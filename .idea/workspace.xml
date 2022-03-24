@@ -34,7 +34,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1648147853629</updated>
-      <workItem from="1648147855215" duration="787000" />
+      <workItem from="1648147855215" duration="990000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1648148051494</created>
@@ -43,7 +43,14 @@
       <option name="project" value="LOCAL" />
       <updated>1648148051494</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="first commit">
+      <created>1648148739077</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1648148739077</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
