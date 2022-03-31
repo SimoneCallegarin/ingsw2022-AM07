@@ -36,12 +36,13 @@ public class Player {
 
     /**
      * Constructor
-     * @param nickname valid nickname chosen by the player
-     * @param squad team chosen by the player
-     * @param mage mage chosen by the player for his deck
-     * @param mageDeck deck of the player (every used card must be removed)
+     *
+     * @param nickname    valid nickname chosen by the player
+     * @param squad       team chosen by the player
+     * @param mage        mage chosen by the player for his deck
+     * @param mageDeck    deck of the player (every used card must be removed)
      * @param discardPile discard pile of the player, it contains only the last assistant card used
-     * @param dashboard dashboard referring to the player (each player has his own dashboard)
+     * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      */
     public Player(String nickname, Squads squad, Mages mage, ArrayList<AssistantCard> mageDeck, AssistantCard discardPile, Dashboard dashboard) {
         this.nickname = nickname;
