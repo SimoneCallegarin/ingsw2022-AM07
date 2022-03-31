@@ -6,5 +6,5 @@ package it.polimi.ingsw.Model;
  *
  */
 public interface Place {
-    public void getnumOfElements();
+    public int getnumOfElements();
 }
