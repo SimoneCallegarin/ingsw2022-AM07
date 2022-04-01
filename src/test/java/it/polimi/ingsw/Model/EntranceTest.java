@@ -19,7 +19,7 @@ class EntranceTest {
         e.addStudent(RealmColors.RED);
         e.addStudent(RealmColors.RED);
         e.addStudent(RealmColors.RED);
-        assertEquals(7, e.getNumOfElements());
+        assertEquals(7, e.getNumberOfElements());
     }
 
     /**
@@ -47,7 +47,7 @@ class EntranceTest {
         e.addStudent(RealmColors.RED);
         assertTrue(e.isFull());
         e.addStudent(RealmColors.PINK);
-        assertEquals(7, e.getNumOfElements());
+        assertEquals(7, e.getNumberOfElements());
     }
 
     /**
@@ -62,9 +62,9 @@ class EntranceTest {
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
-        assertEquals(6, e.getNumOfElements());
+        assertEquals(6, e.getNumberOfElements());
         e.removeStudent(RealmColors.YELLOW);
-        assertEquals(5, e.getNumOfElements());
+        assertEquals(5, e.getNumberOfElements());
     }
 
     /**
@@ -77,9 +77,9 @@ class EntranceTest {
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.BLUE);
         e.addStudent(RealmColors.RED);
-        assertEquals(4, e.getNumOfElements());
+        assertEquals(4, e.getNumberOfElements());
         e.removeStudent(RealmColors.YELLOW);
-        assertEquals(4, e.getNumOfElements());
+        assertEquals(4, e.getNumberOfElements());
     }
 
     /**

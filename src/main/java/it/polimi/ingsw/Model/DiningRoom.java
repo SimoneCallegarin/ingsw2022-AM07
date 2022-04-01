@@ -35,7 +35,7 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
      * @return the number of students and professors actually in the dining room
      */
     @Override
-    public int getNumOfElements() {
+    public int getNumberOfElements() {
         int totalNumberOfStudents = 0;
         for (RealmColors rc : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(rc) + professors.get(rc);
