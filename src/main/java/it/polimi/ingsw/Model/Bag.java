@@ -55,12 +55,15 @@ public class Bag implements Place, StudentManager{
         students.put(color, temp);
     }
 
+    /**
+     * this method extract the students for the bag randomly, basing on how many students per color there are
+     * @return the color of the extracted student
+     */
     public RealmColors draw(){
 
-        int studentsSequence = 0;
+        int studentsSequence = 0;   //studentsSequence permits checking of which color the random students extracted is
 
         int randomStudent = (int) (Math.random() * (getnumOfElements())+1);
-
 
         for (RealmColors c : RealmColors.values()) {
             studentsSequence = students.get(c) + studentsSequence;

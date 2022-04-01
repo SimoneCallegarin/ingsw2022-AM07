@@ -64,30 +64,22 @@ class BagTest {
             bagForTest.addStudent(color);
         }
 
-        boolean checkInBetween = false;
-
-        if (19000 < studentsEqually.get(RealmColors.YELLOW) & studentsEqually.get(RealmColors.YELLOW) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.PINK) & studentsEqually.get(RealmColors.PINK) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.BLUE) & studentsEqually.get(RealmColors.BLUE) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.RED) & studentsEqually.get(RealmColors.RED) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.GREEN) & studentsEqually.get(RealmColors.GREEN) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
+        boolean checkInBetween = 19000 < studentsEqually.get(RealmColors.YELLOW) & studentsEqually.get(RealmColors.YELLOW) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.PINK) & studentsEqually.get(RealmColors.PINK) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.BLUE) & studentsEqually.get(RealmColors.BLUE) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.RED) & studentsEqually.get(RealmColors.RED) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.GREEN) & studentsEqually.get(RealmColors.GREEN) < 21000;
+        assertTrue(checkInBetween);
 
     }
 
+    /**
+     * we are testing if when extracting 130 students the number of students remaining is equal to 0
+     */
     @Test
     void drawWeighted() {
         HashMap<RealmColors,Integer> students = new HashMap<>();
