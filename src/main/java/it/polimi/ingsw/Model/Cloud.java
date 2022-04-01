@@ -2,20 +2,23 @@ package it.polimi.ingsw.Model;
 
 import java.util.HashMap;
 
-public class Bag implements Place, StudentManager{
+public class Cloud implements Place,StudentManager{
 
+    private final int idCloud;
+    private final CloudSide side;
     /**
      * this is the students container
      */
     private final HashMap<RealmColors,Integer> students;
 
-    public Bag() {
+    public Cloud(int idCloud, CloudSide side) {
+        this.idCloud = idCloud;
+        this.side = side;
         this.students = new HashMap<>();
 
         for (RealmColors c : RealmColors.values()) {
-            students.put(c, 26);
+            students.put(c, 0);
         }
-
     }
 
     /**
@@ -29,6 +32,15 @@ public class Bag implements Place, StudentManager{
             totalNumberOfStudents = totalNumberOfStudents + students.get(c);
         }
         return totalNumberOfStudents;
+    }
+
+    /**
+     * this method when called gives the number of students in the bag of a precise color
+     * @param  colors is the color of the students we want to know the number
+     * @return the number of students actually in the bag of a certain color
+     */
+    public int getNumberOfStudentsOfColor(RealmColors colors) {
+        return students.get(colors);
     }
 
     /**
@@ -55,26 +67,12 @@ public class Bag implements Place, StudentManager{
         students.put(color, temp);
     }
 
+    //the following method might be not very useful, in the future we may decide to remove it
     /**
-     * this method extract the students for the bag randomly, basing on how many students per color there are
-     * @return the color of the extracted student
+     * this method permits knowing if the cloud is actually empty
      */
-    public RealmColors draw(){
-
-        int studentsSequence = 0;   //studentsSequence permits checking of which color the random students extracted is
-
-        int randomStudent = (int) (Math.random() * (getNumberOfElements())+1);
-
-        for (RealmColors c : RealmColors.values()) {
-            studentsSequence = students.get(c) + studentsSequence;
-
-            if(randomStudent <= studentsSequence){
-                removeStudent(c);
-                return c;
-            }
-
-        }
-        return null;
+    public boolean isEmpty(){
+        return getNumberOfElements() == 0;
     }
 
 }

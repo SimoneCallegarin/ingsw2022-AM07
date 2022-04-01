@@ -5,5 +5,5 @@ package it.polimi.ingsw.Model;
  * it will contain all the methods to get information about the objects inside
  */
 public interface Place {
-    public int getNumOfElements();
+    int getNumberOfElements();
 }

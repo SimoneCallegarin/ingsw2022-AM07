@@ -2,7 +2,6 @@ package it.polimi.ingsw.Model;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,18 +15,7 @@ class BagTest {
      */
     @Test
     void getnumOfElements() {
-        assertEquals(130, bagForTest.getNumOfElements());
-    }
-
-    /**
-     * we are testing if the value in the students' hashmap is correctly updated (-1 each time)
-     */
-    @Test
-    void removeStudent() {
-        bagForTest.removeStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getNumOfElements());
-        bagForTest.removeStudent(RealmColors.RED);
-        assertEquals(128, bagForTest.getNumOfElements());
+        assertEquals(130, bagForTest.getNumberOfElements());
     }
 
     /**
@@ -38,7 +26,18 @@ class BagTest {
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.addStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getNumOfElements());
+        assertEquals(129, bagForTest.getNumberOfElements());
+    }
+
+    /**
+     * we are testing if the value in the students' hashmap is correctly updated (-1 each time)
+     */
+    @Test
+    void removeStudent() {
+        bagForTest.removeStudent(RealmColors.YELLOW);
+        assertEquals(129, bagForTest.getNumberOfElements());
+        bagForTest.removeStudent(RealmColors.RED);
+        assertEquals(128, bagForTest.getNumberOfElements());
     }
 
     /**
@@ -64,30 +63,22 @@ class BagTest {
             bagForTest.addStudent(color);
         }
 
-        boolean checkInBetween = false;
-
-        if (19000 < studentsEqually.get(RealmColors.YELLOW) & studentsEqually.get(RealmColors.YELLOW) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.PINK) & studentsEqually.get(RealmColors.PINK) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.BLUE) & studentsEqually.get(RealmColors.BLUE) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.RED) & studentsEqually.get(RealmColors.RED) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
-        checkInBetween = false;
-        if (19000 < studentsEqually.get(RealmColors.GREEN) & studentsEqually.get(RealmColors.GREEN) < 21000)
-            checkInBetween = true;
-        assertEquals(true, checkInBetween);
+        boolean checkInBetween = 19000 < studentsEqually.get(RealmColors.YELLOW) & studentsEqually.get(RealmColors.YELLOW) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.PINK) & studentsEqually.get(RealmColors.PINK) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.BLUE) & studentsEqually.get(RealmColors.BLUE) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.RED) & studentsEqually.get(RealmColors.RED) < 21000;
+        assertTrue(checkInBetween);
+        checkInBetween = 19000 < studentsEqually.get(RealmColors.GREEN) & studentsEqually.get(RealmColors.GREEN) < 21000;
+        assertTrue(checkInBetween);
 
     }
 
+    /**
+     * we are testing if when extracting 130 students the number of students remaining is equal to 0
+     */
     @Test
     void drawWeighted() {
         HashMap<RealmColors,Integer> students = new HashMap<>();
@@ -104,7 +95,7 @@ class BagTest {
             students.put(color, studentsOfColor);
         }
 
-        assertEquals(0,bagForTest.getNumOfElements());
+        assertEquals(0,bagForTest.getNumberOfElements());
     }
 
 }
