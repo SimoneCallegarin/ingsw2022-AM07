@@ -44,12 +44,12 @@ public class Player {
      * @param discardPile discard pile of the player, it contains only the last assistant card used
      * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      */
-    public Player(String nickname, Squads squad, Mages mage, ArrayList<AssistantCard> mageDeck, AssistantCard discardPile, Dashboard dashboard) {
+    public Player(String nickname, Squads squad, Mages mage, ArrayList<AssistantCard> mageDeck, Dashboard dashboard) {
         this.nickname = nickname;
         this.squad = squad;
         this.mage = mage;
         this.mageDeck = mageDeck;
-        this.discardPile = discardPile;
+        this.discardPile = null;
         this.dashboard = dashboard;
     }
 

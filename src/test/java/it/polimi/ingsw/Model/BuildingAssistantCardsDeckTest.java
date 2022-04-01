@@ -26,7 +26,7 @@ class BuildingAssistantCardsDeckTest {
 
         ArrayList<AssistantCard> deckForTest = new ArrayList<AssistantCard>();
         Dashboard dashboard = new Dashboard();
-        Player playerForTest = new Player("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, deckForTest, null, dashboard );
+        Player playerForTest = new Player("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, deckForTest, dashboard );
         playerForTest.buildDeck(Mages.MAGE1);
 
         for(int i = 0; i < 10; i++) {

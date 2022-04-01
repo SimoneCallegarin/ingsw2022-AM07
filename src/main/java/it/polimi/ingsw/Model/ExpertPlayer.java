@@ -18,7 +18,7 @@ public class ExpertPlayer extends Player{
      * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      */
     public ExpertPlayer(String nickname, Squads squad, Mages mage, ArrayList<AssistantCard> mageDeck, AssistantCard discardPile, Dashboard dashboard, int money, int alreadyPlayedCard, boolean alreadyPlayedACardThisTurn) {
-        super(nickname, squad, mage, mageDeck, discardPile, dashboard);
+        super(nickname, squad, mage, mageDeck, dashboard);
         this.money = money;
         this.alreadyPlayedCard = alreadyPlayedCard;
         this.alreadyPlayedACardThisTurn = alreadyPlayedACardThisTurn;

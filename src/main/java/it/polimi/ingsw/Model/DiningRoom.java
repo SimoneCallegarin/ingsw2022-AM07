@@ -7,11 +7,11 @@ public class DiningRoom implements StudentManager, ProfessorManager{
     /**
      * this is the students container
      */
-    private final HashMap<Colors,Integer> students;
+    private final HashMap<RealmColors,Integer> students;
     /**
      * this is the professors container
      */
-    private final HashMap<Colors,Integer> professors;
+    private final HashMap<RealmColors,Integer> professors;
     /**
      * this is a value that defines how the dining room is made
      */
@@ -24,7 +24,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
         this.students = new HashMap<>();
         this.professors = new HashMap<>();
 
-        for (Colors c : Colors.values()) {
+        for (RealmColors c : RealmColors.values()) {
             students.put(c, 0);
             professors.put(c, 0);
         }
@@ -35,7 +35,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
      * @param color is the key of the value we want to update in the students' hashmap
      */
     @Override
-    public void addStudent(Colors color) {
+    public void addStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
         temp++;
@@ -47,7 +47,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
      * @param color is the key of the value we want to update in the students' hashmap
      */
     @Override
-    public void removeStudent(Colors color) {
+    public void removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
         temp--;
@@ -59,7 +59,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
      * @param color is the key of the value we want to set to 1 in the professors' hashmap
      */
     @Override
-    public void addProfessor(Colors color) {
+    public void addProfessor(RealmColors color) {
         professors.put(color, 1);
     }
 
@@ -68,7 +68,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
      * @param color is the key of the value we want to set to 0 in the professors' hashmap
      */
     @Override
-    public void removeProfessor(Colors color) {
+    public void removeProfessor(RealmColors color) {
         professors.put(color, 0);
     }
 
@@ -77,7 +77,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
      * @param color is the key of the value we want to get
      * @return the value we want
      */
-    public int getStudentsByColor(Colors color) {
+    public int getStudentsByColor(RealmColors color) {
         return students.get(color);
     }
 
@@ -86,7 +86,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
      * @param color is the key of the value we want to get
      * @return the value we want
      */
-    public int getProfessorByColor(Colors color) {
+    public int getProfessorByColor(RealmColors color) {
         return professors.get(color);
     }
 
