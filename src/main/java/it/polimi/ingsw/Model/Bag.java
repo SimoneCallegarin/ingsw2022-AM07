@@ -23,7 +23,7 @@ public class Bag implements Place, StudentManager{
      * @return the number of students actually in the bag
      */
     @Override
-    public int getnumOfElements() {
+    public int getNumOfElements() {
         int totalNumberOfStudents = 0;
         for (RealmColors c : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(c);
@@ -55,11 +55,21 @@ public class Bag implements Place, StudentManager{
         students.put(color, temp);
     }
 
+    /**
+     * a getter method to receive a certain value contained in the students' hashmap
+     * @param color is the key of the value we want to get
+     * @return the value we want
+     */
+    @Override
+    public int getStudentsByColor(RealmColors color) {
+        return students.get(color);
+    }
+
     public RealmColors draw(){
 
         int studentsSequence = 0;
 
-        int randomStudent = (int) (Math.random() * (getnumOfElements())+1);
+        int randomStudent = (int) (Math.random() * (getNumOfElements())+1);
 
 
         for (RealmColors c : RealmColors.values()) {

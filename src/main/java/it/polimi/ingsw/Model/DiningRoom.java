@@ -2,7 +2,7 @@ package it.polimi.ingsw.Model;
 
 import java.util.HashMap;
 
-public class DiningRoom implements StudentManager, ProfessorManager{
+public class DiningRoom implements Place, StudentManager, ProfessorManager {
 
     /**
      * this is the students container
@@ -24,10 +24,23 @@ public class DiningRoom implements StudentManager, ProfessorManager{
         this.students = new HashMap<>();
         this.professors = new HashMap<>();
 
-        for (RealmColors c : RealmColors.values()) {
-            students.put(c, 0);
-            professors.put(c, 0);
+        for (RealmColors rc : RealmColors.values()) {
+            students.put(rc, 0);
+            professors.put(rc, 0);
         }
+    }
+
+    /**
+     * this method when called gives the number of students and professors in the dining room
+     * @return the number of students and professors actually in the dining room
+     */
+    @Override
+    public int getNumOfElements() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc) + professors.get(rc);
+        }
+        return totalNumberOfStudents;
     }
 
     /**
@@ -50,7 +63,8 @@ public class DiningRoom implements StudentManager, ProfessorManager{
     public void removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        temp--;
+        if (temp > 0)
+            temp--;
         students.put(color, temp);
     }
 
@@ -77,6 +91,7 @@ public class DiningRoom implements StudentManager, ProfessorManager{
      * @param color is the key of the value we want to get
      * @return the value we want
      */
+    @Override
     public int getStudentsByColor(RealmColors color) {
         return students.get(color);
     }
