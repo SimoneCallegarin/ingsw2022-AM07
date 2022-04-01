@@ -5,5 +5,5 @@ package it.polimi.ingsw.Model;
  */
 
 public interface MotherNatureManager {
-    //public void moveMotherNature(Idisle: int):void;
+    public void moveMotherNature(int idIsle);
 }

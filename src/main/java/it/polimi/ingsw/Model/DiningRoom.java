@@ -24,9 +24,9 @@ public class DiningRoom implements StudentManager, ProfessorManager{
         this.students = new HashMap<>();
         this.professors = new HashMap<>();
 
-        for (RealmColors rc : RealmColors.values()) {
-            students.put(rc, 0);
-            professors.put(rc, 0);
+        for (RealmColors c : RealmColors.values()) {
+            students.put(c, 0);
+            professors.put(c, 0);
         }
     }
 

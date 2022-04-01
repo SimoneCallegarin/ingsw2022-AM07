@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class Player {
     /**
      * This attribute is the deck of assistant cards
      */
-    public List<AssistantCard> mageDeck;
+    public ArrayList<AssistantCard> mageDeck;
     /**
      * This attribute is the card on the top of the discards pile
      */
@@ -35,13 +36,20 @@ public class Player {
 
     /**
      * Constructor
+     *
+     * @param nickname    valid nickname chosen by the player
+     * @param squad       team chosen by the player
+     * @param mage        mage chosen by the player for his deck
+     * @param mageDeck    deck of the player (every used card must be removed)
+     * @param discardPile discard pile of the player, it contains only the last assistant card used
+     * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      */
-    public Player(String nickname, Squads squad, Mages mage, List<AssistantCard> mageDeck, AssistantCard discardPile, Dashboard dashboard) {
+    public Player(String nickname, Squads squad, Mages mage, ArrayList<AssistantCard> mageDeck, Dashboard dashboard) {
         this.nickname = nickname;
         this.squad = squad;
         this.mage = mage;
         this.mageDeck = mageDeck;
-        this.discardPile = discardPile;
+        this.discardPile = null;
         this.dashboard = dashboard;
     }
 
@@ -52,10 +60,6 @@ public class Player {
         this.nickname = nickname;
     }
 
-    public void setMage(Mages mage) {
-        this.mage = mage;
-    }
-
     public void setSquad(Squads squad) {
         this.squad = squad;
     }
@@ -64,12 +68,30 @@ public class Player {
         this.dashboard = dashboard;
     }
 
-    public void setMageDeck(List<AssistantCard> mageDeck) {
+    public void setDiscardPile(AssistantCard discardPile) {
+        this.discardPile = discardPile;
+    }
+
+    public void setMageDeck(ArrayList<AssistantCard> mageDeck) {
         this.mageDeck = mageDeck;
     }
 
-    public void setDiscardPile(AssistantCard discardPile) {
-        this.discardPile = discardPile;
+    public List<AssistantCard> getMageDeck() {
+        return mageDeck;
+    }
+
+    /**
+     * This method permits the creation of a deck of assistant cards
+     * @param mage is the valid mage chosen by the player
+     * i+1 is equal to the turn order of the assistant card
+     * (i/2)+1 is equal to the mother nature possible movement for an assistant card
+     * false indicates that the assistant card hasn't been used yet
+     */
+    public void buildDeck(Mages mage){
+        this.mage = mage;
+        for(int i = 0; i < 10; i++) {
+            this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1, false));
+        }
     }
 
     /**

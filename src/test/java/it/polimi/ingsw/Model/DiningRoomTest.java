@@ -25,8 +25,8 @@ class DiningRoomTest {
     @Test
     public void addStudentBasic() {
         DiningRoom dr = new DiningRoom();
-        dr.addStudent(Colors.YELLOW);
-        assertEquals(1, dr.getStudentsByColor(Colors.YELLOW));
+        dr.addStudent(RealmColors.YELLOW);
+        assertEquals(1, dr.getStudentsByColor(RealmColors.YELLOW));
     }
 
     /**
@@ -35,12 +35,12 @@ class DiningRoomTest {
     @Test
     void removeStudentBasic() {
         DiningRoom dr = new DiningRoom();
-        dr.addStudent(Colors.YELLOW);
-        dr.addStudent(Colors.YELLOW);
-        dr.addStudent(Colors.YELLOW);
-        assertEquals(3, dr.getStudentsByColor(Colors.YELLOW));
-        dr.removeStudent(Colors.YELLOW);
-        assertEquals(2, dr.getStudentsByColor(Colors.YELLOW));
+        dr.addStudent(RealmColors.YELLOW);
+        dr.addStudent(RealmColors.YELLOW);
+        dr.addStudent(RealmColors.YELLOW);
+        assertEquals(3, dr.getStudentsByColor(RealmColors.YELLOW));
+        dr.removeStudent(RealmColors.YELLOW);
+        assertEquals(2, dr.getStudentsByColor(RealmColors.YELLOW));
     }
 
     /**
@@ -49,8 +49,8 @@ class DiningRoomTest {
     @Test
     void addProfessorBasic() {
         DiningRoom dr = new DiningRoom();
-        dr.addProfessor(Colors.YELLOW);
-        assertEquals(1, dr.getProfessorByColor(Colors.YELLOW));
+        dr.addProfessor(RealmColors.YELLOW);
+        assertEquals(1, dr.getProfessorByColor(RealmColors.YELLOW));
     }
 
     /**
@@ -59,10 +59,10 @@ class DiningRoomTest {
     @Test
     void removeProfessorBasic() {
         DiningRoom dr = new DiningRoom();
-        dr.addProfessor(Colors.YELLOW);
-        assertEquals(1, dr.getProfessorByColor(Colors.YELLOW));
-        dr.removeProfessor(Colors.YELLOW);
-        assertEquals(0, dr.getProfessorByColor(Colors.YELLOW));
+        dr.addProfessor(RealmColors.YELLOW);
+        assertEquals(1, dr.getProfessorByColor(RealmColors.YELLOW));
+        dr.removeProfessor(RealmColors.YELLOW);
+        assertEquals(0, dr.getProfessorByColor(RealmColors.YELLOW));
     }
 
     /**
@@ -71,7 +71,7 @@ class DiningRoomTest {
     @Test
     void getStudentsByColor() {
         DiningRoom dr = new DiningRoom();
-        assertEquals(0, dr.getStudentsByColor(Colors.YELLOW));
+        assertEquals(0, dr.getStudentsByColor(RealmColors.YELLOW));
     }
 
     /**
@@ -80,6 +80,6 @@ class DiningRoomTest {
     @Test
     void getProfessorByColor() {
         DiningRoom dr = new DiningRoom();
-        assertEquals(0, dr.getProfessorByColor(Colors.YELLOW));
+        assertEquals(0, dr.getProfessorByColor(RealmColors.YELLOW));
     }
 }
