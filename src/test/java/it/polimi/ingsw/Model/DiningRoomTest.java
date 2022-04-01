@@ -7,6 +7,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class DiningRoomTest {
 
     /**
+     * we are testing if the constructor of the class sets every field to 0
+     */
+    @Test
+    public void constructor() {
+        DiningRoom dr = new DiningRoom();
+        assertEquals(0, dr.getStudentsByColor(Colors.YELLOW));
+        assertEquals(0, dr.getStudentsByColor(Colors.PINK));
+        assertEquals(0, dr.getStudentsByColor(Colors.BLUE));
+        assertEquals(0, dr.getStudentsByColor(Colors.RED));
+        assertEquals(0, dr.getStudentsByColor(Colors.GREEN));
+    }
+
+    /**
      * we are testing if the value in the students' hashmap is correctly updated (+1)
      */
     @Test
