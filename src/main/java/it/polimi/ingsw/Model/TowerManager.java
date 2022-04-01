@@ -6,7 +6,7 @@ package it.polimi.ingsw.Model;
 
 public interface TowerManager {
 
-    public void addTower(RealmColors color);
-    public void removeTower(RealmColors color);
+    void addTower();
+    void removeTower();
 
 }

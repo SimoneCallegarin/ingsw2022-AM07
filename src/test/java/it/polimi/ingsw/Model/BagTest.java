@@ -19,17 +19,6 @@ class BagTest {
     }
 
     /**
-     * we are testing if the value in the students' hashmap is correctly updated (-1 each time)
-     */
-    @Test
-    void removeStudent() {
-        bagForTest.removeStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getNumberOfElements());
-        bagForTest.removeStudent(RealmColors.RED);
-        assertEquals(128, bagForTest.getNumberOfElements());
-    }
-
-    /**
      * we are testing if the value in the students' hashmap is correctly updated (+1 each time)
      */
     @Test
@@ -38,6 +27,17 @@ class BagTest {
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.addStudent(RealmColors.YELLOW);
         assertEquals(129, bagForTest.getNumberOfElements());
+    }
+
+    /**
+     * we are testing if the value in the students' hashmap is correctly updated (-1 each time)
+     */
+    @Test
+    void removeStudent() {
+        bagForTest.removeStudent(RealmColors.YELLOW);
+        assertEquals(129, bagForTest.getNumberOfElements());
+        bagForTest.removeStudent(RealmColors.RED);
+        assertEquals(128, bagForTest.getNumberOfElements());
     }
 
     /**
