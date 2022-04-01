@@ -2,7 +2,6 @@ package it.polimi.ingsw.Model;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +15,7 @@ class BagTest {
      */
     @Test
     void getnumOfElements() {
-        assertEquals(130, bagForTest.getnumOfElements());
+        assertEquals(130, bagForTest.getNumberOfElements());
     }
 
     /**
@@ -25,9 +24,9 @@ class BagTest {
     @Test
     void removeStudent() {
         bagForTest.removeStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getnumOfElements());
+        assertEquals(129, bagForTest.getNumberOfElements());
         bagForTest.removeStudent(RealmColors.RED);
-        assertEquals(128, bagForTest.getnumOfElements());
+        assertEquals(128, bagForTest.getNumberOfElements());
     }
 
     /**
@@ -38,7 +37,7 @@ class BagTest {
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.addStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getnumOfElements());
+        assertEquals(129, bagForTest.getNumberOfElements());
     }
 
     /**
@@ -96,7 +95,7 @@ class BagTest {
             students.put(color, studentsOfColor);
         }
 
-        assertEquals(0,bagForTest.getnumOfElements());
+        assertEquals(0,bagForTest.getNumberOfElements());
     }
 
 }
