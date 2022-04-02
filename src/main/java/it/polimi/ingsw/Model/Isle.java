@@ -28,6 +28,14 @@ public class Isle {
         this.numOfIsles=0;
     }
 
+    public void setIdIsle(int idIsle) {
+        this.idIsle = idIsle;
+    }
+
+    public void setNumOfIsles(int numOfIsles) {
+        this.numOfIsles = numOfIsles;
+    }
+
     public void updateTower(TowerColors c){
         this.tower=c;
     }
