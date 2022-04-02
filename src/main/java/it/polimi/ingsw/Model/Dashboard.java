@@ -12,6 +12,19 @@ public class Dashboard {
         this.towerStorage = towerStorage;
     }
 
+    public int getIdDashboard() {
+        return idDashboard;
+    }
 
+    public Entrance getEntrance() {
+        return entrance;
+    }
 
+    public TowerStorage getTowerStorage() {
+        return towerStorage;
+    }
+
+    public DiningRoom getDiningRoom() {
+        return diningRoom;
+    }
 }

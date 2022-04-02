@@ -29,4 +29,7 @@ public class TowerStorage implements TowerManager{
         return numberOfTowers;
     }
 
+    public TowerColors getTowerColor() {
+        return towerColor;
+    }
 }
