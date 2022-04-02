@@ -7,15 +7,15 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
     /**
      * this is the students container
      */
-    private final HashMap<RealmColors,Integer> students;
+    final HashMap<RealmColors,Integer> students;
     /**
      * this is the professors container
      */
-    private final HashMap<RealmColors,Integer> professors;
+    final HashMap<RealmColors,Integer> professors;
     /**
      * this is a value that defines how the dining room is made
      */
-    private static final int maxStudentsPerColor = 10;
+    static final int maxStudentsPerColor = 10;
 
     /**
      * DiningRoom constructor: hashmaps initialization (every field is set to 0)
@@ -51,7 +51,8 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
     public void addStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        temp++;
+        if (temp < maxStudentsPerColor)
+            temp++;
         students.put(color, temp);
     }
 

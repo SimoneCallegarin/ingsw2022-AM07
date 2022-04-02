@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Model;
 
-public class TowerStorage implements TowerManager{
+public class TowerStorage implements Place, TowerManager{
     private int numberOfTowers;
     private final TowerColors towerColor;
 
@@ -25,7 +25,8 @@ public class TowerStorage implements TowerManager{
         numberOfTowers -= 1;
     }
 
-    public int getNumberOfTowers(){
+    @Override
+    public int getNumberOfElements(){
         return numberOfTowers;
     }
 

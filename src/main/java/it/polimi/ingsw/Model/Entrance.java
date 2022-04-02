@@ -19,23 +19,18 @@ public class Entrance implements Place, StudentManager {
 
     /**
      * Entrance constructor: hashmaps initialization (every field is set to 0); maxNumber and maxNumberRemovable attributes initialization
-     * @param playerNumber is used to choose which value has to be assigned to maxStudents
+     * @param maxStudents is used to choose which value has to be assigned to maxStudents
+     * @param maxStudentsRemovable is used to choose which value has to be assigned to maxStudentsRemovable
      */
-    public Entrance(int playerNumber) {
+    public Entrance(int maxStudents, int maxStudentsRemovable) {
         this.students = new HashMap<>();
 
         for (RealmColors rc : RealmColors.values()) {
             students.put(rc, 0);
         }
 
-        if (playerNumber == 3) {
-            maxStudents = 9;
-            maxStudentsRemovable = 4;
-        }
-        else {
-            maxStudents = 7;
-            maxStudentsRemovable = 3;
-        }
+        this.maxStudents = maxStudents;
+        this.maxStudentsRemovable = maxStudentsRemovable;
 
     }
 

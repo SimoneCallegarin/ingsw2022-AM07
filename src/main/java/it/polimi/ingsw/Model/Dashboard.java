@@ -1,15 +1,51 @@
 package it.polimi.ingsw.Model;
 
 public class Dashboard {
-    //Not yet implemented, used only to do proper tests of other classes
     private final int idDashboard;
-    private Entrance entrance;
-    private DiningRoom diningRoom;
+    private final Entrance entrance;
+    private final DiningRoom diningRoom;
     private final TowerStorage towerStorage;
 
-    public Dashboard(int idDashboard, TowerStorage towerStorage) {
+    public Dashboard(int numOfPlayers, int idDashboard, GameMode gm) {
+
+        int maxEntranceStudents;
+        int maxEntranceStudentsRemovable;
+        int maxStorageTowers;
+        TowerColors towerColor;
+
         this.idDashboard = idDashboard;
-        this.towerStorage = towerStorage;
+
+        if (numOfPlayers == 3) {
+            maxEntranceStudents = 9;
+            maxEntranceStudentsRemovable = 4;
+            maxStorageTowers = 6;
+        }
+        else {
+            maxEntranceStudents = 7;
+            maxEntranceStudentsRemovable = 3;
+            maxStorageTowers = 8;
+        }
+
+        switch (idDashboard) {
+            case 1 :
+                towerColor = TowerColors.WHITE;
+                break;
+            case 2 :
+                towerColor = TowerColors.BLACK;
+                break;
+            case 3 :
+                towerColor = TowerColors.GREY;
+                break;
+            default:
+                towerColor = TowerColors.NOCOLOR;
+        }
+
+        this.entrance = new Entrance(maxEntranceStudents, maxEntranceStudentsRemovable);
+        this.towerStorage = new TowerStorage(maxStorageTowers, towerColor);
+
+        if (gm == GameMode.EXPERT)
+            this.diningRoom = new ExpertDiningRoom();
+        else this.diningRoom = new DiningRoom();
     }
 
     public int getIdDashboard() {
@@ -20,11 +56,11 @@ public class Dashboard {
         return entrance;
     }
 
-    public TowerStorage getTowerStorage() {
-        return towerStorage;
-    }
-
     public DiningRoom getDiningRoom() {
         return diningRoom;
+    }
+
+    public TowerStorage getTowerStorage() {
+        return towerStorage;
     }
 }
