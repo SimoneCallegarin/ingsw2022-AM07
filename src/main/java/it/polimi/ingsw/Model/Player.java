@@ -36,21 +36,29 @@ public class Player {
 
     /**
      * Constructor
-     *
      * @param nickname    valid nickname chosen by the player
      * @param squad       team chosen by the player
      * @param mage        mage chosen by the player for his deck
-     * @param mageDeck    deck of the player (every used card must be removed)
-     * @param discardPile discard pile of the player, it contains only the last assistant card used
      * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      */
-    public Player(String nickname, Squads squad, Mages mage, ArrayList<AssistantCard> mageDeck, Dashboard dashboard) {
+    public Player(String nickname, Squads squad, Mages mage, Dashboard dashboard) {
         this.nickname = nickname;
         this.squad = squad;
         this.mage = mage;
-        this.mageDeck = mageDeck;
         this.discardPile = null;
         this.dashboard = dashboard;
+        this.mageDeck = new ArrayList<>(10);
+
+        /**
+         * This method permits the creation of a deck of assistant cards
+         * i+1 is equal to the turn order of the assistant card
+         * (i/2)+1 is equal to the mother nature possible movement for an assistant card
+         * false indicates that the assistant card hasn't been used yet
+         */
+        for(int i = 0; i < 10; i++) {
+            this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1, false));
+        }
+
     }
 
     /**
@@ -80,19 +88,6 @@ public class Player {
         return mageDeck;
     }
 
-    /**
-     * This method permits the creation of a deck of assistant cards
-     * @param mage is the valid mage chosen by the player
-     * i+1 is equal to the turn order of the assistant card
-     * (i/2)+1 is equal to the mother nature possible movement for an assistant card
-     * false indicates that the assistant card hasn't been used yet
-     */
-    public void buildDeck(Mages mage){
-        this.mage = mage;
-        for(int i = 0; i < 10; i++) {
-            this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1, false));
-        }
-    }
 
     /**
      * This method permits the player to select an assistant card to play

@@ -67,6 +67,16 @@ public class Cloud implements Place,StudentManager{
         students.put(color, temp);
     }
 
+    /**
+     * a getter method to receive a certain value contained in the students' hashmap
+     * @param color is the key of the value we want to get
+     * @return the value we want
+     */
+    @Override
+    public int getStudentsByColor(RealmColors color) {
+        return students.get(color);
+    }
+
     //the following method might be not very useful, in the future we may decide to remove it
     /**
      * this method permits knowing if the cloud is actually empty

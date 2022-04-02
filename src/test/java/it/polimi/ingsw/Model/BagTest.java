@@ -41,6 +41,14 @@ class BagTest {
     }
 
     /**
+     * we are testing if the getter works properly
+     */
+    @Test
+    public void getStudentsByColor() {
+        assertEquals(26, bagForTest.getStudentsByColor(RealmColors.YELLOW));
+    }
+
+    /**
      * we are testing if the probability of a student to be drawn
      * is the same for each color when there are all the students
      *

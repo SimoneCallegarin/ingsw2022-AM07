@@ -61,6 +61,14 @@ class CloudTest2and4Players {
     }
 
     /**
+     * we are testing if the getter works properly
+     */
+    @Test
+    public void getStudentsByColor() {
+        assertEquals(0, cloudForTest.getStudentsByColor(RealmColors.YELLOW));
+    }
+
+    /**
      * we are testing if the cloud is empty when there aren't any students on the cloud
      */
     @Test

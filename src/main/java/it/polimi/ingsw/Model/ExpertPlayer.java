@@ -13,12 +13,10 @@ public class ExpertPlayer extends Player{
      *  @param nickname    valid nickname chosen by the player
      * @param squad       team chosen by the player
      * @param mage        mage chosen by the player for his deck
-     * @param mageDeck    deck of the player (every used card must be removed)
-     * @param discardPile discard pile of the player, it contains only the last assistant card used
      * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      */
-    public ExpertPlayer(String nickname, Squads squad, Mages mage, ArrayList<AssistantCard> mageDeck, AssistantCard discardPile, Dashboard dashboard, int money, int alreadyPlayedCard, boolean alreadyPlayedACardThisTurn) {
-        super(nickname, squad, mage, mageDeck, dashboard);
+    public ExpertPlayer(String nickname, Squads squad, Mages mage, Dashboard dashboard, int money, int alreadyPlayedCard, boolean alreadyPlayedACardThisTurn) {
+        super(nickname, squad, mage, dashboard);
         this.money = money;
         this.alreadyPlayedCard = alreadyPlayedCard;
         this.alreadyPlayedACardThisTurn = alreadyPlayedACardThisTurn;

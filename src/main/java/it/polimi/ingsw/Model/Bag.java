@@ -56,6 +56,16 @@ public class Bag implements Place, StudentManager{
     }
 
     /**
+     * a getter method to receive a certain value contained in the students' hashmap
+     * @param color is the key of the value we want to get
+     * @return the value we want
+     */
+    @Override
+    public int getStudentsByColor(RealmColors color) {
+        return students.get(color);
+    }
+
+    /**
      * this method extract the students for the bag randomly, basing on how many students per color there are
      * @return the color of the extracted student
      */

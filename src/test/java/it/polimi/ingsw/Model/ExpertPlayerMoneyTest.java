@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
 public class ExpertPlayerMoneyTest {
-    Dashboard dashboard = new Dashboard();
-    ArrayList<AssistantCard> deckForTest = new ArrayList<AssistantCard>();
-    ExpertPlayer expertPlayerForTest = new ExpertPlayer("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, deckForTest, null, dashboard, 3, 0, false );
+    TowerStorage towerStorage = new TowerStorage(8,TowerColors.WHITE);
+    Dashboard dashboard = new Dashboard(1, towerStorage);
+    ExpertPlayer expertPlayerForTest = new ExpertPlayer("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, dashboard, 3, 0, false );
 
     /**
      * Testing that when calling the following method the expert player gain 1 money
