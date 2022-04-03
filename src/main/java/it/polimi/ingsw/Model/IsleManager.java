@@ -41,11 +41,10 @@ public class IsleManager {
 
     }
 
+    public Isle getIsle(int index){return Isles.get(index);}
+
     public List<Isle> getIsles() {
         return Isles;
     }
 
-    public void setIsles(List<Isle> isles) {
-        Isles = isles;
-    }
 }
