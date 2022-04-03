@@ -41,6 +41,8 @@ public class IsleManager {
 
     }
 
+    public Isle getIsle(int index){return Isles.get(index);}
+
     public List<Isle> getIsles() {
         return Isles;
     }
