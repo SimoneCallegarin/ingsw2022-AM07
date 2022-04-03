@@ -8,6 +8,8 @@ public class Game {
     private int numberOfPlayers;
     private GameTable gameTable;
     private int actualNumberOfPlayers;
+    private Bag bag;
+    private IsleManager isleManager;
 
     private final GamePhases gamePhases;
     private final ActionPhases actionPhases;
@@ -19,13 +21,17 @@ public class Game {
     private final int moreInfluence;   //used for the character cards in recalculate effect
     private final int noColorInfluence;   //used for the character cards in recalculate effect
 
-    public Game(ActionPhases actionPhases, PlanificationPhases planificationPhases) {
+    public Game() {
         this.players = null;
         this.gameMode = GameMode.BASE;
         this.numberOfPlayers = 0;
+        this.bag = new Bag();
+        this.isleManager = new IsleManager();
+
         this.gamePhases = GamePhases.SETUP_PHASE;                       //not already used but ok, maybe we can add a "neutral" phase
         this.actionPhases = ActionPhases.MOVE_STUDENTS;
         this.planificationPhases = PlanificationPhases.FILL_CLOUDS;
+
         this.sameStudents = 0;
         this.noTowerCount = 0;
         this.moreMNMovement = 0;
@@ -62,6 +68,7 @@ public class Game {
 
         setPlayerNumbers(numberOfPlayers);
         setGameMode(gameMode);
+
         Player newPlayer;
 
         GameTable gameTable = new GameTable(numberOfPlayers, gameMode);

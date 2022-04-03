@@ -36,8 +36,8 @@ public class Isle {
         this.numOfIsles = numOfIsles;
     }
 
-    public void updateTower(TowerColors c){
-        this.tower=c;
+    public void updateTower(TowerColors color){
+        this.tower=color;
     }
 
     /**
