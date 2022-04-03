@@ -15,11 +15,11 @@ public class ExpertDiningRoom extends DiningRoom {
         temp = students.get(color);
         prev = temp;
 
-        if (temp < maxStudentsPerColor)
             temp++;
         students.put(color, temp);
 
-        if ((temp%3 == 0) && (prev == temp--)) {
+        if (temp < maxStudentsPerColor)
+            if ((temp%3 == 0) && (prev == temp--)) {
             //addMoney
         }
 

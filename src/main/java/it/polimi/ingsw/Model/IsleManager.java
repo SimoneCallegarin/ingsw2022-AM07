@@ -45,7 +45,4 @@ public class IsleManager {
         return Isles;
     }
 
-    public void setIsles(List<Isle> isles) {
-        Isles = isles;
-    }
 }
