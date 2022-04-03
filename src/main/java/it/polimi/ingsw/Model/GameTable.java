@@ -6,16 +6,19 @@ public class GameTable {
 
     private final ArrayList<Dashboard> dashboards;
     private final ArrayList<Cloud> clouds;
+    private final IsleManager isleManager;
     private final ArrayList<CharacterCard> characterCards;
     private final int generalMoneyReserve = 20;
     private final GameMode gameMode;
     private int numberOfPlayers;
 
-    public GameTable(int numberOfPlayers, GameMode gameMode) {
+    public GameTable( int numberOfPlayers, GameMode gameMode) {
+
         this.gameMode = gameMode;
         this.numberOfPlayers = numberOfPlayers;
 
         this.dashboards = new ArrayList<>(4);
+        this.isleManager = new IsleManager();
         this.clouds = new ArrayList<>(3);
         this.characterCards = new ArrayList<>(3);
     }
@@ -43,6 +46,10 @@ public class GameTable {
     public Dashboard getDashboard(int idDashboard) { return dashboards.get(idDashboard); }
 
     public Cloud getCloud(int idCloud) { return clouds.get(idCloud); }
+
+    public IsleManager getIsleManager() {
+        return isleManager;
+    }
 
     public CharacterCard getCharacterCard(int idCharacterCard) { return characterCards.get(idCharacterCard); }
 }

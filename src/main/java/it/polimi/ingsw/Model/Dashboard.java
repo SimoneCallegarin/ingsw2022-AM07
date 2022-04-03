@@ -64,6 +64,7 @@ public class Dashboard {
                 case 2 :
                 case 3 :
                     towerColor = TowerColors.NOCOLOR;
+                    maxStorageTowers = 0;
                     break;
             }
 
