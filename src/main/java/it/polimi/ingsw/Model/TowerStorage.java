@@ -1,11 +1,13 @@
 package it.polimi.ingsw.Model;
 
-public class TowerStorage implements Place, TowerManager{
-    private int numberOfTowers;
+public class TowerStorage implements Place, TowerManager {
+    private final int maxTowers;
+    private int numOfTowers;
     private final TowerColors towerColor;
 
-    public TowerStorage(int numberOfTowers, TowerColors towerColor) {
-        this.numberOfTowers = numberOfTowers;
+    public TowerStorage(int maxNumberOfTowers, TowerColors towerColor) {
+        this.maxTowers = maxNumberOfTowers;
+        this.numOfTowers = maxNumberOfTowers;
         this.towerColor = towerColor;
     }
 
@@ -14,7 +16,8 @@ public class TowerStorage implements Place, TowerManager{
      */
     @Override
     public void addTower() {
-        numberOfTowers += 1;
+        if (numOfTowers < maxTowers)
+            numOfTowers++;
     }
 
     /**
@@ -22,12 +25,13 @@ public class TowerStorage implements Place, TowerManager{
      */
     @Override
     public void removeTower() {
-        numberOfTowers -= 1;
+        if (numOfTowers > 0)
+            numOfTowers--;
     }
 
     @Override
     public int getNumberOfElements(){
-        return numberOfTowers;
+        return numOfTowers;
     }
 
     public TowerColors getTowerColor() {
