@@ -8,8 +8,8 @@ public class Game {
     private int numberOfPlayers;
     private GameTable gameTable;
     private int actualNumberOfPlayers;
-    private Bag bag;
-    private IsleManager isleManager;
+    private final Bag bag;
+    private final IsleManager isleManager;
 
     private final GamePhases gamePhases;
     private final ActionPhases actionPhases;
@@ -39,11 +39,18 @@ public class Game {
         this.noColorInfluence = 0;
     }
 
-    public int getPlayer(String nickName) {
+    public int getPlayerID(String nickName) {
         int i = 0;
         while (!players.get(i).nickname.equals(nickName))
             i++;
         return i;
+    }
+
+    public Player getPlayer(String nickName) {
+        int i = 0;
+        while (!players.get(i).nickname.equals(nickName))
+            i++;
+        return players.get(i);
     }
 
     public Bag getBag() {
@@ -94,9 +101,15 @@ public class Game {
         gameTable.buildDashboard(0);
 
         if (numberOfPlayers==4)
-            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(0));
+            if (gameMode.equals(GameMode.EXPERT))
+                newPlayer = new ExpertPlayer(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(0));
+            else
+                newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(0));
         else
-            newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(0));
+            if (gameMode.equals(GameMode.EXPERT))
+                newPlayer = new ExpertPlayer(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(0));
+            else
+                newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(0));
 
         players.add(newPlayer);
         actualNumberOfPlayers = 1;
@@ -119,16 +132,23 @@ public class Game {
         if ((actualNumberOfPlayers<numberOfPlayers)) {
             gameTable.buildDashboard(actualNumberOfPlayers);
             Player newPlayer;
-                if(numberOfPlayers == 2)
-                    newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
-                else
-                    if(numberOfPlayers == 3)
-                        newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                if(numberOfPlayers == 2 || numberOfPlayers == 3)
+                    if (gameMode.equals(GameMode.EXPERT))
+                        newPlayer = new ExpertPlayer(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
                     else
-                        if(actualNumberOfPlayers == 1)
-                            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                        newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                else
+                    if(actualNumberOfPlayers == 1)
+                        if (gameMode.equals(GameMode.EXPERT))
+                            newPlayer = new ExpertPlayer(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers));
                         else
-                            newPlayer = new Player(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                    else
+                    if (gameMode.equals(GameMode.EXPERT))
+                        newPlayer = new ExpertPlayer(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                    else
+                        newPlayer = new Player(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers));
+
             players.add(newPlayer);
             actualNumberOfPlayers += 1;
         }

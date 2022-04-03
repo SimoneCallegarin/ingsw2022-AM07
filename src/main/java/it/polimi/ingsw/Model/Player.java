@@ -61,27 +61,8 @@ public class Player {
 
     }
 
-    /**
-     * Setters
-     */
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setSquad(Squads squad) {
-        this.squad = squad;
-    }
-
-    public void setDashboard(Dashboard dashboard) {
-        this.dashboard = dashboard;
-    }
-
     public void setDiscardPile(AssistantCard discardPile) {
         this.discardPile = discardPile;
-    }
-
-    public void setMageDeck(ArrayList<AssistantCard> mageDeck) {
-        this.mageDeck = mageDeck;
     }
 
     public List<AssistantCard> getMageDeck() {

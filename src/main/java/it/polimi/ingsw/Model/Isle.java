@@ -10,15 +10,15 @@ public class Isle implements Place,StudentManager,DenyCardManager {
     private int idIsle;
     public final HashMap<RealmColors,Integer> students;
     TowerColors tower;
-    boolean motherNature;
-    boolean towerIsPresent;
-    boolean denyCard;
+    private boolean motherNature;
+    private boolean towerIsPresent;
+    private boolean denyCard;
     private int numOfIsles;
 
 
     public Isle(int idIsle){
         this.idIsle=idIsle;
-        this.students=new HashMap<RealmColors,Integer>();
+        this.students=new HashMap<>();
         for (RealmColors c: RealmColors.values()){
             students.put(c,0);
         }
@@ -73,7 +73,7 @@ public class Isle implements Place,StudentManager,DenyCardManager {
         int influence=0;
         for(RealmColors c: RealmColors.values()){
             if(player.dashboard.getDiningRoom().getProfessorByColor(c)!=0){
-                influence+= (int)this.students.get(c);
+                influence += students.get(c);
             }
         }
         if(tower.equals(player.dashboard.getTowerStorage().getTowerColor())){
@@ -88,6 +88,14 @@ public class Isle implements Place,StudentManager,DenyCardManager {
 
     public int getNumOfIsles() {
         return numOfIsles;
+    }
+
+    public boolean getMotherNature() {
+        return motherNature;
+    }
+
+    public boolean getDenyCard() {
+        return denyCard;
     }
 
     public void setIdIsle(int idIsle) {this.idIsle = idIsle;}

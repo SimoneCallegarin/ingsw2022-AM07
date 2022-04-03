@@ -1,15 +1,15 @@
 package it.polimi.ingsw.Model;
 
 public class CharacterCard {
-    private int idCard;
+    private final int idCard;
     private int cost;
-    private boolean toUse;
+    private boolean used;
     private Effect effect;
 
-    public CharacterCard(int idCard, int cost, boolean toUse, Effect effect) {
+    public CharacterCard(int idCard, int cost, Effect effect) {
         this.idCard = idCard;
         this.cost = cost;
-        this.toUse = toUse;
+        this.used = false;
         this.effect = effect;
     }
 
@@ -17,24 +17,17 @@ public class CharacterCard {
         return idCard;
     }
 
-    public void setIdCard(int idCard) {
-        this.idCard = idCard;
-    }
-
     public int getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void isUsed() {
+        used = true;
+        cost += 1;
     }
 
-    public boolean isToUse() {
-        return toUse;
-    }
-
-    public void setToUse(boolean toUse) {
-        this.toUse = toUse;
+    public boolean getUsed() {
+        return used;
     }
 
     public Effect getEffect() {

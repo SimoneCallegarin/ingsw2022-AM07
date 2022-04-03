@@ -8,9 +8,9 @@ public class GameTable {
     private final ArrayList<Cloud> clouds;
     private final IsleManager isleManager;
     private final ArrayList<CharacterCard> characterCards;
-    private final int generalMoneyReserve = 20;
     private final GameMode gameMode;
     private int numberOfPlayers;
+    private final int generalMoneyReserve = 20-numberOfPlayers;
 
     public GameTable( int numberOfPlayers, GameMode gameMode) {
 
@@ -39,7 +39,7 @@ public class GameTable {
 
     public void buildCharacterCards(int idCharacterCard){  //Not yet implemented!
         Effect effect = null;
-        CharacterCard characterCard = new CharacterCard(idCharacterCard,0,false,effect);
+        CharacterCard characterCard = new CharacterCard(idCharacterCard,0,effect);
         characterCards.add(characterCard);
     }
 
