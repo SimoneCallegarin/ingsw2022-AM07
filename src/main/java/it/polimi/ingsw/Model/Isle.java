@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Isle {
 
     private int idIsle;
-    HashMap students;
+    public final HashMap students;
     TowerColors tower;
     boolean motherNature;
     boolean towerIsPresent;
@@ -41,19 +41,20 @@ public class Isle {
     }
 
     /**
-     * getInfluence is the method used to calculate the Player influence on the Isle according to the professors on hid dashboard and
+     * getInfluence is the method used to calculate the Player influence on the Isle
+     * according to the professors on his dashboard and
      * the students and the professors on the Isle
-     * @param p
-     * @return
+     * @param player the player we want to calculate the influence
+     * @return the influence of that player in the isle
      */
-    public int getInfluence(Player p){
+    public int getInfluence(Player player){
         int influence=0;
         for(RealmColors c: RealmColors.values()){
-            if(p.dashboard.getDiningRoom().getProfessorByColor(c)!=0){
+            if(player.dashboard.getDiningRoom().getProfessorByColor(c)!=0){
                 influence+= (int)this.students.get(c);
             }
         }
-        if(tower.equals(p.dashboard.getTowerStorage().getTowerColor())){
+        if(tower.equals(player.dashboard.getTowerStorage().getTowerColor())){
             influence+= numOfIsles;
         }
         return influence;

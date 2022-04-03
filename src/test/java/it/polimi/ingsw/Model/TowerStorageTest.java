@@ -37,7 +37,7 @@ class TowerStorageTest {
     /**
      * instead here we are testing a tower storage in a 3 players game mode
      */
-    TowerStorage towerStorageForTest3Players = new TowerStorage(6, TowerColors.GRAY);
+    TowerStorage towerStorageForTest3Players = new TowerStorage(6, TowerColors.GREY);
 
     /**
      * we are testing if the number of towers is correctly increased and decreased by 1

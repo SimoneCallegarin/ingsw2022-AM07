@@ -6,12 +6,13 @@ public class Cloud implements Place,StudentManager{
 
     private final int idCloud;
     private final CloudSide side;
+    private final int maxCloudsStudents;
     /**
      * this is the students container
      */
     private final HashMap<RealmColors,Integer> students;
 
-    public Cloud(int idCloud, CloudSide side) {
+    public Cloud(int idCloud,CloudSide side) {
         this.idCloud = idCloud;
         this.side = side;
         this.students = new HashMap<>();
@@ -19,6 +20,12 @@ public class Cloud implements Place,StudentManager{
         for (RealmColors c : RealmColors.values()) {
             students.put(c, 0);
         }
+
+       if(side == CloudSide.SIDE_2_AND_4_PLAYERS)
+           this.maxCloudsStudents = 3;
+       else
+           this.maxCloudsStudents = 4;
+
     }
 
     /**
@@ -52,7 +59,8 @@ public class Cloud implements Place,StudentManager{
         int temp;
         temp = students.get(color);
         temp++;
-        students.put(color, temp);
+        if (getNumberOfElements()<maxCloudsStudents)
+            students.put(color, temp);
     }
 
     /**
@@ -64,7 +72,8 @@ public class Cloud implements Place,StudentManager{
         int temp;
         temp = students.get(color);
         temp--;
-        students.put(color, temp);
+        if (getNumberOfElements()>0)
+            students.put(color, temp);
     }
 
     /**
@@ -76,6 +85,8 @@ public class Cloud implements Place,StudentManager{
     public int getStudentsByColor(RealmColors color) {
         return students.get(color);
     }
+
+    public int getIdCloud(){ return idCloud; }
 
     //the following method might be not very useful, in the future we may decide to remove it
     /**

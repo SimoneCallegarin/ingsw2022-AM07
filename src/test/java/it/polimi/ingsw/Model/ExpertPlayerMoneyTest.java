@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ExpertPlayerMoneyTest {
     TowerStorage towerStorage = new TowerStorage(8,TowerColors.WHITE);
-    Dashboard dashboard = new Dashboard(1, towerStorage);
+    Dashboard dashboard = new Dashboard(4, 1, GameMode.EXPERT);
     ExpertPlayer expertPlayerForTest = new ExpertPlayer("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, dashboard, 3, 0, false );
 
     /**

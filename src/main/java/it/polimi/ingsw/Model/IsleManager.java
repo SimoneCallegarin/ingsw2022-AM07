@@ -18,7 +18,8 @@ public class IsleManager {
     }
 
     /**
-     * this method is used to unify two different isles. It updates the values of the first isle using the ones from the second isle,
+     * this method is used to unify two different isles.
+     * It updates the values of the first isle using the ones from the second isle,
      * then the second isle is removed and at the end we reset all the Isle ids.
      * @param Isle1 the first Isle
      * @param Isle2 the second Isle

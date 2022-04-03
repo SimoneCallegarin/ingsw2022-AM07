@@ -7,24 +7,42 @@ public class GameTable {
     private final ArrayList<Dashboard> dashboards;
     private final ArrayList<Cloud> clouds;
     private final ArrayList<CharacterCard> characterCards;
-    private final int generalMoneyReserve;
-    private final Bag bag;
-    private final IsleManager isleManager;
+    private final int generalMoneyReserve = 20;
     private final GameMode gameMode;
+    private int numberOfPlayers;
 
-    public GameTable(ArrayList<Dashboard> dashboards, ArrayList<Cloud> clouds, ArrayList<CharacterCard> characterCards, int generalMoneyReserve, Bag bag, IsleManager isleManager, GameMode gameMode) {
-        this.dashboards = dashboards;
-        this.clouds = clouds;
-        this.characterCards = characterCards;
-        this.generalMoneyReserve = generalMoneyReserve;
-        this.bag = bag;
-        this.isleManager = isleManager;
+    public GameTable(int numberOfPlayers, GameMode gameMode) {
         this.gameMode = gameMode;
+        this.numberOfPlayers = numberOfPlayers;
+
+        this.dashboards = new ArrayList<>(4);
+        this.clouds = new ArrayList<>(3);
+        this.characterCards = new ArrayList<>(3);
     }
 
-    public Dashboard getDashboards(int idDashboard) { return dashboards.get(idDashboard); }
+    public void buildDashboard(int idDashboard){
+        Dashboard dashboard = new Dashboard(numberOfPlayers, idDashboard, gameMode);
+        dashboards.add(dashboard);
+    }
 
-    public Cloud getClouds(int idCloud) { return clouds.get(idCloud); }
+    public void buildCloud(int idCLoud){
+        Cloud cloud;
+        if (numberOfPlayers==3)
+            cloud = new Cloud(idCLoud, CloudSide.SIDE_3_PLAYERS);
+        else
+            cloud = new Cloud(idCLoud, CloudSide.SIDE_2_AND_4_PLAYERS);
+        clouds.add(cloud);
+    }
 
-    public CharacterCard getCharacterCards(int indexOfCharacterCard) { return characterCards.get(indexOfCharacterCard); }
+    public void buildCharacterCards(int idCharacterCard){  //Not yet implemented!
+        Effect effect = null;
+        CharacterCard characterCard = new CharacterCard(idCharacterCard,0,false,effect);
+        characterCards.add(characterCard);
+    }
+
+    public Dashboard getDashboard(int idDashboard) { return dashboards.get(idDashboard); }
+
+    public Cloud getCloud(int idCloud) { return clouds.get(idCloud); }
+
+    public CharacterCard getCharacterCard(int idCharacterCard) { return characterCards.get(idCharacterCard); }
 }

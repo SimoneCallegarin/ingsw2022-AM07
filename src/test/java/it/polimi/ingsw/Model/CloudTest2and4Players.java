@@ -22,8 +22,9 @@ class CloudTest2and4Players {
         cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.addStudent(RealmColors.PINK);
-        cloudForTest.addStudent(RealmColors.RED);
-        assertEquals(4, cloudForTest.getNumberOfElements());
+        assertEquals(3, cloudForTest.getNumberOfElements());
+        cloudForTest.addStudent(RealmColors.PINK);
+        assertEquals(3, cloudForTest.getNumberOfElements());
     }
 
     /**

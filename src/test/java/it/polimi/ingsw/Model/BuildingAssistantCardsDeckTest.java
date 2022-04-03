@@ -23,7 +23,7 @@ class BuildingAssistantCardsDeckTest {
         int[] turnOrder = new int[] {1,2,3,4,5,6,7,8,9,10};
         int[] mnMovement = new int[] {1,1,2,2,3,3,4,4,5,5};
 
-        Dashboard dashboard = new Dashboard(1,new TowerStorage(8,TowerColors.WHITE));
+        Dashboard dashboard = new Dashboard(2, 0 ,GameMode.EXPERT);
         Player playerForTest = new Player("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, dashboard );
 
         for(int i = 0; i < 10; i++) {
