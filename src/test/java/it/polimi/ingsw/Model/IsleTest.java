@@ -63,15 +63,7 @@ class IsleTest {
      */
     @Test
     void getInfluence() {
-        Player p=new Player("filobuda",Squads.SQUAD1,Mages.MAGE1,new Dashboard(2,0,GameMode.BASE));
-        p.dashboard.getTowerStorage().
 
-        isleTest.addStudent(RealmColors.RED);
-        p.dashboard.getDiningRoom().addProfessor(RealmColors.RED);
-        assertEquals(isleTest.getInfluence(p),1);
-
-        isleTest.setTower(TowerColors.BLACK);
-        assertEquals(isleTest.getInfluence(p),2);
 
     }
 }
