@@ -22,7 +22,7 @@ public class Game {
     private final int noColorInfluence;   //used for the character cards in recalculate effect
 
     public Game() {
-        this.players = null;
+        this.players = new ArrayList<>(4);
         this.gameMode = GameMode.BASE;
         this.numberOfPlayers = 0;
         this.bag = new Bag();
@@ -37,6 +37,25 @@ public class Game {
         this.moreMNMovement = 0;
         this.moreInfluence = 0;
         this.noColorInfluence = 0;
+    }
+
+    public int getPlayer(String nickName) {
+        int i = 0;
+        while (!players.get(i).nickname.equals(nickName))
+            i++;
+        return i;
+    }
+
+    public Bag getBag() {
+        return bag;
+    }
+
+    public IsleManager getIsleManager() {
+        return isleManager;
+    }
+
+    public GameTable getGameTable() {
+        return gameTable;
     }
 
     /**
@@ -71,7 +90,7 @@ public class Game {
 
         Player newPlayer;
 
-        GameTable gameTable = new GameTable(numberOfPlayers, gameMode);
+        gameTable = new GameTable(numberOfPlayers, gameMode);
         gameTable.buildDashboard(0);
 
         if (numberOfPlayers==4)
@@ -91,7 +110,7 @@ public class Game {
      */
     public void addAnOtherPlayer(String nickName, Mages mage){
 
-        for (int i=0; i<numberOfPlayers; i++){
+        for (int i=0; i<actualNumberOfPlayers; i++){
             if (nickName.equals(players.get(i).nickname))
                 return;
                 //new name please
@@ -99,7 +118,17 @@ public class Game {
 
         if ((actualNumberOfPlayers<numberOfPlayers)) {
             gameTable.buildDashboard(actualNumberOfPlayers);
-            Player newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
+            Player newPlayer;
+                if(numberOfPlayers == 2)
+                    newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                else
+                    if(numberOfPlayers == 3)
+                        newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                    else
+                        if(actualNumberOfPlayers == 1)
+                            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                        else
+                            newPlayer = new Player(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers));
             players.add(newPlayer);
             actualNumberOfPlayers += 1;
         }
@@ -107,5 +136,7 @@ public class Game {
             return;         //it is not possible to add more player than the number of players selected by the first player
 
     }
+
+
 
 }
