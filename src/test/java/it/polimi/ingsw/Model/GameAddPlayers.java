@@ -35,17 +35,8 @@ public class GameAddPlayers {
         game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().addStudent(RealmColors.BLUE);
         game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().addStudent(RealmColors.PINK);
 
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
+        for (int i = 0; i<12; i++)
+            game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("filippo")).getDiningRoom().addStudent(RealmColors.YELLOW);
 
         assertEquals(6, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().getNumberOfElements());
         assertEquals(3, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().getStudentsByColor(RealmColors.YELLOW));
@@ -61,16 +52,9 @@ public class GameAddPlayers {
         game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getEntrance().addStudent(RealmColors.BLUE);
         game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getEntrance().addStudent(RealmColors.RED);
 
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
-        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
+        for(int i = 0; i<11; i++)
+            game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().addStudent(RealmColors.BLUE);
+
 
         assertEquals(3, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getEntrance().getNumberOfElements());
         assertEquals(2, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getEntrance().getStudentsByColor(RealmColors.BLUE));
@@ -83,8 +67,18 @@ public class GameAddPlayers {
 
         game4PlayersExpert.getGameTable().getIsleManager().getIsle(11).addStudent(RealmColors.PINK);
 
+        assertEquals(3, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getNumberOfElements());
+        assertEquals(2, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getStudentsByColor(RealmColors.YELLOW));
+        assertEquals(1, game4PlayersExpert.getGameTable().getIsleManager().getIsle(11).getNumberOfElements());
 
+        //Testing the number of professors in the dashboard:
+        assertEquals(6, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().getProfessorByColor(RealmColors.YELLOW));
 
+        game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().addProfessor(RealmColors.YELLOW);
+
+        assertEquals(1, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().getProfessorByColor(RealmColors.YELLOW));
+        assertEquals(7, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getDiningRoom().getNumberOfElements());
     }
 
 }

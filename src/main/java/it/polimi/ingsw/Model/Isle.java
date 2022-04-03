@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * this class represents the Isle game object
  */
-public class Isle implements StudentManager,DenyCardManager {
+public class Isle implements Place,StudentManager,DenyCardManager {
 
     private int idIsle;
     public final HashMap<RealmColors,Integer> students;
@@ -96,4 +96,12 @@ public class Isle implements StudentManager,DenyCardManager {
 
     public void setTower(TowerColors c){this.tower=c;}
 
+    @Override
+    public int getNumberOfElements() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
+        }
+        return totalNumberOfStudents;
+    }
 }
