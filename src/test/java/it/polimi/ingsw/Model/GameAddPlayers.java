@@ -76,6 +76,15 @@ public class GameAddPlayers {
         assertEquals(2, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("simone")).getEntrance().getStudentsByColor(RealmColors.BLUE));
         assertEquals(7, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayer("bob")).getEntrance().getNumberOfElements());
 
+        //Testing the number of students in the isles:
+        game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).addStudent(RealmColors.YELLOW);
+        game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).addStudent(RealmColors.YELLOW);
+        game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).addStudent(RealmColors.RED);
+
+        game4PlayersExpert.getGameTable().getIsleManager().getIsle(11).addStudent(RealmColors.PINK);
+
+
+
     }
 
 }

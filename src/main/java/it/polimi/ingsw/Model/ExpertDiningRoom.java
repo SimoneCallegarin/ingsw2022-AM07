@@ -15,6 +15,7 @@ public class ExpertDiningRoom extends DiningRoom {
         temp = students.get(color);
         prev = temp;
 
+        if (temp < maxStudentsPerColor)
             temp++;
         students.put(color, temp);
 

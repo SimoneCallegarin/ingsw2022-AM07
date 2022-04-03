@@ -20,7 +20,7 @@ public class Dashboard {
     private final TowerStorage towerStorage;
 
     /**
-     * Dashboard constructor: here are set the maximum dimension of each  
+     * Dashboard constructor: here are set the maximum dimension of each depending on the number of players and the game mode
      */
     public Dashboard(int numOfPlayers, int idDashboard, GameMode gm) {
 
