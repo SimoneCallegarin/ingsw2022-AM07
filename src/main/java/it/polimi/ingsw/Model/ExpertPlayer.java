@@ -10,7 +10,7 @@ public class ExpertPlayer extends Player{
 
     /**
      * Constructor
-     *  @param nickname    valid nickname chosen by the player
+     * @param nickname    valid nickname chosen by the player
      * @param squad       team chosen by the player
      * @param mage        mage chosen by the player for his deck
      * @param dashboard   dashboard referring to the player (each player has his own dashboard)
