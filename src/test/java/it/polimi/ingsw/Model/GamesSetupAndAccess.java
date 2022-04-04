@@ -54,9 +54,12 @@ public class GamesSetupAndAccess {
         assertEquals(2,game4PlayersExpert.getPlayer("bob").getMageDeck().get(2).getMnMovement());
         assertFalse(game4PlayersExpert.getPlayer("bob").getMageDeck().get(2).isUsed());
 
-        //Testing the access to the moneys of the player:
-       // assertEquals(0,game4PlayersExpert.getPlayer("simone").getMoney);  why it isn't referring to the methods of an expert player?
-
+        //Testing the access to the expert game mode function the player:
+        assertEquals(1,game4PlayersExpert.getPlayer("simone").expertFunctionForPlayer.getMoney());
+        assertFalse(game4PlayersExpert.getPlayer("simone").expertFunctionForPlayer.getAlreadyPlayedACardThisTurn());
+        CharacterCard characterCard = new CharacterCard(3,1, new Effect());
+        game4PlayersExpert.getPlayer("simone").expertFunctionForPlayer.playCharacterCard(characterCard);
+        assertEquals(0,game4PlayersExpert.getPlayer("simone").expertFunctionForPlayer.getMoney());
     }
 
 }

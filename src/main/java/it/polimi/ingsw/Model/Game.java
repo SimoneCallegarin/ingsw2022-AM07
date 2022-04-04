@@ -101,15 +101,9 @@ public class Game {
         gameTable.buildDashboard(0);
 
         if (numberOfPlayers==4)
-            if (gameMode.equals(GameMode.EXPERT))
-                newPlayer = new ExpertPlayer(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(0));
-            else
-                newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(0));
+            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(0), gameMode);
         else
-            if (gameMode.equals(GameMode.EXPERT))
-                newPlayer = new ExpertPlayer(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(0));
-            else
-                newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(0));
+            newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(0), gameMode);
 
         players.add(newPlayer);
         actualNumberOfPlayers = 1;
@@ -133,21 +127,12 @@ public class Game {
             gameTable.buildDashboard(actualNumberOfPlayers);
             Player newPlayer;
                 if(numberOfPlayers == 2 || numberOfPlayers == 3)
-                    if (gameMode.equals(GameMode.EXPERT))
-                        newPlayer = new ExpertPlayer(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
-                    else
-                        newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                    newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
                 else
                     if(actualNumberOfPlayers == 1)
-                        if (gameMode.equals(GameMode.EXPERT))
-                            newPlayer = new ExpertPlayer(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers));
-                        else
-                            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                        newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
                     else
-                    if (gameMode.equals(GameMode.EXPERT))
-                        newPlayer = new ExpertPlayer(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers));
-                    else
-                        newPlayer = new Player(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers));
+                        newPlayer = new Player(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
 
             players.add(newPlayer);
             actualNumberOfPlayers += 1;

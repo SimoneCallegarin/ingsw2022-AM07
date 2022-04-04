@@ -1,21 +1,14 @@
 package it.polimi.ingsw.Model;
 
-import java.util.ArrayList;
-
-public class ExpertPlayer extends Player{
+public class ExpertFunctionForPlayer {
 
     private int money;
-    boolean alreadyPlayedACardThisTurn;
+    private boolean alreadyPlayedACardThisTurn;
 
     /**
      * Constructor
-     * @param nickname    valid nickname chosen by the player
-     * @param squad       team chosen by the player
-     * @param mage        mage chosen by the player for his deck
-     * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      */
-    public ExpertPlayer(String nickname, Squads squad, Mages mage, Dashboard dashboard) {
-        super(nickname, squad, mage, dashboard);
+    public ExpertFunctionForPlayer() {
         this.money = 1;
         this.alreadyPlayedACardThisTurn = false;
     }
@@ -37,7 +30,7 @@ public class ExpertPlayer extends Player{
             money = money - characterCard.getCost();
             characterCard.isUsed();
             alreadyPlayedACardThisTurn = true;}          //in order to prevent the player to play two cards in the same turn
-                                                    //this has to be checked in the class game if(alreadyPlayedACardThisTurn=false) => "Playable" else "NotPlayable"
+        //this has to be checked in the class game if(alreadyPlayedACardThisTurn=false) => "Playable" else "NotPlayable"
     }
 
 }
