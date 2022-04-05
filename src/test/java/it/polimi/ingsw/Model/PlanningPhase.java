@@ -54,7 +54,6 @@ class PlanningPhase {
         Game game = new Game();
         game.addFirstPlayer("giec", GameMode.BASE, 2, Mages.MAGE1);
         game.addAnOtherPlayer("simo", Mages.MAGE2);
-        System.out.println(game.firstPlayerIndex);
         if (game.firstPlayerIndex == 0) {
             assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(0).getOrder());
             assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(1).getOrder());
@@ -75,7 +74,6 @@ class PlanningPhase {
         game.addAnOtherPlayer("simo", Mages.MAGE2);
         game.addAnOtherPlayer("fil", Mages.MAGE3);
         game.addAnOtherPlayer("sbob", Mages.MAGE4);
-        System.out.println(game.firstPlayerIndex);
         if (game.firstPlayerIndex == 0) {
             assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(0).getOrder());
             assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(1).getOrder());
@@ -111,7 +109,6 @@ class PlanningPhase {
         AssistantCard cardPlayed = new AssistantCard(3, 2, false);
         game.addFirstPlayer("giec", GameMode.BASE, 2, Mages.MAGE1);
         game.addAnOtherPlayer("simo", Mages.MAGE2);
-        System.out.println(game.firstPlayerIndex);
         game.playAssistantCard(game.firstPlayerIndex, cardPlayed);
         assertEquals(1, game.playerCounter);
     }
@@ -125,7 +122,6 @@ class PlanningPhase {
         AssistantCard cardPlayed = new AssistantCard(3, 2, false);
         game.addFirstPlayer("giec", GameMode.BASE, 2, Mages.MAGE1);
         game.addAnOtherPlayer("simo", Mages.MAGE2);
-        System.out.println(game.firstPlayerIndex);
         if (game.firstPlayerIndex == 0)
             game.playAssistantCard(1, cardPlayed);
         else

@@ -44,7 +44,7 @@ public class GameTable {
 
     public void buildCharacterCards(int idCharacterCard){  //Not yet implemented!
         Effect effect = null;
-        CharacterCard characterCard = new CharacterCard(idCharacterCard,0,false,effect);
+        CharacterCard characterCard = new CharacterCard(idCharacterCard,0,effect);
         characterCards.add(characterCard);
     }
 

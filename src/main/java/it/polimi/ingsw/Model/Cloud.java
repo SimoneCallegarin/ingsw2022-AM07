@@ -48,7 +48,7 @@ public class Cloud implements Place,StudentManager{
      */
     public int getNumberOfStudentsOfColor(RealmColors colors) {
         return students.get(colors);
-    }
+    }   // refuso
 
     /**
      * this method updates the students' hashmap incrementing by 1 the value specified by color

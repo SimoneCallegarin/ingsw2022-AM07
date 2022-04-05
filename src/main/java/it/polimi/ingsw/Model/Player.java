@@ -77,14 +77,9 @@ public class Player {
 
     }
 
-    public void setDiscardPile(AssistantCard discardPile) {
-        this.discardPile = discardPile;
-    }
-
     public List<AssistantCard> getMageDeck() {
         return mageDeck;
     }
-
 
     /**
      * This method permits the player to select an assistant card to play
