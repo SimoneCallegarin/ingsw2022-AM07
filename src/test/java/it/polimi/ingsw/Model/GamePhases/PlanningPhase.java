@@ -135,4 +135,25 @@ class PlanningPhase {
         assertEquals(0, game.playerCounter);
     }
 
+    /**
+     * we are testing if nothing happens when the second player tries to play the same card as the one played by the first player
+     */
+    @Test
+    public void wrongCardPlayed() {
+        Game game = new Game();
+        AssistantCard cardPlayed1 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        game.addFirstPlayer("giec", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
+        game.addAnOtherPlayer("simo", Mages.WEALTHY_KING);
+        if (game.firstPlayerIndex == 0) {
+            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, cardPlayed2);
+        }
+        else {
+            game.playAssistantCard(1, cardPlayed1);
+            game.playAssistantCard(0, cardPlayed2);
+        }
+        assertEquals(1, game.playerCounter);
+    }
+
 }

@@ -30,9 +30,9 @@ public class Dashboard {
         int maxEntranceStudents;
         int maxEntranceStudentsRemovable;
         int maxStorageTowers;
-        TowerColors towerColor = TowerColors.NOCOLOR;
 
         this.idDashboard = idDashboard;
+        TowerColors towerColor = TowerColors.getColor(idDashboard);
 
         if (numOfPlayers == 3) {
             maxEntranceStudents = 9;
@@ -50,8 +50,6 @@ public class Dashboard {
         if((idDashboard==2||idDashboard==3)&&numOfPlayers==4)
             maxStorageTowers=0;
         this.towerStorage = new TowerStorage(maxStorageTowers, towerColor);
-        //the process of building the tower storage mey be simplified
-        towerStorage.setTowerColor(towerStorage.getTowerColor().getColor(idDashboard,numOfPlayers));
     }
 
     public int getIdDashboard() {

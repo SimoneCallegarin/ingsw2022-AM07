@@ -169,14 +169,25 @@ public class Game {
     }
 
     public void playAssistantCard(int IDPlayer, AssistantCard assistantCardPlayed) {
+        boolean alreadyPlayed = false;
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(IDPlayer).getOrder()) {
-            players.get(IDPlayer).playAssistantCard(assistantCardPlayed);
-            playerCounter++;
-            if (playerCounter == numberOfPlayers) {
-                gamePhase = GamePhases.ACTION_PHASE;
-                actionPhase = ActionPhases.MOVE_STUDENTS;
+            for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
+                if (p.discardPile != null) {
+                    if (p.discardPile.getTurnOrder() == assistantCardPlayed.getTurnOrder()) {
+                        alreadyPlayed = true;
+                        break;
+                    }
+                }
             }
-            nextPlayer();
+            if (!alreadyPlayed) {
+                players.get(IDPlayer).playAssistantCard(assistantCardPlayed);
+                playerCounter++;
+                if (playerCounter == numberOfPlayers) {
+                    gamePhase = GamePhases.ACTION_PHASE;
+                    actionPhase = ActionPhases.MOVE_STUDENTS;
+                }
+                nextPlayer();
+            }
         }
     }
 
