@@ -7,6 +7,7 @@ public class GameTable {
     private final ArrayList<Dashboard> dashboards;
     private final ArrayList<Cloud> clouds;
     private final IsleManager isleManager;
+    private final Bag bag;
     private final ArrayList<CharacterCard> characterCards;
     private final GameMode gameMode;
     private int numberOfPlayers;
@@ -18,6 +19,7 @@ public class GameTable {
         this.numberOfPlayers = numberOfPlayers;
 
         this.dashboards = new ArrayList<>(4);
+        this.bag = new Bag();
         this.isleManager = new IsleManager();
         this.clouds = new ArrayList<>(3);
         this.characterCards = new ArrayList<>(3);

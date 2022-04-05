@@ -8,8 +8,6 @@ public class Game {
     private int numberOfPlayers;
     private GameTable gameTable;
     private int actualNumberOfPlayers;
-    private final Bag bag;
-    private final IsleManager isleManager;
 
     private final GamePhases gamePhases;
     private final ActionPhases actionPhases;
@@ -25,8 +23,6 @@ public class Game {
         this.players = new ArrayList<>(4);
         this.gameMode = GameMode.BASE;
         this.numberOfPlayers = 0;
-        this.bag = new Bag();
-        this.isleManager = new IsleManager();
 
         this.gamePhases = GamePhases.SETUP_PHASE;                       //not already used but ok, maybe we can add a "neutral" phase
         this.actionPhases = ActionPhases.MOVE_STUDENTS;
@@ -51,14 +47,6 @@ public class Game {
         while (!players.get(i).nickname.equals(nickName))
             i++;
         return players.get(i);
-    }
-
-    public Bag getBag() {
-        return bag;
-    }
-
-    public IsleManager getIsleManager() {
-        return isleManager;
     }
 
     public GameTable getGameTable() {
