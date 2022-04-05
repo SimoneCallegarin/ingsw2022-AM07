@@ -1,5 +1,10 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Model.Enumeration.*;
+import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+import it.polimi.ingsw.Model.Player.AssistantCard;
+import it.polimi.ingsw.Model.Player.Player;
+
 import java.util.ArrayList;
 
 public class Game {
@@ -16,7 +21,7 @@ public class Game {
     private int studentsCounter = 0;
 
     private GamePhases gamePhase;
-    public PlanificationPhases planificationPhase;
+    public PlanningPhases planningPhase;
     private ActionPhases actionPhase;
     private CurrentOrder currentActivePlayer;
 
@@ -32,7 +37,7 @@ public class Game {
         this.numberOfPlayers = 0;
 
         this.gamePhase = GamePhases.SETUP_PHASE;                       //not already used but ok, maybe we can add a "neutral" phase
-        this.planificationPhase = PlanificationPhases.FILL_CLOUDS;
+        this.planningPhase = PlanningPhases.FILL_CLOUDS;
         this.actionPhase = ActionPhases.MOVE_STUDENTS;
 
         this.sameStudents = 0;
@@ -47,14 +52,6 @@ public class Game {
         while (!players.get(i).nickname.equals(nickName))
             i++;
         return i;
-    }
-
-    public Player getPlayer(String nickName) {
-        int i = 0;
-        while (!players.get(i).nickname.equals(nickName))
-            i++;
-        Player player = players.get(i);
-        return player;
     }
 
     public Player getPlayerByIndex(int playerIndex) {
@@ -106,9 +103,9 @@ public class Game {
         gameTable.buildDashboard(0);
 
         if (numberOfPlayers==4)
-            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(0), gameMode);
+            newPlayer = new Player(nickName, Squads.SQUAD1, gameTable.getDashboard(0), gameMode);
         else
-            newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(0), gameMode);
+            newPlayer = new Player(nickName, Squads.NOSQUAD, gameTable.getDashboard(0), gameMode);
 
         players.add(newPlayer);
         actualNumberOfPlayers = 1;
@@ -132,20 +129,20 @@ public class Game {
             gameTable.buildDashboard(actualNumberOfPlayers);
             Player newPlayer;
                 if(numberOfPlayers == 2)
-                    newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
+                    newPlayer = new Player(nickName, Squads.NOSQUAD, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
                 else
                     if(numberOfPlayers == 3)
-                        newPlayer = new Player(nickName, Squads.NOSQUAD, mage, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
+                        newPlayer = new Player(nickName, Squads.NOSQUAD, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
                     else
                         if(actualNumberOfPlayers == 1)
-                            newPlayer = new Player(nickName, Squads.SQUAD1, mage, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
+                            newPlayer = new Player(nickName, Squads.SQUAD1, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
                         else
-                            newPlayer = new Player(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
+                            newPlayer = new Player(nickName, Squads.SQUAD2, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
             players.add(newPlayer);
             actualNumberOfPlayers += 1;
 
             if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
-                this.gamePhase = GamePhases.PLANIFICATION_PHASE;
+                this.gamePhase = GamePhases.PLANNING_PHASE;
                 fillClouds();
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 updateOrder(gamePhase);
@@ -161,18 +158,18 @@ public class Game {
      * this is a method used during PLANIFICATION_PHASE and it fills clouds automatically
      */
     private void fillClouds() {
-        if (gamePhase == GamePhases.PLANIFICATION_PHASE && planificationPhase == PlanificationPhases.FILL_CLOUDS) {
+        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
             for (int i = 0; i < numberOfPlayers; i++) {
                 for (int j = 0; j < studentsMovable; j++) {
                     gameTable.getCloud(i).addStudent(gameTable.getBag().draw());
                 }
             }
-            planificationPhase = PlanificationPhases.ASSISTANT_CARD_PHASE;
+            planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
         }
     }
 
     public void playAssistantCard(int IDPlayer, AssistantCard assistantCardPlayed) {
-        if (gamePhase == GamePhases.PLANIFICATION_PHASE && planificationPhase == PlanificationPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(IDPlayer).getOrder()) {
+        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(IDPlayer).getOrder()) {
             players.get(IDPlayer).playAssistantCard(assistantCardPlayed);
             playerCounter++;
             if (playerCounter == numberOfPlayers) {
@@ -185,7 +182,7 @@ public class Game {
 
     private void updateOrder(GamePhases gamePhase) {
         int i = firstPlayerIndex;
-        if (gamePhase == GamePhases.PLANIFICATION_PHASE) {
+        if (gamePhase == GamePhases.PLANNING_PHASE) {
             players.get(firstPlayerIndex).setOrder(CurrentOrder.FIRST_PLAYER);
             currentActivePlayer = CurrentOrder.FIRST_PLAYER;
             playerCounter++;
@@ -235,14 +232,14 @@ public class Game {
 
         if (gamePhase == GamePhases.SETUP_PHASE)
             gp = "setup_phase";
-        else if (gamePhase == GamePhases.PLANIFICATION_PHASE)
+        else if (gamePhase == GamePhases.PLANNING_PHASE)
             gp = "planning_phase";
         else if (gamePhase == GamePhases.ACTION_PHASE)
             gp = "action_phase";
 
-        if (planificationPhase == PlanificationPhases.FILL_CLOUDS)
+        if (planningPhase == PlanningPhases.FILL_CLOUDS)
             pp = "fill_clouds";
-        else if (planificationPhase == PlanificationPhases.ASSISTANT_CARD_PHASE)
+        else if (planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE)
             pp = "assistant_card_phase";
 
         if (actionPhase == ActionPhases.MOVE_STUDENTS)
