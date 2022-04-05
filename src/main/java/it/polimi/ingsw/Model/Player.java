@@ -33,6 +33,15 @@ public class Player {
      * This attribute represents the Dashboard associated with the player
      */
     public Dashboard dashboard;
+    /**
+     * This attribute represents the game mode
+     */
+    public GameMode gameMode;
+    /**
+     * This attribute implements the function for a player in expert mode
+     */
+    public ExpertFunctionForPlayer expertFunctionForPlayer;
+
 
     private CurrentOrder order;
 
@@ -42,13 +51,15 @@ public class Player {
      * @param squad       team chosen by the player
      * @param mage        mage chosen by the player for his deck
      * @param dashboard   dashboard referring to the player (each player has his own dashboard)
+     * @param gameMode    game mode of the game where the player have to play, used to add function to the player
      */
-    public Player(String nickname, Squads squad, Mages mage, Dashboard dashboard) {
+    public Player(String nickname, Squads squad, Mages mage, Dashboard dashboard, GameMode gameMode) {
         this.nickname = nickname;
         this.squad = squad;
         this.mage = mage;
         this.discardPile = null;
         this.dashboard = dashboard;
+        this.gameMode = gameMode;
         this.mageDeck = new ArrayList<>(10);
 
         /**
@@ -61,29 +72,13 @@ public class Player {
             this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1, false));
         }
 
-    }
+        if (gameMode.equals(GameMode.EXPERT))
+            this.expertFunctionForPlayer = new ExpertFunctionForPlayer();
 
-    /**
-     * Setters
-     */
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setSquad(Squads squad) {
-        this.squad = squad;
-    }
-
-    public void setDashboard(Dashboard dashboard) {
-        this.dashboard = dashboard;
     }
 
     public void setDiscardPile(AssistantCard discardPile) {
         this.discardPile = discardPile;
-    }
-
-    public void setMageDeck(ArrayList<AssistantCard> mageDeck) {
-        this.mageDeck = mageDeck;
     }
 
     public List<AssistantCard> getMageDeck() {

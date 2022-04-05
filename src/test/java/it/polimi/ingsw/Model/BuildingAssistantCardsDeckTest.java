@@ -24,7 +24,7 @@ class BuildingAssistantCardsDeckTest {
         int[] mnMovement = new int[] {1,1,2,2,3,3,4,4,5,5};
 
         Dashboard dashboard = new Dashboard(2, 0 ,GameMode.EXPERT);
-        Player playerForTest = new Player("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, dashboard );
+        Player playerForTest = new Player("PlayerForTest", Squads.SQUAD1, Mages.MAGE1, dashboard, GameMode.BASE );
 
         for(int i = 0; i < 10; i++) {
             assertEquals(turnOrder[i], playerForTest.getMageDeck().get(i).turnOrder);

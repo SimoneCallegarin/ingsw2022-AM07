@@ -53,17 +53,30 @@ class IsleTest {
     void removeDenyCard() {
         isleTest.addDenyCard();
         isleTest.removeDenyCard();
-        assertEquals(isleTest.denyCard, false);
+        assertFalse(isleTest.getDenyCard());
         isleTest.removeDenyCard();
-        assertEquals(isleTest.denyCard,false);
+        assertFalse(isleTest.getDenyCard());
     }
 
     /**
-     * testing if getInfluence correctly return the influence value relative to one player
+     * testing if getInfluence correctly return the influence value relative to one player if there's only one student,
+     * if there's also the tower, and if there's nothing relative to the player
      */
     @Test
     void getInfluence() {
+        Player p=new Player("filobuda",Squads.SQUAD1,Mages.MAGE1,new Dashboard(2,0,GameMode.BASE),GameMode.BASE);
 
+
+        isleTest.addStudent(RealmColors.RED);
+        p.dashboard.getDiningRoom().addProfessor(RealmColors.RED);
+        assertEquals(isleTest.getInfluence(p),1);
+
+        isleTest.setTower( p.dashboard.getTowerStorage().getTowerColor());
+        assertEquals(isleTest.getInfluence(p),2);
+
+        isleTest.setTower(TowerColors.NOCOLOR);
+        isleTest.removeStudent(RealmColors.RED);
+        assertEquals(isleTest.getInfluence(p),0);
 
     }
 }
