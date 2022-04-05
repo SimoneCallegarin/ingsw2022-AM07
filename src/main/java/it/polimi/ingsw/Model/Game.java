@@ -4,16 +4,21 @@ import java.util.ArrayList;
 
 public class Game {
     private final ArrayList<Player> players;
+    public int firstPlayerIndex;
     private GameMode gameMode;
+
     private int numberOfPlayers;
+    private int studentsMovable;
     private GameTable gameTable;
     private int actualNumberOfPlayers;
-    private Bag bag;
-    private IsleManager isleManager;
 
-    private final GamePhases gamePhases;
-    private final ActionPhases actionPhases;
-    private final PlanificationPhases planificationPhases;
+    public int playerCounter = 0;
+    private int studentsCounter = 0;
+
+    private GamePhases gamePhase;
+    public PlanificationPhases planificationPhase;
+    private ActionPhases actionPhase;
+    private CurrentOrder currentActivePlayer;
 
     private final int sameStudents;   //used for the character cards in recalculate effect
     private final int noTowerCount;   //used for the character cards in recalculate effect
@@ -25,12 +30,10 @@ public class Game {
         this.players = new ArrayList<>(4);
         this.gameMode = GameMode.BASE;
         this.numberOfPlayers = 0;
-        this.bag = new Bag();
-        this.isleManager = new IsleManager();
 
-        this.gamePhases = GamePhases.SETUP_PHASE;                       //not already used but ok, maybe we can add a "neutral" phase
-        this.actionPhases = ActionPhases.MOVE_STUDENTS;
-        this.planificationPhases = PlanificationPhases.FILL_CLOUDS;
+        this.gamePhase = GamePhases.SETUP_PHASE;                       //not already used but ok, maybe we can add a "neutral" phase
+        this.planificationPhase = PlanificationPhases.FILL_CLOUDS;
+        this.actionPhase = ActionPhases.MOVE_STUDENTS;
 
         this.sameStudents = 0;
         this.noTowerCount = 0;
@@ -46,12 +49,8 @@ public class Game {
         return i;
     }
 
-    public Bag getBag() {
-        return bag;
-    }
-
-    public IsleManager getIsleManager() {
-        return isleManager;
+    public Player getPlayerByIndex(int playerIndex) {
+        return players.get(playerIndex);
     }
 
     public GameTable getGameTable() {
@@ -72,6 +71,11 @@ public class Game {
      */
     public void setPlayerNumbers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
+
+        if (numberOfPlayers == 3)
+            studentsMovable = 4;
+        else
+            studentsMovable = 3;
     }
 
     //it is possible to split this method in 4 sub methods that permit to build the player by asking him 1 param per times
@@ -131,12 +135,126 @@ public class Game {
                             newPlayer = new Player(nickName, Squads.SQUAD2, mage, gameTable.getDashboard(actualNumberOfPlayers));
             players.add(newPlayer);
             actualNumberOfPlayers += 1;
+
+            if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
+                this.gamePhase = GamePhases.PLANIFICATION_PHASE;
+                fillClouds();
+                firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
+                updateOrder(gamePhase);
+            }
+
         }
         else
             return;         //it is not possible to add more player than the number of players selected by the first player
 
     }
 
+    /**
+     * this is a method used during PLANIFICATION_PHASE and it fills clouds automatically
+     */
+    private void fillClouds() {
+        if (gamePhase == GamePhases.PLANIFICATION_PHASE && planificationPhase == PlanificationPhases.FILL_CLOUDS) {
+            for (int i = 0; i < numberOfPlayers; i++) {
+                for (int j = 0; j < studentsMovable; j++) {
+                    gameTable.getCloud(i).addStudent(gameTable.getBag().draw());
+                }
+            }
+            planificationPhase = PlanificationPhases.ASSISTANT_CARD_PHASE;
+        }
+    }
 
+    public void playAssistantCard(int IDPlayer, AssistantCard assistantCardPlayed) {
+        if (gamePhase == GamePhases.PLANIFICATION_PHASE && planificationPhase == PlanificationPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(IDPlayer).getOrder()) {
+            players.get(IDPlayer).playAssistantCard(assistantCardPlayed);
+            playerCounter++;
+            if (playerCounter == numberOfPlayers) {
+                gamePhase = GamePhases.ACTION_PHASE;
+                actionPhase = ActionPhases.MOVE_STUDENTS;
+            }
+            nextPlayer();
+        }
+    }
+
+    private void updateOrder(GamePhases gamePhase) {
+        int i = firstPlayerIndex;
+        if (gamePhase == GamePhases.PLANIFICATION_PHASE) {
+            players.get(firstPlayerIndex).setOrder(CurrentOrder.FIRST_PLAYER);
+            currentActivePlayer = CurrentOrder.FIRST_PLAYER;
+            playerCounter++;
+            while (playerCounter < numberOfPlayers) {
+                i++;
+                if (i == numberOfPlayers)
+                    i = 0;
+                if (playerCounter == 1)
+                    players.get(i).setOrder(CurrentOrder.SECOND_PLAYER);
+                else if (playerCounter == 2)
+                    players.get(i).setOrder(CurrentOrder.THIRD_PLAYER);
+                else if (playerCounter == 3)
+                    players.get(i).setOrder(CurrentOrder.FOURTH_PLAYER);
+                playerCounter++;
+            }
+            playerCounter = 0;
+        }
+
+        if (gamePhase == GamePhases.ACTION_PHASE) {
+            if (actionPhase == ActionPhases.MOVE_STUDENTS) {
+               // check of every discard pile
+            }
+        }
+    }
+
+    private void nextPlayer() {
+        if (currentActivePlayer == CurrentOrder.FIRST_PLAYER)
+            currentActivePlayer = CurrentOrder.SECOND_PLAYER;
+        else if (currentActivePlayer == CurrentOrder.SECOND_PLAYER) {
+            if (playerCounter == numberOfPlayers)
+                updateOrder(GamePhases.ACTION_PHASE);
+            else
+                currentActivePlayer = CurrentOrder.THIRD_PLAYER;
+        }
+        else if (currentActivePlayer == CurrentOrder.THIRD_PLAYER) {
+            if (playerCounter == numberOfPlayers)
+                updateOrder(GamePhases.ACTION_PHASE);
+            else
+                currentActivePlayer = CurrentOrder.FOURTH_PLAYER;
+        }
+        else if (currentActivePlayer == CurrentOrder.FOURTH_PLAYER)
+            updateOrder(GamePhases.ACTION_PHASE);
+    }
+
+    public String getState() {
+        String gp = null, pp = null, ap = null, cap = null;
+
+        if (gamePhase == GamePhases.SETUP_PHASE)
+            gp = "setup_phase";
+        else if (gamePhase == GamePhases.PLANIFICATION_PHASE)
+            gp = "planning_phase";
+        else if (gamePhase == GamePhases.ACTION_PHASE)
+            gp = "action_phase";
+
+        if (planificationPhase == PlanificationPhases.FILL_CLOUDS)
+            pp = "fill_clouds";
+        else if (planificationPhase == PlanificationPhases.ASSISTANT_CARD_PHASE)
+            pp = "assistant_card_phase";
+
+        if (actionPhase == ActionPhases.MOVE_STUDENTS)
+            ap = "move_students";
+        else if (actionPhase == ActionPhases.MOVE_MOTHER_NATURE)
+            ap = "move_mother_nature";
+        else if (actionPhase == ActionPhases.CHOOSE_CLOUD)
+            ap = "choose_cloud";
+
+        if (currentActivePlayer == CurrentOrder.FIRST_PLAYER)
+            cap = "player_1";
+        else if (currentActivePlayer == CurrentOrder.SECOND_PLAYER)
+            cap = "player_2";
+        else if (currentActivePlayer == CurrentOrder.THIRD_PLAYER)
+            cap = "player_3";
+        else if (currentActivePlayer == CurrentOrder.FOURTH_PLAYER)
+            cap = "player_4";
+
+        return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
+
+    }
 
 }

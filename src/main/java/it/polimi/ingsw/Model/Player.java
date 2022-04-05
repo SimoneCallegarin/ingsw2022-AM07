@@ -34,6 +34,8 @@ public class Player {
      */
     public Dashboard dashboard;
 
+    private CurrentOrder order;
+
     /**
      * Constructor
      * @param nickname    valid nickname chosen by the player
@@ -95,6 +97,14 @@ public class Player {
     public void playAssistantCard(AssistantCard assistantCard){
         this.discardPile = assistantCard;
         this.mageDeck.remove(assistantCard);
+    }
+
+    public void setOrder(CurrentOrder order) {
+        this.order = order;
+    }
+
+    public CurrentOrder getOrder() {
+        return this.order;
     }
 
 }

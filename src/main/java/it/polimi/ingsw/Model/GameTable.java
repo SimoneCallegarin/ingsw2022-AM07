@@ -7,10 +7,11 @@ public class GameTable {
     private final ArrayList<Dashboard> dashboards;
     private final ArrayList<Cloud> clouds;
     private final IsleManager isleManager;
+    private final Bag bag;
     private final ArrayList<CharacterCard> characterCards;
     private final int generalMoneyReserve = 20;
     private final GameMode gameMode;
-    private int numberOfPlayers;
+    private final int numberOfPlayers;
 
     public GameTable( int numberOfPlayers, GameMode gameMode) {
 
@@ -19,7 +20,11 @@ public class GameTable {
 
         this.dashboards = new ArrayList<>(4);
         this.isleManager = new IsleManager();
-        this.clouds = new ArrayList<>(3);
+        this.bag = new Bag();
+        this.clouds = new ArrayList<>(4);
+            for (int i = 0; i < numberOfPlayers; i++) {
+                buildCloud(i);
+            }
         this.characterCards = new ArrayList<>(3);
     }
 
@@ -49,6 +54,10 @@ public class GameTable {
 
     public IsleManager getIsleManager() {
         return isleManager;
+    }
+
+    public Bag getBag() {
+        return bag;
     }
 
     public CharacterCard getCharacterCard(int idCharacterCard) { return characterCards.get(idCharacterCard); }
