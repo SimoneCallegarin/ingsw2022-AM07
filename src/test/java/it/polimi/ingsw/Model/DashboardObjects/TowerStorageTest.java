@@ -33,9 +33,6 @@ class TowerStorageTest {
         assertEquals(8,towerStorageForTest2and4Players.getNumberOfElements());
     }
 
-
-
-
     /**
      * instead here we are testing a tower storage in a 3 players game mode
      */

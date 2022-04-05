@@ -51,7 +51,7 @@ public class Dashboard {
             maxStorageTowers=0;
         this.towerStorage = new TowerStorage(maxStorageTowers, towerColor);
         //the process of building the tower storage mey be simplified
-        towerStorage.setTowerColor(towerStorage.getTowerColor().getColor(idDashboard,numOfPlayers));
+        towerStorage.setTowerColor(towerStorage.getTowerColor().getColor(idDashboard));
     }
 
     public int getIdDashboard() {

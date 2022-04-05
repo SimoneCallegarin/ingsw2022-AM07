@@ -88,7 +88,7 @@ public class Bag implements Place, StudentManager {
             }
 
         }
-        return null;
+        return null;  //Exception da implementare!
     }
 
 }

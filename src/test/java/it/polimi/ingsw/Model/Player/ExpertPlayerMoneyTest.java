@@ -36,8 +36,7 @@ public class ExpertPlayerMoneyTest {
         expertPlayerForTest.gainMoney();
         //3 money in total for the player
 
-        Effect effect = new Effect();
-        CharacterCard characterCard = new CharacterCard(0,2,effect);
+        CharacterCard characterCard = new CharacterCard(0,2);
 
         expertPlayerForTest.playCharacterCard(characterCard);
         assertEquals(1,expertPlayerForTest.getMoney());
@@ -53,8 +52,7 @@ public class ExpertPlayerMoneyTest {
         expertPlayerForTest.gainMoney();
         //3 money in total for the player
 
-        Effect effect = new Effect();
-        CharacterCard characterCard = new CharacterCard(0,1,effect);
+        CharacterCard characterCard = new CharacterCard(0,1);
 
         expertPlayerForTest.playCharacterCard(characterCard);
         assertEquals(2,expertPlayerForTest.getMoney());

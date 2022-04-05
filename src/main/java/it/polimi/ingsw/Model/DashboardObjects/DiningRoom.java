@@ -56,7 +56,7 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
      */
     @Override
     public void addStudent(RealmColors color) {
-        int temp, prev;
+        int temp;
         temp = students.get(color);
         if (temp < maxStudentsPerColor) {
             if (temp%3 == 0)

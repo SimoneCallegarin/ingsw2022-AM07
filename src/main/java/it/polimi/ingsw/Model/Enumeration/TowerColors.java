@@ -5,20 +5,13 @@ package it.polimi.ingsw.Model.Enumeration;
  */
 public enum TowerColors {
     WHITE, BLACK, GREY, NOCOLOR;
-    public TowerColors getColor(int index, int numberOfPlayer) {
-        if (numberOfPlayer == 3)
-            switch (index) {
-                case 0: return WHITE;
-                case 1: return BLACK;
-                case 2: return GREY;
-            }
-        else
-            switch (index){
-                case 0: return WHITE;
-                case 1: return BLACK;
-                case 2:
-                case 3: return NOCOLOR;
-            }
-        return null;
+    public TowerColors getColor(int index) {
+        return switch (index) {
+            case 0 -> WHITE;
+            case 1 -> BLACK;
+            case 2 -> GREY;
+            case 3 -> NOCOLOR;
+            default -> null;
+        };
     }
 }
