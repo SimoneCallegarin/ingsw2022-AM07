@@ -19,16 +19,12 @@ public class EffectDatabase {
         };  //NOPE fai enum
         RealmColors color = RealmColors.YELLOW;
 
-        ArrayList list = new ArrayList<>();
+        ArrayList listM = new ArrayList<>();
+        ArrayList listS = new ArrayList<>();
 
         //MONK:
 
-        temp.put(EffectsName.SETUP, list);
-        temp.get(EffectsName.SETUP).add(Movable.STUDENT);
-
-        temp.get(EffectsName.SETUP).add(4);
-        temp.get(EffectsName.SETUP).add(Movable.STUDENT);
-        temp.put(EffectsName.MOVEMENT, list);
+        temp.put(EffectsName.MOVEMENT, listM);
         temp.get(EffectsName.MOVEMENT).add(1);
         temp.get(EffectsName.MOVEMENT).add(place);
         temp.get(EffectsName.MOVEMENT).add(place);
@@ -38,6 +34,11 @@ public class EffectDatabase {
         temp.get(EffectsName.MOVEMENT).add(place);
         temp.get(EffectsName.MOVEMENT).add(place);
         temp.get(EffectsName.MOVEMENT).add(Movable.STUDENT);
+
+        temp.put(EffectsName.SETUP, listS);
+        temp.get(EffectsName.SETUP).add(4);
+        temp.get(EffectsName.SETUP).add(Movable.STUDENT);
+
 
         database.put(CharacterCardsName.MONK, temp);
     }
