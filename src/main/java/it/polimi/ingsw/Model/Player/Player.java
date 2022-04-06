@@ -39,7 +39,7 @@ public class Player {
     /**
      * This attribute represents the Dashboard associated with the player
      */
-    public Dashboard dashboard;
+    private final Dashboard dashboard;
     /**
      * This attribute represents the game mode
      */
