@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
 import it.polimi.ingsw.Model.Player.AssistantCard;
@@ -13,9 +14,9 @@ public class Game {
     private GameMode gameMode;
 
     private int numberOfPlayers;
-    private int studentsMovable;
+    private int maxMovableStudents;
     private GameTable gameTable;
-    private int actualNumberOfPlayers;
+    private int actualNumberOfPlayers = 0;
 
     public int playerCounter = 0;
     private int studentsCounter = 0;
@@ -63,14 +64,6 @@ public class Game {
     }
 
     /**
-     * setting the game mode when selected by the first player
-     * @param gameMode expert or base
-     */
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
-    }
-
-    /**
      * setting the number of player when selected by the first player
      * @param numberOfPlayers to play with in total
      */
@@ -78,9 +71,9 @@ public class Game {
         this.numberOfPlayers = numberOfPlayers;
 
         if (numberOfPlayers == 3)
-            studentsMovable = 4;
+            maxMovableStudents = 4;
         else
-            studentsMovable = 3;
+            maxMovableStudents = 3;
     }
 
     //it is possible to split this method in 4 sub methods that permit to build the player by asking him 1 param per times
@@ -90,22 +83,20 @@ public class Game {
      * @param nickName selected by the player
      * @param gameMode selected by the player (expert or base)
      * @param numberOfPlayers selected by the player (from 2 to 4)
-     * @param mage selected by the player between 4 possible mages
      */
-    public void addFirstPlayer(String nickName, GameMode gameMode, int numberOfPlayers, Mages mage){
+    public void addFirstPlayer(String nickName, GameMode gameMode, int numberOfPlayers){
 
         setPlayerNumbers(numberOfPlayers);
-        setGameMode(gameMode);
+        this.gameMode = gameMode;
 
         Player newPlayer;
 
         gameTable = new GameTable(numberOfPlayers, gameMode);
-        gameTable.buildDashboard(0);
 
         if (numberOfPlayers==4)
-            newPlayer = new Player(nickName, Squads.SQUAD1, gameTable.getDashboard(0), gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
         else
-            newPlayer = new Player(nickName, Squads.NOSQUAD, gameTable.getDashboard(0), gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
 
         players.add(newPlayer);
         actualNumberOfPlayers = 1;
@@ -117,7 +108,7 @@ public class Game {
      * (after having checked that the number of players is respected)
      * @param nickName the nickname of the player, must be checked if other players already got the same
      */
-    public void addAnOtherPlayer(String nickName, Mages mage){
+    public void addAnotherPlayer(String nickName) {
 
         for (int i=0; i<actualNumberOfPlayers; i++){
             if (nickName.equals(players.get(i).nickname))
@@ -125,21 +116,18 @@ public class Game {
                 //new name please
         }
 
-        if ((actualNumberOfPlayers<numberOfPlayers)) {
-            gameTable.buildDashboard(actualNumberOfPlayers);
+        if (actualNumberOfPlayers < numberOfPlayers) {
             Player newPlayer;
-                if(numberOfPlayers == 2)
-                    newPlayer = new Player(nickName, Squads.NOSQUAD, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
+            if (numberOfPlayers == 2 || numberOfPlayers == 3)
+                newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
+            else {
+                if (actualNumberOfPlayers == 1)
+                    newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
                 else
-                    if(numberOfPlayers == 3)
-                        newPlayer = new Player(nickName, Squads.NOSQUAD, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
-                    else
-                        if(actualNumberOfPlayers == 1)
-                            newPlayer = new Player(nickName, Squads.SQUAD1, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
-                        else
-                            newPlayer = new Player(nickName, Squads.SQUAD2, gameTable.getDashboard(actualNumberOfPlayers), gameMode);
+                    newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2, gameMode);
+            }
             players.add(newPlayer);
-            actualNumberOfPlayers += 1;
+            actualNumberOfPlayers++;
 
             if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
                 this.gamePhase = GamePhases.PLANNING_PHASE;
@@ -160,7 +148,7 @@ public class Game {
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
             for (int i = 0; i < numberOfPlayers; i++) {
-                for (int j = 0; j < studentsMovable; j++) {
+                for (int j = 0; j < maxMovableStudents; j++) {
                     gameTable.getCloud(i).addStudent(gameTable.getBag().draw());
                 }
             }

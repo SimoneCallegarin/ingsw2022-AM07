@@ -20,24 +20,6 @@ class GameTableTest {
     GameTable gameTableForTest = new GameTable(4, GameMode.EXPERT);
 
     /**
-     * we are testing if the method returns the correct dashboard when called
-     */
-    @Test
-    void getDashboards() {
-
-        gameTableForTest.buildDashboard(0);
-        gameTableForTest.buildDashboard(1);
-        gameTableForTest.buildDashboard(2);
-        gameTableForTest.buildDashboard(3);
-
-        assertEquals(0,gameTableForTest.getDashboard(0).getIdDashboard());
-        assertEquals(1,gameTableForTest.getDashboard(1).getIdDashboard());
-        assertEquals(2,gameTableForTest.getDashboard(2).getIdDashboard());
-        assertEquals(3,gameTableForTest.getDashboard(3).getIdDashboard());
-
-    }
-
-    /**
      * we are testing if the method returns the correct cloud when called
      */
     @Test

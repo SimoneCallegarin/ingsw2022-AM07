@@ -15,8 +15,8 @@ class PlanningPhase {
     @Test
     public void fillClouds2Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
         assertEquals(3, game.getGameTable().getCloud(0).getNumberOfElements());
         assertEquals(3, game.getGameTable().getCloud(1).getNumberOfElements());
         assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
@@ -28,8 +28,8 @@ class PlanningPhase {
     @Test
     public void firstPlayerIndex2Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
         boolean check = game.firstPlayerIndex == 0 || game.firstPlayerIndex == 1;
         assertTrue(check);
     }
@@ -40,10 +40,10 @@ class PlanningPhase {
     @Test
     public void fillClouds3Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 3, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("simo", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 3);
+        game.addAnotherPlayer("simo");
         assertEquals(0, game.getGameTable().getCloud(0).getNumberOfElements());
-        game.addAnOtherPlayer("filo", Mages.CLEVER_WITCH);
+        game.addAnotherPlayer("filo");
         assertEquals(4, game.getGameTable().getCloud(0).getNumberOfElements());
         assertEquals(4, game.getGameTable().getCloud(1).getNumberOfElements());
         assertEquals(4, game.getGameTable().getCloud(2).getNumberOfElements());
@@ -55,8 +55,8 @@ class PlanningPhase {
     @Test
     public void firstUpdateOrder2Player() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
             assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(0).getOrder());
             assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(1).getOrder());
@@ -73,10 +73,10 @@ class PlanningPhase {
     @Test
     public void firstUpdateOrder4Player() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 4, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
-        game.addAnOtherPlayer("filo", Mages.CLEVER_WITCH);
-        game.addAnOtherPlayer("bob", Mages.ANCIENT_SAGE);
+        game.addFirstPlayer("jack", GameMode.BASE, 4);
+        game.addAnotherPlayer("calle");
+        game.addAnotherPlayer("filo");
+        game.addAnotherPlayer("bob");
         if (game.firstPlayerIndex == 0) {
             assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(0).getOrder());
             assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(1).getOrder());
@@ -110,8 +110,8 @@ class PlanningPhase {
     public void firstOneToPlayAssistantCard() {
         Game game = new Game();
         AssistantCard cardPlayed = new AssistantCard(3, 2, false);
-        game.addFirstPlayer("jack", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
         game.playAssistantCard(game.firstPlayerIndex, cardPlayed);
         assertEquals(1, game.playerCounter);
     }
@@ -123,8 +123,8 @@ class PlanningPhase {
     public void wrongFirstPlayer() {
         Game game = new Game();
         AssistantCard cardPlayed = new AssistantCard(3, 2, false);
-        game.addFirstPlayer("jack", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0)
             game.playAssistantCard(1, cardPlayed);
         else
@@ -140,8 +140,8 @@ class PlanningPhase {
         Game game = new Game();
         AssistantCard cardPlayed1 = new AssistantCard(3, 2, false);
         AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
-        game.addFirstPlayer("jack", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
             game.playAssistantCard(0, cardPlayed1);
             game.playAssistantCard(1, cardPlayed2);
@@ -161,8 +161,8 @@ class PlanningPhase {
         Game game = new Game();
         AssistantCard cardPlayed1 = new AssistantCard(3, 2, false);
         AssistantCard cardPlayed2 = new AssistantCard(4, 2, false);
-        game.addFirstPlayer("jack", GameMode.BASE, 2, Mages.MYSTICAL_WIZARD);
-        game.addAnOtherPlayer("calle", Mages.WEALTHY_KING);
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
             game.playAssistantCard(0, cardPlayed1);
             assertEquals(1, game.playerCounter);

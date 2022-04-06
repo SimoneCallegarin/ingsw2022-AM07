@@ -13,7 +13,7 @@ package it.polimi.ingsw.Model.Enumeration;
      * @param index associated to a certain mage
      * @return Mage (retro of the assistants card of a deck)
      */
-        public Mages getMage(int index){
+        public static Mages getMage(int index){
             return switch (index) {
                 case 0 -> MYSTICAL_WIZARD;
                 case 1 -> WEALTHY_KING;

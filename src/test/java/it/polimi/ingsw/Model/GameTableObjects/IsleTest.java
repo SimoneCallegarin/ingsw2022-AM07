@@ -71,7 +71,7 @@ class IsleTest {
      */
     @Test
     void getInfluence() {
-        Player p=new Player("filobuda", Squads.SQUAD1, new Dashboard(2,0, GameMode.BASE),GameMode.BASE);
+        Player p=new Player("filobuda", 2, 0, Squads.SQUAD1,GameMode.BASE);
 
 
         isleTest.addStudent(RealmColors.RED);
