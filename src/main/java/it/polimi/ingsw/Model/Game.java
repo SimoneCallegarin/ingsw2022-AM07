@@ -20,10 +20,10 @@ public class Game {
     public int playerCounter = 0;
     private int studentsCounter = 0;
 
-    private GamePhases gamePhase;
+    public GamePhases gamePhase;
     public PlanningPhases planningPhase;
     private ActionPhases actionPhase;
-    private CurrentOrder currentActivePlayer;
+    public CurrentOrder currentActivePlayer;
 
     private final int sameStudents;   //used for the character cards in recalculate effect
     private final int noTowerCount;   //used for the character cards in recalculate effect
@@ -155,7 +155,7 @@ public class Game {
     }
 
     /**
-     * this is a method used during PLANIFICATION_PHASE and it fills clouds automatically
+     * this is a method used during PLANNING_PHASE that fills clouds automatically
      */
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
@@ -168,12 +168,17 @@ public class Game {
         }
     }
 
+    /**
+     * this method is responsible for changing the discard pile of a certain player
+     * @param IDPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
+     * @param assistantCardPlayed is the AssistantCard played
+     */
     public void playAssistantCard(int IDPlayer, AssistantCard assistantCardPlayed) {
         boolean alreadyPlayed = false;
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(IDPlayer).getOrder()) {
             for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
                 if (p.discardPile != null) {
-                    if (p.discardPile.getTurnOrder() == assistantCardPlayed.getTurnOrder()) {
+                    if (p.discardPile.equals(assistantCardPlayed)) {
                         alreadyPlayed = true;
                         break;
                     }
@@ -182,60 +187,42 @@ public class Game {
             if (!alreadyPlayed) {
                 players.get(IDPlayer).playAssistantCard(assistantCardPlayed);
                 playerCounter++;
-                if (playerCounter == numberOfPlayers) {
-                    gamePhase = GamePhases.ACTION_PHASE;
-                    actionPhase = ActionPhases.MOVE_STUDENTS;
-                }
                 nextPlayer();
             }
         }
     }
 
+    /**
+     * according to the game phase, this method updates when a player has to play
+     * @param gamePhase is used in order to execute different statements
+     */
     private void updateOrder(GamePhases gamePhase) {
         int i = firstPlayerIndex;
         if (gamePhase == GamePhases.PLANNING_PHASE) {
-            players.get(firstPlayerIndex).setOrder(CurrentOrder.FIRST_PLAYER);
-            currentActivePlayer = CurrentOrder.FIRST_PLAYER;
-            playerCounter++;
-            while (playerCounter < numberOfPlayers) {
+            for (playerCounter = 0; playerCounter < numberOfPlayers; playerCounter++) {
+                players.get(i).setOrder(CurrentOrder.getCurrentOrder(playerCounter));
                 i++;
                 if (i == numberOfPlayers)
                     i = 0;
-                if (playerCounter == 1)
-                    players.get(i).setOrder(CurrentOrder.SECOND_PLAYER);
-                else if (playerCounter == 2)
-                    players.get(i).setOrder(CurrentOrder.THIRD_PLAYER);
-                else if (playerCounter == 3)
-                    players.get(i).setOrder(CurrentOrder.FOURTH_PLAYER);
-                playerCounter++;
             }
+            currentActivePlayer = CurrentOrder.FIRST_PLAYER;
             playerCounter = 0;
         }
 
         if (gamePhase == GamePhases.ACTION_PHASE) {
-            if (actionPhase == ActionPhases.MOVE_STUDENTS) {
-               // check of every discard pile
-            }
+            this.gamePhase = GamePhases.ACTION_PHASE;
+            actionPhase = ActionPhases.MOVE_STUDENTS;
         }
     }
 
+    /**
+     * this method updates an attribute of Game that is used to identify which player has the right to play in a specific moment
+     */
     private void nextPlayer() {
-        if (currentActivePlayer == CurrentOrder.FIRST_PLAYER)
-            currentActivePlayer = CurrentOrder.SECOND_PLAYER;
-        else if (currentActivePlayer == CurrentOrder.SECOND_PLAYER) {
-            if (playerCounter == numberOfPlayers)
-                updateOrder(GamePhases.ACTION_PHASE);
-            else
-                currentActivePlayer = CurrentOrder.THIRD_PLAYER;
-        }
-        else if (currentActivePlayer == CurrentOrder.THIRD_PLAYER) {
-            if (playerCounter == numberOfPlayers)
-                updateOrder(GamePhases.ACTION_PHASE);
-            else
-                currentActivePlayer = CurrentOrder.FOURTH_PLAYER;
-        }
-        else if (currentActivePlayer == CurrentOrder.FOURTH_PLAYER)
+        if (playerCounter == numberOfPlayers)
             updateOrder(GamePhases.ACTION_PHASE);
+        else
+            currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
     }
 
     public String getState() {

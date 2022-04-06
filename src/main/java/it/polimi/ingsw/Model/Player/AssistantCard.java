@@ -39,4 +39,10 @@ public class AssistantCard {
         return used;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof AssistantCard ac)) return false;
+        return (turnOrder == ac.turnOrder);
+    }
+
 }
