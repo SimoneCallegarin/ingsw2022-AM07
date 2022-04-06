@@ -39,7 +39,7 @@ public class Player {
     /**
      * This attribute represents the Dashboard associated with the player
      */
-    public Dashboard dashboard;
+    private final Dashboard dashboard;
     /**
      * This attribute represents the game mode
      */
@@ -61,18 +61,18 @@ public class Player {
      * Constructor
      * @param nickname    valid nickname chosen by the player
      * @param squad       team chosen by the player
-     * @param dashboard   dashboard referring to the player (each player has his own dashboard)
      * @param gameMode    game mode of the game where the player have to play, used to add function to the player
      */
-    public Player(String nickname, Squads squad, Dashboard dashboard, GameMode gameMode) {
+    public Player(String nickname, int numOfPlayers, int idDashboard, Squads squad, GameMode gameMode) {
         this.nickname = nickname;
         this.squad = squad;
-        this.discardPile = null;
-        this.dashboard = dashboard;
         this.gameMode = gameMode;
-        this.mage = Mages.MYSTICAL_WIZARD;
-        this.mage = mage.getMage(dashboard.getIdDashboard());
+
+        this.dashboard = new Dashboard(numOfPlayers, idDashboard, gameMode);
+
+        this.mage = Mages.getMage(idDashboard);
         this.mageDeck = new ArrayList<>(10);
+        this.discardPile = null;
 
         /**
          * This method permits the creation of a deck of assistant cards
@@ -91,6 +91,8 @@ public class Player {
         this.alreadyPlayedACardThisTurn = false;
 
     }
+
+    public Dashboard getDashboard() {return dashboard;}
 
     public List<AssistantCard> getMageDeck() {
         return mageDeck;

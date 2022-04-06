@@ -71,14 +71,14 @@ class IsleTest {
      */
     @Test
     void getInfluence() {
-        Player p=new Player("filobuda", Squads.SQUAD1, new Dashboard(2,0, GameMode.BASE),GameMode.BASE);
+        Player p=new Player("filobuda", 2, 0, Squads.SQUAD1,GameMode.BASE);
 
 
         isleTest.addStudent(RealmColors.RED);
-        p.dashboard.getDiningRoom().addProfessor(RealmColors.RED);
+        p.getDashboard().getDiningRoom().addProfessor(RealmColors.RED);
         assertEquals(isleTest.getInfluence(p),1);
 
-        isleTest.setTower( p.dashboard.getTowerStorage().getTowerColor());
+        isleTest.setTower( p.getDashboard().getTowerStorage().getTowerColor());
         assertEquals(isleTest.getInfluence(p),2);
 
         isleTest.setTower(TowerColors.NOCOLOR);

@@ -5,7 +5,7 @@ package it.polimi.ingsw.Model.Enumeration;
  */
 public enum TowerColors {
     WHITE, BLACK, GREY, NOCOLOR;
-    public TowerColors getColor(int index) {
+    public static TowerColors getColor(int index) {
         return switch (index) {
             case 0 -> WHITE;
             case 1 -> BLACK;

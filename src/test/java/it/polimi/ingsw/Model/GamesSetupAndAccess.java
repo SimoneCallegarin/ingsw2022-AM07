@@ -2,7 +2,6 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.Effect;
-import it.polimi.ingsw.Model.CharacterCards.SetupEffect;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.Mages;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
@@ -20,31 +19,27 @@ public class GamesSetupAndAccess {
     @Test
     void add4PlayersExpert() {
         Game game4PlayersExpert = new Game();
-        game4PlayersExpert.addFirstPlayer("simone", GameMode.EXPERT, 4, Mages.MYSTICAL_WIZARD);
-        game4PlayersExpert.addAnOtherPlayer("giacomo", Mages.WEALTHY_KING);
-        game4PlayersExpert.addAnOtherPlayer("filippo", Mages.CLEVER_WITCH);
-        game4PlayersExpert.addAnOtherPlayer("bob", Mages.ANCIENT_SAGE);
+        game4PlayersExpert.addFirstPlayer("simone", GameMode.EXPERT, 4);
+        game4PlayersExpert.addAnotherPlayer("giacomo");
+        game4PlayersExpert.addAnotherPlayer("filippo");
+        game4PlayersExpert.addAnotherPlayer("bob");
 
         //Testing number of towers in the tower storage:
-        assertEquals(8, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("simone")).getTowerStorage().getNumberOfElements());
-        assertEquals(8, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("giacomo")).getTowerStorage().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("filippo")).getTowerStorage().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("bob")).getTowerStorage().getNumberOfElements());
-        game4PlayersExpert.getGameTable().getDashboard(2).getTowerStorage().addTower();
-        assertEquals(TowerColors.GREY, game4PlayersExpert.getGameTable().getDashboard(2).getTowerStorage().getTowerColor());
-        //even if in the third dashboard the color of the towers is set Gray, there are no towers, and they can't be added, so it doesn't cause any problem
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(2).getTowerStorage().getNumberOfElements());
+        assertEquals(8, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfElements());
+        assertEquals(8, game4PlayersExpert.getPlayerByIndex(1).getDashboard().getTowerStorage().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(2).getDashboard().getTowerStorage().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getTowerStorage().getNumberOfElements());
 
         //Testing the access to the number of students in the dining room:
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("simone")).getDiningRoom().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("bob")).getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getDiningRoom().getNumberOfElements());
 
         //Testing the access to the number of professors in the dining room:
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("simone")).getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfElements());
 
         //Testing the access to the number of students in the entrance:
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("simone")).getEntrance().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getGameTable().getDashboard(game4PlayersExpert.getPlayerID("bob")).getEntrance().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getEntrance().getNumberOfElements());
 
         //Testing the access to the number of students in the isles:
         assertEquals(0, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getNumberOfElements());
@@ -68,7 +63,7 @@ public class GamesSetupAndAccess {
         //Testing the access to the expert game mode function the player:
         assertEquals(1,game4PlayersExpert.getPlayerByIndex(3).getMoney());
         assertFalse(game4PlayersExpert.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
-        CharacterCard characterCard = new CharacterCard(3,1);
+        CharacterCard characterCard = new CharacterCard(3,1, new Effect());
         game4PlayersExpert.getPlayerByIndex(0).playCharacterCard(characterCard);
         assertEquals(0,game4PlayersExpert.getPlayerByIndex(0).getMoney());
     }

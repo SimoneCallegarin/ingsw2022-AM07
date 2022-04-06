@@ -18,8 +18,8 @@ class DashboardTest {
      */
     @Test
     public void basicDashboardCreation() {
-        Dashboard d = new Dashboard(2, 0, GameMode.BASE);
-        assertEquals(0, d.getIdDashboard());
+        Dashboard d = new Dashboard(2, 1, GameMode.BASE);
+        assertEquals(1, d.getIdDashboard());
         Entrance e = d.getEntrance();
         assertEquals(0, e.getNumberOfElements());
         e.addStudent(RealmColors.YELLOW);
@@ -48,7 +48,7 @@ class DashboardTest {
         dr.addStudent(RealmColors.YELLOW);
         assertEquals(10, dr.getNumberOfElements());
         TowerStorage ts = d.getTowerStorage();
-        assertEquals(TowerColors.WHITE, ts.getTowerColor());
+        assertEquals(TowerColors.BLACK, ts.getTowerColor());
         assertEquals(8, ts.getNumberOfElements());
         ts.addTower();
         assertEquals(8, ts.getNumberOfElements());
