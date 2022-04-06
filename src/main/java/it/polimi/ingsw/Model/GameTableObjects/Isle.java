@@ -79,11 +79,11 @@ public class Isle implements Place, StudentManager, DenyCardManager {
     public int getInfluence(Player player){
         int influence=0;
         for(RealmColors c: RealmColors.values()){
-            if(player.dashboard.getDiningRoom().getProfessorByColor(c)!=0){
+            if(player.getDashboard().getDiningRoom().getProfessorByColor(c)!=0){
                 influence += students.get(c);
             }
         }
-        if(tower.equals(player.dashboard.getTowerStorage().getTowerColor())){
+        if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor())){
             influence+= numOfIsles;
         }
         return influence;
