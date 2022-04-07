@@ -20,9 +20,9 @@ class TowerStorageTest {
     void addAnsRemoveTower2and4Players() {
         towerStorageForTest2and4Players.removeTower();
         towerStorageForTest2and4Players.removeTower();
-        assertEquals(6,towerStorageForTest2and4Players.getNumberOfElements());
+        assertEquals(6,towerStorageForTest2and4Players.getNumberOfTowers());
         towerStorageForTest2and4Players.addTower();
-        assertEquals(7,towerStorageForTest2and4Players.getNumberOfElements());
+        assertEquals(7,towerStorageForTest2and4Players.getNumberOfTowers());
     }
 
     /**
@@ -30,7 +30,7 @@ class TowerStorageTest {
      */
     @Test
     void getNumberOfTowers2and4Players() {
-        assertEquals(8,towerStorageForTest2and4Players.getNumberOfElements());
+        assertEquals(8,towerStorageForTest2and4Players.getNumberOfTowers());
     }
 
     /**
@@ -45,9 +45,9 @@ class TowerStorageTest {
     void addAndRemoveTower3Players() {
         towerStorageForTest2and4Players.removeTower();
         towerStorageForTest2and4Players.removeTower();
-        assertEquals(6,towerStorageForTest2and4Players.getNumberOfElements());
+        assertEquals(6,towerStorageForTest2and4Players.getNumberOfTowers());
         towerStorageForTest2and4Players.addTower();
-        assertEquals(7,towerStorageForTest2and4Players.getNumberOfElements());
+        assertEquals(7,towerStorageForTest2and4Players.getNumberOfTowers());
     }
 
     /**
@@ -55,7 +55,7 @@ class TowerStorageTest {
      */
     @Test
     void getNumberOfTowers3Players() {
-        assertEquals(8,towerStorageForTest2and4Players.getNumberOfElements());
+        assertEquals(8,towerStorageForTest2and4Players.getNumberOfTowers());
     }
 
 }

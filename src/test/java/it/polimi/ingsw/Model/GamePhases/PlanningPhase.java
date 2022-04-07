@@ -17,8 +17,8 @@ class PlanningPhase {
         Game game = new Game();
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
-        assertEquals(3, game.getGameTable().getCloud(0).getNumberOfElements());
-        assertEquals(3, game.getGameTable().getCloud(1).getNumberOfElements());
+        assertEquals(3, game.getGameTable().getCloud(0).getNumberOfStudents());
+        assertEquals(3, game.getGameTable().getCloud(1).getNumberOfStudents());
         assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
     }
 
@@ -42,11 +42,11 @@ class PlanningPhase {
         Game game = new Game();
         game.addFirstPlayer("jack", GameMode.BASE, 3);
         game.addAnotherPlayer("simo");
-        assertEquals(0, game.getGameTable().getCloud(0).getNumberOfElements());
+        assertEquals(0, game.getGameTable().getCloud(0).getNumberOfStudents());
         game.addAnotherPlayer("filo");
-        assertEquals(4, game.getGameTable().getCloud(0).getNumberOfElements());
-        assertEquals(4, game.getGameTable().getCloud(1).getNumberOfElements());
-        assertEquals(4, game.getGameTable().getCloud(2).getNumberOfElements());
+        assertEquals(4, game.getGameTable().getCloud(0).getNumberOfStudents());
+        assertEquals(4, game.getGameTable().getCloud(1).getNumberOfStudents());
+        assertEquals(4, game.getGameTable().getCloud(2).getNumberOfStudents());
     }
 
     /**

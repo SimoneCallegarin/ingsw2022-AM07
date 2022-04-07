@@ -32,7 +32,8 @@ public class TowerStorage implements TowerManager {
             numOfTowers--;
     }
 
-    public int getNumberOfElements(){
+    @Override
+    public int getNumberOfTowers(){
         return numOfTowers;
     }
 

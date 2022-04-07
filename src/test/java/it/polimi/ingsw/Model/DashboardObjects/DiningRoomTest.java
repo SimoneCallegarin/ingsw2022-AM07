@@ -33,7 +33,9 @@ class DiningRoomTest {
         dr.addStudent(RealmColors.RED);
         dr.addStudent(RealmColors.RED);
         dr.addStudent(RealmColors.RED);
-        assertEquals(6, dr.getStudentsByColor(RealmColors.YELLOW)+dr.getStudentsByColor(RealmColors.BLUE)+dr.getStudentsByColor(RealmColors.RED));
+        dr.addProfessor(RealmColors.RED);
+        assertEquals(6, dr.getNumberOfStudents());
+        assertEquals(1, dr.getNumberOfProfessors());
     }
 
     /**

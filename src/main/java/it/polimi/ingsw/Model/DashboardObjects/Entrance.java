@@ -41,7 +41,8 @@ public class Entrance implements StudentManager {
      * this method when called gives the number of students in the entrance
      * @return the number of students actually in the entrance
      */
-    public int getNumberOfElements() {
+    @Override
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors rc : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
@@ -57,7 +58,7 @@ public class Entrance implements StudentManager {
     public void addStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        if (getNumberOfElements() < maxStudents)
+        if (getNumberOfStudents() < maxStudents)
             temp++;
         students.put(color, temp);
     }
@@ -65,13 +66,12 @@ public class Entrance implements StudentManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
-     * @return the color of the student that has been removed
      */
     @Override
     public RealmColors removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        if (temp > 0 && getNumberOfElements() > (maxStudents-maxStudentsRemovable))
+        if (temp > 0 && getNumberOfStudents() > (maxStudents-maxStudentsRemovable))
             temp--;
         students.put(color, temp);
         return color;
@@ -92,6 +92,6 @@ public class Entrance implements StudentManager {
      * @return is the boolean that says if the entrance is full or not
      */
     public boolean isFull() {
-        return getNumberOfElements() == maxStudents;
+        return getNumberOfStudents() == maxStudents;
     }
 }

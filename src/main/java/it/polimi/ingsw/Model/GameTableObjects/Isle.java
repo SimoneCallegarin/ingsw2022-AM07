@@ -115,7 +115,8 @@ public class Isle implements StudentManager, DenyCardManager {
 
     public void setTower(TowerColors c){this.tower=c;}
 
-    public int getNumberOfElements() {
+    @Override
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors rc : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(rc);

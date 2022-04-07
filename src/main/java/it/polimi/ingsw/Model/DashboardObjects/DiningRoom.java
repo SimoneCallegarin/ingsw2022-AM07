@@ -37,6 +37,32 @@ public class DiningRoom implements StudentManager, ProfessorManager {
     }
 
     /**
+     * this method when called gives the number of students in the dining room
+     * @return the number of students actually in the dining room
+     */
+    @Override
+    public int getNumberOfStudents() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
+        }
+        return totalNumberOfStudents;
+    }
+
+    /**
+     * this method when called gives the number of professors in the dining room
+     * @return the number of professors actually in the dining room
+     */
+    @Override
+    public int getNumberOfProfessors() {
+        int totalNumberOfProfessors = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfProfessors = totalNumberOfProfessors + professors.get(rc);
+        }
+        return totalNumberOfProfessors;
+    }
+
+    /**
      * this method updates the students' hashmap incrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
      */
@@ -55,7 +81,6 @@ public class DiningRoom implements StudentManager, ProfessorManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
-     * @return the color of the student that has been removed
      */
     @Override
     public RealmColors removeStudent(RealmColors color) {
@@ -100,6 +125,7 @@ public class DiningRoom implements StudentManager, ProfessorManager {
      * @param color is the key of the value we want to get
      * @return the value we want
      */
+    @Override
     public int getProfessorByColor(RealmColors color) {
         return professors.get(color);
     }

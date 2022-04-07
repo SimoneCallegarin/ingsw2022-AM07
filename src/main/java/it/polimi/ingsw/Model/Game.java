@@ -158,12 +158,12 @@ public class Game {
 
     /**
      * this method is responsible for changing the discard pile of a certain player
-     * @param IDPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
      * @param assistantCardPlayed is the AssistantCard played
      */
-    public void playAssistantCard(int IDPlayer, AssistantCard assistantCardPlayed) {
+    public void playAssistantCard(int idPlayer, AssistantCard assistantCardPlayed) {
         boolean alreadyPlayed = false;
-        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(IDPlayer).getOrder()) {
+        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
             for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
                 if (p.discardPile != null) {
                     if (p.discardPile.equals(assistantCardPlayed)) {
@@ -173,15 +173,17 @@ public class Game {
                 }
             }
             if (!alreadyPlayed) {
-                players.get(IDPlayer).playAssistantCard(assistantCardPlayed);
+                players.get(idPlayer).playAssistantCard(assistantCardPlayed);
                 playerCounter++;
                 nextPlayer();
             }
         }
     }
 
+
+
     /**
-     * according to the game phase, this method updates when a player has to play
+     * according to the game phase, this method updates when a player has the right to play
      * @param gamePhase is used in order to execute different statements
      */
     private void updateOrder(GamePhases gamePhase) {

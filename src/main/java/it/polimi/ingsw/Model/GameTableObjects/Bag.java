@@ -25,7 +25,8 @@ public class Bag implements StudentManager {
      * this method when called gives the number of students in the bag
      * @return the number of students actually in the bag
      */
-    public int getNumberOfElements() {
+    @Override
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors c : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(c);
@@ -48,7 +49,6 @@ public class Bag implements StudentManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
-     * @return the color of the student that has been removed
      */
     @Override
     public RealmColors removeStudent(RealmColors color) {
@@ -77,7 +77,7 @@ public class Bag implements StudentManager {
 
         int studentsSequence = 0;   //studentsSequence permits checking of which color the random students extracted is
 
-        int randomStudent = (int) (Math.random() * (getNumberOfElements())+1);
+        int randomStudent = (int) (Math.random() * (getNumberOfStudents())+1);
 
         for (RealmColors c : RealmColors.values()) {
             studentsSequence = students.get(c) + studentsSequence;

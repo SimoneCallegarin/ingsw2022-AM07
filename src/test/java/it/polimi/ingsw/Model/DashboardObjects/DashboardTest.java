@@ -21,7 +21,7 @@ class DashboardTest {
         Dashboard d = new Dashboard(2, 1, GameMode.BASE);
         assertEquals(1, d.getIdDashboard());
         Entrance e = d.getEntrance();
-        assertEquals(0, e.getNumberOfElements());
+        assertEquals(0, e.getNumberOfStudents());
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
@@ -29,11 +29,11 @@ class DashboardTest {
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
-        assertEquals(7, e.getNumberOfElements());
+        assertEquals(7, e.getNumberOfStudents());
         e.addStudent(RealmColors.YELLOW);
-        assertEquals(7, e.getNumberOfElements());
+        assertEquals(7, e.getNumberOfStudents());
         DiningRoom dr = d.getDiningRoom();
-        assertEquals(0, dr.getStudentsByColor(RealmColors.YELLOW));
+        assertEquals(0, dr.getNumberOfStudents());
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
@@ -44,14 +44,14 @@ class DashboardTest {
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
-        assertEquals(10, dr.getStudentsByColor(RealmColors.YELLOW));
+        assertEquals(10, dr.getNumberOfStudents());
         dr.addStudent(RealmColors.YELLOW);
-        assertEquals(10, dr.getStudentsByColor(RealmColors.YELLOW));
+        assertEquals(10, dr.getNumberOfStudents());
         TowerStorage ts = d.getTowerStorage();
         assertEquals(TowerColors.BLACK, ts.getTowerColor());
-        assertEquals(8, ts.getNumberOfElements());
+        assertEquals(8, ts.getNumberOfTowers());
         ts.addTower();
-        assertEquals(8, ts.getNumberOfElements());
+        assertEquals(8, ts.getNumberOfTowers());
         ts.removeTower();
         ts.removeTower();
         ts.removeTower();
@@ -60,9 +60,9 @@ class DashboardTest {
         ts.removeTower();
         ts.removeTower();
         ts.removeTower();
-        assertEquals(0, ts.getNumberOfElements());
+        assertEquals(0, ts.getNumberOfTowers());
         ts.removeTower();
-        assertEquals(0, ts.getNumberOfElements());
+        assertEquals(0, ts.getNumberOfTowers());
     }
 
 

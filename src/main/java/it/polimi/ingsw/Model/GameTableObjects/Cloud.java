@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class Cloud implements StudentManager {
 
     private final int idCloud;
+    private final CloudSide side;
     private final int maxCloudsStudents;
     /**
      * this is the students container
@@ -17,6 +18,7 @@ public class Cloud implements StudentManager {
 
     public Cloud(int idCloud, int numberOfPlayers) {
         this.idCloud = idCloud;
+        this.side = side;
         this.students = new HashMap<>();
 
         for (RealmColors c : RealmColors.values()) {
@@ -34,7 +36,8 @@ public class Cloud implements StudentManager {
      * this method when called gives the number of students in the bag
      * @return the number of students actually in the bag
      */
-    public int getNumberOfElements() {
+    @Override
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors c : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(c);
@@ -60,21 +63,20 @@ public class Cloud implements StudentManager {
         int temp;
         temp = students.get(color);
         temp++;
-        if (getNumberOfElements()<maxCloudsStudents)
+        if (getNumberOfStudents()<maxCloudsStudents)
             students.put(color, temp);
     }
 
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
-     * @return the color of the student removed
      */
     @Override
     public RealmColors removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
         temp--;
-        if (getNumberOfElements()>0)
+        if (getNumberOfStudents()>0)
             students.put(color, temp);
         return color;
     }
@@ -96,7 +98,7 @@ public class Cloud implements StudentManager {
      * this method permits knowing if the cloud is actually empty
      */
     public boolean isEmpty(){
-        return getNumberOfElements() == 0;
+        return getNumberOfStudents() == 0;
     }
 
 }
