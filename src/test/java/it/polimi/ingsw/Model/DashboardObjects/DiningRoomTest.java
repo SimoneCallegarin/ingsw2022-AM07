@@ -22,7 +22,7 @@ class DiningRoomTest {
     }
 
     /**
-     * we are testing if the method getNumberOfStudents works properly on normal conditions
+     * we are testing if the method getnumOfElements works properly on normal conditions
      */
     @Test
     public void getNumBasic() {

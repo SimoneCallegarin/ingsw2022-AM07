@@ -49,13 +49,15 @@ public class Bag implements StudentManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
+     * @return the color of the removed student
      */
     @Override
-    public void removeStudent(RealmColors color) {
+    public RealmColors removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
         temp--;
         students.put(color, temp);
+        return color;
     }
 
     /**
@@ -72,7 +74,7 @@ public class Bag implements StudentManager {
      * this method extract the students for the bag randomly, basing on how many students per color there are
      * @return the color of the extracted student
      */
-    public RealmColors draw(){
+    public RealmColors draw(){    //NEED TO BE UPDATED DUE TO METCH A REMOVE METHOD CALLED IN THE CHARACTER CARDS
 
         int studentsSequence = 0;   //studentsSequence permits checking of which color the random students extracted is
 
@@ -87,7 +89,7 @@ public class Bag implements StudentManager {
             }
 
         }
-        return null;
+        return null;  //Exception da implementare!
     }
 
 }

@@ -44,12 +44,13 @@ public class Isle implements StudentManager, DenyCardManager {
     }
 
     @Override
-    public void removeStudent(RealmColors color) {
+    public RealmColors removeStudent(RealmColors color) {
         int temp;
         temp= students.get(color);
         temp--;
         if(temp>=0)
         students.put(color,temp);
+        return color;
     }
 
     @Override

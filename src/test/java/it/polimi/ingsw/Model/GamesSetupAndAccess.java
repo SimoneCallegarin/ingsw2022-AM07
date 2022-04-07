@@ -1,9 +1,8 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
-import it.polimi.ingsw.Model.CharacterCards.Effect;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
-import it.polimi.ingsw.Model.Enumeration.Mages;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import org.junit.jupiter.api.Test;
@@ -63,7 +62,7 @@ public class GamesSetupAndAccess {
         //Testing the access to the expert game mode function the player:
         assertEquals(1,game4PlayersExpert.getPlayerByIndex(3).getMoney());
         assertFalse(game4PlayersExpert.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
-        CharacterCard characterCard = new CharacterCard(3,1, new Effect());
+        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK,1);
         game4PlayersExpert.getPlayerByIndex(0).playCharacterCard(characterCard);
         assertEquals(0,game4PlayersExpert.getPlayerByIndex(0).getMoney());
     }

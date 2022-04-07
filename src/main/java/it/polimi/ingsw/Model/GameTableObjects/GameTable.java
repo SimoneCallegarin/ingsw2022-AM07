@@ -1,13 +1,9 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
-import it.polimi.ingsw.Model.CharacterCards.Effect;
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
-import it.polimi.ingsw.Model.Enumeration.CloudSide;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+import it.polimi.ingsw.Model.CharacterCards.EffectFactoryManager;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
-import it.polimi.ingsw.Model.GameTableObjects.Bag;
-import it.polimi.ingsw.Model.GameTableObjects.Cloud;
-import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 
 import java.util.ArrayList;
 
@@ -17,6 +13,7 @@ public class GameTable {
     private final IsleManager isleManager;
     private final Bag bag;
     private final ArrayList<CharacterCard> characterCards;
+    private final EffectFactoryManager effectFactoryManager;
     private final int generalMoneyReserve = 20;
     private final GameMode gameMode;
     private final int numberOfPlayers;
@@ -32,21 +29,23 @@ public class GameTable {
                 buildCloud(i);
             }
         this.characterCards = new ArrayList<>(3);
+        this.effectFactoryManager = new EffectFactoryManager();
     }
 
     public void buildCloud(int idCLoud){
         Cloud cloud;
-        if (numberOfPlayers==3)
-            cloud = new Cloud(idCLoud, CloudSide.SIDE_3_PLAYERS);
-        else
-            cloud = new Cloud(idCLoud, CloudSide.SIDE_2_AND_4_PLAYERS);
+        cloud = new Cloud(idCLoud, numberOfPlayers);
         clouds.add(cloud);
     }
 
-    public void buildCharacterCards(int idCharacterCard){  //Not implemented yet!
-        Effect effect = null;
-        CharacterCard characterCard = new CharacterCard(idCharacterCard,0,effect);
-        characterCards.add(characterCard);
+    public void extractCharacterCards() {
+        int extraction;
+        CharacterCardsName characterCardsName = null;
+        for(int i = 0; i<3; i++) {
+            extraction = (int) (Math.random() * (12) + 1);
+            //characterCards.add(0,characterCard);
+        }
+
     }
 
     public Cloud getCloud(int idCloud) { return clouds.get(idCloud); }
@@ -59,5 +58,10 @@ public class GameTable {
         return bag;
     }
 
-    public CharacterCard getCharacterCard(int idCharacterCard) { return characterCards.get(idCharacterCard); }
+    public CharacterCard getCharacterCard(CharacterCardsName characterCardsName) {
+        int i;
+        for (i = 0; !characterCards.get(i).getCharacterCardsName().equals(characterCardsName); i++)
+            i++;
+        return characterCards.get(i);
+    }
 }

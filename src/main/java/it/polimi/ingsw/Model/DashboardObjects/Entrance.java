@@ -66,14 +66,16 @@ public class Entrance implements StudentManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
+     * @return the color of the removed student
      */
     @Override
-    public void removeStudent(RealmColors color) {
+    public RealmColors removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
         if (temp > 0 && getNumberOfStudents() > (maxStudents-maxStudentsRemovable))
             temp--;
         students.put(color, temp);
+        return color;
     }
 
     /**
