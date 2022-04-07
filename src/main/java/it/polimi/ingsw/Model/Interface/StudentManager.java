@@ -7,6 +7,6 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
  */
 public interface StudentManager {
     void addStudent(RealmColors color);
-    void removeStudent(RealmColors color);
+    RealmColors removeStudent(RealmColors color);
     int getStudentsByColor(RealmColors color);
 }

@@ -1,15 +1,15 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
 import it.polimi.ingsw.Model.Enumeration.Movable;
-import it.polimi.ingsw.Model.GameTableObjects.Bag;
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Interface.StudentManager;
 
-public class SetupEffect extends  Effect{
+public class SetupEffect implements AtomicEffect{
+
     @Override
-    public void effect(Movable object, CharacterCard characterCard, Bag bag) {
-        super.effect();
-        if(object.equals(Movable.STUDENT))
-            characterCard.addStudent(bag.draw());
-        if ((object.equals(Movable.DENYCARD)))
-            characterCard.addDenyCard();
+    public void effect(int times, StudentManager from, StudentManager to, Movable object, RealmColors color) {
+        for(int i=0; i<times; i++)
+            to.addStudent(from.removeStudent(color));
     }
+
 }

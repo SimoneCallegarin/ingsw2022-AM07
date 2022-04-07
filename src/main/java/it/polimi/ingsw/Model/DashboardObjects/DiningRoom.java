@@ -1,13 +1,12 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.ProfessorManager;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
-public class DiningRoom implements Place, StudentManager, ProfessorManager {
+public class DiningRoom implements StudentManager, ProfessorManager {
 
     /**
      * this is the students container
@@ -38,19 +37,6 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
     }
 
     /**
-     * this method when called gives the number of students and professors in the dining room
-     * @return the number of students and professors actually in the dining room
-     */
-    @Override
-    public int getNumberOfElements() {
-        int totalNumberOfStudents = 0;
-        for (RealmColors rc : RealmColors.values()){
-            totalNumberOfStudents = totalNumberOfStudents + students.get(rc) + professors.get(rc);
-        }
-        return totalNumberOfStudents;
-    }
-
-    /**
      * this method updates the students' hashmap incrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
      */
@@ -69,14 +55,16 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
+     * @return the color of the student that has been removed
      */
     @Override
-    public void removeStudent(RealmColors color) {
+    public RealmColors removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
         if (temp > 0)
             temp--;
         students.put(color, temp);
+        return color;
     }
 
     /**

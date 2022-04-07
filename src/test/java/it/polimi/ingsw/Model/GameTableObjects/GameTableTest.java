@@ -41,12 +41,7 @@ class GameTableTest {
     @Test
     void getCharacterCards() {
 
-        gameTableForTest.buildCharacterCards(0);
-        gameTableForTest.buildCharacterCards(1);
-        gameTableForTest.buildCharacterCards(2);
+        //RIFARE
 
-        assertEquals(0,gameTableForTest.getCharacterCard(0).getIdCard());
-        assertEquals(1,gameTableForTest.getCharacterCard(1).getIdCard());
-        assertEquals(2,gameTableForTest.getCharacterCard(2).getIdCard());
     }
 }

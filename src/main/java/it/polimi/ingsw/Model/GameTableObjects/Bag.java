@@ -1,12 +1,11 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
-public class Bag implements Place, StudentManager {
+public class Bag implements StudentManager {
 
     /**
      * this is the students container
@@ -26,7 +25,6 @@ public class Bag implements Place, StudentManager {
      * this method when called gives the number of students in the bag
      * @return the number of students actually in the bag
      */
-    @Override
     public int getNumberOfElements() {
         int totalNumberOfStudents = 0;
         for (RealmColors c : RealmColors.values()){
@@ -50,13 +48,15 @@ public class Bag implements Place, StudentManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
+     * @return the color of the student that has been removed
      */
     @Override
-    public void removeStudent(RealmColors color) {
+    public RealmColors removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
         temp--;
         students.put(color, temp);
+        return color;
     }
 
     /**
@@ -73,7 +73,7 @@ public class Bag implements Place, StudentManager {
      * this method extract the students for the bag randomly, basing on how many students per color there are
      * @return the color of the extracted student
      */
-    public RealmColors draw(){
+    public RealmColors draw(){    //NEED TO BE UPDATED DUE TO METCH A REMOVE METHOD CALLED IN THE CHARACTER CARDS
 
         int studentsSequence = 0;   //studentsSequence permits checking of which color the random students extracted is
 

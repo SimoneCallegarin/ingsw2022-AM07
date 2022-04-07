@@ -33,7 +33,7 @@ class DashboardTest {
         e.addStudent(RealmColors.YELLOW);
         assertEquals(7, e.getNumberOfElements());
         DiningRoom dr = d.getDiningRoom();
-        assertEquals(0, dr.getNumberOfElements());
+        assertEquals(0, dr.getStudentsByColor(RealmColors.YELLOW));
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
@@ -44,9 +44,9 @@ class DashboardTest {
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
         dr.addStudent(RealmColors.YELLOW);
-        assertEquals(10, dr.getNumberOfElements());
+        assertEquals(10, dr.getStudentsByColor(RealmColors.YELLOW));
         dr.addStudent(RealmColors.YELLOW);
-        assertEquals(10, dr.getNumberOfElements());
+        assertEquals(10, dr.getStudentsByColor(RealmColors.YELLOW));
         TowerStorage ts = d.getTowerStorage();
         assertEquals(TowerColors.BLACK, ts.getTowerColor());
         assertEquals(8, ts.getNumberOfElements());

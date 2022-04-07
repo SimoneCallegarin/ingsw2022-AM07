@@ -1,9 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
-import it.polimi.ingsw.Model.CharacterCards.Effect;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
-import it.polimi.ingsw.Model.Enumeration.Mages;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import org.junit.jupiter.api.Test;
@@ -31,11 +28,11 @@ public class GamesSetupAndAccess {
         assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getTowerStorage().getNumberOfElements());
 
         //Testing the access to the number of students in the dining room:
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW));
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW));
 
         //Testing the access to the number of professors in the dining room:
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW));
 
         //Testing the access to the number of students in the entrance:
         assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfElements());
@@ -61,11 +58,9 @@ public class GamesSetupAndAccess {
         assertFalse(game4PlayersExpert.getPlayerByIndex(3).getMageDeck().get(2).isUsed());
 
         //Testing the access to the expert game mode function the player:
-        assertEquals(1,game4PlayersExpert.getPlayerByIndex(3).getMoney());
-        assertFalse(game4PlayersExpert.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
-        CharacterCard characterCard = new CharacterCard(3,1, new Effect());
-        game4PlayersExpert.getPlayerByIndex(0).playCharacterCard(characterCard);
-        assertEquals(0,game4PlayersExpert.getPlayerByIndex(0).getMoney());
+
+        //RIFARE
+
     }
 
 }
