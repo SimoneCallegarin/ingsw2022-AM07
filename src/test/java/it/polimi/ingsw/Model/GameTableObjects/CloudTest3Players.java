@@ -14,7 +14,7 @@ class CloudTest3Players {
     /**
      * we are testing a cloud with a side of a 3 players match
      */
-    Cloud cloudForTest = new Cloud(2, CloudSide.SIDE_3_PLAYERS);
+    Cloud cloudForTest = new Cloud(2, 3);
 
     /**
      * we are testing if the number of students on the cloud is correctly returned
@@ -25,7 +25,7 @@ class CloudTest3Players {
         cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.addStudent(RealmColors.PINK);
         cloudForTest.addStudent(RealmColors.RED);
-        cloudForTest.addStudent(RealmColors.PINK);
+        cloudForTest.addStudent(RealmColors.RED);
         assertEquals(4, cloudForTest.getNumberOfElements());
         cloudForTest.addStudent(RealmColors.RED);
         assertEquals(4, cloudForTest.getNumberOfElements());

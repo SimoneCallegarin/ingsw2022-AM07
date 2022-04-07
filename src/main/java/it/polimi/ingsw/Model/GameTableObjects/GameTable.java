@@ -36,10 +36,7 @@ public class GameTable {
 
     public void buildCloud(int idCLoud){
         Cloud cloud;
-        if (numberOfPlayers==3)
-            cloud = new Cloud(idCLoud, CloudSide.SIDE_3_PLAYERS);
-        else
-            cloud = new Cloud(idCLoud, CloudSide.SIDE_2_AND_4_PLAYERS);
+        cloud = new Cloud(idCLoud, numberOfPlayers);
         clouds.add(cloud);
     }
 

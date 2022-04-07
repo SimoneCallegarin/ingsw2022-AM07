@@ -15,7 +15,7 @@ public class Cloud implements StudentManager {
      */
     private final HashMap<RealmColors,Integer> students;
 
-    public Cloud(int idCloud,CloudSide side) {
+    public Cloud(int idCloud, int numberOfPlayers) {
         this.idCloud = idCloud;
         this.students = new HashMap<>();
 
@@ -23,10 +23,10 @@ public class Cloud implements StudentManager {
             students.put(c, 0);
         }
 
-       if(side == CloudSide.SIDE_2_AND_4_PLAYERS)
-           this.maxCloudsStudents = 3;
-       else
+       if(numberOfPlayers == 3)
            this.maxCloudsStudents = 4;
+       else
+           this.maxCloudsStudents = 3;
 
     }
 
