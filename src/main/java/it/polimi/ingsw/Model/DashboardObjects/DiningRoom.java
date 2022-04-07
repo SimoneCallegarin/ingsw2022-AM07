@@ -1,13 +1,12 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.ProfessorManager;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
-public class DiningRoom implements Place, StudentManager, ProfessorManager {
+public class DiningRoom implements StudentManager, ProfessorManager {
 
     /**
      * this is the students container
@@ -38,16 +37,29 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
     }
 
     /**
-     * this method when called gives the number of students and professors in the dining room
-     * @return the number of students and professors actually in the dining room
+     * this method when called gives the number of students in the dining room
+     * @return the number of students actually in the dining room
      */
     @Override
-    public int getNumberOfElements() {
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors rc : RealmColors.values()){
-            totalNumberOfStudents = totalNumberOfStudents + students.get(rc) + professors.get(rc);
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
         }
         return totalNumberOfStudents;
+    }
+
+    /**
+     * this method when called gives the number of professors in the dining room
+     * @return the number of professors actually in the dining room
+     */
+    @Override
+    public int getNumberOfProfessors() {
+        int totalNumberOfProfessors = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfProfessors = totalNumberOfProfessors + professors.get(rc);
+        }
+        return totalNumberOfProfessors;
     }
 
     /**
@@ -112,6 +124,7 @@ public class DiningRoom implements Place, StudentManager, ProfessorManager {
      * @param color is the key of the value we want to get
      * @return the value we want
      */
+    @Override
     public int getProfessorByColor(RealmColors color) {
         return professors.get(color);
     }

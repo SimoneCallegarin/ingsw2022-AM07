@@ -8,5 +8,6 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 public interface ProfessorManager {
     void addProfessor(RealmColors color);
     void removeProfessor(RealmColors color);
+    int getNumberOfProfessors();
     int getProfessorByColor(RealmColors color);
 }

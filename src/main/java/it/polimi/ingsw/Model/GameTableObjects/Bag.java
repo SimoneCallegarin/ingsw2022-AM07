@@ -1,12 +1,11 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
-public class Bag implements Place, StudentManager {
+public class Bag implements StudentManager {
 
     /**
      * this is the students container
@@ -27,7 +26,7 @@ public class Bag implements Place, StudentManager {
      * @return the number of students actually in the bag
      */
     @Override
-    public int getNumberOfElements() {
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors c : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(c);
@@ -77,7 +76,7 @@ public class Bag implements Place, StudentManager {
 
         int studentsSequence = 0;   //studentsSequence permits checking of which color the random students extracted is
 
-        int randomStudent = (int) (Math.random() * (getNumberOfElements())+1);
+        int randomStudent = (int) (Math.random() * (getNumberOfStudents())+1);
 
         for (RealmColors c : RealmColors.values()) {
             studentsSequence = students.get(c) + studentsSequence;

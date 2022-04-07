@@ -1,10 +1,9 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.TowerManager;
 
-public class TowerStorage implements Place, TowerManager {
+public class TowerStorage implements TowerManager {
     private final int maxTowers;
     private int numOfTowers;
     private TowerColors towerColor;
@@ -34,7 +33,7 @@ public class TowerStorage implements Place, TowerManager {
     }
 
     @Override
-    public int getNumberOfElements(){
+    public int getNumberOfTowers(){
         return numOfTowers;
     }
 

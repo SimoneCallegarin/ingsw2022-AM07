@@ -5,8 +5,7 @@ package it.polimi.ingsw.Model.Interface;
  */
 
 public interface TowerManager {
-
     void addTower();
     void removeTower();
-
+    int getNumberOfTowers();
 }

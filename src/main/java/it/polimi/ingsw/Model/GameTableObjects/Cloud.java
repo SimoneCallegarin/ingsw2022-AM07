@@ -2,12 +2,11 @@ package it.polimi.ingsw.Model.GameTableObjects;
 
 import it.polimi.ingsw.Model.Enumeration.CloudSide;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
-public class Cloud implements Place, StudentManager {
+public class Cloud implements StudentManager {
 
     private final int idCloud;
     private final CloudSide side;
@@ -38,7 +37,7 @@ public class Cloud implements Place, StudentManager {
      * @return the number of students actually in the bag
      */
     @Override
-    public int getNumberOfElements() {
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors c : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(c);
@@ -64,7 +63,7 @@ public class Cloud implements Place, StudentManager {
         int temp;
         temp = students.get(color);
         temp++;
-        if (getNumberOfElements()<maxCloudsStudents)
+        if (getNumberOfStudents()<maxCloudsStudents)
             students.put(color, temp);
     }
 
@@ -77,7 +76,7 @@ public class Cloud implements Place, StudentManager {
         int temp;
         temp = students.get(color);
         temp--;
-        if (getNumberOfElements()>0)
+        if (getNumberOfStudents()>0)
             students.put(color, temp);
     }
 
@@ -98,7 +97,7 @@ public class Cloud implements Place, StudentManager {
      * this method permits knowing if the cloud is actually empty
      */
     public boolean isEmpty(){
-        return getNumberOfElements() == 0;
+        return getNumberOfStudents() == 0;
     }
 
 }

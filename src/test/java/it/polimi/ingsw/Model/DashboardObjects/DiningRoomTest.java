@@ -22,7 +22,7 @@ class DiningRoomTest {
     }
 
     /**
-     * we are testing if the method getnumOfElements works properly on normal conditions
+     * we are testing if the method getNumberOfStudents works properly on normal conditions
      */
     @Test
     public void getNumBasic() {
@@ -34,7 +34,8 @@ class DiningRoomTest {
         dr.addStudent(RealmColors.RED);
         dr.addStudent(RealmColors.RED);
         dr.addProfessor(RealmColors.RED);
-        assertEquals(7, dr.getNumberOfElements());
+        assertEquals(6, dr.getNumberOfStudents());
+        assertEquals(1, dr.getNumberOfProfessors());
     }
 
     /**

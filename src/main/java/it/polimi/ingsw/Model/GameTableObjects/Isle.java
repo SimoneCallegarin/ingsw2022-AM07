@@ -3,7 +3,6 @@ package it.polimi.ingsw.Model.GameTableObjects;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Model.Interface.DenyCardManager;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 import it.polimi.ingsw.Model.Player.Player;
 
@@ -12,7 +11,7 @@ import java.util.HashMap;
 /**
  * this class represents the Isle game object
  */
-public class Isle implements Place, StudentManager, DenyCardManager {
+public class Isle implements StudentManager, DenyCardManager {
 
     private int idIsle;
     private final HashMap<RealmColors,Integer> students;
@@ -116,7 +115,7 @@ public class Isle implements Place, StudentManager, DenyCardManager {
     public void setTower(TowerColors c){this.tower=c;}
 
     @Override
-    public int getNumberOfElements() {
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors rc : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(rc);

@@ -21,13 +21,13 @@ class CloudTest2and4Players {
      */
     @Test
     void getNumberOfElements() {
-        assertEquals(0, cloudForTest.getNumberOfElements());
+        assertEquals(0, cloudForTest.getNumberOfStudents());
         cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.addStudent(RealmColors.PINK);
-        assertEquals(3, cloudForTest.getNumberOfElements());
+        assertEquals(3, cloudForTest.getNumberOfStudents());
         cloudForTest.addStudent(RealmColors.PINK);
-        assertEquals(3, cloudForTest.getNumberOfElements());
+        assertEquals(3, cloudForTest.getNumberOfStudents());
     }
 
     /**
@@ -48,9 +48,9 @@ class CloudTest2and4Players {
      */
     @Test
     void addStudent() {
-        assertEquals(0, cloudForTest.getNumberOfElements());
+        assertEquals(0, cloudForTest.getNumberOfStudents());
         cloudForTest.addStudent(RealmColors.YELLOW);
-        assertEquals(1, cloudForTest.getNumberOfElements());
+        assertEquals(1, cloudForTest.getNumberOfStudents());
     }
 
     /**
