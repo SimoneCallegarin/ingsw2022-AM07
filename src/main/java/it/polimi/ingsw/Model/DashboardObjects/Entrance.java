@@ -1,12 +1,11 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.Place;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
-public class Entrance implements Place, StudentManager {
+public class Entrance implements StudentManager {
 
     /**
      * this is the students container
@@ -43,7 +42,7 @@ public class Entrance implements Place, StudentManager {
      * @return the number of students actually in the entrance
      */
     @Override
-    public int getNumberOfElements() {
+    public int getNumberOfStudents() {
         int totalNumberOfStudents = 0;
         for (RealmColors rc : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
@@ -59,7 +58,7 @@ public class Entrance implements Place, StudentManager {
     public void addStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        if (getNumberOfElements() < maxStudents)
+        if (getNumberOfStudents() < maxStudents)
             temp++;
         students.put(color, temp);
     }
@@ -72,7 +71,7 @@ public class Entrance implements Place, StudentManager {
     public void removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        if (temp > 0 && getNumberOfElements() > (maxStudents-maxStudentsRemovable))
+        if (temp > 0 && getNumberOfStudents() > (maxStudents-maxStudentsRemovable))
             temp--;
         students.put(color, temp);
     }
@@ -92,6 +91,6 @@ public class Entrance implements Place, StudentManager {
      * @return is the boolean that says if the entrance is full or not
      */
     public boolean isFull() {
-        return getNumberOfElements() == maxStudents;
+        return getNumberOfStudents() == maxStudents;
     }
 }

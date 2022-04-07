@@ -17,7 +17,7 @@ class BagTest {
      */
     @Test
     void getnumOfElements() {
-        assertEquals(130, bagForTest.getNumberOfElements());
+        assertEquals(130, bagForTest.getNumberOfStudents());
     }
 
     /**
@@ -28,7 +28,7 @@ class BagTest {
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.addStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getNumberOfElements());
+        assertEquals(129, bagForTest.getNumberOfStudents());
     }
 
     /**
@@ -37,9 +37,9 @@ class BagTest {
     @Test
     void removeStudent() {
         bagForTest.removeStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getNumberOfElements());
+        assertEquals(129, bagForTest.getNumberOfStudents());
         bagForTest.removeStudent(RealmColors.RED);
-        assertEquals(128, bagForTest.getNumberOfElements());
+        assertEquals(128, bagForTest.getNumberOfStudents());
     }
 
     /**
@@ -105,7 +105,7 @@ class BagTest {
             students.put(color, studentsOfColor);
         }
 
-        assertEquals(0,bagForTest.getNumberOfElements());
+        assertEquals(0,bagForTest.getNumberOfStudents());
     }
 
 }

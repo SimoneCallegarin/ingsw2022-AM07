@@ -25,26 +25,26 @@ public class GamesSetupAndAccess {
         game4PlayersExpert.addAnotherPlayer("bob");
 
         //Testing number of towers in the tower storage:
-        assertEquals(8, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfElements());
-        assertEquals(8, game4PlayersExpert.getPlayerByIndex(1).getDashboard().getTowerStorage().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(2).getDashboard().getTowerStorage().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getTowerStorage().getNumberOfElements());
+        assertEquals(8, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(8, game4PlayersExpert.getPlayerByIndex(1).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(2).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getTowerStorage().getNumberOfTowers());
 
         //Testing the access to the number of students in the dining room:
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfStudents());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getDiningRoom().getNumberOfStudents());
 
         //Testing the access to the number of professors in the dining room:
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
 
         //Testing the access to the number of students in the entrance:
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfElements());
-        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getEntrance().getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfStudents());
+        assertEquals(0, game4PlayersExpert.getPlayerByIndex(3).getDashboard().getEntrance().getNumberOfStudents());
 
         //Testing the access to the number of students in the isles:
-        assertEquals(0, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getNumberOfStudents());
         assertEquals(0, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getStudentsByColor(RealmColors.YELLOW));
-        assertEquals(0, game4PlayersExpert.getGameTable().getIsleManager().getIsle(11).getNumberOfElements());
+        assertEquals(0, game4PlayersExpert.getGameTable().getIsleManager().getIsle(11).getNumberOfStudents());
 
         //Testing the access to the towers in the isles:
         assertEquals(TowerColors.NOCOLOR, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getTowersColor());
