@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
-import it.polimi.ingsw.Model.Enumeration.CloudSide;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
@@ -9,7 +8,6 @@ import java.util.HashMap;
 public class Cloud implements StudentManager {
 
     private final int idCloud;
-    private final CloudSide side;
     private final int maxCloudsStudents;
     /**
      * this is the students container
@@ -18,7 +16,6 @@ public class Cloud implements StudentManager {
 
     public Cloud(int idCloud, int numberOfPlayers) {
         this.idCloud = idCloud;
-        this.side = side;
         this.students = new HashMap<>();
 
         for (RealmColors c : RealmColors.values()) {
@@ -70,6 +67,7 @@ public class Cloud implements StudentManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
+     * @return the color of the removed student
      */
     @Override
     public RealmColors removeStudent(RealmColors color) {

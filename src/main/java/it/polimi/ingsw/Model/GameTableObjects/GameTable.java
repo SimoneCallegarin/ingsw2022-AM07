@@ -1,10 +1,8 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
-import it.polimi.ingsw.Model.CharacterCards.AtomicEffect;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.CharacterCards.EffectFactoryManager;
-import it.polimi.ingsw.Model.Enumeration.CloudSide;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 
 import java.util.ArrayList;
@@ -45,16 +43,9 @@ public class GameTable {
         CharacterCardsName characterCardsName = null;
         for(int i = 0; i<3; i++) {
             extraction = (int) (Math.random() * (12) + 1);
-            characterCards.add(buildCharacterCards(characterCardsName.getCharacterCardName(extraction)));
+            //characterCards.add(0,characterCard);
         }
 
-    }
-
-    public CharacterCard buildCharacterCards(CharacterCardsName characterCardsName) {
-        ArrayList<AtomicEffect> effect = effectFactoryManager.getEffect(characterCardsName);
-        CharacterCard characterCard = new CharacterCard(characterCardsName, 0);
-        characterCards.add(characterCard);
-        return characterCard;
     }
 
     public Cloud getCloud(int idCloud) { return clouds.get(idCloud); }

@@ -19,7 +19,7 @@ public class CharacterCard implements StudentManager {
     /**
      * This attribute refers to the effect of the card
      */
-    private ArrayList<AtomicEffect> effect;
+    private ArrayList<AtomicEffect> effects;
     /**
      * This attribute indicates if the character card has been already used previously in the the game
      */
@@ -66,11 +66,15 @@ public class CharacterCard implements StudentManager {
         return used;
     }
 
+    public void setEffect(ArrayList<AtomicEffect> effects){
+        this.effects = effects;
+    }
+
     /**
      * @return the effect of the card
      */
     public ArrayList<AtomicEffect> getEffect() {
-        return effect;
+        return effects;
     }
 
     /**
@@ -80,6 +84,19 @@ public class CharacterCard implements StudentManager {
     public void isUsed() {
         used = true;
         cost += 1;
+    }
+
+    /**
+     * a getter method that counts the number of students on the character card
+     * @return the number of students on the card
+     */
+    @Override
+    public int getNumberOfStudents() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors c : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(c);
+        }
+        return totalNumberOfStudents;
     }
 
     /**

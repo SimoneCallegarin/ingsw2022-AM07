@@ -19,6 +19,7 @@ public class EffectFactory {
 
         switch (card){
             case MONK:
+
                 CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK,1);
 
                 AtomicEffect setup = new SetupEffect();
@@ -58,4 +59,5 @@ public class EffectFactory {
         }
         return effect;
     }
+
 }
