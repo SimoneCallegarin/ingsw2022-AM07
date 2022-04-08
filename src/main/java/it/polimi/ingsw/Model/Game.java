@@ -24,7 +24,7 @@ public class Game {
 
     public GamePhases gamePhase;
     public PlanningPhases planningPhase;
-    private ActionPhases actionPhase;
+    public ActionPhases actionPhase;
     public CurrentOrder currentActivePlayer;
 
     private final int sameStudents;   //used for the character cards in recalculate effect
@@ -144,20 +144,6 @@ public class Game {
     }
 
     /**
-     * this is a method used during PLANNING_PHASE that fills clouds automatically
-     */
-    private void fillClouds() {
-        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
-            for (int i = 0; i < numberOfPlayers; i++) {
-                for (int j = 0; j < maxMovableStudents; j++) {
-                    gameTable.getCloud(i).addStudent(gameTable.getBag().draw());
-                }
-            }
-            planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        }
-    }
-
-    /**
      * this method is responsible for changing the discard pile of a certain player
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
      * @param assistantCardPlayed is the AssistantCard played
@@ -181,8 +167,56 @@ public class Game {
         }
     }
 
-    public void moveStudentInIsle(int idIsle, RealmColors color) {
+    /**
+     * this method takes a student from the dashboard of a certain player and puts it on a specified island
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
+     * @param idIsle is the index of the chosen island
+     * @param color is the color of the student that has been moved
+     */
+    public void moveStudentInIsle(int idPlayer, int idIsle, RealmColors color) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
+            gameTable.getIsleManager().getIsle(idIsle).addStudent(color);
+            studentsCounter++;
 
+            if (studentsCounter == maxMovableStudents) {
+                actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+                studentsCounter = 0;
+            }
+        }
+    }
+
+    /**
+     * this method takes a student from the dashboard of a certain player and puts it in the dining room
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
+     * @param color is the color of the student that has been moved
+     */
+    public void moveStudentInDiningRoom(int idPlayer, RealmColors color) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
+            players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
+            checkUpdateProfessor(idPlayer, color);
+            studentsCounter++;
+
+            if (studentsCounter == maxMovableStudents) {
+                actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+                studentsCounter = 0;
+            }
+        }
+    }
+
+    /**
+     * this is a method used during PLANNING_PHASE that fills clouds automatically
+     */
+    private void fillClouds() {
+        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
+            for (int i = 0; i < numberOfPlayers; i++) {
+                for (int j = 0; j < maxMovableStudents; j++) {
+                    gameTable.getCloud(i).addStudent(gameTable.getBag().draw());
+                }
+            }
+            planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
+        }
     }
 
     /**
@@ -241,6 +275,35 @@ public class Game {
         }
         else
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
+    }
+
+    /**
+     * this method is invoked when a student has been added to the dining room of a certain player and updates the professors owned by players, if it is necessary
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player whose dining room has been updated
+     * @param color is the color of the student that has been moved to the dining room, therefore it is the color of the professor we need to check
+     */
+    private void checkUpdateProfessor(int idPlayer, RealmColors color) {
+        if (players.get(idPlayer).getDashboard().getDiningRoom().getProfessorByColor(color) == 0) {
+            int playerWhoHasProfessorIndex = 0;
+            boolean someoneHasProfessor = false;
+
+            for (Player p : players) {
+                if (p.getDashboard().getDiningRoom().getProfessorByColor(color) == 1) {
+                    playerWhoHasProfessorIndex = p.getDashboard().getIdDashboard();
+                    someoneHasProfessor = true;
+                    break;
+                }
+            }
+
+            if (someoneHasProfessor) {
+                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)) {
+                    players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
+                    players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+                }
+            }
+            else
+                players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+        }
     }
 
     public String getState() {
