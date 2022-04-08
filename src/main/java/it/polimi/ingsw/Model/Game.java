@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class Game {
     private final ArrayList<Player> players;
@@ -165,8 +166,8 @@ public class Game {
         boolean alreadyPlayed = false;
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
             for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
-                if (p.discardPile != null) {
-                    if (p.discardPile.equals(assistantCardPlayed)) {
+                if (p.getDiscardPile() != null) {
+                    if (p.getDiscardPile().equals(assistantCardPlayed)) {
                         alreadyPlayed = true;
                         break;
                     }
@@ -180,7 +181,9 @@ public class Game {
         }
     }
 
+    public void moveStudentInIsle(int idIsle, RealmColors color) {
 
+    }
 
     /**
      * according to the game phase, this method updates when a player has the right to play
@@ -202,6 +205,29 @@ public class Game {
         if (gamePhase == GamePhases.ACTION_PHASE) {
             this.gamePhase = GamePhases.ACTION_PHASE;
             actionPhase = ActionPhases.MOVE_STUDENTS;
+            TreeSet<Integer> turnOrderTree = new TreeSet<>();
+            int lowestTurnOrder = 0;
+
+            for (Player p : players)
+                turnOrderTree.add(p.getDiscardPile().getTurnOrder());
+
+            for (playerCounter = 0; playerCounter < numberOfPlayers; playerCounter++) {
+                if (!turnOrderTree.isEmpty())
+                    lowestTurnOrder = turnOrderTree.pollFirst();
+                for (Player p : players) {
+                    if (p.getDiscardPile().getTurnOrder() == lowestTurnOrder) {
+                        p.setOrder(CurrentOrder.getCurrentOrder(playerCounter));
+                        break;
+                    }
+                }
+            }
+
+            for (Player p : players) {
+                if (p.getOrder() == CurrentOrder.FIRST_PLAYER)
+                    firstPlayerIndex = p.getDashboard().getIdDashboard();
+            }
+            currentActivePlayer = CurrentOrder.FIRST_PLAYER;
+            playerCounter = 0;
         }
     }
 
@@ -209,8 +235,10 @@ public class Game {
      * this method updates an attribute of Game that is used to identify which player has the right to play in a specific moment
      */
     private void nextPlayer() {
-        if (playerCounter == numberOfPlayers)
+        if (playerCounter == numberOfPlayers) {
+            playerCounter = 0;
             updateOrder(GamePhases.ACTION_PHASE);
+        }
         else
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
     }

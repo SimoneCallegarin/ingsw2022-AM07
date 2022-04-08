@@ -98,6 +98,8 @@ public class Player {
         return mageDeck;
     }
 
+    public AssistantCard getDiscardPile() {return discardPile;}
+
     /**
      * This method permits the player to select an assistant card to play
      */

@@ -154,30 +154,178 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if everything works properly during a normal flow of execution in the Assistant Card phase
+     * we are testing if everything works properly during a normal flow of execution in the Assistant Card phase (2 players)
      */
     @Test
     public void assistantCardPhase2Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0) {
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, cardPlayed1);
             assertEquals(1, game.playerCounter);
             assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
             game.playAssistantCard(1, cardPlayed2);
-            assertEquals(2, game.playerCounter);
+            assertEquals(0, game.playerCounter);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(0).getOrder());
         }
-        if (game.firstPlayerIndex == 1) {
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, cardPlayed2);
             assertEquals(1, game.playerCounter);
             assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
             game.playAssistantCard(0, cardPlayed1);
-            assertEquals(2, game.playerCounter);
+            assertEquals(0, game.playerCounter);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(0).getOrder());
+        }
+    }
+
+    /**
+     * we are testing if everything works properly during a normal flow of execution in the Assistant Card phase (3 players)
+     */
+    @Test
+    public void assistantCardPhase3Players() {
+        Game game = new Game();
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed3 = new AssistantCard(1, 1, false);
+        game.addFirstPlayer("jack", GameMode.BASE, 3);
+        game.addAnotherPlayer("calle");
+        game.addAnotherPlayer("filo");
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, cardPlayed1);
+            assertEquals(1, game.playerCounter);
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(1, cardPlayed2);
+            assertEquals(2, game.playerCounter);
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(2, cardPlayed3);
+            assertEquals(0, game.playerCounter);
+            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(2).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(0).getOrder());
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, cardPlayed2);
+            assertEquals(1, game.playerCounter);
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(2, cardPlayed3);
+            assertEquals(2, game.playerCounter);
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(0, cardPlayed1);
+            assertEquals(0, game.playerCounter);
+            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(2).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(0).getOrder());
+        }
+        if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(2, cardPlayed3);
+            assertEquals(1, game.playerCounter);
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(0, cardPlayed1);
+            assertEquals(2, game.playerCounter);
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(1, cardPlayed2);
+            assertEquals(0, game.playerCounter);
+            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(2).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(0).getOrder());
+        }
+    }
+
+    /**
+     * we are testing if everything works properly during a normal flow of execution in the Assistant Card phase (4 players)
+     */
+    @Test
+    public void assistantCardPhase4Players() {
+        Game game = new Game();
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed3 = new AssistantCard(1, 1, false);
+        AssistantCard cardPlayed4 = new AssistantCard(2, 1, false);
+        game.addFirstPlayer("jack", GameMode.BASE, 4);
+        game.addAnotherPlayer("calle");
+        game.addAnotherPlayer("filo");
+        game.addAnotherPlayer("bob");
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, cardPlayed1);
+            assertEquals(1, game.playerCounter);
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(1, cardPlayed2);
+            assertEquals(2, game.playerCounter);
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(2, cardPlayed3);
+            assertEquals(3, game.playerCounter);
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(3, cardPlayed4);
+            assertEquals(0, game.playerCounter);
+            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(2).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(3).getOrder());
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.getPlayerByIndex(0).getOrder());
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, cardPlayed2);
+            assertEquals(1, game.playerCounter);
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(2, cardPlayed3);
+            assertEquals(2, game.playerCounter);
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(3, cardPlayed4);
+            assertEquals(3, game.playerCounter);
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(0, cardPlayed1);
+            assertEquals(0, game.playerCounter);
+            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(2).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(3).getOrder());
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.getPlayerByIndex(0).getOrder());
+        }
+        if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(2, cardPlayed3);
+            assertEquals(1, game.playerCounter);
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(3, cardPlayed4);
+            assertEquals(2, game.playerCounter);
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(0, cardPlayed1);
+            assertEquals(3, game.playerCounter);
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(1, cardPlayed2);
+            assertEquals(0, game.playerCounter);
+            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(2).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(3).getOrder());
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.getPlayerByIndex(0).getOrder());
+        }
+        if (game.firstPlayerIndex == 3 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(3, cardPlayed4);
+            assertEquals(1, game.playerCounter);
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(0, cardPlayed1);
+            assertEquals(2, game.playerCounter);
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(1, cardPlayed2);
+            assertEquals(3, game.playerCounter);
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.currentActivePlayer);
+            game.playAssistantCard(2, cardPlayed3);
+            assertEquals(0, game.playerCounter);
+            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(2).getOrder());
+            assertEquals(CurrentOrder.SECOND_PLAYER, game.getPlayerByIndex(3).getOrder());
+            assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(1).getOrder());
+            assertEquals(CurrentOrder.FOURTH_PLAYER, game.getPlayerByIndex(0).getOrder());
         }
     }
 
