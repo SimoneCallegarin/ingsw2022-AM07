@@ -16,16 +16,13 @@ class SetupEffectTest {
      */
     @Test
     void effectSetupForStudents() {
-        CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK,1);
+        CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK);
         ArrayList<AtomicEffect> effects = new ArrayList<>();
         AtomicEffect setupEffectStudents = new SetupEffect();
         Bag bag =  new Bag();
         setupEffectStudents.effect(4,bag , characterCardTestForStudents, Movable.STUDENT, RealmColors.RED);   //The colors have to be randomized, in order to accomplish this we have to chance the draw method in bag and add a RANDOM_COLOR in RealColor enum
         assertEquals(126,bag.getNumberOfStudents());
         assertEquals(4, characterCardTestForStudents.getNumberOfStudents());
-        effects.add(setupEffectStudents);
-        characterCardTestForStudents.setEffect(effects);
-        assertEquals(effects,characterCardTestForStudents.getEffect());
     }
 
 }

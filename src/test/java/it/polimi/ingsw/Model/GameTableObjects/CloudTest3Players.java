@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
-import it.polimi.ingsw.Model.Enumeration.CloudSide;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

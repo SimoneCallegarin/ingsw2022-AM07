@@ -17,7 +17,7 @@ class MovementEffectTest {
      */
     @Test
     void effect() {
-        CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK,1);
+        CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK);
         ArrayList<AtomicEffect> effects = new ArrayList<>();
         AtomicEffect movementEffectStudents1 = new MovementEffect();
         AtomicEffect movementEffectStudents2 = new MovementEffect();
@@ -30,9 +30,5 @@ class MovementEffectTest {
         movementEffectStudents2.effect(1,bag,characterCardTestForStudents,Movable.STUDENT,RealmColors.RED);
         assertEquals(1,characterCardTestForStudents.getNumberOfStudents());
         assertEquals(129,bag.getNumberOfStudents());
-        effects.add(movementEffectStudents1);
-        effects.add(movementEffectStudents2);
-        characterCardTestForStudents.setEffect(effects);
-        assertEquals(effects,characterCardTestForStudents.getEffect());
     }
 }

@@ -20,7 +20,7 @@ public class EffectFactory {
         switch (card){
             case MONK:
 
-                CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK,1);
+                CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
 
                 AtomicEffect setup = new SetupEffect();
                 setup.effect(4, null,null,Movable.STUDENT,color);

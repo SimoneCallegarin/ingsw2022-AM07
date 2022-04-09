@@ -81,7 +81,7 @@ public class Player {
          * false indicates that the assistant card hasn't been used yet
          */
         for(int i = 0; i < 10; i++) {
-            this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1, false));
+            this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1));
         }
 
         this.money = 0;
@@ -130,7 +130,8 @@ public class Player {
         if (money>=characterCard.getCost()){
             money = money - characterCard.getCost();
             characterCard.isUsed();
-            alreadyPlayedACardThisTurn = true;}          //in order to prevent the player to play two cards in the same turn
+            alreadyPlayedACardThisTurn = true;
+        }          //in order to prevent the player to play two cards in the same turn
         //this has to be checked in the class game if(alreadyPlayedACardThisTurn=false) => "Playable" else "NotPlayable"
     }
 

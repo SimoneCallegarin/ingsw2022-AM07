@@ -1,7 +1,5 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
-import it.polimi.ingsw.Model.Enumeration.Mages;
-
 public enum CharacterCardsName {
     MONK,
     FARMER,
@@ -16,7 +14,13 @@ public enum CharacterCardsName {
     SPOILED_PRINCESS,
     THIEF;
 
-    public CharacterCardsName getCharacterCardName(int index){
+    /**
+     * this method permits to associate a card to a number that
+     * is used in the initial extraction of three character cards
+     * @param index associated to the character card
+     * @return the name of the character card associated to that index
+     */
+    public static CharacterCardsName getCharacterCardName(int index){
         return switch (index) {
             case 0 -> MONK;
             case 1 -> FARMER;
@@ -31,6 +35,19 @@ public enum CharacterCardsName {
             case 10 -> SPOILED_PRINCESS;
             case 11 -> THIEF;
             default -> null;
+        };
+    }
+
+    /**
+     * this method associate a character card to his relative cost at the start of the game
+     * @param characterCardName the name of the character card we want to know the cost
+     * @return the cost of that character card
+     */
+    public int getCharacterCardStartingCost(CharacterCardsName characterCardName){
+        return switch (characterCardName) {
+            case MONK, MAGICAL_LETTER_CARRIER, JESTER, MINSTREL -> 1;
+            case FARMER, GRANDMA_HERBS, KNIGHT, SPOILED_PRINCESS -> 2;
+            case HERALD, THIEF, CENTAUR, FUNGIST -> 3;
         };
     }
 

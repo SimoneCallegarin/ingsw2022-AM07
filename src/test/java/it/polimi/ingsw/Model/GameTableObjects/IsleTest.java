@@ -59,10 +59,9 @@ class IsleTest {
     @Test
     void removeDenyCard() {
         isleTest.addDenyCard();
+        assertEquals(1,isleTest.getDenyCards());
         isleTest.removeDenyCard();
-        assertFalse(isleTest.getDenyCard());
-        isleTest.removeDenyCard();
-        assertFalse(isleTest.getDenyCard());
+        assertEquals(0,isleTest.getDenyCards());
     }
 
     /**
@@ -86,4 +85,10 @@ class IsleTest {
         assertEquals(isleTest.getInfluence(p),0);
 
     }
+
+    @Test
+    void getDenyCards(){
+        assertEquals(0,isleTest.getDenyCards());
+    }
+
 }

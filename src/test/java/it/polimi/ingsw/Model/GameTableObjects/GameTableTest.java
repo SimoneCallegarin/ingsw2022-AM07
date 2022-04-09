@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
 import org.junit.jupiter.api.Test;
@@ -30,11 +31,19 @@ class GameTableTest {
     }
 
     /**
-     * we are testing if the method returns the correct character card when called
+     * we are testing if the characters card are extracted and instantiated properly
+     * when the game table is built, because they need to be different between each other
+     * we are also testing if the getter method works
      */
     @Test
-    void getCharacterCards() {
-
-
+    void extractAndSetUsableAndGetCharacterCards() {
+        boolean test = true;
+        for (int i=0; i<1000; i++){
+            gameTableForTest.extractAndSetUsableCharacterCards();
+            if(gameTableForTest.getCharacterCard(0)==gameTableForTest.getCharacterCard(1)||gameTableForTest.getCharacterCard(0)==gameTableForTest.getCharacterCard(2)||gameTableForTest.getCharacterCard(1)==gameTableForTest.getCharacterCard(2))
+                test = false;
+            assertTrue(test);
+        }
     }
+
 }

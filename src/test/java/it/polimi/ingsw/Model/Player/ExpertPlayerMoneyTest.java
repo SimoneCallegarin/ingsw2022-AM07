@@ -35,7 +35,7 @@ public class ExpertPlayerMoneyTest {
         expertPlayerForTest.gainMoney();
         //3 money in total for the player
 
-        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK, 1);
+        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
 
         expertPlayerForTest.playCharacterCard(characterCard);
         assertEquals(2,expertPlayerForTest.getMoney());
@@ -51,7 +51,7 @@ public class ExpertPlayerMoneyTest {
         expertPlayerForTest.gainMoney();
         //3 money in total for the player
 
-        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK,1);
+        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
 
         expertPlayerForTest.playCharacterCard(characterCard);
         assertEquals(2,expertPlayerForTest.getMoney());

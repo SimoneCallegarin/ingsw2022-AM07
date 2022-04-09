@@ -1,25 +1,21 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Interface.DenyCardManager;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CharacterCard implements StudentManager {
+public class CharacterCard implements StudentManager, DenyCardManager {
 
     /**
      * This attribute indicates the name of the card
      */
-    private final CharacterCardsName characterCardsName;
+    private final CharacterCardsName characterCardName;
     /**
      * This attribute indicates the cost of the card
      */
     private int cost;
-    /**
-     * This attribute refers to the effect of the card
-     */
-    private ArrayList<AtomicEffect> effects;
     /**
      * This attribute indicates if the character card has been already used previously in the the game
      */
@@ -34,9 +30,9 @@ public class CharacterCard implements StudentManager {
     private int denyCards;
 
 
-    public CharacterCard(CharacterCardsName characterCardsName, int cost) {
-        this.characterCardsName = characterCardsName;
-        this.cost = cost;
+    public CharacterCard(CharacterCardsName characterCardName) {
+        this.characterCardName = characterCardName;
+        this.cost = characterCardName.getCharacterCardStartingCost(characterCardName);
         this.used = false;
 
         this.students = new HashMap<>();
@@ -55,8 +51,8 @@ public class CharacterCard implements StudentManager {
     /**
      * @return the name of the card
      */
-    public CharacterCardsName getCharacterCardsName() {
-        return characterCardsName;
+    public CharacterCardsName getCharacterCardName() {
+        return characterCardName;
     }
 
     /**
@@ -64,17 +60,6 @@ public class CharacterCard implements StudentManager {
      */
     public boolean getUsed() {
         return used;
-    }
-
-    public void setEffect(ArrayList<AtomicEffect> effects){
-        this.effects = effects;
-    }
-
-    /**
-     * @return the effect of the card
-     */
-    public ArrayList<AtomicEffect> getEffect() {
-        return effects;
     }
 
     /**
@@ -124,20 +109,19 @@ public class CharacterCard implements StudentManager {
     /**
      * this method updates the students' hashmap decrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap
-     * @return the color of the student that has been removed
      */
     @Override
-    public RealmColors removeStudent(RealmColors color){
+    public void removeStudent(RealmColors color){
         int temp;
         temp = students.get(color);
         temp--;
         students.put(color, temp);
-        return color;
     }
 
     /**
      * @return the number of deny cards on the card
      */
+    @Override
     public int getDenyCards(){
         return denyCards;
     }
@@ -145,6 +129,7 @@ public class CharacterCard implements StudentManager {
     /**
      * increase the number of deny cards by 1
      */
+    @Override
     public void addDenyCard(){
         denyCards += 1;
     }
@@ -152,9 +137,9 @@ public class CharacterCard implements StudentManager {
     /**
      * decrease the number of deny cards by 1
      */
+    @Override
     public void removeDenyCard(){
         denyCards -= 1;
     }
-
 
 }

@@ -8,8 +8,10 @@ public class SetupEffect implements AtomicEffect{
 
     @Override
     public void effect(int times, StudentManager from, StudentManager to, Movable object, RealmColors color) {
-        for(int i=0; i<times; i++)
-            to.addStudent(from.removeStudent(color));
+        for(int i=0; i<times; i++) {
+            to.addStudent(color);
+            from.removeStudent(color);
+        }
     }
 
 }

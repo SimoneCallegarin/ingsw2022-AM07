@@ -44,13 +44,12 @@ public class Isle implements StudentManager, DenyCardManager {
     }
 
     @Override
-    public RealmColors removeStudent(RealmColors color) {
+    public void removeStudent(RealmColors color) {
         int temp;
         temp= students.get(color);
         temp--;
         if(temp>=0)
         students.put(color,temp);
-        return color;
     }
 
     @Override
@@ -66,6 +65,14 @@ public class Isle implements StudentManager, DenyCardManager {
     @Override
     public void removeDenyCard() {
         this.denyCard=false;
+    }
+
+    @Override
+    public int getDenyCards() {
+        int present;
+        if (denyCard) present = 1;
+        else present = 0;
+        return present;
     }
 
 
@@ -99,10 +106,6 @@ public class Isle implements StudentManager, DenyCardManager {
 
     public boolean getMotherNature() {
         return motherNature;
-    }
-
-    public boolean getDenyCard() {
-        return denyCard;
     }
 
     public TowerColors getTowersColor(){

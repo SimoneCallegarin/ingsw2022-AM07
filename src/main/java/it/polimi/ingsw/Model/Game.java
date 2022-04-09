@@ -26,12 +26,6 @@ public class Game {
     private ActionPhases actionPhase;
     public CurrentOrder currentActivePlayer;
 
-    private final int sameStudents;   //used for the character cards in recalculate effect
-    private final int noTowerCount;   //used for the character cards in recalculate effect
-    private final int moreMNMovement;   //used for the character cards in recalculate effect
-    private final int moreInfluence;   //used for the character cards in recalculate effect
-    private final int noColorInfluence;   //used for the character cards in recalculate effect
-
     public Game() {
         this.players = new ArrayList<>(4);
         this.gameMode = GameMode.BASE;
@@ -41,11 +35,6 @@ public class Game {
         this.planningPhase = PlanningPhases.FILL_CLOUDS;
         this.actionPhase = ActionPhases.MOVE_STUDENTS;
 
-        this.sameStudents = 0;
-        this.noTowerCount = 0;
-        this.moreMNMovement = 0;
-        this.moreInfluence = 0;
-        this.noColorInfluence = 0;
     }
 
     public int getPlayerID(String nickName) {

@@ -49,7 +49,7 @@ public class GamesSetupAndAccess {
         assertEquals(TowerColors.NOCOLOR, game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getTowersColor());
 
         //Testing the access to the deny card in the isles:
-        assertFalse(game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getDenyCard());
+        assertEquals(0,game4PlayersExpert.getGameTable().getIsleManager().getIsle(0).getDenyCards());
 
         //Testing the access to mother nature in the isles:
         assertFalse(game4PlayersExpert.getGameTable().getIsleManager().getIsle(5).getMotherNature());
@@ -62,7 +62,7 @@ public class GamesSetupAndAccess {
         //Testing the access to the expert game mode function the player:
         assertEquals(1,game4PlayersExpert.getPlayerByIndex(3).getMoney());
         assertFalse(game4PlayersExpert.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
-        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK,1);
+        CharacterCard characterCard = new CharacterCard(CharacterCardsName.JESTER);
         game4PlayersExpert.getPlayerByIndex(0).playCharacterCard(characterCard);
         assertEquals(0,game4PlayersExpert.getPlayerByIndex(0).getMoney());
     }

@@ -10,14 +10,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CharacterCardTest {
 
-    CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.MONK,1);
+    CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.FARMER);
 
     /**
      * we are testing if the method that return the character card name returns it correctly
      */
     @Test
     void getCharacterCardsName() {
-        assertEquals(CharacterCardsName.MONK, characterCardForTest.getCharacterCardsName());
+        CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.FARMER);
+        assertEquals(CharacterCardsName.FARMER, characterCardForTest.getCharacterCardName());
     }
 
     /**
@@ -25,8 +26,11 @@ class CharacterCardTest {
      */
     @Test
     void getAndIsUsed() {
+        CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.CENTAUR);
         assertFalse(characterCardForTest.getUsed());
         Player simone = new Player("simone", 2, 0, Squads.NOSQUAD, GameMode.EXPERT);
+        simone.gainMoney();
+        simone.gainMoney();
         simone.playCharacterCard(characterCardForTest);
         assertTrue(characterCardForTest.getUsed());
     }
@@ -36,18 +40,13 @@ class CharacterCardTest {
      */
     @Test
     void getCost() {
-        assertEquals(1,characterCardForTest.getCost());
+        CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.THIEF);
+        assertEquals(3,characterCardForTest.getCost());
         Player simone = new Player("simone", 2, 0, Squads.NOSQUAD, GameMode.EXPERT);
+        simone.gainMoney();
+        simone.gainMoney();
         simone.playCharacterCard(characterCardForTest);
-        assertEquals(2,characterCardForTest.getCost());
-    }
-
-    /**
-     * we are testing...
-     */
-    @Test
-    void getEffect() {
-        assertNull(characterCardForTest.getEffect());    //non ancora validato come test
+        assertEquals(4,characterCardForTest.getCost());
     }
 
     /**
@@ -55,6 +54,7 @@ class CharacterCardTest {
      */
     @Test
     void addGetAndRemoveStudent() {
+        CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.SPOILED_PRINCESS);
         assertEquals(0,characterCardForTest.getStudentsByColor(RealmColors.YELLOW));
         characterCardForTest.addStudent(RealmColors.YELLOW);
         assertEquals(1,characterCardForTest.getStudentsByColor(RealmColors.YELLOW));
@@ -67,6 +67,7 @@ class CharacterCardTest {
      */
     @Test
     void addGetAndRemoveDenyCard() {
+        CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.KNIGHT);
         assertEquals(0, characterCardForTest.getDenyCards());
         characterCardForTest.addDenyCard();
         assertEquals(1, characterCardForTest.getDenyCards());

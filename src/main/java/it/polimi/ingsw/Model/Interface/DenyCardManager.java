@@ -5,7 +5,6 @@ package it.polimi.ingsw.Model.Interface;
  */
 public interface DenyCardManager {
     void addDenyCard();
-
     void removeDenyCard();
-
+    int getDenyCards();
 }
