@@ -11,7 +11,7 @@ public class AssistantCard {
      */
     public int mnMovement;
     /**
-     * This attribute indicates if the card has already been used by the player
+     * This attribute indicates if the card has already been played by the player
      */
     public boolean used;
 
