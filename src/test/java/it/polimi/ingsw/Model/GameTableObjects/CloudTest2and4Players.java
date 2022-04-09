@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CloudTest2and4Players {
 
-    //when game will be implemented it will be possible to better differentiate the two tests of the cloud
-
     /**
      * we are testing a cloud with a side of a 2 or 4 players match
      */

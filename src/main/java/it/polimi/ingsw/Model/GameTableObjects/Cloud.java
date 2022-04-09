@@ -7,13 +7,24 @@ import java.util.HashMap;
 
 public class Cloud implements StudentManager {
 
+    /**
+     * this is the id of the cloud, it is decided in the GameTable according to the number of players
+     */
     private final int idCloud;
+    /**
+     * this is the maximum number of students that can be placed on the cloud
+     */
     private final int maxCloudsStudents;
     /**
      * this is the students container
      */
     private final HashMap<RealmColors,Integer> students;
 
+    /**
+     * Cloud constructor
+     * @param idCloud id of the cloud
+     * @param numberOfPlayers the number of players that are going to play the game
+     */
     public Cloud(int idCloud, int numberOfPlayers) {
         this.idCloud = idCloud;
         this.students = new HashMap<>();
@@ -27,19 +38,6 @@ public class Cloud implements StudentManager {
        else
            this.maxCloudsStudents = 3;
 
-    }
-
-    /**
-     * this method when called gives the number of students in the bag
-     * @return the number of students actually in the bag
-     */
-    @Override
-    public int getNumberOfStudents() {
-        int totalNumberOfStudents = 0;
-        for (RealmColors c : RealmColors.values()){
-            totalNumberOfStudents = totalNumberOfStudents + students.get(c);
-        }
-        return totalNumberOfStudents;
     }
 
     /**
@@ -87,6 +85,23 @@ public class Cloud implements StudentManager {
         return students.get(color);
     }
 
+    /**
+     * this method when called gives the number of students in the cloud
+     * @return the number of students actually in the bag
+     */
+    @Override
+    public int getNumberOfStudents() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors c : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(c);
+        }
+        return totalNumberOfStudents;
+    }
+
+    /**
+     * a getter method that gives the id of the cloud
+     * @return the id of the cloud
+     */
     public int getIdCloud(){ return idCloud; }
 
     //the following method might be not very useful, in the future we may decide to remove it

@@ -5,6 +5,12 @@ package it.polimi.ingsw.Model.Enumeration;
  */
 public enum TowerColors {
     WHITE, BLACK, GREY, NOCOLOR;
+
+    /**
+     * this method associate a tower color to a dashboard id
+     * @param index is the dashboard id
+     * @return the color associated to a dashboard id
+     */
     public static TowerColors getColor(int index) {
         return switch (index) {
             case 0 -> WHITE;

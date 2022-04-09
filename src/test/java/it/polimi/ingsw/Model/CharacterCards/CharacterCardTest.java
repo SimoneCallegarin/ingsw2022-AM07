@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CharacterCardTest {
 
-    CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.FARMER);
-
     /**
      * we are testing if the method that return the character card name returns it correctly
      */

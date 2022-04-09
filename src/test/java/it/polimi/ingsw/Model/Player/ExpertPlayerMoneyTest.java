@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpertPlayerMoneyTest {
-    TowerStorage towerStorage = new TowerStorage(8, TowerColors.WHITE);
-    Dashboard dashboard = new Dashboard(4, 1, GameMode.EXPERT);
+
     Player expertPlayerForTest = new Player("PlayerForTest", 4, 1, Squads.SQUAD1, GameMode.EXPERT);
 
     /**

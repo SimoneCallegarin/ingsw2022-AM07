@@ -52,18 +52,34 @@ public class Dashboard {
         this.towerStorage = new TowerStorage(maxStorageTowers, towerColor);
     }
 
+    /**
+     * Getter method
+     * @return the dashboard id
+     */
     public int getIdDashboard() {
         return idDashboard;
     }
 
+    /**
+     * Getter method
+     * @return the entrance of the dashboard
+     */
     public Entrance getEntrance() {
         return entrance;
     }
 
+    /**
+     * Getter method
+     * @return the dining room of the dashboard
+     */
     public DiningRoom getDiningRoom() {
         return diningRoom;
     }
 
+    /**
+     * Getter method
+     * @return the tower storage of the dashboard
+     */
     public TowerStorage getTowerStorage() {
         return towerStorage;
     }

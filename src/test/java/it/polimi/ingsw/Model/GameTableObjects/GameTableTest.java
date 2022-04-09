@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTableTest {
+
     /**
      * simulating Game class, building some objects necessary for the game develop and the game table tests
      * here we are building a game table for 4 players in expert mode
@@ -19,15 +20,9 @@ class GameTableTest {
      */
     @Test
     void getClouds() {
-
-        gameTableForTest.buildCloud(0);
-        gameTableForTest.buildCloud(1);
-        gameTableForTest.buildCloud(2);
-
         assertEquals(0,gameTableForTest.getCloud(0).getIdCloud());
         assertEquals(1,gameTableForTest.getCloud(1).getIdCloud());
         assertEquals(2,gameTableForTest.getCloud(2).getIdCloud());
-
     }
 
     /**

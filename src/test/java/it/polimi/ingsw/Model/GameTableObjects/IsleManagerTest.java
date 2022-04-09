@@ -21,13 +21,6 @@ class IsleManagerTest {
         Isle isletest1 = isleManagerTest.getIsle(0);
         Isle isletest2 = isleManagerTest.getIsle(1);
         Isle isletest3 = isleManagerTest.getIsle(2);
-        Isle isletest4 = isleManagerTest.getIsle(3);
-        Isle isletest5 = isleManagerTest.getIsle(4);
-        Isle isletest6 = isleManagerTest.getIsle(5);
-        Isle isletest7 = isleManagerTest.getIsle(6);
-        Isle isletest8 = isleManagerTest.getIsle(7);
-        Isle isletest9 = isleManagerTest.getIsle(8);
-        Isle isletest10= isleManagerTest.getIsle(9);
         Isle isletest11= isleManagerTest.getIsle(10);
         Isle isletest12= isleManagerTest.getIsle(11);
 
@@ -50,8 +43,6 @@ class IsleManagerTest {
         assertEquals(isletest1.getNumOfIsles(),3);
         assertEquals(isletest1.getIdIsle(),0);
         assertEquals(isletest11.getIdIsle(),9);
-
-
-
     }
+
 }

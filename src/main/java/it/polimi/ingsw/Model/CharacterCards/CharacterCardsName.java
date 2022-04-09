@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
+/**
+ * The name associated to each character card of the game
+ */
 public enum CharacterCardsName {
     MONK,
     FARMER,

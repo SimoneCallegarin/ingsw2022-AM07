@@ -1,12 +1,11 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.ProfessorManager;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
-public class DiningRoom implements StudentManager, ProfessorManager {
+public class DiningRoom implements StudentManager {
 
     /**
      * this is the students container
@@ -53,7 +52,6 @@ public class DiningRoom implements StudentManager, ProfessorManager {
      * this method when called gives the number of professors in the dining room
      * @return the number of professors actually in the dining room
      */
-    @Override
     public int getNumberOfProfessors() {
         int totalNumberOfProfessors = 0;
         for (RealmColors rc : RealmColors.values()){
@@ -95,7 +93,6 @@ public class DiningRoom implements StudentManager, ProfessorManager {
      * this method adds the professor of a certain color to the dining room of the player who owns it
      * @param color is the key of the value we want to set to 1 in the professors' hashmap
      */
-    @Override
     public void addProfessor(RealmColors color) {
         professors.put(color, 1);
     }
@@ -104,7 +101,6 @@ public class DiningRoom implements StudentManager, ProfessorManager {
      * this method removes the professor of a certain color from the dining room of the player who doesn't own it anymore
      * @param color is the key of the value we want to set to 0 in the professors' hashmap
      */
-    @Override
     public void removeProfessor(RealmColors color) {
         professors.put(color, 0);
     }
@@ -124,7 +120,6 @@ public class DiningRoom implements StudentManager, ProfessorManager {
      * @param color is the key of the value we want to get
      * @return the value we want
      */
-    @Override
     public int getProfessorByColor(RealmColors color) {
         return professors.get(color);
     }

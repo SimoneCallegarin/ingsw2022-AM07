@@ -10,8 +10,14 @@ import java.util.List;
  */
 
 public class IsleManager {
-    List<Isle> Isles;
+    /**
+     * this is the actual list of active isle for the game
+     */
+    private ArrayList<Isle> Isles;
 
+    /**
+     * Isle manager constructor
+     */
     public IsleManager(){
         Isles=new ArrayList<>();
         for(int i=0;i<12;i++){
@@ -45,10 +51,18 @@ public class IsleManager {
 
     }
 
+    /**
+     * getter method that gives the isle of a certain index
+     * @param index the index associated to a certain isle in the ArrayList
+     * @return the isle associated to that index
+     */
     public Isle getIsle(int index){return Isles.get(index);}
 
-    public List<Isle> getIsles() {
-        return Isles;
-    }
+    /**
+     * method used only for testing
+     * gives the list of active isles
+     * @return the list of active isles
+     */
+    public List<Isle> getIsles() { return Isles; }
 
 }

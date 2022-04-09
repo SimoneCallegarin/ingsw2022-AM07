@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * This class represent one single player
  */
-
 public class Player {
 
     /**
@@ -92,12 +91,6 @@ public class Player {
 
     }
 
-    public Dashboard getDashboard() {return dashboard;}
-
-    public List<AssistantCard> getMageDeck() {
-        return mageDeck;
-    }
-
     /**
      * This method permits the player to select an assistant card to play
      */
@@ -106,26 +99,63 @@ public class Player {
         this.mageDeck.remove(assistantCard);
     }
 
+    /**
+     * this method permits to set the current player order in the turn
+     * @param order of the player this turn
+     */
     public void setOrder(CurrentOrder order) {
         this.order = order;
     }
 
+    /**
+     * this method gives what is the current player turn order
+     * @return the turn order of the player
+     */
     public CurrentOrder getOrder() {
         return this.order;
     }
 
+    /**
+     * getter method that gives which is the dashboard associated to the current player
+     * @return the dashboard of the current player
+     */
+    public Dashboard getDashboard() {return dashboard;}
+
+    /**
+     * getter method that gives the assistant cards of the current player
+     * @return the deck of assistant cards of the player
+     */
+    public List<AssistantCard> getMageDeck() {
+        return mageDeck;
+    }
+
+    /**
+     * getter method that gives the number of money of the player
+     * @return number of money of the player
+     */
     public int getMoney() {
         return money;
     }
 
+    /**
+     * getter method that permits to know if an assistant card has been already used by the player
+     * @return true if already used, else false
+     */
     public boolean getAlreadyPlayedACardThisTurn() {
         return alreadyPlayedACardThisTurn;
     }
 
+    /**
+     * this method increase the number of money of the player by 1
+     */
     public void gainMoney(){
         this.money += 1;
     }
 
+    /**
+     * this method permits the player to play a character card
+     * @param characterCard the selected character card that the player wants to play
+     */
     public void playCharacterCard(CharacterCard characterCard){
         if (money>=characterCard.getCost()){
             money = money - characterCard.getCost();

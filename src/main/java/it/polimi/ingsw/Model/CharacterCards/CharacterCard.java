@@ -29,7 +29,10 @@ public class CharacterCard implements StudentManager, DenyCardManager {
      */
     private int denyCards;
 
-
+    /**
+     * Constructor of a character card
+     * @param characterCardName the name of the character card
+     */
     public CharacterCard(CharacterCardsName characterCardName) {
         this.characterCardName = characterCardName;
         this.cost = characterCardName.getCharacterCardStartingCost(characterCardName);

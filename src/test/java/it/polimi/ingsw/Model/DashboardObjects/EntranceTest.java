@@ -100,4 +100,5 @@ class EntranceTest {
         e.addStudent(RealmColors.RED);
         assertTrue(e.isFull());
     }
+
 }

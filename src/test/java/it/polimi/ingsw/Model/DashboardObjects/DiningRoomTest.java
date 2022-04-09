@@ -112,4 +112,5 @@ class DiningRoomTest {
         DiningRoom dr = new DiningRoom();
         assertEquals(0, dr.getProfessorByColor(RealmColors.YELLOW));
     }
+
 }
