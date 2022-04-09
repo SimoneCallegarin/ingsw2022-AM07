@@ -10,7 +10,7 @@ public class EffectFactory {
 
     public EffectFactory(){}
 
-    public ArrayList<AtomicEffect> getEffect (CharacterCardsName card){
+    /*public ArrayList<AtomicEffect> getEffect (CharacterCardsName card){
         ArrayList<AtomicEffect> effect = null;
 
         StudentManager from = null;
@@ -58,6 +58,6 @@ public class EffectFactory {
                 break;
         }
         return effect;
-    }
+    }*/
 
 }
