@@ -18,10 +18,10 @@ public class AssistantCard {
     /**
      * Constructor
      */
-    public AssistantCard(int turnOrder, int mnMovement, boolean used) {
+    public AssistantCard(int turnOrder, int mnMovement) {
         this.turnOrder = turnOrder;
         this.mnMovement = mnMovement;
-        this.used = used;
+        this.used = false;
     }
 
     /**
