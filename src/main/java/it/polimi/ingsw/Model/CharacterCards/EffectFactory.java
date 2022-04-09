@@ -11,7 +11,7 @@ public class EffectFactory {
     public EffectFactory(){}
 
     /*public ArrayList<AtomicEffect> getEffect (CharacterCardsName card){
-        ArrayList<AtomicEffect> effect = null;
+        List<AtomicEffect> effect = null;
 
         StudentManager from = null;
         StudentManager to = null;
