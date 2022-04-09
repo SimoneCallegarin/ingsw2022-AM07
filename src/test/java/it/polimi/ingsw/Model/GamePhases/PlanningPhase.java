@@ -109,7 +109,7 @@ class PlanningPhase {
     @Test
     public void firstOneToPlayAssistantCard() {
         Game game = new Game();
-        AssistantCard cardPlayed = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         game.playAssistantCard(game.firstPlayerIndex, cardPlayed);
@@ -122,7 +122,7 @@ class PlanningPhase {
     @Test
     public void wrongFirstPlayer() {
         Game game = new Game();
-        AssistantCard cardPlayed = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0)
@@ -138,8 +138,8 @@ class PlanningPhase {
     @Test
     public void wrongCardPlayed() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(3, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
@@ -159,8 +159,8 @@ class PlanningPhase {
     @Test
     public void assistantCardPhase2Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(3, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(4, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
