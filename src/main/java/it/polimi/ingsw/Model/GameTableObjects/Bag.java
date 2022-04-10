@@ -14,11 +14,18 @@ public class Bag implements StudentManager {
 
     public Bag() {
         this.students = new HashMap<>();
+    }
 
+    public void fillSetupBag() {
         for (RealmColors c : RealmColors.values()) {
-            students.put(c, 26);
+            students.put(c, 2);
         }
+    }
 
+    public void fillBag() {
+        for (RealmColors c : RealmColors.values()) {
+            students.put(c, 24);
+        }
     }
 
     /**

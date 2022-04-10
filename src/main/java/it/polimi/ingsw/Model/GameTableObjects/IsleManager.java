@@ -10,45 +10,108 @@ import java.util.List;
  */
 
 public class IsleManager {
-    List<Isle> Isles;
+    List<Isle> isles;
+    int isleWithMotherNatureIndex;
 
     public IsleManager(){
-        Isles=new ArrayList<>();
+        isles=new ArrayList<>();
+
         for(int i=0;i<12;i++){
-            Isles.add(new Isle(i));
+            isles.add(new Isle(i));
         }
+
+        isleWithMotherNatureIndex = (int) (Math.random() * (12));
+        getIsle(isleWithMotherNatureIndex).setMotherNature(true);
     }
 
     /**
      * this method is used to unify two different isles.
      * It updates the values of the first isle using the ones from the second isle,
      * then the second isle is removed and at the end we reset all the Isle ids.
-     * @param Isle1 the first Isle
-     * @param Isle2 the second Isle
+     * @param isle1 the first Isle
+     * @param isle2 the second Isle
      */
-    public void UnifyIsle(Isle Isle1, Isle Isle2){
-        for(RealmColors c: RealmColors.values()){
-            int totalStudentsOnIsles =  Isle2.getStudentsByColor(c);
-            for(int i=0; i<totalStudentsOnIsles; i++)
-                Isle1.addStudent(c);
+    public void unifyIsle(int isle1, int isle2) {
+        for (RealmColors c : RealmColors.values()) {
+            int totalStudentsOnIsles = isles.get(isle2).getStudentsByColor(c);
+            for (int i = 0; i < totalStudentsOnIsles; i++)
+                getIsle(isle1).addStudent(c);
         }
 
-        Isle1.setNumOfIsles(Isle1.getNumOfIsles() + Isle2.getNumOfIsles());
+        isles.get(isle1).setNumOfIsles(isles.get(isle1).getNumOfIsles() + isles.get(isle2).getNumOfIsles());
 
-        Isles.remove(Isle2.getIdIsle());
+        isles.remove(isle2);
 
-        int i=0;
-        for(Isle isle: Isles){
+        int i = 0;
+        for (Isle isle : isles) {
             isle.setIdIsle(i);
             i++;
         }
-
     }
 
-    public Isle getIsle(int index){return Isles.get(index);}
+    public void checkUnifyIsle(int idIsle) {
+        int idIsleOffsetIndex = 0;
+        int previousIsleOffsetIndex = 0;
+        int nextIsleIndex = idIsle+1;
+        int previousIsleIndex = idIsle-1;
+
+        if (idIsle == isles.size()-1)
+            nextIsleIndex = 0;
+
+        if (idIsle == 0)
+            previousIsleIndex = isles.size()-1;
+
+        if (isles.get(nextIsleIndex).getTowersColor() == isles.get(idIsle).getTowersColor()) {
+            unifyIsle(idIsle, nextIsleIndex);
+            if (nextIsleIndex == 0) {
+                idIsleOffsetIndex = 1;
+                previousIsleOffsetIndex = 1;
+            }
+            if (nextIsleIndex == 1)
+                previousIsleOffsetIndex = 1;
+        }
+
+        if (isles.get(previousIsleIndex).getTowersColor() == isles.get(idIsle).getTowersColor())
+            unifyIsle(previousIsleIndex-previousIsleOffsetIndex, idIsle-idIsleOffsetIndex);
+    }
+
+    public Isle getIsle(int index){return isles.get(index);}
+
+    public int getIsleWithMotherNatureIndex() {
+        return isleWithMotherNatureIndex;
+    }
+
+    public int getIsleOppositeToMotherNatureIndex() {
+        if (isleWithMotherNatureIndex >= 0 && isleWithMotherNatureIndex < 6)
+            return isleWithMotherNatureIndex+6;
+        else
+            return isleWithMotherNatureIndex-6;
+    }
+
+    public void setIsleOppositeToMotherNatureIndex(int newMNIsleIndex) {
+        isleWithMotherNatureIndex = newMNIsleIndex;
+    }
+
+    public boolean isMNMovementAcceptable(int idIsle, int mnMovement) {
+        boolean acceptable = false;
+
+        if (idIsle > isleWithMotherNatureIndex) {
+            if (mnMovement >= idIsle-isleWithMotherNatureIndex)
+                acceptable = true;
+        }
+        else if (idIsle == isleWithMotherNatureIndex) {
+            if (mnMovement >= isles.size())
+                acceptable = true;
+        }
+        else {
+            if (mnMovement >= isles.size()-isleWithMotherNatureIndex+idIsle)
+                acceptable = true;
+        }
+        return acceptable;
+    }
 
     public List<Isle> getIsles() {
-        return Isles;
+        return isles;
     }
 
 }

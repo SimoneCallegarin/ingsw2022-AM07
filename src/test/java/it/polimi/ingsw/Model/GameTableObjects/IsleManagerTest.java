@@ -38,7 +38,7 @@ class IsleManagerTest {
             isletest2.addStudent(color);
         }
 
-        isleManagerTest.UnifyIsle(isletest1,isletest2);
+        isleManagerTest.unifyIsle(isletest1.getIdIsle(),isletest2.getIdIsle());
         for(RealmColors color:RealmColors.values()) assertEquals(isletest1.getStudentsByColor(color),3);
         assertEquals(isletest1.getNumOfIsles(),2);
         assertEquals(isleManagerTest.getIsles().indexOf(isletest1),0);
@@ -46,7 +46,7 @@ class IsleManagerTest {
         assertEquals(isleManagerTest.getIsles().indexOf(isletest3),1);
         assertEquals(isletest3.getIdIsle(),1);
 
-        isleManagerTest.UnifyIsle(isletest1,isletest12);
+        isleManagerTest.unifyIsle(isletest1.getIdIsle(),isletest12.getIdIsle());
         assertEquals(isletest1.getNumOfIsles(),3);
         assertEquals(isletest1.getIdIsle(),0);
         assertEquals(isletest11.getIdIsle(),9);

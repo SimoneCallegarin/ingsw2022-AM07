@@ -2,7 +2,9 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.Enumeration.*;
+import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 
@@ -21,6 +23,10 @@ public class Game {
 
     public int playerCounter = 0;
     private int studentsCounter = 0;
+
+    private boolean endGame = false;
+    private boolean drawEndGame = false;
+    private Player winner;
 
     public GamePhases gamePhase;
     public PlanningPhases planningPhase;
@@ -68,7 +74,7 @@ public class Game {
      * setting the number of player when selected by the first player
      * @param numberOfPlayers to play with in total
      */
-    public void setPlayerNumbers(int numberOfPlayers) {
+    public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
 
         if (numberOfPlayers == 3)
@@ -76,6 +82,8 @@ public class Game {
         else
             maxMovableStudents = 3;
     }
+
+    public int getNumberOfPlayers() {return numberOfPlayers;}
 
     //it is possible to split this method in 4 sub methods that permit to build the player by asking him 1 param per times
     /**
@@ -87,7 +95,7 @@ public class Game {
      */
     public void addFirstPlayer(String nickName, GameMode gameMode, int numberOfPlayers){
 
-        setPlayerNumbers(numberOfPlayers);
+        setNumberOfPlayers(numberOfPlayers);
         this.gameMode = gameMode;
 
         Player newPlayer;
@@ -100,6 +108,7 @@ public class Game {
             newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
 
         players.add(newPlayer);
+        initializeEntrance(actualNumberOfPlayers);
         actualNumberOfPlayers = 1;
 
     }
@@ -128,6 +137,7 @@ public class Game {
                     newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2, gameMode);
             }
             players.add(newPlayer);
+            initializeEntrance(actualNumberOfPlayers);
             actualNumberOfPlayers++;
 
             if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
@@ -205,14 +215,69 @@ public class Game {
         }
     }
 
+    public void moveMotherNature(int idPlayer, int idIsle) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_MOTHER_NATURE && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).discardPile.getMnMovement())) {
+                gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
+                gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
+                gameTable.getIsleManager().setIsleOppositeToMotherNatureIndex(idIsle);
+                checkUpdateInfluence(idIsle);
+                checkEndGame();
+                actionPhase = ActionPhases.CHOOSE_CLOUD;
+            }
+        }
+    }
+
+    public void pickStudentsFromCloud(int idPlayer, int idCloud) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.CHOOSE_CLOUD && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            while (studentsCounter < maxMovableStudents) {
+                for (RealmColors rc : RealmColors.values()) {
+                    if (gameTable.getCloud(idCloud).getStudentsByColor(rc) >= 1) {
+                        gameTable.getCloud(idCloud).removeStudent(rc);
+                        players.get(idPlayer).getDashboard().getEntrance().addStudent(rc);
+                        break;
+                    }
+                }
+                studentsCounter++;
+            }
+            studentsCounter = 0;
+            playerCounter++;
+            actionPhase = ActionPhases.MOVE_STUDENTS;
+            nextPlayer();
+        }
+    }
+
+    public boolean isGameEnded() {
+        return endGame;
+    }
+
+    public boolean isGameEndedInADraw() {
+        return drawEndGame;
+    }
+
+    public String getWinner() {
+        if (numberOfPlayers == 4) {
+            return winner.getSquad().toString();
+        } else
+            return winner.nickname;
+    }
+
+    private void initializeEntrance(int idDashboard) {
+        for (int i = 0; i < players.get(idDashboard).getDashboard().getEntrance().getMaxStudents(); i++) {
+            players.get(idDashboard).getDashboard().getEntrance().addStudent(gameTable.getBag().draw());
+        }
+    }
+
     /**
      * this is a method used during PLANNING_PHASE that fills clouds automatically
      */
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
             for (int i = 0; i < numberOfPlayers; i++) {
+                Cloud cloud = gameTable.getCloud(i);
                 for (int j = 0; j < maxMovableStudents; j++) {
-                    gameTable.getCloud(i).addStudent(gameTable.getBag().draw());
+                    RealmColors color = gameTable.getBag().draw();
+                    cloud.addStudent(color);
                 }
             }
             planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
@@ -237,8 +302,6 @@ public class Game {
         }
 
         if (gamePhase == GamePhases.ACTION_PHASE) {
-            this.gamePhase = GamePhases.ACTION_PHASE;
-            actionPhase = ActionPhases.MOVE_STUDENTS;
             TreeSet<Integer> turnOrderTree = new TreeSet<>();
             int lowestTurnOrder = 0;
 
@@ -271,7 +334,15 @@ public class Game {
     private void nextPlayer() {
         if (playerCounter == numberOfPlayers) {
             playerCounter = 0;
-            updateOrder(GamePhases.ACTION_PHASE);
+            if (gamePhase == GamePhases.PLANNING_PHASE) {
+                gamePhase = GamePhases.ACTION_PHASE;
+                planningPhase = PlanningPhases.FILL_CLOUDS;
+            }
+            else {
+                gamePhase = GamePhases.PLANNING_PHASE;
+                fillClouds();
+            }
+            updateOrder(gamePhase);
         }
         else
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
@@ -301,8 +372,136 @@ public class Game {
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
                 }
             }
-            else
+            else {
+                gameTable.removeProfessor(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+            }
+        }
+    }
+
+    private void checkUpdateInfluence(int idIsle) {
+        int majorInfluence = 0;
+        int conquerorIndex = 0;
+        boolean draw = false;
+
+        if (numberOfPlayers == 4) {
+            int tempInfluence = 0;
+            for (int i = 0; i < 2; i++) {
+                for (Player p : players) {
+                    if (p.getSquad() == Squads.getSquads(i))
+                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
+                }
+                if (tempInfluence > majorInfluence) {
+                    majorInfluence = tempInfluence;
+                    conquerorIndex = i;
+                    draw = false;
+                }
+                if (tempInfluence == majorInfluence)
+                    draw = true;
+            }
+        }
+        else {
+            for (Player p : players) {
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) > majorInfluence) {
+                    majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
+                    conquerorIndex = p.getDashboard().getIdDashboard();
+                    draw = false;
+                }
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) == majorInfluence)
+                    draw = true;
+            }
+        }
+
+        if (!draw) {
+            if (gameTable.getIsleManager().getIsle(idIsle).getTowersColor() != players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor()) {
+                if (gameTable.getIsleManager().getIsle(idIsle).getTowersColor() == TowerColors.NOCOLOR)
+                    players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();
+                else {
+                    for (Player p : players) {
+                        if (p.getDashboard().getTowerStorage().getTowerColor() == gameTable.getIsleManager().getIsle(idIsle).getTowersColor()) {
+                            for (int i = 0; i < gameTable.getIsleManager().getIsle(idIsle).getNumOfIsles(); i++) {
+                                p.getDashboard().getTowerStorage().addTower();
+                                players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();
+                            }
+                            break;
+                        }
+                    }
+                }
+                gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
+                gameTable.getIsleManager().checkUnifyIsle(idIsle);
+            }
+        }
+    }
+
+    private void checkEndGame() {
+        for (Player p : players) {
+            if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
+                endGame = true;
+                winner = p;
+                break;
+            }
+        }
+
+        if (gameTable.getIsleManager().getIsles().size() == 3) {
+            endGame = true;
+
+            int minorNumOfTowersInStorage = 8;
+            int winnerIndex = 0;
+            boolean draw= false;
+
+            if (numberOfPlayers == 4) {
+                for (Player p : players) {
+                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
+                        minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
+                        winnerIndex = p.getDashboard().getIdDashboard();
+                        draw = false;
+                    }
+                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR)
+                        draw = true;
+                }
+            }
+            else {
+                for (Player p : players) {
+                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage) {
+                        minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
+                        winnerIndex = p.getDashboard().getIdDashboard();
+                        draw = false;
+                    }
+                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
+                        draw = true;
+                }
+            }
+
+            if (draw) {
+                int majorProfessors = 0;
+
+                if (numberOfPlayers == 4) {
+                    int tempProfessors = 0;
+                    for (int i = 0; i < 2; i++) {
+                        for (Player p : players) {
+                            if (p.getSquad() == Squads.getSquads(i))
+                                tempProfessors = tempProfessors + p.getDashboard().getDiningRoom().getNumberOfProfessors();
+                        }
+                        if (tempProfessors > majorProfessors) {
+                            majorProfessors = tempProfessors;
+                            winnerIndex = i;
+                        }
+                    }
+                }
+                else {
+                    for (Player p : players) {
+                        if (p.getDashboard().getDiningRoom().getNumberOfProfessors() > majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {
+                            majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();
+                            winnerIndex = p.getDashboard().getIdDashboard();
+                            drawEndGame = false;
+                        }
+                        if (p.getDashboard().getDiningRoom().getNumberOfProfessors() == majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
+                            drawEndGame = true;
+                    }
+                }
+            }
+
+            winner = players.get(winnerIndex);
         }
     }
 

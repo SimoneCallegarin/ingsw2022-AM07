@@ -47,8 +47,10 @@ public class Dashboard {
 
         this.entrance = new Entrance(maxEntranceStudents, maxEntranceStudentsRemovable);
         this.diningRoom = new DiningRoom();
-        if((idDashboard==2||idDashboard==3)&&numOfPlayers==4)
-            maxStorageTowers=0;
+        if((idDashboard==2||idDashboard==3)&&numOfPlayers==4) {
+            maxStorageTowers = 0;
+            towerColor = TowerColors.getColor(3);
+        }
         this.towerStorage = new TowerStorage(maxStorageTowers, towerColor);
     }
 

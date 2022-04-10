@@ -92,6 +92,8 @@ public class Player {
 
     }
 
+    public Squads getSquad() {return squad;}
+
     public Dashboard getDashboard() {return dashboard;}
 
     public List<AssistantCard> getMageDeck() {

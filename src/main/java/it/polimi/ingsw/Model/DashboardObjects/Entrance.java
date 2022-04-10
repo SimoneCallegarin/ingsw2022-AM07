@@ -93,4 +93,6 @@ public class Entrance implements StudentManager {
     public boolean isFull() {
         return getNumberOfStudents() == maxStudents;
     }
+
+    public int getMaxStudents() { return maxStudents; }
 }
