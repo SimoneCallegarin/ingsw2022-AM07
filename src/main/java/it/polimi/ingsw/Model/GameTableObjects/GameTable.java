@@ -26,7 +26,6 @@ public class GameTable {
      */
     private final ArrayList<CharacterCard> characterCards;
 
-    //private final EffectFactory effectFactory;
     /**
      * this is the general money reserve that is filled with 20 money
      * it is updated when a player plays a character card
@@ -65,6 +64,7 @@ public class GameTable {
                 characterCards.add(new CharacterCard(CharacterCardsName.getCharacterCardName(extraction)));
                 extractedNumbers.add(extraction);
             }
+            //if setup effect do the setup!
         }
     }
 

@@ -2,10 +2,8 @@ package it.polimi.ingsw.Model.Player;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
-import it.polimi.ingsw.Model.Enumeration.CurrentOrder;
-import it.polimi.ingsw.Model.Enumeration.GameMode;
-import it.polimi.ingsw.Model.Enumeration.Mages;
-import it.polimi.ingsw.Model.Enumeration.Squads;
+import it.polimi.ingsw.Model.Enumeration.*;
+import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,8 +159,46 @@ public class Player {
             money = money - characterCard.getCost();
             characterCard.isUsed();
             alreadyPlayedACardThisTurn = true;
-        }          //in order to prevent the player to play two cards in the same turn
-        //this has to be checked in the class game if(alreadyPlayedACardThisTurn=false) => "Playable" else "NotPlayable"
+        }
+    }
+
+    /**
+     * this method interfaces with the controller and the view to pick a student color
+     * the player choose a student to pick from the student manager where it is and the view gives the color
+     * chosen to the controller that sends it to the model
+     * @param from the student manager from where choose the color of the student the player wants to move
+     * @param color the color of the student the player picked
+     * @return the color of the student the player picked
+     */
+    public RealmColors selectColor(StudentManager from, RealmColors color){
+        if(from.getStudentsByColor(color)==0)
+            return  null;
+        else
+            return color;
+    }
+
+    /**
+     * this method interfaces with the controller and the view to pick the number of students the player wants to move
+     * the player choose a number of students to pick from the student manager where it is and the view gives this number
+     * chosen to the controller that sends it to the model
+     * @param from the student manager from where choose the number of the students the player wants to move
+     * @param numberOfStudents the number of students the player picked
+     * @return the number of students the player picked
+     */
+    public int selectNumberOfStudentsToMove(StudentManager from, int numberOfStudents){
+        if(from.getNumberOfStudents()<numberOfStudents)
+            return from.getNumberOfStudents();
+        else
+            return numberOfStudents;
+    }
+
+    /**
+     * this method interfaces with the controller and the view to pick the isle chosen by the player
+     * @param isleID the ID of the isle chosen by the player
+     * @return the ID of the isle chosen by the player
+     */
+    public int selectIsleId(int isleID){
+        return isleID;
     }
 
 }

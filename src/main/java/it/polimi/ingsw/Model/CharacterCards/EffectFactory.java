@@ -1,37 +1,32 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
-import it.polimi.ingsw.Model.Enumeration.Movable;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Interface.StudentManager;
+import it.polimi.ingsw.Model.GameTableObjects.Bag;
+import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+import it.polimi.ingsw.Model.Player.Player;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class EffectFactory {
 
     public EffectFactory(){}
 
-    /*public ArrayList<AtomicEffect> getEffect (CharacterCardsName card){
-        List<AtomicEffect> effect = null;
+    public void getEffect (Player player, GameTable gameTable, CharacterCard characterCard){
 
-        StudentManager from = null;
-        StudentManager to = null;
-        RealmColors color = RealmColors.YELLOW;
+        List effect = null;
+        StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
+        DenyCardMovementEffect denyCardMovementEffect = new DenyCardMovementEffect();
+        StudentSetupEffect studentSetupEffect = new StudentSetupEffect();
+        DenyCardSetupEffect denyCardSetupEffect = new DenyCardSetupEffect();
 
-        switch (card){
+        switch (characterCard.getCharacterCardName()){
             case MONK:
 
-                CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
-
-                AtomicEffect setup = new SetupEffect();
-                setup.effect(4, null,null,Movable.STUDENT,color);
-
-                effect.add(setup);
-
-                AtomicEffect move = new MovementEffect();
-
-                move.effect(1, from, to, Movable.STUDENT,color);
-
-                effect.add(move);
+                studentSetupEffect.effect(4,gameTable.getBag(),characterCard,ColorsForEffects.RANDOM, player);
+                effect.add(studentSetupEffect);
+                studentMovementEffect.effect(1,characterCard,gameTable.getIsleManager().getIsle(player.selectIsleId(0)),ColorsForEffects.SELECT,player);
+                effect.add(studentMovementEffect);
+                studentMovementEffect.effect(1,gameTable.getBag(),characterCard,ColorsForEffects.RANDOM,player);
+                effect.add(studentMovementEffect);
 
                 break;
             case FARMER:
@@ -57,7 +52,5 @@ public class EffectFactory {
             case THIEF:
                 break;
         }
-        return effect;
-    }*/
-
+    }
 }
