@@ -15,6 +15,7 @@ import com.google.gson.Gson;
  */
 public class ClientHandler implements Runnable{
     Socket socket;
+    CommandParser commandParser=new CommandParser();
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -27,7 +28,7 @@ public class ClientHandler implements Runnable{
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             while (true) {
                 String line = in.nextLine();
-                if (processCmd(line,out)) {
+                if (commandParser.processCmd(line,out)) {
                     break;
                 } else {
                     out.println("Received: " + line);
@@ -43,19 +44,5 @@ public class ClientHandler implements Runnable{
     }
 
 
-    private Boolean processCmd(String cmd, PrintWriter out){
-        switch (cmd.toLowerCase()){
-            case "quit" :
-                return true;
-        }
-        System.out.println("got:\n" + cmd + "\n");
-        out.println("Answer: " + cmd);
-        Gson gson = new Gson();
-        Map map = gson.fromJson(cmd, Map.class);
-        // Assert.assertEquals(1, map.size());
-        Map m = (Map) map.get("moveto");
-        double x = (double)m.get("x");
-        out.flush();
-        return false;
-    }
+
 }
