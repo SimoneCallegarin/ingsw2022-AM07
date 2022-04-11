@@ -81,15 +81,15 @@ public class IsleManager {
         return isleWithMotherNatureIndex;
     }
 
+    public void setIsleWithMotherNatureIndex(int newMNIsleIndex) {
+        isleWithMotherNatureIndex = newMNIsleIndex;
+    }
+
     public int getIsleOppositeToMotherNatureIndex() {
         if (isleWithMotherNatureIndex >= 0 && isleWithMotherNatureIndex < 6)
             return isleWithMotherNatureIndex+6;
         else
             return isleWithMotherNatureIndex-6;
-    }
-
-    public void setIsleOppositeToMotherNatureIndex(int newMNIsleIndex) {
-        isleWithMotherNatureIndex = newMNIsleIndex;
     }
 
     public boolean isMNMovementAcceptable(int idIsle, int mnMovement) {

@@ -327,6 +327,7 @@ class PlanningPhase {
             assertEquals(CurrentOrder.THIRD_PLAYER, game.getPlayerByIndex(1).getOrder());
             assertEquals(CurrentOrder.FOURTH_PLAYER, game.getPlayerByIndex(0).getOrder());
         }
+        assertEquals(2, game.firstPlayerIndex);
     }
 
 }

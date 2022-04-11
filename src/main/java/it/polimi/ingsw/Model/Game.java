@@ -131,7 +131,7 @@ public class Game {
             if (numberOfPlayers == 2 || numberOfPlayers == 3)
                 newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
             else {
-                if (actualNumberOfPlayers == 1)
+                if (actualNumberOfPlayers == 2)
                     newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
                 else
                     newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2, gameMode);
@@ -220,7 +220,7 @@ public class Game {
             if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).discardPile.getMnMovement())) {
                 gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
                 gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
-                gameTable.getIsleManager().setIsleOppositeToMotherNatureIndex(idIsle);
+                gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
                 checkUpdateInfluence(idIsle);
                 checkEndGame();
                 actionPhase = ActionPhases.CHOOSE_CLOUD;
@@ -391,24 +391,25 @@ public class Game {
                     if (p.getSquad() == Squads.getSquads(i))
                         tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
                 }
+                if (tempInfluence == majorInfluence)
+                    draw = true;
                 if (tempInfluence > majorInfluence) {
                     majorInfluence = tempInfluence;
                     conquerorIndex = i;
                     draw = false;
                 }
-                if (tempInfluence == majorInfluence)
-                    draw = true;
+                tempInfluence = 0;
             }
         }
         else {
             for (Player p : players) {
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) == majorInfluence)
+                    draw = true;
                 if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) > majorInfluence) {
                     majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
                     conquerorIndex = p.getDashboard().getIdDashboard();
                     draw = false;
                 }
-                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) == majorInfluence)
-                    draw = true;
             }
         }
 
@@ -451,24 +452,24 @@ public class Game {
 
             if (numberOfPlayers == 4) {
                 for (Player p : players) {
+                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR)
+                        draw = true;
                     if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                         minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
                         winnerIndex = p.getDashboard().getIdDashboard();
                         draw = false;
                     }
-                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR)
-                        draw = true;
                 }
             }
             else {
                 for (Player p : players) {
+                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
+                        draw = true;
                     if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage) {
                         minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
                         winnerIndex = p.getDashboard().getIdDashboard();
                         draw = false;
                     }
-                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
-                        draw = true;
                 }
             }
 
@@ -490,13 +491,13 @@ public class Game {
                 }
                 else {
                     for (Player p : players) {
+                        if (p.getDashboard().getDiningRoom().getNumberOfProfessors() == majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
+                            drawEndGame = true;
                         if (p.getDashboard().getDiningRoom().getNumberOfProfessors() > majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {
                             majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();
                             winnerIndex = p.getDashboard().getIdDashboard();
                             drawEndGame = false;
                         }
-                        if (p.getDashboard().getDiningRoom().getNumberOfProfessors() == majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
-                            drawEndGame = true;
                     }
                 }
             }
