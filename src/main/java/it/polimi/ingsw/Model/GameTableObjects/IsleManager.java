@@ -28,8 +28,8 @@ public class IsleManager {
      * this method is used to unify two different isles.
      * It updates the values of the first isle using the ones from the second isle,
      * then the second isle is removed and at the end we reset all the Isle ids.
-     * @param isle1 the first Isle
-     * @param isle2 the second Isle
+     * @param isle1 the index of the first Isle
+     * @param isle2 the index of the second Isle
      */
     public void unifyIsle(int isle1, int isle2) {
         for (RealmColors c : RealmColors.values()) {
@@ -40,6 +40,15 @@ public class IsleManager {
 
         isles.get(isle1).setNumOfIsles(isles.get(isle1).getNumOfIsles() + isles.get(isle2).getNumOfIsles());
 
+        if (isles.get(isle2).getMotherNature()) {
+            isles.get(isle2).setMotherNature(false);
+            isles.get(isle1).setMotherNature(true);
+        //    isleWithMotherNatureIndex = isle1;
+        }
+
+        //if (isle1 == isles.size()-1)
+        //    isleWithMotherNatureIndex = isles.size()-2;
+
         isles.remove(isle2);
 
         int i = 0;
@@ -47,6 +56,8 @@ public class IsleManager {
             isle.setIdIsle(i);
             i++;
         }
+
+        updateIsleWithMotherNatureIndex();
     }
 
     public void checkUnifyIsle(int idIsle) {
@@ -71,7 +82,7 @@ public class IsleManager {
                 previousIsleOffsetIndex = 1;
         }
 
-        if (isles.get(previousIsleIndex).getTowersColor() == isles.get(idIsle).getTowersColor())
+        if (isles.get(previousIsleIndex-previousIsleOffsetIndex).getTowersColor() == isles.get(idIsle-idIsleOffsetIndex).getTowersColor())
             unifyIsle(previousIsleIndex-previousIsleOffsetIndex, idIsle-idIsleOffsetIndex);
     }
 
@@ -83,6 +94,15 @@ public class IsleManager {
 
     public void setIsleWithMotherNatureIndex(int newMNIsleIndex) {
         isleWithMotherNatureIndex = newMNIsleIndex;
+    }
+
+    private void updateIsleWithMotherNatureIndex() {
+        for (Isle i : isles) {
+            if (i.getMotherNature()) {
+                isleWithMotherNatureIndex = i.getIdIsle();
+                break;
+            }
+        }
     }
 
     public int getIsleOppositeToMotherNatureIndex() {

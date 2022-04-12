@@ -40,8 +40,4 @@ public class TowerStorage implements TowerManager {
     public TowerColors getTowerColor() {
         return towerColor;
     }
-
-    public void setTowerColor(TowerColors color){
-        towerColor = color;
-    }
 }

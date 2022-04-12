@@ -55,12 +55,12 @@ public class Game {
         this.noColorInfluence = 0;
     }
 
-    public int getPlayerID(String nickName) {
+/*    public int getPlayerID(String nickName) {
         int i = 0;
         while (!players.get(i).nickname.equals(nickName))
             i++;
         return i;
-    }
+    } */
 
     public Player getPlayerByIndex(int playerIndex) {
         return players.get(playerIndex);
@@ -203,14 +203,16 @@ public class Game {
      */
     public void moveStudentInDiningRoom(int idPlayer, RealmColors color) {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
-            players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
-            checkUpdateProfessor(idPlayer, color);
-            studentsCounter++;
+            if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
+                players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
+                players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
+                checkUpdateProfessor(idPlayer, color);
+                studentsCounter++;
 
-            if (studentsCounter == maxMovableStudents) {
-                actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
-                studentsCounter = 0;
+                if (studentsCounter == maxMovableStudents) {
+                    actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+                    studentsCounter = 0;
+                }
             }
         }
     }
@@ -230,20 +232,22 @@ public class Game {
 
     public void pickStudentsFromCloud(int idPlayer, int idCloud) {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.CHOOSE_CLOUD && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            while (studentsCounter < maxMovableStudents) {
-                for (RealmColors rc : RealmColors.values()) {
-                    if (gameTable.getCloud(idCloud).getStudentsByColor(rc) >= 1) {
-                        gameTable.getCloud(idCloud).removeStudent(rc);
-                        players.get(idPlayer).getDashboard().getEntrance().addStudent(rc);
-                        break;
+            if (!gameTable.getCloud(idCloud).isEmpty()) {
+                while (studentsCounter < maxMovableStudents) {
+                    for (RealmColors rc : RealmColors.values()) {
+                        if (gameTable.getCloud(idCloud).getStudentsByColor(rc) >= 1) {
+                            gameTable.getCloud(idCloud).removeStudent(rc);
+                            players.get(idPlayer).getDashboard().getEntrance().addStudent(rc);
+                            break;
+                        }
                     }
+                    studentsCounter++;
                 }
-                studentsCounter++;
+                studentsCounter = 0;
+                playerCounter++;
+                actionPhase = ActionPhases.MOVE_STUDENTS;
+                nextPlayer();
             }
-            studentsCounter = 0;
-            playerCounter++;
-            actionPhase = ActionPhases.MOVE_STUDENTS;
-            nextPlayer();
         }
     }
 
@@ -439,7 +443,7 @@ public class Game {
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                 endGame = true;
                 winner = p;
-                break;
+                return;
             }
         }
 
@@ -448,7 +452,7 @@ public class Game {
 
             int minorNumOfTowersInStorage = 8;
             int winnerIndex = 0;
-            boolean draw= false;
+            boolean draw = false;
 
             if (numberOfPlayers == 4) {
                 for (Player p : players) {
@@ -506,7 +510,7 @@ public class Game {
         }
     }
 
-    public String getState() {
+/*    public String getState() {
         String gp = null, pp = null, ap = null, cap = null;
 
         if (gamePhase == GamePhases.SETUP_PHASE)
@@ -539,6 +543,6 @@ public class Game {
 
         return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
 
-    }
+    } */
 
 }
