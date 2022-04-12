@@ -71,7 +71,7 @@ public class Entrance implements StudentManager {
     public void removeStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        if (temp > 0 && getNumberOfStudents() > (maxStudents-maxStudentsRemovable))
+        if (temp > 0)       //ADD a check that are not removed more than 3/4 students per turn for each player
             temp--;
         students.put(color, temp);
     }

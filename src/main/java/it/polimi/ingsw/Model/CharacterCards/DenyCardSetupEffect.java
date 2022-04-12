@@ -14,6 +14,6 @@ public class DenyCardSetupEffect {
      */
     public void effect(int times, DenyCardManager from, DenyCardManager to, ColorsForEffects color) {
         DenyCardMovementEffect denyCardMovementEffect = new DenyCardMovementEffect();
-        denyCardMovementEffect.effect(times,null,to,color);
+        denyCardMovementEffect.effect(times,from,to,color);
     }
 }

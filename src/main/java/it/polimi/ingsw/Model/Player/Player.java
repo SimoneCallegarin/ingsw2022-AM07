@@ -170,7 +170,7 @@ public class Player {
      * @param color the color of the student the player picked
      * @return the color of the student the player picked
      */
-    public RealmColors selectColor(StudentManager from, RealmColors color){
+    public RealmColors selectColor(StudentManager from, RealmColors color){     //NEEDS TO BE UPDATED WHEN VIEW AND CONTROLLER WILL BE IMPLEMENTED
         if(from.getStudentsByColor(color)==0)
             return  null;
         else

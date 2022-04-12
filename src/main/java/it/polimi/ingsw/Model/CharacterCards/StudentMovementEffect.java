@@ -19,7 +19,6 @@ public class StudentMovementEffect {
             if(color==ColorsForEffects.RANDOM){
                 Bag bag = (Bag) from;
                 RealmColors colorExtracted = bag.draw();
-                System.out.println(1);
                 to.addStudent(colorExtracted);
             }
             if(color==ColorsForEffects.SELECT){

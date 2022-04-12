@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model.GameTableObjects;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
 import org.junit.jupiter.api.Test;
 
@@ -33,12 +34,27 @@ class GameTableTest {
     @Test
     void extractAndSetUsableAndGetCharacterCards() {
         boolean test = true;
+
         for (int i=0; i<1000; i++){
-            gameTableForTest.extractAndSetUsableCharacterCards();
+            gameTableForTest = new GameTable(4, GameMode.EXPERT);       //here we call 1000 times extractAndSetUsableCharacterCards method
             if(gameTableForTest.getCharacterCard(0)==gameTableForTest.getCharacterCard(1)||gameTableForTest.getCharacterCard(0)==gameTableForTest.getCharacterCard(2)||gameTableForTest.getCharacterCard(1)==gameTableForTest.getCharacterCard(2))
                 test = false;
             assertTrue(test);
         }
+    }
+
+    @Test
+    void getIsleManager(){
+        assertEquals(0,gameTableForTest.getIsleManager().getIsle(0).getNumberOfStudents());
+    }
+
+    @Test
+    void denyCards(){
+        assertEquals(4,gameTableForTest.getDenyCards());
+        gameTableForTest.removeDenyCard();
+        assertEquals(3,gameTableForTest.getDenyCards());
+        gameTableForTest.addDenyCard();
+        assertEquals(4,gameTableForTest.getDenyCards());
     }
 
 }

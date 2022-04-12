@@ -1,15 +1,13 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
-import it.polimi.ingsw.Model.CharacterCards.EffectFactory;
+import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
-import it.polimi.ingsw.Model.Interface.StudentManager;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Game {
     /**
@@ -19,7 +17,7 @@ public class Game {
     /**
      * the number of players that are going to play the game, it is decided by the first player that joins the game
      */
-    private int numberOfPlayers;
+    public int numberOfPlayers;
     /**
      * the number of players that already joined the game
      */
@@ -66,7 +64,7 @@ public class Game {
     /**
      * its the factory that permits to build the effect of each playable character card
      */
-    private final EffectFactory effectFactory;
+    private final EffectInGameFactory effectInGameFactory;
 
     /**
      * Game constructor
@@ -80,7 +78,7 @@ public class Game {
         this.planningPhase = PlanningPhases.FILL_CLOUDS;
         this.actionPhase = ActionPhases.MOVE_STUDENTS;
 
-        this.effectFactory = new EffectFactory();
+        this.effectInGameFactory = new EffectInGameFactory();
     }
 
 
@@ -261,7 +259,7 @@ public class Game {
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
     }
 
-    public String getState() {
+    /*public String getState() {
         String gp = null, pp = null, ap = null, cap = null;
 
         if (gamePhase == GamePhases.SETUP_PHASE)
@@ -294,14 +292,14 @@ public class Game {
 
         return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
 
-    }
+    }*/
 
     public void playCharacterCard(int idPlayer, CharacterCard characterCard) {
 
-        if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
+        //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
             getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
-            effectFactory.getEffect(getPlayerByIndex(idPlayer), gameTable , characterCard);
-        }
+            effectInGameFactory.getEffect(characterCard,this, getPlayerByIndex(idPlayer));
+        //}
     }
 
 }
