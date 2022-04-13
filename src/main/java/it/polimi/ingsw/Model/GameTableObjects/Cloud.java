@@ -104,7 +104,6 @@ public class Cloud implements StudentManager {
      */
     public int getIdCloud(){ return idCloud; }
 
-    //the following method might be not very useful, in the future we may decide to remove it
     /**
      * this method permits knowing if the cloud is actually empty
      */

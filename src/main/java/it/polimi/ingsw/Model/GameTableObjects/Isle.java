@@ -200,4 +200,16 @@ public class Isle implements StudentManager, DenyCardManager {
      */
     public void setTower(TowerColors c){this.tower=c;}
 
+    public void setMotherNature(boolean motherNature) {
+        this.motherNature = motherNature;
+    }
+
+    @Override
+    public int getNumberOfStudents() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
+        }
+        return totalNumberOfStudents;
+    }
 }
