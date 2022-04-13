@@ -60,6 +60,10 @@ public class IsleManager {
         updateIsleWithMotherNatureIndex();
     }
 
+    /**
+     * it checks whether isles have to be unified or not
+     * @param idIsle is the index of the isle which we start the check on
+     */
     public void checkUnifyIsle(int idIsle) {
         int idIsleOffsetIndex = 0;
         int previousIsleOffsetIndex = 0;
@@ -112,6 +116,12 @@ public class IsleManager {
             return isleWithMotherNatureIndex-6;
     }
 
+    /**
+     * according to the isle chosen by player and the maximum number of MN movements he can do, it checks if the movement of mother nature is possible
+     * @param idIsle is the index of the chosen isle
+     * @param mnMovement is the MN movement number that can be seen on the assistant card played
+     * @return boolean that tells if the movement is acceptable or not
+     */
     public boolean isMNMovementAcceptable(int idIsle, int mnMovement) {
         boolean acceptable = false;
 

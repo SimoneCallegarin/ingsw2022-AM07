@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlanningPhase {
 
     /**
-     * we are testing if the correct number of clouds is filled after insert of the last player
+     * it tests if the correct number of clouds is filled after insert of the last player
      */
     @Test
     public void fillClouds2Players() {
@@ -23,7 +23,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if firstPlayerIndex is inbound
+     * it tests if firstPlayerIndex is inbound
      */
     @Test
     public void firstPlayerIndex2Players() {
@@ -35,7 +35,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if the correct number of clouds is filled after insert of the last player
+     * it tests if the correct number of clouds is filled after insert of the last player
      */
     @Test
     public void fillClouds3Players() {
@@ -50,7 +50,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if the order for the first planning phase is correct (for 2 players)
+     * it tests if the order for the first planning phase is correct (for 2 players)
      */
     @Test
     public void firstUpdateOrder2Player() {
@@ -68,7 +68,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if the order for the first planning phase is correct (for 4 players)
+     * it tests if the order for the first planning phase is correct (for 4 players)
      */
     @Test
     public void firstUpdateOrder4Player() {
@@ -104,7 +104,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if the player who has to be the first is actually who plays the first assistant card
+     * it tests if the player who has to be the first is actually who plays the first assistant card
      */
     @Test
     public void firstOneToPlayAssistantCard() {
@@ -117,7 +117,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if nothing happens when the second player tries to play before the other one
+     * it tests if nothing happens when the second player tries to play before the other one
      */
     @Test
     public void wrongFirstPlayer() {
@@ -133,7 +133,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if nothing happens when the second player tries to play the same card as the one played by the first player
+     * it tests if nothing happens when the second player tries to play the same card as the one played by the first player
      */
     @Test
     public void wrongCardPlayed() {
@@ -154,7 +154,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if everything works properly during a normal flow of execution in the Assistant Card phase (2 players)
+     * it tests if everything works properly during a normal flow of execution in the Assistant Card phase (2 players)
      */
     @Test
     public void assistantCardPhase2Players() {
@@ -186,7 +186,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if everything works properly during a normal flow of execution in the Assistant Card phase (3 players)
+     * wit tests if everything works properly during a normal flow of execution in the Assistant Card phase (3 players)
      */
     @Test
     public void assistantCardPhase3Players() {
@@ -242,7 +242,7 @@ class PlanningPhase {
     }
 
     /**
-     * we are testing if everything works properly during a normal flow of execution in the Assistant Card phase (4 players)
+     * it tests if everything works properly during a normal flow of execution in the Assistant Card phase (4 players)
      */
     @Test
     public void assistantCardPhase4Players() {

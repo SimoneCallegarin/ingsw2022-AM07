@@ -33,34 +33,15 @@ public class Game {
     public ActionPhases actionPhase;
     public CurrentOrder currentActivePlayer;
 
-    private final int sameStudents;   //used for the character cards in recalculate effect
-    private final int noTowerCount;   //used for the character cards in recalculate effect
-    private final int moreMNMovement;   //used for the character cards in recalculate effect
-    private final int moreInfluence;   //used for the character cards in recalculate effect
-    private final int noColorInfluence;   //used for the character cards in recalculate effect
-
     public Game() {
         this.players = new ArrayList<>(4);
         this.gameMode = GameMode.BASE;
         this.numberOfPlayers = 0;
 
-        this.gamePhase = GamePhases.SETUP_PHASE;                       //not already used but ok, maybe we can add a "neutral" phase
+        this.gamePhase = GamePhases.SETUP_PHASE;
         this.planningPhase = PlanningPhases.FILL_CLOUDS;
         this.actionPhase = ActionPhases.MOVE_STUDENTS;
-
-        this.sameStudents = 0;
-        this.noTowerCount = 0;
-        this.moreMNMovement = 0;
-        this.moreInfluence = 0;
-        this.noColorInfluence = 0;
     }
-
-/*    public int getPlayerID(String nickName) {
-        int i = 0;
-        while (!players.get(i).nickname.equals(nickName))
-            i++;
-        return i;
-    } */
 
     public Player getPlayerByIndex(int playerIndex) {
         return players.get(playerIndex);
@@ -85,7 +66,6 @@ public class Game {
 
     public int getNumberOfPlayers() {return numberOfPlayers;}
 
-    //it is possible to split this method in 4 sub methods that permit to build the player by asking him 1 param per times
     /**
      * First method that has to be called to properly start the game
      * adding the first player following his desire about which game mode and with how many players he wants to play
@@ -154,7 +134,7 @@ public class Game {
     }
 
     /**
-     * this method is responsible for changing the discard pile of a certain player
+     * it is responsible for changing the discard pile of a certain player
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
      * @param assistantCardPlayed is the AssistantCard played
      */
@@ -178,7 +158,7 @@ public class Game {
     }
 
     /**
-     * this method takes a student from the dashboard of a certain player and puts it on a specified island
+     * it takes a student from the dashboard of a certain player and puts it on a specified island
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
      * @param idIsle is the index of the chosen island
      * @param color is the color of the student that has been moved
@@ -197,7 +177,7 @@ public class Game {
     }
 
     /**
-     * this method takes a student from the dashboard of a certain player and puts it in the dining room
+     * it takes a student from the dashboard of a certain player and puts it in the dining room
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
      * @param color is the color of the student that has been moved
      */
@@ -217,6 +197,11 @@ public class Game {
         }
     }
 
+    /**
+     * it takes a student from the dashboard of a certain player and puts it on a certain isle
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
+     * @param idIsle is the index of the isle which we want to move the student on
+     */
     public void moveMotherNature(int idPlayer, int idIsle) {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_MOTHER_NATURE && currentActivePlayer == players.get(idPlayer).getOrder()) {
             if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).discardPile.getMnMovement())) {
@@ -230,6 +215,11 @@ public class Game {
         }
     }
 
+    /**
+     * it picks the students present on a certain cloud and puts them in the entrance of the player
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who chose the cloud
+     * @param idCloud is the index of the chosen cloud
+     */
     public void pickStudentsFromCloud(int idPlayer, int idCloud) {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.CHOOSE_CLOUD && currentActivePlayer == players.get(idPlayer).getOrder()) {
             if (!gameTable.getCloud(idCloud).isEmpty()) {
@@ -251,14 +241,26 @@ public class Game {
         }
     }
 
+    /**
+     * it returns a boolean that tells if the game is ended or not
+     * @return the "endGame" boolean
+     */
     public boolean isGameEnded() {
         return endGame;
     }
 
+    /**
+     * it returns a boolean that tells if the game is ended in a draw or not
+     * @return the "drawEndGame" boolean
+     */
     public boolean isGameEndedInADraw() {
         return drawEndGame;
     }
 
+    /**
+     * it returns the nickname of the player who won (or, if it is a 4 Players match, the squad)
+     * @return the string of the winner
+     */
     public String getWinner() {
         if (numberOfPlayers == 4) {
             return winner.getSquad().toString();
@@ -266,6 +268,10 @@ public class Game {
             return winner.nickname;
     }
 
+    /**
+     * depending on the number of players. it adds 7 or 9 students taken from the bag to a specific dashboard
+     * @param idDashboard is the id of the dashboard whose entrance we want to fill
+     */
     private void initializeEntrance(int idDashboard) {
         for (int i = 0; i < players.get(idDashboard).getDashboard().getEntrance().getMaxStudents(); i++) {
             players.get(idDashboard).getDashboard().getEntrance().addStudent(gameTable.getBag().draw());
@@ -273,7 +279,7 @@ public class Game {
     }
 
     /**
-     * this is a method used during PLANNING_PHASE that fills clouds automatically
+     * it is used during PLANNING_PHASE, it fills clouds automatically
      */
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
@@ -289,7 +295,7 @@ public class Game {
     }
 
     /**
-     * according to the game phase, this method updates when a player has the right to play
+     * according to the game phase, it updates when a player has the right to play
      * @param gamePhase is used in order to execute different statements
      */
     private void updateOrder(GamePhases gamePhase) {
@@ -333,7 +339,7 @@ public class Game {
     }
 
     /**
-     * this method updates an attribute of Game that is used to identify which player has the right to play in a specific moment
+     * it updates an attribute of Game that is used to identify which player has the right to play in a specific moment
      */
     private void nextPlayer() {
         if (playerCounter == numberOfPlayers) {
@@ -353,7 +359,7 @@ public class Game {
     }
 
     /**
-     * this method is invoked when a student has been added to the dining room of a certain player and updates the professors owned by players, if it is necessary
+     * it is invoked when a student has been added to the dining room of a certain player and updates the professors owned by players, if it is necessary
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player whose dining room has been updated
      * @param color is the color of the student that has been moved to the dining room, therefore it is the color of the professor we need to check
      */
@@ -383,6 +389,10 @@ public class Game {
         }
     }
 
+    /**
+     * it is invoked when mother nature ends on acceptable isle and updates all tower references, if it is necessary (it also calls a method to verify if isles union has to occur)
+     * @param idIsle is the index of the isle which has mother nature on it
+     */
     private void checkUpdateInfluence(int idIsle) {
         int majorInfluence = 0;
         int conquerorIndex = 0;
@@ -438,6 +448,9 @@ public class Game {
         }
     }
 
+    /**
+     * it checks if the game has ended and updates the proper end game variables
+     */
     private void checkEndGame() {
         for (Player p : players) {
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
