@@ -45,7 +45,7 @@ class GameTableTest {
 
     @Test
     void getIsleManager(){
-        if(gameTableForTest.getIsleManager().getIsle(0).getMotherNature()==true)
+        if(gameTableForTest.getIsleManager().getIsle(0).getMotherNature()==true||gameTableForTest.getIsleManager().getIsle(gameTableForTest.getIsleManager().getIsleOppositeToMotherNatureIndex()).getMotherNature()==true)
             assertEquals(0,gameTableForTest.getIsleManager().getIsle(0).getNumberOfStudents());
         else
             assertEquals(1,gameTableForTest.getIsleManager().getIsle(0).getNumberOfStudents());
