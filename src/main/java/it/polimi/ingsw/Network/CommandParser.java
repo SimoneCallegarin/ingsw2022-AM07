@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Network;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.Network.Messages.Message;
 
 import java.io.PrintWriter;
 
@@ -17,12 +17,8 @@ public class CommandParser {
         }
         System.out.println("got:\n" + cmd + "\n");
         //out.println("Answer: " + cmd);
-
-        //the second parameter is used to let the fromjson method receive every type of message which
-        //extends the abstract class Message
-        MoveStudent_Message m=g.fromJson(cmd,new TypeToken<Message>(){}.getType());
-        System.out.println(m.x);
-        out.flush();
+        Message m=g.fromJson(cmd,Message.class);
+        out.println(m.getMessageType());
         return false;
     }
 }
