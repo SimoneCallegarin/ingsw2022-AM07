@@ -10,9 +10,16 @@ import java.util.List;
  */
 
 public class IsleManager {
-    List<Isle> isles;
-    int isleWithMotherNatureIndex;
 
+    /**
+     * this is the actual list of active isle for the game
+     */
+    private ArrayList<Isle> Isles;
+    private int isleWithMotherNatureIndex;
+
+    /**
+     * Isle manager constructor
+     */
     public IsleManager(){
         isles=new ArrayList<>();
 
@@ -90,8 +97,6 @@ public class IsleManager {
             unifyIsle(previousIsleIndex-previousIsleOffsetIndex, idIsle-idIsleOffsetIndex);
     }
 
-    public Isle getIsle(int index){return isles.get(index);}
-
     public int getIsleWithMotherNatureIndex() {
         return isleWithMotherNatureIndex;
     }
@@ -140,8 +145,18 @@ public class IsleManager {
         return acceptable;
     }
 
-    public List<Isle> getIsles() {
-        return isles;
-    }
+    /**
+     * getter method that gives the isle of a certain index
+     * @param index the index associated to a certain isle in the ArrayList
+     * @return the isle associated to that index
+     */
+    public Isle getIsle(int index){return Isles.get(index);}
+
+    /**
+     * method used only for testing
+     * gives the list of active isles
+     * @return the list of active isles
+     */
+    public ArrayList<Isle> getIsles() { return Isles; }
 
 }

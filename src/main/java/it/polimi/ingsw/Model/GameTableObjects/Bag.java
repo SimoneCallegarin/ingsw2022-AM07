@@ -11,7 +11,9 @@ public class Bag implements StudentManager {
      * this is the students container
      */
     private final HashMap<RealmColors,Integer> students;
-
+    /**
+     * Constructor of the bag, we put 130 students at the start of the game
+     */
     public Bag() {
         this.students = new HashMap<>();
     }
@@ -85,7 +87,7 @@ public class Bag implements StudentManager {
      * this method extract the students for the bag randomly, basing on how many students per color there are
      * @return the color of the extracted student
      */
-    public RealmColors draw(){
+    public RealmColors draw(){    //NEED TO BE UPDATED DUE TO MATCH A REMOVE METHOD CALLED IN THE CHARACTER CARDS
 
         int studentsSequence = 0;   //studentsSequence permits checking of which color the random students extracted is
 

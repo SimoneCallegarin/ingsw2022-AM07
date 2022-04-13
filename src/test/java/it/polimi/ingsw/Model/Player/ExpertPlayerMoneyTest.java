@@ -1,19 +1,17 @@
 package it.polimi.ingsw.Model.Player;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
-import it.polimi.ingsw.Model.CharacterCards.Effect;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.DashboardObjects.TowerStorage;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.Squads;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpertPlayerMoneyTest {
-    TowerStorage towerStorage = new TowerStorage(8, TowerColors.WHITE);
-    Dashboard dashboard = new Dashboard(4, 1, GameMode.EXPERT);
+
     Player expertPlayerForTest = new Player("PlayerForTest", 4, 1, Squads.SQUAD1, GameMode.EXPERT);
 
     /**
@@ -36,11 +34,10 @@ public class ExpertPlayerMoneyTest {
         expertPlayerForTest.gainMoney();
         //3 money in total for the player
 
-        Effect effect = new Effect();
-        CharacterCard characterCard = new CharacterCard(0,2,effect);
+        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
 
         expertPlayerForTest.playCharacterCard(characterCard);
-        assertEquals(1,expertPlayerForTest.getMoney());
+        assertEquals(2,expertPlayerForTest.getMoney());
     }
 
     /**
@@ -53,8 +50,7 @@ public class ExpertPlayerMoneyTest {
         expertPlayerForTest.gainMoney();
         //3 money in total for the player
 
-        Effect effect = new Effect();
-        CharacterCard characterCard = new CharacterCard(0,1,effect);
+        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
 
         expertPlayerForTest.playCharacterCard(characterCard);
         assertEquals(2,expertPlayerForTest.getMoney());

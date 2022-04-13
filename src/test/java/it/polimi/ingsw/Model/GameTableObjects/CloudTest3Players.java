@@ -1,20 +1,16 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
-import it.polimi.ingsw.Model.Enumeration.CloudSide;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CloudTest3Players {
 
-    //when game will be implemented it will be possible to better differentiate the two tests of the cloud
-
     /**
      * we are testing a cloud with a side of a 3 players match
      */
-    Cloud cloudForTest = new Cloud(2, CloudSide.SIDE_3_PLAYERS);
+    Cloud cloudForTest = new Cloud(2, 3);
 
     /**
      * we are testing if the number of students on the cloud is correctly returned

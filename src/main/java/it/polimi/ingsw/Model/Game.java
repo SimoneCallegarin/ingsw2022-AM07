@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
@@ -12,27 +13,69 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class Game {
-    private final ArrayList<Player> players;
-    public int firstPlayerIndex;
+    /**
+     * the game mode of the game, it is decided by the first player that joins the game
+     */
     private GameMode gameMode;
-
-    private int numberOfPlayers;
-    private int maxMovableStudents;
-    private GameTable gameTable;
+    /**
+     * the number of players that are going to play the game, it is decided by the first player that joins the game
+     */
+    public int numberOfPlayers;
+    /**
+     * the number of players that already joined the game
+     */
     private int actualNumberOfPlayers = 0;
-
+    /**
+     * the game table where the game is going to be played, it contains many different objects that compose the game itself
+     */
+    private GameTable gameTable;
+    /**
+     * the list of players that are playing the game
+     */
+    private final ArrayList<Player> players;
+    /**
+     * random index used to say who will be the first player to play in the first turn
+     */
+    public int firstPlayerIndex;
+    /**
+     * the number of students that is possible to move in a turn for each player
+     */
+    private int maxMovableStudents;
+    /**
+     * counter used to check how many players already played their turn in a game turn
+     */
     public int playerCounter = 0;
+
     private int studentsCounter = 0;
 
     private boolean endGame = false;
     private boolean drawEndGame = false;
     private Player winner;
 
+    /**
+     * Phases in which it's divided the game
+     */
     public GamePhases gamePhase;
+    /**
+     * it divide the planning phase in 2 different sub phases and it indicates that the player turn is in the planning phase
+     */
     public PlanningPhases planningPhase;
+    /**
+     * it divide the planning phase in 3 different sub phases and it indicates that the player turn is in the action phase
+     */
     public ActionPhases actionPhase;
+    /**
+     * it indicates who is the current active player that is playing his turn
+     */
     public CurrentOrder currentActivePlayer;
+    /**
+     * its the factory that permits to build the effect of each playable character card
+     */
+    private final EffectInGameFactory effectInGameFactory;
 
+    /**
+     * Game constructor
+     */
     public Game() {
         this.players = new ArrayList<>(4);
         this.gameMode = GameMode.BASE;
@@ -41,12 +84,23 @@ public class Game {
         this.gamePhase = GamePhases.SETUP_PHASE;
         this.planningPhase = PlanningPhases.FILL_CLOUDS;
         this.actionPhase = ActionPhases.MOVE_STUDENTS;
+
+        this.effectInGameFactory = new EffectInGameFactory();
     }
 
+    /**
+     * getter method that permits to know whats the  in the list of players that has a certain index
+     * @param playerIndex the index of the player that is in the list
+     * @return the player associated with that index
+     */
     public Player getPlayerByIndex(int playerIndex) {
         return players.get(playerIndex);
     }
 
+    /**
+     * getter method that permits to pick the current game table
+     * @return the current game table
+     */
     public GameTable getGameTable() {
         return gameTable;
     }
@@ -523,7 +577,7 @@ public class Game {
         }
     }
 
-/*    public String getState() {
+    /*public String getState() {
         String gp = null, pp = null, ap = null, cap = null;
 
         if (gamePhase == GamePhases.SETUP_PHASE)
@@ -555,7 +609,14 @@ public class Game {
             cap = "player_4";
 
         return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
+    }*/
 
-    } */
+    public void playCharacterCard(int idPlayer, CharacterCard characterCard) {
+
+        //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
+            effectInGameFactory.getEffect(characterCard,this, getPlayerByIndex(idPlayer));
+        //}
+    }
 
 }

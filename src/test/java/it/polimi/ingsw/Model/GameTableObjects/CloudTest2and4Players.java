@@ -1,20 +1,16 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
-import it.polimi.ingsw.Model.Enumeration.CloudSide;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CloudTest2and4Players {
 
-    //when game will be implemented it will be possible to better differentiate the two tests of the cloud
-
     /**
      * we are testing a cloud with a side of a 2 or 4 players match
      */
-    Cloud cloudForTest = new Cloud(1, CloudSide.SIDE_2_AND_4_PLAYERS);
+    Cloud cloudForTest = new Cloud(1, 2);
 
     /**
      * we are testing if the number of students on the cloud is correctly returned
@@ -23,8 +19,8 @@ class CloudTest2and4Players {
     void getNumberOfElements() {
         assertEquals(0, cloudForTest.getNumberOfStudents());
         cloudForTest.addStudent(RealmColors.YELLOW);
-        cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.addStudent(RealmColors.PINK);
+        cloudForTest.addStudent(RealmColors.BLUE);
         assertEquals(3, cloudForTest.getNumberOfStudents());
         cloudForTest.addStudent(RealmColors.PINK);
         assertEquals(3, cloudForTest.getNumberOfStudents());

@@ -65,5 +65,4 @@ class DashboardTest {
         assertEquals(0, ts.getNumberOfTowers());
     }
 
-
 }
