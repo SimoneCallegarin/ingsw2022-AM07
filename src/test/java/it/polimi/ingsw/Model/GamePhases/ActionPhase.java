@@ -16,8 +16,8 @@ class ActionPhase {
     public void diningRoomFirstMovements2Players() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -68,8 +68,8 @@ class ActionPhase {
     public void diningRoomMovementsPossibleDraw2Players() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -125,8 +125,8 @@ class ActionPhase {
     public void firstStudentsMovements() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -172,8 +172,8 @@ class ActionPhase {
     public void firstMotherNatureMovementWithConquest() {
         int nextIsleIndex = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -216,8 +216,8 @@ class ActionPhase {
     @Test
     public void wrongMotherNatureMovements() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -269,8 +269,8 @@ class ActionPhase {
     @Test
     public void variousMotherNatureMovementsWithAndWithoutConquest() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -366,8 +366,8 @@ class ActionPhase {
     @Test
     public void variousPossibleMotherNatureMovements() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 12, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 12);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -416,10 +416,10 @@ class ActionPhase {
     @Test
     public void motherNatureMovement4Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(6, 3, false);
-        AssistantCard cardPlayed2 = new AssistantCard(5, 3, false);
-        AssistantCard cardPlayed3 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed4 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(6, 3);
+        AssistantCard cardPlayed2 = new AssistantCard(5, 3);
+        AssistantCard cardPlayed3 = new AssistantCard(3, 2);
+        AssistantCard cardPlayed4 = new AssistantCard(4, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -570,8 +570,8 @@ class ActionPhase {
     @Test
     public void checkUnifyIsle() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -677,8 +677,8 @@ class ActionPhase {
     public void pickStudentsFromCloud() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -745,8 +745,8 @@ class ActionPhase {
     public void endActionPhase() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -815,8 +815,8 @@ class ActionPhase {
     @Test
     public void endGame2PlayersNoMoreTowers() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -862,8 +862,8 @@ class ActionPhase {
     @Test
     public void endGame2Players3IslesNoDraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -930,9 +930,9 @@ class ActionPhase {
     @Test
     public void endGame3Players3IslesWithTowersDraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed3 = new AssistantCard(5, 3, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
+        AssistantCard cardPlayed3 = new AssistantCard(5, 3);
         game.addFirstPlayer("jack", GameMode.BASE, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -1021,9 +1021,9 @@ class ActionPhase {
     @Test
     public void game3IslesEndedInADraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2, false);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed3 = new AssistantCard(5, 3, false);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
+        AssistantCard cardPlayed3 = new AssistantCard(5, 3);
         game.addFirstPlayer("jack", GameMode.BASE, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -1110,10 +1110,10 @@ class ActionPhase {
     @Test
     public void endGame4PlayersNoMoreTowers() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(6, 3, false);
-        AssistantCard cardPlayed2 = new AssistantCard(5, 3, false);
-        AssistantCard cardPlayed3 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed4 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(6, 3);
+        AssistantCard cardPlayed2 = new AssistantCard(5, 3);
+        AssistantCard cardPlayed3 = new AssistantCard(3, 2);
+        AssistantCard cardPlayed4 = new AssistantCard(4, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -1184,10 +1184,10 @@ class ActionPhase {
     @Test
     public void endGame4Players3IslesNoDraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(6, 3, false);
-        AssistantCard cardPlayed2 = new AssistantCard(5, 3, false);
-        AssistantCard cardPlayed3 = new AssistantCard(3, 2, false);
-        AssistantCard cardPlayed4 = new AssistantCard(4, 2, false);
+        AssistantCard cardPlayed1 = new AssistantCard(6, 3);
+        AssistantCard cardPlayed2 = new AssistantCard(5, 3);
+        AssistantCard cardPlayed3 = new AssistantCard(3, 2);
+        AssistantCard cardPlayed4 = new AssistantCard(4, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");

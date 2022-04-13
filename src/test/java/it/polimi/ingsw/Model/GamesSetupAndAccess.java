@@ -52,7 +52,7 @@ public class GamesSetupAndAccess {
 
         //Testing the access to deny card in the isles:
         for (int i = 0; i < 12; i++)
-            assertFalse(game4PlayersExpert.getGameTable().getIsleManager().getIsle(i).getDenyCard());
+            assertEquals(0,game4PlayersExpert.getGameTable().getIsleManager().getIsle(i).getDenyCards());
 
         //Testing the access to mother nature in the isles:
         assertTrue(game4PlayersExpert.getGameTable().getIsleManager().getIsle(game4PlayersExpert.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).getMotherNature());

@@ -20,11 +20,11 @@ class StudentSetupEffectTest {
         CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK);
         Player player = new Player("simone", 4, 0, Squads.SQUAD1, GameMode.EXPERT);
 
-        List effects = null;
         StudentSetupEffect studentSetupEffectStudents = new StudentSetupEffect();
         Bag bag =  new Bag();
+        bag.fillBag();
         studentSetupEffectStudents.effect(4,bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
-        assertEquals(126,bag.getNumberOfStudents());
+        assertEquals(116,bag.getNumberOfStudents());
         assertEquals(4, characterCardTestForStudents.getNumberOfStudents());
     }
 

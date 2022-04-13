@@ -159,8 +159,8 @@ class PlanningPhase {
     @Test
     public void assistantCardPhase2Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
+        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {

@@ -14,7 +14,7 @@ public class IsleManager {
     /**
      * this is the actual list of active isle for the game
      */
-    private ArrayList<Isle> Isles;
+    private ArrayList<Isle> isles;
     private int isleWithMotherNatureIndex;
 
     /**
@@ -150,13 +150,13 @@ public class IsleManager {
      * @param index the index associated to a certain isle in the ArrayList
      * @return the isle associated to that index
      */
-    public Isle getIsle(int index){return Isles.get(index);}
+    public Isle getIsle(int index){return isles.get(index);}
 
     /**
      * method used only for testing
      * gives the list of active isles
      * @return the list of active isles
      */
-    public ArrayList<Isle> getIsles() { return Isles; }
+    public ArrayList<Isle> getIsles() { return isles; }
 
 }

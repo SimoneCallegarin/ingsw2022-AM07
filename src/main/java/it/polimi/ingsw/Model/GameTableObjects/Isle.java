@@ -204,12 +204,4 @@ public class Isle implements StudentManager, DenyCardManager {
         this.motherNature = motherNature;
     }
 
-    @Override
-    public int getNumberOfStudents() {
-        int totalNumberOfStudents = 0;
-        for (RealmColors rc : RealmColors.values()){
-            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
-        }
-        return totalNumberOfStudents;
-    }
 }

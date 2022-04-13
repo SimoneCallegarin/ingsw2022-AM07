@@ -29,12 +29,14 @@ class GamePlaySomeCharacterCards {
         assertEquals(studentsInTheBag-4, game.getGameTable().getBag().getNumberOfStudents());
         assertEquals(4, game.getGameTable().getCharacterCard(0).getNumberOfStudents());
 
+        int studentsOnIsle = game.getGameTable().getIsleManager().getIsle(0).getNumberOfStudents();
+
         game.getGameTable().getCharacterCard(0).addStudent(RealmColors.YELLOW);   //this will be removed when the implementation is fully completed
 
         //played the MONK character card:
         game.playCharacterCard(0, game.getGameTable().getCharacterCard(0));
         assertEquals(studentsInTheBag-5, game.getGameTable().getBag().getNumberOfStudents());
-        assertEquals(1, game.getGameTable().getIsleManager().getIsle(0).getNumberOfStudents());
+        assertEquals(studentsOnIsle+1, game.getGameTable().getIsleManager().getIsle(0).getNumberOfStudents());
         assertEquals(5, game.getGameTable().getCharacterCard(0).getNumberOfStudents());
 
     }
@@ -70,6 +72,21 @@ class GamePlaySomeCharacterCards {
 
         int studentsInTheBag = game.getGameTable().getBag().getNumberOfStudents();
 
+        int counter=0;
+
+        // removing 3 students from entrance
+        for (RealmColors rc : RealmColors.values()) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(rc);
+            for (int i = 0; i < studentsOfSpecifiedColor; i++) {
+                game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(rc);
+                counter++;
+                if (counter == 7)
+                    break;
+            }
+            if (counter == 7)
+                break;
+        }
+
         game.getGameTable().setCharacterCards(0,CharacterCardsName.JESTER);
 
         assertEquals(studentsInTheBag-6, game.getGameTable().getBag().getNumberOfStudents());
@@ -101,6 +118,21 @@ class GamePlaySomeCharacterCards {
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(0,CharacterCardsName.MINSTREL);
+
+        int counter=0;
+
+        // removing 3 students from entrance
+        for (RealmColors rc : RealmColors.values()) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(rc);
+            for (int i = 0; i < studentsOfSpecifiedColor; i++) {
+                game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(rc);
+                counter++;
+                if (counter == 7)
+                    break;
+            }
+            if (counter == 7)
+                break;
+        }
 
         game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.YELLOW);   //this will be removed when the implementation is fully completed
         game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.YELLOW);   //this will be removed when the implementation is fully completed
