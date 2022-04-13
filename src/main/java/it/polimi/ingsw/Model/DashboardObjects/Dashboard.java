@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model.DashboardObjects;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
-public class Dashboard {
+public class Dashboard {     //implements RecalculateEffect
 
     /**
      * this is the identification number of the dashboard
@@ -83,4 +83,18 @@ public class Dashboard {
     public TowerStorage getTowerStorage() {
         return towerStorage;
     }
+
+    //THIS METHOD WILL BE IMPLEMENTED ONLY WHEN ALL THE OTHER METHODS THAT DOES COUNTS IN GAME CLASS ARE FULLY IMPLEMENTED
+    // /**
+     // * this method adjust the value of the count of students in order to permit the current player
+     // * to obtain the professors even in a student's number condition of draw
+     // */
+   // @Override
+    //public void adjustValues(int idPlayer) {
+      //  if(idPlayer!=idDashboard)
+        //    getDiningRoom().recalculateNumberOfStudents=true;
+        //else
+          //  getDiningRoom().recalculateNumberOfStudents=false;
+    //}
+
 }

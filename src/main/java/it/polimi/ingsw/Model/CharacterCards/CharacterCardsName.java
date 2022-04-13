@@ -37,7 +37,7 @@ public enum CharacterCardsName {
             case 9 -> MINSTREL;
             case 10 -> SPOILED_PRINCESS;
             case 11 -> THIEF;
-            default -> null;
+            default -> throw new IllegalStateException("Unexpected value: " + index);
         };
     }
 

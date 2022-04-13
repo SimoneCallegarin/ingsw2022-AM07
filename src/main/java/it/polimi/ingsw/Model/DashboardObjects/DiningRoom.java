@@ -19,6 +19,10 @@ public class DiningRoom implements StudentManager {
      * this is a value that defines how the dining room is made
      */
     static final int maxStudentsPerColor = 10;
+    /**
+     * bool used to adjust the count of students in order to activate the FARMER character card
+     */
+    //boolean recalculateNumberOfStudents = false;
 
     boolean giveMoney = false;
 
@@ -45,7 +49,11 @@ public class DiningRoom implements StudentManager {
         for (RealmColors rc : RealmColors.values()){
             totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
         }
-        return totalNumberOfStudents;
+        //THIS METHOD WILL BE IMPLEMENTED ONLY WHEN ALL THE OTHER METHODS THAT DOES COUNTS IN GAME CLASS ARE FULLY IMPLEMENTED
+        //if(recalculateNumberOfStudents)
+          //  return totalNumberOfStudents-1;
+        //else
+            return totalNumberOfStudents;
     }
 
     /**

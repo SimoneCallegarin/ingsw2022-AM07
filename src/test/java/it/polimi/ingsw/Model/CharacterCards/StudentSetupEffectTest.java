@@ -1,15 +1,16 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
-import it.polimi.ingsw.Model.Enumeration.Movable;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.GameMode;
+import it.polimi.ingsw.Model.Enumeration.Squads;
 import it.polimi.ingsw.Model.GameTableObjects.Bag;
+import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SetupEffectTest {
+class StudentSetupEffectTest {
 
     /**
      * we are testing if a setup effect does what it is supposed to do when called
@@ -17,10 +18,12 @@ class SetupEffectTest {
     @Test
     void effectSetupForStudents() {
         CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK);
-        ArrayList<AtomicEffect> effects = new ArrayList<>();
-        AtomicEffect setupEffectStudents = new SetupEffect();
+        Player player = new Player("simone", 4, 0, Squads.SQUAD1, GameMode.EXPERT);
+
+        List effects = null;
+        StudentSetupEffect studentSetupEffectStudents = new StudentSetupEffect();
         Bag bag =  new Bag();
-        setupEffectStudents.effect(4,bag , characterCardTestForStudents, Movable.STUDENT, RealmColors.RED);   //The colors have to be randomized, in order to accomplish this we have to chance the draw method in bag and add a RANDOM_COLOR in RealColor enum
+        studentSetupEffectStudents.effect(4,bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
         assertEquals(126,bag.getNumberOfStudents());
         assertEquals(4, characterCardTestForStudents.getNumberOfStudents());
     }

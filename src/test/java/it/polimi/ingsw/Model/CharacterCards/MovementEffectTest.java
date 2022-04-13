@@ -1,12 +1,15 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
-import it.polimi.ingsw.Model.Enumeration.Movable;
+import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.Squads;
 import it.polimi.ingsw.Model.GameTableObjects.Bag;
 import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
+import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,16 +21,17 @@ class MovementEffectTest {
     @Test
     void effect() {
         CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK);
-        ArrayList<AtomicEffect> effects = new ArrayList<>();
-        AtomicEffect movementEffectStudents1 = new MovementEffect();
-        AtomicEffect movementEffectStudents2 = new MovementEffect();
+        Player player = new Player("simone", 4, 0, Squads.SQUAD1, GameMode.EXPERT);
+        List effects = null;
+        StudentMovementEffect movementEffectStudents1 = new StudentMovementEffect();
+        StudentMovementEffect movementEffectStudents2 = new StudentMovementEffect();
         IsleManager isleManager = new IsleManager();
         Bag bag = new Bag();
-        characterCardTestForStudents.addStudent(RealmColors.RED);
-        movementEffectStudents1.effect(1,characterCardTestForStudents,isleManager.getIsle(0),Movable.STUDENT,RealmColors.RED);
+        characterCardTestForStudents.addStudent(RealmColors.YELLOW);
+        movementEffectStudents1.effect(1,characterCardTestForStudents,isleManager.getIsle(0), ColorsForEffects.SELECT, player);
         assertEquals(0,characterCardTestForStudents.getNumberOfStudents());
         assertEquals(1,isleManager.getIsle(0).getNumberOfStudents());
-        movementEffectStudents2.effect(1,bag,characterCardTestForStudents,Movable.STUDENT,RealmColors.RED);
+        movementEffectStudents2.effect(1,bag,characterCardTestForStudents, ColorsForEffects.RANDOM, player);
         assertEquals(1,characterCardTestForStudents.getNumberOfStudents());
         assertEquals(129,bag.getNumberOfStudents());
     }
