@@ -1,8 +1,10 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.Model.GameTableObjects.GameTable;
 import it.polimi.ingsw.Model.Player.Player;
+
+import java.util.ArrayList;
 
 /**
  * this is the factory that permits to activate character cards effect that takes place during the game
@@ -11,19 +13,17 @@ public class EffectInGameFactory {
 
     public EffectInGameFactory(){}
 
-    public void getEffect (CharacterCard characterCard, Game game, Player player){
-
+    public void getEffect (CharacterCard characterCard, ArrayList<Player> players, GameTable gameTable, Player player){
 
         StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
         DenyCardMovementEffect denyCardMovementEffect = new DenyCardMovementEffect();
 
         int times;
 
-
         switch (characterCard.getCharacterCardName()){
             case MONK:
-                studentMovementEffect.effect(1,characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(0)),ColorsForEffects.SELECT,player);
-                studentMovementEffect.effect(1,game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,player);
+                studentMovementEffect.effect(1,characterCard,gameTable.getIsleManager().getIsle(player.selectIsleId(0)),ColorsForEffects.SELECT,player);
+                studentMovementEffect.effect(1,gameTable.getBag(),characterCard,ColorsForEffects.RANDOM,player);
                 break;
 
             case FARMER:
@@ -38,7 +38,7 @@ public class EffectInGameFactory {
                 //Recalculate
                 break;
             case GRANDMA_HERBS:
-                denyCardMovementEffect.effect(1,characterCard,game.getGameTable().getIsleManager().getIsle(0),ColorsForEffects.NONE);
+                denyCardMovementEffect.effect(1,characterCard,gameTable.getIsleManager().getIsle(0),ColorsForEffects.NONE);
                 break;
 
             case CENTAUR:
@@ -69,15 +69,15 @@ public class EffectInGameFactory {
 
             case SPOILED_PRINCESS:
                 studentMovementEffect.effect(1,characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,player);
-                studentMovementEffect.effect(1,game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,player);
+                studentMovementEffect.effect(1,gameTable.getBag(),characterCard,ColorsForEffects.RANDOM,player);
                 break;
 
             case THIEF:
-                RealmColors color = player.selectColor(game.getGameTable().getBag(), RealmColors.YELLOW); //va generalizzato con un nuovo metodo!
-                for(int i=0; i<game.numberOfPlayers; i++)
+                RealmColors color = player.selectColor(gameTable.getBag(), RealmColors.YELLOW); //va generalizzato con un nuovo metodo!
+                for(int i=0; i<players.size(); i++)
                     for (int j=0; j<3; j++){
-                        if(game.getPlayerByIndex(i).getDashboard().getDiningRoom().getStudentsByColor(color)>0)
-                            studentMovementEffect.effect(1,game.getPlayerByIndex(i).getDashboard().getDiningRoom(),game.getGameTable().getBag(),ColorsForEffects.SELECT,player);
+                        if(players.get(i).getDashboard().getDiningRoom().getStudentsByColor(color)>0)
+                            studentMovementEffect.effect(1,players.get(i).getDashboard().getDiningRoom(),gameTable.getBag(),ColorsForEffects.SELECT,player);
                     }
                 break;
 

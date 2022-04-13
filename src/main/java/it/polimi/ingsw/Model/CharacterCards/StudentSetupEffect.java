@@ -14,8 +14,8 @@ public class StudentSetupEffect {
      * @param color will always be set to RANDOM
      */
     public void effect(int times, StudentManager from, StudentManager to, ColorsForEffects color, Player player) {
-            StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
-            studentMovementEffect.effect(times, from, to, color, player);
+        StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
+        studentMovementEffect.effect(times, from, to, color, player);
     }
 
 }

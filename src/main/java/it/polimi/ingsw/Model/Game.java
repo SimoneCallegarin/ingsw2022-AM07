@@ -615,7 +615,7 @@ public class Game {
 
         //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
             getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
-            effectInGameFactory.getEffect(characterCard,this, getPlayerByIndex(idPlayer));
+            effectInGameFactory.getEffect(characterCard, players, gameTable, getPlayerByIndex(idPlayer));
         //}
     }
 
