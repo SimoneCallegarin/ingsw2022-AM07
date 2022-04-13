@@ -521,54 +521,26 @@ public class Game {
             int winnerIndex = 0;
             boolean draw = false;
 
-            if (numberOfPlayers == 4) {
-                for (Player p : players) {
-                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR)
-                        draw = true;
-                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
-                        minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
-                        winnerIndex = p.getDashboard().getIdDashboard();
-                        draw = false;
-                    }
-                }
-            }
-            else {
-                for (Player p : players) {
-                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
-                        draw = true;
-                    if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage) {
-                        minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
-                        winnerIndex = p.getDashboard().getIdDashboard();
-                        draw = false;
-                    }
+            for (Player p : players) {
+                if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR)
+                    draw = true;
+                if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage) {
+                    minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
+                    winnerIndex = p.getDashboard().getIdDashboard();
+                    draw = false;
                 }
             }
 
             if (draw) {
                 int majorProfessors = 0;
 
-                if (numberOfPlayers == 4) {
-                    int tempProfessors = 0;
-                    for (int i = 0; i < 2; i++) {
-                        for (Player p : players) {
-                            if (p.getSquad() == Squads.getSquads(i))
-                                tempProfessors = tempProfessors + p.getDashboard().getDiningRoom().getNumberOfProfessors();
-                        }
-                        if (tempProfessors > majorProfessors) {
-                            majorProfessors = tempProfessors;
-                            winnerIndex = i;
-                        }
-                    }
-                }
-                else {
-                    for (Player p : players) {
-                        if (p.getDashboard().getDiningRoom().getNumberOfProfessors() == majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
-                            drawEndGame = true;
-                        if (p.getDashboard().getDiningRoom().getNumberOfProfessors() > majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {
-                            majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();
-                            winnerIndex = p.getDashboard().getIdDashboard();
-                            drawEndGame = false;
-                        }
+                for (Player p : players) {
+                    if (p.getDashboard().getDiningRoom().getNumberOfProfessors() == majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
+                        drawEndGame = true;
+                    if (p.getDashboard().getDiningRoom().getNumberOfProfessors() > majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {
+                        majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();
+                        winnerIndex = p.getDashboard().getIdDashboard();
+                        drawEndGame = false;
                     }
                 }
             }
