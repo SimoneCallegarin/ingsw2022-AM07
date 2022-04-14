@@ -3,11 +3,14 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
+import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class Game {
     /**
@@ -45,6 +48,10 @@ public class Game {
 
     private int studentsCounter = 0;
 
+    private boolean endGame = false;
+    private boolean drawEndGame = false;
+    private Player winner;
+
     /**
      * Phases in which it's divided the game
      */
@@ -56,7 +63,7 @@ public class Game {
     /**
      * it divide the planning phase in 3 different sub phases and it indicates that the player turn is in the action phase
      */
-    private ActionPhases actionPhase;
+    public ActionPhases actionPhase;
     /**
      * it indicates who is the current active player that is playing his turn
      */
@@ -74,21 +81,12 @@ public class Game {
         this.gameMode = GameMode.BASE;
         this.numberOfPlayers = 0;
 
-        this.gamePhase = GamePhases.SETUP_PHASE;                       //not already used but ok, maybe we can add a "neutral" phase
+        this.gamePhase = GamePhases.SETUP_PHASE;
         this.planningPhase = PlanningPhases.FILL_CLOUDS;
         this.actionPhase = ActionPhases.MOVE_STUDENTS;
 
         this.effectInGameFactory = new EffectInGameFactory();
     }
-
-
-    /*          (still not used)
-    public int getPlayerID(String nickName) {
-        int i = 0;
-        while (!players.get(i).nickname.equals(nickName))
-            i++;
-        return i;
-    }*/
 
     /**
      * getter method that permits to know whats the  in the list of players that has a certain index
@@ -111,7 +109,7 @@ public class Game {
      * setting the number of player when selected by the first player
      * @param numberOfPlayers to play with in total
      */
-    public void setPlayerNumbers(int numberOfPlayers) {
+    public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
 
         if (numberOfPlayers == 3)
@@ -120,7 +118,8 @@ public class Game {
             maxMovableStudents = 3;
     }
 
-    //it is possible to split this method in 4 sub methods that permit to build the player by asking him 1 param per times
+    public int getNumberOfPlayers() {return numberOfPlayers;}
+
     /**
      * First method that has to be called to properly start the game
      * adding the first player following his desire about which game mode and with how many players he wants to play
@@ -130,7 +129,7 @@ public class Game {
      */
     public void addFirstPlayer(String nickName, GameMode gameMode, int numberOfPlayers){
 
-        setPlayerNumbers(numberOfPlayers);
+        setNumberOfPlayers(numberOfPlayers);
         this.gameMode = gameMode;
 
         Player newPlayer;
@@ -143,6 +142,7 @@ public class Game {
             newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
 
         players.add(newPlayer);
+        initializeEntrance(actualNumberOfPlayers);
         actualNumberOfPlayers = 1;
 
     }
@@ -165,12 +165,13 @@ public class Game {
             if (numberOfPlayers == 2 || numberOfPlayers == 3)
                 newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
             else {
-                if (actualNumberOfPlayers == 1)
+                if (actualNumberOfPlayers == 2)
                     newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
                 else
                     newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2, gameMode);
             }
             players.add(newPlayer);
+            initializeEntrance(actualNumberOfPlayers);
             actualNumberOfPlayers++;
 
             if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
@@ -187,21 +188,7 @@ public class Game {
     }
 
     /**
-     * this is a method used during PLANNING_PHASE that fills clouds automatically
-     */
-    private void fillClouds() {
-        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
-            for (int i = 0; i < numberOfPlayers; i++) {
-                for (int j = 0; j < maxMovableStudents; j++) {
-                    gameTable.getCloud(i).addStudent(gameTable.getBag().draw());
-                }
-            }
-            planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        }
-    }
-
-    /**
-     * this method is responsible for changing the discard pile of a certain player
+     * it is responsible for changing the discard pile of a certain player
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
      * @param assistantCardPlayed is the AssistantCard played
      */
@@ -209,8 +196,8 @@ public class Game {
         boolean alreadyPlayed = false;
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
             for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
-                if (p.discardPile != null) {
-                    if (p.discardPile.equals(assistantCardPlayed)) {
+                if (p.getDiscardPile() != null) {
+                    if (p.getDiscardPile().equals(assistantCardPlayed)) {
                         alreadyPlayed = true;
                         break;
                     }
@@ -224,10 +211,145 @@ public class Game {
         }
     }
 
+    /**
+     * it takes a student from the dashboard of a certain player and puts it on a specified island
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
+     * @param idIsle is the index of the chosen island
+     * @param color is the color of the student that has been moved
+     */
+    public void moveStudentInIsle(int idPlayer, int idIsle, RealmColors color) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
+            gameTable.getIsleManager().getIsle(idIsle).addStudent(color);
+            studentsCounter++;
 
+            if (studentsCounter == maxMovableStudents) {
+                actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+                studentsCounter = 0;
+            }
+        }
+    }
 
     /**
-     * according to the game phase, this method updates when a player has the right to play
+     * it takes a student from the dashboard of a certain player and puts it in the dining room
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
+     * @param color is the color of the student that has been moved
+     */
+    public void moveStudentInDiningRoom(int idPlayer, RealmColors color) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
+                players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
+                players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
+                checkUpdateProfessor(idPlayer, color);
+                studentsCounter++;
+
+                if (studentsCounter == maxMovableStudents) {
+                    actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+                    studentsCounter = 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * it takes a student from the dashboard of a certain player and puts it on a certain isle
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
+     * @param idIsle is the index of the isle which we want to move the student on
+     */
+    public void moveMotherNature(int idPlayer, int idIsle) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_MOTHER_NATURE && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).discardPile.getMnMovement())) {
+                gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
+                gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
+                gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
+                checkUpdateInfluence(idIsle);
+                checkEndGame();
+                actionPhase = ActionPhases.CHOOSE_CLOUD;
+            }
+        }
+    }
+
+    /**
+     * it picks the students present on a certain cloud and puts them in the entrance of the player
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who chose the cloud
+     * @param idCloud is the index of the chosen cloud
+     */
+    public void pickStudentsFromCloud(int idPlayer, int idCloud) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.CHOOSE_CLOUD && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            if (!gameTable.getCloud(idCloud).isEmpty()) {
+                while (studentsCounter < maxMovableStudents) {
+                    for (RealmColors rc : RealmColors.values()) {
+                        if (gameTable.getCloud(idCloud).getStudentsByColor(rc) >= 1) {
+                            gameTable.getCloud(idCloud).removeStudent(rc);
+                            players.get(idPlayer).getDashboard().getEntrance().addStudent(rc);
+                            break;
+                        }
+                    }
+                    studentsCounter++;
+                }
+                studentsCounter = 0;
+                playerCounter++;
+                actionPhase = ActionPhases.MOVE_STUDENTS;
+                nextPlayer();
+            }
+        }
+    }
+
+    /**
+     * it returns a boolean that tells if the game is ended or not
+     * @return the "endGame" boolean
+     */
+    public boolean isGameEnded() {
+        return endGame;
+    }
+
+    /**
+     * it returns a boolean that tells if the game is ended in a draw or not
+     * @return the "drawEndGame" boolean
+     */
+    public boolean isGameEndedInADraw() {
+        return drawEndGame;
+    }
+
+    /**
+     * it returns the nickname of the player who won (or, if it is a 4 Players match, the squad)
+     * @return the string of the winner
+     */
+    public String getWinner() {
+        if (numberOfPlayers == 4) {
+            return winner.getSquad().toString();
+        } else
+            return winner.nickname;
+    }
+
+    /**
+     * depending on the number of players. it adds 7 or 9 students taken from the bag to a specific dashboard
+     * @param idDashboard is the id of the dashboard whose entrance we want to fill
+     */
+    private void initializeEntrance(int idDashboard) {
+        for (int i = 0; i < players.get(idDashboard).getDashboard().getEntrance().getMaxStudents(); i++) {
+            players.get(idDashboard).getDashboard().getEntrance().addStudent(gameTable.getBag().draw());
+        }
+    }
+
+    /**
+     * it is used during PLANNING_PHASE, it fills clouds automatically
+     */
+    private void fillClouds() {
+        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
+            for (int i = 0; i < numberOfPlayers; i++) {
+                Cloud cloud = gameTable.getCloud(i);
+                for (int j = 0; j < maxMovableStudents; j++) {
+                    RealmColors color = gameTable.getBag().draw();
+                    cloud.addStudent(color);
+                }
+            }
+            planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
+        }
+    }
+
+    /**
+     * according to the game phase, it updates when a player has the right to play
      * @param gamePhase is used in order to execute different statements
      */
     private void updateOrder(GamePhases gamePhase) {
@@ -244,19 +366,187 @@ public class Game {
         }
 
         if (gamePhase == GamePhases.ACTION_PHASE) {
-            this.gamePhase = GamePhases.ACTION_PHASE;
-            actionPhase = ActionPhases.MOVE_STUDENTS;
+            TreeSet<Integer> turnOrderTree = new TreeSet<>();
+            int lowestTurnOrder = 0;
+
+            for (Player p : players)
+                turnOrderTree.add(p.getDiscardPile().getTurnOrder());
+
+            for (playerCounter = 0; playerCounter < numberOfPlayers; playerCounter++) {
+                if (!turnOrderTree.isEmpty())
+                    lowestTurnOrder = turnOrderTree.pollFirst();
+                for (Player p : players) {
+                    if (p.getDiscardPile().getTurnOrder() == lowestTurnOrder) {
+                        p.setOrder(CurrentOrder.getCurrentOrder(playerCounter));
+                        break;
+                    }
+                }
+            }
+
+            for (Player p : players) {
+                if (p.getOrder() == CurrentOrder.FIRST_PLAYER)
+                    firstPlayerIndex = p.getDashboard().getIdDashboard();
+            }
+            currentActivePlayer = CurrentOrder.FIRST_PLAYER;
+            playerCounter = 0;
         }
     }
 
     /**
-     * this method updates an attribute of Game that is used to identify which player has the right to play in a specific moment
+     * it updates an attribute of Game that is used to identify which player has the right to play in a specific moment
      */
     private void nextPlayer() {
-        if (playerCounter == numberOfPlayers)
-            updateOrder(GamePhases.ACTION_PHASE);
+        if (playerCounter == numberOfPlayers) {
+            playerCounter = 0;
+            if (gamePhase == GamePhases.PLANNING_PHASE) {
+                gamePhase = GamePhases.ACTION_PHASE;
+                planningPhase = PlanningPhases.FILL_CLOUDS;
+            }
+            else {
+                gamePhase = GamePhases.PLANNING_PHASE;
+                fillClouds();
+            }
+            updateOrder(gamePhase);
+        }
         else
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
+    }
+
+    /**
+     * it is invoked when a student has been added to the dining room of a certain player and updates the professors owned by players, if it is necessary
+     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player whose dining room has been updated
+     * @param color is the color of the student that has been moved to the dining room, therefore it is the color of the professor we need to check
+     */
+    private void checkUpdateProfessor(int idPlayer, RealmColors color) {
+        if (players.get(idPlayer).getDashboard().getDiningRoom().getProfessorByColor(color) == 0) {
+            int playerWhoHasProfessorIndex = 0;
+            boolean someoneHasProfessor = false;
+
+            for (Player p : players) {
+                if (p.getDashboard().getDiningRoom().getProfessorByColor(color) == 1) {
+                    playerWhoHasProfessorIndex = p.getDashboard().getIdDashboard();
+                    someoneHasProfessor = true;
+                    break;
+                }
+            }
+
+            if (someoneHasProfessor) {
+                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)) {
+                    players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
+                    players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+                }
+            }
+            else {
+                gameTable.removeProfessor(color);
+                players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+            }
+        }
+    }
+
+    /**
+     * it is invoked when mother nature ends on acceptable isle and updates all tower references, if it is necessary (it also calls a method to verify if isles union has to occur)
+     * @param idIsle is the index of the isle which has mother nature on it
+     */
+    private void checkUpdateInfluence(int idIsle) {
+        int majorInfluence = 0;
+        int conquerorIndex = 0;
+        boolean draw = false;
+
+        if (numberOfPlayers == 4) {
+            int tempInfluence = 0;
+            for (int i = 0; i < 2; i++) {
+                for (Player p : players) {
+                    if (p.getSquad() == Squads.getSquads(i))
+                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
+                }
+                if (tempInfluence == majorInfluence)
+                    draw = true;
+                if (tempInfluence > majorInfluence) {
+                    majorInfluence = tempInfluence;
+                    conquerorIndex = i;
+                    draw = false;
+                }
+                tempInfluence = 0;
+            }
+        }
+        else {
+            for (Player p : players) {
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) == majorInfluence)
+                    draw = true;
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) > majorInfluence) {
+                    majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
+                    conquerorIndex = p.getDashboard().getIdDashboard();
+                    draw = false;
+                }
+            }
+        }
+
+        if (!draw) {
+            if (gameTable.getIsleManager().getIsle(idIsle).getTowersColor() != players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor()) {
+                if (gameTable.getIsleManager().getIsle(idIsle).getTowersColor() == TowerColors.NOCOLOR)
+                    players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();
+                else {
+                    for (Player p : players) {
+                        if (p.getDashboard().getTowerStorage().getTowerColor() == gameTable.getIsleManager().getIsle(idIsle).getTowersColor()) {
+                            for (int i = 0; i < gameTable.getIsleManager().getIsle(idIsle).getNumOfIsles(); i++) {
+                                p.getDashboard().getTowerStorage().addTower();
+                                players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();
+                            }
+                            break;
+                        }
+                    }
+                }
+                gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
+                gameTable.getIsleManager().checkUnifyIsle(idIsle);
+            }
+        }
+    }
+
+    /**
+     * it checks if the game has ended and updates the proper end game variables
+     */
+    private void checkEndGame() {
+        for (Player p : players) {
+            if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
+                endGame = true;
+                winner = p;
+                return;
+            }
+        }
+
+        if (gameTable.getIsleManager().getIsles().size() == 3) {
+            endGame = true;
+
+            int minorNumOfTowersInStorage = 8;
+            int winnerIndex = 0;
+            boolean draw = false;
+
+            for (Player p : players) {
+                if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR)
+                    draw = true;
+                if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage) {
+                    minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
+                    winnerIndex = p.getDashboard().getIdDashboard();
+                    draw = false;
+                }
+            }
+
+            if (draw) {
+                int majorProfessors = 0;
+
+                for (Player p : players) {
+                    if (p.getDashboard().getDiningRoom().getNumberOfProfessors() == majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)
+                        drawEndGame = true;
+                    if (p.getDashboard().getDiningRoom().getNumberOfProfessors() > majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {
+                        majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();
+                        winnerIndex = p.getDashboard().getIdDashboard();
+                        drawEndGame = false;
+                    }
+                }
+            }
+
+            winner = players.get(winnerIndex);
+        }
     }
 
     /*public String getState() {
@@ -291,14 +581,13 @@ public class Game {
             cap = "player_4";
 
         return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
-
     }*/
 
     public void playCharacterCard(int idPlayer, CharacterCard characterCard) {
 
         //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
             getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
-            effectInGameFactory.getEffect(characterCard,this, getPlayerByIndex(idPlayer));
+            effectInGameFactory.getEffect(characterCard, players, gameTable, getPlayerByIndex(idPlayer));
         //}
     }
 

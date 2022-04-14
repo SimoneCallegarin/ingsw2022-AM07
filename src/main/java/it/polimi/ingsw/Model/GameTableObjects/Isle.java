@@ -200,4 +200,8 @@ public class Isle implements StudentManager, DenyCardManager {
      */
     public void setTower(TowerColors c){this.tower=c;}
 
+    public void setMotherNature(boolean motherNature) {
+        this.motherNature = motherNature;
+    }
+
 }

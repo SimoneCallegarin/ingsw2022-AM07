@@ -89,6 +89,10 @@ public class Player {
 
     }
 
+    public Squads getSquad() {return squad;}
+
+    public AssistantCard getDiscardPile() {return discardPile;}
+
     /**
      * This method permits the player to select an assistant card to play
      */

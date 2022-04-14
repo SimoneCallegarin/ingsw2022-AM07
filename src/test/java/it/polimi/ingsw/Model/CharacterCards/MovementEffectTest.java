@@ -27,12 +27,13 @@ class MovementEffectTest {
         StudentMovementEffect movementEffectStudents2 = new StudentMovementEffect();
         IsleManager isleManager = new IsleManager();
         Bag bag = new Bag();
+        bag.fillBag();
         characterCardTestForStudents.addStudent(RealmColors.YELLOW);
         movementEffectStudents1.effect(1,characterCardTestForStudents,isleManager.getIsle(0), ColorsForEffects.SELECT, player);
         assertEquals(0,characterCardTestForStudents.getNumberOfStudents());
         assertEquals(1,isleManager.getIsle(0).getNumberOfStudents());
         movementEffectStudents2.effect(1,bag,characterCardTestForStudents, ColorsForEffects.RANDOM, player);
         assertEquals(1,characterCardTestForStudents.getNumberOfStudents());
-        assertEquals(129,bag.getNumberOfStudents());
+        assertEquals(119,bag.getNumberOfStudents());
     }
 }

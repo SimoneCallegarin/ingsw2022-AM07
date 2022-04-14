@@ -16,8 +16,11 @@ class BagTest {
      * we are testing if the number of students in the Hashmap is correctly returned
      */
     @Test
-    void getnumOfElements() {
-        assertEquals(130, bagForTest.getNumberOfStudents());
+    void getNumOfElements() {
+        bagForTest.fillSetupBag();
+        assertEquals(10, bagForTest.getNumberOfStudents());
+        bagForTest.fillBag();
+        assertEquals(120, bagForTest.getNumberOfStudents());
     }
 
     /**
@@ -25,10 +28,11 @@ class BagTest {
      */
     @Test
     void addStudent() {
+        bagForTest.fillBag();
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.removeStudent(RealmColors.YELLOW);
         bagForTest.addStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getNumberOfStudents());
+        assertEquals(119, bagForTest.getNumberOfStudents());
     }
 
     /**
@@ -36,10 +40,11 @@ class BagTest {
      */
     @Test
     void removeStudent() {
+        bagForTest.fillBag();
         bagForTest.removeStudent(RealmColors.YELLOW);
-        assertEquals(129, bagForTest.getNumberOfStudents());
+        assertEquals(119, bagForTest.getNumberOfStudents());
         bagForTest.removeStudent(RealmColors.RED);
-        assertEquals(128, bagForTest.getNumberOfStudents());
+        assertEquals(118, bagForTest.getNumberOfStudents());
     }
 
     /**
@@ -47,7 +52,10 @@ class BagTest {
      */
     @Test
     public void getStudentsByColor() {
-        assertEquals(26, bagForTest.getStudentsByColor(RealmColors.YELLOW));
+        bagForTest.fillSetupBag();
+        assertEquals(2, bagForTest.getStudentsByColor(RealmColors.YELLOW));
+        bagForTest.fillBag();
+        assertEquals(24, bagForTest.getStudentsByColor(RealmColors.YELLOW));
     }
 
     /**
@@ -58,6 +66,7 @@ class BagTest {
      */
     @Test
     void drawEqually() {
+        bagForTest.fillBag();
         HashMap<RealmColors,Integer> studentsEqually = new HashMap<>();
 
         for (RealmColors c : RealmColors.values())
@@ -91,6 +100,7 @@ class BagTest {
      */
     @Test
     void drawWeighted() {
+        bagForTest.fillBag();
         HashMap<RealmColors,Integer> students = new HashMap<>();
 
         for (RealmColors c : RealmColors.values())
@@ -99,13 +109,13 @@ class BagTest {
         int studentsOfColor;
         RealmColors color;
 
-        for (int i = 0; i < 130; i++){
+        for (int i = 0; i < 120; i++){
             color = bagForTest.draw();
             studentsOfColor = students.get(color) + 1;
             students.put(color, studentsOfColor);
         }
 
-        assertEquals(0,bagForTest.getNumberOfStudents());
+        assertEquals(0, bagForTest.getNumberOfStudents());
     }
 
 }

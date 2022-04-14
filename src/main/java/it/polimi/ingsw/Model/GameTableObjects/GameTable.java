@@ -4,9 +4,16 @@ import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.CharacterCards.EffectSetupFactory;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.GameTableObjects.Bag;
+import it.polimi.ingsw.Model.GameTableObjects.Cloud;
+import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Model.Interface.DenyCardManager;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class GameTable implements DenyCardManager {
 
@@ -23,6 +30,8 @@ public class GameTable implements DenyCardManager {
      * this is the bag that will be filled with 130 students (26 per color)
      */
     private final Bag bag;
+
+    private final HashMap<RealmColors,Integer> professors;
     /**
      * this is the list of playable character cards (3 for an expert game mode, 0 for the base one)
      */
@@ -51,11 +60,26 @@ public class GameTable implements DenyCardManager {
     public GameTable(int numberOfPlayers, GameMode gameMode) {
         this.isleManager = new IsleManager();
         this.bag = new Bag();
+
+        bag.fillSetupBag();
+        for (int i = 0; i < 12; i++) {
+            if (isleManager.getIsle(i) != isleManager.getIsle(isleManager.getIsleWithMotherNatureIndex()) && isleManager.getIsle(i) != isleManager.getIsle(isleManager.getIsleOppositeToMotherNatureIndex()))
+                isleManager.getIsle(i).addStudent(bag.draw());
+        }
+
+        bag.fillBag();
+
         this.clouds = new ArrayList<>(4);
         for (int i = 0; i < numberOfPlayers; i++) {
             Cloud cloud = new Cloud(i, numberOfPlayers);
             clouds.add(cloud);
         }
+
+        this.professors = new HashMap<>();
+        for (RealmColors rc : RealmColors.values()) {
+            professors.put(rc, 1);
+        }
+           
         this.characterCards = new ArrayList<>(3);
         if (gameMode.equals(GameMode.EXPERT))
             extractAndSetUsableCharacterCards();
@@ -106,6 +130,18 @@ public class GameTable implements DenyCardManager {
      */
     public Bag getBag() {
         return bag;
+    }
+
+    public int getNumberOfProfessors() {
+        int totalNumberOfProfessors = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfProfessors = totalNumberOfProfessors + professors.get(rc);
+        }
+        return totalNumberOfProfessors;
+    }
+
+    public void removeProfessor(RealmColors color) {
+        professors.put(color, 0);
     }
 
     /**
