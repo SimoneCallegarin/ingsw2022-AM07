@@ -93,6 +93,21 @@ public class Player {
 
     public AssistantCard getDiscardPile() {return discardPile;}
 
+    public void setDiscardPileNull() {
+        discardPile = null;
+    }
+
+    public AssistantCard getAssistantCardByTurnOrder(int turnOrder) {
+        AssistantCard assistantCardFound = null;
+        for (AssistantCard ac : mageDeck) {
+            if (ac.getTurnOrder() == turnOrder) {
+                assistantCardFound = ac;
+                break;
+            }
+        }
+        return assistantCardFound;
+    }
+
     /**
      * This method permits the player to select an assistant card to play
      */
