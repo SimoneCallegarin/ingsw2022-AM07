@@ -116,6 +116,10 @@ public class Player {
         this.mageDeck.remove(assistantCard);
     }
 
+    public boolean isMageDeckEmpty() {
+        return mageDeck.isEmpty();
+    }
+
     /**
      * this method permits to set the current player order in the turn
      * @param order of the player this turn

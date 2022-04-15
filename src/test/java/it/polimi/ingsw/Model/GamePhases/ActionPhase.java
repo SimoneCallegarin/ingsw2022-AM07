@@ -1271,4 +1271,155 @@ class ActionPhase {
         assertFalse(game.isGameEndedInADraw());
         assertEquals("SQUAD1", game.getWinner());
     }
+
+    @Test
+    public void lastRoundNoMoreStudents() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
+        }
+        // leaving 5 students in the bag
+        for (int i = 0; i < 95; i++)
+            game.getGameTable().getBag().draw();
+        assertEquals(5, game.getGameTable().getBag().getNumberOfStudents());
+        // skipping to the phase of interest
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(0, 1);
+        // checking if we are in the last round and the clouds are empty
+        assertTrue(game.isLastRound());
+        assertTrue(game.getGameTable().getCloud(0).isEmpty());
+        assertTrue(game.getGameTable().getCloud(1).isEmpty());
+        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
+    }
+
+    @Test
+    public void endGameNoMoreStudentsDraw() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
+        }
+        // leaving 5 students in the bag
+        for (int i = 0; i < 95; i++)
+            game.getGameTable().getBag().draw();
+        assertEquals(5, game.getGameTable().getBag().getNumberOfStudents());
+        // skipping to the phase of interest
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(0, 1);
+        // checking if we are in the last round and the clouds are empty
+        assertTrue(game.isLastRound());
+        assertTrue(game.getGameTable().getCloud(0).isEmpty());
+        assertTrue(game.getGameTable().getCloud(1).isEmpty());
+        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
+        // executing last round... (skipping move student phases)
+        game.playAssistantCard(1, 1);
+        game.playAssistantCard(0, 2);
+        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.BLUE);
+        assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
+
+        game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
+        game.getGameTable().getIsleManager().getIsle(5).setMotherNature(true);
+        game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(5);
+
+        game.getGameTable().getIsleManager().getIsle(6).removeStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(7).removeStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(game.firstPlayerIndex, 6);
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(0, 7);
+        // checking if the game ended properly
+        assertTrue(game.isGameEnded());
+        assertTrue(game.isGameEndedInADraw());
+    }
+
+    @Test
+    public void lastRoundNoMoreAssistCard() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+
+        // leaving 1 assistant card to the player of index 1
+        game.getPlayerByIndex(1).mageDeck.subList(0, 9).clear();
+
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 10);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 10);
+            game.playAssistantCard(0, 4);
+        }
+        // checking if we are in the last round due to the fact that the first player has just played his last assistant card
+        assertTrue(game.isLastRound());
+        assertTrue(game.getPlayerByIndex(1).isMageDeckEmpty());
+    }
+
+    @Test
+    public void endGameNoMoreAssistCard() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+
+        // leaving 1 assistant card to the player of index 1
+        game.getPlayerByIndex(1).mageDeck.subList(0, 9).clear();
+
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 10);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 10);
+            game.playAssistantCard(0, 4);
+        }
+        // executing last round... (skipping move student phases)
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
+
+        game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
+        game.getGameTable().getIsleManager().getIsle(5).setMotherNature(true);
+        game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(5);
+
+        game.getGameTable().getIsleManager().getIsle(6).removeStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(7).removeStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(0, 6);
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(1, 7);
+        // checking if the game ended properly
+        assertTrue(game.isGameEnded());
+        assertFalse(game.isGameEndedInADraw());
+        assertEquals("jack", game.getWinner());
+    }
 }
