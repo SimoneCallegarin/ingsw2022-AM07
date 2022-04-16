@@ -21,12 +21,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         /*for (RealmColors rc : RealmColors.values())
             System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc));*/
@@ -73,12 +73,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // manually adding students and professors to the second player
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
@@ -130,12 +130,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // moving 3 students (both in the dining room and on an isle)
         for (RealmColors rc : RealmColors.values()) {
@@ -177,12 +177,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // skipping first movements phase by manually adding students and professors to player one dining room
         game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
@@ -221,12 +221,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // setting externally where mother nature is (isle 5)
         game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
@@ -274,12 +274,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // skipping first movements phase by manually adding students and professors to players dining rooms
         game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
@@ -371,12 +371,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // setting externally where mother nature is (isle 9)
         game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
@@ -401,13 +401,13 @@ class ActionPhase {
         assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
 
         // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        //game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 0);
+        //game.moveMotherNature(game.firstPlayerIndex, 0);
         // checking if the movement has been done correctly
-        assertEquals(0, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
+        //assertEquals(0, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        //assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
     }
 
     /**
@@ -425,31 +425,31 @@ class ActionPhase {
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 3 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         assertEquals(2, game.firstPlayerIndex);
@@ -575,12 +575,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // skipping first movements phase by manually adding students and professors to first player's dining room
         game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
@@ -682,12 +682,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // removing 3 students from entrance
         for (RealmColors rc : RealmColors.values()) {
@@ -750,12 +750,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // removing 3 students from first player's entrance
         for (RealmColors rc : RealmColors.values()) {
@@ -800,6 +800,8 @@ class ActionPhase {
         // verifying if the second player has 7 students in its entrance now
         assertEquals(7, game.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfStudents());
         // checking if we moved onto the next stage
+        assertNull(game.getPlayerByIndex(0).getDiscardPile());
+        assertNull(game.getPlayerByIndex(1).getDiscardPile());
         assertFalse(game.getGameTable().getCloud(0).isEmpty());
         assertFalse(game.getGameTable().getCloud(1).isEmpty());
         assertEquals(ActionPhases.MOVE_STUDENTS, game.actionPhase);
@@ -820,12 +822,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // manually removing 7 towers from first player's tower storage
         game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
@@ -867,12 +869,12 @@ class ActionPhase {
         game.addFirstPlayer("jack", GameMode.BASE, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
         }
         // manually removing 5 towers from players' tower storages
         game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
@@ -937,19 +939,19 @@ class ActionPhase {
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(2, 5);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(2, 5);
+            game.playAssistantCard(0, 4);
         }
         if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(2, 5);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         // manually removing 3 or 4 towers from players' tower storages
         game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
@@ -1028,19 +1030,19 @@ class ActionPhase {
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(2, 5);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(2, 5);
+            game.playAssistantCard(0, 4);
         }
         if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(2, 5);
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
         }
         // manually removing 3 or 4 towers from players' tower storages
         game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
@@ -1119,31 +1121,31 @@ class ActionPhase {
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 3 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         assertEquals(2, game.firstPlayerIndex);
@@ -1193,31 +1195,31 @@ class ActionPhase {
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(2, cardPlayed3);
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
+            game.playAssistantCard(2, 3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         if (game.firstPlayerIndex == 3 && game.gamePhase == GamePhases.PLANNING_PHASE) {
-            game.playAssistantCard(3, cardPlayed4);
-            game.playAssistantCard(0, cardPlayed1);
-            game.playAssistantCard(1, cardPlayed2);
-            game.playAssistantCard(2, cardPlayed3);
+            game.playAssistantCard(3, 4);
+            game.playAssistantCard(0, 6);
+            game.playAssistantCard(1, 5);
+            game.playAssistantCard(2, 3);
             assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
         }
         assertEquals(2, game.firstPlayerIndex);
@@ -1268,5 +1270,156 @@ class ActionPhase {
         assertTrue(game.isGameEnded());
         assertFalse(game.isGameEndedInADraw());
         assertEquals("SQUAD1", game.getWinner());
+    }
+
+    @Test
+    public void lastRoundNoMoreStudents() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
+        }
+        // leaving 5 students in the bag
+        for (int i = 0; i < 95; i++)
+            game.getGameTable().getBag().draw();
+        assertEquals(5, game.getGameTable().getBag().getNumberOfStudents());
+        // skipping to the phase of interest
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(0, 1);
+        // checking if we are in the last round and the clouds are empty
+        assertTrue(game.isLastRound());
+        assertTrue(game.getGameTable().getCloud(0).isEmpty());
+        assertTrue(game.getGameTable().getCloud(1).isEmpty());
+        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
+    }
+
+    @Test
+    public void endGameNoMoreStudentsDraw() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
+        }
+        // leaving 5 students in the bag
+        for (int i = 0; i < 95; i++)
+            game.getGameTable().getBag().draw();
+        assertEquals(5, game.getGameTable().getBag().getNumberOfStudents());
+        // skipping to the phase of interest
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
+        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.pickStudentsFromCloud(0, 1);
+        // checking if we are in the last round and the clouds are empty
+        assertTrue(game.isLastRound());
+        assertTrue(game.getGameTable().getCloud(0).isEmpty());
+        assertTrue(game.getGameTable().getCloud(1).isEmpty());
+        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
+        // executing last round... (skipping move student phases)
+        game.playAssistantCard(1, 1);
+        game.playAssistantCard(0, 2);
+        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.BLUE);
+        assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
+
+        game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
+        game.getGameTable().getIsleManager().getIsle(5).setMotherNature(true);
+        game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(5);
+
+        game.getGameTable().getIsleManager().getIsle(6).removeStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(7).removeStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(game.firstPlayerIndex, 6);
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(0, 7);
+        // checking if the game ended properly
+        assertTrue(game.isGameEnded());
+        assertTrue(game.isGameEndedInADraw());
+    }
+
+    @Test
+    public void lastRoundNoMoreAssistCard() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+
+        // leaving 1 assistant card to the player of index 1
+        game.getPlayerByIndex(1).mageDeck.subList(0, 9).clear();
+
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 10);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 10);
+            game.playAssistantCard(0, 4);
+        }
+        // checking if we are in the last round due to the fact that the first player has just played his last assistant card
+        assertTrue(game.isLastRound());
+        assertTrue(game.getPlayerByIndex(1).isMageDeckEmpty());
+    }
+
+    @Test
+    public void endGameNoMoreAssistCard() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addAnotherPlayer("calle");
+
+        // leaving 1 assistant card to the player of index 1
+        game.getPlayerByIndex(1).mageDeck.subList(0, 9).clear();
+
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 10);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 10);
+            game.playAssistantCard(0, 4);
+        }
+        // executing last round... (skipping move student phases)
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
+
+        game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
+        game.getGameTable().getIsleManager().getIsle(5).setMotherNature(true);
+        game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(5);
+
+        game.getGameTable().getIsleManager().getIsle(6).removeStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(6).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(7).removeStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+        game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
+
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(0, 6);
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.moveMotherNature(1, 7);
+        // checking if the game ended properly
+        assertTrue(game.isGameEnded());
+        assertFalse(game.isGameEndedInADraw());
+        assertEquals("jack", game.getWinner());
     }
 }

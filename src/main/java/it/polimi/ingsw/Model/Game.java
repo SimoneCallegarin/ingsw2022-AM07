@@ -42,11 +42,13 @@ public class Game {
      */
     private int maxMovableStudents;
     /**
-     * counter used to check how many players already played their turn in a game turn
+     * counter used to check how many players already played their turn in a game phase
      */
     public int playerCounter = 0;
 
     private int studentsCounter = 0;
+
+    private boolean lastRound = false;
 
     private boolean endGame = false;
     private boolean drawEndGame = false;
@@ -190,10 +192,12 @@ public class Game {
     /**
      * it is responsible for changing the discard pile of a certain player
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
-     * @param assistantCardPlayed is the AssistantCard played
+     * @param turnOrderPlayed is the turn order of the AssistantCard played
      */
-    public void playAssistantCard(int idPlayer, AssistantCard assistantCardPlayed) {
+    public void playAssistantCard(int idPlayer, int turnOrderPlayed) {
         boolean alreadyPlayed = false;
+        AssistantCard assistantCardPlayed = players.get(idPlayer).getAssistantCardByTurnOrder(turnOrderPlayed);
+
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
             for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
                 if (p.getDiscardPile() != null) {
@@ -205,6 +209,8 @@ public class Game {
             }
             if (!alreadyPlayed) {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
+                if (players.get(idPlayer).isMageDeckEmpty())
+                    lastRound = true;
                 playerCounter++;
                 nextPlayer();
             }
@@ -240,6 +246,8 @@ public class Game {
             if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
                 players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
+                if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0)
+                    players.get(idPlayer).gainMoney();
                 checkUpdateProfessor(idPlayer, color);
                 studentsCounter++;
 
@@ -264,7 +272,13 @@ public class Game {
                 gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
                 checkUpdateInfluence(idIsle);
                 checkEndGame();
-                actionPhase = ActionPhases.CHOOSE_CLOUD;
+                if (!lastRound)
+                    actionPhase = ActionPhases.CHOOSE_CLOUD;
+                else {
+                    playerCounter++;
+                    actionPhase = ActionPhases.MOVE_STUDENTS;
+                    nextPlayer();
+                }
             }
         }
     }
@@ -294,6 +308,8 @@ public class Game {
             }
         }
     }
+
+    public boolean isLastRound() { return lastRound;}
 
     /**
      * it returns a boolean that tells if the game is ended or not
@@ -337,13 +353,17 @@ public class Game {
      */
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
-            for (int i = 0; i < numberOfPlayers; i++) {
-                Cloud cloud = gameTable.getCloud(i);
-                for (int j = 0; j < maxMovableStudents; j++) {
-                    RealmColors color = gameTable.getBag().draw();
-                    cloud.addStudent(color);
+            if (getGameTable().getBag().getNumberOfStudents() >= numberOfPlayers*maxMovableStudents) {
+                for (int i = 0; i < numberOfPlayers; i++) {
+                    Cloud cloud = gameTable.getCloud(i);
+                    for (int j = 0; j < maxMovableStudents; j++) {
+                        RealmColors color = gameTable.getBag().draw();
+                        cloud.addStudent(color);
+                    }
                 }
             }
+            else
+                lastRound = true;
             planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
         }
     }
@@ -404,6 +424,9 @@ public class Game {
             }
             else {
                 gamePhase = GamePhases.PLANNING_PHASE;
+                for (Player p : players) {
+                    p.setDiscardPileNull();
+                }
                 fillClouds();
             }
             updateOrder(gamePhase);
@@ -514,7 +537,7 @@ public class Game {
             }
         }
 
-        if (gameTable.getIsleManager().getIsles().size() == 3) {
+        if ((gameTable.getIsleManager().getIsles().size() == 3) || (lastRound && playerCounter == numberOfPlayers-1)) {
             endGame = true;
 
             int minorNumOfTowersInStorage = 8;
@@ -547,6 +570,7 @@ public class Game {
 
             winner = players.get(winnerIndex);
         }
+
     }
 
     /*public String getState() {

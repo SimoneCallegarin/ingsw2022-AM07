@@ -93,12 +93,31 @@ public class Player {
 
     public AssistantCard getDiscardPile() {return discardPile;}
 
+    public void setDiscardPileNull() {
+        discardPile = null;
+    }
+
+    public AssistantCard getAssistantCardByTurnOrder(int turnOrder) {
+        AssistantCard assistantCardFound = null;
+        for (AssistantCard ac : mageDeck) {
+            if (ac.getTurnOrder() == turnOrder) {
+                assistantCardFound = ac;
+                break;
+            }
+        }
+        return assistantCardFound;
+    }
+
     /**
      * This method permits the player to select an assistant card to play
      */
     public void playAssistantCard(AssistantCard assistantCard){
         this.discardPile = assistantCard;
         this.mageDeck.remove(assistantCard);
+    }
+
+    public boolean isMageDeckEmpty() {
+        return mageDeck.isEmpty();
     }
 
     /**
