@@ -5,15 +5,11 @@ import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.CharacterCards.EffectSetupFactory;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.GameTableObjects.Bag;
-import it.polimi.ingsw.Model.GameTableObjects.Cloud;
-import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Model.Interface.DenyCardManager;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GameTable implements DenyCardManager {
 
@@ -176,14 +172,33 @@ public class GameTable implements DenyCardManager {
 
     /**
      * method used only for Testing purpose
-     * @param index of the character card in the list of the game table
+     * it deletes all the other character cards created and creates a new character card received in input
      * @param characterCardsName the name of the character card we want to add
      */
-    public void setCharacterCards(int index, CharacterCardsName characterCardsName){
-        characterCards.remove(index);
-        characterCards.add(index,new CharacterCard(characterCardsName));
+    public void setCharacterCards(CharacterCardsName characterCardsName){
+        for(int index = 0;index<3;index++){
+            switch (getCharacterCard(index).getCharacterCardName()) {
+                case MONK, JESTER, SPOILED_PRINCESS -> {
+                    for(RealmColors colors : RealmColors.values()) {
+                        for(int i=getCharacterCard(index).getStudentsByColor(colors); i>0;i--){
+                            getBag().addStudent(colors);
+                            getCharacterCard(index).removeStudent(colors);
+                        }
+                    }
+                }
+                case GRANDMA_HERBS -> {
+                    for(int i=0;i<4;i++) {
+                        addDenyCard();
+                        getCharacterCard(index).removeDenyCard();
+                    }
+                }
+            }
+        }
+
+        characterCards.clear();
+        characterCards.add(new CharacterCard(characterCardsName));
         if(characterCardsName.equals(CharacterCardsName.MONK)||characterCardsName.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName.equals(CharacterCardsName.JESTER))
-            effectSetupFactory.getEffect(null,this,characterCards.get(index));
+            effectSetupFactory.getEffect(null,this,characterCards.get(0));
     }
 
 }

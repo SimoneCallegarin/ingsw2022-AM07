@@ -1,11 +1,10 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.CharacterCards.ColorsForEffects;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
-import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 
@@ -590,11 +589,24 @@ public class Game {
         return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
     }*/
 
-    public void playCharacterCard(int idPlayer, CharacterCard characterCard) {
+    public void playCharacterCard(int idPlayer, int characterCardIndex) {
 
         //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
-            effectInGameFactory.getEffect(characterCard, players, gameTable, getPlayerByIndex(idPlayer));
+            getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+        //}
+    }
+
+    /**
+     *  @param idPlayer the id of the player who plays the character card
+     * @param characterCardIndex the
+     * @param colorStudentFrom the color of the student the player wants to remove from the staring StudentsManager
+     * @param value it represents different values based on the played card
+*              MONK          -> isle index where to move the student
+*              HERALD        -> isle where calculate the influence now
+     */
+    public void activateAtomicEffect(int idPlayer, int characterCardIndex, RealmColors colorStudentFrom, RealmColors colorStudentTo, int value){
+        //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
+        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), players, gameTable, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
         //}
     }
 
