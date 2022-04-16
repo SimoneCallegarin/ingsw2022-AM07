@@ -5,12 +5,15 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import it.polimi.ingsw.Controller.GameController;
 import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.MessageType;
 
 /**
  * This class is used to manage the connection with the client
  */
 public class ClientHandler implements Runnable{
+    GameController gameController;
     Socket socket;
 
     CommandParser commandParser=new CommandParser();
@@ -26,12 +29,19 @@ public class ClientHandler implements Runnable{
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             while (true) {
                 String line = in.nextLine();
-                if (commandParser.processCmd(line,out)) {
+                Message m=commandParser.processCmd(line,out);
+                if(m.getMessageType()== MessageType.QUIT){
+                    break;
+                }
+                else{
+                    gameController.onMessage(m);
+                }
+               /* if (commandParser.processCmd(line,out)) {
                     break;
                 } else {
                     out.println("Received: " + line);
                     out.flush();
-                }
+                }*/
             }
             in.close();
             out.close();

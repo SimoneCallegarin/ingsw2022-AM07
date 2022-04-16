@@ -591,4 +591,20 @@ public class Game {
         //}
     }
 
+    public GamePhases getGamePhase() {
+        return gamePhase;
+    }
+
+    public PlanningPhases getPlanningPhase() {
+        return planningPhase;
+    }
+
+    public ActionPhases getActionPhase() {
+        return actionPhase;
+    }
+
+    public CurrentOrder getCurrentActivePlayer() {
+        return currentActivePlayer;
+    }
+
 }
