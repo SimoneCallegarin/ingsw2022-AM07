@@ -129,19 +129,22 @@ public class Game {
      * @param gameMode selected by the player (expert or base)
      * @param numberOfPlayers selected by the player (from 2 to 4)
      */
-    public void addFirstPlayer(String nickName, GameMode gameMode, int numberOfPlayers){
+    public void addFirstPlayer(String nickName, boolean gameMode, int numberOfPlayers){
 
         setNumberOfPlayers(numberOfPlayers);
-        this.gameMode = gameMode;
+
+        if(gameMode){
+            this.gameMode=GameMode.EXPERT;
+        }else{this.gameMode=GameMode.BASE;}
 
         Player newPlayer;
 
-        gameTable = new GameTable(numberOfPlayers, gameMode);
+        gameTable = new GameTable(numberOfPlayers, this.gameMode);
 
         if (numberOfPlayers==4)
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, this.gameMode);
         else
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, this.gameMode);
 
         players.add(newPlayer);
         initializeEntrance(actualNumberOfPlayers);

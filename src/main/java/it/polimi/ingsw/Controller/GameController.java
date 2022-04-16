@@ -1,16 +1,32 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Model.Enumeration.ActionPhases;
-import it.polimi.ingsw.Model.Enumeration.GamePhases;
-import it.polimi.ingsw.Model.Enumeration.PlanningPhases;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.Setup_Message;
 
+/**
+ * this class represents the Controller module in the MVC pattern
+ */
 public class GameController {
-    public RealmColors color;
+    /**
+     * this is the model reference
+     */
     public Game game;
 
+    /**
+     * these are some auxiliary attributes. They are used to store a player choice and use them only when the controller
+     * can call the model methods with all the parameters
+     */
+    public RealmColors color;
+    public boolean gameMode;
+    public int numplayers;
+
+    /**
+     * this method receive a Message from the ClientHandler classes and calls the model method to update the game state based on
+     * the message type
+     * @param message the message received, it represents a move by the player
+     */
     public void onMessage(Message message){
         switch(message.getMessageType()){
             case PLAY_ASSISTCARD -> {
@@ -41,7 +57,40 @@ public class GameController {
             case PLAY_CHARACTERCARD ->{
                 //playcharactercards
             }
+            /**
+             * the value case is used to store the color of the student chosen by the player. It's stored because the corresponding
+             * model method is only called when the player decides where to move the student. While the player's deciding
+             * he can also change the color of the student to move, in that case the value case is called again to memorize
+             * the new information.
+             */
             case VALUE -> color=RealmColors.getColor(message.genericValue);
         }
     }
+
+    /**
+     * this is the method used during the setup phase of the game where the first player decides the game mode, the number
+     * of players and his username (in this order).Only after the first player makes his decisions, the other players set
+     * their username
+     * @param sm the setup message received
+     */
+    public void onSetup_Message(Setup_Message sm){
+
+        switch(sm.getMessageType()){
+            case FIRST_USERNAME_CHOICE -> {
+                game.addFirstPlayer(sm.user_choice,gameMode,numplayers);
+            }
+            case USERNAME_CHOICE -> {
+                game.addAnotherPlayer(sm.user_choice);
+            }
+            case GAMEMODE -> {
+                gameMode=sm.gamemode;
+
+            }
+            case NUMOF_PLAYERS -> {
+                numplayers=Integer.parseInt(sm.user_choice);
+            }
+        }
+    }
+
+
 }

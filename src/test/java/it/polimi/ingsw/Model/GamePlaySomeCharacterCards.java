@@ -18,7 +18,7 @@ class GamePlaySomeCharacterCards {
     @Test
     void playMONK_CharacterCard() {
         Game game = new Game();
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         int studentsInTheBag = game.getGameTable().getBag().getNumberOfStudents();
@@ -47,7 +47,7 @@ class GamePlaySomeCharacterCards {
     @Test
     public void playGRANDMA_HERBS_CharacterCard(){
         Game game = new Game();
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(0,CharacterCardsName.GRANDMA_HERBS);
@@ -67,7 +67,7 @@ class GamePlaySomeCharacterCards {
     @Test
     public void playJESTER_CharacterCard(){
         Game game = new Game();
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         int studentsInTheBag = game.getGameTable().getBag().getNumberOfStudents();
@@ -114,7 +114,7 @@ class GamePlaySomeCharacterCards {
     @Test
     public void playMINSTREL_CharacterCard(){
         Game game = new Game();
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(0,CharacterCardsName.MINSTREL);
@@ -157,7 +157,7 @@ class GamePlaySomeCharacterCards {
     @Test
     void playSPOILED_PRINCESS_CharacterCard() {
         Game game = new Game();
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         int studentsInTheBag = game.getGameTable().getBag().getNumberOfStudents();
@@ -184,7 +184,7 @@ class GamePlaySomeCharacterCards {
     @Test
     void playTHIEF_CharacterCard() {
         Game game = new Game();
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);

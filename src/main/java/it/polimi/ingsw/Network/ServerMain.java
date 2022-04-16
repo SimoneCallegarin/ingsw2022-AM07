@@ -25,6 +25,15 @@ public class ServerMain{
             e.printStackTrace();
             return;
         }
+        try {
+            System.out.println("Accepting...");
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Connection accepted!");
+            executor.submit(new First_ClientHandler(clientSocket));
+        }catch (IOException e){
+            e.printStackTrace();
+            return;
+        }
 
         while(true){
             try {
