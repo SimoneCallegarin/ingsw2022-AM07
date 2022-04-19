@@ -13,6 +13,22 @@ public class EffectInGameFactory {
 
     public EffectInGameFactory(){}
 
+    /**
+     * this method will permit activating part of the effect that characterise a character card
+     * @param characterCard the character card played
+     * @param players the list of players playing the game
+     * @param gameTable the game table where the game takes place
+     * @param player the player that played the character card
+     * @param color the type of color it will be used
+     *      NONE: refers to deny cards and for any recalculate effect that doesn't need a color because it doesn't pick students
+     *      RANDOM: refers to an extraction of students from the bag that is randomized and doesn't need to know a color first
+     *      SELECT: refers to the fact that when calling an effect, it needs to know from the user what is the color of the students it needs to move
+     * @param colorFrom it's the color of the student that have to be moved from a certain student manager
+     *                  it will be set to null when it isn't required
+     * @param colorTo it's the color of the student that have to be moved to a certain student manager
+     *                it will be set to null when it isn't required
+     * @param value it represents many values
+     */
     public void getEffect (CharacterCard characterCard, ArrayList<Player> players, GameTable gameTable, Player player, ColorsForEffects color, RealmColors colorFrom, RealmColors colorTo, int value){
 
         StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
@@ -25,7 +41,15 @@ public class EffectInGameFactory {
                 break;
 
             case FARMER:
-                //Recalculate
+                for(Player p : players){
+                    for(RealmColors c : RealmColors.values()){
+                        if(p.getDashboard().getDiningRoom().getProfessorByColor(c)==1)
+                            if(player.getDashboard().getDiningRoom().getStudentsByColor(c)==p.getDashboard().getDiningRoom().getStudentsByColor(c)){
+                                p.getDashboard().getDiningRoom().removeStudent(c);
+                                player.getDashboard().getDiningRoom().addProfessor(c);
+                            }
+                    }
+                }
                 break;
 
             case HERALD:
@@ -33,8 +57,9 @@ public class EffectInGameFactory {
                 break;
 
             case MAGICAL_LETTER_CARRIER:
-                //Recalculate
+                player.getDiscardPile().increaseMnMovement();
                 break;
+
             case GRANDMA_HERBS:
                 denyCardMovementEffect.effect(characterCard,gameTable.getIsleManager().getIsle(value),ColorsForEffects.NONE);
                 break;

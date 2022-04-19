@@ -1,8 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Model.Enumeration.GameMode;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * We are testing if each character card behaves correctly
  */
-class GamePlaySomeCharacterCards {
+class GamePlaySomeCharacterCardsTest {
 
     Game game = new Game();
 
@@ -18,10 +17,11 @@ class GamePlaySomeCharacterCards {
      * We are testing the behaviour of the MONK
      */
     @Test
-    void playMONK_CharacterCard() {
+    void play_MONK_CharacterCard() {
         game.addFirstPlayer("simone", GameMode.EXPERT, 2);
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
         // students:
         //  130 in the bag
         //  -10 in isle
@@ -56,10 +56,92 @@ class GamePlaySomeCharacterCards {
      * We are testing the behaviour of the GRANDMA_HERBS
      */
     @Test
-    public void playGRANDMA_HERBS_CharacterCard(){
+    void play_FARMER_CharacterCard(){
+        game.addFirstPlayer("simone", GameMode.EXPERT, 3);
+        game.addAnotherPlayer("giacomo");
+        game.addAnotherPlayer("filippo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.FARMER);
+
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.checkUpdateProfessor(0,RealmColors.YELLOW);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.GREEN);
+        game.checkUpdateProfessor(0,RealmColors.GREEN);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.checkUpdateProfessor(0,RealmColors.BLUE);
+        assertEquals(1,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.YELLOW));
+        assertEquals(1,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.GREEN));
+        assertEquals(1,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.BLUE));
+
+        game.getPlayerByIndex(1).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
+        game.checkUpdateProfessor(1,RealmColors.RED);
+        game.getPlayerByIndex(1).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
+        game.checkUpdateProfessor(1,RealmColors.RED);
+        assertEquals(1,game.getPlayerByIndex(1).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.RED));
+
+        game.getPlayerByIndex(2).getDashboard().getDiningRoom().addStudent(RealmColors.PINK);
+        game.checkUpdateProfessor(2,RealmColors.PINK);
+        game.getPlayerByIndex(2).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.checkUpdateProfessor(2,RealmColors.YELLOW);
+        game.getPlayerByIndex(2).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
+        game.checkUpdateProfessor(2,RealmColors.RED);
+        assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.PINK));
+
+        //Students:
+        //  simone: 1 YELLOW, 1 GREEN, 1 BLUE
+        //  giacomo: 2 RED
+        //  filippo: 1 PINK, 1 YELLOW, 1 RED
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+
+        game.playCharacterCard(2,0);
+
+        game.activateAtomicEffect(2,0,null,null,0);
+
+        assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.YELLOW));
+        assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.PINK));
+        assertEquals(0,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.RED));
+        assertEquals(0,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.BLUE));
+        assertEquals(0,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.GREEN));
+
+    }
+
+    /**
+     * We are testing the behaviour of the MAGICAL_LETTER_CARRIER
+     */
+    @Test
+    void play_MAGICAL_LETTER_CARRIER_CharacterCard(){
+        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addAnotherPlayer("giacomo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.MAGICAL_LETTER_CARRIER);
+
+        //setting the correct game phase for the player simone
+        game.setGamePhase(GamePhases.PLANNING_PHASE);
+        game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
+        if(game.getPlayerByIndex(0).getOrder()==CurrentOrder.SECOND_PLAYER)
+            game.currentActivePlayer = CurrentOrder.SECOND_PLAYER;
+        game.playAssistantCard(0,1);
+
+        assertEquals(1,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+
+        game.playCharacterCard(0,0);
+
+        game.activateAtomicEffect(0,0,null,null,0);
+
+        assertEquals(3,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
+
+    }
+
+    /**
+     * We are testing the behaviour of the GRANDMA_HERBS
+     */
+    @Test
+    void play_GRANDMA_HERBS_CharacterCard(){
         game.addFirstPlayer("simone", GameMode.EXPERT, 2);
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.GRANDMA_HERBS);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
 
         // 4 deny cards on the character card
         assertEquals(4,game.getGameTable().getCharacterCard(0).getDenyCards());
@@ -83,12 +165,12 @@ class GamePlaySomeCharacterCards {
      * We are testing the behaviour of the JESTER
      */
     @Test
-    public void playJESTER_CharacterCard(){             //check better the colors number and with more students!
-        Game game = new Game();
+    void play_JESTER_CharacterCard(){             //check better the colors number and with more students!
         game.addFirstPlayer("simone", GameMode.EXPERT, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.JESTER);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
 
         int counter=0;
 
@@ -135,12 +217,12 @@ class GamePlaySomeCharacterCards {
      * We are testing the behaviour of the MINSTREL
      */
     @Test
-    public void playMINSTREL_CharacterCard(){
-        Game game = new Game();
+    void play_MINSTREL_CharacterCard(){
         game.addFirstPlayer("simone", GameMode.EXPERT, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
 
         int counter=0;
 
@@ -194,12 +276,12 @@ class GamePlaySomeCharacterCards {
      * We are testing the behaviour of the SPOILED_PRINCESS
      */
     @Test
-    void playSPOILED_PRINCESS_CharacterCard() {
-        Game game = new Game();
+    void play_SPOILED_PRINCESS_CharacterCard() {
         game.addFirstPlayer("simone", GameMode.EXPERT, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.SPOILED_PRINCESS);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
 
         //testing if SPOILED_PRINCESS character card is correctly set up
         assertEquals(96, game.getGameTable().getBag().getNumberOfStudents());
@@ -222,12 +304,12 @@ class GamePlaySomeCharacterCards {
      * We are testing the behaviour of the THIEF
      */
     @Test
-    void playTHIEF_CharacterCard() {
-        Game game = new Game();
+    void play_THIEF_CharacterCard() {
         game.addFirstPlayer("simone", GameMode.EXPERT, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.THIEF);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
 
         // add 4 yellow students in the dining room of player 0
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);

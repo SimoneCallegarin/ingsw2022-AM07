@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ActionPhase {
+class ActionPhaseTest {
 
     /**
      * it tests if the first player to move students during the first action phase gains all the professors he deserves
