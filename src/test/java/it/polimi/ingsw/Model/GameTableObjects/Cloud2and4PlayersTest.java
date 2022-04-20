@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CloudTest2and4Players {
+class Cloud2and4PlayersTest {
 
     /**
      * we are testing a cloud with a side of a 2 or 4 players match

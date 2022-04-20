@@ -27,9 +27,9 @@ class BuildingAssistantCardsDeckTest {
         Player playerForTest = new Player("PlayerForTest", 2, 0, Squads.SQUAD1, GameMode.BASE );
 
         for(int i = 0; i < 10; i++) {
-            assertEquals(turnOrder[i], playerForTest.getMageDeck().get(i).turnOrder);
-            assertEquals(mnMovement[i], playerForTest.getMageDeck().get(i).mnMovement);
-            assertFalse(playerForTest.getMageDeck().get(i).used);
+            assertEquals(turnOrder[i], playerForTest.getMageDeck().get(i).getTurnOrder());
+            assertEquals(mnMovement[i], playerForTest.getMageDeck().get(i).getMnMovement());
+            assertFalse(playerForTest.getMageDeck().get(i).isUsed());
         }
     }
 }

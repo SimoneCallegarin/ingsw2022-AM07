@@ -16,9 +16,18 @@ public class EffectSetupFactory {
             DenyCardSetupEffect denyCardSetupEffect = new DenyCardSetupEffect();
 
             switch (characterCard.getCharacterCardName()) {
-                case MONK, SPOILED_PRINCESS -> studentSetupEffect.effect(4, gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, player);
-                case GRANDMA_HERBS -> denyCardSetupEffect.effect(4, gameTable, characterCard, ColorsForEffects.NONE);
-                case JESTER -> studentSetupEffect.effect(6, gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, player);
+                case MONK, SPOILED_PRINCESS -> {
+                    for(int i=0; i<4; i++)
+                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, player);
+                }
+                case GRANDMA_HERBS -> {
+                    for(int i=0; i<4; i++)
+                        denyCardSetupEffect.effect(gameTable, characterCard, ColorsForEffects.NONE);
+                }
+                case JESTER -> {
+                    for(int i=0; i<6; i++)
+                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, player);
+                }
             }
         }
 

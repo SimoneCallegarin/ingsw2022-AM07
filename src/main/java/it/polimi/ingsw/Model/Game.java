@@ -1,11 +1,10 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.CharacterCards.ColorsForEffects;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
-import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 
@@ -443,7 +442,7 @@ public class Game {
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player whose dining room has been updated
      * @param color is the color of the student that has been moved to the dining room, therefore it is the color of the professor we need to check
      */
-    private void checkUpdateProfessor(int idPlayer, RealmColors color) {
+    public void checkUpdateProfessor(int idPlayer, RealmColors color) {
         if (players.get(idPlayer).getDashboard().getDiningRoom().getProfessorByColor(color) == 0) {
             int playerWhoHasProfessorIndex = 0;
             boolean someoneHasProfessor = false;
@@ -610,12 +609,42 @@ public class Game {
         return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
     }*/
 
-    public void playCharacterCard(int idPlayer, CharacterCard characterCard) {
+    /**
+     * this method permits to play a character card during the action phase
+     * it set money and other booleans but doesn't activate the proper effect of the card
+     * @param idPlayer the id of the player who plays a certain character card during his action phase
+     * @param characterCardIndex the index of the character card that the player wants to play
+     */
+    public void playCharacterCard(int idPlayer, int characterCardIndex) {
 
-        //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
-            effectInGameFactory.getEffect(characterCard, players, gameTable, getPlayerByIndex(idPlayer));
-        //}
+        if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
+            getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+        }
+    }
+
+    /**
+     * this method permits to activate an atomic effect called in the controller for a certain number of times
+     * it is part of the concrete effect of a character card
+     * @param idPlayer the id of the player who plays the character card
+     * @param characterCardIndex the
+     * @param colorStudentFrom the color of the student the player wants to remove from the staring StudentsManager
+     * @param value it represents different values based on the played card
+*              MONK          -> isle index where to move the student
+*              HERALD        -> isle where calculate the influence now
+     *         When not used -> set to 0
+     */
+    public void activateAtomicEffect(int idPlayer, int characterCardIndex, RealmColors colorStudentFrom, RealmColors colorStudentTo, int value){
+        if (gamePhase == GamePhases.ACTION_PHASE) {
+        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), players, gameTable, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
+        }
+    }
+
+    /**
+     * used for testing purpose only
+     * @param gameP game phase
+     */
+    public void setGamePhase(GamePhases gameP){
+        gamePhase = gameP;
     }
 
     public GamePhases getGamePhase() {

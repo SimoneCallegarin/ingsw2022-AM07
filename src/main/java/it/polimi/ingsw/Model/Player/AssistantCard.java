@@ -5,15 +5,15 @@ public class AssistantCard {
     /**
      * This attribute indicates the value of the turn order of the card
      */
-    public int turnOrder;
+    private int turnOrder;
     /**
      * This attribute indicates the value of the mother nature movement of the card
      */
-    public int mnMovement;
+    private int mnMovement;
     /**
      * This attribute indicates if the card has already been played by the player
      */
-    public boolean used;
+    private boolean used;
 
     /**
      * Assistant card constructor
@@ -31,6 +31,12 @@ public class AssistantCard {
     public int getMnMovement() {
         return mnMovement;
     }
+
+    /**
+     * this method is used by the MAGICAL LETTER CARRIER
+     * to increase the possible movement of mother nature by 2
+     */
+    public void increaseMnMovement(){mnMovement=mnMovement+2;}
 
     /**
      * getter method that gives the turn order value of the assistant card

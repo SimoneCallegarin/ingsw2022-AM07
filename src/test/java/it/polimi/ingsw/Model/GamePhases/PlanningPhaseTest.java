@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlanningPhase {
+class PlanningPhaseTest {
 
     /**
      * it tests if the correct number of clouds is filled after insert of the last player

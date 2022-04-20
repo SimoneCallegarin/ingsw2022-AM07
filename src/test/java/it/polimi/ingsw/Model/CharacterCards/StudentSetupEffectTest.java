@@ -23,7 +23,10 @@ class StudentSetupEffectTest {
         StudentSetupEffect studentSetupEffectStudents = new StudentSetupEffect();
         Bag bag =  new Bag();
         bag.fillBag();
-        studentSetupEffectStudents.effect(4,bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
         assertEquals(116,bag.getNumberOfStudents());
         assertEquals(4, characterCardTestForStudents.getNumberOfStudents());
     }

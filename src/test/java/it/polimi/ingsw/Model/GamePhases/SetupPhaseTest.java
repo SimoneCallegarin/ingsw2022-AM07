@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SetupPhase {
+public class SetupPhaseTest {
 
     /**
      * it tests if the game table is correctly created after the insert of the last player (2 Players)
