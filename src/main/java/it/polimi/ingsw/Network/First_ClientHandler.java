@@ -21,31 +21,28 @@ public class First_ClientHandler implements Runnable {
     Game game;
     GameController gameController;
     Socket socket;
-
-
+    CommandParser commandParser=new CommandParser();
     Gson g=new Gson();
 
-    public First_ClientHandler(Socket socket){
+    public First_ClientHandler(Socket socket,Game game, GameController gameController){
         this.socket=socket;
+        this.game=game;
+        this.gameController=gameController;
     }
 
     public void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            String line;
-            if (game.gamePhase== GamePhases.SETUP_PHASE){
-                line=in.nextLine();
-                Setup_Message sm=processSetup_Cmd(line,g);//to set the gamemode
-                gameController.onSetup_Message(sm);
-                sm=processSetup_Cmd(in.nextLine(),g);//to set the number of players
-                gameController.onSetup_Message(sm);
-                sm=processSetup_Cmd(in.nextLine(),g);//to get the first player username
-                gameController.onSetup_Message(sm);
-            }
+            PrintWriter out=new PrintWriter(socket.getOutputStream());
+            String line=in.nextLine();
+            Setup_Message sm= commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
+            gameController.onSetup_Message(sm);
+            line=in.nextLine();
+            sm= commandParser.processSetup_Cmd(line, g);//to get the first player username
+            gameController.onSetup_Message(sm);
             while (true) {
-                line = in.nextLine();
-                Message m=processCmd(line, g);
+                line=in.nextLine();
+                Message m= commandParser.processCmd(line, g);
                 if(m.getMessageType()== MessageType.QUIT){
                     break;
                 }
@@ -53,20 +50,13 @@ public class First_ClientHandler implements Runnable {
                     gameController.onMessage(m);
                 }
             }
-            in.close();
             out.close();
+            in.close();
             socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
 
-    private Setup_Message processSetup_Cmd(String line, Gson g){
-        return g.fromJson(line, Setup_Message.class);
-    }
-
-    private Message processCmd(String line,Gson g){
-        return g.fromJson(line,Message.class);
-    }
 
 }

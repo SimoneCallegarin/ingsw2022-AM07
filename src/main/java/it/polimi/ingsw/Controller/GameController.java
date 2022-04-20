@@ -23,6 +23,14 @@ public class GameController {
     public int numplayers;
 
     /**
+     * the class constructor
+     * @param game the game model of the ongoing match
+     */
+    public GameController(Game game) {
+        this.game = game;
+    }
+
+    /**
      * this method receive a Message from the ClientHandler classes and calls the model method to update the game state based on
      * the message type
      * @param message the message received, it represents a move by the player
@@ -82,12 +90,9 @@ public class GameController {
             case USERNAME_CHOICE -> {
                 game.addAnotherPlayer(sm.user_choice);
             }
-            case GAMEMODE -> {
-                gameMode=sm.gamemode;
-
-            }
-            case NUMOF_PLAYERS -> {
-                numplayers=Integer.parseInt(sm.user_choice);
+            case GAMESETUP_INFO -> {
+                gameMode = sm.gamemode;
+                numplayers = Integer.parseInt(sm.user_choice);
             }
         }
     }

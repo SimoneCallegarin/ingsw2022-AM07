@@ -634,4 +634,7 @@ public class Game {
         return currentActivePlayer;
     }
 
+    public GameMode getGameMode() {
+        return gameMode;
+    }
 }

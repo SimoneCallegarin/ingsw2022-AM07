@@ -20,11 +20,12 @@ public class ClientHandler implements Runnable{
     Game game;
     GameController gameController;
     Socket socket;
+    CommandParser commandParser=new CommandParser();
 
     Gson g=new Gson();
 
-    public ClientHandler(Socket socket) {
-        this.socket = socket;
+    public ClientHandler(Socket socket,GameController gameController) {
+        this.socket = socket; this.gameController=gameController;
     }
 
     @Override
@@ -33,11 +34,12 @@ public class ClientHandler implements Runnable{
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             if(game.getGamePhase()==GamePhases.SETUP_PHASE){
-                Setup_Message sm=processSetup_Cmd(in.nextLine(),g);//to get the palyer username
+                Setup_Message sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
                 gameController.onSetup_Message(sm);
             }
             while (true) {
-                Message m=processCmd(in.nextLine(), g);
+                Message m= commandParser.processCmd(in.nextLine(), g);
+                notifyAll();
                 if(m.getMessageType()== MessageType.QUIT){
                     break;
                 }
@@ -52,16 +54,5 @@ public class ClientHandler implements Runnable{
             System.err.println(e.getMessage());
         }
     }
-
-    private Setup_Message processSetup_Cmd(String line, Gson g){
-        return g.fromJson(line, Setup_Message.class);
-    }
-
-    private Message processCmd(String line,Gson g){
-        return g.fromJson(line,Message.class);
-    }
-
-
-
 
 }
