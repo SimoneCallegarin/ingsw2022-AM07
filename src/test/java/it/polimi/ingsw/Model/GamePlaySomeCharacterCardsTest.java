@@ -49,7 +49,6 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(95,game.getGameTable().getBag().getNumberOfStudents());
         // 5 student on the character card (4 randomly extracted during set up + 1 extracted in game)
         assertEquals(5,game.getGameTable().getCharacterCard(0).getNumberOfStudents());
-
     }
 
     /**
@@ -102,12 +101,59 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(0,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.RED));
         assertEquals(0,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.BLUE));
         assertEquals(0,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.GREEN));
-
     }
 
     /**
-     * We are testing the behaviour of the MAGICAL_LETTER_CARRIER
+     * We are testing the behaviour of the HERALD
      */
+    @Test
+    void play_HERALD_CharacterCard(){
+        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addAnotherPlayer("giacomo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.HERALD);
+
+        //Player 0: 1 YELLOW student, 1 YELLOW professor
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+        game.checkUpdateProfessor(0,RealmColors.YELLOW);
+        //Player 1: 1 RED student, 1 RED professor
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.checkUpdateProfessor(1,RealmColors.RED);
+
+        while (game.getGameTable().getIsleManager().getIsle(8).getNumberOfStudents()!=0){
+            for(RealmColors c : RealmColors.values()){
+                if(game.getGameTable().getIsleManager().getIsle(8).getStudentsByColor(c)!=0)
+                    game.getGameTable().getIsleManager().getIsle(8).removeStudent(c);
+            }
+        }
+        //Isle 0: 1 RED student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+
+        //Isle 8:
+        //player 0 influence = 1
+        //player 1 influence = 0
+        game.checkUpdateInfluence(8);
+        //Isle 8:
+        //player 0 influence = 1 + 1(tower)
+        //player 1 influence = 0
+        assertEquals(TowerColors.WHITE,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
+
+        //Isle 0: 1 RED student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        //Isle 8:
+        //player 0 influence = 2
+        //player 1 influence = 3
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.playCharacterCard(1,0);
+        game.activateAtomicEffect(1,0,null,null,8);
+        assertEquals(TowerColors.BLACK,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
+    }
+
+        /**
+         * We are testing the behaviour of the MAGICAL_LETTER_CARRIER
+         */
     @Test
     void play_MAGICAL_LETTER_CARRIER_CharacterCard(){
         game.addFirstPlayer("simone", GameMode.EXPERT, 2);
@@ -130,7 +176,6 @@ class GamePlaySomeCharacterCardsTest {
         game.activateAtomicEffect(0,0,null,null,0);
 
         assertEquals(3,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
-
     }
 
     /**
@@ -158,7 +203,6 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(3,game.getGameTable().getCharacterCard(0).getDenyCards());
         // 1 deny card on the isle 11
         assertEquals(1,game.getGameTable().getIsleManager().getIsle(11).getDenyCards());
-
     }
 
     /**
@@ -269,7 +313,6 @@ class GamePlaySomeCharacterCardsTest {
 
         assertEquals(7, game.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfStudents());
         assertEquals(7, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfStudents());
-
     }
 
     /**
@@ -297,7 +340,6 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(95, game.getGameTable().getBag().getNumberOfStudents());
         assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfStudents());
         assertEquals(5, game.getGameTable().getCharacterCard(0).getNumberOfStudents());
-
     }
 
     /**
@@ -338,7 +380,6 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(1,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfStudents());
         // 0 student remained in the dining room of player 1
         assertEquals(0,game.getPlayerByIndex(1).getDashboard().getDiningRoom().getNumberOfStudents());
-
     }
 
 }
