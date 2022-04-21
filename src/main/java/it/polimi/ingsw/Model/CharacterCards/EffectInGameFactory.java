@@ -66,7 +66,7 @@ public class EffectInGameFactory {
                 break;
 
             case CENTAUR:
-                //Recalculate
+                game.getGameTable().getIsleManager().getIsle(value).setCentaur(true);
                 break;
 
             case JESTER:

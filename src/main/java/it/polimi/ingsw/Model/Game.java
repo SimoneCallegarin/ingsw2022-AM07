@@ -529,6 +529,7 @@ public class Game {
                         }
                     }
                 }
+                getGameTable().getIsleManager().getIsle(idIsle).setCentaur(false);
                 gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
                 gameTable.getIsleManager().checkUnifyIsle(idIsle);
             }

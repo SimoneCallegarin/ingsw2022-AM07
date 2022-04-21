@@ -108,7 +108,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_HERALD_CharacterCard(){
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.HERALD);
 
@@ -125,7 +125,7 @@ class GamePlaySomeCharacterCardsTest {
                     game.getGameTable().getIsleManager().getIsle(8).removeStudent(c);
             }
         }
-        //Isle 0: 1 RED student
+        //Isle 8: 1 YELLOW student
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
 
         //Isle 8:
@@ -137,7 +137,7 @@ class GamePlaySomeCharacterCardsTest {
         //player 1 influence = 0
         assertEquals(TowerColors.WHITE,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
 
-        //Isle 0: 1 RED student
+        //Isle 8: 3 RED students, 1 YELLOW student
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
@@ -203,6 +203,110 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(3,game.getGameTable().getCharacterCard(0).getDenyCards());
         // 1 deny card on the isle 11
         assertEquals(1,game.getGameTable().getIsleManager().getIsle(11).getDenyCards());
+    }
+
+    /**
+     * We are testing the behaviour of the CENTAUR in a draw condition between two players
+     */
+    @Test
+    void play_CENTAUR_Draw_CharacterCard(){
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.CENTAUR);
+
+        //Player 0: 1 YELLOW student, 1 YELLOW professor
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+        game.checkUpdateProfessor(0,RealmColors.YELLOW);
+        //Player 1: 1 RED student, 1 RED professor
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.checkUpdateProfessor(1,RealmColors.RED);
+
+        while (game.getGameTable().getIsleManager().getIsle(8).getNumberOfStudents()!=0){
+            for(RealmColors c : RealmColors.values()){
+                if(game.getGameTable().getIsleManager().getIsle(8).getStudentsByColor(c)!=0)
+                    game.getGameTable().getIsleManager().getIsle(8).removeStudent(c);
+            }
+        }
+        //Isle 8: 1 YELLOW student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+
+        //Isle 8:
+        //player 0 influence = 1
+        //player 1 influence = 0
+        game.checkUpdateInfluence(8);
+        //Isle 8:
+        //player 0 influence = 1 + 1(tower)
+        //player 1 influence = 0
+        assertEquals(TowerColors.WHITE,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
+
+        //Isle 8: 1 RED student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        //Isle 8:
+        //player 0 influence = 2
+        //player 1 influence = 1
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.playCharacterCard(1,0);
+        game.activateAtomicEffect(1,0,null,null,8);
+        //Isle 8:
+        //player 0 influence = 2
+        //player 1 influence = 1
+        // it's a DRAW
+        assertEquals(TowerColors.WHITE,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
+
+    }
+
+    /**
+     * We are testing the behaviour of the CENTAUR in a condition where between two players
+     * the second conquers the isle using the centaur character card
+     */
+    @Test
+    void play_CENTAUR_Win_CharacterCard(){
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.CENTAUR);
+
+        //Player 0: 1 YELLOW student, 1 YELLOW professor
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+        game.checkUpdateProfessor(0,RealmColors.YELLOW);
+        //Player 1: 1 RED student, 1 RED professor
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.checkUpdateProfessor(1,RealmColors.RED);
+
+        while (game.getGameTable().getIsleManager().getIsle(8).getNumberOfStudents()!=0){
+            for(RealmColors c : RealmColors.values()){
+                if(game.getGameTable().getIsleManager().getIsle(8).getStudentsByColor(c)!=0)
+                    game.getGameTable().getIsleManager().getIsle(8).removeStudent(c);
+            }
+        }
+        //Isle 8: 1 YELLOW student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+
+        //Isle 8:
+        //player 0 influence = 1
+        //player 1 influence = 0
+        game.checkUpdateInfluence(8);
+        //Isle 8:
+        //player 0 influence = 1 + 1(tower)
+        //player 1 influence = 0
+        assertEquals(TowerColors.WHITE,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
+
+        //Isle 8: 1 RED student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        //Isle 8:
+        //player 0 influence = 2
+        //player 1 influence = 2
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.playCharacterCard(1,0);
+        game.activateAtomicEffect(1,0,null,null,8);
+        //Isle 8:
+        //player 0 influence = 1
+        //player 1 influence = 2
+        game.checkUpdateInfluence(8);
+        assertEquals(TowerColors.BLACK,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
     }
 
     /**

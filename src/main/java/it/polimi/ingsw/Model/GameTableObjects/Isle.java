@@ -37,6 +37,11 @@ public class Isle implements StudentManager, DenyCardManager {
      * this is the number of isle that are unified in order to compose this isle
      */
     private int numOfIsles;
+    /**
+     * this boolean refers to the effect of the centaur
+     * true if activate this card, else false
+     */
+    private boolean centaur = false;
 
     /**
      * Isle constructor
@@ -145,10 +150,18 @@ public class Isle implements StudentManager, DenyCardManager {
                 influence += students.get(c);
             }
         }
-        if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor())){
+        if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor()) && !centaur){
             influence+= numOfIsles;
         }
         return influence;
+    }
+
+    /**
+     * setter method called when a player plays the centaur character card
+     * @param centaur set true when played the centaur character card
+     */
+    public void setCentaur(boolean centaur) {
+        this.centaur = centaur;
     }
 
     /**
