@@ -88,7 +88,7 @@ public class GameController {
                 game.addFirstPlayer(sm.user_choice,gameMode,numplayers);
             }
             case USERNAME_CHOICE -> {
-                game.addAnotherPlayer(sm.user_choice);
+                    game.addAnotherPlayer(sm.user_choice);
             }
             case GAMESETUP_INFO -> {
                 gameMode = sm.gamemode;

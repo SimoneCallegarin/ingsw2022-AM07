@@ -42,7 +42,7 @@ public class ServerMain{
             return;
         }
 
-        while(numClients!=game.numberOfPlayers){
+        while(numClients!=gameController.numplayers){
             try {
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
@@ -54,7 +54,8 @@ public class ServerMain{
                 break;
             }
         }
-        executor.shutdown();
+        System.out.println("Maximum number of clients connected!");
+
     }
 
 

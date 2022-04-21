@@ -2,7 +2,6 @@ package it.polimi.ingsw.Network;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.Controller.GameController;
-import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.Network.Messages.MessageType;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Timer;
 
 /**
  * this class is used to manage the connection to the first client which connects to the server to play.
@@ -33,14 +33,20 @@ public class First_ClientHandler implements Runnable {
     public void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out=new PrintWriter(socket.getOutputStream());
+            PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
+            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gamemode\":true}";
+            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}";
+
             String line=in.nextLine();
             Setup_Message sm= commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
             gameController.onSetup_Message(sm);
+            out.println(okJSON);
+
             line=in.nextLine();
-            System.out.println(line);
             sm= commandParser.processSetup_Cmd(line, g);//to get the first player username and set the attributes in the game model
             gameController.onSetup_Message(sm);
+            out.println(okJSON);
+
             while (true) {
                 line=in.nextLine();
                 Message m= commandParser.processCmd(line, g);
@@ -49,6 +55,8 @@ public class First_ClientHandler implements Runnable {
                 }
                 else{
                     gameController.onMessage(m);
+                    out.println(okJSON);
+
                 }
             }
             out.close();
@@ -58,6 +66,5 @@ public class First_ClientHandler implements Runnable {
             System.err.println(e.getMessage());
         }
     }
-
 
 }
