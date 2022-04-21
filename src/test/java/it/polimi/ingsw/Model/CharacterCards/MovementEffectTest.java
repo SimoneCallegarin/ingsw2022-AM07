@@ -8,7 +8,6 @@ import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,17 +21,16 @@ class MovementEffectTest {
     void effect() {
         CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK);
         Player player = new Player("simone", 4, 0, Squads.SQUAD1, GameMode.EXPERT);
-        List effects = null;
         StudentMovementEffect movementEffectStudents1 = new StudentMovementEffect();
         StudentMovementEffect movementEffectStudents2 = new StudentMovementEffect();
         IsleManager isleManager = new IsleManager();
         Bag bag = new Bag();
         bag.fillBag();
         characterCardTestForStudents.addStudent(RealmColors.YELLOW);
-        movementEffectStudents1.effect(1,characterCardTestForStudents,isleManager.getIsle(0), ColorsForEffects.SELECT, player);
+        movementEffectStudents1.effect(characterCardTestForStudents,isleManager.getIsle(0), ColorsForEffects.SELECT, RealmColors.YELLOW, null, player);
         assertEquals(0,characterCardTestForStudents.getNumberOfStudents());
         assertEquals(1,isleManager.getIsle(0).getNumberOfStudents());
-        movementEffectStudents2.effect(1,bag,characterCardTestForStudents, ColorsForEffects.RANDOM, player);
+        movementEffectStudents2.effect(bag,characterCardTestForStudents, ColorsForEffects.RANDOM, RealmColors.YELLOW, null, player);
         assertEquals(1,characterCardTestForStudents.getNumberOfStudents());
         assertEquals(119,bag.getNumberOfStudents());
     }

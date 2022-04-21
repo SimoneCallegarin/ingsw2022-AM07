@@ -186,36 +186,6 @@ public class Player {
     }
 
     /**
-     * this method interfaces with the controller and the view to pick a student color
-     * the player choose a student to pick from the student manager where it is and the view gives the color
-     * chosen to the controller that sends it to the model
-     * @param from the student manager from where choose the color of the student the player wants to move
-     * @param color the color of the student the player picked
-     * @return the color of the student the player picked
-     */
-    public RealmColors selectColor(StudentManager from, RealmColors color){     //NEEDS TO BE UPDATED WHEN VIEW AND CONTROLLER WILL BE IMPLEMENTED
-        if(from.getStudentsByColor(color)==0)
-            return  null;
-        else
-            return color;
-    }
-
-    /**
-     * this method interfaces with the controller and the view to pick the number of students the player wants to move
-     * the player choose a number of students to pick from the student manager where it is and the view gives this number
-     * chosen to the controller that sends it to the model
-     * @param from the student manager from where choose the number of the students the player wants to move
-     * @param numberOfStudents the number of students the player picked
-     * @return the number of students the player picked
-     */
-    public int selectNumberOfStudentsToMove(StudentManager from, int numberOfStudents){
-        if(from.getNumberOfStudents()<numberOfStudents)
-            return from.getNumberOfStudents();
-        else
-            return numberOfStudents;
-    }
-
-    /**
      * this method interfaces with the controller and the view to pick the isle chosen by the player
      * @param isleID the ID of the isle chosen by the player
      * @return the ID of the isle chosen by the player

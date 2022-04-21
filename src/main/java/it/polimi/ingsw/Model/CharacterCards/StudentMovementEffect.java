@@ -9,24 +9,27 @@ public class StudentMovementEffect {
 
     /**
      * Effect that permits to move students from a StudentsManager to another
-     * @param times the number of times this exact movement has to be done
      * @param from the StudentsManager where is removed the student
      * @param to the StudentsManager where is added the student
-     * @param color the color of the student that has to be moved
+     * @param color the type of color that has to be passed
+ *              RANDOM: if obtained randomly from the bag
+ *              SELECT: if obtained by asking the player the color of the student that he wants to move
+     * @param colorFrom the color of the student that has to be moved from
+     * @param colorTo the color of the student that has to be moved to
      */
-    public void effect(int times, StudentManager from, StudentManager to, ColorsForEffects color, Player player) {
-        for (int i = 0; i < times; i++) {
+    public void effect(StudentManager from, StudentManager to, ColorsForEffects color, RealmColors colorFrom, RealmColors colorTo, Player player) {
             if(color==ColorsForEffects.RANDOM){
                 Bag bag = (Bag) from;
                 RealmColors colorExtracted = bag.draw();
                 to.addStudent(colorExtracted);
             }
             if(color==ColorsForEffects.SELECT){
-                RealmColors colorSelected = player.selectColor(from, RealmColors.YELLOW);       //THIS HAS TO BE IMPLEMENTED WITH THE VIEW
-                //BECAUSE THE PARAMETER colorSelected WILL BE DECIDED BY THE PLAYER THROUGH THE VIEW AND PASSED WITH THE CONTROLLER TO THE MODEL
-                from.removeStudent(colorSelected);
-                to.addStudent(colorSelected);
+                if(colorTo != null){
+                    from.addStudent(colorTo);
+                    to.removeStudent(colorTo);
+                }
+                from.removeStudent(colorFrom);
+                to.addStudent(colorFrom);
             }
-        }
     }
 }

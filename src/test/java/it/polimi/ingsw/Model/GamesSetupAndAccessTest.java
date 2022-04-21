@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GamesSetupAndAccess {
+public class GamesSetupAndAccessTest {
 
     /**
      * we are testing if a game with 4 players in expert mode is correctly created
