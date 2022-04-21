@@ -17,7 +17,7 @@ public class GamesSetupAndAccessTest {
     @Test
     void add4PlayersExpert() {
         Game game4PlayersExpert = new Game();
-        game4PlayersExpert.addFirstPlayer("simone", GameMode.EXPERT, 4);
+        game4PlayersExpert.addFirstPlayer("simone", true, 4);
         game4PlayersExpert.addAnotherPlayer("giacomo");
         game4PlayersExpert.addAnotherPlayer("filippo");
         game4PlayersExpert.addAnotherPlayer("bob");

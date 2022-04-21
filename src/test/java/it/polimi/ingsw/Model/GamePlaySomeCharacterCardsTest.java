@@ -18,7 +18,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_MONK_CharacterCard() {
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
         game.setGamePhase(GamePhases.ACTION_PHASE);
@@ -56,7 +56,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_FARMER_CharacterCard(){
-        game.addFirstPlayer("simone", GameMode.EXPERT, 3);
+        game.addFirstPlayer("simone", true, 3);
         game.addAnotherPlayer("giacomo");
         game.addAnotherPlayer("filippo");
         game.getGameTable().setCharacterCards(CharacterCardsName.FARMER);
@@ -156,7 +156,7 @@ class GamePlaySomeCharacterCardsTest {
          */
     @Test
     void play_MAGICAL_LETTER_CARRIER_CharacterCard(){
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.MAGICAL_LETTER_CARRIER);
 
@@ -183,7 +183,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_GRANDMA_HERBS_CharacterCard(){
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.GRANDMA_HERBS);
         game.setGamePhase(GamePhases.ACTION_PHASE);
@@ -210,7 +210,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_JESTER_CharacterCard(){             //check better the colors number and with more students!
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.JESTER);
@@ -262,7 +262,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_MINSTREL_CharacterCard(){
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
@@ -320,7 +320,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_SPOILED_PRINCESS_CharacterCard() {
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.SPOILED_PRINCESS);
@@ -347,7 +347,7 @@ class GamePlaySomeCharacterCardsTest {
      */
     @Test
     void play_THIEF_CharacterCard() {
-        game.addFirstPlayer("simone", GameMode.EXPERT, 2);
+        game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.THIEF);
