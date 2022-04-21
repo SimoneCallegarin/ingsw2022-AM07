@@ -38,7 +38,8 @@ public class First_ClientHandler implements Runnable {
             Setup_Message sm= commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
             gameController.onSetup_Message(sm);
             line=in.nextLine();
-            sm= commandParser.processSetup_Cmd(line, g);//to get the first player username
+            System.out.println(line);
+            sm= commandParser.processSetup_Cmd(line, g);//to get the first player username and set the attributes in the game model
             gameController.onSetup_Message(sm);
             while (true) {
                 line=in.nextLine();
