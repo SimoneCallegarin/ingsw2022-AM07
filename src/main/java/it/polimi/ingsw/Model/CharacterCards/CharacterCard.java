@@ -17,7 +17,7 @@ public class CharacterCard implements StudentManager, DenyCardManager {
      */
     private int cost;
     /**
-     * This attribute indicates if the character card has been already used previously in the the game
+     * This attribute indicates if the character card has been already used previously in the game
      */
     private boolean used;
     /**

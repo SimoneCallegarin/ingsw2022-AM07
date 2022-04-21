@@ -610,8 +610,10 @@ public class Game {
     public void playCharacterCard(int idPlayer, CharacterCard characterCard) {
 
         //if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
-            effectInGameFactory.getEffect(characterCard, players, gameTable, getPlayerByIndex(idPlayer));
+            if (players.get(idPlayer).getMoney() >= characterCard.getCost()) {
+                getPlayerByIndex(idPlayer).playCharacterCard(characterCard);
+
+            }
         //}
     }
 
