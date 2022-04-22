@@ -192,6 +192,14 @@ public class Game {
     }
 
     /**
+     * this is a getter method that returns the list of players who are playing the game
+     * @return the list of players who are playing the game
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    /**
      * it is responsible for changing the discard pile of a certain player
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
      * @param turnOrderPlayed is the turn order of the AssistantCard played
@@ -472,7 +480,7 @@ public class Game {
      * it is invoked when mother nature ends on acceptable isle and updates all tower references, if it is necessary (it also calls a method to verify if isles union has to occur)
      * @param idIsle is the index of the isle which has mother nature on it
      */
-    private void checkUpdateInfluence(int idIsle) {
+    public void checkUpdateInfluence(int idIsle) {
         int majorInfluence = 0;
         int conquerorIndex = 0;
         boolean draw = false;
@@ -521,6 +529,7 @@ public class Game {
                         }
                     }
                 }
+                getGameTable().getIsleManager().getIsle(idIsle).setCentaur(false);
                 gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
                 gameTable.getIsleManager().checkUnifyIsle(idIsle);
             }
@@ -530,7 +539,7 @@ public class Game {
     /**
      * it checks if the game has ended and updates the proper end game variables
      */
-    private void checkEndGame() {
+    public void checkEndGame() {
         for (Player p : players) {
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                 endGame = true;
@@ -635,7 +644,7 @@ public class Game {
      */
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, RealmColors colorStudentFrom, RealmColors colorStudentTo, int value){
         if (gamePhase == GamePhases.ACTION_PHASE) {
-        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), players, gameTable, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
+        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
         }
     }
 
