@@ -17,12 +17,12 @@ import java.util.concurrent.Executors;
 public class ServerMain{
     public Game game;
 
-    public void runServer(Game game,GameController gameController) {
-        this.game=game;
-        int numClients;
-        ExecutorService executor=Executors.newCachedThreadPool();
+    public synchronized void runServer(Game game,GameController gameController){
+        this.game = game;
+        ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
-        final int port=1234;
+        final int port = 1234;
+        int numClients;
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("ServerSocket started!");
@@ -31,25 +31,27 @@ public class ServerMain{
             e.printStackTrace();
             return;
         }
+        First_ClientHandler first_clientHandler;
         try {
             System.out.println("Accepting...");
             Socket clientSocket = serverSocket.accept();
             System.out.println("Connection accepted!");
-            executor.submit(new First_ClientHandler(clientSocket,game,gameController));
+            first_clientHandler = new First_ClientHandler(clientSocket, game, gameController);
+            executor.submit(first_clientHandler);
             numClients=1;
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return;
         }
 
-        while(numClients!=gameController.numplayers){
+        while (numClients!=gameController.numplayers) {
             try {
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection accepted!");
-                executor.submit(new ClientHandler(clientSocket, new GameController(game)));
+                executor.submit(new ClientHandler(clientSocket, gameController));
                 numClients++;
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
                 break;
             }

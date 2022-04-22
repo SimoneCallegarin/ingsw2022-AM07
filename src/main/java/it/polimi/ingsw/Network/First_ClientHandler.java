@@ -30,7 +30,7 @@ public class First_ClientHandler implements Runnable {
         this.gameController=gameController;
     }
 
-    public void run() {
+    public synchronized void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out=new PrintWriter(socket.getOutputStream(),true);

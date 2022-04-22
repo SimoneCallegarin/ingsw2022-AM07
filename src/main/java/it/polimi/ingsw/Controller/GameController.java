@@ -20,7 +20,7 @@ public class GameController {
      */
     public RealmColors color;
     public boolean gameMode;
-    public int numplayers;
+    public int numplayers=0;
 
     /**
      * the class constructor
@@ -35,7 +35,7 @@ public class GameController {
      * the message type
      * @param message the message received, it represents a move by the player
      */
-    public void onMessage(Message message){
+    public synchronized void onMessage(Message message){
         switch(message.getMessageType()){
             case PLAY_ASSISTCARD -> {
                 if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
@@ -81,7 +81,7 @@ public class GameController {
      * their username
      * @param sm the setup message received
      */
-    public void onSetup_Message(Setup_Message sm){
+    public synchronized void onSetup_Message(Setup_Message sm){
 
         switch(sm.getMessageType()){
             case FIRST_USERNAME_CHOICE -> {

@@ -17,7 +17,6 @@ import it.polimi.ingsw.Network.Messages.Setup_Message;
  * This class is used to manage the connection with the client from the second to the fourth.
  */
 public class ClientHandler implements Runnable{
-    Game game;
     GameController gameController;
     Socket socket;
     CommandParser commandParser=new CommandParser();
@@ -29,7 +28,7 @@ public class ClientHandler implements Runnable{
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
@@ -42,7 +41,7 @@ public class ClientHandler implements Runnable{
 
             while (true) {
                 Message m= commandParser.processCmd(in.nextLine(), g);
-                notifyAll();
+
                 if(m.getMessageType()== MessageType.QUIT){
                     break;
                 }
