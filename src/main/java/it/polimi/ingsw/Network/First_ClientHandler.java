@@ -2,7 +2,6 @@ package it.polimi.ingsw.Network;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.Controller.GameController;
-import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.Network.Messages.MessageType;

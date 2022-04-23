@@ -3,7 +3,6 @@ package it.polimi.ingsw.Model.CharacterCards;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.GameTableObjects.Bag;
 import it.polimi.ingsw.Model.Interface.StudentManager;
-import it.polimi.ingsw.Model.Player.Player;
 
 public class StudentMovementEffect {
 
@@ -17,7 +16,7 @@ public class StudentMovementEffect {
      * @param colorFrom the color of the student that has to be moved from
      * @param colorTo the color of the student that has to be moved to
      */
-    public void effect(StudentManager from, StudentManager to, ColorsForEffects color, RealmColors colorFrom, RealmColors colorTo, Player player) {
+    public void effect(StudentManager from, StudentManager to, ColorsForEffects color, RealmColors colorFrom, RealmColors colorTo) {
             if(color==ColorsForEffects.RANDOM){
                 Bag bag = (Bag) from;
                 RealmColors colorExtracted = bag.draw();

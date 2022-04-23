@@ -76,11 +76,8 @@ public class DiningRoom implements StudentManager {
     public void addStudent(RealmColors color) {
         int temp;
         temp = students.get(color);
-        if (temp < maxStudentsPerColor) {
-            if (temp%3 == 0)
-                giveMoney = true;  //ANCORA DA IMPLEMENTARE
+        if (temp < maxStudentsPerColor)
             temp += 1;
-        }
         students.put(color, temp);
     }
 

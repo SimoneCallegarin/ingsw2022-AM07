@@ -9,10 +9,9 @@ public class DenyCardSetupEffect {
      * it uses the DenyCardMovementEffect to put deny cards on the character card
      * @param from will not be used, always set to null
      * @param to will always be set to the character card
-     * @param color will always be set to NONE
      */
-    public void effect(DenyCardManager from, DenyCardManager to, ColorsForEffects color) {
+    public void effect(DenyCardManager from, DenyCardManager to) {
         DenyCardMovementEffect denyCardMovementEffect = new DenyCardMovementEffect();
-        denyCardMovementEffect.effect(from,to,color);
+        denyCardMovementEffect.effect(from,to);
     }
 }

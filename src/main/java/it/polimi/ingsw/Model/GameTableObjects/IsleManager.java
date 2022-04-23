@@ -3,7 +3,6 @@ package it.polimi.ingsw.Model.GameTableObjects;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * IsleManager is the class responsible for managing the Isle composition on the board.
@@ -14,14 +13,13 @@ public class IsleManager {
     /**
      * this is the actual list of active isle for the game
      */
-    private ArrayList<Isle> isles;
+    private final ArrayList<Isle> isles = new ArrayList<>();
     private int isleWithMotherNatureIndex;
 
     /**
      * Isle manager constructor
      */
     public IsleManager(){
-        isles=new ArrayList<>();
 
         for(int i=0;i<12;i++){
             isles.add(new Isle(i));
@@ -50,11 +48,7 @@ public class IsleManager {
         if (isles.get(isle2).getMotherNature()) {
             isles.get(isle2).setMotherNature(false);
             isles.get(isle1).setMotherNature(true);
-        //    isleWithMotherNatureIndex = isle1;
         }
-
-        //if (isle1 == isles.size()-1)
-        //    isleWithMotherNatureIndex = isles.size()-2;
 
         isles.remove(isle2);
 

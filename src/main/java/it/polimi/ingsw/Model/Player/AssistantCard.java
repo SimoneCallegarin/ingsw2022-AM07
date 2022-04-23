@@ -5,15 +5,11 @@ public class AssistantCard {
     /**
      * This attribute indicates the value of the turn order of the card
      */
-    private int turnOrder;
+    private final int turnOrder;
     /**
      * This attribute indicates the value of the mother nature movement of the card
      */
     private int mnMovement;
-    /**
-     * This attribute indicates if the card has already been played by the player
-     */
-    private boolean used;
 
     /**
      * Assistant card constructor
@@ -21,7 +17,6 @@ public class AssistantCard {
     public AssistantCard(int turnOrder, int mnMovement) {
         this.turnOrder = turnOrder;
         this.mnMovement = mnMovement;
-        this.used = false;
     }
 
     /**
@@ -43,14 +38,6 @@ public class AssistantCard {
      */
     public int getTurnOrder() {
         return turnOrder;
-    }
-
-    /**
-     * getter method that permits to know if an assistant card has been already used previously in the game
-     * @return true if already used, else false
-     */
-    public boolean isUsed() {
-        return used;
     }
 
     /**

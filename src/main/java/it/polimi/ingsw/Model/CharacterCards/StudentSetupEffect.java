@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
 import it.polimi.ingsw.Model.Interface.StudentManager;
-import it.polimi.ingsw.Model.Player.Player;
 
 public class StudentSetupEffect {
 
@@ -12,9 +11,9 @@ public class StudentSetupEffect {
      * @param to will always be set to the character card
      * @param color will always be set to RANDOM
      */
-    public void effect(StudentManager from, StudentManager to, ColorsForEffects color, Player player) {
+    public void effect(StudentManager from, StudentManager to, ColorsForEffects color) {
         StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
-        studentMovementEffect.effect(from, to, color, null, null, player);
+        studentMovementEffect.effect(from, to, color, null, null);
     }
 
 }

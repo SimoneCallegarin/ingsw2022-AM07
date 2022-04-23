@@ -1,8 +1,8 @@
 package it.polimi.ingsw.Model.GamePhases;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Model.Player.AssistantCard;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,8 +16,6 @@ class ActionPhaseTest {
     public void diningRoomFirstMovements2Players() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -28,8 +26,8 @@ class ActionPhaseTest {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
-        /*for (RealmColors rc : RealmColors.values())
-            System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc));*/
+        // for (RealmColors rc : RealmColors.values())
+           // System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc));*/
         // moving 3 students
         for (RealmColors rc : RealmColors.values()) {
             int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc);
@@ -46,12 +44,14 @@ class ActionPhaseTest {
         assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
         // checking if the player has 4 students in his entrance
         assertEquals(4, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
-        /*System.out.println("");
+
+        /*  System.out.println("");
         for (RealmColors rc : RealmColors.values())
             System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc));
         System.out.println("");
         for (RealmColors rc : RealmColors.values())
             System.out.println("Number of " + rc.toString() + " students in player one dining room: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getStudentsByColor(rc));*/
+
         // checking if professors are gained
         for (RealmColors rc : RealmColors.values()) {
             if (game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getStudentsByColor(rc) > 0)
@@ -68,8 +68,6 @@ class ActionPhaseTest {
     public void diningRoomMovementsPossibleDraw2Players() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -125,8 +123,6 @@ class ActionPhaseTest {
     public void firstStudentsMovements() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -172,8 +168,6 @@ class ActionPhaseTest {
     public void firstMotherNatureMovementWithConquest() {
         int nextIsleIndex = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -216,8 +210,6 @@ class ActionPhaseTest {
     @Test
     public void wrongMotherNatureMovements() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -269,8 +261,6 @@ class ActionPhaseTest {
     @Test
     public void variousMotherNatureMovementsWithAndWithoutConquest() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -366,8 +356,6 @@ class ActionPhaseTest {
     @Test
     public void variousPossibleMotherNatureMovements() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 12);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -416,10 +404,6 @@ class ActionPhaseTest {
     @Test
     public void motherNatureMovement4Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(6, 3);
-        AssistantCard cardPlayed2 = new AssistantCard(5, 3);
-        AssistantCard cardPlayed3 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed4 = new AssistantCard(4, 2);
         game.addFirstPlayer("jack", false, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -570,8 +554,6 @@ class ActionPhaseTest {
     @Test
     public void checkUnifyIsle() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack",false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -677,8 +659,6 @@ class ActionPhaseTest {
     public void pickStudentsFromCloud() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -745,8 +725,6 @@ class ActionPhaseTest {
     public void endActionPhase() {
         int counter = 0;
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -817,8 +795,6 @@ class ActionPhaseTest {
     @Test
     public void endGame2PlayersNoMoreTowers() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -864,8 +840,6 @@ class ActionPhaseTest {
     @Test
     public void endGame2Players3IslesNoDraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -932,9 +906,6 @@ class ActionPhaseTest {
     @Test
     public void endGame3Players3IslesWithTowersDraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed3 = new AssistantCard(5, 3);
         game.addFirstPlayer("jack", false, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -1023,9 +994,6 @@ class ActionPhaseTest {
     @Test
     public void game3IslesEndedInADraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed3 = new AssistantCard(5, 3);
         game.addFirstPlayer("jack",false, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -1112,10 +1080,6 @@ class ActionPhaseTest {
     @Test
     public void endGame4PlayersNoMoreTowers() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(6, 3);
-        AssistantCard cardPlayed2 = new AssistantCard(5, 3);
-        AssistantCard cardPlayed3 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed4 = new AssistantCard(4, 2);
         game.addFirstPlayer("jack", false, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -1186,10 +1150,6 @@ class ActionPhaseTest {
     @Test
     public void endGame4Players3IslesNoDraw() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(6, 3);
-        AssistantCard cardPlayed2 = new AssistantCard(5, 3);
-        AssistantCard cardPlayed3 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed4 = new AssistantCard(4, 2);
         game.addFirstPlayer("jack",false, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -1422,4 +1382,161 @@ class ActionPhaseTest {
         assertFalse(game.isGameEndedInADraw());
         assertEquals("jack", game.getWinner());
     }
+
+    @Test
+    public void check_3_6_9_Position_In_DiningRoom() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", true, 2);
+        game.addAnotherPlayer("calle");
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+
+        assertEquals(1,game.getPlayerByIndex(0).getMoney());
+
+        game.moveStudentInDiningRoom(0,RealmColors.YELLOW);
+        game.moveStudentInDiningRoom(0,RealmColors.YELLOW);
+        game.moveStudentInDiningRoom(0,RealmColors.YELLOW);
+
+        assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW));
+
+        assertEquals(2,game.getPlayerByIndex(0).getMoney());
+        assertEquals(17,game.getGameTable().getGeneralMoneyReserve());
+
+    }
+
+    /**
+     * We are testing if adding a student in third position of the dining room gives the player an extra money
+     */
+    @Test
+    void gainMoneyMinstrel() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", true, 2);
+        game.addAnotherPlayer("calle");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+
+        int counter=0;
+
+        // removing all 7 students from entrance
+        for (RealmColors rc : RealmColors.values()) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(rc);
+            for (int i = 0; i < studentsOfSpecifiedColor; i++) {
+                game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(rc);
+                counter++;
+                if (counter == 7)
+                    break;
+            }
+            if (counter == 7)
+                break;
+        }
+
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+
+        game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.BLUE);
+
+        assertEquals(1,game.getPlayerByIndex(0).getMoney());
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+        //we play the character card we want
+        game.playCharacterCard(0,0);
+        //and then the controller will activate the atomic effect of each card for the number of times needed
+        game.activateAtomicEffect(0,0,RealmColors.YELLOW, RealmColors.BLUE,0);
+
+        assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(1,game.getPlayerByIndex(0).getMoney());
+
+    }
+
+    /**
+     * We are testing if adding a student in third position of the dining room gives the player an extra money
+     */
+    @Test
+    void gainMoneySwappingWithTheMinstrel() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", true, 2);
+        game.addAnotherPlayer("calle");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+
+        int counter=0;
+
+        // removing all 7 students from entrance
+        for (RealmColors rc : RealmColors.values()) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(rc);
+            for (int i = 0; i < studentsOfSpecifiedColor; i++) {
+                game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(rc);
+                counter++;
+                if (counter == 7)
+                    break;
+            }
+            if (counter == 7)
+                break;
+        }
+
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+
+        game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.BLUE);
+
+        assertEquals(1,game.getPlayerByIndex(0).getMoney());
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+        //we play the character card we want
+        game.playCharacterCard(0,0);
+        //and then the controller will activate the atomic effect of each card for the number of times needed
+        game.activateAtomicEffect(0,0,RealmColors.BLUE, RealmColors.YELLOW,0);
+        game.activateAtomicEffect(0,0,RealmColors.YELLOW, RealmColors.BLUE,0);
+
+        assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(1,game.getPlayerByIndex(0).getMoney());
+
+    }
+
+    /**
+     * We are testing if the player gains a money when a student in third position in the dining room
+     * is put using the spoiled princess character card
+     */
+    @Test
+    void gainMoneySpoiled_Princess() {
+        Game game = new Game();
+        game.addFirstPlayer("jack", true, 2);
+        game.addAnotherPlayer("calle");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.SPOILED_PRINCESS);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.getPlayerByIndex(0).gainMoney();
+
+        game.getGameTable().getCharacterCard(0).addStudent(RealmColors.BLUE);
+
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
+
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+        //played the SPOILED_PRINCESS character card:
+        game.playCharacterCard(0, 0);
+        //and then the controller will activate the atomic effect of each card for the number of times needed
+        game.activateAtomicEffect(0,0,RealmColors.BLUE, null, 0);
+
+        assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
+        assertEquals(19,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(1,game.getPlayerByIndex(0).getMoney());
+
+    }
+
 }

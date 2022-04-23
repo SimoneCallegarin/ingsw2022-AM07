@@ -1,10 +1,11 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Model.CharacterCards;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
+import it.polimi.ingsw.Model.Game;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * We are testing if each character card behaves correctly
@@ -22,6 +23,7 @@ class GamePlaySomeCharacterCardsTest {
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
         // students:
         //  130 in the bag
         //  -10 in isle
@@ -91,6 +93,8 @@ class GamePlaySomeCharacterCardsTest {
         //  filippo: 1 PINK, 1 YELLOW, 1 RED
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(2).getOrder();
+        game.getPlayerByIndex(2).gainMoney();
 
         game.playCharacterCard(2,0);
 
@@ -146,8 +150,13 @@ class GamePlaySomeCharacterCardsTest {
         //player 1 influence = 3
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.getPlayerByIndex(1).gainMoney();
+        game.getPlayerByIndex(1).gainMoney();
+
         game.playCharacterCard(1,0);
         game.activateAtomicEffect(1,0,null,null,8);
+
         assertEquals(TowerColors.BLACK,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
     }
 
@@ -160,16 +169,16 @@ class GamePlaySomeCharacterCardsTest {
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.MAGICAL_LETTER_CARRIER);
 
-        //setting the correct game phase for the player simone
+        //setting the correct game phase
         game.setGamePhase(GamePhases.PLANNING_PHASE);
         game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        if(game.getPlayerByIndex(0).getOrder()==CurrentOrder.SECOND_PLAYER)
-            game.currentActivePlayer = CurrentOrder.SECOND_PLAYER;
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
         game.playAssistantCard(0,1);
 
         assertEquals(1,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
 
         game.playCharacterCard(0,0);
 
@@ -187,6 +196,8 @@ class GamePlaySomeCharacterCardsTest {
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.GRANDMA_HERBS);
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.getPlayerByIndex(0).gainMoney();
 
         // 4 deny cards on the character card
         assertEquals(4,game.getGameTable().getCharacterCard(0).getDenyCards());
@@ -247,6 +258,9 @@ class GamePlaySomeCharacterCardsTest {
         //player 1 influence = 1
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.getPlayerByIndex(1).gainMoney();
+
         game.playCharacterCard(1,0);
         game.activateAtomicEffect(1,0,null,null,8);
         //Isle 8:
@@ -300,6 +314,10 @@ class GamePlaySomeCharacterCardsTest {
         //player 0 influence = 2
         //player 1 influence = 2
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.getPlayerByIndex(1).gainMoney();
+        game.getPlayerByIndex(1).gainMoney();
+
         game.playCharacterCard(1,0);
         game.activateAtomicEffect(1,0,null,null,8);
         //Isle 8:
@@ -319,6 +337,7 @@ class GamePlaySomeCharacterCardsTest {
 
         game.getGameTable().setCharacterCards(CharacterCardsName.JESTER);
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
 
         int counter=0;
 
@@ -362,15 +381,59 @@ class GamePlaySomeCharacterCardsTest {
     }
 
     /**
+     * We are testing the behaviour of the KNIGHT
+     */
+    @Test
+    void play_KNIGHT_CharacterCard() {
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.KNIGHT);
+        game.getPlayerByIndex(0).gainMoney();
+
+        game.getPlayerByIndex(1).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+
+        //removing all students from isle 8:
+        while (game.getGameTable().getIsleManager().getIsle(8).getNumberOfStudents()!=0){
+            for(RealmColors c : RealmColors.values()){
+                if(game.getGameTable().getIsleManager().getIsle(8).getStudentsByColor(c)!=0)
+                    game.getGameTable().getIsleManager().getIsle(8).removeStudent(c);
+            }
+        }
+        //Isle 8: 1 YELLOW student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+        //player 0 influence on isle 8 = 0
+        //player 1 influence on isle 8 = 1
+        assertEquals(0,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+
+        game.playCharacterCard(0,0);
+        //player 0 influence on isle 8 = 2
+        //player 1 influence on isle 8 = 1
+        game.activateAtomicEffect(0,0,null,null,0);
+        assertEquals(2,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
+        assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(1)));
+
+        game.checkUpdateInfluence(8);
+
+        assertEquals(TowerColors.WHITE, game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
+        assertFalse(game.getPlayerByIndex(0).getKnight());
+
+    }
+
+    /**
      * We are testing the behaviour of the MINSTREL
      */
     @Test
-    void play_MINSTREL_CharacterCard(){
+    void play_MINSTREL_CharacterCard() {
         game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
 
         game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
 
         int counter=0;
 
@@ -429,6 +492,8 @@ class GamePlaySomeCharacterCardsTest {
 
         game.getGameTable().setCharacterCards(CharacterCardsName.SPOILED_PRINCESS);
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.getPlayerByIndex(0).gainMoney();
 
         //testing if SPOILED_PRINCESS character card is correctly set up
         assertEquals(96, game.getGameTable().getBag().getNumberOfStudents());
@@ -456,6 +521,9 @@ class GamePlaySomeCharacterCardsTest {
 
         game.getGameTable().setCharacterCards(CharacterCardsName.THIEF);
         game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.getPlayerByIndex(0).gainMoney();
+        game.getPlayerByIndex(0).gainMoney();
 
         // add 4 yellow students in the dining room of player 0
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);

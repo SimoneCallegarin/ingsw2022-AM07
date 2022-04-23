@@ -146,13 +146,14 @@ public class Isle implements StudentManager, DenyCardManager {
     public int getInfluence(Player player){
         int influence=0;
         for(RealmColors c: RealmColors.values()){
-            if(player.getDashboard().getDiningRoom().getProfessorByColor(c)!=0){
-                influence += students.get(c);
-            }
+            if(player.getDashboard().getDiningRoom().getProfessorByColor(c)!=0)
+                    influence += students.get(c);
         }
         if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor()) && !centaur){
             influence+= numOfIsles;
         }
+        if(player.getKnight())
+            influence += 2;
         return influence;
     }
 
@@ -213,8 +214,10 @@ public class Isle implements StudentManager, DenyCardManager {
      */
     public void setTower(TowerColors c){this.tower=c;}
 
-    public void setMotherNature(boolean motherNature) {
-        this.motherNature = motherNature;
-    }
+    /**
+     * this method permits setting if there's or not mother nature on an isle
+     * @param motherNature true if mother nature is present, false else
+     */
+    public void setMotherNature(boolean motherNature) { this.motherNature = motherNature; }
 
 }
