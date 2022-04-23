@@ -15,17 +15,12 @@ public class Entrance implements StudentManager {
      * this is a value that defines how many students can be in the entrance at the same time
      */
     private final int maxStudents;
-    /**
-     * this is a value that defines how many students can be removed from the entrance during a turn
-     */
-    private final int maxStudentsRemovable;
 
     /**
      * Entrance constructor: hashmaps initialization (every field is set to 0); maxNumber and maxNumberRemovable attributes initialization
      * @param maxStudents is used to choose which value has to be assigned to maxStudents
-     * @param maxStudentsRemovable is used to choose which value has to be assigned to maxStudentsRemovable
      */
-    public Entrance(int maxStudents, int maxStudentsRemovable) {
+    public Entrance(int maxStudents) {
         this.students = new HashMap<>();
 
         for (RealmColors rc : RealmColors.values()) {
@@ -33,7 +28,6 @@ public class Entrance implements StudentManager {
         }
 
         this.maxStudents = maxStudents;
-        this.maxStudentsRemovable = maxStudentsRemovable;
 
     }
 

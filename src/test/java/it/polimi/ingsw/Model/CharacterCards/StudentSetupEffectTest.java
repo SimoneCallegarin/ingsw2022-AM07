@@ -6,8 +6,6 @@ import it.polimi.ingsw.Model.GameTableObjects.Bag;
 import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class StudentSetupEffectTest {
@@ -23,10 +21,10 @@ class StudentSetupEffectTest {
         StudentSetupEffect studentSetupEffectStudents = new StudentSetupEffect();
         Bag bag =  new Bag();
         bag.fillBag();
-        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
-        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
-        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
-        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM, player);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM);
+        studentSetupEffectStudents.effect(bag , characterCardTestForStudents, ColorsForEffects.RANDOM);
         assertEquals(116,bag.getNumberOfStudents());
         assertEquals(4, characterCardTestForStudents.getNumberOfStudents());
     }

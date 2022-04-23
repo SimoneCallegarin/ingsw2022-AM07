@@ -2,8 +2,8 @@ package it.polimi.ingsw.Model.GameTableObjects;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+import it.polimi.ingsw.Model.Enumeration.GamePhases;
+import it.polimi.ingsw.Model.Game;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,6 +58,23 @@ class GameTableTest {
         assertEquals(3,gameTableForTest.getDenyCards());
         gameTableForTest.addDenyCard();
         assertEquals(4,gameTableForTest.getDenyCards());
+    }
+
+    @Test
+    void characterCardPlayed() {
+        Game game = new Game();
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+        game.playCharacterCard(0,0);
+
+        assertEquals(19,game.getGameTable().getGeneralMoneyReserve());
+
     }
 
 }

@@ -1,10 +1,5 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
-import it.polimi.ingsw.Model.DashboardObjects.DiningRoom;
-import it.polimi.ingsw.Model.DashboardObjects.Entrance;
-import it.polimi.ingsw.Model.DashboardObjects.TowerStorage;
-import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import org.junit.jupiter.api.Test;
@@ -18,7 +13,7 @@ class DashboardTest {
      */
     @Test
     public void basicDashboardCreation() {
-        Dashboard d = new Dashboard(2, 1, GameMode.BASE);
+        Dashboard d = new Dashboard(2, 1);
         assertEquals(1, d.getIdDashboard());
         Entrance e = d.getEntrance();
         assertEquals(0, e.getNumberOfStudents());

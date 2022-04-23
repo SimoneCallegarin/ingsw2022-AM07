@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 public class NetworkTest {
 
-    @Test
+   /* @Test
     void SetupMessageTest() throws IOException, InterruptedException {
         Game game=new Game();
         GameController gameController=new GameController(game);
@@ -49,5 +49,5 @@ public class NetworkTest {
 
     }
 
-
+*/
 }

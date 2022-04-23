@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.CharacterCards.ColorsForEffects;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
@@ -134,7 +133,9 @@ public class Game {
 
         if(gameMode){
             this.gameMode=GameMode.EXPERT;
-        }else{this.gameMode=GameMode.BASE;}
+        } else {
+            this.gameMode=GameMode.BASE;
+        }
 
         Player newPlayer;
 
@@ -143,7 +144,7 @@ public class Game {
         if (numberOfPlayers==4)
             newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, this.gameMode);
         else
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, this.gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD, this.gameMode);
 
         players.add(newPlayer);
         initializeEntrance(actualNumberOfPlayers);
@@ -167,7 +168,7 @@ public class Game {
         if (actualNumberOfPlayers < numberOfPlayers) {
             Player newPlayer;
             if (numberOfPlayers == 2 || numberOfPlayers == 3)
-                newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
+                newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD, gameMode);
             else {
                 if (actualNumberOfPlayers == 2)
                     newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
@@ -207,7 +208,6 @@ public class Game {
     public void playAssistantCard(int idPlayer, int turnOrderPlayed) {
         boolean alreadyPlayed = false;
         AssistantCard assistantCardPlayed = players.get(idPlayer).getAssistantCardByTurnOrder(turnOrderPlayed);
-
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
             for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
                 if (p.getDiscardPile() != null) {
@@ -256,8 +256,10 @@ public class Game {
             if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
                 players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
-                if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0)
+                if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
                     players.get(idPlayer).gainMoney();
+                    gameTable.studentInMoneyPosition();
+                }
                 checkUpdateProfessor(idPlayer, color);
                 studentsCounter++;
 
@@ -438,6 +440,9 @@ public class Game {
                     p.setDiscardPileNull();
                 }
                 fillClouds();
+                if(gameMode==GameMode.EXPERT)
+                    for(Player p : players)
+                        p.setNotAlreadyPlayedACardThisTurn();
             }
             updateOrder(gamePhase);
         }
@@ -530,6 +535,9 @@ public class Game {
                     }
                 }
                 getGameTable().getIsleManager().getIsle(idIsle).setCentaur(false);
+                for(Player p : getPlayers())
+                    if(p.getKnight())
+                        p.setKnight(false);
                 gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
                 gameTable.getIsleManager().checkUnifyIsle(idIsle);
             }
@@ -584,7 +592,7 @@ public class Game {
 
     }
 
-    /*public String getState() {
+    /* public String getState() {
         String gp = null, pp = null, ap = null, cap = null;
 
         if (gamePhase == GamePhases.SETUP_PHASE)
@@ -625,8 +633,8 @@ public class Game {
      * @param characterCardIndex the index of the character card that the player wants to play
      */
     public void playCharacterCard(int idPlayer, int characterCardIndex) {
-
-        if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
+        if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder() && players.get(idPlayer).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()){
+            getGameTable().characterCardPlayed(characterCardIndex);
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
         }
     }
@@ -635,7 +643,7 @@ public class Game {
      * this method permits to activate an atomic effect called in the controller for a certain number of times
      * it is part of the concrete effect of a character card
      * @param idPlayer the id of the player who plays the character card
-     * @param characterCardIndex the
+     * @param characterCardIndex the index of the character card played
      * @param colorStudentFrom the color of the student the player wants to remove from the staring StudentsManager
      * @param value it represents different values based on the played card
 *              MONK          -> isle index where to move the student
@@ -643,9 +651,8 @@ public class Game {
      *         When not used -> set to 0
      */
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, RealmColors colorStudentFrom, RealmColors colorStudentTo, int value){
-        if (gamePhase == GamePhases.ACTION_PHASE) {
-        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
-        }
+        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder())
+            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), colorStudentFrom, colorStudentTo, value);
     }
 
     /**
@@ -658,18 +665,6 @@ public class Game {
 
     public GamePhases getGamePhase() {
         return gamePhase;
-    }
-
-    public PlanningPhases getPlanningPhase() {
-        return planningPhase;
-    }
-
-    public ActionPhases getActionPhase() {
-        return actionPhase;
-    }
-
-    public CurrentOrder getCurrentActivePlayer() {
-        return currentActivePlayer;
     }
 
     public GameMode getGameMode() {

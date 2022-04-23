@@ -46,7 +46,7 @@ public class GameTable implements DenyCardManager {
      * it is updated when a player plays a character card
      * or when he fill the space of the dining room that gives money
      */
-    private final int generalMoneyReserve;
+    private int generalMoneyReserve;
 
     /**
      * GameTable constructor
@@ -82,6 +82,8 @@ public class GameTable implements DenyCardManager {
 
         this.denyCards = 4;
         this.generalMoneyReserve = 20;
+        if(gameMode==GameMode.EXPERT)
+            generalMoneyReserve -= numberOfPlayers;
 
     }
 
@@ -147,6 +149,29 @@ public class GameTable implements DenyCardManager {
      */
     public CharacterCard getCharacterCard(int index) {
         return characterCards.get(index);
+    }
+
+    /**
+     * this method will update the number of money when a character card is played
+     * @param index the index of the character card played
+     */
+    public void characterCardPlayed(int index) {
+        generalMoneyReserve += getCharacterCard(index).getCost();
+    }
+
+    /**
+     * this method is called when a player
+     * places a student in the 3°, 6° or 9° position
+     * and gains one money
+     */
+    public void studentInMoneyPosition() { generalMoneyReserve -= 1; }
+
+    /**
+     * getter method to return the general money reserve value
+     * @return the number of money still available on the game table
+     */
+    public int getGeneralMoneyReserve() {
+        return generalMoneyReserve;
     }
 
     /**

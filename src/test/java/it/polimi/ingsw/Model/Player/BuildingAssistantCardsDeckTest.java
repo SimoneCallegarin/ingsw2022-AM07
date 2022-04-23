@@ -16,7 +16,7 @@ class BuildingAssistantCardsDeckTest {
     @Test
     void buildDeck() {
 
-        /**
+        /*
          * These two following arrays represent the expected values of the assistant cards parameters,
          * there is also used that is initialized false
          */
@@ -29,7 +29,6 @@ class BuildingAssistantCardsDeckTest {
         for(int i = 0; i < 10; i++) {
             assertEquals(turnOrder[i], playerForTest.getMageDeck().get(i).getTurnOrder());
             assertEquals(mnMovement[i], playerForTest.getMageDeck().get(i).getMnMovement());
-            assertFalse(playerForTest.getMageDeck().get(i).isUsed());
         }
     }
 }

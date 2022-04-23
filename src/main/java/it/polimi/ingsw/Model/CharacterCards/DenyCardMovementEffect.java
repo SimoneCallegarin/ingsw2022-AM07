@@ -8,9 +8,8 @@ public class DenyCardMovementEffect {
      * Effect that permits to move a denyCard from a DenyCardsManager to another
      * @param from the DenyCardsManager where is removed the denyCard
      * @param to the DenyCardsManager where is added the denyCard
-     * @param color will be set to NONE every time we use this effect
      */
-    public void effect(DenyCardManager from, DenyCardManager to, ColorsForEffects color) {
+    public void effect(DenyCardManager from, DenyCardManager to) {
             to.addDenyCard();
             from.removeDenyCard();
     }
