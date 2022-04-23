@@ -128,19 +128,22 @@ public class Game {
      * @param gameMode selected by the player (expert or base)
      * @param numberOfPlayers selected by the player (from 2 to 4)
      */
-    public void addFirstPlayer(String nickName, GameMode gameMode, int numberOfPlayers){
+    public void addFirstPlayer(String nickName, boolean gameMode, int numberOfPlayers){
 
         setNumberOfPlayers(numberOfPlayers);
-        this.gameMode = gameMode;
+
+        if(gameMode){
+            this.gameMode=GameMode.EXPERT;
+        }else{this.gameMode=GameMode.BASE;}
 
         Player newPlayer;
 
-        gameTable = new GameTable(numberOfPlayers, gameMode);
+        gameTable = new GameTable(numberOfPlayers, this.gameMode);
 
         if (numberOfPlayers==4)
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, this.gameMode);
         else
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, this.gameMode);
 
         players.add(newPlayer);
         initializeEntrance(actualNumberOfPlayers);
@@ -186,6 +189,14 @@ public class Game {
         else
             return;         //it is not possible to add more player than the number of players selected by the first player
 
+    }
+
+    /**
+     * this is a getter method that returns the list of players who are playing the game
+     * @return the list of players who are playing the game
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
     /**
@@ -469,7 +480,7 @@ public class Game {
      * it is invoked when mother nature ends on acceptable isle and updates all tower references, if it is necessary (it also calls a method to verify if isles union has to occur)
      * @param idIsle is the index of the isle which has mother nature on it
      */
-    private void checkUpdateInfluence(int idIsle) {
+    public void checkUpdateInfluence(int idIsle) {
         int majorInfluence = 0;
         int conquerorIndex = 0;
         boolean draw = false;
@@ -518,6 +529,7 @@ public class Game {
                         }
                     }
                 }
+                getGameTable().getIsleManager().getIsle(idIsle).setCentaur(false);
                 gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
                 gameTable.getIsleManager().checkUnifyIsle(idIsle);
             }
@@ -527,7 +539,7 @@ public class Game {
     /**
      * it checks if the game has ended and updates the proper end game variables
      */
-    private void checkEndGame() {
+    public void checkEndGame() {
         for (Player p : players) {
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                 endGame = true;
@@ -632,7 +644,7 @@ public class Game {
      */
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, RealmColors colorStudentFrom, RealmColors colorStudentTo, int value){
         if (gamePhase == GamePhases.ACTION_PHASE) {
-        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), players, gameTable, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
+        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
         }
     }
 
@@ -644,4 +656,23 @@ public class Game {
         gamePhase = gameP;
     }
 
+    public GamePhases getGamePhase() {
+        return gamePhase;
+    }
+
+    public PlanningPhases getPlanningPhase() {
+        return planningPhase;
+    }
+
+    public ActionPhases getActionPhase() {
+        return actionPhase;
+    }
+
+    public CurrentOrder getCurrentActivePlayer() {
+        return currentActivePlayer;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
 }

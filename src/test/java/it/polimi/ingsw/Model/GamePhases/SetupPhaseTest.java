@@ -16,7 +16,7 @@ public class SetupPhaseTest {
     @Test
     public void gameTableCreation2Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack", false, 2);
         // checking if 10 students (2 per color) have been put on 10 isles
         for (int i = 0; i < 12; i++) {
             if (game.getGameTable().getIsleManager().getIsle(i) != game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()) && game.getGameTable().getIsleManager().getIsle(i) != game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex()))
@@ -51,7 +51,7 @@ public class SetupPhaseTest {
     @Test
     public void gameTableCreation3Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 3);
+        game.addFirstPlayer("jack", false, 3);
         for (int i = 0; i < 12; i++) {
             if (game.getGameTable().getIsleManager().getIsle(i) != game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()) && game.getGameTable().getIsleManager().getIsle(i) != game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex()))
                 assertEquals(1, game.getGameTable().getIsleManager().getIsle(i).getNumberOfStudents());

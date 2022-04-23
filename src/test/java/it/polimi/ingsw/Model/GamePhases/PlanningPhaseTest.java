@@ -15,7 +15,7 @@ class PlanningPhaseTest {
     @Test
     public void fillClouds2Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         assertEquals(3, game.getGameTable().getCloud(0).getNumberOfStudents());
         assertEquals(3, game.getGameTable().getCloud(1).getNumberOfStudents());
@@ -28,7 +28,7 @@ class PlanningPhaseTest {
     @Test
     public void firstPlayerIndex2Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         boolean check = game.firstPlayerIndex == 0 || game.firstPlayerIndex == 1;
         assertTrue(check);
@@ -40,7 +40,7 @@ class PlanningPhaseTest {
     @Test
     public void fillClouds3Players() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 3);
+        game.addFirstPlayer("jack", false, 3);
         game.addAnotherPlayer("simo");
         assertEquals(0, game.getGameTable().getCloud(0).getNumberOfStudents());
         game.addAnotherPlayer("filo");
@@ -55,7 +55,7 @@ class PlanningPhaseTest {
     @Test
     public void firstUpdateOrder2Player() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
             assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(0).getOrder());
@@ -73,7 +73,7 @@ class PlanningPhaseTest {
     @Test
     public void firstUpdateOrder4Player() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 4);
+        game.addFirstPlayer("jack", false, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
@@ -109,7 +109,7 @@ class PlanningPhaseTest {
     @Test
     public void firstOneToPlayAssistantCard() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         game.playAssistantCard(game.firstPlayerIndex, 3);
         assertEquals(1, game.playerCounter);
@@ -121,7 +121,7 @@ class PlanningPhaseTest {
     @Test
     public void wrongFirstPlayer() {
         Game game = new Game();
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack",false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0)
             game.playAssistantCard(1, 3);
@@ -138,7 +138,7 @@ class PlanningPhaseTest {
         Game game = new Game();
         AssistantCard cardPlayed1 = new AssistantCard(3, 2);
         AssistantCard cardPlayed2 = new AssistantCard(3, 2);
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack",false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
             game.playAssistantCard(0, 3);
@@ -159,7 +159,7 @@ class PlanningPhaseTest {
         Game game = new Game();
         AssistantCard cardPlayed1 = new AssistantCard(4, 2);
         AssistantCard cardPlayed2 = new AssistantCard(3, 2);
-        game.addFirstPlayer("jack", GameMode.BASE, 2);
+        game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
@@ -192,7 +192,7 @@ class PlanningPhaseTest {
         AssistantCard cardPlayed1 = new AssistantCard(4, 2);
         AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         AssistantCard cardPlayed3 = new AssistantCard(1, 1);
-        game.addFirstPlayer("jack", GameMode.BASE, 3);
+        game.addFirstPlayer("jack", false, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -249,7 +249,7 @@ class PlanningPhaseTest {
         AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         AssistantCard cardPlayed3 = new AssistantCard(1, 1);
         AssistantCard cardPlayed4 = new AssistantCard(2, 1);
-        game.addFirstPlayer("jack", GameMode.BASE, 4);
+        game.addFirstPlayer("jack",false, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
