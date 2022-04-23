@@ -54,6 +54,8 @@ public class Player {
      */
     private CurrentOrder order;
 
+    private int cardOrder = 0;
+
     /**
      * Constructor
      * @param nickname    valid nickname chosen by the player
@@ -135,6 +137,10 @@ public class Player {
     public CurrentOrder getOrder() {
         return this.order;
     }
+
+    public void setCardOrder(int cardOrder) { this.cardOrder = cardOrder;}
+
+    public int getCardOrder() { return cardOrder;}
 
     /**
      * getter method that gives which is the dashboard associated to the current player

@@ -206,6 +206,7 @@ public class Game {
      */
     public void playAssistantCard(int idPlayer, int turnOrderPlayed) {
         boolean alreadyPlayed = false;
+        boolean onlyChoice = true;
         AssistantCard assistantCardPlayed = players.get(idPlayer).getAssistantCardByTurnOrder(turnOrderPlayed);
 
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
@@ -217,8 +218,30 @@ public class Game {
                     }
                 }
             }
-            if (!alreadyPlayed) {
+
+            if (alreadyPlayed) {
+                alreadyPlayed = false;
+                for (AssistantCard ac : players.get(idPlayer).getMageDeck()) {
+                    for (Player p : players) {
+                        if (p.getDiscardPile() != null) {
+                            if (p.getDiscardPile().equals(ac)) {
+                                alreadyPlayed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!alreadyPlayed) {
+                        onlyChoice = false;
+                        break;
+                    }
+                    alreadyPlayed = false;
+                }
+                alreadyPlayed = true;
+            }
+
+            if (!alreadyPlayed || onlyChoice) {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
+                players.get(idPlayer).setCardOrder(playerCounter+1);
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
                 playerCounter++;
@@ -400,15 +423,14 @@ public class Game {
             int lowestTurnOrder = 0;
 
             for (Player p : players)
-                turnOrderTree.add(p.getDiscardPile().getTurnOrder());
+                turnOrderTree.add(Integer.valueOf(Integer.valueOf(p.getDiscardPile().getTurnOrder()).toString()+Integer.valueOf(p.getCardOrder()).toString()));
 
             for (playerCounter = 0; playerCounter < numberOfPlayers; playerCounter++) {
                 if (!turnOrderTree.isEmpty())
                     lowestTurnOrder = turnOrderTree.pollFirst();
                 for (Player p : players) {
-                    if (p.getDiscardPile().getTurnOrder() == lowestTurnOrder) {
+                    if (Integer.parseInt(Integer.valueOf(p.getDiscardPile().getTurnOrder()).toString()+Integer.valueOf(p.getCardOrder()).toString()) == lowestTurnOrder) {
                         p.setOrder(CurrentOrder.getCurrentOrder(playerCounter));
-                        break;
                     }
                 }
             }
