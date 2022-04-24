@@ -58,6 +58,9 @@ public class Player {
      */
     private CurrentOrder order;
 
+    /**
+     * it saves when the assistant card has been played during last planning phase
+     */
     private int cardOrder = 0;
 
     /**
