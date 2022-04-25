@@ -18,7 +18,6 @@ class MovementEffectTest {
     @Test
     void effect() {
         CharacterCard characterCardTestForStudents = new CharacterCard(CharacterCardsName.MONK);
-        Player player = new Player("simone", 4, 0, Squads.SQUAD1, GameMode.EXPERT);
         StudentMovementEffect movementEffectStudents1 = new StudentMovementEffect();
         StudentMovementEffect movementEffectStudents2 = new StudentMovementEffect();
         IsleManager isleManager = new IsleManager();

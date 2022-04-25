@@ -194,7 +194,8 @@ public class Player {
      */
     public void playCharacterCard(CharacterCard characterCard){
         money = money - characterCard.getCost();
-        characterCard.isUsed();
+        if(!characterCard.isUsed())
+            characterCard.setUsed();
         alreadyPlayedACardThisTurn = true;
     }
 
