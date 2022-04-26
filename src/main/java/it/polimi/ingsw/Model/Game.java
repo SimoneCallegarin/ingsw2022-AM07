@@ -433,6 +433,7 @@ public class Game {
                 for (Player p : players) {
                     if (Integer.parseInt(Integer.valueOf(p.getDiscardPile().getTurnOrder()).toString()+Integer.valueOf(p.getCardOrder()).toString()) == lowestTurnOrder) {
                         p.setOrder(CurrentOrder.getCurrentOrder(playerCounter));
+                        break;
                     }
                 }
             }
