@@ -18,7 +18,7 @@ public class GameController {
      * these are some auxiliary attributes. They are used to store a player choice and use them only when the controller
      * can call the model methods with all the parameters
      */
-    public RealmColors color;
+    int colorIndex;
     public boolean gameMode;
     public int numplayers;
 
@@ -44,12 +44,12 @@ public class GameController {
             }
             case MOVE_STUDENT_TODINING -> {
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()) {
-                    game.moveStudentInDiningRoom(message.playerID, color);
+                    game.moveStudentInDiningRoom(message.playerID, colorIndex);
                 }
             }
             case MOVE_STUDENT_TOISLE ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
-                    game.moveStudentInIsle(message.playerID, message.genericValue, color);
+                    game.moveStudentInIsle(message.playerID, message.genericValue, colorIndex);
                 }
             }
             case MOVE_MOTHERNATURE ->{
@@ -65,13 +65,13 @@ public class GameController {
             case PLAY_CHARACTERCARD ->{
                 //playcharactercards
             }
-            /**
-             * the value case is used to store the color of the student chosen by the player. It's stored because the corresponding
-             * model method is only called when the player decides where to move the student. While the player's deciding
-             * he can also change the color of the student to move, in that case the value case is called again to memorize
-             * the new information.
+            /*
+              the value case is used to store the color of the student chosen by the player. It's stored because the corresponding
+              model method is only called when the player decides where to move the student. While the player's deciding
+              he can also change the color of the student to move, in that case the value case is called again to memorize
+              the new information.
              */
-            case VALUE -> color=RealmColors.getColor(message.genericValue);
+            case VALUE -> colorIndex = message.genericValue;
         }
     }
 

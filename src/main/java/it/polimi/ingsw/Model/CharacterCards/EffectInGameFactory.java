@@ -17,20 +17,20 @@ public class EffectInGameFactory {
      * @param characterCard the character card played
      * @param game reference to all the objects that compose the game
      * @param player the player that played the character card
-     * @param Color1 it's the color of the student that have to be moved from a certain student manager
-*                  it will be set to null when it isn't required
-     * @param Color2 it's the color of the student that have to be moved to a certain student manager
-*                it will be set to null when it isn't required
-     * @param value it represents many values
+     * @param value1 it's the color of the student that has to be moved from a certain student manager
+     *               it will be set to null when it isn't required
+     * @param value2 it can be the color of the student that has to be moved to a certain student manager
+     *               it can also be to the index of a certain isle
+     *               it will be set to null when it isn't required
      */
-    public void getEffect(CharacterCard characterCard, Game game, Player player, RealmColors Color1, RealmColors Color2, int value){
+    public void getEffect(CharacterCard characterCard, Game game, Player player, int value1, int value2){
 
         StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
         DenyCardMovementEffect denyCardMovementEffect = new DenyCardMovementEffect();
 
         switch (characterCard.getCharacterCardName()){
             case MONK:
-                studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value)),ColorsForEffects.SELECT,Color1, null);
+                studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,RealmColors.getColor(value1), RealmColors.getColor(value2));
                 studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,null, null);
                 break;
 
@@ -47,7 +47,7 @@ public class EffectInGameFactory {
                 break;
 
             case HERALD:
-                game.checkUpdateInfluence(value);
+                game.checkUpdateInfluence(value2);
                 game.checkEndGame();
                 break;
 
@@ -56,15 +56,15 @@ public class EffectInGameFactory {
                 break;
 
             case GRANDMA_HERBS:
-                denyCardMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value));
+                denyCardMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value2));
                 break;
 
             case CENTAUR:
-                game.getGameTable().getIsleManager().getIsle(value).setCentaur(true);
+                game.getGameTable().getIsleManager().getIsle(value2).setCentaur(true);
                 break;
 
             case JESTER:
-                studentMovementEffect.effect(characterCard,player.getDashboard().getEntrance(),ColorsForEffects.SELECT,Color1, Color2);
+                studentMovementEffect.effect(characterCard,player.getDashboard().getEntrance(),ColorsForEffects.SELECT,RealmColors.getColor(value1), RealmColors.getColor(value2));
                 break;
 
             case KNIGHT:
@@ -76,17 +76,17 @@ public class EffectInGameFactory {
                 break;
 
             case MINSTREL:
-                studentMovementEffect.effect(player.getDashboard().getDiningRoom(),player.getDashboard().getEntrance(),ColorsForEffects.SELECT,Color1, Color2);
-                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(Color2)%3 == 0){
+                studentMovementEffect.effect(player.getDashboard().getDiningRoom(),player.getDashboard().getEntrance(),ColorsForEffects.SELECT,RealmColors.getColor(value1), RealmColors.getColor(value2));
+                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2))%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
                 }
                 break;
 
             case SPOILED_PRINCESS:
-                studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,Color1, null);
+                studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,RealmColors.getColor(value1), null);
                 studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,null,null);
-                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(Color1)%3 == 0){
+                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1))%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
                 }
@@ -95,8 +95,8 @@ public class EffectInGameFactory {
             case THIEF:
                 for (Player p : game.getPlayers())
                     for (int j = 0; j < 3; j++) {
-                        if (p.getDashboard().getDiningRoom().getStudentsByColor(Color1) > 0)
-                            studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, Color1, null);
+                        if (p.getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1)) > 0)
+                            studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, RealmColors.getColor(value1), null);
                     }
                 break;
 

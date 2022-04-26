@@ -29,8 +29,8 @@ class ActionPhaseTest {
         // for (RealmColors rc : RealmColors.values())
            // System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc));*/
         // moving 3 students
-        for (RealmColors rc : RealmColors.values()) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc);
+        for (int rc=0; rc<5; rc++) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
                 game.moveStudentInDiningRoom(game.firstPlayerIndex, rc);
                 counter++;
@@ -89,8 +89,8 @@ class ActionPhaseTest {
         game.getGameTable().removeProfessor(RealmColors.PINK);
         game.getGameTable().removeProfessor(RealmColors.BLUE);
         // moving 3 students of the first player
-        for (RealmColors rc : RealmColors.values()) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc);
+        for (int rc=0; rc<5; rc++) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
                 game.moveStudentInDiningRoom(game.firstPlayerIndex, rc);
                 counter++;
@@ -134,8 +134,8 @@ class ActionPhaseTest {
             game.playAssistantCard(0, 4);
         }
         // moving 3 students (both in the dining room and on an isle)
-        for (RealmColors rc : RealmColors.values()) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc);
+        for (int rc=0; rc<5; rc++) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
                 if (counter == 1)
                     game.moveStudentInIsle(game.firstPlayerIndex, game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex(), rc);
@@ -1394,9 +1394,9 @@ class ActionPhaseTest {
 
         assertEquals(1,game.getPlayerByIndex(0).getMoney());
 
-        game.moveStudentInDiningRoom(0,RealmColors.YELLOW);
-        game.moveStudentInDiningRoom(0,RealmColors.YELLOW);
-        game.moveStudentInDiningRoom(0,RealmColors.YELLOW);
+        game.moveStudentInDiningRoom(0,0);
+        game.moveStudentInDiningRoom(0,0);
+        game.moveStudentInDiningRoom(0,0);
 
         assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW));
 
@@ -1446,7 +1446,7 @@ class ActionPhaseTest {
         //we play the character card we want
         game.playCharacterCard(0,0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,RealmColors.YELLOW, RealmColors.BLUE,0);
+        game.activateAtomicEffect(0,0,0,2);
 
         assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
         assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
@@ -1496,8 +1496,8 @@ class ActionPhaseTest {
         //we play the character card we want
         game.playCharacterCard(0,0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,RealmColors.BLUE, RealmColors.YELLOW,0);
-        game.activateAtomicEffect(0,0,RealmColors.YELLOW, RealmColors.BLUE,0);
+        game.activateAtomicEffect(0,0,2,0);
+        game.activateAtomicEffect(0,0,0,2);
 
         assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
         assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
@@ -1531,7 +1531,7 @@ class ActionPhaseTest {
         //played the SPOILED_PRINCESS character card:
         game.playCharacterCard(0, 0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,RealmColors.BLUE, null, 0);
+        game.activateAtomicEffect(0,0,2,0);
 
         assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
         assertEquals(19,game.getGameTable().getGeneralMoneyReserve());

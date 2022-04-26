@@ -43,7 +43,7 @@ class GamePlaySomeCharacterCardsTest {
         //we play the character card we want
         game.playCharacterCard(0,0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,RealmColors.PINK, null,10);
+        game.activateAtomicEffect(0,0,1,10);
 
         // students on the isle 10
         assertEquals(studentsOnIsle0+1, game.getGameTable().getIsleManager().getIsle(10).getNumberOfStudents());
@@ -98,7 +98,7 @@ class GamePlaySomeCharacterCardsTest {
 
         game.playCharacterCard(2,0);
 
-        game.activateAtomicEffect(2,0,null,null,0);
+        game.activateAtomicEffect(2,0,0,0);
 
         assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.YELLOW));
         assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.PINK));
@@ -155,7 +155,7 @@ class GamePlaySomeCharacterCardsTest {
         game.getPlayerByIndex(1).gainMoney();
 
         game.playCharacterCard(1,0);
-        game.activateAtomicEffect(1,0,null,null,8);
+        game.activateAtomicEffect(1,0,0,8);
 
         assertEquals(TowerColors.BLACK,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
     }
@@ -182,7 +182,7 @@ class GamePlaySomeCharacterCardsTest {
 
         game.playCharacterCard(0,0);
 
-        game.activateAtomicEffect(0,0,null,null,0);
+        game.activateAtomicEffect(0,0,0,0);
 
         assertEquals(3,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
     }
@@ -208,7 +208,7 @@ class GamePlaySomeCharacterCardsTest {
         //we play the character card we want
         game.playCharacterCard(0,0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,null, null,11);
+        game.activateAtomicEffect(0,0,0,11);
 
         // 3 deny cards on the character card, one is removed and then put on the isle 11
         assertEquals(3,game.getGameTable().getCharacterCard(0).getDenyCards());
@@ -262,7 +262,7 @@ class GamePlaySomeCharacterCardsTest {
         game.getPlayerByIndex(1).gainMoney();
 
         game.playCharacterCard(1,0);
-        game.activateAtomicEffect(1,0,null,null,8);
+        game.activateAtomicEffect(1,0,0,8);
         //Isle 8:
         //player 0 influence = 2
         //player 1 influence = 1
@@ -319,7 +319,7 @@ class GamePlaySomeCharacterCardsTest {
         game.getPlayerByIndex(1).gainMoney();
 
         game.playCharacterCard(1,0);
-        game.activateAtomicEffect(1,0,null,null,8);
+        game.activateAtomicEffect(1,0,0,8);
         //Isle 8:
         //player 0 influence = 1
         //player 1 influence = 2
@@ -371,8 +371,8 @@ class GamePlaySomeCharacterCardsTest {
         game.playCharacterCard(0,0);
 
         // the number of times this method is called is decided by the player, and it's defined by a controller invocation of this method
-        game.activateAtomicEffect(0,0,RealmColors.BLUE,RealmColors.GREEN,0);
-        game.activateAtomicEffect(0,0,RealmColors.PINK,RealmColors.YELLOW,0);
+        game.activateAtomicEffect(0,0,2,4);
+        game.activateAtomicEffect(0,0,1,0);
 
         assertEquals(3, game.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfStudents());
         assertEquals(9, game.getGameTable().getCharacterCard(0).getNumberOfStudents());
@@ -412,7 +412,7 @@ class GamePlaySomeCharacterCardsTest {
         game.playCharacterCard(0,0);
         //player 0 influence on isle 8 = 2
         //player 1 influence on isle 8 = 1
-        game.activateAtomicEffect(0,0,null,null,0);
+        game.activateAtomicEffect(0,0,0,0);
         assertEquals(2,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
         assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(1)));
 
@@ -474,9 +474,9 @@ class GamePlaySomeCharacterCardsTest {
 
         game.playCharacterCard(0,0);
 
-        game.activateAtomicEffect(0,0,RealmColors.BLUE, RealmColors.GREEN, 0);
-        game.activateAtomicEffect(0,0,RealmColors.RED, RealmColors.PINK, 0);
-        game.activateAtomicEffect(0,0,RealmColors.YELLOW, RealmColors.PINK, 0);
+        game.activateAtomicEffect(0,0,2, 4);
+        game.activateAtomicEffect(0,0,3, 1);
+        game.activateAtomicEffect(0,0,0, 1);
 
         assertEquals(7, game.getPlayerByIndex(0).getDashboard().getEntrance().getNumberOfStudents());
         assertEquals(7, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfStudents());
@@ -504,7 +504,7 @@ class GamePlaySomeCharacterCardsTest {
         //played the SPOILED_PRINCESS character card:
         game.playCharacterCard(0, 0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,RealmColors.BLUE, null, 0);
+        game.activateAtomicEffect(0,0,2,0);
 
         assertEquals(95, game.getGameTable().getBag().getNumberOfStudents());
         assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfStudents());
@@ -540,7 +540,7 @@ class GamePlaySomeCharacterCardsTest {
         //played the THIEF character card:
         game.playCharacterCard(0, 0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,RealmColors.YELLOW, null, 0);
+        game.activateAtomicEffect(0,0,0,0);
 
         // 100 students in the bag
         // + 3 yellow students removed from the dining room of player 0

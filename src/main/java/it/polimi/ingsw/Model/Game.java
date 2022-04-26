@@ -188,7 +188,7 @@ public class Game {
 
         }
         else
-            return;         //it is not possible to add more player than the number of players selected by the first player
+            return;
 
     }
 
@@ -254,9 +254,10 @@ public class Game {
      * it takes a student from the dashboard of a certain player and puts it on a specified island
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
      * @param idIsle is the index of the chosen island
-     * @param color is the color of the student that has been moved
+     * @param colorIndex is the index of the color of the student that has been moved
      */
-    public void moveStudentInIsle(int idPlayer, int idIsle, RealmColors color) {
+    public void moveStudentInIsle(int idPlayer, int idIsle, int colorIndex) {
+        RealmColors color = RealmColors.getColor(colorIndex);
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
             players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
             gameTable.getIsleManager().getIsle(idIsle).addStudent(color);
@@ -272,9 +273,10 @@ public class Game {
     /**
      * it takes a student from the dashboard of a certain player and puts it in the dining room
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
-     * @param color is the color of the student that has been moved
+     * @param colorIndex is the index of the color of the student that has been moved
      */
-    public void moveStudentInDiningRoom(int idPlayer, RealmColors color) {
+    public void moveStudentInDiningRoom(int idPlayer, int colorIndex) {
+        RealmColors color = RealmColors.getColor(colorIndex);
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
             if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
                 players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
@@ -666,15 +668,15 @@ public class Game {
      * it is part of the concrete effect of a character card
      * @param idPlayer the id of the player who plays the character card
      * @param characterCardIndex the index of the character card played
-     * @param colorStudentFrom the color of the student the player wants to remove from the staring StudentsManager
-     * @param value it represents different values based on the played card
+     * @param value1 the color of the student the player wants to remove from the staring StudentsManager
+     * @param value2 it represents different values based on the played card
 *              MONK          -> isle index where to move the student
 *              HERALD        -> isle where calculate the influence now
      *         When not used -> set to 0
      */
-    public void activateAtomicEffect(int idPlayer, int characterCardIndex, RealmColors colorStudentFrom, RealmColors colorStudentTo, int value){
+    public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder())
-            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), colorStudentFrom, colorStudentTo, value);
+            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
     }
 
     /**
