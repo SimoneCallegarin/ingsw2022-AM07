@@ -136,8 +136,6 @@ class PlanningPhaseTest {
     @Test
     public void wrongCardPlayed() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack",false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0) {
@@ -229,8 +227,6 @@ class PlanningPhaseTest {
     @Test
     public void assistantCardPhase2Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
         if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
@@ -261,9 +257,6 @@ class PlanningPhaseTest {
     @Test
     public void assistantCardPhase3Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed3 = new AssistantCard(1, 1);
         game.addFirstPlayer("jack", false, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
@@ -317,10 +310,6 @@ class PlanningPhaseTest {
     @Test
     public void assistantCardPhase4Players() {
         Game game = new Game();
-        AssistantCard cardPlayed1 = new AssistantCard(4, 2);
-        AssistantCard cardPlayed2 = new AssistantCard(3, 2);
-        AssistantCard cardPlayed3 = new AssistantCard(1, 1);
-        AssistantCard cardPlayed4 = new AssistantCard(2, 1);
         game.addFirstPlayer("jack",false, 4);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");

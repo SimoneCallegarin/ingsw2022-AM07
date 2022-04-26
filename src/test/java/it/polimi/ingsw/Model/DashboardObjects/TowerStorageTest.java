@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
-import it.polimi.ingsw.Model.DashboardObjects.TowerStorage;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import org.junit.jupiter.api.Test;
 
@@ -32,11 +31,6 @@ class TowerStorageTest {
     void getNumberOfTowers2and4Players() {
         assertEquals(8,towerStorageForTest2and4Players.getNumberOfTowers());
     }
-
-    /**
-     * instead here we are testing a tower storage in a 3 players game mode
-     */
-    TowerStorage towerStorageForTest3Players = new TowerStorage(6, TowerColors.GREY);
 
     /**
      * we are testing if the number of towers is correctly increased and decreased by 1

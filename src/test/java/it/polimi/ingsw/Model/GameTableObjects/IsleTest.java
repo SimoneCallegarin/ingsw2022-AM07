@@ -1,11 +1,9 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.Squads;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 

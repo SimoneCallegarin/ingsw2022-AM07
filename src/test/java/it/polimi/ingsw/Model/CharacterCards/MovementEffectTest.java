@@ -1,11 +1,8 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
-import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Enumeration.Squads;
 import it.polimi.ingsw.Model.GameTableObjects.Bag;
 import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
-import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

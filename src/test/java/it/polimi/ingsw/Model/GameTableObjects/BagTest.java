@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.GameTableObjects.Bag;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
