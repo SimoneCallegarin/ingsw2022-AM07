@@ -25,12 +25,12 @@ class CharacterCardTest {
     @Test
     void getAndIsUsed() {
         CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.CENTAUR);
-        assertFalse(characterCardForTest.getUsed());
+        assertFalse(characterCardForTest.isUsed());
         Player simone = new Player("simone", 2, 0, Squads.NO_SQUAD, GameMode.EXPERT);
         simone.gainMoney();
         simone.gainMoney();
         simone.playCharacterCard(characterCardForTest);
-        assertTrue(characterCardForTest.getUsed());
+        assertTrue(characterCardForTest.isUsed());
     }
 
     /**

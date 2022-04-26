@@ -61,7 +61,7 @@ public class CharacterCard implements StudentManager, DenyCardManager {
     /**
      * @return if the card has been already used previously in the game
      */
-    public boolean getUsed() {
+    public boolean isUsed() {
         return used;
     }
 
@@ -69,7 +69,7 @@ public class CharacterCard implements StudentManager, DenyCardManager {
      * when the card is used by the player its cost will increase by 1 and this method will set used to true
      * for the rest of the game in order to prevent other increase of the cost when played the same card another time
      */
-    public void isUsed() {
+    public void setUsed() {
         used = true;
         cost += 1;
     }

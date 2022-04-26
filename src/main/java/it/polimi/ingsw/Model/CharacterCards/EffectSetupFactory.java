@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
-import it.polimi.ingsw.Model.Player.Player;
 
 /**
  * this is the factory that permits to set up the character cards that need to be set up at the start of the game
@@ -10,15 +9,17 @@ public class EffectSetupFactory {
 
         public EffectSetupFactory(){}
 
-        public void getEffect (Player player, GameTable gameTable, CharacterCard characterCard){
+        public void getEffect(GameTable gameTable, CharacterCard characterCard){
 
-            StudentSetupEffect studentSetupEffect = new StudentSetupEffect();
-            DenyCardSetupEffect denyCardSetupEffect = new DenyCardSetupEffect();
+            StudentMovementEffect studentSetupEffect = new StudentMovementEffect();
+            DenyCardMovementEffect denyCardSetupEffect = new DenyCardMovementEffect();
+
+
 
             switch (characterCard.getCharacterCardName()) {
                 case MONK, SPOILED_PRINCESS -> {
                     for(int i=0; i<4; i++)
-                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM);
+                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, null,null);
                 }
                 case GRANDMA_HERBS -> {
                     for(int i=0; i<4; i++)
@@ -26,7 +27,7 @@ public class EffectSetupFactory {
                 }
                 case JESTER -> {
                     for(int i=0; i<6; i++)
-                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM);
+                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, null, null);
                 }
             }
         }

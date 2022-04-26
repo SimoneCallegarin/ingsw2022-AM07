@@ -102,7 +102,7 @@ public class GameTable implements DenyCardManager {
                 characterCards.add(new CharacterCard(CharacterCardsName.getCharacterCardName(extraction)));
                 extractedNumbers.add(extraction);
                 if(extraction==0||extraction==4||extraction==6||extraction==10)
-                    effectSetupFactory.getEffect(null,this,characterCards.get(i));
+                    effectSetupFactory.getEffect(this,characterCards.get(i));
             }
         }
     }
@@ -223,7 +223,7 @@ public class GameTable implements DenyCardManager {
         characterCards.clear();
         characterCards.add(new CharacterCard(characterCardsName));
         if(characterCardsName.equals(CharacterCardsName.MONK)||characterCardsName.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName.equals(CharacterCardsName.JESTER))
-            effectSetupFactory.getEffect(null,this,characterCards.get(0));
+            effectSetupFactory.getEffect(this,characterCards.get(0));
     }
 
 }

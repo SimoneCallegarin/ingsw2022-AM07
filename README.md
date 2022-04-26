@@ -8,14 +8,14 @@
 | Functionality      |                       State                        |
 |:-------------------|:--------------------------------------------------:|
 | Basic rules        | 🟢 |
-| Complete rules     | 🟡 |
-| Socket             | 🔴 |
+| Complete rules     | 🟢 |
+| Socket             | 🟡 |
 | GUI                | 🔴 |
 | CLI                | 🔴 |
 | Multiple games     | 🔴 |
 | Persistence        | 🔴 |
 | 12 Character cards | 🟡 |
-| 4 Players match    | 🟡 |
+| 4 Players match    | 🟢 |
 
 🔴
 🟢
