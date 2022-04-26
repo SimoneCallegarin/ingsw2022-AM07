@@ -28,9 +28,12 @@ public class EffectInGameFactory {
         StudentMovementEffect studentMovementEffect = new StudentMovementEffect();
         DenyCardMovementEffect denyCardMovementEffect = new DenyCardMovementEffect();
 
+        RealmColors color1 = RealmColors.getColor(value1);
+        RealmColors color2 = RealmColors.getColor(value2);
+
         switch (characterCard.getCharacterCardName()){
             case MONK:
-                studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,RealmColors.getColor(value1), RealmColors.getColor(value2));
+                studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,color1,color2);
                 studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,null, null);
                 break;
 
@@ -59,16 +62,8 @@ public class EffectInGameFactory {
                 denyCardMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value2));
                 break;
 
-            case CENTAUR:
-                game.getGameTable().getIsleManager().getIsle(value2).setCentaur(true);
-                break;
-
             case JESTER:
-                studentMovementEffect.effect(characterCard,player.getDashboard().getEntrance(),ColorsForEffects.SELECT,RealmColors.getColor(value1), RealmColors.getColor(value2));
-                break;
-
-            case KNIGHT:
-                player.setKnight(true);
+                studentMovementEffect.effect(characterCard,player.getDashboard().getEntrance(),ColorsForEffects.SELECT,color1, color2);
                 break;
 
             case FUNGIST:
@@ -76,17 +71,19 @@ public class EffectInGameFactory {
                 break;
 
             case MINSTREL:
-                studentMovementEffect.effect(player.getDashboard().getDiningRoom(),player.getDashboard().getEntrance(),ColorsForEffects.SELECT,RealmColors.getColor(value1), RealmColors.getColor(value2));
-                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2))%3 == 0){
+                studentMovementEffect.effect(player.getDashboard().getDiningRoom(),player.getDashboard().getEntrance(),ColorsForEffects.SELECT,color1,color2);
+                // checking if the student is added in third, sixth or ninth position of the dining room
+                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(color2)%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
                 }
                 break;
 
             case SPOILED_PRINCESS:
-                studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,RealmColors.getColor(value1), null);
+                studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,color1, null);
                 studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,null,null);
-                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1))%3 == 0){
+                // checking if the student is added in third, sixth or ninth position of the dining room
+                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(color1)%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
                 }
@@ -95,8 +92,8 @@ public class EffectInGameFactory {
             case THIEF:
                 for (Player p : game.getPlayers())
                     for (int j = 0; j < 3; j++) {
-                        if (p.getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1)) > 0)
-                            studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, RealmColors.getColor(value1), null);
+                        if (p.getDashboard().getDiningRoom().getStudentsByColor(color1) > 0)
+                            studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, color1, null);
                     }
                 break;
 

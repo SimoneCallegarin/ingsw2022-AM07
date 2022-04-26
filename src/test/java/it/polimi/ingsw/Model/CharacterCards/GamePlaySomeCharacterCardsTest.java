@@ -310,9 +310,10 @@ class GamePlaySomeCharacterCardsTest {
         //Isle 8: 1 RED student
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
         //Isle 8:
         //player 0 influence = 2
-        //player 1 influence = 2
+        //player 1 influence = 3
         game.setGamePhase(GamePhases.ACTION_PHASE);
         game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
         game.getPlayerByIndex(1).gainMoney();
@@ -321,8 +322,8 @@ class GamePlaySomeCharacterCardsTest {
         game.playCharacterCard(1,0);
         game.activateAtomicEffect(1,0,0,8);
         //Isle 8:
-        //player 0 influence = 1
-        //player 1 influence = 2
+        //player 0 influence = 2
+        //player 1 influence = 3
         game.checkUpdateInfluence(8);
         assertEquals(TowerColors.BLACK,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
     }
@@ -419,7 +420,7 @@ class GamePlaySomeCharacterCardsTest {
         game.checkUpdateInfluence(8);
 
         assertEquals(TowerColors.WHITE, game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
-        assertFalse(game.getPlayerByIndex(0).getKnight());
+        assertEquals(CharacterCardsName.KNIGHT,game.getPlayerByIndex(0).getCharacterCardPlayed());
 
     }
 

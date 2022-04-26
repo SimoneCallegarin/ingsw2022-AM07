@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model.GameTableObjects;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Model.Interface.DenyCardManager;
@@ -37,11 +38,6 @@ public class Isle implements StudentManager, DenyCardManager {
      * this is the number of isle that are unified in order to compose this isle
      */
     private int numOfIsles;
-    /**
-     * this boolean refers to the effect of the centaur
-     * true if activate this card, else false
-     */
-    private boolean centaur = false;
 
     /**
      * Isle constructor
@@ -149,20 +145,12 @@ public class Isle implements StudentManager, DenyCardManager {
             if(player.getDashboard().getDiningRoom().getProfessorByColor(c)!=0)
                     influence += students.get(c);
         }
-        if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor()) && !centaur){
+        if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor()) && player.getCharacterCardPlayed()!= CharacterCardsName.CENTAUR){
             influence+= numOfIsles;
         }
-        if(player.getKnight())
+        if(player.getAlreadyPlayedACardThisTurn() && player.getCharacterCardPlayed()== CharacterCardsName.KNIGHT)
             influence += 2;
         return influence;
-    }
-
-    /**
-     * setter method called when a player plays the centaur character card
-     * @param centaur set true when played the centaur character card
-     */
-    public void setCentaur(boolean centaur) {
-        this.centaur = centaur;
     }
 
     /**

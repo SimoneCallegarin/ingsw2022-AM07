@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model.Player;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.Enumeration.*;
 
@@ -49,10 +50,9 @@ public class Player {
      */
     private boolean alreadyPlayedACardThisTurn = false;
     /**
-     * this boolean refers to the effect of the centaur
-     * true if activate this card, else false
+     * this attribute indicates the name of the character card played this turn
      */
-    private boolean knight = false;
+    private CharacterCardsName characterCardPlayed;
     /**
      * This attribute represents the order number in the turn for the player
      */
@@ -197,19 +197,19 @@ public class Player {
         if(!characterCard.isUsed())
             characterCard.setUsed();
         alreadyPlayedACardThisTurn = true;
+        characterCardPlayed = characterCard.getCharacterCardName();
     }
 
     /**
-     * setter method called when a player plays the knight character card
-     * @param knight set true when played the knight character card
+     * this method permits knowing which character card the player played this turn
+     * @return the name of the character card played this turn
      */
-    public void setKnight(boolean knight) { this.knight = knight; }
-
-    /**
-     * getter method that returns if the knight card has been played this turn by the player
-     * @return true when played, false else
-     */
-    public boolean getKnight() { return knight; }
+    public CharacterCardsName getCharacterCardPlayed() {
+        if(getAlreadyPlayedACardThisTurn())
+            return characterCardPlayed;
+        else
+            return null;
+    }
 
     /**
      * this method interfaces with the controller and the view to pick the isle chosen by the player

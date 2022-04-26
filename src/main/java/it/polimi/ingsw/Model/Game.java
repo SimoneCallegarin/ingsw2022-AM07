@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
@@ -277,11 +278,21 @@ public class Game {
      */
     public void moveStudentInDiningRoom(int idPlayer, int colorIndex) {
         RealmColors color = RealmColors.getColor(colorIndex);
+        int indexFarmer=0;
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
             if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
                 players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
-                if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
+                // if FARMER character card is played by the player this turn
+                // then each time is checked if the player has an equal number of students of another
+                // player that owe the professor of that color
+                if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getCharacterCardPlayed()== CharacterCardsName.FARMER){
+                    while(gameTable.getCharacterCard(indexFarmer).getCharacterCardName()==CharacterCardsName.FARMER)
+                        indexFarmer++;
+                    activateAtomicEffect(idPlayer,indexFarmer,0,0);
+                }
+                // checking if the student is added in third, sixth or ninth position of the dining room
+                    if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
                     players.get(idPlayer).gainMoney();
                     gameTable.studentInMoneyPosition();
                 }
@@ -559,10 +570,6 @@ public class Game {
                         }
                     }
                 }
-                getGameTable().getIsleManager().getIsle(idIsle).setCentaur(false);
-                for(Player p : getPlayers())
-                    if(p.getKnight())
-                        p.setKnight(false);
                 gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
                 gameTable.getIsleManager().checkUnifyIsle(idIsle);
             }
