@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
-import it.polimi.ingsw.Model.DashboardObjects.DiningRoom;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import org.junit.jupiter.api.Test;
 

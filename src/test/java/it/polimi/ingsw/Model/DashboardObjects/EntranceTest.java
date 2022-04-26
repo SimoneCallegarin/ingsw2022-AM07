@@ -79,9 +79,6 @@ class EntranceTest {
         e.addStudent(RealmColors.BLUE);
         e.addStudent(RealmColors.RED);
         assertEquals(4, e.getNumberOfStudents());
-        //need to add a check to the maximum number of students that can be added
-        //e.removeStudent(RealmColors.YELLOW);
-        //assertEquals(4, e.getNumberOfStudents());
     }
 
     /**
