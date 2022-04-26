@@ -35,7 +35,7 @@ public class ServerMain{
             System.out.println("Accepting...");
             Socket clientSocket = serverSocket.accept();
             System.out.println("Connection accepted!");
-            executor.submit(new First_ClientHandler(clientSocket,game,gameController));
+            executor.submit(new FirstClientHandler(clientSocket,game,gameController));
             numClients=1;
         }catch (IOException e){
             e.printStackTrace();

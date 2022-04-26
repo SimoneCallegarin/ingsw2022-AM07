@@ -5,7 +5,7 @@ import it.polimi.ingsw.Controller.GameController;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.Network.Messages.MessageType;
-import it.polimi.ingsw.Network.Messages.Setup_Message;
+import it.polimi.ingsw.Network.Messages.SetupMessage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,14 +16,14 @@ import java.util.Scanner;
  * this class is used to manage the connection to the first client which connects to the server to play.
  * It has to get the setup choices by the first player and his moves
  */
-public class First_ClientHandler implements Runnable {
+public class FirstClientHandler implements Runnable {
     Game game;
     GameController gameController;
     Socket socket;
     CommandParser commandParser=new CommandParser();
     Gson g=new Gson();
 
-    public First_ClientHandler(Socket socket,Game game, GameController gameController){
+    public FirstClientHandler(Socket socket,Game game, GameController gameController){
         this.socket=socket;
         this.game=game;
         this.gameController=gameController;
@@ -34,7 +34,7 @@ public class First_ClientHandler implements Runnable {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out=new PrintWriter(socket.getOutputStream());
             String line=in.nextLine();
-            Setup_Message sm= commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
+            SetupMessage sm= commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
             gameController.onSetup_Message(sm);
             line=in.nextLine();
             System.out.println(line);

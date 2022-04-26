@@ -3,7 +3,7 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
-import it.polimi.ingsw.Network.Messages.Setup_Message;
+import it.polimi.ingsw.Network.Messages.SetupMessage;
 
 /**
  * this class represents the Controller module in the MVC pattern
@@ -81,7 +81,7 @@ public class GameController {
      * their username
      * @param sm the setup message received
      */
-    public void onSetup_Message(Setup_Message sm){
+    public void onSetup_Message(SetupMessage sm){
 
         switch(sm.getMessageType()){
             case FIRST_USERNAME_CHOICE -> {

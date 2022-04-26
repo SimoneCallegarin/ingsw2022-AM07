@@ -11,7 +11,7 @@ import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.Network.Messages.MessageType;
-import it.polimi.ingsw.Network.Messages.Setup_Message;
+import it.polimi.ingsw.Network.Messages.SetupMessage;
 
 /**
  * This class is used to manage the connection with the client from the second to the fourth.
@@ -34,7 +34,7 @@ public class ClientHandler implements Runnable{
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             if(game.getGamePhase()==GamePhases.SETUP_PHASE){
-                Setup_Message sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
+                SetupMessage sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
                 gameController.onSetup_Message(sm);
             }
             while (true) {
