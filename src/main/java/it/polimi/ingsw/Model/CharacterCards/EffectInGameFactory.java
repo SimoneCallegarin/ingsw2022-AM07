@@ -31,6 +31,11 @@ public class EffectInGameFactory {
         RealmColors color1 = RealmColors.getColor(value1);
         RealmColors color2 = RealmColors.getColor(value2);
 
+        /*
+         KNIGHT and CENTAUR character cards are directly managed by the class ISLE,
+         in the method that get changed by their activation
+         ISLE -> getInfluence();
+        */
         switch (characterCard.getCharacterCardName()){
             case MONK:
                 studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,color1,color2);
@@ -67,7 +72,7 @@ public class EffectInGameFactory {
                 break;
 
             case FUNGIST:
-                // yet to be implemented
+                game.setColorForFungist(value1);
                 break;
 
             case MINSTREL:

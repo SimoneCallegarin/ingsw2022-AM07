@@ -4,8 +4,7 @@ import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * We are testing if each character card behaves correctly
@@ -421,6 +420,66 @@ class GamePlaySomeCharacterCardsTest {
 
         assertEquals(TowerColors.WHITE, game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
         assertEquals(CharacterCardsName.KNIGHT,game.getPlayerByIndex(0).getCharacterCardPlayed());
+
+    }
+
+    /**
+     * We are testing the behaviour of the FUNGIST
+     */
+    @Test
+    void play_FUNGIST_CharacterCard() {
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.FUNGIST);
+        game.getPlayerByIndex(1).gainMoney();
+        game.getPlayerByIndex(1).gainMoney();
+
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(1).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
+        game.checkUpdateProfessor(0,RealmColors.YELLOW);
+        game.checkUpdateProfessor(1,RealmColors.RED);
+
+        //removing all students from isle 8:
+        while (game.getGameTable().getIsleManager().getIsle(8).getNumberOfStudents()!=0){
+            for(RealmColors c : RealmColors.values()){
+                if(game.getGameTable().getIsleManager().getIsle(8).getStudentsByColor(c)!=0)
+                    game.getGameTable().getIsleManager().getIsle(8).removeStudent(c);
+            }
+        }
+        //Isle 8: 2 YELLOW student and 1 RED student
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+        game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        // player 0 influence on isle 8 = 2
+        // player 1 influence on isle 8 = 1
+        assertEquals(2,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
+        assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(1)));
+
+        game.setGamePhase(GamePhases.PLANNING_PHASE);
+        game.planningPhase=PlanningPhases.ASSISTANT_CARD_PHASE;
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.playAssistantCard(1,9);
+        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.playAssistantCard(1,5);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        for(int i=0; i<12; i++)
+            game.getGameTable().getIsleManager().getIsle(i).setMotherNature(false);
+        game.getGameTable().getIsleManager().getIsle(7).setMotherNature(true);
+        game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(7);
+        assertTrue(game.getGameTable().getIsleManager().getIsle(7).getMotherNature());
+
+        game.playCharacterCard(1,0);
+        game.activateAtomicEffect(1,0,0,0);
+        // player 0 influence on isle 8 = 0
+        // player 1 influence on isle 8 = 1
+        // value1 = 0 = YELLOW
+        game.moveMotherNature(1,8);
+        assertTrue(game.getGameTable().getIsleManager().getIsle(8).getMotherNature());
+        assertEquals(TowerColors.BLACK, game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
 
     }
 
