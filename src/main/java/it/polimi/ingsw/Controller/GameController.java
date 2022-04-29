@@ -3,7 +3,7 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
-import it.polimi.ingsw.Network.Messages.Setup_Message;
+import it.polimi.ingsw.Network.Messages.SetupMessage;
 
 /**
  * this class represents the Controller module in the MVC pattern
@@ -18,9 +18,9 @@ public class GameController {
      * these are some auxiliary attributes. They are used to store a player choice and use them only when the controller
      * can call the model methods with all the parameters
      */
-    public RealmColors color;
+    int colorIndex;
     public boolean gameMode;
-    public int numplayers=0;
+    public int numplayers;
 
     /**
      * the class constructor
@@ -35,7 +35,7 @@ public class GameController {
      * the message type
      * @param message the message received, it represents a move by the player
      */
-    public synchronized void onMessage(Message message){
+    public void onMessage(Message message){
         switch(message.getMessageType()){
             case PLAY_ASSISTCARD -> {
                 if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
@@ -44,12 +44,12 @@ public class GameController {
             }
             case MOVE_STUDENT_TODINING -> {
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()) {
-                    game.moveStudentInDiningRoom(message.playerID, color);
+                    game.moveStudentInDiningRoom(message.playerID, colorIndex);
                 }
             }
             case MOVE_STUDENT_TOISLE ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
-                    game.moveStudentInIsle(message.playerID, message.genericValue, color);
+                    game.moveStudentInIsle(message.playerID, message.genericValue, colorIndex);
                 }
             }
             case MOVE_MOTHERNATURE ->{
@@ -65,13 +65,13 @@ public class GameController {
             case PLAY_CHARACTERCARD ->{
                 //playcharactercards
             }
-            /**
-             * the value case is used to store the color of the student chosen by the player. It's stored because the corresponding
-             * model method is only called when the player decides where to move the student. While the player's deciding
-             * he can also change the color of the student to move, in that case the value case is called again to memorize
-             * the new information.
+            /*
+              the value case is used to store the color of the student chosen by the player. It's stored because the corresponding
+              model method is only called when the player decides where to move the student. While the player's deciding
+              he can also change the color of the student to move, in that case the value case is called again to memorize
+              the new information.
              */
-            case VALUE -> color=RealmColors.getColor(message.genericValue);
+            case VALUE -> colorIndex = message.genericValue;
         }
     }
 
@@ -81,14 +81,14 @@ public class GameController {
      * their username
      * @param sm the setup message received
      */
-    public synchronized void onSetup_Message(Setup_Message sm){
+    public void onSetup_Message(SetupMessage sm){
 
         switch(sm.getMessageType()){
             case FIRST_USERNAME_CHOICE -> {
                 game.addFirstPlayer(sm.user_choice,gameMode,numplayers);
             }
             case USERNAME_CHOICE -> {
-                    game.addAnotherPlayer(sm.user_choice);
+                game.addAnotherPlayer(sm.user_choice);
             }
             case GAMESETUP_INFO -> {
                 gameMode = sm.gamemode;

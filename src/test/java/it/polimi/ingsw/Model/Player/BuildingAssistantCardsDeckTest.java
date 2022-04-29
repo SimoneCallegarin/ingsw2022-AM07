@@ -1,9 +1,7 @@
 package it.polimi.ingsw.Model.Player;
 
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.Squads;
-import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +14,7 @@ class BuildingAssistantCardsDeckTest {
     @Test
     void buildDeck() {
 
-        /**
+        /*
          * These two following arrays represent the expected values of the assistant cards parameters,
          * there is also used that is initialized false
          */
@@ -29,7 +27,6 @@ class BuildingAssistantCardsDeckTest {
         for(int i = 0; i < 10; i++) {
             assertEquals(turnOrder[i], playerForTest.getMageDeck().get(i).getTurnOrder());
             assertEquals(mnMovement[i], playerForTest.getMageDeck().get(i).getMnMovement());
-            assertFalse(playerForTest.getMageDeck().get(i).isUsed());
         }
     }
 }

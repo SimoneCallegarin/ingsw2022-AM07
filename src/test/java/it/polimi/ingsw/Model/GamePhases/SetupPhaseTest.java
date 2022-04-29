@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Model.GamePhases;
 
-import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.GamePhases;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
 import org.junit.jupiter.api.Test;
 

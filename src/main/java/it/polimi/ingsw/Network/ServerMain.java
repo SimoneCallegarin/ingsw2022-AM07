@@ -17,12 +17,12 @@ import java.util.concurrent.Executors;
 public class ServerMain{
     public Game game;
 
-    public synchronized void runServer(Game game,GameController gameController){
-        this.game = game;
-        ExecutorService executor = Executors.newCachedThreadPool();
-        ServerSocket serverSocket;
-        final int port = 1234;
+    public void runServer(Game game,GameController gameController) {
+        this.game=game;
         int numClients;
+        ExecutorService executor=Executors.newCachedThreadPool();
+        ServerSocket serverSocket;
+        final int port=1234;
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("ServerSocket started!");
@@ -31,33 +31,30 @@ public class ServerMain{
             e.printStackTrace();
             return;
         }
-        First_ClientHandler first_clientHandler;
         try {
             System.out.println("Accepting...");
             Socket clientSocket = serverSocket.accept();
             System.out.println("Connection accepted!");
-            first_clientHandler = new First_ClientHandler(clientSocket, game, gameController);
-            executor.submit(first_clientHandler);
+            executor.submit(new FirstClientHandler(clientSocket,game,gameController));
             numClients=1;
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
             return;
         }
 
-        while (numClients!=gameController.numplayers) {
+        while(numClients!=game.numberOfPlayers){
             try {
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection accepted!");
-                executor.submit(new ClientHandler(clientSocket, gameController));
+                executor.submit(new ClientHandler(clientSocket, new GameController(game)));
                 numClients++;
-            } catch (IOException e) {
+            }catch (IOException e){
                 e.printStackTrace();
                 break;
             }
         }
-        System.out.println("Maximum number of clients connected!");
-
+        executor.shutdown();
     }
 
 

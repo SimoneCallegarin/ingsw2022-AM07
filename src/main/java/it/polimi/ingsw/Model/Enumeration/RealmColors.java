@@ -8,7 +8,7 @@ public enum RealmColors {
 
     public static RealmColors getColor(int index){
         return switch (index){
-            case 0 ->YELLOW;
+            case 0 -> YELLOW;
             case 1 -> PINK;
             case 2 -> BLUE;
             case 3 -> RED;

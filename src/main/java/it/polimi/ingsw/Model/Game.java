@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.CharacterCards.ColorsForEffects;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
@@ -70,9 +70,18 @@ public class Game {
      */
     public CurrentOrder currentActivePlayer;
     /**
-     * its the factory that permits to build the effect of each playable character card
+     * it's the factory that permits to build the effect of each playable character card
      */
     private final EffectInGameFactory effectInGameFactory;
+    /**
+     * saves the color chosen by the player when activating the FUNGIST character card
+     */
+    private RealmColors colorForFungist;
+    /**
+     * saves the number of students of the chosen color removed from the isle
+     * when checking the influence the turn the FUNGIST has been played
+     */
+    private int studentsRemovedByFungist=0;
 
     /**
      * Game constructor
@@ -134,7 +143,9 @@ public class Game {
 
         if(gameMode){
             this.gameMode=GameMode.EXPERT;
-        }else{this.gameMode=GameMode.BASE;}
+        } else {
+            this.gameMode=GameMode.BASE;
+        }
 
         Player newPlayer;
 
@@ -143,7 +154,7 @@ public class Game {
         if (numberOfPlayers==4)
             newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, this.gameMode);
         else
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, this.gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD, this.gameMode);
 
         players.add(newPlayer);
         initializeEntrance(actualNumberOfPlayers);
@@ -167,7 +178,7 @@ public class Game {
         if (actualNumberOfPlayers < numberOfPlayers) {
             Player newPlayer;
             if (numberOfPlayers == 2 || numberOfPlayers == 3)
-                newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NOSQUAD, gameMode);
+                newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD, gameMode);
             else {
                 if (actualNumberOfPlayers == 2)
                     newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
@@ -187,7 +198,7 @@ public class Game {
 
         }
         else
-            return;         //it is not possible to add more player than the number of players selected by the first player
+            return;
 
     }
 
@@ -206,8 +217,8 @@ public class Game {
      */
     public void playAssistantCard(int idPlayer, int turnOrderPlayed) {
         boolean alreadyPlayed = false;
+        boolean onlyChoice = true;
         AssistantCard assistantCardPlayed = players.get(idPlayer).getAssistantCardByTurnOrder(turnOrderPlayed);
-
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
             for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
                 if (p.getDiscardPile() != null) {
@@ -217,8 +228,30 @@ public class Game {
                     }
                 }
             }
-            if (!alreadyPlayed) {
+
+            if (alreadyPlayed) {
+                alreadyPlayed = false;
+                for (AssistantCard ac : players.get(idPlayer).getMageDeck()) {
+                    for (Player p : players) {
+                        if (p.getDiscardPile() != null) {
+                            if (p.getDiscardPile().equals(ac)) {
+                                alreadyPlayed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!alreadyPlayed) {
+                        onlyChoice = false;
+                        break;
+                    }
+                    alreadyPlayed = false;
+                }
+                alreadyPlayed = true;
+            }
+
+            if (!alreadyPlayed || onlyChoice) {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
+                players.get(idPlayer).setCardOrder(playerCounter+1);
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
                 playerCounter++;
@@ -231,9 +264,10 @@ public class Game {
      * it takes a student from the dashboard of a certain player and puts it on a specified island
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
      * @param idIsle is the index of the chosen island
-     * @param color is the color of the student that has been moved
+     * @param colorIndex is the index of the color of the student that has been moved
      */
-    public void moveStudentInIsle(int idPlayer, int idIsle, RealmColors color) {
+    public void moveStudentInIsle(int idPlayer, int idIsle, int colorIndex) {
+        RealmColors color = RealmColors.getColor(colorIndex);
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
             players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
             gameTable.getIsleManager().getIsle(idIsle).addStudent(color);
@@ -249,15 +283,28 @@ public class Game {
     /**
      * it takes a student from the dashboard of a certain player and puts it in the dining room
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
-     * @param color is the color of the student that has been moved
+     * @param colorIndex is the index of the color of the student that has been moved
      */
-    public void moveStudentInDiningRoom(int idPlayer, RealmColors color) {
+    public void moveStudentInDiningRoom(int idPlayer, int colorIndex) {
+        RealmColors color = RealmColors.getColor(colorIndex);
+        int indexFarmer=0;
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
             if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
                 players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
-                if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0)
+                // if FARMER character card is played by the player this turn
+                // then each time is checked if the player has an equal number of students of another
+                // player that owe the professor of that color
+                if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getCharacterCardPlayed()== CharacterCardsName.FARMER){
+                    while(gameTable.getCharacterCard(indexFarmer).getCharacterCardName()==CharacterCardsName.FARMER)
+                        indexFarmer++;
+                    activateAtomicEffect(idPlayer,indexFarmer,0,0);
+                }
+                // checking if the student is added in third, sixth or ninth position of the dining room
+                    if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
                     players.get(idPlayer).gainMoney();
+                    gameTable.studentInMoneyPosition();
+                }
                 checkUpdateProfessor(idPlayer, color);
                 studentsCounter++;
 
@@ -280,7 +327,20 @@ public class Game {
                 gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
                 gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
                 gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
+                // if the FUNGIST card is played, then we remove the students of the chosen color from the selected isle
+                // then we proceed to calculate the influence on the isle
+                if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)
+                    while(gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != 0){
+                        gameTable.getIsleManager().getIsle(idIsle).removeStudent(colorForFungist);
+                        studentsRemovedByFungist += 1;
+                    }
                 checkUpdateInfluence(idIsle);
+                // if the FUNGIST card is played, then we add the students of the chosen color
+                // that were removed from the selected isle
+                if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)
+                    while(gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != studentsRemovedByFungist)
+                        gameTable.getIsleManager().getIsle(idIsle).addStudent(colorForFungist);
+                    studentsRemovedByFungist = 0;
                 checkEndGame();
                 if (!lastRound)
                     actionPhase = ActionPhases.CHOOSE_CLOUD;
@@ -400,13 +460,13 @@ public class Game {
             int lowestTurnOrder = 0;
 
             for (Player p : players)
-                turnOrderTree.add(p.getDiscardPile().getTurnOrder());
+                turnOrderTree.add(Integer.valueOf(Integer.valueOf(p.getDiscardPile().getTurnOrder()).toString()+Integer.valueOf(p.getCardOrder()).toString()));
 
             for (playerCounter = 0; playerCounter < numberOfPlayers; playerCounter++) {
                 if (!turnOrderTree.isEmpty())
                     lowestTurnOrder = turnOrderTree.pollFirst();
                 for (Player p : players) {
-                    if (p.getDiscardPile().getTurnOrder() == lowestTurnOrder) {
+                    if (Integer.parseInt(Integer.valueOf(p.getDiscardPile().getTurnOrder()).toString()+Integer.valueOf(p.getCardOrder()).toString()) == lowestTurnOrder) {
                         p.setOrder(CurrentOrder.getCurrentOrder(playerCounter));
                         break;
                     }
@@ -438,6 +498,9 @@ public class Game {
                     p.setDiscardPileNull();
                 }
                 fillClouds();
+                if(gameMode==GameMode.EXPERT)
+                    for(Player p : players)
+                        p.setNotAlreadyPlayedACardThisTurn();
             }
             updateOrder(gamePhase);
         }
@@ -529,7 +592,6 @@ public class Game {
                         }
                     }
                 }
-                getGameTable().getIsleManager().getIsle(idIsle).setCentaur(false);
                 gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
                 gameTable.getIsleManager().checkUnifyIsle(idIsle);
             }
@@ -584,40 +646,6 @@ public class Game {
 
     }
 
-    /*public String getState() {
-        String gp = null, pp = null, ap = null, cap = null;
-
-        if (gamePhase == GamePhases.SETUP_PHASE)
-            gp = "setup_phase";
-        else if (gamePhase == GamePhases.PLANNING_PHASE)
-            gp = "planning_phase";
-        else if (gamePhase == GamePhases.ACTION_PHASE)
-            gp = "action_phase";
-
-        if (planningPhase == PlanningPhases.FILL_CLOUDS)
-            pp = "fill_clouds";
-        else if (planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE)
-            pp = "assistant_card_phase";
-
-        if (actionPhase == ActionPhases.MOVE_STUDENTS)
-            ap = "move_students";
-        else if (actionPhase == ActionPhases.MOVE_MOTHER_NATURE)
-            ap = "move_mother_nature";
-        else if (actionPhase == ActionPhases.CHOOSE_CLOUD)
-            ap = "choose_cloud";
-
-        if (currentActivePlayer == CurrentOrder.FIRST_PLAYER)
-            cap = "player_1";
-        else if (currentActivePlayer == CurrentOrder.SECOND_PLAYER)
-            cap = "player_2";
-        else if (currentActivePlayer == CurrentOrder.THIRD_PLAYER)
-            cap = "player_3";
-        else if (currentActivePlayer == CurrentOrder.FOURTH_PLAYER)
-            cap = "player_4";
-
-        return "GAME_PHASE: " + gp + "," + "PLANNING_PHASE: " + pp + "," + "ACTION_PHASE: " + ap + "," + "ACTIVE_PLAYER: " + cap;
-    }*/
-
     /**
      * this method permits to play a character card during the action phase
      * it set money and other booleans but doesn't activate the proper effect of the card
@@ -625,8 +653,8 @@ public class Game {
      * @param characterCardIndex the index of the character card that the player wants to play
      */
     public void playCharacterCard(int idPlayer, int characterCardIndex) {
-
-        if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()) {
+        if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder() && players.get(idPlayer).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()){
+            getGameTable().characterCardPlayed(characterCardIndex);
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
         }
     }
@@ -635,18 +663,23 @@ public class Game {
      * this method permits to activate an atomic effect called in the controller for a certain number of times
      * it is part of the concrete effect of a character card
      * @param idPlayer the id of the player who plays the character card
-     * @param characterCardIndex the
-     * @param colorStudentFrom the color of the student the player wants to remove from the staring StudentsManager
-     * @param value it represents different values based on the played card
+     * @param characterCardIndex the index of the character card played
+     * @param value1 the color of the student the player wants to remove from the staring StudentsManager
+     * @param value2 it represents different values based on the played card
 *              MONK          -> isle index where to move the student
 *              HERALD        -> isle where calculate the influence now
      *         When not used -> set to 0
      */
-    public void activateAtomicEffect(int idPlayer, int characterCardIndex, RealmColors colorStudentFrom, RealmColors colorStudentTo, int value){
-        if (gamePhase == GamePhases.ACTION_PHASE) {
-        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), ColorsForEffects.NONE,colorStudentFrom, colorStudentTo, value);
-        }
+    public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
+        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder())
+            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
     }
+
+    /**
+     * this method saves a color in the class GAME for then FUNGIST character card when played
+     * @param indexColorFungist the index of the color that has to be saved
+     */
+    public void setColorForFungist(int indexColorFungist) { this.colorForFungist = RealmColors.getColor(indexColorFungist); }
 
     /**
      * used for testing purpose only
@@ -658,18 +691,6 @@ public class Game {
 
     public GamePhases getGamePhase() {
         return gamePhase;
-    }
-
-    public PlanningPhases getPlanningPhase() {
-        return planningPhase;
-    }
-
-    public ActionPhases getActionPhase() {
-        return actionPhase;
-    }
-
-    public CurrentOrder getCurrentActivePlayer() {
-        return currentActivePlayer;
     }
 
     public GameMode getGameMode() {

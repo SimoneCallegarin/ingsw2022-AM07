@@ -11,12 +11,13 @@ import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.Network.Messages.MessageType;
-import it.polimi.ingsw.Network.Messages.Setup_Message;
+import it.polimi.ingsw.Network.Messages.SetupMessage;
 
 /**
  * This class is used to manage the connection with the client from the second to the fourth.
  */
 public class ClientHandler implements Runnable{
+    Game game;
     GameController gameController;
     Socket socket;
     CommandParser commandParser=new CommandParser();
@@ -28,26 +29,22 @@ public class ClientHandler implements Runnable{
     }
 
     @Override
-    public synchronized void run() {
+    public void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
-            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gamemode\":true}";
-            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}";
-
-            Setup_Message sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
-            gameController.onSetup_Message(sm);
-            out.println(okJSON);
-
+            if(game.getGamePhase()==GamePhases.SETUP_PHASE){
+                SetupMessage sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
+                gameController.onSetup_Message(sm);
+            }
             while (true) {
                 Message m= commandParser.processCmd(in.nextLine(), g);
-
+                notifyAll();
                 if(m.getMessageType()== MessageType.QUIT){
                     break;
                 }
                 else{
                     gameController.onMessage(m);
-                    out.println(okJSON);
                 }
             }
             in.close();

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model.DashboardObjects;
 
-import it.polimi.ingsw.Model.DashboardObjects.Entrance;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ class EntranceTest {
      */
     @Test
     public void getNumBasic() {
-        Entrance e = new Entrance(7, 3);
+        Entrance e = new Entrance(7);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.BLUE);
@@ -29,7 +28,7 @@ class EntranceTest {
      */
     @Test
     public void addStudentBasic() {
-        Entrance e = new Entrance(7, 3);
+        Entrance e = new Entrance(7);
         e.addStudent(RealmColors.YELLOW);
         assertEquals(1, e.getStudentsByColor(RealmColors.YELLOW));
     }
@@ -39,7 +38,7 @@ class EntranceTest {
      */
     @Test
     public void addStudentFull() {
-        Entrance e = new Entrance(7, 3);
+        Entrance e = new Entrance(7);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.BLUE);
@@ -57,7 +56,7 @@ class EntranceTest {
      */
     @Test
     public void removeStudent() {
-        Entrance e = new Entrance(7, 3);
+        Entrance e = new Entrance(7);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
@@ -74,15 +73,12 @@ class EntranceTest {
      */
     @Test
     public void removeStudentUnder() {
-        Entrance e = new Entrance(7, 3);
+        Entrance e = new Entrance(7);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.BLUE);
         e.addStudent(RealmColors.RED);
         assertEquals(4, e.getNumberOfStudents());
-        //need to add a check to the maximum number of students that can be added
-        //e.removeStudent(RealmColors.YELLOW);
-        //assertEquals(4, e.getNumberOfStudents());
     }
 
     /**
@@ -90,7 +86,7 @@ class EntranceTest {
      */
     @Test
     public void isFull() {
-        Entrance e = new Entrance(7, 3);
+        Entrance e = new Entrance(7);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.YELLOW);
         e.addStudent(RealmColors.BLUE);

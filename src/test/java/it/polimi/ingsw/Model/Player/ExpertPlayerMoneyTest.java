@@ -2,11 +2,8 @@ package it.polimi.ingsw.Model.Player;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
-import it.polimi.ingsw.Model.DashboardObjects.TowerStorage;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.Squads;
-import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,13 +28,12 @@ public class ExpertPlayerMoneyTest {
     void spendMoneyNotAlreadyUsedCard() {
 
         expertPlayerForTest.gainMoney();
-        expertPlayerForTest.gainMoney();
-        //3 money in total for the player
+        //2 money in total for the player
 
         CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
 
         expertPlayerForTest.playCharacterCard(characterCard);
-        assertEquals(2,expertPlayerForTest.getMoney());
+        assertEquals(1,expertPlayerForTest.getMoney());
     }
 
     /**
@@ -57,6 +53,24 @@ public class ExpertPlayerMoneyTest {
 
         expertPlayerForTest.playCharacterCard(characterCard);
         assertEquals(0,expertPlayerForTest.getMoney());
+    }
+
+    @Test
+    void setNotAlreadyPlayedACardThisTurn() {
+
+        expertPlayerForTest.gainMoney();
+        //2 money in total for the player
+
+        CharacterCard characterCard = new CharacterCard(CharacterCardsName.MONK);
+
+        expertPlayerForTest.playCharacterCard(characterCard);
+
+        assertTrue(expertPlayerForTest.getAlreadyPlayedACardThisTurn());
+
+        expertPlayerForTest.setNotAlreadyPlayedACardThisTurn();
+
+        assertFalse(expertPlayerForTest.getAlreadyPlayedACardThisTurn());
+
     }
 
 }

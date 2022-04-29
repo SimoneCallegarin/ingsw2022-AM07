@@ -1,9 +1,9 @@
 package it.polimi.ingsw.Model.Player;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.Enumeration.*;
-import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +20,11 @@ public class Player {
     /**
      * This attribute indicates the team of the player in a 4 players game
      */
-    public Squads squad;
+    private final Squads squad;
     /**
      * This attribute represents the name of the mage deck chosen
      */
-    public Mages mage;
+    private final Mages mage;
     /**
      * This attribute is the deck of assistant cards
      */
@@ -48,11 +48,20 @@ public class Player {
     /**
      * This attribute indicates if a player already played a card in a turn when set true
      */
-    private boolean alreadyPlayedACardThisTurn;
+    private boolean alreadyPlayedACardThisTurn = false;
+    /**
+     * this attribute indicates the name of the character card played this turn
+     */
+    private CharacterCardsName characterCardPlayed;
     /**
      * This attribute represents the order number in the turn for the player
      */
     private CurrentOrder order;
+
+    /**
+     * it saves when the assistant card has been played during last planning phase
+     */
+    private int cardOrder = 0;
 
     /**
      * Constructor
@@ -65,17 +74,17 @@ public class Player {
         this.squad = squad;
         this.gameMode = gameMode;
 
-        this.dashboard = new Dashboard(numOfPlayers, idDashboard, gameMode);
+        this.dashboard = new Dashboard(numOfPlayers, idDashboard);
 
         this.mage = Mages.getMage(idDashboard);
         this.mageDeck = new ArrayList<>(10);
         this.discardPile = null;
 
-        /**
-         * This method permits the creation of a deck of assistant cards
-         * i+1 is equal to the turn order of the assistant card
-         * (i/2)+1 is equal to the mother nature possible movement for an assistant card
-         * false indicates that the assistant card hasn't been used yet
+        /*
+          This method permits the creation of a deck of assistant cards
+          i+1 is equal to the turn order of the assistant card
+          (i/2)+1 is equal to the mother nature possible movement for an assistant card
+          false indicates that the assistant card hasn't been used yet
          */
         for(int i = 0; i < 10; i++) {
             this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1));
@@ -84,9 +93,6 @@ public class Player {
         this.money = 0;
         if (gameMode.equals(GameMode.EXPERT))
             this.money = 1;
-
-        this.alreadyPlayedACardThisTurn = false;
-
     }
 
     public Squads getSquad() {return squad;}
@@ -136,6 +142,10 @@ public class Player {
         return this.order;
     }
 
+    public void setCardOrder(int cardOrder) { this.cardOrder = cardOrder;}
+
+    public int getCardOrder() { return cardOrder;}
+
     /**
      * getter method that gives which is the dashboard associated to the current player
      * @return the dashboard of the current player
@@ -167,6 +177,11 @@ public class Player {
     }
 
     /**
+     * set to false the attribute alreadyPlayedACardThisTurn
+     */
+    public void setNotAlreadyPlayedACardThisTurn() { this.alreadyPlayedACardThisTurn = false; }
+
+    /**
      * this method increase the number of money of the player by 1
      */
     public void gainMoney(){
@@ -178,11 +193,22 @@ public class Player {
      * @param characterCard the selected character card that the player wants to play
      */
     public void playCharacterCard(CharacterCard characterCard){
-        if (money>=characterCard.getCost()){
-            money = money - characterCard.getCost();
-            characterCard.isUsed();
-            alreadyPlayedACardThisTurn = true;
-        }
+        money = money - characterCard.getCost();
+        if(!characterCard.isUsed())
+            characterCard.setUsed();
+        alreadyPlayedACardThisTurn = true;
+        characterCardPlayed = characterCard.getCharacterCardName();
+    }
+
+    /**
+     * this method permits knowing which character card the player played this turn
+     * @return the name of the character card played this turn
+     */
+    public CharacterCardsName getCharacterCardPlayed() {
+        if(getAlreadyPlayedACardThisTurn())
+            return characterCardPlayed;
+        else
+            return null;
     }
 
     /**
@@ -193,6 +219,5 @@ public class Player {
     public int selectIsleId(int isleID){
         return isleID;
     }
-
 
 }
