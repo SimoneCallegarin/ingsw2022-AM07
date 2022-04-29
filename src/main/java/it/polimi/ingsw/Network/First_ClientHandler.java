@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.Timer;
+
 
 /**
  * this class is used to manage the connection to the first client which connects to the server to play.
