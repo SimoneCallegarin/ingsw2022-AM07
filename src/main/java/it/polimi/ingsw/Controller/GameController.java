@@ -18,7 +18,7 @@ public class GameController {
      * these are some auxiliary attributes. They are used to store a player choice and use them only when the controller
      * can call the model methods with all the parameters
      */
-    int colorIndex;
+    public int colorIndex;
     public boolean gameMode;
     public int numplayers;
 

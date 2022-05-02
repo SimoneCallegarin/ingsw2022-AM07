@@ -12,4 +12,12 @@ public class Message {
         return messageType;
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageType=" + messageType +
+                ", playerID=" + playerID +
+                ", genericValue=" + genericValue +
+                '}';
+    }
 }

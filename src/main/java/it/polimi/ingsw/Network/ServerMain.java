@@ -13,16 +13,15 @@ import java.util.concurrent.Executors;
  * Main Server Class which manages the connection of the clients
  */
 
-
 public class ServerMain{
-    public Game game;
 
-    public void runServer(Game game,GameController gameController) {
-        this.game=game;
+    public static void main(String[] args) {
         int numClients;
         ExecutorService executor=Executors.newCachedThreadPool();
         ServerSocket serverSocket;
-        final int port=1234;
+        final int port=Integer.parseInt(args[0]);
+        Game game=new Game();
+        GameController gameController=new GameController(game);
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("ServerSocket started!");
@@ -47,7 +46,7 @@ public class ServerMain{
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection accepted!");
-                executor.submit(new ClientHandler(clientSocket, new GameController(game)));
+                executor.submit(new ClientHandler(clientSocket, gameController));
                 numClients++;
             }catch (IOException e){
                 e.printStackTrace();

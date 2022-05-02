@@ -11,4 +11,13 @@ public class SetupMessage {
     public MessageType getMessageType() {
         return messageType;
     }
+
+    @Override
+    public String toString() {
+        return "SetupMessage{" +
+                "messageType=" + messageType +
+                ", user_choice='" + user_choice + '\'' +
+                ", gamemode=" + gamemode +
+                '}';
+    }
 }
