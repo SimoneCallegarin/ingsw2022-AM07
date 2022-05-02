@@ -207,7 +207,7 @@ class GamePlaySomeCharacterCardsTest {
         //we play the character card we want
         game.playCharacterCard(0,0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,0,11);
+        game.activateAtomicEffect(0,0,11,0);
 
         // 3 deny cards on the character card, one is removed and then put on the isle 11
         assertEquals(3,game.getGameTable().getCharacterCard(0).getDenyCards());
@@ -564,7 +564,7 @@ class GamePlaySomeCharacterCardsTest {
         //played the SPOILED_PRINCESS character card:
         game.playCharacterCard(0, 0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,2,0);
+        game.activateAtomicEffect(0,0,2,-1);
 
         assertEquals(95, game.getGameTable().getBag().getNumberOfStudents());
         assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfStudents());
@@ -600,7 +600,7 @@ class GamePlaySomeCharacterCardsTest {
         //played the THIEF character card:
         game.playCharacterCard(0, 0);
         //and then the controller will activate the atomic effect of each card for the number of times needed
-        game.activateAtomicEffect(0,0,0,0);
+        game.activateAtomicEffect(0,0,0,-1);
 
         // 100 students in the bag
         // + 3 yellow students removed from the dining room of player 0

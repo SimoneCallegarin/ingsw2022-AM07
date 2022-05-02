@@ -17,11 +17,11 @@ public class EffectInGameFactory {
      * @param characterCard the character card played
      * @param game reference to all the objects that compose the game
      * @param player the player that played the character card
-     * @param value1 it's the color of the student that has to be moved from a certain student manager
-     *               it will be set to null when it isn't required
-     * @param value2 it can be the color of the student that has to be moved to a certain student manager
+     * @param value1 it can be the color of the student that has to be moved from a certain student manager
      *               it can also be to the index of a certain isle
-     *               it will be set to null when it isn't required
+     *               it will be set to -1 when it isn't required
+     * @param value2 it's the color of the student that has to be moved to a certain student manager
+     *               it will be set to -1 when it isn't required
      */
     public void getEffect(CharacterCard characterCard, Game game, Player player, int value1, int value2){
 
@@ -39,7 +39,7 @@ public class EffectInGameFactory {
         switch (characterCard.getCharacterCardName()){
             case MONK:
                 studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,color1,color2);
-                studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,null, null);
+                studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,color1, color2);
                 break;
 
             case FARMER:
@@ -64,7 +64,7 @@ public class EffectInGameFactory {
                 break;
 
             case GRANDMA_HERBS:
-                denyCardMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value2));
+                denyCardMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value1));
                 break;
 
             case JESTER:
@@ -85,8 +85,8 @@ public class EffectInGameFactory {
                 break;
 
             case SPOILED_PRINCESS:
-                studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,color1, null);
-                studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,null,null);
+                studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,color1, color2);
+                studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,color1,color2);
                 // checking if the student is added in third, sixth or ninth position of the dining room
                 if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(color1)%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
@@ -98,7 +98,7 @@ public class EffectInGameFactory {
                 for (Player p : game.getPlayers())
                     for (int j = 0; j < 3; j++) {
                         if (p.getDashboard().getDiningRoom().getStudentsByColor(color1) > 0)
-                            studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, color1, null);
+                            studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, color1, color2);
                     }
                 break;
 
