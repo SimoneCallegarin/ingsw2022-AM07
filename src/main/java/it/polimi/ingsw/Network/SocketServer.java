@@ -26,19 +26,9 @@ public class SocketServer implements Runnable{
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection accepted!");
+                executorService.submit(new ClientHandler(server,clientSocket));
             }catch (IOException e){
                 System.err.println("Error in client acceptation!");
-                break;
-            }
-        }
-    }
-
-    public void logWithSetupMessage(ServerSocket serverSocket, SetupMessage setupMessage) {
-        while (true) {
-            try {
-                server.setClientRequestedConnection(clientSocket, setupMessage);
-            }catch (IOException e){
-                e.printStackTrace();
                 break;
             }
         }

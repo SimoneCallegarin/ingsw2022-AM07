@@ -46,13 +46,13 @@ public class Server {
 
     }
 
-    public void setClientRequestedConnection(Socket clientSocket, SetupMessage setupMessage) {
+    public void setClientRequestedConnection(SetupMessage setupMessage) {
         if(checkConnectionMessageValidity(setupMessage)==0){
             int k=0;
             while (clientRequestedConnection.get(k) != null)
                 k++;
             clientRequestedConnection.put(k,setupMessage.nickName);
-            addPlayer(clientSocket, setupMessage);
+            addPlayer(setupMessage);
         }
         else{
             if(checkConnectionMessageValidity(setupMessage)==1)
@@ -62,7 +62,7 @@ public class Server {
         }
     }
 
-    public void addPlayer(Socket clientSocket, SetupMessage setupMessage){
+    public void addPlayer(SetupMessage setupMessage){
         int lobbyID=0;
         for(int i=0; activeMatches.get(i)!=null; i++){
             if(activeMatches.get(i).game.getGameMode()==setupMessage.gameMode && activeMatches.get(i).game.getNumberOfPlayers()==setupMessage.numberOfPlayers && activeMatches.get(i).game.getActualNumberOfPlayers()!=activeMatches.get(i).game.getNumberOfPlayers()){
@@ -75,8 +75,6 @@ public class Server {
             gameController = newGame(setupMessage);
         else
             gameController = addPlayerToAnExistingLobby(lobbyID,setupMessage);
-
-        executor.submit(new ClientHandler(clientSocket,gameController));
     }
 
     public GameController newGame(SetupMessage setupMessage){

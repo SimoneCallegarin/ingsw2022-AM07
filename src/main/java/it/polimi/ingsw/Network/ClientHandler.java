@@ -18,14 +18,20 @@ import it.polimi.ingsw.Network.Messages.SetupMessage;
  */
 public class ClientHandler implements Runnable{
     GameController gameController;
+    Server server;
     Socket socket;
     CommandParser commandParser=new CommandParser();
 
     Gson g=new Gson();
 
-    public ClientHandler(Socket socket,GameController gameController) {
+    public ClientHandler(Server server,Socket socket) {
+        this.server = server;
         this.socket = socket;
         this.gameController=gameController;
+    }
+
+    private void logWithSetupMessage(SetupMessage setupMessage) {
+            server.setClientRequestedConnection(setupMessage);
     }
 
     @Override
@@ -37,7 +43,7 @@ public class ClientHandler implements Runnable{
             String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gameMode\":true}";
 
             if(gameController.game.getGamePhase()==GamePhases.SETUP_PHASE){
-                SetupMessage sm = commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
+                SetupMessage sm = commandParser.processSetup_Cmd(in.nextLine(), g);     //to get the player username
                 gameController.onSetup_Message(sm);
                 out.println(okJSON);
             }
