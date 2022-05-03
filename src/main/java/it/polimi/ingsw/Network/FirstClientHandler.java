@@ -38,8 +38,17 @@ public class FirstClientHandler implements Runnable {
             String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gamemode\":true}";
             String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}";
 
-            String line=in.nextLine();
-            SetupMessage sm= commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
+            SetupMessage sm=new SetupMessage();
+            String line;
+            do {
+                if(sm.getMessageType()==MessageType.KO){
+                    out.println(koJSON);
+                    System.out.println("S:Error on received message, waiting for correction...");
+                }
+                line = in.nextLine();
+                sm = commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
+            }while(sm.getMessageType()==MessageType.KO);
+
             System.out.println("Server received: "+ sm);
             gameController.onSetup_Message(sm);
             out.println(okJSON);
