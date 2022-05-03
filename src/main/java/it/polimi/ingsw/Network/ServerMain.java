@@ -16,10 +16,12 @@ import java.util.concurrent.Executors;
 public class ServerMain{
 
     public static void main(String[] args) {
+
         int numClients;
         ExecutorService executor=Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         final int port=Integer.parseInt(args[0]);
+
         Game game=new Game();
         GameController gameController=new GameController(game);
         try {
