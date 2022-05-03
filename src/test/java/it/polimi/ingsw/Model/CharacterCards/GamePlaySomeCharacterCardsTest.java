@@ -225,7 +225,10 @@ class GamePlaySomeCharacterCardsTest {
         game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
         game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
 
-        game.moveMotherNature(0,game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+2);
+        if(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()<10)
+            game.moveMotherNature(0,game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+2);
+        else
+            game.moveMotherNature(0,game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()-10);
 
         assertEquals(0,game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).getDenyCards());
     }

@@ -124,7 +124,7 @@ class GameControllerTest {
         message.messageType = MessageType.MOVE_MOTHERNATURE;
         message.playerID = 0;
         int newIsleWithMotherNature;
-        if(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()<9)
+        if(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()<8)
             newIsleWithMotherNature = game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+4;
         else
             newIsleWithMotherNature = game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()-8;
