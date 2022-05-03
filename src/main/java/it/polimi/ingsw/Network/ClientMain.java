@@ -39,15 +39,12 @@ public class ClientMain {
             }
 
             System.out.println("Which game mode do you prefer?Expert or Base?");
-                gameMode = user.nextLine();
-                if(gameMode.equals("Expert"))
-                    gamemode=true;
-                else
-                    gamemode=false;
+            gameMode = user.nextLine();
+            if(gameMode.equals("Expert"))
+                gamemode=true;
+            else
+                gamemode=false;
 
-
-
-            //socketClient.send("soos");
             socketClient.send("{\"messageType\":GAMESETUP_INFO,\"nickName\":"+nickName+",\"numberOfPlayers\":\""+numberPlayers+"\", \"gameMode\":"+gamemode+"}");
             serviceMessage = commandParser.processSetup_Cmd(in.nextLine(), g);
 
@@ -59,7 +56,6 @@ public class ClientMain {
             System.out.println("Error on message sent!");
             return;
         }
-
 
     }
 }

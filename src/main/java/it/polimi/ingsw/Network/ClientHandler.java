@@ -38,8 +38,8 @@ public class ClientHandler implements Runnable{
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
-            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gamemode\":true}";
-            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}";
+            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gameMode\":true}";
+            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gameMode\":true}";
 
             SetupMessage sm=new SetupMessage();
             String line;
@@ -49,7 +49,7 @@ public class ClientHandler implements Runnable{
                     System.out.println("S:Error on received message, waiting for correction...");
                 }
                 line = in.nextLine();
-                sm = commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
+                sm = commandParser.processSetup_Cmd(line, g);       //to set the gameMode and the number of players
             }while(sm.getMessageType()==MessageType.KO || sm.getMessageType() == null);
 
             System.out.println("Server received: "+ sm);
