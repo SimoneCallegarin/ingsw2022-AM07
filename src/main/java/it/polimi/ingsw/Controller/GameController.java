@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.Message;
@@ -18,9 +19,12 @@ public class GameController {
      * these are some auxiliary attributes. They are used to store a player choice and use them only when the controller
      * can call the model methods with all the parameters
      */
-    public int colorIndex;
+    int colorIndex;
+    int colorIndexSaved;
     public boolean gameMode;
-    public int numplayers;
+    public int numberOfPlayers;
+
+    int characterCardPlayedIndex;
 
     /**
      * the class constructor
@@ -63,7 +67,22 @@ public class GameController {
                 }
             }
             case PLAY_CHARACTERCARD ->{
-                //playcharactercards
+                if (game.gamePhase == GamePhases.ACTION_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
+                    game.playCharacterCard(message.playerID,message.genericValue);
+                    characterCardPlayedIndex = message.genericValue;
+                    CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.genericValue).getCharacterCardName();
+                    switch (characterCardPlayed){
+                        case FARMER,HERALD,MAGICAL_LETTER_CARRIER -> game.activateAtomicEffect(message.playerID,characterCardPlayedIndex,-1,-1);
+                    }
+                }
+            }
+            case ACTIVATE_ATOMIC_EFFECT ->{
+                CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.genericValue).getCharacterCardName();
+                switch (characterCardPlayed){
+                    case MONK,GRANDMA_HERBS,SPOILED_PRINCESS,THIEF -> game.activateAtomicEffect(message.playerID,characterCardPlayedIndex,colorIndex,-1);
+                    case JESTER,MINSTREL -> game.activateAtomicEffect(message.playerID,characterCardPlayedIndex,colorIndex,colorIndexSaved);
+                    //still missing the choice of the number of students to move
+                }
             }
             /*
               the value case is used to store the color of the student chosen by the player. It's stored because the corresponding
@@ -71,7 +90,10 @@ public class GameController {
               he can also change the color of the student to move, in that case the value case is called again to memorize
               the new information.
              */
-            case VALUE -> colorIndex = message.genericValue;
+            case VALUE -> {
+                colorIndexSaved = colorIndex;
+                colorIndex = message.genericValue;
+            }
         }
     }
 
@@ -84,15 +106,11 @@ public class GameController {
     public void onSetup_Message(SetupMessage sm){
 
         switch(sm.getMessageType()){
-            case FIRST_USERNAME_CHOICE -> {
-                game.addFirstPlayer(sm.user_choice,gameMode,numplayers);
-            }
-            case USERNAME_CHOICE -> {
-                game.addAnotherPlayer(sm.user_choice);
-            }
+            case FIRST_USERNAME_CHOICE -> game.addFirstPlayer(sm.user_choice,gameMode,numberOfPlayers);
+            case USERNAME_CHOICE -> game.addAnotherPlayer(sm.user_choice);
             case GAMESETUP_INFO -> {
                 gameMode = sm.gamemode;
-                numplayers = Integer.parseInt(sm.user_choice);
+                numberOfPlayers = Integer.parseInt(sm.user_choice);
             }
         }
     }
