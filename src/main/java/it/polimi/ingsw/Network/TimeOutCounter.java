@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Network;
 import java.util.TimerTask;
 
-class TimeoutCounter extends TimerTask
+ class TimeoutCounter extends TimerTask
     {
         TimeOutCheckerInterface timeOutChecker;
 

@@ -36,11 +36,11 @@ public class ClientHandler implements Runnable{
             String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gamemode\":true}";
             String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}";
 
-            if(game.getGamePhase()==GamePhases.SETUP_PHASE){
-                SetupMessage sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
-                gameController.onSetup_Message(sm);
-                out.println(okJSON);
-            }
+
+            SetupMessage sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
+            gameController.onSetup_Message(sm);
+            out.println(okJSON);
+
             while (true) {
                 Message m= commandParser.processCmd(in.nextLine(), g);
                 notifyAll();
