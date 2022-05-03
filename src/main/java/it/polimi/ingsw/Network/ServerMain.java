@@ -16,12 +16,10 @@ import java.util.concurrent.Executors;
 public class ServerMain{
 
     public static void main(String[] args) {
-
         int numClients;
         ExecutorService executor=Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         final int port=Integer.parseInt(args[0]);
-
         Game game=new Game();
         GameController gameController=new GameController(game);
         try {
@@ -32,6 +30,7 @@ public class ServerMain{
             e.printStackTrace();
             return;
         }
+
         try {
             System.out.println("Accepting...");
             Socket clientSocket = serverSocket.accept();
@@ -43,7 +42,7 @@ public class ServerMain{
             return;
         }
 
-        while(numClients!=game.numberOfPlayers){
+        while(numClients!=gameController.numberOfPlayers){
             try {
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
@@ -57,7 +56,6 @@ public class ServerMain{
         }
         executor.shutdown();
     }
-
 
 }
 

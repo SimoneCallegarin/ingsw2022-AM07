@@ -28,9 +28,10 @@ public class FirstClientHandler implements Runnable {
         this.socket=socket;
         this.game=game;
         this.gameController=gameController;
+
     }
 
-    public synchronized void run() {
+    public void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out=new PrintWriter(socket.getOutputStream(),true);

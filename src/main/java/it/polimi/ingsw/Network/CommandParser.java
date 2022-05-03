@@ -20,16 +20,17 @@ public class CommandParser
         startMyTimer();
         return g.fromJson(line,Message.class);}
 
+
     void startMyTimer() {
 
         Timer timer = new Timer();
 
         TimeOutCheckerInterface timeOutChecker = (l) -> {
 
-            System.out.println(l);
+           // System.out.println(l);
             Boolean timeoutReached = l > maxRetries;
             if (timeoutReached) {
-                System.out.println("Got timeout inside server class");
+                System.out.println("Got timeout inside parser class");
                 return true;
             }
             return false;
