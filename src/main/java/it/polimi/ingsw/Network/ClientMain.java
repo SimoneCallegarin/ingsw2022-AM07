@@ -22,7 +22,7 @@ public class ClientMain {
         SetupMessage serviceMessage = new SetupMessage();
         do {
             String nickName;
-            String numberPlayers = "0";
+            String numberOfPlayers;
             String gameMode;
             boolean gamemode;
 
@@ -33,29 +33,24 @@ public class ClientMain {
             System.out.println("Nickname?");
             nickName = user.nextLine();
 
-            while (Integer.parseInt(numberPlayers) < 2 || Integer.parseInt(numberPlayers) > 4) {
-                System.out.println("How many players do you want to play with?\n");
-                numberPlayers = user.nextLine();
-            }
+            System.out.println("How many players do you want to play with?\n");
+            numberOfPlayers = user.nextLine();
 
             System.out.println("Which game mode do you prefer?Expert or Base?");
             gameMode = user.nextLine();
-            if(gameMode.equals("Expert"))
+            if (gameMode.equals("Expert"))
                 gamemode=true;
             else
                 gamemode=false;
 
-            socketClient.send("{\"messageType\":GAMESETUP_INFO,\"nickName\":"+nickName+",\"numberOfPlayers\":\""+numberPlayers+"\", \"gameMode\":"+gamemode+"}");
+
+            socketClient.send("{\"messageType\":GAMESETUP_INFO,\"nickName\":\""+nickName+"\",\"numberOfPlayers\":"+numberOfPlayers+",\"gameMode\":"+gamemode+"}");
+            System.out.println(commandParser.processSetup_Cmd(in.nextLine(), g));
+            System.out.println(0);
             serviceMessage = commandParser.processSetup_Cmd(in.nextLine(), g);
+            System.out.println(0);
 
         } while (serviceMessage.getMessageType() == MessageType.KO);
-
-
-        socketClient.send("{\"messageType\": USERNAME_CHOICE, \"user_choice\":\"username\", \"gamemode\":true}");
-        if (commandParser.processSetup_Cmd(in.nextLine(), g).getMessageType().equals(MessageType.KO)) {
-            System.out.println("Error on message sent!");
-            return;
-        }
 
     }
 }

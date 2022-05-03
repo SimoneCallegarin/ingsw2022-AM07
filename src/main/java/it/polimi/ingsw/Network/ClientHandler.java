@@ -21,7 +21,6 @@ public class ClientHandler implements Runnable{
     Server server;
     Socket socket;
     CommandParser commandParser=new CommandParser();
-
     Gson g=new Gson();
 
     public ClientHandler(Server server,Socket socket) {
@@ -38,33 +37,25 @@ public class ClientHandler implements Runnable{
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
-            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gameMode\":true}";
-            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gameMode\":true}";
+            String okJSON="{\"messageType\":OK,\"nickName\":\"ok\",\"numberOfPlayers\":0\", \"gameMode\":true}";
+            String koJSON="{\"messageType\":KO,\"nickName\":\"ko\",\"numberOfPlayers\":0\", \"gameMode\":true}";
 
-            SetupMessage sm=new SetupMessage();
-            String line;
+            SetupMessage setupMessage;
             do {
-                if(sm.getMessageType()==MessageType.KO || sm.getMessageType()==null){
+                setupMessage = commandParser.processSetup_Cmd(in.nextLine(), g);
+                if(setupMessage.getMessageType()==MessageType.KO || setupMessage.getMessageType()==null){
                     out.println(koJSON);
                     System.out.println("S:Error on received message, waiting for correction...");
                 }
-                line = in.nextLine();
-                sm = commandParser.processSetup_Cmd(line, g);       //to set the gameMode and the number of players
-            }while(sm.getMessageType()==MessageType.KO || sm.getMessageType() == null);
+            }while(setupMessage.getMessageType()==MessageType.KO || setupMessage.getMessageType() == null);
 
-            System.out.println("Server received: "+ sm);
-            gameController.onSetup_Message(sm);
-            out.println(okJSON);
+            System.out.println("Server received: "+ setupMessage);
 
-            line=in.nextLine();
-            sm= commandParser.processSetup_Cmd(line, g);//to get the first player username and set the attributes in the game model
-            System.out.println("Server received: "+sm);
-            gameController.onSetup_Message(sm);
+            logWithSetupMessage(setupMessage);
             out.println(okJSON);
 
             while (true) {
-                line=in.nextLine();
-                Message m= commandParser.processCmd(line, g);
+                Message m= commandParser.processCmd(in.nextLine(), g);
                 if(m.getMessageType()== MessageType.QUIT){
                     break;
                 }

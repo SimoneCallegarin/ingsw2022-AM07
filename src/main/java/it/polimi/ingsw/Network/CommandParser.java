@@ -5,13 +5,10 @@ import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.Network.Messages.SetupMessage;
 
 import java.time.Duration;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.*;
 
 public class CommandParser
 {
-    int maxRetries=10;
 
     public SetupMessage processSetup_Cmd(String line, Gson g){
         final Duration timeout=Duration.ofSeconds(5);
@@ -22,7 +19,7 @@ public class CommandParser
             return handler.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
         }catch(TimeoutException | InterruptedException | ExecutionException e){
             handler.cancel(true);
-            return g.fromJson("{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}",SetupMessage.class);
+            return g.fromJson("{\"messageType\":KO,\"nickName\":\"ko\",\"numberOfPlayers\":0,\"gameMode\":true}",SetupMessage.class);
         }
 
     }

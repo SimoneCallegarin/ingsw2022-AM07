@@ -15,11 +15,11 @@ public class SetupMessage {
 
     @Override
     public String toString() {
-        return "SetupMessage{" +
-                "messageType=" + messageType +
-                ", nickName='" + nickName + '\'' +
-                ", numberOfPlayers='" + numberOfPlayers + '\'' +
-                ", gameMode=" + gameMode +
-                '}';
+         return "SetupMessage{" +
+                 "messageType=" + messageType +
+                 ", nickName='" + nickName + '\'' +
+                 ", numberOfPlayers=" + numberOfPlayers +
+                 ", gameMode=" + gameMode +
+                 '}';
     }
 }
