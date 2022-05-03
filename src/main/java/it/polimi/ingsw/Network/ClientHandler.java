@@ -17,6 +17,7 @@ import it.polimi.ingsw.Network.Messages.SetupMessage;
  * This class is used to manage the connection with the client from the second to the fourth.
  */
 public class ClientHandler implements Runnable{
+    Game game;
     GameController gameController;
     Server server;
     Socket socket;
@@ -42,11 +43,11 @@ public class ClientHandler implements Runnable{
             String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gameMode\":true}";
             String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gameMode\":true}";
 
-            if(gameController.game.getGamePhase()==GamePhases.SETUP_PHASE){
-                SetupMessage sm = commandParser.processSetup_Cmd(in.nextLine(), g);     //to get the player username
-                gameController.onSetup_Message(sm);
-                out.println(okJSON);
-            }
+
+            SetupMessage sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
+            gameController.onSetup_Message(sm);
+            out.println(okJSON);
+
             while (true) {
                 Message m= commandParser.processCmd(in.nextLine(), g);
                 notifyAll();
