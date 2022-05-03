@@ -17,7 +17,6 @@ import it.polimi.ingsw.Network.Messages.SetupMessage;
  * This class is used to manage the connection with the client from the second to the fourth.
  */
 public class ClientHandler implements Runnable{
-    Game game;
     GameController gameController;
     Socket socket;
     CommandParser commandParser=new CommandParser();
@@ -25,7 +24,8 @@ public class ClientHandler implements Runnable{
     Gson g=new Gson();
 
     public ClientHandler(Socket socket,GameController gameController) {
-        this.socket = socket; this.gameController=gameController;
+        this.socket = socket;
+        this.gameController=gameController;
     }
 
     @Override
@@ -33,11 +33,11 @@ public class ClientHandler implements Runnable{
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
-            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gamemode\":true}";
-            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}";
+            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gameMode\":true}";
+            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gameMode\":true}";
 
-            if(game.getGamePhase()==GamePhases.SETUP_PHASE){
-                SetupMessage sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
+            if(gameController.game.getGamePhase()==GamePhases.SETUP_PHASE){
+                SetupMessage sm = commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
                 gameController.onSetup_Message(sm);
                 out.println(okJSON);
             }

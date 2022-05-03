@@ -5,8 +5,9 @@ package it.polimi.ingsw.Network.Messages;
  */
 public class SetupMessage {
     public MessageType messageType;
-    public String user_choice;//for the username and the number of players
-    public boolean gamemode;//false for base game, true for expert game
+    public String nickName;         //for the username
+    public int numberOfPlayers;     //for the number of players
+    public boolean gameMode;        //false for base game, true for expert game
 
     public MessageType getMessageType() {
         return messageType;
@@ -16,8 +17,9 @@ public class SetupMessage {
     public String toString() {
         return "SetupMessage{" +
                 "messageType=" + messageType +
-                ", user_choice='" + user_choice + '\'' +
-                ", gamemode=" + gamemode +
+                ", nickName='" + nickName + '\'' +
+                ", numberOfPlayers='" + numberOfPlayers + '\'' +
+                ", gameMode=" + gameMode +
                 '}';
     }
 }

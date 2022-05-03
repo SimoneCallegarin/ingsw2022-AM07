@@ -78,7 +78,7 @@ public class EffectInGameFactory {
             case MINSTREL:
                 studentMovementEffect.effect(player.getDashboard().getDiningRoom(),player.getDashboard().getEntrance(),ColorsForEffects.SELECT,color1,color2);
                 // checking if the student is added in third, sixth or ninth position of the dining room
-                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(color2)%3 == 0){
+                if (game.getGameMode() && player.getDashboard().getDiningRoom().getStudentsByColor(color2)%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
                 }
@@ -88,7 +88,7 @@ public class EffectInGameFactory {
                 studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,color1, color2);
                 studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,color1,color2);
                 // checking if the student is added in third, sixth or ninth position of the dining room
-                if (game.getGameMode() == GameMode.EXPERT && player.getDashboard().getDiningRoom().getStudentsByColor(color1)%3 == 0){
+                if (game.getGameMode() && player.getDashboard().getDiningRoom().getStudentsByColor(color1)%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
                 }

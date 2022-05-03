@@ -106,11 +106,11 @@ public class GameController {
     public void onSetup_Message(SetupMessage sm){
 
         switch(sm.getMessageType()){
-            case FIRST_USERNAME_CHOICE -> game.addFirstPlayer(sm.user_choice,gameMode,numberOfPlayers);
-            case USERNAME_CHOICE -> game.addAnotherPlayer(sm.user_choice);
+            case FIRST_USERNAME_CHOICE -> game.addFirstPlayer(sm.nickName,gameMode,numberOfPlayers);
+            case USERNAME_CHOICE -> game.addAnotherPlayer(sm.nickName);
             case GAMESETUP_INFO -> {
-                gameMode = sm.gamemode;
-                numberOfPlayers = Integer.parseInt(sm.user_choice);
+                gameMode = sm.gameMode;
+                numberOfPlayers = sm.numberOfPlayers;
             }
         }
     }

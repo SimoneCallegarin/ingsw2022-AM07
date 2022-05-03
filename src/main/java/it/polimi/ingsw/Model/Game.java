@@ -685,6 +685,12 @@ public class Game {
     public void setColorForFungist(int indexColorFungist) { this.colorForFungist = RealmColors.getColor(indexColorFungist); }
 
     /**
+     * it returns the number of players that have been added to the game
+     * @return the number of players that have been added to the game
+     */
+    public int getActualNumberOfPlayers() { return actualNumberOfPlayers; }
+
+    /**
      * used for testing purpose only
      * @param gameP game phase
      */
@@ -696,7 +702,10 @@ public class Game {
         return gamePhase;
     }
 
-    public GameMode getGameMode() {
-        return gameMode;
+    public boolean getGameMode() {
+        if(gameMode==GameMode.EXPERT)
+            return true;
+        else
+            return false;
     }
 }
