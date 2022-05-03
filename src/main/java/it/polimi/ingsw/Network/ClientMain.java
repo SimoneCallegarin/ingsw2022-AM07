@@ -9,8 +9,7 @@ import java.util.Scanner;
 
 public class ClientMain {
     public static void main(String[] args) throws IOException {
-        String numberPlayers = "0";
-        String userchoice = "null";
+
         boolean gamemode;
 
         Gson g = new Gson();
@@ -23,6 +22,9 @@ public class ClientMain {
 
         SetupMessage serviceMessage = new SetupMessage();
         do {
+            String numberPlayers = "0";
+            String userchoice = "null";
+
             if (serviceMessage.getMessageType() == MessageType.KO) {
                 System.out.println("Error on sent message, please enter a new one");
             }
@@ -41,9 +43,10 @@ public class ClientMain {
         gamemode = userchoice.equals("Expert");
 
 
-            socketClient.send("soos");
+            //socketClient.send("soos");
+            socketClient.send("{\"message_Type\":GAMESETUP_INFO,\"user_csdhoice\":\""+numberPlayers+"\", \"gamemasdsode\":"+gamemode+"}");
             serviceMessage = commandParser.processSetup_Cmd(in.nextLine(), g);
-            //socketClient.send("{\"messageType\":GAMESETUP_INFO,\"user_choice\":\""+numberPlayers+"\", \"gamemode\":"+gamemode+"}");
+
         } while (serviceMessage.getMessageType() == MessageType.KO);
 
 

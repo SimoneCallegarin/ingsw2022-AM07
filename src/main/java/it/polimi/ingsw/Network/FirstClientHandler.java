@@ -41,13 +41,13 @@ public class FirstClientHandler implements Runnable {
             SetupMessage sm=new SetupMessage();
             String line;
             do {
-                if(sm.getMessageType()==MessageType.KO){
+                if(sm.getMessageType()==MessageType.KO || sm.getMessageType()==null){
                     out.println(koJSON);
                     System.out.println("S:Error on received message, waiting for correction...");
                 }
                 line = in.nextLine();
                 sm = commandParser.processSetup_Cmd(line, g);//to set the gamemode and the number of players
-            }while(sm.getMessageType()==MessageType.KO);
+            }while(sm.getMessageType()==MessageType.KO || sm.getMessageType() == null);
 
             System.out.println("Server received: "+ sm);
             gameController.onSetup_Message(sm);
