@@ -116,6 +116,43 @@ class ActionPhaseTest {
             System.out.println("Is " + rc.toString() + " professor in player one dining room? " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));*/
     }
 
+    @Test
+    public void isleFirstMovements2Players() {
+        int counter = 0;
+        Game game = new Game();
+        game.addFirstPlayer("jack", false, 2);
+        game.addAnotherPlayer("calle");
+        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(0, 4);
+            game.playAssistantCard(1, 3);
+        }
+        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+            game.playAssistantCard(1, 3);
+            game.playAssistantCard(0, 4);
+        }
+        // moving 3 students in isle 0
+        for (int rc=0; rc<5; rc++) {
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
+            for (int i = 0; i < studentsOfSpecifiedColor; i++) {
+                game.moveStudentInIsle(game.firstPlayerIndex, 0, rc);
+                counter++;
+                if (counter == 3)
+                    break;
+            }
+            if (counter == 3)
+                break;
+        }
+        // checking if we skipped to the next stage
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
+        // checking if the player has 4 students in his entrance
+        assertEquals(4, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
+        // checking if we have 3 or 4 students on isle 0
+        if (game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex() == 0 || game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex() == 0)
+            assertEquals(3, game.getGameTable().getIsleManager().getIsle(0).getNumberOfStudents());
+        else
+            assertEquals(4, game.getGameTable().getIsleManager().getIsle(0).getNumberOfStudents());
+    }
+
     /**
      * it tests if a combination of the two moveStudent methods works properly
      */
