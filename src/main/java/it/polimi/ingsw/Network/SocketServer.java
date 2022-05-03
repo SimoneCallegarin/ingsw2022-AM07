@@ -1,7 +1,5 @@
 package it.polimi.ingsw.Network;
 
-import it.polimi.ingsw.Network.Messages.SetupMessage;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class SocketServer implements Runnable{
 
-    private final int port;
+    public int port;
     private final ExecutorService executorService;
     private final Server server;
 
@@ -37,9 +35,9 @@ public class SocketServer implements Runnable{
 
     @Override
     public void run() {
-        ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(port);
+            ServerSocket serverSocket = new ServerSocket(port);
+            acceptConnections(serverSocket);
         } catch (IOException e) {
             System.err.println("Error during socket initialization!");
         }

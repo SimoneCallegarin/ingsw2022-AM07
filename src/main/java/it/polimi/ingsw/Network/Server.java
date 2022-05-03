@@ -17,11 +17,9 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
-    private static ExecutorService executor = Executors.newCachedThreadPool();
+    public int port = 1234;
 
-    final int port = 1234;
-
-    private SocketServer socketServer;
+    public SocketServer socketServer;
     /*
       List of Games created.
     */
@@ -34,7 +32,9 @@ public class Server {
     private HashMap<Integer,String> clientRequestedConnection;
 
     public Server() {
-        socketServer = new SocketServer(port,this);
+        this.socketServer = new SocketServer(port,this);
+        this.activeMatches = new ArrayList<>();
+        this.clientRequestedConnection = new HashMap<>();
     }
 
     public int checkConnectionMessageValidity(SetupMessage setupMessage){
@@ -70,27 +70,27 @@ public class Server {
                 break;
             }
         }
-        GameController gameController;
         if(activeMatches.get(lobbyID)==null)
-            gameController = newGame(setupMessage);
+            newGame(setupMessage);
         else
-            gameController = addPlayerToAnExistingLobby(lobbyID,setupMessage);
+            addPlayerToAnExistingLobby(lobbyID,setupMessage);
     }
 
-    public GameController newGame(SetupMessage setupMessage){
+    public void newGame(SetupMessage setupMessage){
         Game game = new Game();
         GameController gameController = new GameController(game);
         gameController.onSetup_Message(setupMessage);
-        return gameController;
     }
 
-    public GameController addPlayerToAnExistingLobby(int lobbyID, SetupMessage setupMessage){
+    public void addPlayerToAnExistingLobby(int lobbyID, SetupMessage setupMessage){
         activeMatches.get(lobbyID).onSetup_Message(setupMessage);
-        return activeMatches.get(lobbyID);
     }
 
     public static void main(String[] args) {
 
-        executor.shutdown();
+        Server server = new Server();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(server.socketServer);
+        //executor.shutdown();
     }
 }
