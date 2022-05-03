@@ -334,7 +334,10 @@ public class Game {
                         gameTable.getIsleManager().getIsle(idIsle).removeStudent(colorForFungist);
                         studentsRemovedByFungist += 1;
                     }
-                checkUpdateInfluence(idIsle);
+                if(gameTable.getIsleManager().getIsle(idIsle).getDenyCards()==0)
+                    checkUpdateInfluence(idIsle);
+                else
+                    gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
                 // if the FUNGIST card is played, then we add the students of the chosen color
                 // that were removed from the selected isle
                 if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)

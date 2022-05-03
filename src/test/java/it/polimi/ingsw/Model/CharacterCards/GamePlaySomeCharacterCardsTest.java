@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model.CharacterCards;
 
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.Network.Messages.MessageType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -213,6 +214,20 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(3,game.getGameTable().getCharacterCard(0).getDenyCards());
         // 1 deny card on the isle 11
         assertEquals(1,game.getGameTable().getIsleManager().getIsle(11).getDenyCards());
+
+        game.setGamePhase(GamePhases.PLANNING_PHASE);
+        game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+
+        game.playAssistantCard(0,5);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+
+        game.moveMotherNature(0,game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+2);
+
+        assertEquals(0,game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).getDenyCards());
     }
 
     /**
