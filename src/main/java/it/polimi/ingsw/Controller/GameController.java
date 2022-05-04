@@ -3,8 +3,8 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.Message;
-import it.polimi.ingsw.Network.Messages.SetupMessage;
 
 /**
  * this class represents the Controller module in the MVC pattern
@@ -21,9 +21,10 @@ public class GameController {
      */
     int colorIndex;
     int colorIndexSaved;
-    public boolean gameMode;
-    public int numberOfPlayers;
 
+    /**
+     * this will permit to store the index of the character card played
+     */
     int characterCardPlayedIndex;
 
     /**
@@ -35,23 +36,23 @@ public class GameController {
     }
 
     /**
-     * this method receive a Message from the ClientHandler classes and calls the model method to update the game state based on
-     * the message type
+     * this method receive a Message from the ClientHandler classes and calls the model method
+     * to update the game state based on the message type
      * @param message the message received, it represents a move by the player
      */
     public void onMessage(Message message){
         switch(message.getMessageType()){
-            case PLAY_ASSISTCARD -> {
+            case PLAY_ASSISTANT_CARD -> {
                 if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
                     game.playAssistantCard(message.playerID, message.genericValue);
                 }
             }
-            case MOVE_STUDENT_TODINING -> {
+            case MOVE_STUDENT_TO_DINING -> {
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()) {
                     game.moveStudentInDiningRoom(message.playerID, colorIndex);
                 }
             }
-            case MOVE_STUDENT_TOISLE ->{
+            case MOVE_STUDENT_TO_ISLE ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
                     game.moveStudentInIsle(message.playerID, message.genericValue, colorIndex);
                 }
@@ -66,7 +67,7 @@ public class GameController {
                     game.pickStudentsFromCloud(message.playerID, message.genericValue);
                 }
             }
-            case PLAY_CHARACTERCARD ->{
+            case PLAY_CHARACTER_CARD ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
                     game.playCharacterCard(message.playerID,message.genericValue);
                     characterCardPlayedIndex = message.genericValue;
@@ -98,21 +99,17 @@ public class GameController {
     }
 
     /**
-     * this is the method used during the setup phase of the game where the first player decides the game mode, the number
-     * of players and his username (in this order).Only after the first player makes his decisions, the other players set
-     * their username
-     * @param sm the setup message received
+     * this method is called by the server, it permits to add a player to an existing game when newGame is set false
+     * or to create one when newGame is set true
+     * @param nickName the nickname of the player who is joining the game
+     * @param preferences the number of players and the game mode the player chose to play whit
+     * @param newGame boolean variable that permits to know if it's required to add the player to a new game or not
      */
-    public void onSetup_Message(SetupMessage sm){
-
-        switch(sm.getMessageType()){
-            case FIRST_USERNAME_CHOICE -> game.addFirstPlayer(sm.nickName,gameMode,numberOfPlayers);
-            case USERNAME_CHOICE -> game.addAnotherPlayer(sm.nickName);
-            case GAMESETUP_INFO -> {
-                gameMode = sm.gameMode;
-                numberOfPlayers = sm.numberOfPlayers;
-            }
-        }
+    public void addPlayerToGame(String nickName, GamePreferencesMessage preferences, Boolean newGame){
+        if(newGame)
+            game.addFirstPlayer(nickName,preferences.isGameMode(),preferences.getNumberOfPlayers());
+        else
+            game.addAnotherPlayer(nickName);
     }
 
 

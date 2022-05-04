@@ -1,15 +1,12 @@
 package it.polimi.ingsw.Network;
 
-        import com.google.gson.Gson;
-        import it.polimi.ingsw.Controller.GameController;
-        import it.polimi.ingsw.Network.Messages.Message;
-        import it.polimi.ingsw.Network.Messages.MessageType;
-        import it.polimi.ingsw.Network.Messages.SetupMessage;
+import com.google.gson.Gson;
+import it.polimi.ingsw.Network.Messages.*;
 
-        import java.io.IOException;
-        import java.io.PrintWriter;
-        import java.net.Socket;
-        import java.util.Scanner;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
 
 /**
@@ -17,9 +14,10 @@ package it.polimi.ingsw.Network;
  * It has to get the setup choices by the first player and his moves
  */
 public class ClientHandler implements Runnable{
-    GameController gameController;
     Server server;
     Socket socket;
+    int matchID;
+    String nickName;
     CommandParser commandParser=new CommandParser();
     Gson g=new Gson();
 
@@ -28,31 +26,63 @@ public class ClientHandler implements Runnable{
         this.socket = socket;
     }
 
-    private void logWithSetupMessage(SetupMessage setupMessage) {
-        server.setClientRequestedConnection(setupMessage);
+    /**
+     * Logs in the player and checks if it's using a valid nickname
+     * @param in the Scanner that gets the InputStream from the Socket
+     * @param out the PrintWriter that writes the OutputStream to the Socket
+     */
+    private void logPlayer(Scanner in, PrintWriter out) {
+        LoginMessage loginMessage;
+        do{
+            do {
+                loginMessage = commandParser.processLogin_Cmd(in.nextLine(), g);
+                if(loginMessage.getMessageType()==MessageType.KO || loginMessage.getMessageType()!=MessageType.LOGIN){
+                    out.println(ConstantMessages.koJSON);  //NOT WORKING?
+                    System.out.println("Error on received message, waiting for correction...");
+                }
+            }while(loginMessage.getMessageType()==MessageType.KO && loginMessage.getMessageType() != MessageType.LOGIN);
+            server.setPlayers(loginMessage.getNickName(),this);
+        }while (!server.setNickNamesChosen(loginMessage));          //Repeat till it's given an available nickname
+        nickName = loginMessage.getNickName();
+    }
+
+    /**
+     * Adds the player to a game, using some server methods that permits to find the matchID of the game he will play
+     * @param nickName of the player that wants to play
+     * @param in the Scanner that gets the InputStream from the Socket
+     * @param out the PrintWriter that writes the OutputStream to the Socket
+     */
+    private void addPlayerToGame(String nickName, Scanner in, PrintWriter out){
+        GamePreferencesMessage preferences;
+        do{
+            do {
+                preferences = commandParser.processPreferences_Cmd(in.nextLine(), g);
+                if(preferences.getMessageType()==MessageType.KO || preferences.getMessageType()!=MessageType.GAME_SETUP_INFO){
+                    out.println(ConstantMessages.koJSON);
+                    System.out.println("Error on received message, waiting for correction...");
+                }
+            }while(preferences.getMessageType()==MessageType.KO && preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
+            matchID = server.addPlayerToGame(nickName,preferences);
+        }while (matchID==-1);                       //Repeat till it's given a valid number of player
     }
 
     @Override
     public void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
-            String okJSON="{\"messageType\":OK,\"nickName\":\"ok\",\"numberOfPlayers\":0\", \"gameMode\":true}";
-            String koJSON="{\"messageType\":KO,\"nickName\":\"ko\",\"numberOfPlayers\":0\", \"gameMode\":true}";
+            PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
 
-            SetupMessage setupMessage;
-            do {
-                setupMessage = commandParser.processSetup_Cmd(in.nextLine(), g);
-                if(setupMessage.getMessageType()==MessageType.KO || setupMessage.getMessageType()==null){
-                    out.println(koJSON);
-                    System.out.println("S:Error on received message, waiting for correction...");
-                }
-            }while(setupMessage.getMessageType()==MessageType.KO || setupMessage.getMessageType() == null);
+            logPlayer(in,out);
 
-            System.out.println("Server received: "+ setupMessage);
+            System.out.println("NickName selected: "+ nickName);
 
-            logWithSetupMessage(setupMessage);
-            out.println(okJSON);
+            addPlayerToGame(nickName,in,out);
+
+            if(server.getMatch(matchID).game.getActualNumberOfPlayers()==1)
+                System.out.println("Added player: "+ nickName + " to a new game.");
+            else
+                System.out.println("Added player: "+ nickName + " to an already existing game with other "+ (server.getMatch(matchID).game.getActualNumberOfPlayers()-1) +" players.");
+            out.println(ConstantMessages.okJSON);
 
             while (true) {
                 Message m= commandParser.processCmd(in.nextLine(), g);
@@ -60,8 +90,8 @@ public class ClientHandler implements Runnable{
                     break;
                 }
                 else{
-                    gameController.onMessage(m);
-                    out.println(okJSON);
+                    server.getMatch(matchID).onMessage(m);
+                    out.println(ConstantMessages.okJSON);
                 }
             }
             out.close();

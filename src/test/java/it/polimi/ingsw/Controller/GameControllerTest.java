@@ -18,12 +18,12 @@ class GameControllerTest {
     GameController gameController = new GameController(game);
 
     /**
-     * we are testing if the PLAY_ASSISTCARD message works properly
+     * we are testing if the PLAY_ASSISTANT_CARD message works properly
      */
     @Test
     void onMessage_PLAY_ASSISTCARD() {
         Message message = new Message();
-        message.messageType = MessageType.PLAY_ASSISTCARD;
+        message.messageType = MessageType.PLAY_ASSISTANT_CARD;
         message.playerID = 0;
         message.genericValue = 5;
 
@@ -41,7 +41,7 @@ class GameControllerTest {
     }
 
     /**
-     * we are testing if the MOVE_STUDENT_TODINING message works properly
+     * we are testing if the MOVE_STUDENT_TO_DINING message works properly
      */
     @Test
     void onMessage_MOVE_STUDENT_TODINING() {
@@ -59,7 +59,7 @@ class GameControllerTest {
 
         gameController.onMessage(message);
 
-        message.messageType = MessageType.MOVE_STUDENT_TODINING;
+        message.messageType = MessageType.MOVE_STUDENT_TO_DINING;
         message.playerID = 0;
         message.genericValue = 0;
 
@@ -69,7 +69,7 @@ class GameControllerTest {
     }
 
     /**
-     * we are testing if the MOVE_STUDENT_TOISLE message works properly
+     * we are testing if the MOVE_STUDENT_TO_ISLE message works properly
      */
     @Test
     void onMessage_MOVE_STUDENT_TOISLE() {
@@ -89,7 +89,7 @@ class GameControllerTest {
 
         gameController.onMessage(message);
 
-        message.messageType = MessageType.MOVE_STUDENT_TOISLE;
+        message.messageType = MessageType.MOVE_STUDENT_TO_ISLE;
         message.playerID = 0;
         message.genericValue = 11;
 
@@ -104,7 +104,7 @@ class GameControllerTest {
     @Test
     void onMessage_MOVE_MOTHERNATURE() {
         Message message = new Message();
-        message.messageType = MessageType.PLAY_ASSISTCARD;
+        message.messageType = MessageType.PLAY_ASSISTANT_CARD;
         message.playerID = 0;
         message.genericValue = 10;
 
@@ -180,7 +180,7 @@ class GameControllerTest {
     @Test
     void onMessage_PLAY_CHARACTERCARD() {
         Message message = new Message();
-        message.messageType = MessageType.PLAY_ASSISTCARD;
+        message.messageType = MessageType.PLAY_ASSISTANT_CARD;
         message.playerID = 0;
         message.genericValue = 5;
 
@@ -194,7 +194,7 @@ class GameControllerTest {
 
         gameController.onMessage(message);
 
-        message.messageType = MessageType.PLAY_CHARACTERCARD;
+        message.messageType = MessageType.PLAY_CHARACTER_CARD;
         message.playerID = 0;
         message.genericValue = 0;
 
