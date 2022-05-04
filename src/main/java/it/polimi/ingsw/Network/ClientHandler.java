@@ -1,48 +1,61 @@
 package it.polimi.ingsw.Network;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Scanner;
+        import com.google.gson.Gson;
+        import it.polimi.ingsw.Controller.GameController;
+        import it.polimi.ingsw.Network.Messages.Message;
+        import it.polimi.ingsw.Network.Messages.MessageType;
+        import it.polimi.ingsw.Network.Messages.SetupMessage;
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.Controller.GameController;
-import it.polimi.ingsw.Model.Enumeration.GamePhases;
-import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.Messages.Message;
-import it.polimi.ingsw.Network.Messages.MessageType;
-import it.polimi.ingsw.Network.Messages.SetupMessage;
+        import java.io.IOException;
+        import java.io.PrintWriter;
+        import java.net.Socket;
+        import java.util.Scanner;
+
 
 /**
- * This class is used to manage the connection with the client from the second to the fourth.
+ * this class is used to manage the connection to the first client which connects to the server to play.
+ * It has to get the setup choices by the first player and his moves
  */
 public class ClientHandler implements Runnable{
-    Game game;
     GameController gameController;
+    Server server;
     Socket socket;
     CommandParser commandParser=new CommandParser();
-
     Gson g=new Gson();
 
-    public ClientHandler(Socket socket,GameController gameController) {
-        this.socket = socket; this.gameController=gameController;
+    public ClientHandler(Server server,Socket socket) {
+        this.server = server;
+        this.socket = socket;
+    }
+
+    private void logWithSetupMessage(SetupMessage setupMessage) {
+        server.setClientRequestedConnection(setupMessage);
     }
 
     @Override
     public void run() {
         try {
             Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            String okJSON="{\"messageType\":OK,\"user_choice\":\"ok\",\"gamemode\":true}";
-            String koJSON="{\"messageType\":KO,\"user_choice\":\"ko\",\"gamemode\":true}";
+            PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
+            String okJSON="{\"messageType\":OK,\"nickName\":\"ok\",\"numberOfPlayers\":0\", \"gameMode\":true}";
+            String koJSON="{\"messageType\":KO,\"nickName\":\"ko\",\"numberOfPlayers\":0\", \"gameMode\":true}";
 
-            SetupMessage sm= commandParser.processSetup_Cmd(in.nextLine(), g);//to get the player username
-            gameController.onSetup_Message(sm);
+            SetupMessage setupMessage;
+            do {
+                setupMessage = commandParser.processSetup_Cmd(in.nextLine(), g);
+                if(setupMessage.getMessageType()==MessageType.KO || setupMessage.getMessageType()==null){
+                    out.println(koJSON);
+                    System.out.println("S:Error on received message, waiting for correction...");
+                }
+            }while(setupMessage.getMessageType()==MessageType.KO || setupMessage.getMessageType() == null);
+
+            System.out.println("Server received: "+ setupMessage);
+
+            logWithSetupMessage(setupMessage);
             out.println(okJSON);
 
             while (true) {
                 Message m= commandParser.processCmd(in.nextLine(), g);
-                notifyAll();
                 if(m.getMessageType()== MessageType.QUIT){
                     break;
                 }
@@ -51,6 +64,7 @@ public class ClientHandler implements Runnable{
                     out.println(okJSON);
                 }
             }
+            out.close();
             in.close();
             out.close();
             socket.close();

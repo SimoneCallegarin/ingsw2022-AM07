@@ -10,7 +10,6 @@ import java.util.Scanner;
 public class ClientMain {
     public static void main(String[] args) throws IOException {
 
-        boolean gamemode;
 
         Gson g = new Gson();
         CommandParser commandParser = new CommandParser();
@@ -22,40 +21,36 @@ public class ClientMain {
 
         SetupMessage serviceMessage = new SetupMessage();
         do {
-            String numberPlayers = "0";
-            String userchoice = "null";
+            String nickName;
+            String numberOfPlayers;
+            String gameMode;
+            boolean gamemode;
 
             if (serviceMessage.getMessageType() == MessageType.KO) {
                 System.out.println("Error on sent message, please enter a new one");
             }
 
+            System.out.println("Nickname?");
+            nickName = user.nextLine();
 
-        while (Integer.parseInt(numberPlayers) < 2 || Integer.parseInt(numberPlayers) > 4) {
             System.out.println("How many players do you want to play with?\n");
-            numberPlayers = user.nextLine();
-        }
+            numberOfPlayers = user.nextLine();
 
-        while (!userchoice.equals("Expert") && !userchoice.equals("Base")) {
             System.out.println("Which game mode do you prefer?Expert or Base?");
-            userchoice = user.nextLine();
-        }
+            gameMode = user.nextLine();
+            if (gameMode.equals("Expert"))
+                gamemode=true;
+            else
+                gamemode=false;
 
-        gamemode = userchoice.equals("Expert");
 
-
-            //socketClient.send("soos");
-            socketClient.send("{\"message_Type\":GAMESETUP_INFO,\"user_csdhoice\":\""+numberPlayers+"\", \"gamemasdsode\":"+gamemode+"}");
+            socketClient.send("{\"messageType\":GAMESETUP_INFO,\"nickName\":\""+nickName+"\",\"numberOfPlayers\":"+numberOfPlayers+",\"gameMode\":"+gamemode+"}");
+            System.out.println(commandParser.processSetup_Cmd(in.nextLine(), g));
+            System.out.println(0);
             serviceMessage = commandParser.processSetup_Cmd(in.nextLine(), g);
+            System.out.println(0);
 
         } while (serviceMessage.getMessageType() == MessageType.KO);
-
-
-        socketClient.send("{\"messageType\": USERNAME_CHOICE, \"user_choice\":\"username\", \"gamemode\":true}");
-        if (commandParser.processSetup_Cmd(in.nextLine(), g).getMessageType().equals(MessageType.KO)) {
-            System.out.println("Error on message sent!");
-            return;
-        }
-
 
     }
 }
