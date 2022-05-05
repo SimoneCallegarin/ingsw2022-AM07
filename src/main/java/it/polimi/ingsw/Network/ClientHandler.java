@@ -41,8 +41,8 @@ public class ClientHandler implements Runnable{
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(loginMessage.getMessageType()==MessageType.KO && loginMessage.getMessageType() != MessageType.LOGIN);
-            server.setPlayers(loginMessage.getNickName(),this);
-        }while (!server.setNickNamesChosen(loginMessage));          //Repeat till it's given an available nickname
+        }while (!server.setNickNamesChosen(loginMessage));                   //Repeat till it's given an available nickname
+        server.setPlayers(loginMessage.getNickName(),this);        
         nickName = loginMessage.getNickName();
     }
 
