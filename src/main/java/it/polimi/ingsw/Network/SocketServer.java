@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class SocketServer implements Runnable{
 
-    public int port;
+    private final int port;
     private final ExecutorService executorService;
     private final Server server;
 

@@ -12,9 +12,9 @@
 | Socket             | 🟡 |
 | GUI                | 🔴 |
 | CLI                | 🔴 |
-| Multiple games     | 🔴 |
+| Multiple games     | 🟡 |
 | Persistence        | 🔴 |
-| 12 Character cards | 🟡 |
+| 12 Character cards | 🟢 |
 | 4 Players match    | 🟢 |
 
 🔴
