@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.Messages.*;
+import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,7 +40,6 @@ public class ClientHandler implements Runnable{
      * constructor of the client handler
      * @param server the server associated to this client handler
      * @param socket the socket of the client that is associated to this client handler
-     * @throws IOException
      */
     public ClientHandler(Server server,Socket socket) {
         this.server = server;
@@ -59,11 +61,13 @@ public class ClientHandler implements Runnable{
         do{
             do {
                 loginMessage = commandParser.processLogin_Cmd(in.nextLine());
+                System.out.println(loginMessage);
                 if(loginMessage.getMessageType()==MessageType.KO || loginMessage.getMessageType()!=MessageType.LOGIN){
                     out.println(ConstantMessages.koJSON);  //NOT WORKING?
                     System.out.println("Error on received message, waiting for correction...");
+
                 }
-            }while(loginMessage.getMessageType()==MessageType.KO && loginMessage.getMessageType() != MessageType.LOGIN);
+            }while(loginMessage.getMessageType()==MessageType.KO || loginMessage.getMessageType() != MessageType.LOGIN);
         }while (!server.setNickNamesChosen(loginMessage));                   //Repeat till it's given an available nickname
         server.setPlayers(loginMessage.getNickName(),this);        
         nickName = loginMessage.getNickName();
@@ -72,9 +76,8 @@ public class ClientHandler implements Runnable{
 
     /**
      * Adds the player to a game, using some server methods that permits to find the matchID of the game he will play
-     * @param nickName of the player that wants to play
      */
-    private void addPlayerToGame(String nickName){
+    private void addPlayerToGame(){
         GamePreferencesMessage preferences;
         do{
             do {
@@ -83,7 +86,7 @@ public class ClientHandler implements Runnable{
                     out.println(ConstantMessages.koJSON);
                     System.out.println("Error on received message, waiting for correction...");
                 }
-            }while(preferences.getMessageType()==MessageType.KO && preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
+            }while(preferences.getMessageType()==MessageType.KO || preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
             matchID = server.addPlayerToGame(nickName,preferences);
         }while (matchID==-1);                       //Repeat till it's given a valid number of player
 
@@ -97,7 +100,7 @@ public class ClientHandler implements Runnable{
 
     private void handleGame(){
         while (true) {
-            Message m= commandParser.processCmd(in.nextLine());
+            PlayerMoveMessage m= commandParser.processCmd(in.nextLine());
             if(m.getMessageType()== MessageType.QUIT){
                 break;
             }
@@ -114,7 +117,7 @@ public class ClientHandler implements Runnable{
 
             logPlayer();
 
-            addPlayerToGame(nickName);
+            addPlayerToGame();
 
             handleGame();
 

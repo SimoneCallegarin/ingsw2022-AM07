@@ -3,9 +3,10 @@ package it.polimi.ingsw.Network;
 import com.google.gson.Gson;
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.ConstantMessages;
-import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessages;
 
 import java.time.Duration;
 import java.util.concurrent.*;
@@ -24,7 +25,7 @@ public class CommandParser
             return handler.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
         }catch(TimeoutException | InterruptedException | ExecutionException e){
             handler.cancel(true);
-            return g.fromJson(ConstantMessages.koJSON,LoginMessage.class);
+            return g.fromJson(ConstantMessages.koJSON, LoginMessage.class);
         }
 
     }
@@ -43,13 +44,9 @@ public class CommandParser
 
     }
 
-    public Message processCmd(String line){
-        return g.fromJson(line,Message.class);
-    }
+    public PlayerMoveMessage processCmd(String line){ return g.fromJson(line, PlayerMoveMessage.class); }
 
-    public ServerSettings serverSettingsCmd(String line, Gson g){
-        return g.fromJson(line,ServerSettings.class);
-    }
+    public ServerSettings serverSettingsCmd(String line, Gson g){ return g.fromJson(line,ServerSettings.class); }
 
 }
 

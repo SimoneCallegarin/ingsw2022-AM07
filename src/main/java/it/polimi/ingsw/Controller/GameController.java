@@ -3,8 +3,8 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
 
 /**
  * this class represents the Controller module in the MVC pattern
@@ -40,48 +40,48 @@ public class GameController {
      * to update the game state based on the message type
      * @param message the message received, it represents a move by the player
      */
-    public void onMessage(Message message){
+    public void onMessage(PlayerMoveMessage message){
         switch(message.getMessageType()){
             case PLAY_ASSISTANT_CARD -> {
-                if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
-                    game.playAssistantCard(message.playerID, message.genericValue);
+                if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                    game.playAssistantCard(message.getPlayerID(), message.genericValue);
                 }
             }
             case MOVE_STUDENT_TO_DINING -> {
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()) {
-                    game.moveStudentInDiningRoom(message.playerID, colorIndex);
+                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()) {
+                    game.moveStudentInDiningRoom(message.getPlayerID(), colorIndex);
                 }
             }
             case MOVE_STUDENT_TO_ISLE ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
-                    game.moveStudentInIsle(message.playerID, message.genericValue, colorIndex);
+                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                    game.moveStudentInIsle(message.getPlayerID(), message.genericValue, colorIndex);
                 }
             }
             case MOVE_MOTHERNATURE ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_MOTHER_NATURE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
-                    game.moveMotherNature(message.playerID, message.genericValue);
+                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_MOTHER_NATURE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                    game.moveMotherNature(message.getPlayerID(), message.genericValue);
                 }
             }
             case CHOOSE_CLOUD ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.CHOOSE_CLOUD && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
-                    game.pickStudentsFromCloud(message.playerID, message.genericValue);
+                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.CHOOSE_CLOUD && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                    game.pickStudentsFromCloud(message.getPlayerID(), message.genericValue);
                 }
             }
             case PLAY_CHARACTER_CARD ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
-                    game.playCharacterCard(message.playerID,message.genericValue);
+                if (game.gamePhase == GamePhases.ACTION_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                    game.playCharacterCard(message.getPlayerID(),message.genericValue);
                     characterCardPlayedIndex = message.genericValue;
                     CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.genericValue).getCharacterCardName();
                     switch (characterCardPlayed){
-                        case FARMER,HERALD,MAGICAL_LETTER_CARRIER -> game.activateAtomicEffect(message.playerID,characterCardPlayedIndex,-1,-1);
+                        case FARMER,HERALD,MAGICAL_LETTER_CARRIER -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,-1,-1);
                     }
                 }
             }
             case ACTIVATE_ATOMIC_EFFECT ->{
                 CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.genericValue).getCharacterCardName();
                 switch (characterCardPlayed){
-                    case MONK,GRANDMA_HERBS,SPOILED_PRINCESS,THIEF -> game.activateAtomicEffect(message.playerID,characterCardPlayedIndex,colorIndex,-1);
-                    case JESTER,MINSTREL -> game.activateAtomicEffect(message.playerID,characterCardPlayedIndex,colorIndex,colorIndexSaved);
+                    case MONK,GRANDMA_HERBS,SPOILED_PRINCESS,THIEF -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,colorIndex,-1);
+                    case JESTER,MINSTREL -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,colorIndex,colorIndexSaved);
                     //still missing the choice of the number of students to move
                 }
             }

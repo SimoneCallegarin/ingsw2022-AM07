@@ -3,8 +3,8 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Controller.GameController;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
-import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

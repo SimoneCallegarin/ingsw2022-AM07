@@ -6,7 +6,7 @@ import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Model.Enumeration.PlanningPhases;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import org.junit.jupiter.api.Test;
 
@@ -16,16 +16,14 @@ class GameControllerTest {
 
     Game game = new Game();
     GameController gameController = new GameController(game);
+    PlayerMoveMessage message;
 
     /**
      * we are testing if the PLAY_ASSISTANT_CARD message works properly
      */
     @Test
     void onMessage_PLAY_ASSISTCARD() {
-        Message message = new Message();
-        message.messageType = MessageType.PLAY_ASSISTANT_CARD;
-        message.playerID = 0;
-        message.genericValue = 5;
+        message = new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD, 0, 5);
 
         game.addFirstPlayer("simone",false,2);
         game.addAnotherPlayer("giacomo");
@@ -45,10 +43,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_STUDENT_TODINING() {
-        Message message = new Message();
-        message.messageType = MessageType.VALUE;
-        message.playerID = 0;
-        message.genericValue = 1;
+        message = new PlayerMoveMessage(MessageType.VALUE,0,1);
 
         game.addFirstPlayer("simone",false,2);
         game.addAnotherPlayer("giacomo");
@@ -59,9 +54,7 @@ class GameControllerTest {
 
         gameController.onMessage(message);
 
-        message.messageType = MessageType.MOVE_STUDENT_TO_DINING;
-        message.playerID = 0;
-        message.genericValue = 0;
+        message = new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING,0,0);
 
         gameController.onMessage(message);
 
@@ -73,10 +66,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_STUDENT_TOISLE() {
-        Message message = new Message();
-        message.messageType = MessageType.VALUE;
-        message.playerID = 0;
-        message.genericValue = 3;
+        message = new PlayerMoveMessage(MessageType.VALUE,0,3);
 
         game.addFirstPlayer("simone",false,2);
         game.addAnotherPlayer("giacomo");
@@ -89,9 +79,7 @@ class GameControllerTest {
 
         gameController.onMessage(message);
 
-        message.messageType = MessageType.MOVE_STUDENT_TO_ISLE;
-        message.playerID = 0;
-        message.genericValue = 11;
+        message = new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_ISLE,0,11);
 
         gameController.onMessage(message);
 
@@ -103,10 +91,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_MOTHERNATURE() {
-        Message message = new Message();
-        message.messageType = MessageType.PLAY_ASSISTANT_CARD;
-        message.playerID = 0;
-        message.genericValue = 10;
+        message = new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD,0,10);
 
         game.addFirstPlayer("simone",false,2);
         game.addAnotherPlayer("giacomo");
@@ -121,14 +106,13 @@ class GameControllerTest {
         game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
         game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
 
-        message.messageType = MessageType.MOVE_MOTHERNATURE;
-        message.playerID = 0;
         int newIsleWithMotherNature;
         if(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()<8)
             newIsleWithMotherNature = game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+4;
         else
             newIsleWithMotherNature = game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()-8;
-        message.genericValue = newIsleWithMotherNature;
+        message = new PlayerMoveMessage(MessageType.MOVE_MOTHERNATURE,0,newIsleWithMotherNature);
+
 
         gameController.onMessage(message);
 
@@ -140,10 +124,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_CHOOSE_CLOUD() {
-        Message message = new Message();
-        message.messageType = MessageType.CHOOSE_CLOUD;
-        message.playerID = 0;
-        message.genericValue = 1;
+        message = new PlayerMoveMessage(MessageType.CHOOSE_CLOUD,0,1);
 
         game.addFirstPlayer("simone",false,2);
         game.addAnotherPlayer("giacomo");
@@ -179,10 +160,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_PLAY_CHARACTERCARD() {
-        Message message = new Message();
-        message.messageType = MessageType.PLAY_ASSISTANT_CARD;
-        message.playerID = 0;
-        message.genericValue = 5;
+        message = new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD,0,5);
 
         game.addFirstPlayer("simone",true,2);
         game.addAnotherPlayer("giacomo");
@@ -194,9 +172,7 @@ class GameControllerTest {
 
         gameController.onMessage(message);
 
-        message.messageType = MessageType.PLAY_CHARACTER_CARD;
-        message.playerID = 0;
-        message.genericValue = 0;
+        message = new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD,0,0);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
         game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
