@@ -6,7 +6,7 @@ import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Model.Enumeration.PlanningPhases;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.GameMessage;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_PLAY_ASSISTCARD() {
-        Message message = new Message();
+        GameMessage message = new GameMessage();
         message.messageType = MessageType.PLAY_ASSISTANT_CARD;
         message.playerID = 0;
         message.genericValue = 5;
@@ -45,7 +45,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_STUDENT_TODINING() {
-        Message message = new Message();
+        GameMessage message = new GameMessage();
         message.messageType = MessageType.VALUE;
         message.playerID = 0;
         message.genericValue = 1;
@@ -73,7 +73,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_STUDENT_TOISLE() {
-        Message message = new Message();
+        GameMessage message = new GameMessage();
         message.messageType = MessageType.VALUE;
         message.playerID = 0;
         message.genericValue = 3;
@@ -103,7 +103,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_MOTHERNATURE() {
-        Message message = new Message();
+        GameMessage message = new GameMessage();
         message.messageType = MessageType.PLAY_ASSISTANT_CARD;
         message.playerID = 0;
         message.genericValue = 10;
@@ -140,7 +140,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_CHOOSE_CLOUD() {
-        Message message = new Message();
+        GameMessage message = new GameMessage();
         message.messageType = MessageType.CHOOSE_CLOUD;
         message.playerID = 0;
         message.genericValue = 1;
@@ -179,7 +179,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_PLAY_CHARACTERCARD() {
-        Message message = new Message();
+        GameMessage message = new GameMessage();
         message.messageType = MessageType.PLAY_ASSISTANT_CARD;
         message.playerID = 0;
         message.genericValue = 5;

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.Network.Messages.ConstantMessages;
 import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.GameMessage;
 
 import java.time.Duration;
 import java.util.concurrent.*;
@@ -40,8 +40,8 @@ public class CommandParser
 
     }
 
-    public Message processCmd(String line, Gson g){
-        return g.fromJson(line,Message.class);}
+    public GameMessage processCmd(String line, Gson g){
+        return g.fromJson(line,GameMessage.class);}
 
 }
 

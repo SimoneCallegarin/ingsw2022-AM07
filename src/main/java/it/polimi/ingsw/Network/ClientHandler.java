@@ -17,7 +17,7 @@ public class ClientHandler implements Runnable{
     Server server;
     Socket socket;
     int matchID;
-    String nickName;
+    String nickname;
     CommandParser commandParser=new CommandParser();
     Gson g=new Gson();
 
@@ -36,14 +36,15 @@ public class ClientHandler implements Runnable{
         do{
             do {
                 loginMessage = commandParser.processLogin_Cmd(in.nextLine(), g);
-                if(loginMessage.getMessageType()==MessageType.KO || loginMessage.getMessageType()!=MessageType.LOGIN){
+                if(loginMessage.getMessageType()!=MessageType.LOGIN){
                     out.println(ConstantMessages.koJSON);  //NOT WORKING?
                     System.out.println("Error on received message, waiting for correction...");
                 }
-            }while(loginMessage.getMessageType()==MessageType.KO && loginMessage.getMessageType() != MessageType.LOGIN);
-            server.setPlayers(loginMessage.getNickName(),this);
+            }while(loginMessage.getMessageType() != MessageType.LOGIN);
         }while (!server.setNickNamesChosen(loginMessage));          //Repeat till it's given an available nickname
-        nickName = loginMessage.getNickName();
+        server.setPlayers(loginMessage.getNickname(),this);
+        nickname = loginMessage.getNickname();
+        out.println(ConstantMessages.okJSON);
     }
 
     /**
@@ -57,13 +58,14 @@ public class ClientHandler implements Runnable{
         do{
             do {
                 preferences = commandParser.processPreferences_Cmd(in.nextLine(), g);
-                if(preferences.getMessageType()==MessageType.KO || preferences.getMessageType()!=MessageType.GAME_SETUP_INFO){
+                if(preferences.getMessageType()!=MessageType.GAME_SETUP_INFO){
                     out.println(ConstantMessages.koJSON);
                     System.out.println("Error on received message, waiting for correction...");
                 }
-            }while(preferences.getMessageType()==MessageType.KO && preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
+            }while(preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
             matchID = server.addPlayerToGame(nickName,preferences);
         }while (matchID==-1);                       //Repeat till it's given a valid number of player
+        out.println(ConstantMessages.okJSON);
     }
 
     @Override
@@ -74,18 +76,22 @@ public class ClientHandler implements Runnable{
 
             logPlayer(in,out);
 
-            System.out.println("NickName selected: "+ nickName);
+            System.out.println("Nickname selected: "+ nickname);
 
-            addPlayerToGame(nickName,in,out);
+            addPlayerToGame(nickname,in,out);
 
             if(server.getMatch(matchID).game.getActualNumberOfPlayers()==1)
-                System.out.println("Added player: "+ nickName + " to a new game.");
-            else
-                System.out.println("Added player: "+ nickName + " to an already existing game with other "+ (server.getMatch(matchID).game.getActualNumberOfPlayers()-1) +" players.");
+                System.out.println("Added player "+ nickname + " to a new game.");
+            else {
+                if (server.getMatch(matchID).game.getActualNumberOfPlayers() == 2)
+                    System.out.println("Added player " + nickname + " to an already existing game with another player");
+                else
+                    System.out.println("Added player " + nickname + " to an already existing game with other " + (server.getMatch(matchID).game.getActualNumberOfPlayers() - 1) + " players.");
+            }
             out.println(ConstantMessages.okJSON);
 
             while (true) {
-                Message m= commandParser.processCmd(in.nextLine(), g);
+                GameMessage m= commandParser.processCmd(in.nextLine(), g);
                 if(m.getMessageType()== MessageType.QUIT){
                     break;
                 }

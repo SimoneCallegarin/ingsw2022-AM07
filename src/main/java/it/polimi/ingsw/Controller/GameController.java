@@ -4,7 +4,7 @@ import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.GameMessage;
 
 /**
  * this class represents the Controller module in the MVC pattern
@@ -40,7 +40,7 @@ public class GameController {
      * to update the game state based on the message type
      * @param message the message received, it represents a move by the player
      */
-    public void onMessage(Message message){
+    public void onMessage(GameMessage message){
         switch(message.getMessageType()){
             case PLAY_ASSISTANT_CARD -> {
                 if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.playerID).getOrder()){
@@ -107,7 +107,7 @@ public class GameController {
      */
     public void addPlayerToGame(String nickName, GamePreferencesMessage preferences, Boolean newGame){
         if(newGame)
-            game.addFirstPlayer(nickName,preferences.isGameMode(),preferences.getNumberOfPlayers());
+            game.addFirstPlayer(nickName,preferences.isExpert(),preferences.getNumberOfPlayers());
         else
             game.addAnotherPlayer(nickName);
     }

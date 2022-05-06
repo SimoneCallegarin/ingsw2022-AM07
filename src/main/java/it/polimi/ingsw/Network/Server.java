@@ -47,7 +47,7 @@ public class Server {
      * @return true if it's a valid nickname, else false
      */
     public boolean checkNickNameValidity(LoginMessage loginMessage){
-        return !nickNamesChosen.contains(loginMessage.getNickName());
+        return !nickNamesChosen.contains(loginMessage.getNickname());
     }
 
     /**
@@ -73,7 +73,7 @@ public class Server {
      */
     public boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
-            nickNamesChosen.add(loginMessage.getNickName());
+            nickNamesChosen.add(loginMessage.getNickname());
             return true;
         }
         else{
@@ -99,7 +99,7 @@ public class Server {
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
-            if(activeMatches.get(i).game.getGameMode()==preferences.gameMode && activeMatches.get(i).game.getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).game.getActualNumberOfPlayers()!=activeMatches.get(i).game.getNumberOfPlayers()){
+            if(activeMatches.get(i).game.getGameMode()==preferences.expertMode && activeMatches.get(i).game.getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).game.getActualNumberOfPlayers()!=activeMatches.get(i).game.getNumberOfPlayers()){
                 matchID=i;
                 break;
             }
@@ -154,16 +154,16 @@ public class Server {
         String hostName;
         int portNumber;
 
-        if (args.length==2){
+        /*if (args.length==2){
             hostName = args[0];
             portNumber = Integer.parseInt(args[1]);
-        }else{
+        }else{*/
             hostName = ServerSettings.ReadHostFromJSON();
             portNumber = ServerSettings.ReadPortFromJSON();
-        }
+        //}
 
         Server server = new Server(portNumber);
-        System.out.println(hostName+" Server started !");
+        System.out.println(hostName+" Server started at port " + portNumber + "!");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
         //executor.shutdown();
