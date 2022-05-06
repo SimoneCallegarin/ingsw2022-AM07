@@ -78,6 +78,7 @@ public class Server {
         }
         else{
             System.err.println("Error: A player with this nickname already exists!");
+            System.out.println("\"" + loginMessage.getNickName() + "\"" + " isn't valid: ");
             //SEND ERROR!
             return false;
         }
@@ -163,7 +164,7 @@ public class Server {
         }
 
         Server server = new Server(portNumber);
-        System.out.println(hostName+" Server started !");
+        System.out.println("Eryantis Server started !");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
         //executor.shutdown();

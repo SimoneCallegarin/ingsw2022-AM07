@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.ConstantMessages;
 import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.LoginMessage;
@@ -12,7 +13,9 @@ import java.util.concurrent.*;
 public class CommandParser
 {
 
-    public LoginMessage processLogin_Cmd(String line, Gson g){
+    private final Gson g=new Gson();
+
+    public LoginMessage processLogin_Cmd(String line){
         final Duration timeout=Duration.ofSeconds(5);
         ExecutorService executor= Executors.newSingleThreadExecutor();
 
@@ -26,7 +29,7 @@ public class CommandParser
 
     }
 
-    public GamePreferencesMessage processPreferences_Cmd(String line, Gson g){
+    public GamePreferencesMessage processPreferences_Cmd(String line){
         final Duration timeout=Duration.ofSeconds(5);
         ExecutorService executor= Executors.newSingleThreadExecutor();
 
@@ -40,8 +43,13 @@ public class CommandParser
 
     }
 
-    public Message processCmd(String line, Gson g){
-        return g.fromJson(line,Message.class);}
+    public Message processCmd(String line){
+        return g.fromJson(line,Message.class);
+    }
+
+    public ServerSettings serverSettingsCmd(String line, Gson g){
+        return g.fromJson(line,ServerSettings.class);
+    }
 
 }
 
