@@ -1,9 +1,5 @@
 package it.polimi.ingsw.Network;
 
-import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.MessageType;
-
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -17,15 +13,15 @@ public class ClientMain {
         Scanner user = new Scanner(System.in);
 
         do {
-            String nickName;
+            String nickname;
             String numberOfPlayers;
             String gameMode;
             boolean gamemode;
 
             System.out.println("Nickname?");
-            nickName = user.nextLine();
+            nickname = user.nextLine();
 
-            socketClient.send("{\"messageType\":LOGIN,\"nickName\":\""+nickName+"\"}");
+            socketClient.send("{\"messageType\":LOGIN,\"nickname\":\""+ nickname +"\"}");
 
             System.out.println("How many players do you want to play with?\n");
             numberOfPlayers = user.nextLine();
