@@ -35,13 +35,17 @@ public class ConnectionSocket {
         int numberOfPlayers;
         String modePreference;
         boolean expertMode;
+        String messageReceived;
 
         do {
             System.out.println("Nickname?");
             nickname = in.nextLine();
             LoginMessage logMessage = new LoginMessage(nickname);
             send(logMessage, logMessage.getMessageType());
-        } while (!inStream.nextLine().equals(ConstantMessages.okJSON));
+            messageReceived = inStream.nextLine();
+            if (messageReceived.equals(ConstantMessages.koJSON))
+                System.out.println("Nickname already taken, please select a new one");
+        } while (!messageReceived.equals(ConstantMessages.okJSON));
 
         do {
             System.out.println("How many players do you want to play with? [2, 3 or 4]");
@@ -53,7 +57,12 @@ public class ConnectionSocket {
             } while (!modePreference.equalsIgnoreCase("y") && !modePreference.equalsIgnoreCase("n"));
             GamePreferencesMessage gSetMessage = new GamePreferencesMessage(numberOfPlayers, expertMode);
             send(gSetMessage, gSetMessage.getMessageType());
-        } while (!inStream.nextLine().equals(ConstantMessages.okJSON));
+            messageReceived = inStream.nextLine();
+            if (messageReceived.equals(ConstantMessages.koJSON))
+                System.out.println("Error: try again selecting a number between 2 and 4");
+        } while (!messageReceived.equals(ConstantMessages.okJSON));
+
+        System.out.println("You joined a game!");
     }
 
     public static void main(String[] args) throws IOException {

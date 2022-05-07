@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable{
      */
     private void logPlayer(Scanner in, PrintWriter out) {
         LoginMessage loginMessage;
-        do{
+        while (true) {
             do {
                 loginMessage = commandParser.processLogin_Cmd(in.nextLine(), g);
                 if(loginMessage.getMessageType()!=MessageType.LOGIN){
@@ -41,7 +41,11 @@ public class ClientHandler implements Runnable{
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(loginMessage.getMessageType() != MessageType.LOGIN);
-        }while (!server.setNickNamesChosen(loginMessage));          //Repeat till it's given an available nickname
+            if ((!server.setNickNamesChosen(loginMessage)))
+                out.println(ConstantMessages.koJSON);
+            else
+                break;
+        }          //Repeat till it's given an available nickname
         server.setPlayers(loginMessage.getNickname(),this);
         nickname = loginMessage.getNickname();
         out.println(ConstantMessages.okJSON);
@@ -55,7 +59,7 @@ public class ClientHandler implements Runnable{
      */
     private void addPlayerToGame(String nickName, Scanner in, PrintWriter out){
         GamePreferencesMessage preferences;
-        do{
+        while (true) {
             do {
                 preferences = commandParser.processPreferences_Cmd(in.nextLine(), g);
                 if(preferences.getMessageType()!=MessageType.GAME_SETUP_INFO){
@@ -64,7 +68,11 @@ public class ClientHandler implements Runnable{
                 }
             }while(preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
             matchID = server.addPlayerToGame(nickName,preferences);
-        }while (matchID==-1);                       //Repeat till it's given a valid number of player
+            if (matchID == -1)
+                out.println(ConstantMessages.koJSON);
+            else
+                break;
+        }                      //Repeat till it's given a valid number of player
         out.println(ConstantMessages.okJSON);
     }
 
