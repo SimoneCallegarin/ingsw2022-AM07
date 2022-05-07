@@ -23,11 +23,6 @@ public class ClientHandler implements Runnable{
     private PrintWriter out;
 
     /**
-     * The ID of the match that the player associated to this client handler is going to play.
-     * It's set to -1 by default, and it will be updated by the server with the correct match ID.
-     */
-    private int matchID = -1;
-    /**
      * The nickname of the player associated to this client handler
      */
     private String nickName;
@@ -87,13 +82,13 @@ public class ClientHandler implements Runnable{
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(preferences.getMessageType()==MessageType.KO || preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
-            matchID = server.addPlayerToGame(nickName,preferences);
-        }while (matchID==-1);                       //Repeat till it's given a valid number of player
+            server.addPlayerToGame(nickName,preferences);
+        }while (server.getPlayerInfo(nickName).getMatchID()==-1);                       //Repeat till it's given a valid number of player
 
-        if(server.getMatch(matchID).game.getActualNumberOfPlayers()==1)
+        if(server.getMatch(server.getPlayerInfo(nickName).getMatchID()).game.getActualNumberOfPlayers()==1)
             System.out.println("Added player: "+ nickName + " to a new game.");
         else
-            System.out.println("Added player: "+ nickName + " to an already existing game with other "+ (server.getMatch(matchID).game.getActualNumberOfPlayers()-1) +" players.");
+            System.out.println("Added player: "+ nickName + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickName).getMatchID()).game.getActualNumberOfPlayers()-1) +" players.");
         out.println(ConstantMessages.okJSON);
 
     }
@@ -105,7 +100,7 @@ public class ClientHandler implements Runnable{
                 break;
             }
             else{
-                server.getMatch(matchID).onMessage(m);
+                server.getMatch(server.getPlayerInfo(nickName).getMatchID()).onMessage(m);
                 out.println(ConstantMessages.okJSON);
             }
         }

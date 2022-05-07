@@ -17,7 +17,7 @@ public class LoginMessage extends NetworkMessages {
     public String toString() {
         return "RequestNicknameMessage{" +
                 "messageType=" + getMessageType() +
-                ", nickname='" + nickname +
+                ", nickname=" + nickname +
                 '}';
     }
 }

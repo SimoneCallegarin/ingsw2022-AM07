@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Server Class which manages the connection of the clients
+ * Server Class which manages the connection of the clients.
  */
 public class Server {
 
@@ -22,13 +22,14 @@ public class Server {
      */
     public ArrayList<GameController> activeMatches;
     /**
-     * List that contains the nickname chosen by each player requesting connection with a valid nickname
+     * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
     private final ArrayList<String> nickNamesChosen;
     /**
-     * HashMap that permits to find the client handler associated to a certain nickname
+     * HashMap that permits to find the client handler associated to a certain nickname,
+     * the matchID of the game he is playing and his playerID in that game.
      */
-    private final HashMap<String,ClientHandler> players = new HashMap<>();
+    private final HashMap<String,PlayerInfo> players = new HashMap<>();
 
     /**
      * constructor of the Server
@@ -90,13 +91,12 @@ public class Server {
      * for the player that wants to join.
      * When found a game with this characteristics then the player is added to that game, otherwise it will be created
      * a game with the selected characteristics with the player as first player.
-     * @param nickName of the player that wants to play
+     * @param nickname of the player that wants to play
      * @param preferences of the player, about the number of players to play with and the game mode chosen
-     * @return the ID of the match he is going to play
      */
-    public int addPlayerToGame(String nickName, GamePreferencesMessage preferences){
+    public void addPlayerToGame(String nickname, GamePreferencesMessage preferences){
         if(!checkValuesValidity(preferences))
-            return -1;
+            return;
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
@@ -106,10 +106,11 @@ public class Server {
             }
         }
         if(matchID==activeMatches.size())
-            newGame(nickName,preferences);
+            newGame(nickname,preferences);
         else
-            addPlayerToAnExistingLobby(matchID,nickName,preferences);
-        return matchID;
+            addPlayerToAnExistingLobby(matchID, nickname,preferences);
+        players.get(nickname).setMatchID(matchID);
+        players.get(nickname).setPlayerID(activeMatches.get(matchID).game.getActualNumberOfPlayers()-1);
     }
 
     /**
@@ -141,7 +142,11 @@ public class Server {
      * @param nickName of the player that wants to play
      * @param clientHandler of the player that wants to play
      */
-    public void setPlayers(String nickName, ClientHandler clientHandler){ players.put(nickName,clientHandler); }
+    public void setPlayers(String nickName, ClientHandler clientHandler){
+        PlayerInfo playerInfo = new PlayerInfo();
+        playerInfo.setClientHandler(clientHandler);
+        players.put(nickName,playerInfo);
+    }
 
     /**
      * Getter method to obtain the game controller of a certain match
@@ -149,6 +154,8 @@ public class Server {
      * @return the game controller associated to the matchID given
      */
     public GameController getMatch(int matchID) { return activeMatches.get(matchID); }
+
+    public PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
     public static void main(String[] args) {
 
