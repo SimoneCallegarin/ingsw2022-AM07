@@ -16,7 +16,7 @@ public abstract class ViewSubject {
         viewObserverList.remove(viewObserver);
     }
 
-    public void notify(Consumer<ViewObserver> lambda){
+    public void notifyObserver(Consumer<ViewObserver> lambda){
         for (ViewObserver observer : viewObserverList) {
             lambda.accept(observer);
         }

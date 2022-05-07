@@ -37,6 +37,12 @@ public class SocketClient implements ViewObserver {
 
     @Override
     public void onUsername(String username) {
+        //login message
         send("{\"messageType\":USERNAME_CHOICE, \"nickName\":\""+username+"\"");
+    }
+
+    @Override
+    public void onGamePreferences(int numPlayers, Boolean gameMode) {
+        send("{\"messageType\":GAMESETUP_INFO, \"numberOfPlayers\":"+numPlayers+",\"gameMode\":"+gameMode);
     }
 }
