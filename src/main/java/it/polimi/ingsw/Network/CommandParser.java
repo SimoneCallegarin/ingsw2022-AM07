@@ -5,8 +5,7 @@ import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.ConstantMessages;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessages;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 
 import java.time.Duration;
 import java.util.concurrent.*;

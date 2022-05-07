@@ -6,8 +6,8 @@ public class GamePreferencesMessage extends NetworkMessages {
     public int numberOfPlayers;
     public boolean gameMode;
 
-    GamePreferencesMessage(String playerNickName, int numberOfPlayers, boolean gameMode) {
-        super(playerNickName, MessageType.GAME_SETUP_INFO);
+    GamePreferencesMessage(int numberOfPlayers, boolean gameMode) {
+        super(MessageType.GAME_SETUP_INFO);
         this.numberOfPlayers = numberOfPlayers;
         this.gameMode = gameMode;
     }
@@ -20,7 +20,6 @@ public class GamePreferencesMessage extends NetworkMessages {
     public String toString() {
         return "GamePreferencesMessage{" +
                 "messageType=" + getMessageType() +
-                ", nickName=" + getNickName() + '\'' +
                 ", numberOfPlayers=" + numberOfPlayers +
                 ", gameMode=" + gameMode +
                 '}';

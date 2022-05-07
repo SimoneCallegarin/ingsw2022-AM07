@@ -47,7 +47,7 @@ public class Server {
      * @return true if it's a valid nickname, else false
      */
     public boolean checkNickNameValidity(LoginMessage loginMessage){
-        return !nickNamesChosen.contains(loginMessage.getNickName());
+        return !nickNamesChosen.contains(loginMessage.getNickname());
     }
 
     /**
@@ -73,12 +73,12 @@ public class Server {
      */
     public boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
-            nickNamesChosen.add(loginMessage.getNickName());
+            nickNamesChosen.add(loginMessage.getNickname());
             return true;
         }
         else{
             System.err.println("Error: A player with this nickname already exists!");
-            System.out.println("\"" + loginMessage.getNickName() + "\"" + " isn't valid: ");
+            System.out.println("\"" + loginMessage.getNickname() + "\"" + " isn't valid: ");
             //SEND ERROR!
             return false;
         }

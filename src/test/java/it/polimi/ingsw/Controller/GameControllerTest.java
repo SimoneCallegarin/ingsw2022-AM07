@@ -6,7 +6,7 @@ import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Model.Enumeration.PlanningPhases;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import org.junit.jupiter.api.Test;
 

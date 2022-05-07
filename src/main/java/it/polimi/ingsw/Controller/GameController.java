@@ -4,7 +4,7 @@ import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 
 /**
  * this class represents the Controller module in the MVC pattern
@@ -44,7 +44,7 @@ public class GameController {
         switch(message.getMessageType()){
             case PLAY_ASSISTANT_CARD -> {
                 if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
-                    game.playAssistantCard(message.getPlayerID(), message.genericValue);
+                    game.playAssistantCard(message.getPlayerID(), message.getGenericValue());
                 }
             }
             case MOVE_STUDENT_TO_DINING -> {
@@ -54,31 +54,31 @@ public class GameController {
             }
             case MOVE_STUDENT_TO_ISLE ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
-                    game.moveStudentInIsle(message.getPlayerID(), message.genericValue, colorIndex);
+                    game.moveStudentInIsle(message.getPlayerID(), message.getGenericValue(), colorIndex);
                 }
             }
             case MOVE_MOTHERNATURE ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_MOTHER_NATURE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
-                    game.moveMotherNature(message.getPlayerID(), message.genericValue);
+                    game.moveMotherNature(message.getPlayerID(), message.getGenericValue());
                 }
             }
             case CHOOSE_CLOUD ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.CHOOSE_CLOUD && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
-                    game.pickStudentsFromCloud(message.getPlayerID(), message.genericValue);
+                    game.pickStudentsFromCloud(message.getPlayerID(), message.getGenericValue());
                 }
             }
             case PLAY_CHARACTER_CARD ->{
                 if (game.gamePhase == GamePhases.ACTION_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
-                    game.playCharacterCard(message.getPlayerID(),message.genericValue);
-                    characterCardPlayedIndex = message.genericValue;
-                    CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.genericValue).getCharacterCardName();
+                    game.playCharacterCard(message.getPlayerID(), message.getGenericValue());
+                    characterCardPlayedIndex = message.getGenericValue();
+                    CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.getGenericValue()).getCharacterCardName();
                     switch (characterCardPlayed){
                         case FARMER,HERALD,MAGICAL_LETTER_CARRIER -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,-1,-1);
                     }
                 }
             }
             case ACTIVATE_ATOMIC_EFFECT ->{
-                CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.genericValue).getCharacterCardName();
+                CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.getGenericValue()).getCharacterCardName();
                 switch (characterCardPlayed){
                     case MONK,GRANDMA_HERBS,SPOILED_PRINCESS,THIEF -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,colorIndex,-1);
                     case JESTER,MINSTREL -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,colorIndex,colorIndexSaved);
@@ -93,7 +93,7 @@ public class GameController {
              */
             case VALUE -> {
                 colorIndexSaved = colorIndex;
-                colorIndex = message.genericValue;
+                colorIndex = message.getGenericValue();
             }
         }
     }

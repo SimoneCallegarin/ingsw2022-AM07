@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.Messages.*;
-import it.polimi.ingsw.Network.Messages.InternalMessages.PlayerMoveMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 
@@ -69,8 +69,8 @@ public class ClientHandler implements Runnable{
                 }
             }while(loginMessage.getMessageType()==MessageType.KO || loginMessage.getMessageType() != MessageType.LOGIN);
         }while (!server.setNickNamesChosen(loginMessage));                   //Repeat till it's given an available nickname
-        server.setPlayers(loginMessage.getNickName(),this);        
-        nickName = loginMessage.getNickName();
+        server.setPlayers(loginMessage.getNickname(),this);
+        nickName = loginMessage.getNickname();
         System.out.println("NickName selected: "+ "\"" + nickName + "\"");
     }
 
