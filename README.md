@@ -11,9 +11,8 @@
 | Complete rules     | 🟢 |
 | Socket             | 🟡 |
 | GUI                | 🔴 |
-| CLI                | 🔴 |
+| CLI                | 🟡 |
 | Multiple games     | 🟡 |
-| Persistence        | 🔴 |
 | 12 Character cards | 🟢 |
 | 4 Players match    | 🟢 |
 
