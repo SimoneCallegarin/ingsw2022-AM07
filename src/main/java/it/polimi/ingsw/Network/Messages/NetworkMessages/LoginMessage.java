@@ -2,7 +2,7 @@ package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
 import it.polimi.ingsw.Network.Messages.MessageType;
 
-public class LoginMessage extends NetworkMessages {
+public class LoginMessage extends NetworkMessage {
 
     private final String nickname;
 

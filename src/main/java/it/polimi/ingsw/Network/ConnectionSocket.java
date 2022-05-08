@@ -2,11 +2,14 @@ package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.*;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+import it.polimi.ingsw.Observer.ViewObserver;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class ConnectionSocket {
@@ -18,7 +21,7 @@ public class ConnectionSocket {
     MessageSerializer mSerializer;
     Scanner in;
 
-    public void send(Message message, MessageType mt) {
+    public void send(NetworkMessage message, MessageType mt) {
         String messageJSON = mSerializer.serializeMessage(message, mt);
         outStream.println(messageJSON);
     }

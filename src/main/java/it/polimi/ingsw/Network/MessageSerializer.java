@@ -1,10 +1,10 @@
 package it.polimi.ingsw.Network;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.Network.Messages.MessageType;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 public class MessageSerializer {
 
@@ -14,7 +14,7 @@ public class MessageSerializer {
         this.g = new Gson();
     }
 
-    public String serializeMessage(Message message, MessageType mt) {
+    public String serializeMessage(NetworkMessage message, MessageType mt) {
 
         switch (mt) {
             case LOGIN -> {

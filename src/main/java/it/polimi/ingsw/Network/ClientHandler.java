@@ -1,7 +1,9 @@
 package it.polimi.ingsw.Network;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.Network.Messages.*;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -92,7 +94,7 @@ public class ClientHandler implements Runnable{
         if(server.getMatch(server.getPlayerInfo(nickname).getMatchID()).game.getActualNumberOfPlayers()==1)
             System.out.println("Added player: "+ nickname + " to a new game.");
         else
-            System.out.println("Added player: "+ nickname + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickName).getMatchID()).game.getActualNumberOfPlayers()-1) +" players.");
+            System.out.println("Added player: "+ nickname + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).game.getActualNumberOfPlayers()-1) +" players.");
         out.println(ConstantMessages.okJSON);
     }
 

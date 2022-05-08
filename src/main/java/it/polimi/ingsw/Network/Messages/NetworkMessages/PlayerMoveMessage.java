@@ -5,7 +5,7 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 /**
  * this is the class used to communicate the moves made by the different players
  */
-public class PlayerMoveMessage extends NetworkMessages {
+public class PlayerMoveMessage extends NetworkMessage {
 
     private final int playerID;
     /**

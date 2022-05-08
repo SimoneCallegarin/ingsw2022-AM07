@@ -1,12 +1,5 @@
 package it.polimi.ingsw.Network;
 
-import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
-import it.polimi.ingsw.Network.Messages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.MessageType;
-
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
