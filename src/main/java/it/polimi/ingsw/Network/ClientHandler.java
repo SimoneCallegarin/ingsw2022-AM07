@@ -25,7 +25,7 @@ public class ClientHandler implements Runnable{
     /**
      * The nickname of the player associated to this client handler
      */
-    private String nickName;
+    private String nickname;
     /**
      * A command parser that permits to parse different JSON messages
      */
@@ -49,6 +49,32 @@ public class ClientHandler implements Runnable{
     }
 
     /**
+     * Calls all other methods that handle a player connection and his setup for playing.
+     * It also close the connection when the game ends.
+     * 1) Logs the player in the server with his nickname (if valid);
+     * 2) Adds the player to a new or existing game relying on the preferences he specified;
+     * 3) Handles the player moves while playing the game;
+     * 4) Removes all player information that were saved on the server when the game ends.
+     * 5) Closes the connection between client and server.
+     * @throws IOException when there's an error in the exchanged messages.
+     */
+    private void clientHandle() throws IOException {
+
+        logPlayer();
+
+        addPlayerToGame();
+
+        handleGame();
+
+        gameEnded();
+
+        in.close();
+        out.close();
+        client.close();
+    }
+
+    /**
+     * 1)
      * Logs in the player and checks if it's using a valid nickname
      */
     private void logPlayer() {
@@ -64,12 +90,13 @@ public class ClientHandler implements Runnable{
                 }
             }while(loginMessage.getMessageType()==MessageType.KO || loginMessage.getMessageType() != MessageType.LOGIN);
         }while (!server.setNickNamesChosen(loginMessage));                   //Repeat till it's given an available nickname
-        server.setPlayers(loginMessage.getNickname(),this);
-        nickName = loginMessage.getNickname();
-        System.out.println("NickName selected: "+ "\"" + nickName + "\"");
+        server.setPlayer(loginMessage.getNickname(),this);
+        nickname = loginMessage.getNickname();
+        System.out.println("NickName selected: "+ "\"" + nickname + "\"");
     }
 
     /**
+     * 2)
      * Adds the player to a game, using some server methods that permits to find the matchID of the game he will play
      */
     private void addPlayerToGame(){
@@ -82,43 +109,47 @@ public class ClientHandler implements Runnable{
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(preferences.getMessageType()==MessageType.KO || preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
-            server.addPlayerToGame(nickName,preferences);
-        }while (server.getPlayerInfo(nickName).getMatchID()==-1);                       //Repeat till it's given a valid number of player
+            server.addPlayerToGame(nickname,preferences);
+        }while (server.getPlayerInfo(nickname).getMatchID()==-1);                       //Repeat till it's given a valid number of player
 
-        if(server.getMatch(server.getPlayerInfo(nickName).getMatchID()).game.getActualNumberOfPlayers()==1)
-            System.out.println("Added player: "+ nickName + " to a new game.");
+        if(server.getMatch(server.getPlayerInfo(nickname).getMatchID()).game.getActualNumberOfPlayers()==1)
+            System.out.println("Added player: "+ nickname + " to a new game.");
         else
-            System.out.println("Added player: "+ nickName + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickName).getMatchID()).game.getActualNumberOfPlayers()-1) +" players.");
+            System.out.println("Added player: "+ nickname + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).game.getActualNumberOfPlayers()-1) +" players.");
         out.println(ConstantMessages.okJSON);
 
     }
 
+    /**
+     * 3)
+     * Handles all player moves and the game development till the game ends.
+     */
     private void handleGame(){
         while (true) {
             PlayerMoveMessage m= commandParser.processCmd(in.nextLine());
-            if(m.getMessageType()== MessageType.QUIT){
+            if(m.getMessageType() == MessageType.QUIT){
+                server.aPlayerQuit(nickname);
                 break;
             }
             else{
-                server.getMatch(server.getPlayerInfo(nickName).getMatchID()).onMessage(m);
+                server.getMatch(server.getPlayerInfo(nickname).getMatchID()).onMessage(m);
                 out.println(ConstantMessages.okJSON);
             }
         }
     }
 
+    /**
+     * 4)
+     * It will remove all data saved in the server, connected to the player associated with this client handler.
+     */
+    private void gameEnded() {
+        server.removePlayer(nickname);
+    }
+
     @Override
     public void run() {
         try {
-
-            logPlayer();
-
-            addPlayerToGame();
-
-            handleGame();
-
-            in.close();
-            out.close();
-            client.close();
+            clientHandle();
         } catch (IOException e) {
             //ERROR MESSAGE
             System.out.println("An error has occurred");

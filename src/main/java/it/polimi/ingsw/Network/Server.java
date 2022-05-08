@@ -16,11 +16,14 @@ import java.util.concurrent.Executors;
  */
 public class Server {
 
-    public SocketServer socketServer;
+    /**
+     * Socket Server that is responsible for setting up connections with the clients.
+     */
+    private final SocketServer socketServer;
     /**
      * List of Games created.
      */
-    public ArrayList<GameController> activeMatches;
+    private final ArrayList<GameController> activeMatches;
     /**
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
@@ -142,10 +145,23 @@ public class Server {
      * @param nickName of the player that wants to play
      * @param clientHandler of the player that wants to play
      */
-    public void setPlayers(String nickName, ClientHandler clientHandler){
+    public void setPlayer(String nickName, ClientHandler clientHandler){
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
+    }
+
+    /**
+     * Removes all data associated to a certain player that ended a match.
+     * @param nickname the nickname of the player that just ended a match.
+     */
+    public void removePlayer(String nickname) {
+        players.remove(nickname);
+        nickNamesChosen.remove(nickname);
+    }
+
+    public void aPlayerQuit(String nickname) {
+
     }
 
     /**
@@ -155,6 +171,11 @@ public class Server {
      */
     public GameController getMatch(int matchID) { return activeMatches.get(matchID); }
 
+    /**
+     * Getter method to obtain information associated to a player with a certain nickname.
+     * @param nickname the nickname of the  player we want to know the information.
+     * @return the information of that player (playerID, matchID and client handler of the player).
+     */
     public PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
     public static void main(String[] args) {
