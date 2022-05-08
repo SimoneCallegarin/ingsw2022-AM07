@@ -3,11 +3,11 @@ package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
 import it.polimi.ingsw.Network.Messages.MessageType;
 
-public abstract class NetworkMessages {
+public abstract class NetworkMessage {
 
     private final MessageType messageType;
 
-    NetworkMessages(MessageType messageType) { this.messageType = messageType; }
+    NetworkMessage(MessageType messageType) { this.messageType = messageType; }
 
     public MessageType getMessageType() { return messageType; }
 

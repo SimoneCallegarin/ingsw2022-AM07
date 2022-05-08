@@ -103,7 +103,7 @@ public class Server {
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
-            if(activeMatches.get(i).game.getGameMode()==preferences.gameMode && activeMatches.get(i).game.getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).game.getActualNumberOfPlayers()!=activeMatches.get(i).game.getNumberOfPlayers()){
+            if(activeMatches.get(i).game.getGameMode()==preferences.expertMode && activeMatches.get(i).game.getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).game.getActualNumberOfPlayers()!=activeMatches.get(i).game.getNumberOfPlayers()){
                 matchID=i;
                 break;
             }
@@ -192,7 +192,7 @@ public class Server {
         }
 
         Server server = new Server(portNumber);
-        System.out.println("Eryantis Server started !");
+        System.out.println(hostName+" Server started at port " + portNumber + "!");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
         //executor.shutdown();

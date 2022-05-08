@@ -107,7 +107,7 @@ public class GameController {
      */
     public void addPlayerToGame(String nickName, GamePreferencesMessage preferences, Boolean newGame){
         if(newGame)
-            game.addFirstPlayer(nickName,preferences.isGameMode(),preferences.getNumberOfPlayers());
+            game.addFirstPlayer(nickName,preferences.isExpert(),preferences.getNumberOfPlayers());
         else
             game.addAnotherPlayer(nickName);
     }

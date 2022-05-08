@@ -18,28 +18,26 @@ public class SocketServer implements Runnable{
         this.server = server;
     }
 
-    public void acceptConnections(ServerSocket serverSocket) {
+    @Override
+    public void run() {
+        ServerSocket serverSocket;
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            System.err.println("Unavailable port!");
+            return;
+        }
+        System.out.println("Server ready!");
         while (true) {
             try {
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection accepted!");
-                executorService.submit(new ClientHandler(server,clientSocket));
-            }catch (IOException e){
+                executorService.submit(new ClientHandler(server, clientSocket));
+            } catch (IOException e) {
                 System.err.println("Error in client acceptation!");
                 break;
             }
-        }
-    }
-
-
-    @Override
-    public void run() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            acceptConnections(serverSocket);
-        } catch (IOException e) {
-            System.err.println("Error during socket initialization!");
         }
     }
 }
