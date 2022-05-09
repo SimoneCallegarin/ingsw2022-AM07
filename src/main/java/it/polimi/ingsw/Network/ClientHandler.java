@@ -1,9 +1,7 @@
 package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.Messages.*;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,7 +27,9 @@ public class ClientHandler implements Runnable{
     /**
      * A command parser that permits to parse different JSON messages
      */
-    private final CommandParser commandParser=new CommandParser();
+    private final CommandParser commandParser;
+
+    private final MessageSerializer messageSerializer;
 
     /**
      * constructor of the client handler
@@ -39,6 +39,8 @@ public class ClientHandler implements Runnable{
     public ClientHandler(Server server,Socket socket) {
         this.server = server;
         this.client = socket;
+        this.commandParser = new CommandParser();
+        this.messageSerializer = new MessageSerializer();
         try {
             this.in = new Scanner(socket.getInputStream());
             this.out = new PrintWriter(socket.getOutputStream(),true);
@@ -81,19 +83,19 @@ public class ClientHandler implements Runnable{
             do {
                 loginMessage = commandParser.processLogin_Cmd(in.nextLine());
                 if(loginMessage.getMessageType()!=MessageType.LOGIN){
-                    out.println(ConstantMessages.koJSON);  //NOT WORKING?
+                    send(new ServiceMessage(MessageType.KO, "Wrong message"), MessageType.KO);  //NOT WORKING?
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(loginMessage.getMessageType() != MessageType.LOGIN);
             if ((!server.setNickNamesChosen(loginMessage)))
-                out.println(ConstantMessages.koJSON);
+                send(new ServiceMessage(MessageType.KO, "Already taken nickname"), MessageType.KO);
             else
                 break;
         }          //Repeat till it's given an available nickname
         server.setPlayer(loginMessage.getNickname(),this);
         nickname = loginMessage.getNickname();
         System.out.println("NickName selected: "+ "\"" + nickname + "\"");
-        out.println(ConstantMessages.okJSON);
+        send(new ServiceMessage(MessageType.OK), MessageType.OK);
     }
 
     /**
@@ -105,12 +107,12 @@ public class ClientHandler implements Runnable{
             do {
                 preferences = commandParser.processPreferences_Cmd(in.nextLine());
                 if(preferences.getMessageType()!=MessageType.GAME_SETUP_INFO){
-                    out.println(ConstantMessages.koJSON);
+                    send(new ServiceMessage(MessageType.KO, "Wrong message type"), MessageType.KO);
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
             if (!server.addPlayerToGame(nickname,preferences))
-                out.println(ConstantMessages.koJSON);
+                send(new ServiceMessage(MessageType.KO, "Incorrect field"), MessageType.KO);
             else
                 break;
         }                      //Repeat till it's given a valid number of player
@@ -118,7 +120,7 @@ public class ClientHandler implements Runnable{
             System.out.println("Added player: "+ nickname + " to a new game.");
         else
             System.out.println("Added player: "+ nickname + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers()-1) +" players.");
-        out.println(ConstantMessages.okJSON);
+        send(new ServiceMessage(MessageType.OK), MessageType.OK);
     }
 
     /**
@@ -128,7 +130,7 @@ public class ClientHandler implements Runnable{
      */
     private void handleGame() throws IOException {
         while (true) {
-            PlayerMoveMessage m= commandParser.processCmd(in.nextLine());
+            PlayerMoveMessage m= commandParser.processCmd(in.next(""));
             if(m.getMessageType() == MessageType.QUIT){
                 server.aPlayerQuit(nickname);
                 gameEnded();
@@ -136,7 +138,7 @@ public class ClientHandler implements Runnable{
             }
             else{
                 server.getMatch(server.getPlayerInfo(nickname).getMatchID()).onMessage(m);
-                out.println(ConstantMessages.okJSON);
+                send(new ServiceMessage(MessageType.OK), MessageType.OK);
             }
         }
     }
@@ -151,6 +153,11 @@ public class ClientHandler implements Runnable{
         in.close();
         out.close();
         client.close();
+    }
+
+    public void send(NetworkMessage message, MessageType mt) {
+        String messageJSON = messageSerializer.serializeMessage(message, mt);
+        out.println(messageJSON);
     }
 
     @Override

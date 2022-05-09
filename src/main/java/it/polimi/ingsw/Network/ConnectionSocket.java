@@ -5,7 +5,7 @@ import it.polimi.ingsw.Network.Messages.*;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
-import it.polimi.ingsw.Observer.ViewObserver;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,6 +19,7 @@ public class ConnectionSocket {
     private PrintWriter outStream;
     ClientListener cListener;
     MessageSerializer mSerializer;
+    CommandParser cParser;
     Scanner in;
 
     public void send(NetworkMessage message, MessageType mt) {
@@ -30,6 +31,7 @@ public class ConnectionSocket {
         this.host = ServerSettings.ReadHostFromJSON();
         this.port = ServerSettings.ReadPortFromJSON();
         this.mSerializer = new MessageSerializer();
+        this.cParser = new CommandParser();
         this.in = new Scanner(System.in);
     }
 
@@ -38,17 +40,16 @@ public class ConnectionSocket {
         int numberOfPlayers;
         String modePreference;
         boolean expertMode;
-        String messageReceived;
+        ServiceMessage messageReceived;
 
         do {
             System.out.println("Nickname?");
             nickname = in.nextLine();
-            LoginMessage logMessage = new LoginMessage(nickname);
-            send(logMessage, logMessage.getMessageType());
-            messageReceived = inStream.nextLine();
-            if (messageReceived.equals(ConstantMessages.koJSON))
-                System.out.println("Nickname already taken, please select a new one");
-        } while (!messageReceived.equals(ConstantMessages.okJSON));
+            send(new LoginMessage(nickname), MessageType.LOGIN);
+            messageReceived = cParser.processService_Cmd(inStream.nextLine());
+            if (messageReceived.getMessageType() == MessageType.KO)
+                System.out.println(messageReceived.getError() + ", please try again.");
+        } while (messageReceived.getMessageType() != MessageType.OK);
 
         do {
             System.out.println("How many players do you want to play with? [2, 3 or 4]");
@@ -58,13 +59,11 @@ public class ConnectionSocket {
                 modePreference = in.nextLine();
                 expertMode = modePreference.equalsIgnoreCase("y");
             } while (!modePreference.equalsIgnoreCase("y") && !modePreference.equalsIgnoreCase("n"));
-            GamePreferencesMessage gSetMessage = new GamePreferencesMessage(numberOfPlayers, expertMode);
-            send(gSetMessage, gSetMessage.getMessageType());
-            messageReceived = inStream.nextLine();
-            if (messageReceived.equals(ConstantMessages.koJSON))
-                System.out.println("Error: try again selecting a number between 2 and 4");
-            //NOT WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        } while (!messageReceived.equals(ConstantMessages.okJSON));
+            send(new GamePreferencesMessage(numberOfPlayers, expertMode), MessageType.GAME_SETUP_INFO);
+            messageReceived = cParser.processService_Cmd(inStream.nextLine());
+            if (messageReceived.getMessageType() == MessageType.KO)
+                System.out.println(messageReceived.getError() + ", please try again.");
+        } while (messageReceived.getMessageType() != MessageType.OK);
 
         System.out.println("You joined a game!");
     }
