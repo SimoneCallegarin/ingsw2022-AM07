@@ -103,7 +103,7 @@ public class Server {
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
-            if(activeMatches.get(i).game.getGameMode()==preferences.expertMode && activeMatches.get(i).game.getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).game.getActualNumberOfPlayers()!=activeMatches.get(i).game.getNumberOfPlayers()){
+            if(activeMatches.get(i).getGameMode()==preferences.expertMode && activeMatches.get(i).getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
                 matchID=i;
                 break;
             }
@@ -113,7 +113,7 @@ public class Server {
         else
             addPlayerToAnExistingLobby(matchID, nickname,preferences);
         players.get(nickname).setMatchID(matchID);
-        players.get(nickname).setPlayerID(activeMatches.get(matchID).game.getActualNumberOfPlayers()-1);
+        players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
     }
 
     /**
@@ -160,8 +160,21 @@ public class Server {
         nickNamesChosen.remove(nickname);
     }
 
+    /**
+     * Delete a game when a player quit and all the information about all the other players that was playing the game
+     * @param nickname nickname of the player that quit.
+     */
     public void aPlayerQuit(String nickname) {
+        int quitMatch = getPlayerInfo(nickname).getMatchID();
 
+        for (String playerNickname : nickNamesChosen)
+            if(players.get(playerNickname).getMatchID()==quitMatch && !playerNickname.equals(nickname))
+                //removePlayer(activeMatches.get(quitMatch).game.getPlayers().get(i).getNickname());
+                System.err.println("A player quit");            //remove this line when send message implemented
+        //SEND QUIT MESSAGE: ANOTHER PLAYER QUIT... -> GAME END.
+        //THE CLIENT WHEN RECEIVES A QUIT MESSAGE FROM THE SERVER CALLS THE gameEnded method!!!
+
+        System.out.println("Game: "+quitMatch+" because player \""+nickname+"\" left the game.");
     }
 
     /**

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
-import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.Squads;
 import it.polimi.ingsw.Model.Player.Player;
@@ -26,7 +25,7 @@ class CharacterCardTest {
     void getAndIsUsed() {
         CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.CENTAUR);
         assertFalse(characterCardForTest.isUsed());
-        Player simone = new Player("simone", 2, 0, Squads.NO_SQUAD, GameMode.EXPERT);
+        Player simone = new Player("simone", 2, 0, Squads.NO_SQUAD);
         simone.gainMoney();
         simone.gainMoney();
         simone.playCharacterCard(characterCardForTest);
@@ -40,7 +39,7 @@ class CharacterCardTest {
     void getCost() {
         CharacterCard characterCardForTest = new CharacterCard(CharacterCardsName.THIEF);
         assertEquals(3,characterCardForTest.getCost());
-        Player simone = new Player("simone", 2, 0, Squads.NO_SQUAD, GameMode.EXPERT);
+        Player simone = new Player("simone", 2, 0, Squads.NO_SQUAD);
         simone.gainMoney();
         simone.gainMoney();
         simone.playCharacterCard(characterCardForTest);

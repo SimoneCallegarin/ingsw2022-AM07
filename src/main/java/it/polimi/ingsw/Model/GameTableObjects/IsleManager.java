@@ -14,6 +14,9 @@ public class IsleManager {
      * this is the actual list of active isle for the game
      */
     private final ArrayList<Isle> isles = new ArrayList<>();
+    /**
+     * the index of the isle with mother nature on it
+     */
     private int isleWithMotherNatureIndex;
 
     /**
