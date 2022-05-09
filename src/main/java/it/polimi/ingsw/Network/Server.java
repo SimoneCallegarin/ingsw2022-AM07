@@ -97,9 +97,9 @@ public class Server {
      * @param nickname of the player that wants to play
      * @param preferences of the player, about the number of players to play with and the game mode chosen
      */
-    public void addPlayerToGame(String nickname, GamePreferencesMessage preferences){
+    public boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences){
         if(!checkValuesValidity(preferences))
-            return;
+            return false;
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
@@ -114,6 +114,7 @@ public class Server {
             addPlayerToAnExistingLobby(matchID, nickname,preferences);
         players.get(nickname).setMatchID(matchID);
         players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
+        return true;
     }
 
     /**

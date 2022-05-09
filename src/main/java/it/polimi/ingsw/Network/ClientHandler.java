@@ -109,8 +109,7 @@ public class ClientHandler implements Runnable{
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
-            server.addPlayerToGame(nickname,preferences);
-            if (server.getPlayerInfo(nickname).getMatchID() == -1)
+            if (!server.addPlayerToGame(nickname,preferences))
                 out.println(ConstantMessages.koJSON);
             else
                 break;
