@@ -1,14 +1,20 @@
 package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
+import it.polimi.ingsw.Model.DashboardObjects.DiningRoom;
+import it.polimi.ingsw.Model.DashboardObjects.Entrance;
+import it.polimi.ingsw.Model.DashboardObjects.TowerStorage;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.TowerColors;
+import it.polimi.ingsw.Model.GameTableObjects.Cloud;
+import it.polimi.ingsw.Model.GameTableObjects.Isle;
+import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
 import it.polimi.ingsw.Observer.ModelObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -78,6 +84,9 @@ public class CLI extends ViewSubject implements ModelObserver {
         notifyObserver(obs->obs.onUsername(username));
     }
 
+    /**
+     * this method is used to ask the user the game settings he desires, which are the game mode and the number of Players
+     */
     public void askGamePreferences(){
         System.out.println("Enter the number of players desired:\n");
         int numPlayers=Integer.parseInt(readUserInput());
@@ -87,60 +96,241 @@ public class CLI extends ViewSubject implements ModelObserver {
         notifyObserver(obs->obs.onGamePreferences(numPlayers, gamemode));
     }
 
-    public static void drawDashboard(Dashboard dashboard){
-
-    }
-
-    public static StringBuilder drawDiningRoom(HashMap<RealmColors, Integer> students){
+    public static StringBuilder drawClouds(Cloud cloud1, Cloud cloud2){//~
         StringBuilder toPrint=new StringBuilder();
-        toPrint.append("DiningRoom\n");
-        for(RealmColors color: RealmColors.values()){
-            for(int i=0;i<10;i++){
-                if(i<students.get(color)){
-                    toPrint.append(CLIColors.realmColorsConverter(color)).append("O ").append(CLIColors.RESET);
-                }else{
-                    toPrint.append(CLIColors.realmColorsConverter(color)).append("X ").append(CLIColors.RESET);
+        toPrint.append(" ~~~~~     ~~~~~\n" +
+                       "{     }   {     }\t\n" +
+                       " ~~~~~     ~~~~~").append("\n");
+        for(RealmColors color:RealmColors.values()){
+            if(cloud1.getStudentsByColor(color)!=0){
+                StringBuilder support=new StringBuilder();
+
+                toPrint.append(CLIColors.realmColorsConverter(color));
+                toPrint.append(cloud1.getStudentsByColor(color)).append(color);
+
+                support.append(CLIColors.realmColorsConverter(color));
+                support.append(cloud1.getStudentsByColor(color)).append(color);
+                int offset=CLIColors.realmColorsConverter(color).toString().length();
+                for(int i=0;support.length()-offset+i<10;i++){
+                    toPrint.append(" ");
                 }
             }
-            toPrint.append("\n");
-        }
-        return toPrint;
-
-    }
-
-    public static StringBuilder drawEntrance(HashMap<RealmColors, Integer> students){
-        StringBuilder toPrint= new StringBuilder();
-        toPrint.append("Entrance\n");
-        for(RealmColors color:students.keySet()){
-            for(int i=0;i<students.get(color);i++){
-                toPrint.append(CLIColors.realmColorsConverter(color)+"O "+CLIColors.RESET);
-            }
-            toPrint.append("\n");
-        }
-        return toPrint;
-    }
-
-    //need to add the color of the Tower. The TowerColor are Grey, Black, White
-    public static StringBuilder drawTowerStorage(int numTower){
-        StringBuilder toPrint=new StringBuilder();
-        for(int i=0;i<numTower && i<8;i++){
-            toPrint.append("O ");
-            if(i%2!=0){
+            if(cloud2.getStudentsByColor(color)!=0){
+                toPrint.append(CLIColors.realmColorsConverter(color));
+                toPrint.append(cloud2.getStudentsByColor(color)).append(color);
                 toPrint.append("\n");
             }
         }
         return toPrint;
     }
 
+    public static StringBuilder drawIsles(IsleManager isleManager){
+        StringBuilder toPrint=new StringBuilder();
+
+        for(int i=0;i<isleManager.getIsles().size();i++){
+            toPrint.append("/¯¯¯¯¯¯¯\\   ");
+        }
+        toPrint.append("\n");
+        for (int i=0;i<isleManager.getIsles().size();i++){
+            toPrint.append("│     ");
+            if(isleManager.getIsle(i).getMotherNature()){
+                toPrint.append("X");
+            }else{
+                toPrint.append(" ");
+            }
+
+            if(isleManager.getIsle(i).getTowersColor()!=TowerColors.NOCOLOR){
+                toPrint.append(CLIColors.towerColorsConverter(isleManager.getIsle(i).getTowersColor()));
+                toPrint.append("T");
+                toPrint.append(CLIColors.RESET);
+            }else{
+                toPrint.append(" ");
+            }
+            toPrint.append("│   ");
+        }
+        toPrint.append("\n");
+        for (int i=0;i<isleManager.getIsles().size();i++){
+            toPrint.append("│       │   ");
+        }
+        toPrint.append("\n");
+        for (int i=0;i<isleManager.getIsles().size();i++) {
+            toPrint.append("\\_______/   ");
+        }
+        toPrint.append("\n");
+
+        for(RealmColors color:RealmColors.values()){
+            for(int i=0;i< isleManager.getIsles().size();i++){
+                StringBuilder subColor=new StringBuilder();
+
+                toPrint.append(CLIColors.realmColorsConverter(color));
+                toPrint.append(isleManager.getIsle(i).getStudentsByColor(color)).append(color);
+
+                subColor.append(CLIColors.realmColorsConverter(color)).append(isleManager.getIsle(i).getStudentsByColor(color)).append(color);
+
+                //number of students alignment
+                //offset eliminates the characters used to codify the colors from the length of the string
+                int offset=CLIColors.realmColorsConverter(color).toString().length();
+                for(int j=0;subColor.length()-offset+j<12;j++){
+                    toPrint.append(" ");
+                }
+            }
+            toPrint.append("\n");
+        }
+        toPrint.append(CLIColors.RESET);
+        return toPrint;
+    }
+
+    /**
+     * this method draw the Dashboard. It uses other methods to get the StringBuilder objects which represent the entrance
+     * and the dining room and then it cuts and paste them to make them show aligned on the CLI
+     * @param dashboard the dashboard object which attributes are used to draw on the CLI
+     * @return the string to print to show the Dashboard
+     */
+    public static StringBuilder drawDashboard(Dashboard dashboard){
+        int numTower=dashboard.getTowerStorage().getNumberOfTowers();
+
+        StringBuilder entrance=drawEntrance(dashboard.getEntrance());
+        StringBuilder diningRoom=drawDiningRoom(dashboard.getDiningRoom());
+
+        StringBuilder toPrint=new StringBuilder();
+
+        //titles
+        String entranceTitle="Entrance";
+        String diningTitle="DiningRoom";
+        String towerTitle="TowerStorage";
+
+        toPrint.append(entranceTitle).append("    ").append(diningTitle).append("                  ").append(towerTitle).append("\n");
+        //Students cut and paste
+        for(RealmColors color:RealmColors.values()){
+            String substringEntrance= entrance.substring(entrance.indexOf(CLIColors.realmColorsConverter(color).toString()),entrance.indexOf("\n",entrance.indexOf(CLIColors.realmColorsConverter(color).toString())));
+            String substringDining= diningRoom.substring(diningRoom.indexOf(CLIColors.realmColorsConverter(color).toString()),diningRoom.indexOf("\n",diningRoom.indexOf(CLIColors.realmColorsConverter(color).toString())));
+            toPrint.append(substringEntrance);
+
+            //Entrance and DiningRoom representation alignment
+            //offset eliminates the characters used to codify the colors from the length of the string
+            int offset=CLIColors.realmColorsConverter(color).toString().length()+CLIColors.RESET.toString().length();
+            for(int i=1;substringEntrance.length()-offset+i<=10;i++){
+                toPrint.append(" ");
+            }
+            toPrint.append("||  ").append(substringDining).append("  ");
+
+            //Tower storage drawing
+            toPrint.append(CLIColors.towerColorsConverter(dashboard.getTowerStorage().getTowerColor()));
+            for(int j=0;j<2 && numTower>0;j++){
+                toPrint.append("T ");
+                numTower--;
+            }
+            toPrint.append(CLIColors.RESET).append("\n");
+
+
+
+        }
+        //tower cut and paste
+        return toPrint;
+
+
+
+    }
+
+    /**
+     * this method is used to draw the DiningRoom part of the Dashboard
+     * @param diningRoom the DiningRoom object which attributes are used to draw on the CLI
+     * @return the StringBuilder object passed to the drawDashboard method
+     */
+    public static StringBuilder drawDiningRoom(DiningRoom diningRoom){
+        StringBuilder toPrint=new StringBuilder();
+        toPrint.append("DiningRoom\n");
+        for(RealmColors color: RealmColors.values()){
+            toPrint.append(CLIColors.realmColorsConverter(color));
+            for(int i=0;i<10;i++){
+                if(i<diningRoom.getStudentsByColor(color)){
+                    toPrint.append("S ");
+                }else{
+                    toPrint.append("X ");
+                }
+            }
+            toPrint.append(CLIColors.RESET);
+            toPrint.append("||");
+            toPrint.append(CLIColors.realmColorsConverter(color));
+            if(diningRoom.getProfessorByColor(color)==1){
+                toPrint.append(" P");
+            }else {
+                toPrint.append(" X");
+            }
+            toPrint.append(CLIColors.RESET);
+            toPrint.append("\n");
+        }
+        return toPrint;
+    }
+
+    public static StringBuilder drawEntrance(Entrance entrance){
+        StringBuilder toPrint= new StringBuilder();
+
+        toPrint.append("Entrance\n");
+        for(RealmColors color:RealmColors.values()) {
+            if (entrance.getStudentsByColor(color) == 0) {
+                toPrint.append(CLIColors.realmColorsConverter(color)).append(CLIColors.RESET);
+                toPrint.append("\n");
+            } else {
+                toPrint.append(CLIColors.realmColorsConverter(color));
+                for (int i = 0; i < entrance.getStudentsByColor(color); i++) {
+                    toPrint.append("S");
+                }
+                toPrint.append(CLIColors.RESET);
+                toPrint.append("\n");
+            }
+        }
+        return toPrint;
+    }
+
+
     public static void main(String[] args) {
-        HashMap<RealmColors,Integer> students=new HashMap<>();
-        students.put(RealmColors.RED,2);
-        students.put(RealmColors.YELLOW,4);
-        students.put(RealmColors.PINK,3);
-        students.put(RealmColors.BLUE,1);
-        students.put(RealmColors.GREEN,0);
-        System.out.println(drawEntrance(students));
-        System.out.println(drawDiningRoom(students));
-        System.out.println(drawTowerStorage(4));
+        Dashboard dashboard=new Dashboard(4,1);
+        IsleManager isleManager=new IsleManager();
+
+        Entrance entrance=dashboard.getEntrance();
+        DiningRoom diningRoom=dashboard.getDiningRoom();
+
+        entrance.addStudent(RealmColors.RED);
+        entrance.addStudent(RealmColors.RED);
+        entrance.addStudent(RealmColors.RED);
+        entrance.addStudent(RealmColors.YELLOW);
+        entrance.addStudent(RealmColors.YELLOW);
+        entrance.addStudent(RealmColors.PINK);
+        entrance.addStudent(RealmColors.BLUE);
+
+        diningRoom.addStudent(RealmColors.BLUE);
+        diningRoom.addStudent(RealmColors.BLUE);
+        diningRoom.addStudent(RealmColors.BLUE);
+        diningRoom.addStudent(RealmColors.YELLOW);
+        diningRoom.addStudent(RealmColors.YELLOW);
+        diningRoom.addStudent(RealmColors.YELLOW);
+        diningRoom.addStudent(RealmColors.RED);
+        diningRoom.addStudent(RealmColors.GREEN);
+        diningRoom.addStudent(RealmColors.GREEN);
+        diningRoom.addStudent(RealmColors.GREEN);
+
+        for(int i=0;i<isleManager.getIsles().size();i++){
+            for(RealmColors colors:RealmColors.values()){
+                for(int j=0;j<10;j++){
+                    isleManager.getIsle(i).addStudent(colors);
+                }
+            }
+        }
+        //System.out.println(drawDashboard(dashboard));
+        System.out.println(drawIsles(isleManager));
+        Cloud cloud1=new Cloud(1,4);
+        Cloud cloud2=new Cloud(2,4);
+        cloud1.addStudent(RealmColors.BLUE);
+        cloud1.addStudent(RealmColors.BLUE);
+        cloud1.addStudent(RealmColors.BLUE);
+        cloud2.addStudent(RealmColors.GREEN);
+        cloud1.addStudent(RealmColors.GREEN);
+        cloud2.addStudent(RealmColors.GREEN);
+        cloud1.addStudent(RealmColors.GREEN);
+        cloud2.addStudent(RealmColors.GREEN);
+        cloud1.addStudent(RealmColors.GREEN);
+        System.out.println(drawClouds(cloud1,cloud2));
+
     }
 }
