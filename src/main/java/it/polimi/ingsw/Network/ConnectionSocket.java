@@ -63,6 +63,7 @@ public class ConnectionSocket {
             messageReceived = inStream.nextLine();
             if (messageReceived.equals(ConstantMessages.koJSON))
                 System.out.println("Error: try again selecting a number between 2 and 4");
+            //NOT WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         } while (!messageReceived.equals(ConstantMessages.okJSON));
 
         System.out.println("You joined a game!");

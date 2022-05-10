@@ -40,7 +40,7 @@ public class SetupPhaseTest {
         /*for (RealmColors rc : RealmColors.values())
             System.out.println("Number of " + rc.toString() + " students in player two entrance: " + game.getPlayerByIndex(1).getDashboard().getEntrance().getStudentsByColor(rc));*/
         // checking if we moved onto the next phase
-        assertEquals(GamePhases.PLANNING_PHASE, game.gamePhase);
+        assertEquals(GamePhases.PLANNING_PHASE, game.getGamePhase());
     }
 
     /**
@@ -72,6 +72,6 @@ public class SetupPhaseTest {
         assertEquals(9, game.getPlayerByIndex(2).getDashboard().getEntrance().getNumberOfStudents());
         /*for (RealmColors rc : RealmColors.values())
             System.out.println("Number of " + rc.toString() + " students in player three entrance: " + game.getPlayerByIndex(2).getDashboard().getEntrance().getStudentsByColor(rc));*/
-        assertEquals(GamePhases.PLANNING_PHASE, game.gamePhase);
+        assertEquals(GamePhases.PLANNING_PHASE, game.getGamePhase());
     }
 }

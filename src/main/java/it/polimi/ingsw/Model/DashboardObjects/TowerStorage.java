@@ -3,8 +3,17 @@ package it.polimi.ingsw.Model.DashboardObjects;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
 public class TowerStorage {
+    /**
+     * The maximum amount of towers in the tower storage
+     */
     private final int maxTowers;
+    /**
+     * The amount of towers in the tower storage
+     */
     private int numOfTowers;
+    /**
+     * The color of the towers in the tower storage
+     */
     private final TowerColors towerColor;
 
     public TowerStorage(int maxNumberOfTowers, TowerColors towerColor) {

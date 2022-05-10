@@ -13,72 +13,84 @@ import java.util.TreeSet;
 
 public class Game {
     /**
-     * the game mode of the game, it is decided by the first player that joins the game
+     * The game mode of the game, it is decided by the first player that joins the game
      */
     private GameMode gameMode;
     /**
-     * the number of players that are going to play the game, it is decided by the first player that joins the game
+     * The number of players that are going to play the game, it is decided by the first player that joins the game
      */
-    public int numberOfPlayers;
+    private int numberOfPlayers;
     /**
-     * the number of players that already joined the game
+     * The number of players that already joined the game
      */
     private int actualNumberOfPlayers = 0;
     /**
-     * the game table where the game is going to be played, it contains many different objects that compose the game itself
+     * The game table where the game is going to be played, it contains many different objects that compose the game itself
      */
     private GameTable gameTable;
     /**
-     * the list of players that are playing the game
+     * The list of players that are playing the game
      */
     private final ArrayList<Player> players;
     /**
-     * random index used to say who will be the first player to play in the first turn
+     * Random index used to say who will be the first player to play in the first turn
      */
-    public int firstPlayerIndex;
+    private int firstPlayerIndex;
     /**
-     * the number of students that is possible to move in a turn for each player
+     * The number of students that is possible to move in a turn for each player
      */
     private int maxMovableStudents;
     /**
-     * counter used to check how many players already played their turn in a game phase
+     * Counter used to check how many players already played their turn in a game phase
      */
-    public int playerCounter = 0;
-
+    private int playerCounter = 0;
+    /**
+     * Counter of the students moved
+     */
     private int studentsCounter = 0;
-
+    /**
+     * Boolean value that indicates if it is the last round of a game because a player already played
+     * all his assistant cards or if the students in the bag were not enough to end the round for everyone.
+     */
     private boolean lastRound = false;
-
+    /**
+     * When true it means the game ended, else false
+     */
     private boolean endGame = false;
+    /**
+     * When true it means the game ended in a draw, else false
+     */
     private boolean drawEndGame = false;
+    /**
+     * Indicates the player that won the game
+     */
     private Player winner;
-
     /**
      * Phases in which it's divided the game
      */
-    public GamePhases gamePhase;
+    private GamePhases gamePhase;
     /**
-     * it divide the planning phase in 2 different sub phases and it indicates that the player turn is in the planning phase
+     * It divides the planning phase in 2 different sub phases, and it indicates that the player turn is in the planning phase
      */
-    public PlanningPhases planningPhase;
+    private PlanningPhases planningPhase;
     /**
-     * it divide the planning phase in 3 different sub phases and it indicates that the player turn is in the action phase
+     * It divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase
      */
-    public ActionPhases actionPhase;
+    private ActionPhases actionPhase;
     /**
-     * it indicates who is the current active player that is playing his turn
+     * It indicates who is the current active player that is playing his turn
      */
-    public CurrentOrder currentActivePlayer;
+    private CurrentOrder currentActivePlayer;
     /**
-     * it's the factory that permits to build the effect of each playable character card
+     * It's the factory that permits to build the effect of each playable character card
      */
     private final EffectInGameFactory effectInGameFactory;
     /**
-     * saves the color chosen by the player when activating the FUNGIST character card
+     * Saves the color chosen by the player when activating the FUNGIST character card
      */
     private RealmColors colorForFungist;
     /**
-     * saves the number of students of the chosen color removed from the isle
+     * Saves the number of students of the chosen color removed from the isle
      * when checking the influence the turn the FUNGIST has been played
      */
     private int studentsRemovedByFungist=0;
@@ -99,23 +111,6 @@ public class Game {
     }
 
     /**
-     * getter method that permits to know whats the  in the list of players that has a certain index
-     * @param playerIndex the index of the player that is in the list
-     * @return the player associated with that index
-     */
-    public Player getPlayerByIndex(int playerIndex) {
-        return players.get(playerIndex);
-    }
-
-    /**
-     * getter method that permits to pick the current game table
-     * @return the current game table
-     */
-    public GameTable getGameTable() {
-        return gameTable;
-    }
-
-    /**
      * setting the number of player when selected by the first player
      * @param numberOfPlayers to play with in total
      */
@@ -127,8 +122,6 @@ public class Game {
         else
             maxMovableStudents = 3;
     }
-
-    public int getNumberOfPlayers() {return numberOfPlayers;}
 
     /**
      * First method that has to be called to properly start the game
@@ -152,9 +145,9 @@ public class Game {
         gameTable = new GameTable(numberOfPlayers, this.gameMode);
 
         if (numberOfPlayers==4)
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, this.gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1);
         else
-            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD, this.gameMode);
+            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD);
 
         players.add(newPlayer);
         initializeEntrance(actualNumberOfPlayers);
@@ -165,25 +158,18 @@ public class Game {
     /**
      * first action to do when a player that is not the first one asks to join a match
      * (after having checked that the number of players is respected)
-     * @param nickName the nickname of the player, must be checked if other players already got the same
+     * @param nickname the nickname of the player, must be checked if other players already got the same
      */
-    public void addAnotherPlayer(String nickName) {
+    public void addAnotherPlayer(String nickname) {
 
-        for (int i=0; i<actualNumberOfPlayers; i++){
-            if (nickName.equals(players.get(i).nickname))
-                return;
-                //new name please
-        }
-
-        if (actualNumberOfPlayers < numberOfPlayers) {
             Player newPlayer;
             if (numberOfPlayers == 2 || numberOfPlayers == 3)
-                newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD, gameMode);
+                newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD);
             else {
                 if (actualNumberOfPlayers == 2)
-                    newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1, gameMode);
+                    newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1);
                 else
-                    newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2, gameMode);
+                    newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2);
             }
             players.add(newPlayer);
             initializeEntrance(actualNumberOfPlayers);
@@ -195,19 +181,6 @@ public class Game {
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 updateOrder(gamePhase);
             }
-
-        }
-        else
-            return;
-
-    }
-
-    /**
-     * this is a getter method that returns the list of players who are playing the game
-     * @return the list of players who are playing the game
-     */
-    public ArrayList<Player> getPlayers() {
-        return players;
     }
 
     /**
@@ -301,7 +274,7 @@ public class Game {
                     activateAtomicEffect(idPlayer,indexFarmer,0,0);
                 }
                 // checking if the student is added in third, sixth or ninth position of the dining room
-                    if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
+                if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
                     players.get(idPlayer).gainMoney();
                     gameTable.studentInMoneyPosition();
                 }
@@ -323,7 +296,7 @@ public class Game {
      */
     public void moveMotherNature(int idPlayer, int idIsle) {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_MOTHER_NATURE && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).discardPile.getMnMovement())) {
+            if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).getDiscardPile().getMnMovement())) {
                 gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
                 gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
                 gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
@@ -343,7 +316,7 @@ public class Game {
                 if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)
                     while(gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != studentsRemovedByFungist)
                         gameTable.getIsleManager().getIsle(idIsle).addStudent(colorForFungist);
-                    studentsRemovedByFungist = 0;
+                studentsRemovedByFungist = 0;
                 checkEndGame();
                 if (!lastRound)
                     actionPhase = ActionPhases.CHOOSE_CLOUD;
@@ -408,7 +381,7 @@ public class Game {
         if (numberOfPlayers == 4) {
             return winner.getSquad().toString();
         } else
-            return winner.nickname;
+            return winner.getNickname();
     }
 
     /**
@@ -669,8 +642,8 @@ public class Game {
      * @param characterCardIndex the index of the character card played
      * @param value1 the color of the student the player wants to remove from the staring StudentsManager
      * @param value2 it represents different values based on the played card
-*              MONK          -> isle index where to move the student
-*              HERALD        -> isle where calculate the influence now
+     *              MONK          -> isle index where to move the student
+     *              HERALD        -> isle where calculate the influence now
      *         When not used -> set to 0
      */
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
@@ -685,27 +658,102 @@ public class Game {
     public void setColorForFungist(int indexColorFungist) { this.colorForFungist = RealmColors.getColor(indexColorFungist); }
 
     /**
-     * it returns the number of players that have been added to the game
-     * @return the number of players that have been added to the game
+     * getter method that permits to know whats the  in the list of players that has a certain index
+     * @param playerIndex the index of the player that is in the list
+     * @return the player associated with that index
      */
-    public int getActualNumberOfPlayers() { return actualNumberOfPlayers; }
+    public Player getPlayerByIndex(int playerIndex) { return players.get(playerIndex); }
+
+    /**
+     * getter method that permits to pick the current game table
+     * @return the current game table
+     */
+    public GameTable getGameTable() { return gameTable; }
 
     /**
      * used for testing purpose only
      * @param gameP game phase
      */
-    public void setGamePhase(GamePhases gameP){
-        gamePhase = gameP;
+    public void setGamePhase(GamePhases gameP){ gamePhase = gameP; }
+
+    /**
+     * Getter method for the game phase
+     * @return the actual game phase
+     */
+    public GamePhases getGamePhase() { return gamePhase; }
+
+    /**
+     * Getter method that tells if the game mode is expert or not.
+     * @return true if expert, else false
+     */
+    public boolean isGameMode() {
+        return gameMode == GameMode.EXPERT;
     }
 
-    public GamePhases getGamePhase() {
-        return gamePhase;
-    }
+    /**
+     * Getter method that returns the list of players who are playing the game
+     * @return the list of players who are playing the game
+     */
+    public ArrayList<Player> getPlayers() { return players; }
 
-    public boolean getGameMode() {
-        if(gameMode==GameMode.EXPERT)
-            return true;
-        else
-            return false;
-    }
+    /**
+     * Getter method for the index of the first player to play this turn
+     * @return the index of the first player
+     */
+    public int getFirstPlayerIndex() { return firstPlayerIndex; }
+
+    /**
+     * Getter method for the player counter
+     * @return the count of the players till the invocation
+     */
+    public int getPlayerCounter() { return playerCounter; }
+
+    /**
+     * Getter method for the number of players of the game
+     * @return the number of players
+     */
+    public int getNumberOfPlayers() {return numberOfPlayers;}
+
+    /**
+     * It returns the number of players that have been added to the game
+     * @return the number of players that have been added to the game
+     */
+    public int getActualNumberOfPlayers() { return actualNumberOfPlayers; }
+
+    /**
+     * Getter method for the current active player
+     * @return the current active player
+     */
+    public CurrentOrder getCurrentActivePlayer() { return currentActivePlayer; }
+
+    /**
+     * Setter method for the current active player
+     * @param currentActivePlayer the player that will become the current active player
+     */
+    public void setCurrentActivePlayer(CurrentOrder currentActivePlayer) { this.currentActivePlayer = currentActivePlayer; }
+
+    /**
+     * Getter method for the planning phase
+     * @return in which phase of the planning phase we are
+     */
+    public PlanningPhases getPlanningPhase() { return planningPhase; }
+
+    /**
+     * Setter method for the planning phase
+     * @param planningPhase indicates in which phase of the planning phase we are
+     */
+    public void setPlanningPhase(PlanningPhases planningPhase) { this.planningPhase = planningPhase; }
+
+    /**
+     * Getter method for the action phase
+     * @return in which phase of the action phase we are
+     */
+    public ActionPhases getActionPhase() { return actionPhase; }
+
+    /**
+     * Setter method for the action phase
+     * @param actionPhase indicates in which phase of the action phase we are
+     */
+    public void setActionPhase(ActionPhases actionPhase) { this.actionPhase = actionPhase; }
+
 }

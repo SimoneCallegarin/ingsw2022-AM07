@@ -16,7 +16,7 @@ public class Player {
     /**
      * This attribute is the nickname of the player
      */
-    public String nickname;
+    private String nickname;
     /**
      * This attribute indicates the team of the player in a 4 players game
      */
@@ -28,19 +28,15 @@ public class Player {
     /**
      * This attribute is the deck of assistant cards
      */
-    public ArrayList<AssistantCard> mageDeck;
+    private ArrayList<AssistantCard> mageDeck;
     /**
      * This attribute is the card on the top of the discards pile
      */
-    public AssistantCard discardPile;
+    private AssistantCard discardPile;
     /**
      * This attribute represents the Dashboard associated with the player
      */
     private final Dashboard dashboard;
-    /**
-     * This attribute represents the game mode
-     */
-    public GameMode gameMode;
     /**
      * This attribute represents the number of money of a player
      */
@@ -57,7 +53,6 @@ public class Player {
      * This attribute represents the order number in the turn for the player
      */
     private CurrentOrder order;
-
     /**
      * it saves when the assistant card has been played during last planning phase
      */
@@ -67,12 +62,10 @@ public class Player {
      * Constructor
      * @param nickname    valid nickname chosen by the player
      * @param squad       team chosen by the player
-     * @param gameMode    game mode of the game where the player have to play, used to add function to the player
      */
-    public Player(String nickname, int numOfPlayers, int idDashboard, Squads squad, GameMode gameMode) {
+    public Player(String nickname, int numOfPlayers, int idDashboard, Squads squad) {
         this.nickname = nickname;
         this.squad = squad;
-        this.gameMode = gameMode;
 
         this.dashboard = new Dashboard(numOfPlayers, idDashboard);
 
@@ -90,17 +83,7 @@ public class Player {
             this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1));
         }
 
-        this.money = 0;
-        if (gameMode.equals(GameMode.EXPERT))
-            this.money = 1;
-    }
-
-    public Squads getSquad() {return squad;}
-
-    public AssistantCard getDiscardPile() {return discardPile;}
-
-    public void setDiscardPileNull() {
-        discardPile = null;
+        this.money = 1;
     }
 
     public AssistantCard getAssistantCardByTurnOrder(int turnOrder) {
@@ -125,61 +108,6 @@ public class Player {
     public boolean isMageDeckEmpty() {
         return mageDeck.isEmpty();
     }
-
-    /**
-     * this method permits to set the current player order in the turn
-     * @param order of the player this turn
-     */
-    public void setOrder(CurrentOrder order) {
-        this.order = order;
-    }
-
-    /**
-     * this method gives what is the current player turn order
-     * @return the turn order of the player
-     */
-    public CurrentOrder getOrder() {
-        return this.order;
-    }
-
-    public void setCardOrder(int cardOrder) { this.cardOrder = cardOrder;}
-
-    public int getCardOrder() { return cardOrder;}
-
-    /**
-     * getter method that gives which is the dashboard associated to the current player
-     * @return the dashboard of the current player
-     */
-    public Dashboard getDashboard() {return dashboard;}
-
-    /**
-     * getter method that gives the assistant cards of the current player
-     * @return the deck of assistant cards of the player
-     */
-    public List<AssistantCard> getMageDeck() {
-        return mageDeck;
-    }
-
-    /**
-     * getter method that gives the number of money of the player
-     * @return number of money of the player
-     */
-    public int getMoney() {
-        return money;
-    }
-
-    /**
-     * getter method that permits to know if an assistant card has been already used by the player
-     * @return true if already used, else false
-     */
-    public boolean getAlreadyPlayedACardThisTurn() {
-        return alreadyPlayedACardThisTurn;
-    }
-
-    /**
-     * set to false the attribute alreadyPlayedACardThisTurn
-     */
-    public void setNotAlreadyPlayedACardThisTurn() { this.alreadyPlayedACardThisTurn = false; }
 
     /**
      * this method increase the number of money of the player by 1
@@ -219,5 +147,91 @@ public class Player {
     public int selectIsleId(int isleID){
         return isleID;
     }
+
+    /**
+     * Getter method for the nickname.
+     * @return the nickname of the player.
+     */
+    public String getNickname() { return nickname; }
+
+    /**
+     * Getter method for the player team.
+     * @return the team of the player.
+     */
+    public Squads getSquad() {return squad;}
+
+    /**
+     * Getter method for the discard pile.
+     * @return the assistant card on the top of the discard pile.
+     */
+    public AssistantCard getDiscardPile() {return discardPile;}
+
+    /**
+     * Setter method to set the discard pile to null value.
+     */
+    public void setDiscardPileNull() { discardPile = null; }
+
+    /**
+     * Getter method for the player turn order.
+     * @return the turn order of the player.
+     */
+    public CurrentOrder getOrder() {
+        return this.order;
+    }
+
+    /**
+     * Getter method for the assistant card order
+     * @return the order of the assistant card
+     */
+    public int getCardOrder() { return cardOrder; }
+
+    /**
+     * Setter method for the assistant card order
+     * @param cardOrder of the assistant card
+     */
+    public void setCardOrder(int cardOrder) { this.cardOrder = cardOrder;}
+
+    /**
+     * this method permits to set the current player order in the turn
+     * @param order of the player this turn
+     */
+    public void setOrder(CurrentOrder order) {
+        this.order = order;
+    }
+
+    /**
+     * getter method that gives which is the dashboard associated to the current player
+     * @return the dashboard of the current player
+     */
+    public Dashboard getDashboard() {return dashboard;}
+
+    /**
+     * getter method that gives the assistant cards of the current player
+     * @return the deck of assistant cards of the player
+     */
+    public List<AssistantCard> getMageDeck() {
+        return mageDeck;
+    }
+
+    /**
+     * getter method that gives the number of money of the player
+     * @return number of money of the player
+     */
+    public int getMoney() {
+        return money;
+    }
+
+    /**
+     * getter method that permits to know if an assistant card has been already used by the player
+     * @return true if already used, else false
+     */
+    public boolean getAlreadyPlayedACardThisTurn() {
+        return alreadyPlayedACardThisTurn;
+    }
+
+    /**
+     * set to false the attribute alreadyPlayedACardThisTurn
+     */
+    public void setNotAlreadyPlayedACardThisTurn() { this.alreadyPlayedACardThisTurn = false; }
 
 }

@@ -16,11 +16,14 @@ import java.util.concurrent.Executors;
  */
 public class Server {
 
-    public SocketServer socketServer;
+    /**
+     * Socket Server that is responsible for setting up connections with the clients.
+     */
+    private final SocketServer socketServer;
     /**
      * List of Games created.
      */
-    public ArrayList<GameController> activeMatches;
+    private final ArrayList<GameController> activeMatches;
     /**
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
@@ -94,13 +97,13 @@ public class Server {
      * @param nickname of the player that wants to play
      * @param preferences of the player, about the number of players to play with and the game mode chosen
      */
-    public void addPlayerToGame(String nickname, GamePreferencesMessage preferences){
+    public boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences){
         if(!checkValuesValidity(preferences))
-            return;
+            return false;
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
-            if(activeMatches.get(i).game.getGameMode()==preferences.expertMode && activeMatches.get(i).game.getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).game.getActualNumberOfPlayers()!=activeMatches.get(i).game.getNumberOfPlayers()){
+            if(activeMatches.get(i).getGameMode()==preferences.expertMode && activeMatches.get(i).getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
                 matchID=i;
                 break;
             }
@@ -110,7 +113,8 @@ public class Server {
         else
             addPlayerToAnExistingLobby(matchID, nickname,preferences);
         players.get(nickname).setMatchID(matchID);
-        players.get(nickname).setPlayerID(activeMatches.get(matchID).game.getActualNumberOfPlayers()-1);
+        players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
+        return true;
     }
 
     /**
@@ -142,10 +146,36 @@ public class Server {
      * @param nickName of the player that wants to play
      * @param clientHandler of the player that wants to play
      */
-    public void setPlayers(String nickName, ClientHandler clientHandler){
+    public void setPlayer(String nickName, ClientHandler clientHandler){
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
+    }
+
+    /**
+     * Removes all data associated to a certain player that ended a match.
+     * @param nickname the nickname of the player that just ended a match.
+     */
+    public void removePlayer(String nickname) {
+        players.remove(nickname);
+        nickNamesChosen.remove(nickname);
+    }
+
+    /**
+     * Delete a game when a player quit and all the information about all the other players that was playing the game
+     * @param nickname nickname of the player that quit.
+     */
+    public void aPlayerQuit(String nickname) {
+        int quitMatch = getPlayerInfo(nickname).getMatchID();
+
+        for (String playerNickname : nickNamesChosen)
+            if(players.get(playerNickname).getMatchID()==quitMatch && !playerNickname.equals(nickname))
+                //removePlayer(activeMatches.get(quitMatch).game.getPlayers().get(i).getNickname());
+                System.err.println("A player quit");            //remove this line when send message implemented
+        //SEND QUIT MESSAGE: ANOTHER PLAYER QUIT... -> GAME END.
+        //THE CLIENT WHEN RECEIVES A QUIT MESSAGE FROM THE SERVER CALLS THE gameEnded method!!!
+
+        System.out.println("Game: "+quitMatch+" because player \""+nickname+"\" left the game.");
     }
 
     /**
@@ -155,6 +185,11 @@ public class Server {
      */
     public GameController getMatch(int matchID) { return activeMatches.get(matchID); }
 
+    /**
+     * Getter method to obtain information associated to a player with a certain nickname.
+     * @param nickname the nickname of the  player we want to know the information.
+     * @return the information of that player (playerID, matchID and client handler of the player).
+     */
     public PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
     public static void main(String[] args) {

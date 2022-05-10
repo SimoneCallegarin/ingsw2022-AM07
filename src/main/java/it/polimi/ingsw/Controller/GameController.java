@@ -13,19 +13,19 @@ public class GameController {
     /**
      * this is the model reference
      */
-    public Game game;
+    private final Game game;
 
     /**
      * these are some auxiliary attributes. They are used to store a player choice and use them only when the controller
      * can call the model methods with all the parameters
      */
-    int colorIndex;
-    int colorIndexSaved;
+    private int colorIndex;
+    private int colorIndexSaved;
 
     /**
      * this will permit to store the index of the character card played
      */
-    int characterCardPlayedIndex;
+    private int characterCardPlayedIndex;
 
     /**
      * the class constructor
@@ -43,32 +43,32 @@ public class GameController {
     public void onMessage(PlayerMoveMessage message){
         switch(message.getMessageType()){
             case PLAY_ASSISTANT_CARD -> {
-                if (game.gamePhase == GamePhases.PLANNING_PHASE && game.planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                if (game.getGamePhase() == GamePhases.PLANNING_PHASE && game.getPlanningPhase() == PlanningPhases.ASSISTANT_CARD_PHASE && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
                     game.playAssistantCard(message.getPlayerID(), message.getGenericValue());
                 }
             }
             case MOVE_STUDENT_TO_DINING -> {
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()) {
+                if (game.getGamePhase() == GamePhases.ACTION_PHASE && game.getActionPhase() == ActionPhases.MOVE_STUDENTS && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()) {
                     game.moveStudentInDiningRoom(message.getPlayerID(), colorIndex);
                 }
             }
             case MOVE_STUDENT_TO_ISLE ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_STUDENTS && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                if (game.getGamePhase() == GamePhases.ACTION_PHASE && game.getActionPhase() == ActionPhases.MOVE_STUDENTS && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
                     game.moveStudentInIsle(message.getPlayerID(), message.getGenericValue(), colorIndex);
                 }
             }
             case MOVE_MOTHERNATURE ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.MOVE_MOTHER_NATURE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                if (game.getGamePhase() == GamePhases.ACTION_PHASE && game.getActionPhase() == ActionPhases.MOVE_MOTHER_NATURE && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
                     game.moveMotherNature(message.getPlayerID(), message.getGenericValue());
                 }
             }
             case CHOOSE_CLOUD ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.actionPhase == ActionPhases.CHOOSE_CLOUD && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                if (game.getGamePhase() == GamePhases.ACTION_PHASE && game.getActionPhase() == ActionPhases.CHOOSE_CLOUD && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
                     game.pickStudentsFromCloud(message.getPlayerID(), message.getGenericValue());
                 }
             }
             case PLAY_CHARACTER_CARD ->{
-                if (game.gamePhase == GamePhases.ACTION_PHASE && game.currentActivePlayer == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
+                if (game.getGamePhase() == GamePhases.ACTION_PHASE && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
                     game.playCharacterCard(message.getPlayerID(), message.getGenericValue());
                     characterCardPlayedIndex = message.getGenericValue();
                     CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.getGenericValue()).getCharacterCardName();
@@ -101,16 +101,21 @@ public class GameController {
     /**
      * this method is called by the server, it permits to add a player to an existing game when newGame is set false
      * or to create one when newGame is set true
-     * @param nickName the nickname of the player who is joining the game
+     * @param nickname the nickname of the player who is joining the game
      * @param preferences the number of players and the game mode the player chose to play whit
      * @param newGame boolean variable that permits to know if it's required to add the player to a new game or not
      */
-    public void addPlayerToGame(String nickName, GamePreferencesMessage preferences, Boolean newGame){
+    public void addPlayerToGame(String nickname, GamePreferencesMessage preferences, Boolean newGame){
         if(newGame)
-            game.addFirstPlayer(nickName,preferences.isExpert(),preferences.getNumberOfPlayers());
+            game.addFirstPlayer(nickname,preferences.isExpert(),preferences.getNumberOfPlayers());
         else
-            game.addAnotherPlayer(nickName);
+            game.addAnotherPlayer(nickname);
     }
 
+    public int getActualNumberOfPlayers() { return game.getActualNumberOfPlayers(); }
+
+    public boolean getGameMode() { return game.isGameMode(); }
+
+    public int getNumberOfPlayers() { return game.getNumberOfPlayers(); }
 
 }

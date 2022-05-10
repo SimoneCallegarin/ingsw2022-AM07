@@ -10,15 +10,15 @@ public class DiningRoom implements StudentManager {
     /**
      * this is the students container
      */
-    final HashMap<RealmColors,Integer> students;
+    private final HashMap<RealmColors,Integer> students;
     /**
      * this is the professors container
      */
-    final HashMap<RealmColors,Integer> professors;
+    private final HashMap<RealmColors,Integer> professors;
     /**
      * this is a value that defines how the dining room is made
      */
-    static final int maxStudentsPerColor = 10;
+    private static final int maxStudentsPerColor = 10;
 
     /**
      * DiningRoom constructor: hashmaps initialization (every field is set to 0)

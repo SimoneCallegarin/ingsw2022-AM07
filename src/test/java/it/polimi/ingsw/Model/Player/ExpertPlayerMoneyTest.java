@@ -2,14 +2,13 @@ package it.polimi.ingsw.Model.Player;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.Squads;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpertPlayerMoneyTest {
 
-    Player expertPlayerForTest = new Player("PlayerForTest", 4, 1, Squads.SQUAD1, GameMode.EXPERT);
+    Player expertPlayerForTest = new Player("PlayerForTest", 4, 1, Squads.SQUAD1);
 
     /**
      * Testing that when calling the following method the expert player gain 1 money

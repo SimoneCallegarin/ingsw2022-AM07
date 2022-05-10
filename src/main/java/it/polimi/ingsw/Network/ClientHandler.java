@@ -1,9 +1,9 @@
 package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.Messages.*;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,6 +49,30 @@ public class ClientHandler implements Runnable{
     }
 
     /**
+     * Calls all other methods that handle a player connection and his setup for playing.
+     * It also close the connection when the game ends.
+     * What it does:
+     * 1) Logs the player in the server with his nickname (if valid);
+     * 2) Adds the player to a new or existing game relying on the preferences he specified;
+     * 3) Handles the player moves while playing the game;
+     * 4) Removes all player information that were saved on the server when the game ends;
+     * 5) Closes the connection between client and server.
+     * @throws IOException when there's an error in the exchanged messages.
+     */
+    private void clientHandle() throws IOException {
+
+        logPlayer();
+
+        addPlayerToGame();
+
+        handleGame();
+
+        gameEnded();
+
+    }
+
+    /**
+     * 1)
      * Logs in the player and checks if it's using a valid nickname
      */
     private void logPlayer() {
@@ -66,7 +90,7 @@ public class ClientHandler implements Runnable{
             else
                 break;
         }          //Repeat till it's given an available nickname
-        server.setPlayers(loginMessage.getNickname(),this);
+        server.setPlayer(loginMessage.getNickname(),this);
         nickname = loginMessage.getNickname();
         System.out.println("NickName selected: "+ "\"" + nickname + "\"");
         out.println(ConstantMessages.okJSON);
@@ -85,23 +109,29 @@ public class ClientHandler implements Runnable{
                     System.out.println("Error on received message, waiting for correction...");
                 }
             }while(preferences.getMessageType() != MessageType.GAME_SETUP_INFO);
-            server.addPlayerToGame(nickname,preferences);
-            if (server.getPlayerInfo(nickname).getMatchID() == -1)
+            if (!server.addPlayerToGame(nickname,preferences))
                 out.println(ConstantMessages.koJSON);
             else
                 break;
         }                      //Repeat till it's given a valid number of player
-        if(server.getMatch(server.getPlayerInfo(nickname).getMatchID()).game.getActualNumberOfPlayers()==1)
+        if(server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers()==1)
             System.out.println("Added player: "+ nickname + " to a new game.");
         else
-            System.out.println("Added player: "+ nickname + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).game.getActualNumberOfPlayers()-1) +" players.");
+            System.out.println("Added player: "+ nickname + " to an already existing game with other "+ (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers()-1) +" players.");
         out.println(ConstantMessages.okJSON);
     }
 
-    private void handleGame(){
+    /**
+     * 3)
+     * Handles all player moves and the game development till the game ends.
+     * @throws IOException when there's an error in the exchanged messages.
+     */
+    private void handleGame() throws IOException {
         while (true) {
             PlayerMoveMessage m= commandParser.processCmd(in.nextLine());
-            if(m.getMessageType()== MessageType.QUIT){
+            if(m.getMessageType() == MessageType.QUIT){
+                server.aPlayerQuit(nickname);
+                gameEnded();
                 break;
             }
             else{
@@ -111,19 +141,22 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    /**
+     * 4)
+     * It will remove all data saved in the server, connected to the player associated with this client handler.
+     * @throws IOException when there's an error in the exchanged messages.
+     */
+    private void gameEnded() throws IOException {
+        server.removePlayer(nickname);
+        in.close();
+        out.close();
+        client.close();
+    }
+
     @Override
     public void run() {
         try {
-
-            logPlayer();
-
-            addPlayerToGame();
-
-            handleGame();
-
-            in.close();
-            out.close();
-            client.close();
+            clientHandle();
         } catch (IOException e) {
             //ERROR MESSAGE
             System.out.println("An error has occurred");

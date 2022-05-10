@@ -2,7 +2,6 @@ package it.polimi.ingsw.Model.CharacterCards;
 
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.Messages.MessageType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +22,7 @@ class GamePlaySomeCharacterCardsTest {
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         // students:
         //  130 in the bag
         //  -10 in isle
@@ -93,7 +92,7 @@ class GamePlaySomeCharacterCardsTest {
         //  filippo: 1 PINK, 1 YELLOW, 1 RED
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(2).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(2).getOrder());
         game.getPlayerByIndex(2).gainMoney();
 
         game.playCharacterCard(2,0);
@@ -150,7 +149,7 @@ class GamePlaySomeCharacterCardsTest {
         //player 1 influence = 3
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(1).getOrder());
         game.getPlayerByIndex(1).gainMoney();
         game.getPlayerByIndex(1).gainMoney();
 
@@ -171,14 +170,14 @@ class GamePlaySomeCharacterCardsTest {
 
         //setting the correct game phase
         game.setGamePhase(GamePhases.PLANNING_PHASE);
-        game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         game.playAssistantCard(0,1);
 
         assertEquals(1,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         game.playCharacterCard(0,0);
 
@@ -196,7 +195,7 @@ class GamePlaySomeCharacterCardsTest {
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.GRANDMA_HERBS);
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         game.getPlayerByIndex(0).gainMoney();
 
         // 4 deny cards on the character card
@@ -216,14 +215,14 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(1,game.getGameTable().getIsleManager().getIsle(11).getDenyCards());
 
         game.setGamePhase(GamePhases.PLANNING_PHASE);
-        game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         game.playAssistantCard(0,5);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         if(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()<10)
             game.moveMotherNature(0,game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+2);
@@ -275,7 +274,7 @@ class GamePlaySomeCharacterCardsTest {
         //player 1 influence = 1
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(1).getOrder());
         game.getPlayerByIndex(1).gainMoney();
 
         game.playCharacterCard(1,0);
@@ -332,7 +331,7 @@ class GamePlaySomeCharacterCardsTest {
         //player 0 influence = 2
         //player 1 influence = 3
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(1).getOrder());
         game.getPlayerByIndex(1).gainMoney();
         game.getPlayerByIndex(1).gainMoney();
 
@@ -355,7 +354,7 @@ class GamePlaySomeCharacterCardsTest {
 
         game.getGameTable().setCharacterCards(CharacterCardsName.JESTER);
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         int counter=0;
 
@@ -425,7 +424,7 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(0,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         game.playCharacterCard(0,0);
         //player 0 influence on isle 8 = 2
@@ -475,15 +474,15 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(1)));
 
         game.setGamePhase(GamePhases.PLANNING_PHASE);
-        game.planningPhase=PlanningPhases.ASSISTANT_CARD_PHASE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         game.playAssistantCard(1,9);
-        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(1).getOrder());
         game.playAssistantCard(1,5);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
-        game.currentActivePlayer = game.getPlayerByIndex(1).getOrder();
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(1).getOrder());
         for(int i=0; i<12; i++)
             game.getGameTable().getIsleManager().getIsle(i).setMotherNature(false);
         game.getGameTable().getIsleManager().getIsle(7).setMotherNature(true);
@@ -511,7 +510,7 @@ class GamePlaySomeCharacterCardsTest {
 
         game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         int counter=0;
 
@@ -570,7 +569,7 @@ class GamePlaySomeCharacterCardsTest {
 
         game.getGameTable().setCharacterCards(CharacterCardsName.SPOILED_PRINCESS);
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         game.getPlayerByIndex(0).gainMoney();
 
         //testing if SPOILED_PRINCESS character card is correctly set up
@@ -599,7 +598,7 @@ class GamePlaySomeCharacterCardsTest {
 
         game.getGameTable().setCharacterCards(CharacterCardsName.THIEF);
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         game.getPlayerByIndex(0).gainMoney();
         game.getPlayerByIndex(0).gainMoney();
 

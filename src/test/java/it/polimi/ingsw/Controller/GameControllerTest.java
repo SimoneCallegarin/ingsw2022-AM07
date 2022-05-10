@@ -29,8 +29,8 @@ class GameControllerTest {
         game.addAnotherPlayer("giacomo");
 
         game.setGamePhase(GamePhases.PLANNING_PHASE);
-        game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         gameController.onMessage(message);
 
@@ -49,8 +49,8 @@ class GameControllerTest {
         game.addAnotherPlayer("giacomo");
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.actionPhase = ActionPhases.MOVE_STUDENTS;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setActionPhase(ActionPhases.MOVE_STUDENTS);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         gameController.onMessage(message);
 
@@ -74,8 +74,8 @@ class GameControllerTest {
         int redStudentsOnIsle11 = game.getGameTable().getIsleManager().getIsle(11).getStudentsByColor(RealmColors.RED);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.actionPhase = ActionPhases.MOVE_STUDENTS;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setActionPhase(ActionPhases.MOVE_STUDENTS);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         gameController.onMessage(message);
 
@@ -97,14 +97,14 @@ class GameControllerTest {
         game.addAnotherPlayer("giacomo");
 
         game.setGamePhase(GamePhases.PLANNING_PHASE);
-        game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         gameController.onMessage(message);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         int newIsleWithMotherNature;
         if(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()<8)
@@ -146,8 +146,8 @@ class GameControllerTest {
 
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         gameController.onMessage(message);
 
@@ -167,26 +167,20 @@ class GameControllerTest {
         game.getGameTable().setCharacterCards(CharacterCardsName.MAGICAL_LETTER_CARRIER);
 
         game.setGamePhase(GamePhases.PLANNING_PHASE);
-        game.planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         gameController.onMessage(message);
 
         message = new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD,0,0);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         gameController.onMessage(message);
 
         assertEquals(5,game.getPlayerByIndex(0).getDiscardPile().getTurnOrder());
         assertEquals(5,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
         assertTrue(game.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
-    }
-
-
-    @Test
-    void onMessage_ACTIVATE_ATOMIC_EFFECT() {
-        //...
     }
 }

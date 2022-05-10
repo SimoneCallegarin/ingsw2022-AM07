@@ -18,21 +18,21 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // for (RealmColors rc : RealmColors.values())
-           // System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc));*/
+           // System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(rc));*/
         // moving 3 students
         for (int rc=0; rc<5; rc++) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
-                game.moveStudentInDiningRoom(game.firstPlayerIndex, rc);
+                game.moveStudentInDiningRoom(game.getFirstPlayerIndex(), rc);
                 counter++;
                 if (counter == 3)
                     break;
@@ -41,23 +41,24 @@ class ActionPhaseTest {
                 break;
         }
         // checking if we skipped to the next stage
-        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.getActionPhase());
         // checking if the player has 4 students in his entrance
-        assertEquals(4, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
+        assertEquals(4, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getNumberOfStudents());
 
-        /*  System.out.println("");
-        for (RealmColors rc : RealmColors.values())
-            System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc));
+        /*
         System.out.println("");
         for (RealmColors rc : RealmColors.values())
-            System.out.println("Number of " + rc.toString() + " students in player one dining room: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getStudentsByColor(rc));*/
+            System.out.println("Number of " + rc.toString() + " students in player one entrance: " + game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(rc));
+        System.out.println("");
+        for (RealmColors rc : RealmColors.values())
+            System.out.println("Number of " + rc.toString() + " students in player one dining room: " + game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getStudentsByColor(rc));*/
 
         // checking if professors are gained
         for (RealmColors rc : RealmColors.values()) {
-            if (game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getStudentsByColor(rc) > 0)
-                assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));
+            if (game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getStudentsByColor(rc) > 0)
+                assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getProfessorByColor(rc));
             else
-                assertEquals(0, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));
+                assertEquals(0, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getProfessorByColor(rc));
         }
     }
 
@@ -70,11 +71,11 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
@@ -90,9 +91,9 @@ class ActionPhaseTest {
         game.getGameTable().removeProfessor(RealmColors.BLUE);
         // moving 3 students of the first player
         for (int rc=0; rc<5; rc++) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
-                game.moveStudentInDiningRoom(game.firstPlayerIndex, rc);
+                game.moveStudentInDiningRoom(game.getFirstPlayerIndex(), rc);
                 counter++;
                 if (counter == 3)
                     break;
@@ -100,20 +101,23 @@ class ActionPhaseTest {
             if (counter == 3)
                 break;
         }
-        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
-        assertEquals(4, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
-        /*for (RealmColors rc : RealmColors.values())
-            System.out.println("Number of " + rc.toString() + " students in player one dining room: " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getStudentsByColor(rc));*/
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.getActionPhase());
+        assertEquals(4, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getNumberOfStudents());
+        /*
+        for (RealmColors rc : RealmColors.values())
+            System.out.println("Number of " + rc.toString() + " students in player one dining room: " + game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getStudentsByColor(rc));*/
         // checking if certain professors are gained or not (comparison is made with the number of students of the other player)
         for (RealmColors rc : RealmColors.values()) {
-            if (game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getStudentsByColor(rc) > game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(rc))
-                assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));
+            if (game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getStudentsByColor(rc) > game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(rc))
+                assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getProfessorByColor(rc));
             else
-                assertEquals(0, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));
+                assertEquals(0, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getProfessorByColor(rc));
         }
-        /*System.out.println("");
+        /*
+        System.out.println("");
         for (RealmColors rc : RealmColors.values())
-            System.out.println("Is " + rc.toString() + " professor in player one dining room? " + game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));*/
+            System.out.println("Is " + rc.toString() + " professor in player one dining room? " + game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getProfessorByColor(rc));
+            */
     }
 
     @Test
@@ -122,19 +126,19 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // moving 3 students in isle 0
         for (int rc=0; rc<5; rc++) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
-                game.moveStudentInIsle(game.firstPlayerIndex, 0, rc);
+                game.moveStudentInIsle(game.getFirstPlayerIndex(), 0, rc);
                 counter++;
                 if (counter == 3)
                     break;
@@ -143,9 +147,9 @@ class ActionPhaseTest {
                 break;
         }
         // checking if we skipped to the next stage
-        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.getActionPhase());
         // checking if the player has 4 students in his entrance
-        assertEquals(4, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
+        assertEquals(4, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getNumberOfStudents());
         // checking if we have 3 or 4 students on isle 0
         if (game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex() == 0 || game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex() == 0)
             assertEquals(3, game.getGameTable().getIsleManager().getIsle(0).getNumberOfStudents());
@@ -162,22 +166,22 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // moving 3 students (both in the dining room and on an isle)
         for (int rc=0; rc<5; rc++) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(rc));
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
                 if (counter == 1)
-                    game.moveStudentInIsle(game.firstPlayerIndex, game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex(), rc);
+                    game.moveStudentInIsle(game.getFirstPlayerIndex(), game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex(), rc);
                 else
-                    game.moveStudentInDiningRoom(game.firstPlayerIndex, rc);
+                    game.moveStudentInDiningRoom(game.getFirstPlayerIndex(), rc);
                 counter++;
                 if (counter == 3)
                     break;
@@ -185,14 +189,14 @@ class ActionPhaseTest {
             if (counter == 3)
                 break;
         }
-        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
-        assertEquals(4, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.getActionPhase());
+        assertEquals(4, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getNumberOfStudents());
         // checking the professors update...
         for (RealmColors rc : RealmColors.values()) {
-            if (game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getStudentsByColor(rc) > 0)
-                assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));
+            if (game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getStudentsByColor(rc) > 0)
+                assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getProfessorByColor(rc));
             else
-                assertEquals(0, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getProfessorByColor(rc));
+                assertEquals(0, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getProfessorByColor(rc));
         }
         // ...and the number of students on the chosen isle
         assertEquals(1, game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleOppositeToMotherNatureIndex()).getNumberOfStudents());
@@ -207,38 +211,38 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // skipping first movements phase by manually adding students and professors to player one dining room
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.PINK);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.PINK);
-        assertEquals(2, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.PINK);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.PINK);
+        assertEquals(2, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         // calculating index of the next isle (we want to move only by one)
         if (game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex() != 11)
             nextIsleIndex = game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+1;
         // putting a yellow student on the chosen isle in order to be sure player one has the highest influence on it
         game.getGameTable().getIsleManager().getIsle(nextIsleIndex).addStudent(RealmColors.YELLOW);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, nextIsleIndex);
+        game.moveMotherNature(game.getFirstPlayerIndex(), nextIsleIndex);
         // checking if the movement has been done correctly
         assertEquals(nextIsleIndex, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // due to the fact that player one has the highest influence on the isle, we are checking if one tower has been removed from player one dining room...
-        assertEquals(7, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(7, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getNumberOfTowers());
         // ...and tower color on the isle has been updated with the tower color of player one
-        assertEquals(game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getTowerColor(), game.getGameTable().getIsleManager().getIsle(nextIsleIndex).getTowersColor());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        assertEquals(game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getTowerColor(), game.getGameTable().getIsleManager().getIsle(nextIsleIndex).getTowersColor());
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
     }
 
     /**
@@ -249,11 +253,11 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
@@ -261,35 +265,35 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
         game.getGameTable().getIsleManager().getIsle(5).setMotherNature(true);
         game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(5);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 8);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 8);
         // checking if no movement has been done (because first player can only move by 2)...
         assertEquals(5, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
-        // ...and we didn't move on the next actionPhase's stage
-        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
+        // ...and we didn't move on the next getActionPhase()'s stage
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.getActionPhase());
 
         // setting externally where mother nature is (isle 10)
         game.getGameTable().getIsleManager().getIsle(5).setMotherNature(false);
         game.getGameTable().getIsleManager().getIsle(10).setMotherNature(true);
         game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(10);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 1);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 1);
         // checking if no movement has been done (because first player can only move by 2)...
         assertEquals(10, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
-        // ...and we didn't move on the next actionPhase's stage
-        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
+        // ...and we didn't move on the next getActionPhase()'s stage
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.getActionPhase());
 
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 10);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 10);
         // checking if no movement has been done (because first player can only move by 2)...
         assertEquals(10, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         assertEquals(TowerColors.NOCOLOR, game.getGameTable().getIsleManager().getIsle(10).getTowersColor());
-        // ...and we didn't move on the next actionPhase's stage
-        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.actionPhase);
+        // ...and we didn't move on the next getActionPhase()'s stage
+        assertEquals(ActionPhases.MOVE_MOTHER_NATURE, game.getActionPhase());
     }
 
     /**
@@ -300,18 +304,18 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // skipping first movements phase by manually adding students and professors to players dining rooms
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.BLUE);
         assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
@@ -341,50 +345,50 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(10).addStudent(RealmColors.BLUE);
         game.getGameTable().getIsleManager().getIsle(10).setTower(TowerColors.WHITE);
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 6);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 6);
         // checking if the movement has been done correctly
         assertEquals(6, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // checking if the other player still has 5 towers on its dashboard
         assertEquals(5, game.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
         // due to the fact that player one has not the highest influence on the isle (1<2), we are checking if no tower has been removed from player one dining room...
-        assertEquals(8, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(8, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getNumberOfTowers());
         // ...and tower color remained the same as before
         assertEquals(TowerColors.WHITE, game.getGameTable().getIsleManager().getIsle(6).getTowersColor());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
 
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 8);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 8);
         // checking if the movement has been done correctly
         assertEquals(8, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // checking if the other player still has 5 towers on its dashboard
         assertEquals(5, game.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
         // due to the fact that player one has not the highest influence on the isle (2=2), we are checking if no tower has been removed from player one dining room...
-        assertEquals(8, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(8, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getNumberOfTowers());
         // ...and tower color remained the same as before
         assertEquals(TowerColors.WHITE, game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
 
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 10);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 10);
         // checking if the movement has been done correctly
         assertEquals(10, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // checking if the other player now has 6 towers on its dashboard
         assertEquals(6, game.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
         // due to the fact that player one has the highest influence on the isle (3>2), we are checking if one tower has been removed from player one dining room...
-        assertEquals(7, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(7, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getNumberOfTowers());
         // ...and tower color on the isle has been updated with the tower color of player one
         assertEquals(TowerColors.BLACK, game.getGameTable().getIsleManager().getIsle(10).getTowersColor());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
     }
 
     /**
@@ -395,11 +399,11 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
@@ -407,32 +411,32 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
         game.getGameTable().getIsleManager().getIsle(9).setMotherNature(true);
         game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(9);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 11);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 11);
         // checking if the movement has been done correctly
         assertEquals(11, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
 
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 0);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 0);
         // checking if the movement has been done correctly
         assertEquals(0, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
 
-        // manually setting the correct actionPhase stage
-        //game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        //game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        //game.moveMotherNature(game.firstPlayerIndex, 0);
+        //game.moveMotherNature(game.getFirstPlayerIndex(), 0);
         // checking if the movement has been done correctly
         //assertEquals(0, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
-        // checking if we moved on the next stage of actionPhase
-        //assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        //assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
     }
 
     /**
@@ -445,39 +449,39 @@ class ActionPhaseTest {
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 2 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 3 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 3 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        assertEquals(2, game.firstPlayerIndex);
+        assertEquals(2, game.getFirstPlayerIndex());
         // skipping first movements phase by manually adding students and professors to players dining rooms
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.BLUE);
         assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
@@ -534,10 +538,10 @@ class ActionPhaseTest {
         assertEquals(TowerColors.NOCOLOR, game.getPlayerByIndex(2).getDashboard().getTowerStorage().getTowerColor());
         assertEquals(0, game.getPlayerByIndex(3).getDashboard().getTowerStorage().getNumberOfTowers());
         assertEquals(TowerColors.NOCOLOR, game.getPlayerByIndex(3).getDashboard().getTowerStorage().getTowerColor());
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 6);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 6);
         // checking if the movement has been done correctly
         assertEquals(6, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // checking if the captain of squad2 still has 5 towers on its dashboard
@@ -546,13 +550,13 @@ class ActionPhaseTest {
         assertEquals(8, game.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
         // ...and tower color remained the same as before
         assertEquals(TowerColors.BLACK, game.getGameTable().getIsleManager().getIsle(6).getTowersColor());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
 
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 8);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 8);
         // checking if the movement has been done correctly
         assertEquals(8, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // checking if the captain of squad2 still has 5 towers on its dashboard
@@ -561,18 +565,18 @@ class ActionPhaseTest {
         assertEquals(8, game.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
         // ...and tower color remained the same as before
         assertEquals(TowerColors.BLACK, game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
 
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // checking if the influence of each player is correct
         assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(0)));
         assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(1)));
         assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(2)));
         assertEquals(1, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(3)));
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 10);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 10);
         // checking if the movement has been done correctly
         assertEquals(10, game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex());
         // checking if the captain of squad2 now has 6 towers on its dashboard
@@ -581,8 +585,8 @@ class ActionPhaseTest {
         assertEquals(7, game.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
         // ...and tower color on the isle has been updated with the tower color of squad1's captain
         assertEquals(TowerColors.WHITE, game.getGameTable().getIsleManager().getIsle(10).getTowersColor());
-        // checking if we moved on the next stage of actionPhase
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
+        // checking if we moved on the next stage of getActionPhase()
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
     }
 
     /**
@@ -593,18 +597,18 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack",false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // skipping first movements phase by manually adding students and professors to first player's dining room
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         // setting externally where mother nature is (isle 1)
         game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
         game.getGameTable().getIsleManager().getIsle(1).setMotherNature(true);
@@ -614,10 +618,10 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(2).addStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(3).setTower(TowerColors.BLACK);
         game.getGameTable().getIsleManager().getIsle(4).setTower(TowerColors.WHITE);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 2);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 2);
         // checking if isles 2 and 3 have been unified correctly
         assertEquals(11, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(2, game.getGameTable().getIsleManager().getIsle(2).getNumOfIsles());
@@ -630,10 +634,10 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(3).addStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(3).addStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(4).setTower(TowerColors.BLACK);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 3);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 3);
         // checking if isles 2, 3 and 4 have been unified correctly
         assertEquals(9, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(4, game.getGameTable().getIsleManager().getIsle(2).getNumOfIsles());
@@ -644,10 +648,10 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(3).removeStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(3).addStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(3).setTower(TowerColors.WHITE);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 3);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 3);
         // checking if no isles have been unified
         assertEquals(9, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(4, game.getGameTable().getIsleManager().getIsle(2).getNumOfIsles());
@@ -663,10 +667,10 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(8).removeStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(0).setTower(TowerColors.BLACK);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 8);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 8);
         // checking if isles 8 and 0 have been unified correctly
         assertEquals(8, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(2, game.getGameTable().getIsleManager().getIsle(7).getNumOfIsles());
@@ -677,10 +681,10 @@ class ActionPhaseTest {
         // putting students and towers on isles of interest
         game.getGameTable().getIsleManager().getIsle(0).removeStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(0).addStudent(RealmColors.YELLOW);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 0);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 0);
         // checking if isles 7, 0 and 1 have been unified correctly
         assertEquals(6, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(7, game.getGameTable().getIsleManager().getIsle(5).getNumOfIsles());
@@ -698,19 +702,19 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // removing 3 students from entrance
         for (RealmColors rc : RealmColors.values()) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc);
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(rc);
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
-                game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().removeStudent(rc);
+                game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().removeStudent(rc);
                 counter++;
                 if (counter == 3)
                     break;
@@ -718,23 +722,23 @@ class ActionPhaseTest {
             if (counter == 3)
                 break;
         }
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
         // choosing a cloud
-        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
+        game.pickStudentsFromCloud(game.getFirstPlayerIndex(), 0);
         // verifying if the first player has 7 students in its entrance now and if the chosen cloud is empty
-        assertEquals(7, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
+        assertEquals(7, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getNumberOfStudents());
         assertTrue(game.getGameTable().getCloud(0).isEmpty());
         // checking if we moved onto the next stage
-        assertEquals(ActionPhases.MOVE_STUDENTS, game.actionPhase);
-        assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+        assertEquals(ActionPhases.MOVE_STUDENTS, game.getActionPhase());
+        assertEquals(CurrentOrder.SECOND_PLAYER, game.getCurrentActivePlayer());
 
         counter = 0;
         // removing 3 students from entrance
         for (RealmColors rc : RealmColors.values()) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc);
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(rc);
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
-                game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().removeStudent(rc);
+                game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().removeStudent(rc);
                 counter++;
                 if (counter == 3)
                     break;
@@ -742,17 +746,17 @@ class ActionPhaseTest {
             if (counter == 3)
                 break;
         }
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
-        game.currentActivePlayer = CurrentOrder.FIRST_PLAYER;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
+        game.setCurrentActivePlayer(CurrentOrder.FIRST_PLAYER);
         // choosing a cloud
-        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
+        game.pickStudentsFromCloud(game.getFirstPlayerIndex(), 0);
         // verifying if the first player has 4 students in its entrance now and if the chosen cloud is still empty
-        assertEquals(4, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
+        assertEquals(4, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getNumberOfStudents());
         assertTrue(game.getGameTable().getCloud(0).isEmpty());
         // checking if we didn't move onto the next stage
-        assertEquals(ActionPhases.CHOOSE_CLOUD, game.actionPhase);
-        assertEquals(CurrentOrder.FIRST_PLAYER, game.currentActivePlayer);
+        assertEquals(ActionPhases.CHOOSE_CLOUD, game.getActionPhase());
+        assertEquals(CurrentOrder.FIRST_PLAYER, game.getCurrentActivePlayer());
     }
 
     /**
@@ -764,19 +768,19 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // removing 3 students from first player's entrance
         for (RealmColors rc : RealmColors.values()) {
-            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getStudentsByColor(rc);
+            int studentsOfSpecifiedColor = game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getStudentsByColor(rc);
             for (int i = 0; i < studentsOfSpecifiedColor; i++) {
-                game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().removeStudent(rc);
+                game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().removeStudent(rc);
                 counter++;
                 if (counter == 3)
                     break;
@@ -784,16 +788,16 @@ class ActionPhaseTest {
             if (counter == 3)
                 break;
         }
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
         // choosing a cloud
-        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
+        game.pickStudentsFromCloud(game.getFirstPlayerIndex(), 0);
         // verifying if the first player has 7 students in its entrance now and if the chosen cloud is empty
-        assertEquals(7, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getEntrance().getNumberOfStudents());
+        assertEquals(7, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getEntrance().getNumberOfStudents());
         assertTrue(game.getGameTable().getCloud(0).isEmpty());
         // checking if we moved onto the next stage
-        assertEquals(ActionPhases.MOVE_STUDENTS, game.actionPhase);
-        assertEquals(CurrentOrder.SECOND_PLAYER, game.currentActivePlayer);
+        assertEquals(ActionPhases.MOVE_STUDENTS, game.getActionPhase());
+        assertEquals(CurrentOrder.SECOND_PLAYER, game.getCurrentActivePlayer());
 
         counter = 0;
         // removing 3 students from second player's entrance
@@ -808,8 +812,8 @@ class ActionPhaseTest {
             if (counter == 3)
                 break;
         }
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
         // choosing a cloud
         game.pickStudentsFromCloud(0, 1);
         // verifying if the second player has 7 students in its entrance now
@@ -819,11 +823,11 @@ class ActionPhaseTest {
         assertNull(game.getPlayerByIndex(1).getDiscardPile());
         assertFalse(game.getGameTable().getCloud(0).isEmpty());
         assertFalse(game.getGameTable().getCloud(1).isEmpty());
-        assertEquals(ActionPhases.MOVE_STUDENTS, game.actionPhase);
-        assertEquals(GamePhases.PLANNING_PHASE, game.gamePhase);
-        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
-        assertEquals(CurrentOrder.FIRST_PLAYER, game.currentActivePlayer);
-        assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(game.firstPlayerIndex).getOrder());
+        assertEquals(ActionPhases.MOVE_STUDENTS, game.getActionPhase());
+        assertEquals(GamePhases.PLANNING_PHASE, game.getGamePhase());
+        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.getPlanningPhase());
+        assertEquals(CurrentOrder.FIRST_PLAYER, game.getCurrentActivePlayer());
+        assertEquals(CurrentOrder.FIRST_PLAYER, game.getPlayerByIndex(game.getFirstPlayerIndex()).getOrder());
     }
 
     /**
@@ -834,26 +838,26 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // manually removing 7 towers from first player's tower storage
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
         // skipping first movements phase by manually adding students and professors to first player's dining room
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         // setting externally where mother nature is (isle 1)
         game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
         game.getGameTable().getIsleManager().getIsle(1).setMotherNature(true);
@@ -861,10 +865,10 @@ class ActionPhaseTest {
         // putting students and towers on isles of interest
         game.getGameTable().getIsleManager().getIsle(2).removeStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(2).addStudent(RealmColors.YELLOW);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 2);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 2);
         // checking if game is ended and if the winner is calle
         assertTrue(game.isGameEnded());
         assertFalse(game.isGameEndedInADraw());
@@ -879,29 +883,29 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
         // manually removing 5 towers from players' tower storages
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         // skipping first movements phase by manually adding students and professors to first player's dining room
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         // unifying some isles...
         game.getGameTable().getIsleManager().unifyIsle(0, 1);
         game.getGameTable().getIsleManager().unifyIsle(0, 1);
@@ -922,14 +926,14 @@ class ActionPhaseTest {
         // putting students and towers on isles of interest
         game.getGameTable().getIsleManager().getIsle(1).removeStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(1).addStudent(RealmColors.YELLOW);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 1);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 1);
         // checking union between isles 0 and 1
         assertEquals(3, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(6, game.getGameTable().getIsleManager().getIsle(0).getNumOfIsles());
-        assertEquals(2, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(2, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getNumberOfTowers());
         // checking if game is ended and if the winner is calle
         assertTrue(game.isGameEnded());
         assertFalse(game.isGameEndedInADraw());
@@ -946,25 +950,25 @@ class ActionPhaseTest {
         game.addFirstPlayer("jack", false, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
             game.playAssistantCard(2, 5);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(2, 5);
             game.playAssistantCard(0, 4);
         }
-        if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 2 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(2, 5);
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
         // manually removing 3 or 4 towers from players' tower storages
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
@@ -974,13 +978,13 @@ class ActionPhaseTest {
         game.getPlayerByIndex(2).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(2).getDashboard().getTowerStorage().removeTower();
         // skipping first movements phase by manually adding students and professors to players' dining rooms
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.RED);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.GREEN);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.GREEN);
-        assertEquals(3, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.RED);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.GREEN);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.GREEN);
+        assertEquals(3, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.PINK);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.PINK);
         assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
@@ -1010,14 +1014,14 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(3).addStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(3).addStudent(RealmColors.YELLOW);
         assertEquals(2, game.getGameTable().getIsleManager().getIsle(3).getStudentsByColor(RealmColors.YELLOW));
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 3);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 3);
         // checking union between isles 2 and 3
         assertEquals(3, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(4, game.getGameTable().getIsleManager().getIsle(2).getNumOfIsles());
-        assertEquals(2, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(2, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getNumberOfTowers());
         // checking if game is ended and if the winner is calle
         assertTrue(game.isGameEnded());
         assertFalse(game.isGameEndedInADraw());
@@ -1034,25 +1038,25 @@ class ActionPhaseTest {
         game.addFirstPlayer("jack",false, 3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
             game.playAssistantCard(2, 5);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(2, 5);
             game.playAssistantCard(0, 4);
         }
-        if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 2 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(2, 5);
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
         // manually removing 3 or 4 towers from players' tower storages
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
@@ -1062,11 +1066,11 @@ class ActionPhaseTest {
         game.getPlayerByIndex(2).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(2).getDashboard().getTowerStorage().removeTower();
         // skipping first movements phase by manually adding students and professors to players' dining rooms
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.RED);
-        assertEquals(2, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.RED);
+        assertEquals(2, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.PINK);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.PINK);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.GREEN);
@@ -1098,14 +1102,14 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(3).addStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(3).addStudent(RealmColors.YELLOW);
         assertEquals(2, game.getGameTable().getIsleManager().getIsle(3).getStudentsByColor(RealmColors.YELLOW));
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 3);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 3);
         // checking union between isles 2 and 3
         assertEquals(3, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(4, game.getGameTable().getIsleManager().getIsle(2).getNumOfIsles());
-        assertEquals(2, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getTowerStorage().getNumberOfTowers());
+        assertEquals(2, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getTowerStorage().getNumberOfTowers());
         // checking if game is ended in a draw
         assertTrue(game.isGameEnded());
         assertTrue(game.isGameEndedInADraw());
@@ -1121,35 +1125,35 @@ class ActionPhaseTest {
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 2 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 3 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 3 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        assertEquals(2, game.firstPlayerIndex);
+        assertEquals(2, game.getFirstPlayerIndex());
         // manually removing 7 towers from squad1 captain's tower storage
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
@@ -1159,9 +1163,9 @@ class ActionPhaseTest {
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         // skipping first movements phase by manually adding students and professors to first player's dining room
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         // setting externally where mother nature is (isle 1)
         game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
         game.getGameTable().getIsleManager().getIsle(1).setMotherNature(true);
@@ -1169,10 +1173,10 @@ class ActionPhaseTest {
         // putting students and towers on isles of interest
         game.getGameTable().getIsleManager().getIsle(2).removeStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(2).addStudent(RealmColors.YELLOW);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 2);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 2);
         // checking if squad1 captain's has 0 towers in is tower storage
         assertEquals(0, game.getPlayerByIndex(0).getDashboard().getTowerStorage().getNumberOfTowers());
         // checking if game is ended and if the winner is SQUAD1
@@ -1191,35 +1195,35 @@ class ActionPhaseTest {
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("filo");
         game.addAnotherPlayer("bob");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 2 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 2 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(2, 3);
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        if (game.firstPlayerIndex == 3 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 3 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(3, 4);
             game.playAssistantCard(0, 6);
             game.playAssistantCard(1, 5);
             game.playAssistantCard(2, 3);
-            assertEquals(GamePhases.ACTION_PHASE, game.gamePhase);
+            assertEquals(GamePhases.ACTION_PHASE, game.getGamePhase());
         }
-        assertEquals(2, game.firstPlayerIndex);
+        assertEquals(2, game.getFirstPlayerIndex());
         // manually removing 5 towers from captains' tower storages
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(0).getDashboard().getTowerStorage().removeTower();
@@ -1232,9 +1236,9 @@ class ActionPhaseTest {
         game.getPlayerByIndex(1).getDashboard().getTowerStorage().removeTower();
         game.getPlayerByIndex(1).getDashboard().getTowerStorage().removeTower();
         // skipping first movements phase by manually adding students and professors to first player's dining room
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         // unifying some isles...
         game.getGameTable().getIsleManager().unifyIsle(0, 1);
         game.getGameTable().getIsleManager().unifyIsle(0, 1);
@@ -1255,10 +1259,10 @@ class ActionPhaseTest {
         // putting students and towers on isles of interest
         game.getGameTable().getIsleManager().getIsle(1).removeStudent(RealmColors.YELLOW);
         game.getGameTable().getIsleManager().getIsle(1).addStudent(RealmColors.YELLOW);
-        // manually setting the correct actionPhase stage
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        // manually setting the correct getActionPhase() stage
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // moving mother nature
-        game.moveMotherNature(game.firstPlayerIndex, 1);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 1);
         // checking union between isles 0 and 1
         assertEquals(3, game.getGameTable().getIsleManager().getIsles().size());
         assertEquals(6, game.getGameTable().getIsleManager().getIsle(0).getNumOfIsles());
@@ -1274,11 +1278,11 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
@@ -1287,15 +1291,15 @@ class ActionPhaseTest {
             game.getGameTable().getBag().draw();
         assertEquals(5, game.getGameTable().getBag().getNumberOfStudents());
         // skipping to the phase of interest
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
-        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
+        game.pickStudentsFromCloud(game.getFirstPlayerIndex(), 0);
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
         game.pickStudentsFromCloud(0, 1);
         // checking if we are in the last round and the clouds are empty
         assertTrue(game.isLastRound());
         assertTrue(game.getGameTable().getCloud(0).isEmpty());
         assertTrue(game.getGameTable().getCloud(1).isEmpty());
-        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
+        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.getPlanningPhase());
     }
 
     @Test
@@ -1303,11 +1307,11 @@ class ActionPhaseTest {
         Game game = new Game();
         game.addFirstPlayer("jack", false, 2);
         game.addAnotherPlayer("calle");
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 3);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 3);
             game.playAssistantCard(0, 4);
         }
@@ -1316,21 +1320,21 @@ class ActionPhaseTest {
             game.getGameTable().getBag().draw();
         assertEquals(5, game.getGameTable().getBag().getNumberOfStudents());
         // skipping to the phase of interest
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
-        game.pickStudentsFromCloud(game.firstPlayerIndex, 0);
-        game.actionPhase = ActionPhases.CHOOSE_CLOUD;
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
+        game.pickStudentsFromCloud(game.getFirstPlayerIndex(), 0);
+        game.setActionPhase(ActionPhases.CHOOSE_CLOUD);
         game.pickStudentsFromCloud(0, 1);
         // checking if we are in the last round and the clouds are empty
         assertTrue(game.isLastRound());
         assertTrue(game.getGameTable().getCloud(0).isEmpty());
         assertTrue(game.getGameTable().getCloud(1).isEmpty());
-        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.planningPhase);
+        assertEquals(PlanningPhases.ASSISTANT_CARD_PHASE, game.getPlanningPhase());
         // executing last round... (skipping move student phases)
         game.playAssistantCard(1, 1);
         game.playAssistantCard(0, 2);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
-        game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
-        assertEquals(1, game.getPlayerByIndex(game.firstPlayerIndex).getDashboard().getDiningRoom().getNumberOfProfessors());
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        assertEquals(1, game.getPlayerByIndex(game.getFirstPlayerIndex()).getDashboard().getDiningRoom().getNumberOfProfessors());
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.BLUE);
         assertEquals(1, game.getPlayerByIndex(0).getDashboard().getDiningRoom().getNumberOfProfessors());
@@ -1346,9 +1350,9 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
         game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
 
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
-        game.moveMotherNature(game.firstPlayerIndex, 6);
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
+        game.moveMotherNature(game.getFirstPlayerIndex(), 6);
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         game.moveMotherNature(0, 7);
         // checking if the game ended properly
         assertTrue(game.isGameEnded());
@@ -1362,13 +1366,13 @@ class ActionPhaseTest {
         game.addAnotherPlayer("calle");
 
         // leaving 1 assistant card to the player of index 1
-        game.getPlayerByIndex(1).mageDeck.subList(0, 9).clear();
+        game.getPlayerByIndex(1).getMageDeck().subList(0, 9).clear();
 
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 10);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 10);
             game.playAssistantCard(0, 4);
         }
@@ -1384,13 +1388,13 @@ class ActionPhaseTest {
         game.addAnotherPlayer("calle");
 
         // leaving 1 assistant card to the player of index 1
-        game.getPlayerByIndex(1).mageDeck.subList(0, 9).clear();
+        game.getPlayerByIndex(1).getMageDeck().subList(0, 9).clear();
 
-        if (game.firstPlayerIndex == 0 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 0 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(0, 4);
             game.playAssistantCard(1, 10);
         }
-        if (game.firstPlayerIndex == 1 && game.gamePhase == GamePhases.PLANNING_PHASE) {
+        if (game.getFirstPlayerIndex() == 1 && game.getGamePhase() == GamePhases.PLANNING_PHASE) {
             game.playAssistantCard(1, 10);
             game.playAssistantCard(0, 4);
         }
@@ -1410,9 +1414,9 @@ class ActionPhaseTest {
         game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
         game.getGameTable().getIsleManager().getIsle(7).addStudent(RealmColors.BLUE);
 
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         game.moveMotherNature(0, 6);
-        game.actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         game.moveMotherNature(1, 7);
         // checking if the game ended properly
         assertTrue(game.isGameEnded());
@@ -1427,7 +1431,7 @@ class ActionPhaseTest {
         game.addAnotherPlayer("calle");
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         assertEquals(1,game.getPlayerByIndex(0).getMoney());
 
@@ -1454,7 +1458,7 @@ class ActionPhaseTest {
         game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         int counter=0;
 
@@ -1503,7 +1507,7 @@ class ActionPhaseTest {
         game.getGameTable().setCharacterCards(CharacterCardsName.MINSTREL);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         int counter=0;
 
@@ -1555,7 +1559,7 @@ class ActionPhaseTest {
         game.getGameTable().setCharacterCards(CharacterCardsName.SPOILED_PRINCESS);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         game.getPlayerByIndex(0).gainMoney();
 
         game.getGameTable().getCharacterCard(0).addStudent(RealmColors.BLUE);

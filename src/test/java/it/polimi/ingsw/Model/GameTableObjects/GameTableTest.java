@@ -67,7 +67,7 @@ class GameTableTest {
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
         game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.currentActivePlayer = game.getPlayerByIndex(0).getOrder();
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
 
