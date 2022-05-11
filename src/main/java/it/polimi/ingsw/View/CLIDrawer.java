@@ -6,8 +6,8 @@ import it.polimi.ingsw.Model.Game;
 
 public class CLIDrawer {
 
-    private static final int TABLE_DIMENSION_X = 26;
-    private static final int TABLE_DIMENSION_Y = 130;
+    private static final int TABLE_DIMENSION_X = 28;
+    private static final int TABLE_DIMENSION_Y = 133;
 
     private final String[][] gameTable = new String[TABLE_DIMENSION_X][TABLE_DIMENSION_Y];
 
@@ -50,10 +50,11 @@ public class CLIDrawer {
         Table + calling all the methods that print on the screen the other game objects.
          */
         StringBuilder toPrint=new StringBuilder();
-        game.addFirstPlayer("simo",true,3);
+        game.addFirstPlayer("simo_calle",true,4);
         game.addAnotherPlayer("jack");
-        game.addAnotherPlayer("fil");
-        //LIMITE A 18 CARATTERI PER IL nickname!!! (va imposto).
+        game.addAnotherPlayer("filippo");
+        game.addAnotherPlayer("TrentAlexanderArnold");
+        //LIMITE A 20 CARATTERI PER IL nickname!!! (va imposto).
         initializeGameTable();
         for(int i=0; i<game.getNumberOfPlayers();i++)
             drawDashboard(i);
@@ -77,6 +78,7 @@ public class CLIDrawer {
                     gameTable[i][j] = "║";
             }
         }
+        // CORNERS:
         gameTable[0][0] = "╔";
         gameTable[0][TABLE_DIMENSION_Y-1] = "╗";
         gameTable[TABLE_DIMENSION_X-1][0] = "╚";
@@ -99,22 +101,24 @@ public class CLIDrawer {
          */
         int startingPointX=0;
         int startingPointY=0;
-        if(playerID==0){    startingPointX=1;   startingPointY=3;     }
-        if(playerID==1){    startingPointX=1;   startingPointY=TABLE_DIMENSION_Y-23;    }
-        if(playerID==2){    startingPointX=14;  startingPointY=3;     }
-        if(playerID==3){    startingPointX=14;  startingPointY=TABLE_DIMENSION_Y-23;    }
+        if(playerID==0){    startingPointX=2;   startingPointY=3;     }
+        if(playerID==1){    startingPointX=2;   startingPointY=TABLE_DIMENSION_Y-25;    }
+        if(playerID==2){    startingPointX=15;  startingPointY=3;     }
+        if(playerID==3){    startingPointX=15;  startingPointY=TABLE_DIMENSION_Y-25;    }
 
+        //EDGES OF THE DASHBOARD:
         for(int i=startingPointX;i<startingPointX+11;i++){
-            for (int j=startingPointY;j<startingPointY+20;j++){
+            for (int j=startingPointY;j<startingPointY+22;j++){
                 gameTable[i][j] = " ";
                 if(i==startingPointX || i==startingPointX+10)
                     gameTable[i][j] = "═";
-                if(j==startingPointY || j==startingPointY+5 || j==startingPointY+6 || j==startingPointY+11 || j==startingPointY+12 || j==startingPointY+19)
+                if(j==startingPointY || j==startingPointY+5 || j==startingPointY+6 || j==startingPointY+13 || j==startingPointY+14 || j==startingPointY+21)
                     gameTable[i][j] = "║";
             }
         }
 
-        int posNickname = (18-game.getPlayerByIndex(playerID).getNickname().length())/2;
+        // PLAYER'S NICKNAME:
+        int posNickname = (22-game.getPlayerByIndex(playerID).getNickname().length())/2;
         gameTable[startingPointX+1][startingPointY+posNickname] = paintTower(TowerColors.WHITE,game.getPlayerByIndex(playerID).getNickname());
 
 
@@ -124,6 +128,7 @@ public class CLIDrawer {
         drawEntrance(playerID,startingPointX,startingPointY);
         drawDiningRoom(playerID,startingPointX,startingPointY);
         drawTowerStorage(playerID,startingPointX,startingPointY);
+        drawDiscardPile(playerID,startingPointX,startingPointY);
 
     }
 
@@ -136,12 +141,12 @@ public class CLIDrawer {
         gameTable[startingPointX+7][startingPointY+1] = "N";
         gameTable[startingPointX+8][startingPointY+1] = "C";
         gameTable[startingPointX+9][startingPointY+1] = "E";
-
+        // CORNERS:
         gameTable[startingPointX][startingPointY] = "╔";
         gameTable[startingPointX][startingPointY+5] = "╗";
         gameTable[startingPointX+10][startingPointY] = "╚";
         gameTable[startingPointX+10][startingPointY+5] = "╝";
-
+        // STUDENTS IN THE ENTRANCE:
         gameTable[startingPointX+4][startingPointY+3] = paintStudent(RealmColors.YELLOW,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.YELLOW)).toString());
         gameTable[startingPointX+5][startingPointY+3] = paintStudent(RealmColors.PINK,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.PINK)).toString());
         gameTable[startingPointX+6][startingPointY+3] = paintStudent(RealmColors.BLUE,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.BLUE)).toString());
@@ -159,35 +164,47 @@ public class CLIDrawer {
         gameTable[startingPointX+7][startingPointY+7] = "G";
         gameTable[startingPointX+9][startingPointY+7] = "R";
         gameTable[startingPointX+9][startingPointY+8] = ".";
-
+        // CORNERS:
         gameTable[startingPointX][startingPointY+6] = "╔";
-        gameTable[startingPointX][startingPointY+11] = "╗";
+        gameTable[startingPointX][startingPointY+13] = "╗";
         gameTable[startingPointX+10][startingPointY+6] = "╚";
-        gameTable[startingPointX+10][startingPointY+11] = "╝";
-
+        gameTable[startingPointX+10][startingPointY+13] = "╝";
+        // STUDENTS IN THE DINING ROOM:
         gameTable[startingPointX+4][startingPointY+9] = paintStudent(RealmColors.YELLOW,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW)).toString());
         gameTable[startingPointX+5][startingPointY+9] = paintStudent(RealmColors.PINK,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.PINK)).toString());
         gameTable[startingPointX+6][startingPointY+9] = paintStudent(RealmColors.BLUE,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE)).toString());
         gameTable[startingPointX+7][startingPointY+9] = paintStudent(RealmColors.RED,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.RED)).toString());
         gameTable[startingPointX+8][startingPointY+9] = paintStudent(RealmColors.GREEN,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.GREEN)).toString());
-
         if (game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW)>=10)
             gameTable[startingPointX+4][startingPointY+5] = "\b║";
+        // PROFESSORS IN THE DINING ROOM:
+        //game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.YELLOW);
+        if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.YELLOW)==1)
+            gameTable[startingPointX+4][startingPointY+11] = paintStudent(RealmColors.YELLOW,"¶");
+        if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.PINK)==1)
+            gameTable[startingPointX+5][startingPointY+11] = paintStudent(RealmColors.PINK,"¶");
+        if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.BLUE)==1)
+            gameTable[startingPointX+6][startingPointY+11] = paintStudent(RealmColors.BLUE,"¶");
+        if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.RED)==1)
+            gameTable[startingPointX+7][startingPointY+11] = paintStudent(RealmColors.RED,"¶");
+        if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.GREEN)==1)
+            gameTable[startingPointX+8][startingPointY+11] = paintStudent(RealmColors.GREEN,"¶");
+
     }
 
     private void drawTowerStorage(int playerID, int startingPointX, int startingPointY) {
-        gameTable[startingPointX+3][startingPointY+13] = "T";
-        gameTable[startingPointX+4][startingPointY+13] = "O";
-        gameTable[startingPointX+5][startingPointY+13] = "W";
-        gameTable[startingPointX+6][startingPointY+13] = "E";
-        gameTable[startingPointX+7][startingPointY+13] = "R";
-        gameTable[startingPointX+8][startingPointY+13] = "S";
-
-        gameTable[startingPointX][startingPointY+12] = "╔";
-        gameTable[startingPointX][startingPointY+19] = "╗";
-        gameTable[startingPointX+10][startingPointY+12] = "╚";
-        gameTable[startingPointX+10][startingPointY+19] = "╝";
-
+        gameTable[startingPointX+3][startingPointY+15] = "T";
+        gameTable[startingPointX+4][startingPointY+15] = "O";
+        gameTable[startingPointX+5][startingPointY+15] = "W";
+        gameTable[startingPointX+6][startingPointY+15] = "E";
+        gameTable[startingPointX+7][startingPointY+15] = "R";
+        gameTable[startingPointX+8][startingPointY+15] = "S";
+        // CORNERS:
+        gameTable[startingPointX][startingPointY+14] = "╔";
+        gameTable[startingPointX][startingPointY+21] = "╗";
+        gameTable[startingPointX+10][startingPointY+14] = "╚";
+        gameTable[startingPointX+10][startingPointY+21] = "╝";
+        // TOWERS IN THE TOWER STORAGE:
         String towerColor = " ";
         if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getTowerColor()== TowerColors.WHITE)
             towerColor= paintTower(TowerColors.WHITE,"W");
@@ -195,18 +212,53 @@ public class CLIDrawer {
             towerColor= paintTower(TowerColors.BLACK,"B");
         if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getTowerColor()== TowerColors.GREY)
             towerColor= paintTower(TowerColors.GREY,"G");
-
-
-
             for(int i=0;i<=game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers();i=i+2){
-                gameTable[startingPointX+4+i/2][startingPointY+15] = towerColor;
+                gameTable[startingPointX+4+i/2][startingPointY+17] = towerColor;
                 if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers()%2==0 && i==game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers()){
-                    gameTable[startingPointX+4+i/2][startingPointY+15] = " ";
-                    gameTable[startingPointX+4+i/2][startingPointY+16] = towerColor;
+                    gameTable[startingPointX+4+i/2][startingPointY+17] = " ";
+                    gameTable[startingPointX+4+i/2][startingPointY+18] = towerColor;
                 }
                 else
-                    gameTable[startingPointX+4+i/2][startingPointY+17] = towerColor;
+                    gameTable[startingPointX+4+i/2][startingPointY+19] = towerColor;
             }
+    }
+
+    private void drawDiscardPile(int playerID, int startingPointX, int startingPointY) {
+        /*
+        game.setGamePhase(GamePhases.PLANNING_PHASE);
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.playAssistantCard(0,3);
+        game.playAssistantCard(1,4);
+        game.playAssistantCard(2,5);
+        */
+        int posX=0;
+        int posY=0;
+        if(playerID==0){    posX=1;     posY=22;    }
+        if(playerID==1){    posX=1;     posY=-5;    }
+        if(playerID==2){    posX=11;    posY=22;    }
+        if(playerID==3){    posX=11;    posY=-5;    }
+
+            // EDGES OF THE DISCARD PILE:
+            gameTable[startingPointX+posX-1][startingPointY+posY] = "║";
+            gameTable[startingPointX+posX-1][startingPointY+posY+4] = "║";
+            gameTable[startingPointX+posX][startingPointY+posY+1] = "═";
+            gameTable[startingPointX+posX][startingPointY+posY+2] = "═";
+            gameTable[startingPointX+posX][startingPointY+posY+3] = "═";
+            gameTable[startingPointX+posX-2][startingPointY+posY+1] = "═";
+            gameTable[startingPointX+posX-2][startingPointY+posY+2] = "═";
+            gameTable[startingPointX+posX-2][startingPointY+posY+3] = "═";
+            gameTable[startingPointX+posX-2][startingPointY+posY] = "╔";
+            gameTable[startingPointX+posX-2][startingPointY+posY+4] = "╗";
+            gameTable[startingPointX+posX][startingPointY+posY] = "╚";
+            gameTable[startingPointX+posX][startingPointY+posY+4] = "╝";
+            // TURN ORDER:
+            gameTable[startingPointX+posX-2][startingPointY+posY+1] = "T";
+            if(game.getPlayerByIndex(playerID).getDiscardPile().getTurnOrder()!=0)
+                gameTable[startingPointX][startingPointY+posY+1] = Integer.valueOf(game.getPlayerByIndex(playerID).getDiscardPile().getTurnOrder()).toString();
+            // MOTHER NATURE MOVEMENT:
+            gameTable[startingPointX+posX-2][startingPointY+posY+3] = "M";
+            if(game.getPlayerByIndex(playerID).getDiscardPile().getMnMovement()!=0)
+                gameTable[startingPointX][startingPointY+posY+3] = Integer.valueOf(game.getPlayerByIndex(playerID).getDiscardPile().getMnMovement()).toString();
     }
 
     private void drawIsle(int startingPointX, int startingPointY, int isleIndex) {
@@ -214,45 +266,70 @@ public class CLIDrawer {
         ╔═══════════╗
         ║  ISLE_N   ║
         ║ 5-5-5-5-5 ║
-        ║	  MN    ║
-        ║    n T    ║
+        ║	 MN/D   ║
+        ║    n_T    ║
         ╚═══════════╝
          */
-        for(int i = startingPointX; i< startingPointX +6; i++){
-            for (int j = startingPointY; j< startingPointY +14; j++){
+        for(int i = startingPointX; i< startingPointX+6; i++){
+            for (int j = startingPointY; j< startingPointY+13; j++){
                 gameTable[i][j] = " ";
-                if(i== startingPointX || i== startingPointX +5)
+                if(i== startingPointX || i== startingPointX+5)
                     gameTable[i][j] = "═";
-                if(j== startingPointY || j== startingPointY +13)
+                if(j== startingPointY || j== startingPointY+12)
                     gameTable[i][j] = "║";
             }
         }
-        //ANGLES:
+        // CORNERS:
         gameTable[startingPointX][startingPointY] = "╔";
-        gameTable[startingPointX +5][startingPointY +13] = "╝";
-        gameTable[startingPointX][startingPointY +13] = "╗";
-        gameTable[startingPointX +5][startingPointY] = "╚";
-        //ISLE_ID:
-        gameTable[startingPointX +1][startingPointY +4] = "I";
-        gameTable[startingPointX +1][startingPointY +5] = "S";
-        gameTable[startingPointX +1][startingPointY +6] = "L";
-        gameTable[startingPointX +1][startingPointY +7] = "E";
-        gameTable[startingPointX +1][startingPointY +8] = "_";
-        gameTable[startingPointX +1][startingPointY +9] = Integer.valueOf(isleIndex).toString();
+        gameTable[startingPointX+5][startingPointY+12] = "╝";
+        gameTable[startingPointX][startingPointY+12] = "╗";
+        gameTable[startingPointX+5][startingPointY] = "╚";
+        // ISLE_ID:
+        gameTable[startingPointX+1][startingPointY+3] = "I";
+        gameTable[startingPointX+1][startingPointY+4] = "S";
+        gameTable[startingPointX+1][startingPointY+5] = "L";
+        gameTable[startingPointX+1][startingPointY+6] = "E";
+        gameTable[startingPointX+1][startingPointY+7] = "_";
+        gameTable[startingPointX+1][startingPointY+8] = Integer.valueOf(isleIndex).toString();
         if(isleIndex>=10)
-            gameTable[startingPointX +1][startingPointY +2] = "\b ";
+            gameTable[startingPointX+1][startingPointY+10] = "\b ";
+        // STUDENTS IN THE ISLE:
+        gameTable[startingPointX+2][startingPointY+2] = paintStudent(RealmColors.YELLOW,Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(RealmColors.YELLOW)).toString());
+        gameTable[startingPointX+2][startingPointY+4] = paintStudent(RealmColors.PINK,Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(RealmColors.PINK)).toString());
+        gameTable[startingPointX+2][startingPointY+6] = paintStudent(RealmColors.BLUE,Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(RealmColors.BLUE)).toString());
+        gameTable[startingPointX+2][startingPointY+8] = paintStudent(RealmColors.RED,Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(RealmColors.RED)).toString());
+        gameTable[startingPointX+2][startingPointY+10] = paintStudent(RealmColors.GREEN,Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(RealmColors.GREEN)).toString());
+        // MOTHER NATURE AND DENY CARDS:
+        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getMotherNature())
+            gameTable[startingPointX+3][startingPointY+6] = paintTower(TowerColors.WHITE,"■");
+        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getDenyCards()==1)
+            gameTable[startingPointX+3][startingPointY+6] = paintTower(TowerColors.WHITE,"!");
+        // TOWERS:
+        String towerColor = "T";
+        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor() == TowerColors.WHITE)
+            towerColor= paintTower(TowerColors.WHITE,"W");
+        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor() == TowerColors.BLACK)
+            towerColor= paintTower(TowerColors.BLACK,"B");
+        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor() == TowerColors.GREY)
+            towerColor= paintTower(TowerColors.GREY,"G");
+        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor()!=TowerColors.NOCOLOR)
+            gameTable[startingPointX+4][startingPointY+5] = paintTower(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor(),Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getNumOfIsles()).toString());
+        else
+            gameTable[startingPointX+4][startingPointY+5] = "0";
+        gameTable[startingPointX+4][startingPointY+6] = paintTower(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor(),"_");
+        gameTable[startingPointX+4][startingPointY+7] = towerColor;
     }
 
     private void drawIsles() {
         for(int i=0; i<game.getGameTable().getIsleManager().getIsles().size(); i++){
             if(i<5)
-                drawIsle(3,26+16*i,i);
+                drawIsle(4,28+16*i,i);
             if(i==5)
-                drawIsle(10,90,i);
+                drawIsle(11,92,i);
             if(i==11)
-                drawIsle(10,26,i);
+                drawIsle(11,28,i);
             if(i>5 && i!=11)
-                drawIsle(17,90-16*(i-6),i);
+                drawIsle(18,92-16*(i-6),i);
         }
     }
 
