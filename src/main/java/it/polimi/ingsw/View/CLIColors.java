@@ -1,6 +1,7 @@
 package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
 public enum CLIColors {
     //reset and clear
@@ -8,11 +9,14 @@ public enum CLIColors {
     CLEAR("\033[H\033[2J"),
 
     //colors
-    RED("\033[0;31m"),
-    GREEN("\033[38;5;28m"),
-    BLUE("\033[0;34m"),
-    YELLOW("\u001B[33m"),
-    PINK("\033[0;35m");
+    WHITE("\033[1;97m"),
+    BLACK("\033[1;90m"),
+    GREY("\033[1;37m"),
+    RED("\033[1;91m"),
+    GREEN("\033[1;92m"),
+    BLUE("\033[1;94m"),
+    YELLOW("\033[1;93m"),
+    PINK("\033[1;95m");
 
     private final String code;
 
@@ -48,4 +52,22 @@ public enum CLIColors {
             }
         }
     }
+
+    public static CLIColors towerColorsConverter(TowerColors color) {
+        switch(color){
+            case WHITE -> {
+                return CLIColors.WHITE;
+            }
+            case BLACK -> {
+                return CLIColors.BLACK;
+            }
+            case GREY -> {
+                return CLIColors.GREY;
+            }
+            default ->{
+                return CLIColors.RESET;
+            }
+        }
+    }
+
 }
