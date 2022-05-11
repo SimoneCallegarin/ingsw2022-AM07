@@ -18,6 +18,7 @@ public class ConnectionSocket {
     private final int port;
     private PrintWriter outStream;
     ClientListener cListener;
+    ClientPingSender cPingSender;
     MessageSerializer mSerializer;
     CommandParser cParser;
     Scanner in;
@@ -82,9 +83,13 @@ public class ConnectionSocket {
         clientConnection.outStream = new PrintWriter(clientSocket.getOutputStream(),true);
         Scanner inStream = new Scanner(clientSocket.getInputStream());
         clientConnection.setup(inStream);
-        clientConnection.cListener = new ClientListener(clientSocket, inStream);
-        Thread thread = new Thread(clientConnection.cListener);
-        thread.start();
+        clientSocket.setSoTimeout(10*1000);
+        clientConnection.cListener = new ClientListener(clientConnection, clientSocket);
+        clientConnection.cPingSender = new ClientPingSender(clientConnection, clientSocket);
+        Thread threadListener = new Thread(clientConnection.cListener);
+        Thread threadSender = new Thread(clientConnection.cPingSender);
+        threadListener.start();
+        threadSender.start();
     }
 
 }

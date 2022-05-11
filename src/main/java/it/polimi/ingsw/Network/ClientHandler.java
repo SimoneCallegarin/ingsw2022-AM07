@@ -3,10 +3,13 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Network.Messages.*;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 
+import javax.print.attribute.standard.Severity;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -67,7 +70,7 @@ public class ClientHandler implements Runnable{
 
         addPlayerToGame();
 
-        handleGame();
+        listen();
 
         gameEnded();
 
@@ -128,17 +131,40 @@ public class ClientHandler implements Runnable{
      * Handles all player moves and the game development till the game ends.
      * @throws IOException when there's an error in the exchanged messages.
      */
-    private void handleGame() throws IOException {
+    private void handleGame(PlayerMoveMessage pmm) {
+            server.getMatch(server.getPlayerInfo(nickname).getMatchID()).onMessage(pmm);
+            send(new ServiceMessage(MessageType.OK), MessageType.OK);
+    }
+
+    private void listen() throws IOException {
+        String messageReceived;
+        String regularPingExpression = ".*messageType...PING.*";
+        String regularQuitExpression = ".*messageType...QUIT.*";
+        Pattern pingPattern = Pattern.compile(regularPingExpression);
+        Pattern quitPattern = Pattern.compile(regularQuitExpression);
+        ServiceMessage sm;
+        PlayerMoveMessage pmm;
         while (true) {
-            PlayerMoveMessage m= commandParser.processCmd(in.next(""));
-            if(m.getMessageType() == MessageType.QUIT){
-                server.aPlayerQuit(nickname);
-                gameEnded();
-                break;
+            messageReceived = in.nextLine();
+            Matcher pingMatcher = pingPattern.matcher(messageReceived);
+            Matcher quitMatcher = quitPattern.matcher(messageReceived);
+            if (pingMatcher.matches() || quitMatcher.matches()) {
+                System.out.println("A PING or QUIT message has been received from " + nickname + "!");
+                sm = commandParser.processService_Cmd(messageReceived);
+                if (sm.getMessageType() == MessageType.PING)
+                    send(new ServiceMessage(MessageType.PONG), MessageType.PONG);
+                else {
+                    server.aPlayerQuit(nickname);
+                    send(new ServiceMessage(MessageType.OK), MessageType.OK);
+                    System.out.println("QUIT message received...");
+                    gameEnded();
+                    break;
+                }
             }
-            else{
-                server.getMatch(server.getPlayerInfo(nickname).getMatchID()).onMessage(m);
-                send(new ServiceMessage(MessageType.OK), MessageType.OK);
+            else {
+                System.out.println("A PLAYER_MOVE_MESSAGE message has been received from " + nickname + "!");
+                pmm = commandParser.processCmd(messageReceived);
+                handleGame(pmm);
             }
         }
     }
