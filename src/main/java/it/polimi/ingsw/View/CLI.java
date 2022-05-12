@@ -83,9 +83,9 @@ public class CLI extends ViewSubject implements ModelObserver {
 
     }
 
-    public static StringBuilder printScreen(){
-        return drawer.printGameTable();
-    }
+    public static StringBuilder printGameTableOnScreen(){ return drawer.printGameTable(); }
+
+    public static StringBuilder printAssistantCardsOnScreen(int playerID){ return drawer.printAssistantCards(playerID); }
 
     public static StringBuilder drawEntrance(HashMap<RealmColors, Integer> students){
         StringBuilder toPrint= new StringBuilder();
@@ -111,6 +111,7 @@ public class CLI extends ViewSubject implements ModelObserver {
 
     public static void main(String[] args) {
         //drawer.printTitle();
-        System.out.println(printScreen());
+        System.out.println(printGameTableOnScreen());
+        System.out.println(printAssistantCardsOnScreen(0));
     }
 }
