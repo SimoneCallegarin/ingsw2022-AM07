@@ -420,6 +420,9 @@ public class CLIDrawer {
         drawRectangle(TABLE_DIMENSION_X/2-2,TABLE_DIMENSION_Y/2,4,7);
         drawRectangle(TABLE_DIMENSION_X/2-2,TABLE_DIMENSION_Y/2-10,4,7);
         drawRectangle(TABLE_DIMENSION_X/2-2,TABLE_DIMENSION_Y/2-20,4,7);
+        gameTable[TABLE_DIMENSION_X/2-3][TABLE_DIMENSION_Y/2-14] = "CHARACTER CARDS";
+        gameTable[TABLE_DIMENSION_X/2-3][TABLE_DIMENSION_Y/2] = "\b\b\b\b\b\b\b\b\b\b\b\b\b";
+
 
         int cont=0;
 
