@@ -9,7 +9,6 @@ public class CLIDrawer {
 
     private final char[][] gameTable = new char[TABLE_DIMENSION_X][TABLE_DIMENSION_Y];
 
-    Game game = new Game();
 
     public void printTitle() {
         System.out.println(
@@ -37,7 +36,7 @@ public class CLIDrawer {
 
     }
 
-    public StringBuilder drawGameTable() {
+    public StringBuilder drawGameTable(Game game) {
         /*
         ╔═══════════╗
         ║           ║
@@ -55,7 +54,7 @@ public class CLIDrawer {
         initializeGameTable();
         for(int i=0; i<game.getNumberOfPlayers();i++)
             drawDashboard(i);
-        drawIsles();
+        drawIsles(game);
         for(int i=0;i<TABLE_DIMENSION_X;i++){
             for (int j=0;j<TABLE_DIMENSION_Y;j++){
                 toPrint.append(gameTable[i][j]);
@@ -198,7 +197,7 @@ public class CLIDrawer {
         gameTable[startingPointX+5][startingPointY] = '╚';
     }
 
-    private void drawIsles() {
+    private void drawIsles(Game game) {
         for(int i=0; i<game.getGameTable().getIsleManager().getIsles().size(); i++){
             if(i<5)
                 drawIsle(3,25+13*i);

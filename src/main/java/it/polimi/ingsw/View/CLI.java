@@ -1,31 +1,21 @@
 package it.polimi.ingsw.View;
 
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
-import it.polimi.ingsw.Model.DashboardObjects.DiningRoom;
-import it.polimi.ingsw.Model.DashboardObjects.Entrance;
-import it.polimi.ingsw.Model.DashboardObjects.TowerStorage;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.GameTableObjects.Cloud;
-import it.polimi.ingsw.Model.GameTableObjects.Isle;
-import it.polimi.ingsw.Model.GameTableObjects.IsleManager;
-import it.polimi.ingsw.Observer.ModelObserver;
+import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 /**
- * this class implements the command line interface to play trough terminal, it's observed by the clientSocket which sends messages
+ * this class implements the command line interface to play trough terminal, it's observed by the connectionSocket which sends messages
  * to the server according to the CLI updates and, in addition, it observes the model to update the graphics accordingly.
  */
 
-public class CLI extends ViewSubject implements ModelObserver {
+public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    CLIDrawer cliDrawer=new CLIDrawer();
 
     /**
      * method used to launch a thread for user input reading
@@ -33,12 +23,7 @@ public class CLI extends ViewSubject implements ModelObserver {
     //need to make it always run not only when the method is called
     public String readUserInput(){
 
-        FutureTask<String> asyncInput=new FutureTask<>(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                 return br.readLine();
-            }
-        });
+        FutureTask<String> asyncInput=new FutureTask<>(() -> br.readLine());
         Thread inputThread = new Thread(asyncInput);
         inputThread.start();
         String userInput = null;
@@ -58,20 +43,15 @@ public class CLI extends ViewSubject implements ModelObserver {
      * CLI start
      */
     public void CLIstart(){
-        System.out.println(" .----------------.  .----------------.  .----------------.  .----------------.  .-----------------. .----------------.  .----------------.  .----------------. \n" +
-                "| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\n" +
-                "| |  _________   | || |  _______     | || |     _____    | || |      __      | || | ____  _____  | || |  _________   | || |  ____  ____  | || |    _______   | |\n" +
-                "| | |_   ___  |  | || | |_   __ \\    | || |    |_   _|   | || |     /  \\     | || ||_   \\|_   _| | || | |  _   _  |  | || | |_  _||_  _| | || |   /  ___  |  | |\n" +
-                "| |   | |_  \\_|  | || |   | |__) |   | || |      | |     | || |    / /\\ \\    | || |  |   \\ | |   | || | |_/ | | \\_|  | || |   \\ \\  / /   | || |  |  (__ \\_|  | |\n" +
-                "| |   |  _|  _   | || |   |  __ /    | || |      | |     | || |   / ____ \\   | || |  | |\\ \\| |   | || |     | |      | || |    \\ \\/ /    | || |   '.___`-.   | |\n" +
-                "| |  _| |___/ |  | || |  _| |  \\ \\_  | || |     _| |_    | || | _/ /    \\ \\_ | || | _| |_\\   |_  | || |    _| |_     | || |    _|  |_    | || |  |`\\____) |  | |\n" +
-                "| | |_________|  | || | |____| |___| | || |    |_____|   | || ||____|  |____|| || ||_____|\\____| | || |   |_____|    | || |   |______|   | || |  |_______.'  | |\n" +
-                "| |              | || |              | || |              | || |              | || |              | || |              | || |              | || |              | |\n" +
-                "| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |\n" +
-                " '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' ");
         System.out.println("Welcome to Eriantys game!\n");
+        cliDrawer.printTitle();
         askGamePreferences();
         askUsername();
+        //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
+        //trough the VirtualView
+        //we can't send the game reference trough messages so we need to pass each one of the objects to draw them
+        System.out.println(cliDrawer.drawGameTable(new Game()));
+
 
     }
 
@@ -95,7 +75,7 @@ public class CLI extends ViewSubject implements ModelObserver {
         boolean gamemode=choiceGamemode.equals("Expert");
         notifyObserver(obs->obs.onGamePreferences(numPlayers, gamemode));
     }
-
+    /*
     public static StringBuilder drawClouds(Cloud cloud1, Cloud cloud2){//~
         StringBuilder toPrint=new StringBuilder();
         toPrint.append(" ~~~~~     ~~~~~\n" +
@@ -180,12 +160,6 @@ public class CLI extends ViewSubject implements ModelObserver {
         return toPrint;
     }
 
-    /**
-     * this method draw the Dashboard. It uses other methods to get the StringBuilder objects which represent the entrance
-     * and the dining room and then it cuts and paste them to make them show aligned on the CLI
-     * @param dashboard the dashboard object which attributes are used to draw on the CLI
-     * @return the string to print to show the Dashboard
-     */
     public static StringBuilder drawDashboard(Dashboard dashboard){
         int numTower=dashboard.getTowerStorage().getNumberOfTowers();
 
@@ -232,11 +206,6 @@ public class CLI extends ViewSubject implements ModelObserver {
 
     }
 
-    /**
-     * this method is used to draw the DiningRoom part of the Dashboard
-     * @param diningRoom the DiningRoom object which attributes are used to draw on the CLI
-     * @return the StringBuilder object passed to the drawDashboard method
-     */
     public static StringBuilder drawDiningRoom(DiningRoom diningRoom){
         StringBuilder toPrint=new StringBuilder();
         toPrint.append("DiningRoom\n");
@@ -282,55 +251,13 @@ public class CLI extends ViewSubject implements ModelObserver {
         }
         return toPrint;
     }
-
+    */
 
     public static void main(String[] args) {
-        Dashboard dashboard=new Dashboard(4,1);
-        IsleManager isleManager=new IsleManager();
-
-        Entrance entrance=dashboard.getEntrance();
-        DiningRoom diningRoom=dashboard.getDiningRoom();
-
-        entrance.addStudent(RealmColors.RED);
-        entrance.addStudent(RealmColors.RED);
-        entrance.addStudent(RealmColors.RED);
-        entrance.addStudent(RealmColors.YELLOW);
-        entrance.addStudent(RealmColors.YELLOW);
-        entrance.addStudent(RealmColors.PINK);
-        entrance.addStudent(RealmColors.BLUE);
-
-        diningRoom.addStudent(RealmColors.BLUE);
-        diningRoom.addStudent(RealmColors.BLUE);
-        diningRoom.addStudent(RealmColors.BLUE);
-        diningRoom.addStudent(RealmColors.YELLOW);
-        diningRoom.addStudent(RealmColors.YELLOW);
-        diningRoom.addStudent(RealmColors.YELLOW);
-        diningRoom.addStudent(RealmColors.RED);
-        diningRoom.addStudent(RealmColors.GREEN);
-        diningRoom.addStudent(RealmColors.GREEN);
-        diningRoom.addStudent(RealmColors.GREEN);
-
-        for(int i=0;i<isleManager.getIsles().size();i++){
-            for(RealmColors colors:RealmColors.values()){
-                for(int j=0;j<10;j++){
-                    isleManager.getIsle(i).addStudent(colors);
-                }
-            }
-        }
-        //System.out.println(drawDashboard(dashboard));
-        System.out.println(drawIsles(isleManager));
-        Cloud cloud1=new Cloud(1,4);
-        Cloud cloud2=new Cloud(2,4);
-        cloud1.addStudent(RealmColors.BLUE);
-        cloud1.addStudent(RealmColors.BLUE);
-        cloud1.addStudent(RealmColors.BLUE);
-        cloud2.addStudent(RealmColors.GREEN);
-        cloud1.addStudent(RealmColors.GREEN);
-        cloud2.addStudent(RealmColors.GREEN);
-        cloud1.addStudent(RealmColors.GREEN);
-        cloud2.addStudent(RealmColors.GREEN);
-        cloud1.addStudent(RealmColors.GREEN);
-        System.out.println(drawClouds(cloud1,cloud2));
+        CLIDrawer cliDrawer=new CLIDrawer();
+        cliDrawer.printTitle();
+       // System.out.println(cliDrawer.drawGameTable());
 
     }
+
 }
