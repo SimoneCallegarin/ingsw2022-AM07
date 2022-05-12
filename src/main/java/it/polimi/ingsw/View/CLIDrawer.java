@@ -137,6 +137,7 @@ public class CLIDrawer {
         drawIsles();
         drawGeneralMoneyReserve();
         drawCharacterCards();
+        drawClouds();
 
     }
 
@@ -331,7 +332,7 @@ public class CLIDrawer {
         /*
         ╔═══════════╗
         ║  ISLE_n   ║
-        ║ 5 5 5 5 5 ║
+        ║ y p b r g ║
         ║ MN(■)/D(!)║
         ║    n_T    ║
         ╚═══════════╝
@@ -375,14 +376,58 @@ public class CLIDrawer {
 
     private void drawIsles() {
         for(int i=0; i<game.getGameTable().getIsleManager().getIsles().size(); i++){
-            if(i<5)
-                drawIsle(4,28+16*i,i);
+            if(i==0||i==4)
+                    drawIsle(4,28+16*i,i);
+            if(i>0&&i<4)
+                drawIsle(1,28+16*i,i);
             if(i==5)
                 drawIsle(11,92,i);
+            if(i==6 || i==10)
+                drawIsle(18,92-16*(i-6),i);
+            if(i>6&&i<10)
+                drawIsle(21,92-16*(i-6),i);
             if(i==11)
                 drawIsle(11,28,i);
-            if(i>5 && i!=11)
-                drawIsle(18,92-16*(i-6),i);
+        }
+    }
+
+    private void drawCloud(int startingPointY, int cloudIndex) {
+         /*
+        ╔═══════╗
+        ║  s s  ║
+        ║  s s  ║
+        ╚═══n═══╝
+         */
+        drawRectangle(9, startingPointY, 4, 9);
+        gameTable[9 +3][startingPointY+4] = Integer.valueOf(cloudIndex).toString();
+        int cont=0;
+        for (RealmColors color : RealmColors.values()){
+            if(game.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)>0){
+                if(cont<2)
+                    gameTable[9 +1][startingPointY+3+2*cont]=paintStudent(color,Integer.valueOf(game.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
+                else
+                    gameTable[9 +2][startingPointY+3+2*(cont-2)]=paintStudent(color,Integer.valueOf(game.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
+
+                cont++;
+            }
+        }
+
+    }
+
+        private void drawClouds() {
+        /*
+        ╔════════════════════CLOUDS════════════════════╗
+        ║  ╔═══════╗  ╔═══════╗  ╔═══════╗  ╔═══════╗  ║
+        ║  ║  s s  ║  ║  s s  ║  ║  s s  ║  ║  s s  ║  ║
+        ║  ║  s s  ║  ║  s s  ║  ║  s s  ║  ║  s s  ║  ║
+        ║  ╚═══n═══╝  ╚═══n═══╝  ╚═══n═══╝  ╚═══n═══╝  ║
+        ╚══════════════════════════════════════════════╝
+         */
+        drawRectangle(TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-22,6,46);
+            gameTable[TABLE_DIMENSION_X/2-6][TABLE_DIMENSION_Y/2-3] = "CLOUDS";
+            gameTable[TABLE_DIMENSION_X/2-6][TABLE_DIMENSION_Y/2+10] = "\b\b\b\b";
+        for(int i=0; i<game.getNumberOfPlayers(); i++){
+            drawCloud(TABLE_DIMENSION_Y/2-20+11*i,i);
         }
     }
 
@@ -393,18 +438,18 @@ public class CLIDrawer {
         ║ nn$ ║
         ╚═════╝
          */
-        drawRectangle(TABLE_DIMENSION_X/2-2,TABLE_DIMENSION_Y/2+13,4,7);
-        gameTable[TABLE_DIMENSION_X/2-1][TABLE_DIMENSION_Y/2+14] = "MONEY";
-        gameTable[TABLE_DIMENSION_X/2-1][TABLE_DIMENSION_Y/2+18] = "\b\b\b";
+        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2+14,4,7);
+        gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2+15] = "MONEY";
+        gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2+19] = "\b\b\b";
 
         if(game.getGameTable().getGeneralMoneyReserve()>=10){
-            gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+15] = Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString();
-            gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+17] = " \b";
+            gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+16] = Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString();
+            gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+18] = " \b";
         }
         else{
-            gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+16] = Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString();
+            gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+17] = Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString();
         }
-        gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+16] = "$";
+        gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+17] = "$";
     }
 
     private void drawCharacterCards() {
@@ -416,29 +461,30 @@ public class CLIDrawer {
         ║ ╚═════╝   ╚═════╝   ╚═════╝ ║
         ╚═════════════════════════════╝
          */
-        drawRectangle(TABLE_DIMENSION_X/2-3,TABLE_DIMENSION_Y/2-22,6,31);
-        drawRectangle(TABLE_DIMENSION_X/2-2,TABLE_DIMENSION_Y/2,4,7);
-        drawRectangle(TABLE_DIMENSION_X/2-2,TABLE_DIMENSION_Y/2-10,4,7);
-        drawRectangle(TABLE_DIMENSION_X/2-2,TABLE_DIMENSION_Y/2-20,4,7);
-        gameTable[TABLE_DIMENSION_X/2-3][TABLE_DIMENSION_Y/2-14] = "CHARACTER CARDS";
-        gameTable[TABLE_DIMENSION_X/2-3][TABLE_DIMENSION_Y/2] = "\b\b\b\b\b\b\b\b\b\b\b\b\b";
+        drawRectangle(TABLE_DIMENSION_X/2,TABLE_DIMENSION_Y/2-21,6,31);
+        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2+1,4,7);
+        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2-9,4,7);
+        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2-19,4,7);
+        gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2-13] = "CHARACTER CARDS";
+        gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+1] = "\b\b\b\b\b\b\b\b\b\b\b\b\b";
 
 
         int cont=0;
 
         for (int i=0;i<3;i++){
-            gameTable[TABLE_DIMENSION_X/2-1][TABLE_DIMENSION_Y/2+1-10*i] = Integer.valueOf(game.getGameTable().getCharacterCard(i).getCost()).toString();
-            gameTable[TABLE_DIMENSION_X/2-1][TABLE_DIMENSION_Y/2+2-10*i] = "$";
+            gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2-18+10*i] = Integer.valueOf(game.getGameTable().getCharacterCard(i).getCost()).toString();
+            gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2-17+10*i] = "$";
+            gameTable[TABLE_DIMENSION_X/2+4][TABLE_DIMENSION_Y/2-16+10*i] = Integer.valueOf(i).toString();
             if(game.getGameTable().getCharacterCard(i).getNumberOfStudents()!=0){
                 for (RealmColors color : RealmColors.values()){
-                    gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+1-10*i+cont]=paintStudent(color,Integer.valueOf(game.getGameTable().getCharacterCard(i).getStudentsByColor(color)).toString());
+                    gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont]=paintStudent(color,Integer.valueOf(game.getGameTable().getCharacterCard(i).getStudentsByColor(color)).toString());
                     cont++;
                 }
                 cont=0;
             }
             if(game.getGameTable().getCharacterCard(i).getDenyCards()!=0)
                 for (int j=0;j<game.getGameTable().getCharacterCard(i).getDenyCards();j++)
-                    gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+1-10*i+cont+j] = paintTower(TowerColors.WHITE,"!");
+                    gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont+j] = paintTower(TowerColors.WHITE,"!");
         }
     }
 
