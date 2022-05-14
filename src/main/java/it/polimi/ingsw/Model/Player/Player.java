@@ -71,7 +71,7 @@ public class Player {
 
         this.mage = Mages.getMage(idDashboard);
         this.mageDeck = new ArrayList<>(10);
-        this.discardPile = null;
+        this.discardPile = new AssistantCard(0,0);
 
         /*
           This method permits the creation of a deck of assistant cards
