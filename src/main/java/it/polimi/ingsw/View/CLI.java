@@ -1,8 +1,5 @@
 package it.polimi.ingsw.View;
 
-
-
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Observer.ViewSubject;
@@ -67,16 +64,16 @@ public class CLI extends ViewSubject {
 
 
 
-    }
 
+}
     /**
      * method used to read the username choice by the player
      */
     public void askUsername() {
         AtomicBoolean usernameTaken = new AtomicBoolean(true);
+        while (usernameTaken.get()) {
         System.out.println("Enter your username:\n");
         String username = readUserInput();
-        while (usernameTaken.get()) {
                 notifyObserver(obs -> {
                     try {
                         obs.onUsername(username);
@@ -106,7 +103,7 @@ public class CLI extends ViewSubject {
             System.out.println("Now type the game mode preferred: Expert or Base?");
             choiceGamemode = readUserInput();
             gamemode = choiceGamemode.equals("Expert");
-        } while (choiceGamemode != "Expert" || choiceGamemode!="Base");
+        } while (!choiceGamemode.equals("Expert") && !choiceGamemode.equals("Base"));
 
         int finalNumPlayers = numPlayers;
         boolean finalGamemode = gamemode;

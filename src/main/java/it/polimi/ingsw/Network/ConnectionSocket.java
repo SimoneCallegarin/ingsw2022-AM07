@@ -121,7 +121,7 @@ public class ConnectionSocket implements ViewObserver {
     public void onGamePreferences(int numPlayers, Boolean gameMode) {
         String messageReceived;
         GamePreferencesMessage gSetMessage = new GamePreferencesMessage(numPlayers, gameMode);
-        do {//the input is controlled by the view so the only errors that can occur are network message corruption
+        do {//the input is controlled by the view so the only errors that can occur are network corruption
             send(gSetMessage, gSetMessage.getMessageType());
             messageReceived = inStream.nextLine();
         } while (!messageReceived.equals(ConstantMessages.okJSON));
