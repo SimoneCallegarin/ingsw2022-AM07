@@ -1,7 +1,17 @@
 package it.polimi.ingsw.Observer;
 
-import it.polimi.ingsw.Model.Game;
-
 public interface ModelObserver {
-    void onModelUpdate(Game game);
+    void onAssistantCard(int idPlayer, int turnOrderPlayed);
+
+    void onStudentMoving_toDining(int idPlayer, int colorIndex);
+
+    void onStudentMoving_toIsle(int idPlayer, int idIsle, int colorIndex);
+
+    void onMNMovement();
+
+    void onCloudChoice();
+
+    void onCharacterCard();
+
+
 }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.View;
 
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Observer.ModelObserver;
 
 /**
@@ -8,8 +7,32 @@ import it.polimi.ingsw.Observer.ModelObserver;
  */
 public class VirtualView implements ModelObserver {
 
+    @Override
+    public void onAssistantCard(int idPlayer, int turnOrderPlayed) {
+
+    }
 
     @Override
-    public void onModelUpdate(Game game) {
+    public void onStudentMoving_toDining(int idPlayer, int colorIndex) {
+
+    }
+
+    @Override
+    public void onStudentMoving_toIsle(int idPlayer, int idIsle, int colorIndex) {
+    }
+
+    @Override
+    public void onMNMovement() {
+
+    }
+
+    @Override
+    public void onCloudChoice() {
+
+    }
+
+    @Override
+    public void onCharacterCard() {
+
     }
 }
