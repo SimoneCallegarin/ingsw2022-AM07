@@ -110,7 +110,7 @@ public class CLI extends ViewSubject implements ModelObserver {
     }
 
     public static void main(String[] args) {
-        //drawer.printTitle();
+        System.out.println(drawer.printTitle());
         System.out.println(printGameTableOnScreen());
         System.out.println(printAssistantCardsOnScreen(0));
     }
