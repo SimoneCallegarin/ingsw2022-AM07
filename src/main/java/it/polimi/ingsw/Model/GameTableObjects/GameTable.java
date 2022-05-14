@@ -44,7 +44,7 @@ public class GameTable implements DenyCardManager {
     /**
      * this is the general money reserve that is filled with 20 money
      * it is updated when a player plays a character card
-     * or when he fill the space of the dining room that gives money
+     * or when he fills the space of the dining room that gives money
      */
     private int generalMoneyReserve;
 
@@ -81,9 +81,9 @@ public class GameTable implements DenyCardManager {
             extractAndSetUsableCharacterCards();
 
         this.denyCards = 4;
-        this.generalMoneyReserve = 20;
+        this.generalMoneyReserve = 0;
         if(gameMode==GameMode.EXPERT)
-            generalMoneyReserve -= numberOfPlayers;
+            generalMoneyReserve = 20-numberOfPlayers;
 
     }
 

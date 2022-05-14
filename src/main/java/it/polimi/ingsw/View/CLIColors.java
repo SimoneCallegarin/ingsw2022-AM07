@@ -9,14 +9,17 @@ public enum CLIColors {
     CLEAR("\033[H\033[2J"),
 
     //colors
-    RED("\033[0;31m"),
-    GREEN("\033[38;5;28m"),
-    BLUE("\033[0;34m"),
-    YELLOW("\u001B[33m"),
-    PINK("\033[0;35m"),
-    WHITE(""),
-    BLACK("\u001B[47m\u001B[30m");//Black uses the white background and black lettering
-    //GREY missing, not found on the web
+    HB_WHITE("\033[1;97m"),
+    B_WHITE("\033[1;87m"),
+    HB_BLACK("\033[1;90m"),
+    HB_GREY("\033[1;37m"),
+
+    HB_YELLOW("\033[1;93m"),
+    HB_PINK("\033[1;95m"),
+    HB_BLUE("\033[1;94m"),
+    HB_RED("\033[1;91m"),
+    HB_GREEN("\033[1;92m");
+
 
     private final String code;
 
@@ -30,43 +33,44 @@ public enum CLIColors {
         return code;
     }
 
-    public static CLIColors towerColorsConverter(TowerColors color){
-        switch(color){
-            case WHITE -> {
-                return CLIColors.WHITE;
-            }
-            case BLACK ->{
-                return CLIColors.BLACK;
-            }
-            case GREY ->{
-                return CLIColors.RESET;//to update
-            }
-            default -> {
-                return CLIColors.RESET;
-            }
-        }
-    }
-
     public static CLIColors realmColorsConverter(RealmColors color) {
         switch(color){
             case YELLOW -> {
-                return CLIColors.YELLOW;
+                return CLIColors.HB_YELLOW;
             }
             case BLUE -> {
-                return CLIColors.BLUE;
+                return CLIColors.HB_BLUE;
             }
             case RED -> {
-                return CLIColors.RED;
+                return CLIColors.HB_RED;
             }
             case PINK -> {
-                return CLIColors.PINK;
+                return CLIColors.HB_PINK;
             }
             case GREEN -> {
-                return CLIColors.GREEN;
+                return CLIColors.HB_GREEN;
             }
             default ->{
                 return CLIColors.RESET;
             }
         }
     }
+
+    public static CLIColors towerColorsConverter(TowerColors color) {
+        switch(color){
+            case WHITE -> {
+                return CLIColors.HB_WHITE;
+            }
+            case BLACK -> {
+                return CLIColors.HB_BLACK;
+            }
+            case GREY -> {
+                return CLIColors.HB_GREY;
+            }
+            default ->{
+                return CLIColors.RESET;
+            }
+        }
+    }
+
 }

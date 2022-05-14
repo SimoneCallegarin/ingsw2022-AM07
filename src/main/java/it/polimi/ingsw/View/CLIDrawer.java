@@ -1,42 +1,71 @@
 package it.polimi.ingsw.View;
 
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Enumeration.TowerColors;
+import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 
 public class CLIDrawer {
 
     private static final int TABLE_DIMENSION_X = 28;
     private static final int TABLE_DIMENSION_Y = 133;
+    private static final int ASSISTANT_CARDS_X = 3;
+    private static final int ASSISTANT_CARDS_Y = 5;
+    private static final int NICKNAME_X = 3;
+    private static final int NICKNAME_Y = 23;
+    private static final int DASHBOARD_PARTS_X = 10;
+    private static final int ENTRANCE_Y = 7;
+    private static final int DINING_AND_TOWERS_Y = 9;
+    private static final int SMALL_RECTANGLE_X = 3;
+    private static final int SMALL_RECTANGLE_Y = 5;
+    private static final int ISLE_X = 6;
+    private static final int ISLE_Y = 13;
+    private static final int CLOUD_X = 4;
+    private static final int CLOUD_Y = 9;
+    private static final int CLOUDS_CONTAINER_X = 6;
+    private static final int CLOUDS_CONTAINER_Y = 46;
+    private static final int GEN_MONEY_RES_X = 4;
+    private static final int GEN_MONEY_RES_Y = 7;
+    private static final int CHAR_CARDS_CONTAINER_X = 6;
+    private static final int CHAR_CARDS_CONTAINER_Y = 31;
+    private static final int CHAR_CARD_X = 4;
+    private static final int CHAR_CARD_Y = 7;
+    private static final int ASSISTANT_CARDS_CONTAINER_X = 7;
+    private static final int ASSISTANT_CARDS_CONTAINER_Y = 66;
+
+    private final String[][] title = new String[22][174];
 
     private final String[][] gameTable = new String[TABLE_DIMENSION_X][TABLE_DIMENSION_Y];
+
+    private final String[][] assistantCards = new String[ASSISTANT_CARDS_X+4][ASSISTANT_CARDS_Y*10+16];
+
+    private final String[][] legend = new String[16][50];
 
     Game game = new Game();
 
     /**
      * Permits designing in the gameTable matrix a rectangle with certain dimension and positions.
+     * @param place the place where we want to paint the rectangle.
      * @param startingPointX the horizontal starting point in the matrix.
      * @param startingPointY the vertical starting point in the matrix.
-     * @param dimensionX the horizontal dimension of the rectangle.
-     * @param dimensionY the vertical dimension of the rectangle.
+     * @param dimensionX the vertical dimension of the rectangle.
+     * @param dimensionY the horizontal dimension of the rectangle.
      */
-    private void drawRectangle(int startingPointX, int startingPointY, int dimensionX, int dimensionY) {
-        gameTable[startingPointX][startingPointY] = "╔";
-        gameTable[startingPointX][startingPointY+dimensionY-1] = "╗";
+    private void drawRectangle(String[][] place, int startingPointX, int startingPointY, int dimensionX, int dimensionY) {
+        place[startingPointX][startingPointY] = "╔";
+        place[startingPointX][startingPointY+dimensionY-1] = "╗";
         for(int i=1; i<dimensionX-1; i++){
-            gameTable[startingPointX+i][startingPointY] = "║";
-            gameTable[startingPointX+i][startingPointY+dimensionY-1] = "║";
+            place[startingPointX+i][startingPointY] = "║";
+            place[startingPointX+i][startingPointY+dimensionY-1] = "║";
         }
         for(int i=1; i<dimensionY-1; i++){
-            gameTable[startingPointX][startingPointY+i] = "═";
-            gameTable[startingPointX+dimensionX-1][startingPointY+i] = "═";
+            place[startingPointX][startingPointY+i] = "═";
+            place[startingPointX+dimensionX-1][startingPointY+i] = "═";
         }
-        gameTable[startingPointX+dimensionX-1][startingPointY] = "╚";
-        gameTable[startingPointX+dimensionX-1][startingPointY+dimensionY-1] = "╝";
+        place[startingPointX+dimensionX-1][startingPointY] = "╚";
+        place[startingPointX+dimensionX-1][startingPointY+dimensionY-1] = "╝";
     }
 
     /**
-     * Paints the text given with a color that is usually used to define a student or a professor.
+     * Paints the text given with a color that is used to define a student or a professor.
      * @param color RealmColor used (must be a color between: YELLOW,PINK,BLUE,RED AND GREEN).
      * @param toColor the string that has to be colored.
      * @return a colored version of the string given.
@@ -44,7 +73,7 @@ public class CLIDrawer {
     private String paintStudent(RealmColors color, String toColor) { return CLIColors.realmColorsConverter(color)+toColor+CLIColors.RESET; }
 
     /**
-     * Paints the text given with a color that is usually used to define the towers.
+     * Paints the text given with a color that is used to define the towers.
      * @param color TowerColor used (must be a color between: WHITE,BLACK AND GREY).
      * @param toColor the string that has to be colored.
      * @return a colored version of the string given.
@@ -52,9 +81,17 @@ public class CLIDrawer {
     private String paintTower(TowerColors color, String toColor) { return CLIColors.towerColorsConverter(color)+toColor+CLIColors.RESET; }
 
     /**
+     * Paints the text given with a color that is usually used to define nicknames and other game string.
+     * @param color the color we want to paint the string.
+     * @param toColor the string that has to be colored.
+     * @return a colored version of the string given.
+     */
+    private String paintService(CLIColors color, String toColor) { return color+toColor+CLIColors.RESET; }
+
+    /**
      * Paints the word given vertically.
-     * @param startingPointX the horizontal starting point in the matrix.
-     * @param startingPointY the vertical starting point in the matrix.
+     * @param startingPointX the vertical starting point in the matrix.
+     * @param startingPointY the horizontal starting point in the matrix.
      * @param name the string we want to paint vertically.
      */
     private void verticalStringWriter(int startingPointX, int startingPointY, String name) {
@@ -63,31 +100,81 @@ public class CLIDrawer {
     }
 
     /**
-     * Prints the title of the game: ERIANTYS.
+     * Saves a string of more than 1 character in the place given, while adding a backspaces (\b)
+     * amount equal to the string length minus 2.
+     * It also checks if the string is already colored,
+     * in that case the amount of backspaces must be equal to the string length minus 10.
+     * @param place the matrix we want to write the string in.
+     * @param stringToWrite the string we want to write.
+     * @param posX the horizontal position of the matrix where the string will be stored.
+     * @param posY the vertical position of the matrix where the string will be stored.
      */
-    public void printTitle() {
-        System.out.println(
-                """
-                        ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-                        ║              ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                        ¶¶¶¶¶                                                                                                       ║
-                        ║          ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                      ¶¶¶¶¶¶¶                                                                                                      ║
-                        ║        ¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶         ¶¶¶¶¶¶¶¶                     ¶¶¶¶¶¶¶                                                 ¶¶¶                                                  ║
-                        ║       ¶¶¶¶¶      ¶¶¶¶¶¶¶            ¶¶¶¶¶¶                    ¶¶¶¶¶¶¶                                                ¶¶¶¶                                                  ║
-                        ║      ¶¶¶¶¶      ¶¶¶¶¶¶¶¶      ¶¶¶     ¶¶¶¶                     ¶¶¶¶                                                ¶¶¶¶¶¶        ¶¶¶¶       ¶¶¶¶        ¶¶¶¶¶¶¶¶¶          ║
-                        ║      ¶¶¶¶       ¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶        ¶¶¶¶¶   ¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶         ¶¶¶¶¶¶¶¶¶¶¶      ¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶¶¶¶     ¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶        ║
-                        ║      ¶¶¶¶       ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶      ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶ ¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶¶¶¶¶ ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶   ¶¶¶¶        ║
-                        ║      ¶¶¶¶¶      ¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶     ¶¶¶¶¶¶   ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶ ¶¶¶¶  ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶    ¶¶¶        ║
-                        ║      ¶¶¶¶¶      ¶¶¶¶¶¶¶¶¶¶¶       ¶¶       ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶    ¶¶¶¶¶¶     ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶ ¶¶¶    ¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶             ║
-                        ║       ¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶                 ¶¶¶¶¶¶¶   ¶¶¶¶     ¶¶¶¶¶¶¶   ¶¶¶¶¶¶      ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶   ¶¶¶¶¶¶    ¶¶¶¶¶¶¶         ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶           ║
-                        ║        ¶¶¶¶¶¶   ¶¶¶¶¶¶¶¶¶                  ¶¶¶¶¶¶¶   ¶¶       ¶¶¶¶¶¶¶   ¶¶¶¶¶¶     ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶          ¶¶¶¶¶¶¶¶¶¶¶¶¶       ¶¶¶¶¶¶¶¶¶          ║
-                        ║         ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶               ¶¶¶ ¶¶¶¶¶¶¶            ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶           ¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶   ¶¶¶¶¶¶¶¶¶         ║
-                        ║                 ¶¶¶¶¶¶¶¶              ¶¶¶¶ ¶¶¶¶¶¶¶            ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶        ¶¶¶¶¶¶¶¶¶    ¶¶¶¶    ¶¶¶¶¶¶¶         ║
-                        ║                 ¶¶¶¶¶¶¶¶            ¶¶¶¶¶  ¶¶¶¶¶¶             ¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶ ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶          ¶¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶¶          ║
-                        ║                ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶¶¶              ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶   ¶¶¶¶¶     ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶           ¶¶¶¶¶¶¶       ¶¶¶¶¶¶¶¶¶¶¶¶           ║
-                        ║              ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                                                                             ¶¶¶¶¶           ¶¶¶¶¶¶¶          ¶¶¶¶¶¶¶¶             ║
-                        ║                                                                                                                                     ¶¶¶¶¶¶¶                                ║
-                        ║                                                                                                                                     ¶¶¶¶¶¶                                 ║
-                        ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝""");
+    private void writeLongerString (String[][] place, String stringToWrite, int posX, int posY) {
+            place[posX][posY] = stringToWrite;
+            deleteSpacesForStrings(place,stringToWrite,posX,posY);
+    }
+
+    /**
+     * Adds backspaces to the matrix.
+     * If the string is already colored the amount of backspaces will be equal to the string length minus 10,
+     * else it will be equal to the string length minus 2.
+     * @param place the matrix where the backspaces will be stored.
+     * @param stringToWrite the string we wanted to write
+     * @param posX the horizontal position of the matrix where the string will be stored.
+     *             Used to find the position to place the backspaces.
+     * @param posY the vertical position of the matrix where the string will be stored.
+     *             Used to find the position to place the backspaces.
+     */
+    private void deleteSpacesForStrings(String[][] place, String stringToWrite, int posX, int posY) {
+        int lengthUsed;
+        lengthUsed = stringToWrite.length()-2;
+        if(stringToWrite.contains("\033[0m"))
+            lengthUsed = lengthUsed -10;
+        String stringOfBackSpaces = "";
+        for (int i = 0; i< lengthUsed-1; i++)
+            stringOfBackSpaces = stringOfBackSpaces.concat("\b");
+        place[posX][posY+ lengthUsed]=stringOfBackSpaces;
+    }
+
+    /**
+     * Prints the title of the game: ERIANTYS.
+     * @return a StingBuilder containing the title.
+     */
+    public StringBuilder printTitle() {
+
+        StringBuilder toPrint=new StringBuilder();
+
+        initializeRectangle(title,22,174);
+
+        drawRectangle(title,0,0,22,174);
+
+        writeLongerString(title,paintService(CLIColors.HB_YELLOW,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                        ¶¶¶¶¶"),2,15);
+        writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                      ¶¶¶¶¶¶¶"),3,11);
+        writeLongerString(title,paintService(CLIColors.HB_BLUE,"¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶         ¶¶¶¶¶¶¶¶                     ¶¶¶¶¶¶¶                                                 ¶¶¶"),4,9);
+        writeLongerString(title,paintService(CLIColors.HB_RED,"¶¶¶¶¶      ¶¶¶¶¶¶¶            ¶¶¶¶¶¶                    ¶¶¶¶¶¶¶                                                ¶¶¶¶"),5,8);
+        writeLongerString(title,paintService(CLIColors.HB_GREEN,"¶¶¶¶¶      ¶¶¶¶¶¶¶¶      ¶¶¶     ¶¶¶¶                     ¶¶¶¶                                                ¶¶¶¶¶¶        ¶¶¶¶       ¶¶¶¶        ¶¶¶¶¶¶¶¶¶"),6,7);
+        writeLongerString(title,paintService(CLIColors.HB_YELLOW,"¶¶¶¶       ¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶        ¶¶¶¶¶   ¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶         ¶¶¶¶¶¶¶¶¶¶¶      ¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶¶¶¶     ¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶"),7,7);
+        writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶       ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶      ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶ ¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶¶¶¶¶ ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶   ¶¶¶¶"),8,7);
+        writeLongerString(title,paintService(CLIColors.HB_BLUE,"¶¶¶¶¶      ¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶     ¶¶¶¶¶¶   ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶ ¶¶¶¶  ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶    ¶¶¶"),9,7);
+        writeLongerString(title,paintService(CLIColors.HB_RED,"¶¶¶¶¶      ¶¶¶¶¶¶¶¶¶¶¶       ¶¶       ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶    ¶¶¶¶¶¶     ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶ ¶¶¶    ¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶"),10,7);
+        writeLongerString(title,paintService(CLIColors.HB_GREEN,"¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶                 ¶¶¶¶¶¶¶   ¶¶¶¶     ¶¶¶¶¶¶¶   ¶¶¶¶¶¶      ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶   ¶¶¶¶¶¶    ¶¶¶¶¶¶¶         ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶"),11,8);
+        writeLongerString(title,paintService(CLIColors.HB_YELLOW,"¶¶¶¶¶¶   ¶¶¶¶¶¶¶¶¶                  ¶¶¶¶¶¶¶   ¶¶       ¶¶¶¶¶¶¶   ¶¶¶¶¶¶     ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶          ¶¶¶¶¶¶¶¶¶¶¶¶¶       ¶¶¶¶¶¶¶¶¶"),12,9);
+        writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶               ¶¶¶ ¶¶¶¶¶¶¶            ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶           ¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶   ¶¶¶¶¶¶¶¶¶"),13,10);
+        writeLongerString(title,paintService(CLIColors.HB_BLUE,"¶¶¶¶¶¶¶¶              ¶¶¶¶ ¶¶¶¶¶¶¶            ¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶¶        ¶¶¶¶¶¶¶¶¶    ¶¶¶¶    ¶¶¶¶¶¶¶"),14,18);
+        writeLongerString(title,paintService(CLIColors.HB_RED,"¶¶¶¶¶¶¶¶            ¶¶¶¶¶  ¶¶¶¶¶¶             ¶¶¶¶¶¶¶   ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶ ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶¶          ¶¶¶¶¶¶¶     ¶¶¶¶¶¶¶¶¶¶¶¶¶¶"),15,18);
+        writeLongerString(title,paintService(CLIColors.HB_GREEN,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶   ¶¶¶¶¶              ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶   ¶¶¶¶¶     ¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶           ¶¶¶¶¶¶¶       ¶¶¶¶¶¶¶¶¶¶¶¶"),16,17);
+        writeLongerString(title,paintService(CLIColors.HB_YELLOW,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                                                                             ¶¶¶¶¶           ¶¶¶¶¶¶¶          ¶¶¶¶¶¶¶¶"),17,15);
+        writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶¶¶¶"),18,134);
+        writeLongerString(title,paintService(CLIColors.HB_BLUE,"¶¶¶¶¶¶"),19,134);
+
+        for(int i=0;i<22;i++){
+            for (int j=0;j<174;j++){
+                toPrint.append(title[i][j]);
+            }
+            toPrint.append("\n");
+        }
+
+        return toPrint;
 
     }
 
@@ -102,10 +189,14 @@ public class CLIDrawer {
         game.addAnotherPlayer("filippo");
         game.addAnotherPlayer("TrentAlexanderArnold");
         //LIMITE A 20 CARATTERI PER IL nickname!!! (va imposto).
-        initializeGameTable();
+        createGameTable();
         for(int i=0;i<TABLE_DIMENSION_X;i++){
-            for (int j=0;j<TABLE_DIMENSION_Y;j++){
-                toPrint.append(gameTable[i][j]);
+            for (int j=0;j<TABLE_DIMENSION_Y+50;j++){
+                if(j<TABLE_DIMENSION_Y)
+                    toPrint.append(gameTable[i][j]);
+                else
+                if(i<16)
+                    toPrint.append(legend[i][j-TABLE_DIMENSION_Y]);
             }
             toPrint.append("\n");
         }
@@ -115,7 +206,7 @@ public class CLIDrawer {
     /**
      * Paints the borders of the game table and invoke all other methods that paint the other components.
      */
-    private void initializeGameTable() {
+    private void createGameTable() {
         /*
         ╔═══════════╗
         ║           ║
@@ -125,12 +216,10 @@ public class CLIDrawer {
         ╚═══════════╝
           28 X 133
          */
-        for(int i=0;i<TABLE_DIMENSION_X;i++){
-            for (int j=0;j<TABLE_DIMENSION_Y;j++){
-                gameTable[i][j] = " ";
-            }
-        }
-        drawRectangle(0,0, TABLE_DIMENSION_X, TABLE_DIMENSION_Y);
+        initializeRectangle(gameTable,TABLE_DIMENSION_X,TABLE_DIMENSION_Y);
+        drawRectangle(gameTable, 0,0, TABLE_DIMENSION_X, TABLE_DIMENSION_Y);
+
+        initializeRectangle(legend,16,50);
 
         for(int i=0; i<game.getNumberOfPlayers();i++)
             drawDashboard(i);
@@ -138,9 +227,28 @@ public class CLIDrawer {
         drawGeneralMoneyReserve();
         drawCharacterCards();
         drawClouds();
+        drawLegend();
 
     }
 
+    /**
+     * Initialize the matrix of a rectangle by placing spaces(" ") in each box.
+     * @param place the matrix that we want to initialize.
+     * @param dimensionX the vertical dimension of the matrix.
+     * @param dimensionY the horizontal dimension of the matrix.
+     */
+    private void initializeRectangle(String[][] place, int dimensionX, int dimensionY) {
+        for(int i=0;i<dimensionX;i++){
+            for (int j=0;j<dimensionY;j++){
+                place[i][j] = " ";
+            }
+        }
+    }
+
+    /**
+     * Draws the dashboard of a certain player.
+     * @param playerID the id associated to the player that has the dashboard number playerID.
+     */
     private void drawDashboard(int playerID) {
         /*
         ╔═════════════════════╗
@@ -178,21 +286,29 @@ public class CLIDrawer {
 
     }
 
+    /**
+     * Draws the nickname of the player.
+     * @param playerID the id of the player.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the nickname.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the nickname.
+     */
     private void drawNickname(int playerID, int startingPointX, int startingPointY) {
         /*
         ╔═════════════════════╗
         ║      nickname       ║
         ╚═════════════════════╝
          */
-        drawRectangle(startingPointX-1,startingPointY,3,23);
-
-        int posNickname = (23-game.getPlayerByIndex(playerID).getNickname().length())/2;
-        gameTable[startingPointX][startingPointY+posNickname] = paintTower(TowerColors.WHITE,game.getPlayerByIndex(playerID).getNickname());
-
-        for(int i=1;i<game.getPlayerByIndex(playerID).getNickname().length();i++)
-            gameTable[startingPointX][startingPointY+posNickname+i]=" \b";
+        drawRectangle(gameTable, startingPointX-1,startingPointY,NICKNAME_X,NICKNAME_Y);
+        int posNickname = (NICKNAME_Y-game.getPlayerByIndex(playerID).getNickname().length())/2;
+        writeLongerString(gameTable,paintService(CLIColors.HB_WHITE,game.getPlayerByIndex(playerID).getNickname()),startingPointX,startingPointY+posNickname);
     }
 
+    /**
+     * Draws the entrance of the dashboard.
+     * @param playerID the id of the player.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the entrance.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the entrance.
+     */
     private void drawEntrance(int playerID, int startingPointX, int startingPointY) {
         /*
         ╔═════╗
@@ -207,7 +323,7 @@ public class CLIDrawer {
         ╚═════╝
          */
         verticalStringWriter(startingPointX+2,startingPointY+2,"ENTRANCE");
-        drawRectangle(startingPointX+1,startingPointY,10,7);
+        drawRectangle(gameTable, startingPointX+1,startingPointY, DASHBOARD_PARTS_X,ENTRANCE_Y);
         // STUDENTS IN THE ENTRANCE:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
@@ -216,6 +332,12 @@ public class CLIDrawer {
         }
     }
 
+    /**
+     * Draws the dining room of the dashboard.
+     * @param playerID the id of the player.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the dining room.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the dining room.
+     */
     private void drawDiningRoom(int playerID, int startingPointX, int startingPointY) {
         /*
         ╔═══════╗
@@ -230,26 +352,32 @@ public class CLIDrawer {
         ╚═══════╝
          */
         verticalStringWriter(startingPointX+2,startingPointY+8,"DINING R");
-        gameTable[startingPointX+9][startingPointY+9] = ".";
-        drawRectangle(startingPointX+1,startingPointY+6,10,9);
+        gameTable[startingPointX+9][startingPointY+ DINING_AND_TOWERS_Y] = ".";
+        drawRectangle(gameTable, startingPointX+1,startingPointY+6,DASHBOARD_PARTS_X, DINING_AND_TOWERS_Y);
         // STUDENTS IN THE DINING ROOM:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
-            gameTable[startingPointX+4+cont][startingPointY+10]=paintStudent(color,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color)).toString());
+            gameTable[startingPointX+4+cont][startingPointY+ DINING_AND_TOWERS_Y +1]=paintStudent(color,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color)).toString());
+            if (game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color)>=10)
+                gameTable[startingPointX+4][startingPointY+ DINING_AND_TOWERS_Y +2] = "";
             cont++;
         }
-         if (game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.YELLOW)>=10)
-            gameTable[startingPointX+4][startingPointY+5] = "\b║";
         // PROFESSORS IN THE DINING ROOM:
         //game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.BLUE);
         int contP =0;
         for (RealmColors color : RealmColors.values()){
             if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getProfessorByColor(color)==1)
-                gameTable[startingPointX+4+contP][startingPointY+12]=paintStudent(color,"¶");
+                gameTable[startingPointX+4+contP][startingPointY+ DINING_AND_TOWERS_Y +3]=paintStudent(color,"¶");
             contP++;
         }
     }
 
+    /**
+     * Draws the tower storage of the dashboard.
+     * @param playerID the id of the player.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the tower storage.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the tower storage.
+     */
     private void drawTowerStorage(int playerID, int startingPointX, int startingPointY) {
         /*
         ╔═══════╗
@@ -264,7 +392,7 @@ public class CLIDrawer {
         ╚═══════╝
          */
         verticalStringWriter(startingPointX+3,startingPointY+16,"TOWERS");
-        drawRectangle(startingPointX+1,startingPointY+14,10,9);
+        drawRectangle(gameTable, startingPointX+1,startingPointY+14,DASHBOARD_PARTS_X,DINING_AND_TOWERS_Y);
         // TOWERS IN THE TOWER STORAGE:
         String towerColor = " ";
         if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getTowerColor()== TowerColors.WHITE)
@@ -274,16 +402,22 @@ public class CLIDrawer {
         if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getTowerColor()== TowerColors.GREY)
             towerColor= paintTower(TowerColors.GREY,"G");
             for(int i=0;i<=game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers();i=i+2){
-                gameTable[startingPointX+4+i/2][startingPointY+18] = towerColor;
+                gameTable[startingPointX+4+i/2][startingPointY+DINING_AND_TOWERS_Y+9] = towerColor;
                 if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers()%2==0 && i==game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers()){
-                    gameTable[startingPointX+4+i/2][startingPointY+18] = " ";
-                    gameTable[startingPointX+4+i/2][startingPointY+19] = towerColor;
+                    gameTable[startingPointX+4+i/2][startingPointY+DINING_AND_TOWERS_Y+9] = " ";
+                    gameTable[startingPointX+4+i/2][startingPointY+DINING_AND_TOWERS_Y+10] = towerColor;
                 }
                 else
-                    gameTable[startingPointX+4+i/2][startingPointY+20] = towerColor;
+                    gameTable[startingPointX+4+i/2][startingPointY+DINING_AND_TOWERS_Y+11] = towerColor;
             }
     }
 
+    /**
+     * Draws the money of a certain player.
+     * @param playerID the id of the player.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the money.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the money.
+     */
     private void drawPlayerMoney(int playerID, int startingPointX, int startingPointY) {
         /*
         ╔═$═╗
@@ -292,17 +426,23 @@ public class CLIDrawer {
          */
         int posX=0;
         int posY=0;
-        if(playerID==0){    posX=-1;     posY=24;    }
-        if(playerID==1){    posX=-1;     posY=-6;    }
-        if(playerID==2){    posX=8;    posY=24;    }
-        if(playerID==3){    posX=8;    posY=-6;    }
+        if(playerID==0){    posX=-1;    posY=24;    }
+        if(playerID==1){    posX=-1;    posY=-6;    }
+        if(playerID==2){    posX=8;     posY=24;    }
+        if(playerID==3){    posX=8;     posY=-6;    }
 
-        drawRectangle(startingPointX+posX,startingPointY+posY,3,5);
+        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,SMALL_RECTANGLE_X,SMALL_RECTANGLE_Y);
         // MONEY:
-        gameTable[startingPointX+posX][startingPointY+posY+2] = "$";
+        gameTable[startingPointX+posX][startingPointY+posY+2] = paintService(CLIColors.B_WHITE,"$");
         gameTable[startingPointX+posX+1][startingPointY+posY+2] = Integer.valueOf(game.getPlayerByIndex(playerID).getMoney()).toString();
     }
 
+    /**
+     * Draws the discard pile of a certain player.
+     * @param playerID the id of the player.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the discard pile.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the discard pile.
+     */
     private void drawDiscardPile(int playerID, int startingPointX, int startingPointY) {
         /*
         ╔T═M╗
@@ -311,23 +451,29 @@ public class CLIDrawer {
         */
         int posX=0;
         int posY=0;
-        if(playerID==0){    posX=-1;     posY=30;    }
-        if(playerID==1){    posX=-1;     posY=-12;    }
-        if(playerID==2){    posX=8;    posY=30;    }
-        if(playerID==3){    posX=8;    posY=-12;    }
+        if(playerID==0){    posX=-1;    posY=30;    }
+        if(playerID==1){    posX=-1;    posY=-12;   }
+        if(playerID==2){    posX=8;     posY=30;    }
+        if(playerID==3){    posX=8;     posY=-12;   }
 
-        drawRectangle(startingPointX+posX,startingPointY+posY,3,5);
+        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y);
 
         // TURN ORDER:
-        gameTable[startingPointX+posX][startingPointY+posY+1] = "T";
+        gameTable[startingPointX+posX][startingPointY+posY+1] = paintService(CLIColors.B_WHITE,"T");
         if(game.getPlayerByIndex(playerID).getDiscardPile().getTurnOrder()!=0)
             gameTable[startingPointX][startingPointY+posY+1] = Integer.valueOf(game.getPlayerByIndex(playerID).getDiscardPile().getTurnOrder()).toString();
         // MOTHER NATURE MOVEMENT:
-        gameTable[startingPointX+posX][startingPointY+posY+3] = "M";
+        gameTable[startingPointX+posX][startingPointY+posY+3] = paintService(CLIColors.B_WHITE,"M");
         if(game.getPlayerByIndex(playerID).getDiscardPile().getMnMovement()!=0)
             gameTable[startingPointX][startingPointY+posY+3] = Integer.valueOf(game.getPlayerByIndex(playerID).getDiscardPile().getMnMovement()).toString();
     }
 
+    /**
+     * Draws a isle.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the isle.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the isle.
+     * @param isleIndex the index of the isle we want to print.
+     */
     private void drawIsle(int startingPointX, int startingPointY, int isleIndex) {
         /*
         ╔═══════════╗
@@ -337,27 +483,21 @@ public class CLIDrawer {
         ║    n_T    ║
         ╚═══════════╝
          */
-        // ISLE_ID:
-        gameTable[startingPointX+1][startingPointY+3] = "I";
-        gameTable[startingPointX+1][startingPointY+4] = "S";
-        gameTable[startingPointX+1][startingPointY+5] = "L";
-        gameTable[startingPointX+1][startingPointY+6] = "E";
-        gameTable[startingPointX+1][startingPointY+7] = "_";
-        gameTable[startingPointX+1][startingPointY+8] = Integer.valueOf(isleIndex).toString();
-        if(isleIndex>=10)
-            gameTable[startingPointX+1][startingPointY+10] = "\b ";
-        drawRectangle(startingPointX,startingPointY,6,13);
+        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"ISLE_"+Integer.valueOf(isleIndex).toString()),startingPointX+1,startingPointY+3);
+        drawRectangle(gameTable, startingPointX,startingPointY,ISLE_X,ISLE_Y);
         // STUDENTS IN THE ISLE:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
             gameTable[startingPointX+2][startingPointY+2+cont*2]=paintStudent(color,Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(color)).toString());
+            if (game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(color)>=10)
+                gameTable[startingPointX+2][startingPointY+3+cont*2] = "";
             cont++;
         }
         // MOTHER NATURE AND DENY CARDS:
         if(game.getGameTable().getIsleManager().getIsle(isleIndex).getMotherNature())
-            gameTable[startingPointX+3][startingPointY+6] = paintTower(TowerColors.WHITE,"■");
+            gameTable[startingPointX+3][startingPointY+6] = paintService(CLIColors.HB_WHITE,"■");
         if(game.getGameTable().getIsleManager().getIsle(isleIndex).getDenyCards()==1)
-            gameTable[startingPointX+3][startingPointY+6] = paintTower(TowerColors.WHITE,"!");
+            gameTable[startingPointX+3][startingPointY+6] = paintService(CLIColors.HB_WHITE,"!");
         // TOWERS:
         String towerColor = "T";
         if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor() == TowerColors.WHITE)
@@ -374,7 +514,38 @@ public class CLIDrawer {
         gameTable[startingPointX+4][startingPointY+7] = towerColor;
     }
 
+    /**
+     * Places the isle by passing their coordinates in the matrix when called the method that print a single isle.
+     */
     private void drawIsles() {
+        /*
+                                ╔═══════════╗   ╔═══════════╗   ╔═══════════╗
+                                ║  ISLE_1   ║   ║  ISLE_2   ║   ║  ISLE_3   ║
+                                ║ 0 1 0 0 0 ║   ║ 0 0 1 0 0 ║   ║ 0 0 0 1 0 ║
+                ╔═══════════╗   ║           ║   ║           ║   ║           ║   ╔═══════════╗
+                ║  ISLE_0   ║   ║    0_T    ║   ║    0_T    ║   ║    0_T    ║   ║  ISLE_4   ║
+                ║ 0 0 0 0 1 ║   ╚═══════════╝   ╚═══════════╝   ╚═══════════╝   ║ 0 0 1 0 0 ║
+                ║           ║                                                   ║           ║
+                ║    0_T    ║                                                   ║    0_T    ║
+                ╚═══════════╝                                                   ╚═══════════╝
+
+                ╔═══════════╗                                                   ╔═══════════╗
+                ║  ISLE_11  ║                                                   ║  ISLE_5   ║
+                ║ 0 0 0 0 0 ║                                                   ║ 0 0 0 0 0 ║
+                ║           ║                                                   ║           ║
+                ║    0_T    ║                                                   ║    0_T    ║
+                ╚═══════════╝                                                   ╚═══════════╝
+
+                ╔═══════════╗                                                   ╔═══════════╗
+                ║  ISLE_10  ║                                                   ║  ISLE_6   ║
+                ║ 0 1 0 0 0 ║                                                   ║ 1 0 0 0 0 ║
+                ║           ║   ╔═══════════╗   ╔═══════════╗   ╔═══════════╗   ║           ║
+                ║    0_T    ║   ║  ISLE_9   ║   ║  ISLE_8   ║   ║  ISLE_7   ║   ║    0_T    ║
+                ╚═══════════╝   ║ 0 0 0 1 0 ║   ║ 1 0 0 0 0 ║   ║ 0 0 0 0 1 ║   ╚═══════════╝
+                                ║           ║   ║           ║   ║           ║
+                                ║    0_T    ║   ║    0_T    ║   ║    0_T    ║
+                                ╚═══════════╝   ╚═══════════╝   ╚═══════════╝
+         */
         for(int i=0; i<game.getGameTable().getIsleManager().getIsles().size(); i++){
             if(i==0||i==4)
                     drawIsle(4,28+16*i,i);
@@ -391,6 +562,11 @@ public class CLIDrawer {
         }
     }
 
+    /**
+     * Draws a cloud.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the cloud.
+     * @param cloudIndex the index of the cloud in the game.
+     */
     private void drawCloud(int startingPointY, int cloudIndex) {
          /*
         ╔═══════╗
@@ -398,8 +574,8 @@ public class CLIDrawer {
         ║  s s  ║
         ╚═══n═══╝
          */
-        drawRectangle(9, startingPointY, 4, 9);
-        gameTable[9 +3][startingPointY+4] = Integer.valueOf(cloudIndex).toString();
+        drawRectangle(gameTable, 9, startingPointY, CLOUD_X, CLOUD_Y);
+        gameTable[12][startingPointY+4] = Integer.valueOf(cloudIndex).toString();
         int cont=0;
         for (RealmColors color : RealmColors.values()){
             if(game.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)>0){
@@ -414,7 +590,10 @@ public class CLIDrawer {
 
     }
 
-        private void drawClouds() {
+    /**
+     * Places the clouds by passing their coordinates in the matrix when called the method that print a single cloud.
+     */
+    private void drawClouds() {
         /*
         ╔════════════════════CLOUDS════════════════════╗
         ║  ╔═══════╗  ╔═══════╗  ╔═══════╗  ╔═══════╗  ║
@@ -423,14 +602,16 @@ public class CLIDrawer {
         ║  ╚═══n═══╝  ╚═══n═══╝  ╚═══n═══╝  ╚═══n═══╝  ║
         ╚══════════════════════════════════════════════╝
          */
-        drawRectangle(TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-22,6,46);
-            gameTable[TABLE_DIMENSION_X/2-6][TABLE_DIMENSION_Y/2-3] = "CLOUDS";
-            gameTable[TABLE_DIMENSION_X/2-6][TABLE_DIMENSION_Y/2+10] = "\b\b\b\b";
-        for(int i=0; i<game.getNumberOfPlayers(); i++){
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-22,CLOUDS_CONTAINER_X,CLOUDS_CONTAINER_Y);
+            writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"),TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-3);
+            for(int i=0; i<game.getNumberOfPlayers(); i++){
             drawCloud(TABLE_DIMENSION_Y/2-20+11*i,i);
         }
     }
 
+    /**
+     * Draws the general money reserve.
+     */
     private void drawGeneralMoneyReserve(){
         /*
         ╔═════╗
@@ -438,36 +619,30 @@ public class CLIDrawer {
         ║ nn$ ║
         ╚═════╝
          */
-        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2+14,4,7);
-        gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2+15] = "MONEY";
-        gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2+19] = "\b\b\b";
-
-        if(game.getGameTable().getGeneralMoneyReserve()>=10){
-            gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+16] = Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString();
-            gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+18] = " \b";
-        }
-        else{
-            gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+17] = Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString();
-        }
-        gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+17] = "$";
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2+14,GEN_MONEY_RES_X,GEN_MONEY_RES_Y);
+        writeLongerString(gameTable,"MONEY║",TABLE_DIMENSION_X/2+2,TABLE_DIMENSION_Y/2+15);
+        gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2+21] = "\b ";
+        writeLongerString(gameTable,Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString()+"$",TABLE_DIMENSION_X/2+3,TABLE_DIMENSION_Y/2+16);
+        gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+19] = " \b";
     }
 
+    /**
+     * Draws the playable character cards.
+     */
     private void drawCharacterCards() {
         /*
-        ╔═════════════════════════════╗
+        ╔═══════CHARACTER CARDS═══════╗
         ║ ╔═════╗   ╔═════╗   ╔═════╗ ║
         ║ ║n$   ║   ║n$   ║   ║n$   ║ ║
         ║ ║Std/!║   ║Std/!║   ║Std/!║ ║
         ║ ╚═════╝   ╚═════╝   ╚═════╝ ║
         ╚═════════════════════════════╝
          */
-        drawRectangle(TABLE_DIMENSION_X/2,TABLE_DIMENSION_Y/2-21,6,31);
-        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2+1,4,7);
-        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2-9,4,7);
-        drawRectangle(TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2-19,4,7);
-        gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2-13] = "CHARACTER CARDS";
-        gameTable[TABLE_DIMENSION_X/2][TABLE_DIMENSION_Y/2+1] = "\b\b\b\b\b\b\b\b\b\b\b\b\b";
-
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2,TABLE_DIMENSION_Y/2-21,CHAR_CARDS_CONTAINER_X,CHAR_CARDS_CONTAINER_Y);
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2+1,CHAR_CARD_X,CHAR_CARD_Y);
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2-9,CHAR_CARD_X,CHAR_CARD_Y);
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2-19,CHAR_CARD_X,CHAR_CARD_Y);
+        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CHARACTER CARDS"),TABLE_DIMENSION_X/2,TABLE_DIMENSION_Y/2-13);
 
         int cont=0;
 
@@ -486,6 +661,92 @@ public class CLIDrawer {
                 for (int j=0;j<game.getGameTable().getCharacterCard(i).getDenyCards();j++)
                     gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont+j] = paintTower(TowerColors.WHITE,"!");
         }
+    }
+
+    /**
+     * Draws all the assistant cards that the player hasn't already played.
+     * @param playerID the id of the player having the assistant cards painted.
+     * @return a StringBuilder containing the assistant cards not already played.
+     */
+    public StringBuilder printAssistantCards(int playerID) {
+        /*
+        ╔════════════════════PLAYABLE ASSISTANT CARDS════════════════════╗
+        ║                                                                ║
+        ║  ╔T═M╗ ╔T═M╗ ╔T═M╗ ╔T═M╗ ╔T═M╗ ╔T═M╗ ╔T═M╗ ╔T═M╗ ╔T═M╗ ╔T══M╗  ║
+        ║  ║1 1║ ║2 1║ ║3 2║ ║4 2║ ║5 3║ ║6 3║ ║7 4║ ║8 4║ ║9 5║ ║10 5║  ║
+        ║  ╚═══╝ ╚═══╝ ╚═══╝ ╚═══╝ ╚═══╝ ╚═══╝ ╚═══╝ ╚═══╝ ╚═══╝ ╚════╝  ║
+        ║                                                                ║
+        ╚════════════════════════════════════════════════════════════════╝
+        */
+
+        StringBuilder toPrint=new StringBuilder();
+
+        initializeRectangle(assistantCards,ASSISTANT_CARDS_X+4,ASSISTANT_CARDS_Y*10+16);
+
+        drawRectangle(assistantCards,0,0,ASSISTANT_CARDS_CONTAINER_X,ASSISTANT_CARDS_CONTAINER_Y);
+        writeLongerString(assistantCards,paintService(CLIColors.B_WHITE,"PLAYABLE ASSISTANT CARDS"),0,21);
+
+        for(int i=0;i<game.getPlayerByIndex(playerID).getMageDeck().size();i++){
+            if(game.getPlayerByIndex(playerID).getMageDeck().get(i).getTurnOrder()==10){
+                drawRectangle(assistantCards, 2,ASSISTANT_CARDS_Y*i+i+3,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y+1);
+                assistantCards[3][ASSISTANT_CARDS_Y*i+5+i] = " \b";
+                assistantCards[2][ASSISTANT_CARDS_Y*i+4+i] = paintService(CLIColors.B_WHITE,"T");
+                assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getTurnOrder()).toString();
+                assistantCards[2][ASSISTANT_CARDS_Y*i+7+i] = paintService(CLIColors.B_WHITE,"M");
+                assistantCards[3][ASSISTANT_CARDS_Y*i+7+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getMnMovement()).toString();
+            }
+            else{
+                drawRectangle(assistantCards, 2,ASSISTANT_CARDS_Y*i+i+3,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y);
+                // TURN ORDER:
+                assistantCards[2][ASSISTANT_CARDS_Y*i+4+i] = paintService(CLIColors.B_WHITE,"T");
+                assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getTurnOrder()).toString();
+                // MOTHER NATURE MOVEMENT:
+                assistantCards[2][ASSISTANT_CARDS_Y*i+6+i] = paintService(CLIColors.B_WHITE,"M");
+                assistantCards[3][ASSISTANT_CARDS_Y*i+6+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getMnMovement()).toString();
+            }
+        }
+
+        for(int i=0;i<ASSISTANT_CARDS_X+4;i++){
+            for (int j=0;j<ASSISTANT_CARDS_Y*(game.getPlayerByIndex(playerID).getMageDeck().size())+16;j++){
+                toPrint.append(assistantCards[i][j]);
+            }
+            toPrint.append("\n");
+        }
+        return toPrint;
+    }
+
+    /**
+     * Draws a small legend that explains some things about the game representation.
+     */
+    private void drawLegend() {
+        drawRectangle(legend,0,4,16,40);
+        writeLongerString(legend,"LEGEND",0,21);
+        legend[0][21] = paintService(CLIColors.B_WHITE,legend[0][21]);
+        legend[1][7] = paintService(CLIColors.HB_WHITE,"■");
+        writeLongerString(legend," -> MOTHER NATURE",1,8);
+        legend[2][7] = paintService(CLIColors.HB_WHITE,"!");
+        writeLongerString(legend," -> DENY CARD",2,8);
+        legend[3][7] = paintService(CLIColors.HB_WHITE,"¶");
+        writeLongerString(legend," -> PROFESSOR",3,8);
+        drawRectangle(legend, 4,7,3,5);
+        legend[4][9] = paintService(CLIColors.B_WHITE,"$");
+        legend[4][13] = "  ";
+        writeLongerString(legend," -> MONEY OWNED BY THE PLAYER",5,12);
+        legend[6][13] = "  ";
+        legend[7][13] = "  ";
+        drawRectangle(legend, 7,7,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y);
+        legend[7][8] = paintService(CLIColors.B_WHITE,"T");
+        legend[7][10] = paintService(CLIColors.B_WHITE,"M");
+        legend[9][13] = "  ";
+        legend[10][13] = "  ";
+        legend[11][13] = "  ";
+        writeLongerString(legend," -> DISCARD PILE OF THE PLAYER",8,12);
+        writeLongerString(legend,"DIGIT -> "+paintService(CLIColors.HB_WHITE,"C")+" <- TO HAVE INFORMATION",11,7);
+        writeLongerString(legend,"ABOUT THE CHARACTER CARDS",12,11);
+        legend[13][13] = "  ";
+        legend[14][13] = "  ";
+        legend[15][40] = "══";
+        //YET TO BE IMPLEMENTED A METHOD THAT PRINT INFORMATION ABOUT THE CHARACTER CARDS THAT ARE PLAYABLE!
     }
 
 }
