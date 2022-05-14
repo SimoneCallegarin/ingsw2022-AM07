@@ -15,5 +15,7 @@ public enum MessageType {
 
     VALUE,
 
+    UPDATE,
+
     QUIT
 }

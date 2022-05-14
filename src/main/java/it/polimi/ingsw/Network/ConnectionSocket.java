@@ -10,6 +10,7 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 public class ConnectionSocket {
@@ -82,14 +83,13 @@ public class ConnectionSocket {
         }
         clientConnection.outStream = new PrintWriter(clientSocket.getOutputStream(),true);
         Scanner inStream = new Scanner(clientSocket.getInputStream());
-        clientConnection.setup(inStream);
-        clientSocket.setSoTimeout(10*1000);
-        clientConnection.cListener = new ClientListener(clientConnection, clientSocket);
         clientConnection.cPingSender = new ClientPingSender(clientConnection, clientSocket);
-        Thread threadListener = new Thread(clientConnection.cListener);
         Thread threadSender = new Thread(clientConnection.cPingSender);
-        threadListener.start();
         threadSender.start();
+        clientConnection.setup(inStream);
+        clientConnection.cListener = new ClientListener(clientConnection, clientSocket);
+        Thread threadListener = new Thread(clientConnection.cListener);
+        threadListener.start();
     }
 
 }

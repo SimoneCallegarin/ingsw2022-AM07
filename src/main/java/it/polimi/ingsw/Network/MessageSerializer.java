@@ -18,7 +18,7 @@ public class MessageSerializer {
     public String serializeMessage(NetworkMessage message, MessageType mt) {
 
         switch (mt) {
-            case OK, KO, PING, PONG, QUIT -> {
+            case OK, KO, PING, PONG, LOGOUT, QUIT -> {
                 ServiceMessage serMessage = (ServiceMessage) message;
                 return g.toJson(serMessage);
             }

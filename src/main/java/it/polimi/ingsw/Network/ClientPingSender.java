@@ -37,4 +37,5 @@ public class ClientPingSender implements Runnable {
         TimerTask ping = new Pinger();
         timer.schedule(ping, 100, 1000);
     }
+
 }

@@ -3,6 +3,8 @@ package it.polimi.ingsw.Network;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,11 +33,18 @@ public class SocketServer implements Runnable{
         while (true) {
             try {
                 System.out.println("Accepting...");
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Connection accepted!");
-                executorService.submit(new ClientHandler(server, clientSocket));
+                try {
+                    Socket clientSocket = serverSocket.accept();
+                    System.out.println("Connection accepted!");
+                    clientSocket.setSoTimeout(10*1000);
+                    executorService.submit(new ClientHandler(server, clientSocket));
+                } catch (SocketTimeoutException se) {
+                    System.out.println("Closing connection...");
+                    se.printStackTrace();
+                }
             } catch (IOException e) {
                 System.err.println("Error in client acceptation!");
+                e.printStackTrace();
                 break;
             }
         }
