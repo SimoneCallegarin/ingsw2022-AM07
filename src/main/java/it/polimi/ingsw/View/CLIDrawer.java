@@ -5,6 +5,8 @@ import it.polimi.ingsw.Model.Game;
 
 public class CLIDrawer {
 
+    private static final int TITLE_X = 22;
+    private static final int TITLE_Y = 174;
     private static final int TABLE_DIMENSION_X = 28;
     private static final int TABLE_DIMENSION_Y = 133;
     private static final int ASSISTANT_CARDS_X = 3;
@@ -30,14 +32,16 @@ public class CLIDrawer {
     private static final int CHAR_CARD_Y = 7;
     private static final int ASSISTANT_CARDS_CONTAINER_X = 7;
     private static final int ASSISTANT_CARDS_CONTAINER_Y = 66;
+    private static final int LEGEND_X = 16;
+    private static final int LEGEND_Y = 40;
 
-    private final String[][] title = new String[22][174];
+    private final String[][] title = new String[TITLE_X][TITLE_Y];
 
     private final String[][] gameTable = new String[TABLE_DIMENSION_X][TABLE_DIMENSION_Y];
 
     private final String[][] assistantCards = new String[ASSISTANT_CARDS_X+4][ASSISTANT_CARDS_Y*10+16];
 
-    private final String[][] legend = new String[16][50];
+    private final String[][] legend = new String[LEGEND_X][LEGEND_Y+10];
 
     Game game = new Game();
 
@@ -144,9 +148,9 @@ public class CLIDrawer {
 
         StringBuilder toPrint=new StringBuilder();
 
-        initializeRectangle(title,22,174);
+        initializeRectangle(title,TITLE_X,TITLE_Y);
 
-        drawRectangle(title,0,0,22,174);
+        drawRectangle(title,0,0,TITLE_X,TITLE_Y);
 
         writeLongerString(title,paintService(CLIColors.HB_YELLOW,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                        ¶¶¶¶¶"),2,15);
         writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                      ¶¶¶¶¶¶¶"),3,11);
@@ -167,8 +171,8 @@ public class CLIDrawer {
         writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶¶¶¶"),18,134);
         writeLongerString(title,paintService(CLIColors.HB_BLUE,"¶¶¶¶¶¶"),19,134);
 
-        for(int i=0;i<22;i++){
-            for (int j=0;j<174;j++){
+        for(int i=0;i<TITLE_X;i++){
+            for (int j=0;j<TITLE_Y;j++){
                 toPrint.append(title[i][j]);
             }
             toPrint.append("\n");
@@ -191,11 +195,11 @@ public class CLIDrawer {
         //LIMITE A 20 CARATTERI PER IL nickname!!! (va imposto).
         createGameTable();
         for(int i=0;i<TABLE_DIMENSION_X;i++){
-            for (int j=0;j<TABLE_DIMENSION_Y+50;j++){
+            for (int j=0;j<TABLE_DIMENSION_Y+LEGEND_Y+10;j++){
                 if(j<TABLE_DIMENSION_Y)
                     toPrint.append(gameTable[i][j]);
                 else
-                if(i<16)
+                if(i<LEGEND_X)
                     toPrint.append(legend[i][j-TABLE_DIMENSION_Y]);
             }
             toPrint.append("\n");
@@ -219,7 +223,7 @@ public class CLIDrawer {
         initializeRectangle(gameTable,TABLE_DIMENSION_X,TABLE_DIMENSION_Y);
         drawRectangle(gameTable, 0,0, TABLE_DIMENSION_X, TABLE_DIMENSION_Y);
 
-        initializeRectangle(legend,16,50);
+        initializeRectangle(legend,LEGEND_X,LEGEND_Y+10);
 
         for(int i=0; i<game.getNumberOfPlayers();i++)
             drawDashboard(i);
@@ -719,7 +723,7 @@ public class CLIDrawer {
      * Draws a small legend that explains some things about the game representation.
      */
     private void drawLegend() {
-        drawRectangle(legend,0,4,16,40);
+        drawRectangle(legend,0,4,LEGEND_X,LEGEND_Y);
         writeLongerString(legend,"LEGEND",0,21);
         legend[0][21] = paintService(CLIColors.B_WHITE,legend[0][21]);
         legend[1][7] = paintService(CLIColors.HB_WHITE,"■");
