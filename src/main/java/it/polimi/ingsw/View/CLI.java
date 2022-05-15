@@ -204,8 +204,9 @@ public class CLI extends ViewSubject {
     }
 
     public static void main(String[] args) throws IOException {
-        Server server=new Server(1234);
-        ConnectionSocket connectionSocket=new ConnectionSocket();
+        CLIDrawer cliDrawer=new CLIDrawer();
+        System.out.println(cliDrawer.printTitle());
+        System.out.println(cliDrawer.printGameTable());
 
     }
 
