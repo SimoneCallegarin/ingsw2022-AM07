@@ -11,6 +11,7 @@ public class DiningRoom implements StudentManager {
      * this is the students container
      */
     private final HashMap<RealmColors,Integer> students;
+
     /**
      * this is the professors container
      */
@@ -119,4 +120,19 @@ public class DiningRoom implements StudentManager {
         return professors.get(color);
     }
 
+    /**
+     * getter for returning the student HashMap
+     * @return the student HashMap
+     */
+    public HashMap<RealmColors, Integer> getStudents() {
+        return students;
+    }
+
+    /**
+     * getter for returning the professors HashMap
+     * @return the professor HashMap
+     */
+    public HashMap<RealmColors, Integer> getProfessors() {
+        return professors;
+    }
 }

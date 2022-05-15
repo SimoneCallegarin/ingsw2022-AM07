@@ -5,13 +5,17 @@ import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
+import it.polimi.ingsw.Observer.ModelSubject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
-public class Game {
+public class Game extends ModelSubject {
     /**
      * The game mode of the game, it is decided by the first player that joins the game
      */
@@ -225,6 +229,9 @@ public class Game {
             if (!alreadyPlayed || onlyChoice) {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
                 players.get(idPlayer).setCardOrder(playerCounter+1);
+
+                notifyObserver(obs->obs.onAssistantCard(idPlayer,assistantCardPlayed.getTurnOrder()));
+
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
                 playerCounter++;
@@ -251,6 +258,7 @@ public class Game {
                 studentsCounter = 0;
             }
         }
+        notifyObserver(obs->obs.onStudentMoving_toIsle(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idIsle,gameTable.getIsleManager().getIsle(idIsle).getStudents()));
     }
 
     /**
@@ -287,6 +295,7 @@ public class Game {
                 }
             }
         }
+        notifyObserver(obs->obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(),players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
     }
 
     /**
@@ -327,6 +336,14 @@ public class Game {
                 }
             }
         }
+        //inizialization of parametres to pass to the observer
+        List<HashMap<RealmColors,Integer>> islestudents=new ArrayList<>();
+        List<Integer> numIsles=new ArrayList<>();
+        for(Isle isle:gameTable.getIsleManager().getIsles()){
+            islestudents.add(isle.getStudents());
+            numIsles.add(isle.getNumOfIsles());
+        }
+        notifyObserver(obs->obs.onMNMovement(idIsle,islestudents,numIsles));
     }
 
     /**
@@ -352,6 +369,7 @@ public class Game {
                 actionPhase = ActionPhases.MOVE_STUDENTS;
                 nextPlayer();
             }
+            notifyObserver(obs->obs.onCloudChoice(players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
         }
     }
 
@@ -506,11 +524,16 @@ public class Game {
                 if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)) {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+
+                    int finalPlayerWhoHasProfessorIndex = playerWhoHasProfessorIndex;
+                    int finalPlayerWhoHasProfessorIndex1 = playerWhoHasProfessorIndex;
+                    notifyObserver(obs->obs.onProfessorUpdate(idPlayer, finalPlayerWhoHasProfessorIndex,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),players.get(finalPlayerWhoHasProfessorIndex1).getDashboard().getDiningRoom().getProfessors()));
                 }
             }
             else {
                 gameTable.removeProfessor(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+                notifyObserver(obs->obs.onProfessorUpdate(idPlayer,-1,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),null));
             }
         }
     }
@@ -632,6 +655,8 @@ public class Game {
         if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder() && players.get(idPlayer).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()){
             getGameTable().characterCardPlayed(characterCardIndex);
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+
+            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,idPlayer,gameTable.getGeneralMoneyReserve(),players.get(idPlayer).getMoney()));
         }
     }
 

@@ -89,4 +89,12 @@ public class Entrance implements StudentManager {
     }
 
     public int getMaxStudents() { return maxStudents; }
+
+    /**
+     * getter for returning the student HashMap
+     * @return the student HashMap
+     */
+    public HashMap<RealmColors, Integer> getStudents() {
+        return students;
+    }
 }

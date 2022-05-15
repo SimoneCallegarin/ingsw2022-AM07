@@ -1,40 +1,30 @@
 package it.polimi.ingsw.Observer;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
 import it.polimi.ingsw.Model.Enumeration.CurrentOrder;
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.GameTableObjects.Cloud;
+import it.polimi.ingsw.Model.GameTableObjects.Isle;
+
+import java.util.HashMap;
+import java.util.List;
 
 public interface ModelObserver {
-    //after an assistant card is played the view need to refresh:
-    //-the assistant card available
-    //-the discard pile
-    void onAssistantCard(int idPlayer, int turnOrderPlayed, CurrentOrder currentOrder);
 
-    //after a student is moved to the Dining Room the view need to refresh:
-    // -the current player dashboard
-    // -the dashboard of the player that eventually loses a professor
-    void onStudentMoving_toDining(int idPlayer, int colorIndex);
+    void onAssistantCard(int idPlayer, int turnOrderPlayed);
 
-    //after a student is moved to an Isle the view need to refresh:
-    //-the current player dashboard
-    //-the isle where the student is moved
-    void onStudentMoving_toIsle(int idPlayer, int idIsle, int colorIndex);
+    void onStudentMoving_toDining(int idPlayer, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);
 
-    //after a player decides where to move Mother Nature the view need to refresh:
-    //-the isle where MN was before the movement
-    //-the isle where MN is moved
-    //-the isles that eventually unify
-    void onMNMovement();
+    void onProfessorUpdate(int playerID, int otherPlayerID, HashMap<RealmColors,Integer> professors, HashMap<RealmColors,Integer> otherProfessors);
 
-    //after a player decides a cloud the view need to refresh:
-    //-the chosen cloud
-    //-the current player dashboard entrance
-    void onCloudChoice();
+    void onStudentMoving_toIsle(int idPlayer,HashMap<RealmColors,Integer> entrance,int isleID, HashMap<RealmColors,Integer> isleStudents);
 
-    //after a player decides a character card to play the view need to refresh:
-    //-the price of the character card
-    //-the general reserve
-    //-the player money reserve
-    //then the model will call other Observer methods to manage the character effect
-    void onCharacterCard();
+    void onMNMovement(int isleId,List<HashMap<RealmColors,Integer>> isleStudents, List<Integer> numIsles );
+
+    void onCloudChoice(HashMap<RealmColors,Integer> entrance, int cloudId);
+
+    void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney);
 
 
 }

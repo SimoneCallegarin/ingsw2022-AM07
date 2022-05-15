@@ -3,7 +3,9 @@ package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
 import it.polimi.ingsw.Network.Messages.MessageType;
 
-public abstract class NetworkMessage {
+import java.io.Serializable;
+
+public abstract class NetworkMessage implements Serializable {
 
     private final MessageType messageType;
 

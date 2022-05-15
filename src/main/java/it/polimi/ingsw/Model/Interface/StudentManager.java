@@ -2,6 +2,8 @@ package it.polimi.ingsw.Model.Interface;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 
+import java.util.HashMap;
+
 /**
  * interface for Places that needs to implement these three methods
  */
@@ -31,5 +33,11 @@ public interface StudentManager {
      * @return the number of students actually in the bag
      */
     int getNumberOfStudents();
+
+    /**
+     * getter for returning the students HashMap
+     * @return the student HashMap
+     */
+    public HashMap<RealmColors, Integer> getStudents();
 
 }
