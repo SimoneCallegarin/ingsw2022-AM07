@@ -116,7 +116,7 @@ public class ConnectionSocket {
     public void onGamePreferences(int numPlayers, Boolean gameMode) {
         ServiceMessage messageReceived;
         GamePreferencesMessage gSetMessage = new GamePreferencesMessage(numPlayers, gameMode);
-        do {//the input is controlled by the view so the only errors that can occur are network corruption
+        do {//the input is controlled by the view so the only errors that can occur are networksù corruption
             send(gSetMessage, gSetMessage.getMessageType());
             messageReceived = cParser.processService_Cmd(inStream.nextLine());
         } while (messageReceived.getMessageType() != MessageType.OK);

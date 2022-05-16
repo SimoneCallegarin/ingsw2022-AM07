@@ -208,4 +208,11 @@ public class Isle implements StudentManager, DenyCardManager {
      */
     public void setMotherNature(boolean motherNature) { this.motherNature = motherNature; }
 
+    /**
+     * getter for returning the students HashMap
+     * @return the student HashMap
+     */
+    public HashMap<RealmColors, Integer> getStudents() {
+        return students;
+    }
 }

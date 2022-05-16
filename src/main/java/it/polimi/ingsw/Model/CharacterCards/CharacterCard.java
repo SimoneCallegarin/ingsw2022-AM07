@@ -87,6 +87,11 @@ public class CharacterCard implements StudentManager, DenyCardManager {
         return totalNumberOfStudents;
     }
 
+    @Override
+    public HashMap<RealmColors, Integer> getStudents() {
+        return null;
+    }
+
     /**
      * a getter method to receive a certain value contained in the students' hashmap
      * @param color is the key of the value we want to get

@@ -1,17 +1,22 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.GameTableObjects.Cloud;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
+import it.polimi.ingsw.Observer.ModelSubject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
-public class Game {
+public class Game extends ModelSubject {
     /**
      * The game mode of the game, it is decided by the first player that joins the game
      */
@@ -180,7 +185,35 @@ public class Game {
                 fillClouds();
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 updateOrder(gamePhase);
+
+                List<String> nicknames=new ArrayList<>();
+                for(Player p:players){
+                    nicknames.add(p.getNickname());
+                }
+
+                int whereMNId=gameTable.getIsleManager().getIsleWithMotherNatureIndex();
+
+                List<CharacterCard> activeCharacter = new ArrayList<>(gameTable.getCharacterCards());
+
+                List<HashMap<RealmColors,Integer>> clouds=new ArrayList<>();
+                for(Cloud c:gameTable.getClouds()){
+                    clouds.add(c.getStudents());
+                }
+                int numTower=players.get(0).getDashboard().getTowerStorage().getNumberOfTowers();
+                int money=players.get(0).getMoney();
+                int generalReserve=gameTable.getGeneralMoneyReserve();
+                boolean monkPresent=false;
+                List<HashMap<RealmColors,Integer>> studentsOnCard=new ArrayList<>();
+                for(CharacterCard card:gameTable.getCharacterCards()){
+                    if(card.getCharacterCardName().equals(CharacterCardsName.MONK)){
+                        studentsOnCard.add(card.getStudents());
+                    }
+                }
+
+                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,whereMNId,activeCharacter,clouds,studentsOnCard,numTower,money,generalReserve));
+
             }
+
     }
 
     /**
@@ -225,6 +258,9 @@ public class Game {
             if (!alreadyPlayed || onlyChoice) {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
                 players.get(idPlayer).setCardOrder(playerCounter+1);
+
+                notifyObserver(obs->obs.onAssistantCard(idPlayer,assistantCardPlayed.getTurnOrder()));
+
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
                 playerCounter++;
@@ -251,6 +287,7 @@ public class Game {
                 studentsCounter = 0;
             }
         }
+        notifyObserver(obs->obs.onStudentMoving_toIsle(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idIsle,gameTable.getIsleManager().getIsle(idIsle).getStudents()));
     }
 
     /**
@@ -287,6 +324,7 @@ public class Game {
                 }
             }
         }
+        notifyObserver(obs->obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(),players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
     }
 
     /**
@@ -309,8 +347,11 @@ public class Game {
                     }
                 if(gameTable.getIsleManager().getIsle(idIsle).getDenyCards()==0)
                     checkUpdateInfluence(idIsle);
-                else
+                else {
                     gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
+
+                    notifyObserver(obs->obs.onDenyCard(idPlayer,idIsle,false));
+                }
                 // if the FUNGIST card is played, then we add the students of the chosen color
                 // that were removed from the selected isle
                 if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)
@@ -327,6 +368,14 @@ public class Game {
                 }
             }
         }
+        //inizialization of parametres to pass to the observer
+        List<HashMap<RealmColors,Integer>> islestudents=new ArrayList<>();
+        List<Integer> numIsles=new ArrayList<>();
+        for(Isle isle:gameTable.getIsleManager().getIsles()){
+            islestudents.add(isle.getStudents());
+            numIsles.add(isle.getNumOfIsles());
+        }
+        notifyObserver(obs->obs.onMNMovement(idPlayer,idIsle,islestudents,numIsles));
     }
 
     /**
@@ -352,6 +401,7 @@ public class Game {
                 actionPhase = ActionPhases.MOVE_STUDENTS;
                 nextPlayer();
             }
+            notifyObserver(obs->obs.onCloudChoice(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
         }
     }
 
@@ -506,11 +556,16 @@ public class Game {
                 if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)) {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+
+                    int finalPlayerWhoHasProfessorIndex = playerWhoHasProfessorIndex;
+                    int finalPlayerWhoHasProfessorIndex1 = playerWhoHasProfessorIndex;
+                    notifyObserver(obs->obs.onProfessorUpdate(idPlayer, finalPlayerWhoHasProfessorIndex,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),players.get(finalPlayerWhoHasProfessorIndex1).getDashboard().getDiningRoom().getProfessors()));
                 }
             }
             else {
                 gameTable.removeProfessor(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+                notifyObserver(obs->obs.onProfessorUpdate(idPlayer,-1,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),null));
             }
         }
     }
@@ -632,6 +687,8 @@ public class Game {
         if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder() && players.get(idPlayer).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()){
             getGameTable().characterCardPlayed(characterCardIndex);
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+
+            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,idPlayer,gameTable.getGeneralMoneyReserve(),players.get(idPlayer).getMoney()));
         }
     }
 
@@ -649,6 +706,10 @@ public class Game {
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder())
             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
+
+        if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
+            notifyObserver(obs->obs.onDenyCard(idPlayer,value1,true));
+        }
     }
 
     /**
