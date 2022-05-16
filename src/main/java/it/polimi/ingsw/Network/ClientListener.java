@@ -1,24 +1,45 @@
 package it.polimi.ingsw.Network;
 
-import java.net.Socket;
-import java.util.Scanner;
+import it.polimi.ingsw.Network.Messages.MessageType;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.NoSuchElementException;
 
 public class ClientListener implements Runnable {
 
-    private Socket socket;
-    private Scanner inStream;
+    private ConnectionSocket cs;
+    private ObjectInputStream input;
 
-    public ClientListener(Socket socket, Scanner inStream) {
-        this.socket = socket;
-        this.inStream = inStream;
+    public ClientListener(ConnectionSocket cs, ObjectInputStream input) {
+        this.cs = cs;
+        this.input = input;
+    }
+
+    public void stopListener() {
+        Thread.currentThread().interrupt();
     }
 
     @Override
     public void run() {
-        while (true) {
-            String messageReceived = inStream.nextLine();
-            if (messageReceived.equals("quit"))
-                break;
+        NetworkMessage messageReceived;
+
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                messageReceived = (NetworkMessage) input.readObject();
+                if (messageReceived.getMessageType() == MessageType.QUIT) {
+                    ServiceMessage sm = (ServiceMessage) messageReceived;
+                    System.out.println(sm.getError());
+                    cs.disconnect();
+                }
+            } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
+                System.out.println("An error occurred...");
+                e.printStackTrace();
+                cs.disconnect();
+            }
+            System.out.println("Thread listener interrupted");
         }
     }
 }

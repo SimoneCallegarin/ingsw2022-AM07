@@ -5,64 +5,52 @@ import it.polimi.ingsw.Network.Messages.*;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
-import it.polimi.ingsw.Observer.ViewObserver;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ConnectionSocket implements ViewObserver {
+public class ConnectionSocket {
 
     private final String host;
     private final int port;
-    private PrintWriter outStream;
     ClientListener cListener;
-    MessageSerializer mSerializer;
-    Scanner in;
-    Scanner inStream;
+    ClientPingSender cPingSender;
+    ObjectInputStream input;
+    ObjectOutputStream output;
+    Socket clientSocket = null;
 
-
-    public void send(NetworkMessage message, MessageType mt) {
-        String messageJSON = mSerializer.serializeMessage(message, mt);
-        outStream.println(messageJSON);
-    }
-
-    public ConnectionSocket() throws IOException {
-        this.host = ServerSettings.ReadHostFromJSON();
-        this.port = ServerSettings.ReadPortFromJSON();
-        this.mSerializer = new MessageSerializer();
-        this.in = new Scanner(System.in);
-        Socket clientSocket = null;
+    public void send(NetworkMessage message) {
         try {
-            clientSocket = new Socket("localhost", ServerSettings.ReadPortFromJSON());
-            System.out.println("Connection established.");
+            output.writeObject(message);
+            output.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.inStream=new Scanner(clientSocket.getInputStream());
-        this.cListener = new ClientListener(clientSocket, inStream);
-        Thread thread = new Thread(this.cListener);
-        thread.start();
     }
 
-    public void setup(Scanner inStream) {
+    public ConnectionSocket() {
+        this.host = ServerSettings.ReadHostFromJSON();
+        this.port = ServerSettings.ReadPortFromJSON();
+    }
+
+    public void setup() throws IOException, ClassNotFoundException {
         String nickname;
         int numberOfPlayers;
         String modePreference;
         boolean expertMode;
-        String messageReceived;
+        ServiceMessage messageReceived;
+        Scanner in = new Scanner(System.in);
 
         do {
             System.out.println("Nickname?");
             nickname = in.nextLine();
-            LoginMessage logMessage = new LoginMessage(nickname);
-            send(logMessage, logMessage.getMessageType());
-            messageReceived = inStream.nextLine();
-            if (messageReceived.equals(ConstantMessages.koJSON))
-                System.out.println("Nickname already taken, please select a new one");
-        } while (!messageReceived.equals(ConstantMessages.okJSON));
+            send(new LoginMessage(nickname));
+            messageReceived = (ServiceMessage) input.readObject();
+            if (messageReceived.getMessageType() == MessageType.KO)
+                System.out.println(messageReceived.getError() + ", please try again.");
+        } while (messageReceived.getMessageType() != MessageType.OK);
 
         do {
             System.out.println("How many players do you want to play with? [2, 3 or 4]");
@@ -72,59 +60,66 @@ public class ConnectionSocket implements ViewObserver {
                 modePreference = in.nextLine();
                 expertMode = modePreference.equalsIgnoreCase("y");
             } while (!modePreference.equalsIgnoreCase("y") && !modePreference.equalsIgnoreCase("n"));
-            GamePreferencesMessage gSetMessage = new GamePreferencesMessage(numberOfPlayers, expertMode);
-            send(gSetMessage, gSetMessage.getMessageType());
-            messageReceived = inStream.nextLine();
-            if (messageReceived.equals(ConstantMessages.koJSON))
-                System.out.println("Error: try again selecting a number between 2 and 4");
-            //NOT WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        } while (!messageReceived.equals(ConstantMessages.okJSON));
+            send(new GamePreferencesMessage(numberOfPlayers, expertMode));
+            messageReceived = (ServiceMessage) input.readObject();
+            if (messageReceived.getMessageType() == MessageType.KO)
+                System.out.println(messageReceived.getError() + ", please try again.");
+        } while (messageReceived.getMessageType() != MessageType.OK);
 
         System.out.println("You joined a game!");
     }
 
-    public static void main(String[] args){
-
-        /*ConnectionSocket clientConnection = new ConnectionSocket();
-
-        Socket clientSocket = null;
+    public void startConnection() throws ClassNotFoundException {
         try {
             clientSocket = new Socket("localhost", ServerSettings.ReadPortFromJSON());
             System.out.println("Connection established.");
+            output = new ObjectOutputStream(clientSocket.getOutputStream());
+            input = new ObjectInputStream(clientSocket.getInputStream());
+            cPingSender = new ClientPingSender(this);
+            Thread threadSender = new Thread(cPingSender);
+            threadSender.start();
+            setup();
+            cListener = new ClientListener(this, input);
+            Thread threadListener = new Thread(cListener);
+            threadListener.start();
+            System.out.println("Listener started!");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clientConnection.outStream = new PrintWriter(clientSocket.getOutputStream(),true);
-        Scanner inStream = new Scanner(clientSocket.getInputStream());
-
-        clientConnection.setup(inStream);
-
-        clientConnection.cListener = new ClientListener(clientSocket, inStream);
-        Thread thread = new Thread(clientConnection.cListener);
-        thread.start();
-         */
     }
 
-    @Override
+    public void disconnect() {
+        cListener.stopListener();
+        cPingSender.stopPinger();
+        try {
+            input.close();
+            output.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            System.out.println("Error occurred during disconnection");
+        }
+    }
+
+    /*@Override
     public void onUsername(String username) throws Exception {
-        String messageReceived;
+        ServiceMessage messageReceived;
         Exception IOException = new Exception("Username already Taken");
         LoginMessage logMessage = new LoginMessage(username);
         send(logMessage, logMessage.getMessageType());
-        messageReceived=inStream.nextLine();
-        if (messageReceived.equals(ConstantMessages.koJSON)){
+        messageReceived = cParser.processService_Cmd(inStream.nextLine());
+        if (messageReceived.getMessageType() == MessageType.KO) {
             throw IOException;
         }
     }
 
     @Override
     public void onGamePreferences(int numPlayers, Boolean gameMode) {
-        String messageReceived;
+        ServiceMessage messageReceived;
         GamePreferencesMessage gSetMessage = new GamePreferencesMessage(numPlayers, gameMode);
         do {//the input is controlled by the view so the only errors that can occur are networksù corruption
             send(gSetMessage, gSetMessage.getMessageType());
-            messageReceived = inStream.nextLine();
-        } while (!messageReceived.equals(ConstantMessages.okJSON));
+            messageReceived = cParser.processService_Cmd(inStream.nextLine());
+        } while (messageReceived.getMessageType() != MessageType.OK);
     }
 
 
@@ -175,6 +170,6 @@ public class ConnectionSocket implements ViewObserver {
     public void onCloudChoice(int idCloud) {
         PlayerMoveMessage playerMoveMessage=new PlayerMoveMessage(MessageType.CHOOSE_CLOUD,0,idCloud);
         send(playerMoveMessage,playerMoveMessage.getMessageType());
-    }
+    }*/
 }
 

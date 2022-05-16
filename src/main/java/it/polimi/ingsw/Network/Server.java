@@ -3,8 +3,10 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Controller.GameController;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
+import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.View.VirtualView;
 
 import java.util.ArrayList;
@@ -25,20 +27,21 @@ public class Server {
     /**
      * List of Games created.
      */
-    private final List<GameController> activeMatches;
+    private final ArrayList<GameController> activeMatches;
     /**
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
-    private final ArrayList<String> nickNamesChosen;
+    private final ArrayList<String> chosenNicknames;
     /**
      * HashMap that permits to find the client handler associated to a certain nickname,
      * the matchID of the game he is playing and his playerID in that game.
      */
-    private final HashMap<String,PlayerInfo> players = new HashMap<>();
+    private final HashMap<String,PlayerInfo> players;
     /**
      * List containing the virtual views initialized
      */
     private final ArrayList<VirtualView> virtualViews;
+
 
     /**
      * constructor of the Server
@@ -48,8 +51,9 @@ public class Server {
     public Server(int portNumber) {
         this.socketServer = new SocketServer(portNumber,this);
         this.activeMatches = new ArrayList<>();
-        this.nickNamesChosen = new ArrayList<>();
         this.virtualViews=new ArrayList<>();
+        this.chosenNicknames = new ArrayList<>();
+        this.players = new HashMap<>();
     }
 
     /**
@@ -58,7 +62,7 @@ public class Server {
      * @return true if it's a valid nickname, else false
      */
     public boolean checkNickNameValidity(LoginMessage loginMessage){
-        return !nickNamesChosen.contains(loginMessage.getNickname());
+        return !chosenNicknames.contains(loginMessage.getNickname());
     }
 
     /**
@@ -84,7 +88,8 @@ public class Server {
      */
     public boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
-            nickNamesChosen.add(loginMessage.getNickname());
+            chosenNicknames.add(loginMessage.getNickname());
+            System.out.println("Updated chosenNicknames ArrayList with: " + loginMessage.getNickname());
             return true;
         }
         else{
@@ -160,6 +165,7 @@ public class Server {
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
         virtualViews.get(playerInfo.getPlayerID()).setClientHandler(clientHandler);
+        System.out.println("Put " + nickName + "'s PlayerInfo in the players HashMap");
     }
 
     /**
@@ -168,24 +174,7 @@ public class Server {
      */
     public void removePlayer(String nickname) {
         players.remove(nickname);
-        nickNamesChosen.remove(nickname);
-    }
-
-    /**
-     * Delete a game when a player quit and all the information about all the other players that was playing the game
-     * @param nickname nickname of the player that quit.
-     */
-    public void aPlayerQuit(String nickname) {
-        int quitMatch = getPlayerInfo(nickname).getMatchID();
-
-        for (String playerNickname : nickNamesChosen)
-            if(players.get(playerNickname).getMatchID()==quitMatch && !playerNickname.equals(nickname))
-                //removePlayer(activeMatches.get(quitMatch).game.getPlayers().get(i).getNickname());
-                System.err.println("A player quit");            //remove this line when send message implemented
-        //SEND QUIT MESSAGE: ANOTHER PLAYER QUIT... -> GAME END.
-        //THE CLIENT WHEN RECEIVES A QUIT MESSAGE FROM THE SERVER CALLS THE gameEnded method!!!
-
-        System.out.println("Game: "+quitMatch+" because player \""+nickname+"\" left the game.");
+        chosenNicknames.remove(nickname);
     }
 
     /**
@@ -201,6 +190,16 @@ public class Server {
      * @return the information of that player (playerID, matchID and client handler of the player).
      */
     public PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
+
+    public void onDisconnection(String nickname) {
+        System.out.println("Deleting match number " + getPlayerInfo(nickname).getMatchID());
+        int matchToEnd = getPlayerInfo(nickname).getMatchID();
+        for (String player : chosenNicknames)
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
+                players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
+            }
+        System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
+    }
 
     public static void main(String[] args) {
 

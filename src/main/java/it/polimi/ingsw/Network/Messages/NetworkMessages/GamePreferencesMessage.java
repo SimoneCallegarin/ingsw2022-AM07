@@ -16,12 +16,12 @@ public class GamePreferencesMessage extends NetworkMessage {
 
     public boolean isExpert() { return expertMode; }
 
-    @Override
+    /*@Override
     public String toString() {
         return "GamePreferencesMessage{" +
                 "messageType=" + getMessageType() +
                 ", numberOfPlayers=" + numberOfPlayers +
                 ", gameMode=" + expertMode +
                 '}';
-    }
+    }*/
 }

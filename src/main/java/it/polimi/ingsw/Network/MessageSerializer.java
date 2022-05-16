@@ -5,6 +5,7 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 
 public class MessageSerializer {
 
@@ -17,6 +18,10 @@ public class MessageSerializer {
     public String serializeMessage(NetworkMessage message, MessageType mt) {
 
         switch (mt) {
+            case OK, KO, PING, PONG, LOGOUT, QUIT -> {
+                ServiceMessage serMessage = (ServiceMessage) message;
+                return g.toJson(serMessage);
+            }
             case LOGIN -> {
                 LoginMessage logMessage = (LoginMessage) message;
                 return g.toJson(logMessage);

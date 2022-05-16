@@ -2,10 +2,10 @@ package it.polimi.ingsw.Network;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
-import it.polimi.ingsw.Network.Messages.ConstantMessages;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 
 import java.time.Duration;
 import java.util.concurrent.*;
@@ -14,6 +14,20 @@ public class CommandParser
 {
 
     private final Gson g=new Gson();
+
+    public ServiceMessage processService_Cmd(String line){
+        final Duration timeout=Duration.ofSeconds(5);
+        ExecutorService executor= Executors.newSingleThreadExecutor();
+
+        final Future<ServiceMessage> handler=executor.submit((Callable) () -> g.fromJson(line, ServiceMessage.class));
+        try{
+            return handler.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+        }catch(TimeoutException | InterruptedException | ExecutionException e){
+            handler.cancel(true);
+            return g.fromJson("{\"messageType\":KO,\"status\":\"ko\"}", ServiceMessage.class);
+        }
+
+    }
 
     public LoginMessage processLogin_Cmd(String line){
         final Duration timeout=Duration.ofSeconds(5);
@@ -24,7 +38,7 @@ public class CommandParser
             return handler.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
         }catch(TimeoutException | InterruptedException | ExecutionException e){
             handler.cancel(true);
-            return g.fromJson(ConstantMessages.koJSON, LoginMessage.class);
+            return g.fromJson("{\"messageType\":KO,\"status\":\"ko\"}", LoginMessage.class);
         }
 
     }
@@ -38,7 +52,7 @@ public class CommandParser
             return handler.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
         }catch(TimeoutException | InterruptedException | ExecutionException e){
             handler.cancel(true);
-            return g.fromJson(ConstantMessages.koJSON,GamePreferencesMessage.class);
+            return g.fromJson("{\"messageType\":KO,\"status\":\"ko\"}",GamePreferencesMessage.class);
         }
 
     }
