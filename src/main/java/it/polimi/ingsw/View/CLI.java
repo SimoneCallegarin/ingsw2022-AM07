@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-    CLIDrawer cliDrawer=new CLIDrawer();
+    CLIDrawer cliDrawer=new CLIDrawer();    // it will be received by message
 
     public CLI() {
         //addObserver(connectionSocket);
@@ -56,12 +56,9 @@ public class CLI extends ViewSubject {
         System.out.println("Welcome to Eriantys game!\n");
         cliDrawer.printTitle();
         askUsername();
-        //askGamePreferences();
         //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
         //trough the VirtualView
         //we can't send the game reference trough messages so we need to pass each one of the objects to draw them
-        //System.out.println(cliDrawer.printGameTable());
-        //askAssistantCard();
         //askMove();
         //askMNMovement();
         //askCloud();
@@ -204,6 +201,7 @@ public class CLI extends ViewSubject {
 
     public void startGame() {
         System.out.println("Game started!");
+        System.out.println(cliDrawer.printGameTable());
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
