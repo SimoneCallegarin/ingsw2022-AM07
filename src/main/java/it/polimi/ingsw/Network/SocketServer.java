@@ -33,9 +33,11 @@ public class SocketServer implements Runnable{
                 System.out.println("Accepting...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection accepted!");
+                clientSocket.setSoTimeout(10*1000);
                 executorService.submit(new ClientHandler(server, clientSocket));
             } catch (IOException e) {
-                System.err.println("Error in client acceptation!");
+                System.err.println("Error in clientSocket initialization!");
+                e.printStackTrace();
                 break;
             }
         }
