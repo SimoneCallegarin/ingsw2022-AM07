@@ -34,6 +34,8 @@ public class ClientHandler implements Runnable {
 
     private ObjectInputStream input;
 
+    private ObjectOutputStream output;
+
     private boolean connected;
 
     /**

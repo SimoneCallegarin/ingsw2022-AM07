@@ -1,7 +1,9 @@
 package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Network.ClientHandler;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
@@ -18,8 +20,8 @@ public class VirtualView implements ModelObserver {
     List<ClientHandler> clientHandler=new ArrayList<>();
 
     @Override
-    public void onGameCreation(int numPlayers, List<String> nicknames, int whereMNId, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> studentsOnCharacter, int numTower, int money, int generalReserve) {
-        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.GAMECREATION_UPDATE,numPlayers,nicknames,whereMNId,activeCharacter,clouds,studentsOnCharacter,numTower,money,generalReserve);
+    public void onGameCreation(int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<HashMap<RealmColors,Integer>> entrances, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> studentsOnCharacter, int numTower, int money, int generalReserve) {
+        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.GAMECREATION_UPDATE,numPlayers,nicknames,gameMode,whereMNId,entrances,activeCharacter,clouds,studentsOnCharacter,numTower,money,generalReserve);
         clientHandler.get(0).sendUpdate(gameCreation_updateMsg);
     }
 

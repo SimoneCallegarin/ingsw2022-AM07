@@ -186,6 +186,7 @@ public class Game extends ModelSubject {
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 updateOrder(gamePhase);
 
+                //initialization of data to notify the virtual view with
                 List<String> nicknames=new ArrayList<>();
                 for(Player p:players){
                     nicknames.add(p.getNickname());
@@ -209,8 +210,12 @@ public class Game extends ModelSubject {
                         studentsOnCard.add(card.getStudents());
                     }
                 }
+                List<HashMap<RealmColors,Integer>> entrances=new ArrayList<>();
+                for(Player p:players){
+                    entrances.add(p.getDashboard().getEntrance().getStudents());
+                }
 
-                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,whereMNId,activeCharacter,clouds,studentsOnCard,numTower,money,generalReserve));
+                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,activeCharacter,clouds,studentsOnCard,numTower,money,generalReserve));
 
             }
 
