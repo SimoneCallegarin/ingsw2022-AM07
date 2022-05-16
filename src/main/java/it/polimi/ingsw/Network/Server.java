@@ -34,7 +34,7 @@ public class Server {
      * HashMap that permits to find the client handler associated to a certain nickname,
      * the matchID of the game he is playing and his playerID in that game.
      */
-    private final HashMap<String,PlayerInfo> players = new HashMap<>();
+    private final HashMap<String,PlayerInfo> players;
 
     /**
      * constructor of the Server
@@ -45,6 +45,7 @@ public class Server {
         this.socketServer = new SocketServer(portNumber,this);
         this.activeMatches = new ArrayList<>();
         this.chosenNicknames = new ArrayList<>();
+        this.players = new HashMap<>();
     }
 
     /**
@@ -80,6 +81,7 @@ public class Server {
     public boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
             chosenNicknames.add(loginMessage.getNickname());
+            System.out.println("Updated chosenNicknames ArrayList with: " + loginMessage.getNickname());
             return true;
         }
         else{
@@ -152,6 +154,7 @@ public class Server {
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
+        System.out.println("Put " + nickName + "'s PlayerInfo in the players HashMap");
     }
 
     /**
@@ -178,13 +181,12 @@ public class Server {
     public PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
     public void onDisconnection(String nickname) {
+        System.out.println("Deleting match number " + getPlayerInfo(nickname).getMatchID());
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
-
         for (String player : chosenNicknames)
-            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname)) {
-                players.get(player).getClientHandler().send(new ServiceMessage(MessageType.QUIT, nickname + " has left the lobby. The game will now end."), MessageType.QUIT);
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
+                players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
             }
-
         System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
     }
 

@@ -13,11 +13,11 @@ public class LoginMessage extends NetworkMessage {
 
     public String getNickname(){ return nickname; }
 
-    @Override
+    /*@Override
     public String toString() {
         return "RequestNicknameMessage{" +
                 "messageType=" + getMessageType() +
                 ", nickname=" + nickname +
                 '}';
-    }
+    }*/
 }

@@ -21,6 +21,10 @@ public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
     CLIDrawer cliDrawer=new CLIDrawer();
 
+    public CLI(ConnectionSocket connectionSocket) {
+        //addObserver(connectionSocket);
+    }
+
     /**
      * method used to launch a thread for user input reading
      */
@@ -49,8 +53,8 @@ public class CLI extends ViewSubject {
     public void CLIstart(){
         System.out.println("Welcome to Eriantys game!\n");
         cliDrawer.printTitle();
-        askGamePreferences();
         askUsername();
+        askGamePreferences();
         //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
         //trough the VirtualView
         //we can't send the game reference trough messages so we need to pass each one of the objects to draw them
@@ -192,21 +196,21 @@ public class CLI extends ViewSubject {
         choice=Integer.parseInt(readUserInput());
         if(choice==1){
             notifyObserver(obs->obs.onStudentmovement_toDining(0));//to update with the idPlayer value
-            System.out.println(cliDrawer.printGameTable());
         }else{
             System.out.println("Write the id of the isle where you want to move the student");
             choice=Integer.parseInt(readUserInput());
             int finalChoice = choice;
             notifyObserver(obs->obs.onStudentmovement_toIsle(finalChoice));
-            System.out.println(cliDrawer.printGameTable());
         }
+        System.out.println(cliDrawer.printGameTable());
 
     }
 
-    public static void main(String[] args) throws IOException {
-        Server server=new Server(1234);
-        ConnectionSocket connectionSocket=new ConnectionSocket();
-
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        ConnectionSocket connectionSocket = new ConnectionSocket();
+        connectionSocket.startConnection();
+        //CLI cli = new CLI(connectionSocket);
+        //cli.CLIstart();
     }
 
 }

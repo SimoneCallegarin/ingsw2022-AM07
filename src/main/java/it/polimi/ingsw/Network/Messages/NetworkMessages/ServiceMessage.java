@@ -18,11 +18,11 @@ public class ServiceMessage extends NetworkMessage {
 
     public String getError(){ return error; }
 
-    @Override
+    /*@Override
     public String toString() {
         return "ServiceMessage{" +
                 "messageType=" + getMessageType() +
                 ", message=" + error +
                 '}';
-    }
+    }*/
 }
