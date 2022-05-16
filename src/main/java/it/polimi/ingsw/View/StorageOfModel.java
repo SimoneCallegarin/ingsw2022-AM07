@@ -69,4 +69,8 @@ public class StorageOfModel {
 
     public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) { gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue); }
 
+    // GETTERS:
+
+    public int getNumberOfPlayers() { return numberOfPlayers; }
+
 }

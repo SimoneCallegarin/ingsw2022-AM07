@@ -163,7 +163,7 @@ public class Server {
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
-        virtualViews.get(playerInfo.getPlayerID()).setClientHandler(clientHandler);
+        //virtualViews.get(playerInfo.getPlayerID()).setClientHandler(clientHandler);
         System.out.println("Put " + nickName + "'s PlayerInfo in the players HashMap");
     }
 

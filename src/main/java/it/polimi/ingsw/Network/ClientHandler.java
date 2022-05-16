@@ -37,11 +37,6 @@ public class ClientHandler implements Runnable {
     private boolean connected;
 
     /**
-     * Output stream to send update through the server to the client view
-     */
-    private ObjectOutputStream output;
-
-    /**
      * constructor of the client handler
      * @param server the server associated to this client handler
      * @param socket the socket of the client that is associated to this client handler
@@ -71,14 +66,14 @@ public class ClientHandler implements Runnable {
             }
             else {
                 if ((!server.setNickNamesChosen(loginMessage)))
-                    send(new ServiceMessage(MessageType.KO, "Already taken nickname"));
+                    send(new ServiceMessage(MessageType.UNAVAILABLE_USERNAME, "Already taken nickname"));
                 else
                     accepted = true;
                 if (accepted) {
                     server.setPlayer(loginMessage.getNickname(), this);
                     nickname = loginMessage.getNickname();
                     System.out.println("Nickname selected: " + "\"" + nickname + "\"");
-                    send(new ServiceMessage(MessageType.OK));
+                    send(new ServiceMessage(MessageType.USERNAME_ACCEPTED));
                     handlerPhase = HandlerPhases.GAME_SETUP_PHASE;
                 }
             }

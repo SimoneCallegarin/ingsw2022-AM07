@@ -1,5 +1,6 @@
 package it.polimi.ingsw.View;
 
+import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Observer.ViewSubject;
@@ -21,7 +22,7 @@ public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
     CLIDrawer cliDrawer=new CLIDrawer();
 
-    public CLI(ConnectionSocket connectionSocket) {
+    public CLI() {
         //addObserver(connectionSocket);
     }
 
@@ -54,39 +55,25 @@ public class CLI extends ViewSubject {
         System.out.println("Welcome to Eriantys game!\n");
         cliDrawer.printTitle();
         askUsername();
-        askGamePreferences();
+        //askGamePreferences();
         //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
         //trough the VirtualView
         //we can't send the game reference trough messages so we need to pass each one of the objects to draw them
-        System.out.println(cliDrawer.printGameTable());
-        askAssistantCard();
-        askMove();
-        askMNMovement();
-        askCloud();
+        //System.out.println(cliDrawer.printGameTable());
+        //askAssistantCard();
+        //askMove();
+        //askMNMovement();
+        //askCloud();
         //the turn changes
+    }
 
-
-
-
-
-}
     /**
      * method used to read the username choice by the player
      */
     public void askUsername() {
-        AtomicBoolean usernameTaken = new AtomicBoolean(true);
-        while (usernameTaken.get()) {
-        System.out.println("Enter your username:\n");
+        System.out.println("Nickname? ");
         String username = readUserInput();
-                notifyObserver(obs -> {
-                    try {
-                        obs.onUsername(username);
-                        usernameTaken.set(false);
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                });
-        }
+        notifyObserver(obs -> { obs.onUsername(username); });
     }
 
     /**
@@ -94,24 +81,28 @@ public class CLI extends ViewSubject {
      */
     public void askGamePreferences() {
         int numPlayers = 3;
-        do {
+        /*do {
             if (numPlayers < 2 || numPlayers > 4) {
                 System.out.println("Invalid input, repeat");
             }
             System.out.println("Enter the number of players desired:\n");
             numPlayers = Integer.parseInt(readUserInput());
-        } while (numPlayers < 2 || numPlayers > 4);
-        boolean gamemode;
-        String choiceGamemode;
-        do {
+        } while (numPlayers < 2 || numPlayers > 4);*/
+        System.out.println("How many players do you want to play with? [2, 3 or 4]");
+        numPlayers = Integer.parseInt(readUserInput());
+        boolean expertMode = false;
+        String modePreference;
+        /*do {
             System.out.println("Now type the game mode preferred: Expert or Base?");
             choiceGamemode = readUserInput();
             gamemode = choiceGamemode.equals("Expert");
-        } while (!choiceGamemode.equals("Expert") && !choiceGamemode.equals("Base"));
-
+        } while (!choiceGamemode.equals("Expert") && !choiceGamemode.equals("Base"));*/
+        System.out.println("Do you want to play in Expert mode? [y/n]");
+        modePreference = readUserInput();
+        expertMode = modePreference.equalsIgnoreCase("y");
         int finalNumPlayers = numPlayers;
-        boolean finalGamemode = gamemode;
-        notifyObserver(obs -> obs.onGamePreferences(finalNumPlayers, finalGamemode));
+        boolean finalExpertMode = expertMode;
+        notifyObserver(obs -> obs.onGamePreferences(finalNumPlayers, finalExpertMode));
     }
 
     public void askCloud(){
@@ -207,10 +198,13 @@ public class CLI extends ViewSubject {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        CLI cli = new CLI();
         ConnectionSocket connectionSocket = new ConnectionSocket();
+        ClientController clientController = new ClientController(cli, connectionSocket);
+        cli.addObserver(clientController);
         connectionSocket.startConnection();
-        //CLI cli = new CLI(connectionSocket);
-        //cli.CLIstart();
+        connectionSocket.getClientListener().addObserver(clientController);
+        cli.CLIstart();
     }
 
 }
