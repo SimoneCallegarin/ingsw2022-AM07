@@ -32,7 +32,8 @@ public class ConnectionSocket {
             output.writeObject(message);
             output.reset();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error in sending message to server");
+            //e.printStackTrace();
         }
     }
 
@@ -95,6 +96,7 @@ public class ConnectionSocket {
     }
 
     public void disconnect() {
+        System.out.println("Closing connection...");
         cListener.stopListener();
         cPingSender.stopPinger();
         try {

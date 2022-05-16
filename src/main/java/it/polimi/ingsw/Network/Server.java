@@ -6,6 +6,7 @@ import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.View.VirtualView;
 
@@ -199,6 +200,14 @@ public class Server {
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
             }
         System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
+    }
+
+    public void broadcastMessage(String nickname, NetworkMessage message) {
+        int matchToBroadcast = getPlayerInfo(nickname).getMatchID();
+        for (String player : chosenNicknames)
+            if(players.get(player).getMatchID() == matchToBroadcast && players.get(player).getClientHandler().isConnected()) {
+                players.get(player).getClientHandler().send(message);
+            }
     }
 
     public static void main(String[] args) {
