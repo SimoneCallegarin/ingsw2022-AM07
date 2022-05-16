@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class PlayerModelView {
 
-    private String nickname;
+    private final String nickname;
     private HashMap<RealmColors,Integer> entranceStudents;
     private HashMap<RealmColors,Integer> diningStudents;
     private HashMap<RealmColors,Integer> diningProfessors;
@@ -20,7 +20,26 @@ public class PlayerModelView {
     private ArrayList<Integer> assistantCardsTurnOrder;
     private ArrayList<Integer> assistantCardsMNMovement;
 
+    /**
+     * Constructor used in the update manager to build an array of the PlayerModelView of each player
+     * at the beginning of the game, containing all the information about each player.
+     */
+    public PlayerModelView(String nickname, HashMap<RealmColors, Integer> entranceStudents, HashMap<RealmColors, Integer> diningStudents, HashMap<RealmColors, Integer> diningProfessors, int numOfTowers, TowerColors towerColor, int money, int discardPileTurnOrder, int discardPileMNMovement, ArrayList<Integer> assistantCardsTurnOrder, ArrayList<Integer> assistantCardsMNMovement) {
+        this.nickname = nickname;
+        this.entranceStudents = entranceStudents;
+        this.diningStudents = diningStudents;
+        this.diningProfessors = diningProfessors;
+        this.numOfTowers = numOfTowers;
+        this.towerColor = towerColor;
+        this.money = money;
+        this.discardPileTurnOrder = discardPileTurnOrder;
+        this.discardPileMNMovement = discardPileMNMovement;
+        this.assistantCardsTurnOrder = assistantCardsTurnOrder;
+        this.assistantCardsMNMovement = assistantCardsMNMovement;
+    }
+
     // GETTERS:
+
     public String getNickname() { return nickname; }
 
     public HashMap<RealmColors, Integer> getEntranceStudents() { return entranceStudents; }
@@ -43,8 +62,8 @@ public class PlayerModelView {
 
     public ArrayList<Integer> getAssistantCardsMNMovement() { return assistantCardsMNMovement; }
 
+
     // SETTERS:
-    public void setNickname(String nickname) { this.nickname = nickname; }
 
     public void setEntranceStudents(HashMap<RealmColors, Integer> entranceStudents) { this.entranceStudents = entranceStudents; }
 

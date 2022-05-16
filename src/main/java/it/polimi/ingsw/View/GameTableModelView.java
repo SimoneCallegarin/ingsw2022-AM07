@@ -7,6 +7,10 @@ import java.util.HashMap;
 
 public class GameTableModelView {
 
+    // We used records for each component of the game table because each time there's a move that changes
+    // the game table the UpdateHandler will create a new variable record containing all the updated information,
+    // and it will place it in the store removing the previous one.
+
     public record CharacterCard(int characterCardCost,
                                 HashMap<RealmColors, Integer> studentsOnCharacterCard,
                                 int denyCardsOnCharacterCard) {
@@ -41,24 +45,37 @@ public class GameTableModelView {
     private ArrayList<Cloud> clouds;
     private int generalMoneyReserve;
 
-    public CharacterCard getCharacterCard(int index) { return characterCards.get(index); }
+    public GameTableModelView(ArrayList<CharacterCard> characterCards, ArrayList<Isle> isles, ArrayList<Cloud> clouds, int generalMoneyReserve) {
+        this.characterCards = characterCards;
+        this.isles = isles;
+        this.clouds = clouds;
+        this.generalMoneyReserve = generalMoneyReserve;
+    }
 
-    public Isle getIsle(int index) { return isles.get(index); }
+    public CharacterCard getCharacterCard(int characterCardIndex) { return characterCards.get(characterCardIndex); }
 
-    public Cloud getCloud(int index) { return clouds.get(index); }
+    public Isle getIsle(int isleID) { return isles.get(isleID); }
+
+    public Cloud getCloud(int cloudID) { return clouds.get(cloudID); }
 
     public int getGeneralMoneyReserve() { return generalMoneyReserve; }
 
-    public void setCharacterCards(ArrayList<CharacterCard> CharacterCards) { this.characterCards = CharacterCards; }
+    // SETTERS:
 
-    public void setCharacterCard(int index, CharacterCard characterCard) {
-        characterCards.remove(index);
-        characterCards.add(index,characterCard);
+    public void setCharacterCard(int characterCardIndex, CharacterCard characterCard) {
+        this.characterCards.remove(characterCardIndex);
+        this.characterCards.add(characterCardIndex,characterCard);
     }
 
-    public void setIsles(ArrayList<Isle> Isles) { this.isles = Isles; }
+    public void setIsles(int isleID, Isle isle) {
+        this.isles.remove(isleID);
+        this.isles.add(isleID,isle);
+    }
 
-    public void setClouds(ArrayList<Cloud> Clouds) { this.clouds = Clouds; }
+    public void setClouds(int cloudID, Cloud cloud) {
+        this.clouds.remove(cloudID);
+        this.clouds.add(cloud);
+    }
 
     public void setGeneralMoneyReserve(int generalMoneyReserve) { this.generalMoneyReserve = generalMoneyReserve; }
 }
