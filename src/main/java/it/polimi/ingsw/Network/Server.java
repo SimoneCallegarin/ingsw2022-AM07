@@ -5,9 +5,11 @@ import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+import it.polimi.ingsw.View.VirtualView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,7 +25,7 @@ public class Server {
     /**
      * List of Games created.
      */
-    private final ArrayList<GameController> activeMatches;
+    private final List<GameController> activeMatches;
     /**
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
@@ -33,6 +35,10 @@ public class Server {
      * the matchID of the game he is playing and his playerID in that game.
      */
     private final HashMap<String,PlayerInfo> players = new HashMap<>();
+    /**
+     * List containing the virtual views initialized
+     */
+    private final ArrayList<VirtualView> virtualViews;
 
     /**
      * constructor of the Server
@@ -43,6 +49,7 @@ public class Server {
         this.socketServer = new SocketServer(portNumber,this);
         this.activeMatches = new ArrayList<>();
         this.nickNamesChosen = new ArrayList<>();
+        this.virtualViews=new ArrayList<>();
     }
 
     /**
@@ -125,8 +132,10 @@ public class Server {
     public void newGame(String nickName, GamePreferencesMessage preferences){
         Game game = new Game();
         GameController gameController = new GameController(game);
+        VirtualView virtualView= new VirtualView();
         gameController.addPlayerToGame(nickName,preferences,true);
         activeMatches.add(gameController);
+        virtualViews.add(virtualView);
         //SEND NEW GAME!
     }
 
@@ -150,6 +159,7 @@ public class Server {
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
+        virtualViews.get(playerInfo.getPlayerID()).setClientHandler(clientHandler);
     }
 
     /**

@@ -318,8 +318,11 @@ public class Game extends ModelSubject {
                     }
                 if(gameTable.getIsleManager().getIsle(idIsle).getDenyCards()==0)
                     checkUpdateInfluence(idIsle);
-                else
+                else {
                     gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
+                    
+                    notifyObserver(obs->obs.onDenyCard(idPlayer,idIsle,false));
+                }
                 // if the FUNGIST card is played, then we add the students of the chosen color
                 // that were removed from the selected isle
                 if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)
@@ -343,7 +346,7 @@ public class Game extends ModelSubject {
             islestudents.add(isle.getStudents());
             numIsles.add(isle.getNumOfIsles());
         }
-        notifyObserver(obs->obs.onMNMovement(idIsle,islestudents,numIsles));
+        notifyObserver(obs->obs.onMNMovement(idPlayer,idIsle,islestudents,numIsles));
     }
 
     /**
@@ -369,7 +372,7 @@ public class Game extends ModelSubject {
                 actionPhase = ActionPhases.MOVE_STUDENTS;
                 nextPlayer();
             }
-            notifyObserver(obs->obs.onCloudChoice(players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
+            notifyObserver(obs->obs.onCloudChoice(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
         }
     }
 
@@ -674,6 +677,10 @@ public class Game extends ModelSubject {
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder())
             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
+
+        if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
+            notifyObserver(obs->obs.onDenyCard(idPlayer,value1,true));
+        }
     }
 
     /**

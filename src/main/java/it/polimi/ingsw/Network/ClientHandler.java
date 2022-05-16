@@ -1,11 +1,13 @@
 package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.Messages.*;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -30,6 +32,11 @@ public class ClientHandler implements Runnable{
      * A command parser that permits to parse different JSON messages
      */
     private final CommandParser commandParser=new CommandParser();
+
+    /**
+     * Output stream to send update through the server to the client view
+     */
+    private ObjectOutputStream output;
 
     /**
      * constructor of the client handler
@@ -161,6 +168,14 @@ public class ClientHandler implements Runnable{
             //ERROR MESSAGE
             System.out.println("An error has occurred");
             System.err.println(e.getMessage());
+        }
+    }
+
+    public void sendUpdate(NetworkMessage networkMessage){
+        try {
+            output.writeObject(networkMessage);
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 

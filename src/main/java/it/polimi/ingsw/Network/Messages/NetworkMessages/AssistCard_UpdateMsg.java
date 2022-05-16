@@ -7,12 +7,10 @@ public class AssistCard_UpdateMsg extends NetworkMessage {
     MessageType messageType;
     int idPlayer;
     int turnOrderPlayed;
-    CurrentOrder currentOrder;
 
-    AssistCard_UpdateMsg(MessageType messageType, int idPlayer, int turnOrderPlayed, CurrentOrder currentOrder) {
+    public AssistCard_UpdateMsg(MessageType messageType, int idPlayer, int turnOrderPlayed) {
         super(messageType);
         this.idPlayer=idPlayer;
         this.turnOrderPlayed=turnOrderPlayed;
-        this.currentOrder=currentOrder;
     }
 }

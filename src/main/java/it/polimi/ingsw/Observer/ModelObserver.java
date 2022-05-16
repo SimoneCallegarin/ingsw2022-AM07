@@ -20,11 +20,13 @@ public interface ModelObserver {
 
     void onStudentMoving_toIsle(int idPlayer,HashMap<RealmColors,Integer> entrance,int isleID, HashMap<RealmColors,Integer> isleStudents);
 
-    void onMNMovement(int isleId,List<HashMap<RealmColors,Integer>> isleStudents, List<Integer> numIsles );
+    void onMNMovement(int playerId,int isleId,List<HashMap<RealmColors,Integer>> isleStudents, List<Integer> numIsles );
 
-    void onCloudChoice(HashMap<RealmColors,Integer> entrance, int cloudId);
+    void onCloudChoice(int playerID,HashMap<RealmColors,Integer> entrance, int cloudId);
 
     void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney);
+
+    void onDenyCard(int playerId,int isleId,boolean denyCard);
 
 
 }

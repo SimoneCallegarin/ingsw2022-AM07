@@ -8,19 +8,14 @@ import java.util.HashMap;
 
 public class StudentToDining_UpdateMsg extends NetworkMessage{
     int idPlayer;
-    int idOtherPlayer;
     HashMap<RealmColors, Integer> entrance;
-    java.util.HashMap<RealmColors, Integer> dining;
-    HashMap<RealmColors, Integer> myProfessors;
-    HashMap<RealmColors, Integer> otherProfessors;
+    HashMap<RealmColors, Integer> dining;
 
-    public StudentToDining_UpdateMsg(MessageType messageType, int idPlayer, int idOtherPlayer, HashMap<RealmColors, Integer> entrance, HashMap<RealmColors, Integer> dining, HashMap<RealmColors, Integer> myProfessors, HashMap<RealmColors, Integer> otherProfessors) {
+    public StudentToDining_UpdateMsg(MessageType messageType, int idPlayer, HashMap<RealmColors, Integer> entrance, HashMap<RealmColors, Integer> dining) {
         super(messageType);
         this.idPlayer = idPlayer;
-        this.idOtherPlayer = idOtherPlayer;
         this.entrance = entrance;
         this.dining = dining;
-        this.myProfessors = myProfessors;
-        this.otherProfessors = otherProfessors;
+
     }
 }
