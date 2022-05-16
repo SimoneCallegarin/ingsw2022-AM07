@@ -49,6 +49,11 @@ public class Bag implements StudentManager {
         return totalNumberOfStudents;
     }
 
+    @Override
+    public HashMap<RealmColors, Integer> getStudents() {
+        return students;
+    }
+
     /**
      * this method updates the students' hashmap incrementing by 1 the value specified by color
      * @param color is the key of the value we want to update in the students' hashmap

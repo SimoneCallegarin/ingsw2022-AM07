@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Observer;
 
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

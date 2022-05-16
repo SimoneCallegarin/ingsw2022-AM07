@@ -12,10 +12,15 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ConnectionSocket extends ViewSubject {
+public class ConnectionSocket {
 
     private final String host;
     private final int port;
+
+    public ClientListener getClientListener() {
+        return cListener;
+    }
+
     ClientListener cListener;
     ClientPingSender cPingSender;
     ObjectInputStream input;
@@ -83,7 +88,7 @@ public class ConnectionSocket extends ViewSubject {
             cListener = new ClientListener(this, input);
             Thread threadListener = new Thread(cListener);
             threadListener.start();
-            System.out.println("Listener started!");
+            //System.out.println("Listener started!");
         } catch (IOException e) {
             e.printStackTrace();
         }

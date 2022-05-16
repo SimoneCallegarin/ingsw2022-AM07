@@ -3,12 +3,14 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.Observer.NetworkSubject;
+import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.NoSuchElementException;
 
-public class ClientListener implements Runnable {
+public class ClientListener extends NetworkSubject implements Runnable {
 
     private ConnectionSocket cs;
     private ObjectInputStream input;
@@ -29,6 +31,7 @@ public class ClientListener implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 messageReceived = (NetworkMessage) input.readObject();
+                notifyObserver(messageReceived);
                 if (messageReceived.getMessageType() == MessageType.QUIT) {
                     ServiceMessage sm = (ServiceMessage) messageReceived;
                     System.out.println(sm.getError());
@@ -39,7 +42,7 @@ public class ClientListener implements Runnable {
                 e.printStackTrace();
                 cs.disconnect();
             }
-            System.out.println("Thread listener interrupted");
         }
+        System.out.println("Thread listener interrupted");
     }
 }

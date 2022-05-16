@@ -2,7 +2,7 @@ package it.polimi.ingsw.Observer;
 
 public interface ViewObserver {
 
-    void onUsername(String username) throws Exception;
+    void onUsername(String username) ;
 
     void onGamePreferences(int numPlayers, Boolean gameMode);
 
