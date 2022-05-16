@@ -226,4 +226,11 @@ public class GameTable implements DenyCardManager {
             effectSetupFactory.getEffect(this,characterCards.get(0));
     }
 
+    public ArrayList<Cloud> getClouds() {
+        return clouds;
+    }
+
+    public ArrayList<CharacterCard> getCharacterCards() {
+        return characterCards;
+    }
 }

@@ -1,8 +1,15 @@
 package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.Messages.*;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.*;
 import java.net.Socket;
 import java.util.NoSuchElementException;
@@ -29,6 +36,11 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream output;
 
     private boolean connected;
+
+    /**
+     * Output stream to send update through the server to the client view
+     */
+    private ObjectOutputStream output;
 
     /**
      * constructor of the client handler
@@ -199,6 +211,14 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             //System.out.println("TIMEOUT EXPIRED or ERROR");
             disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
+        }
+    }
+
+    public void sendUpdate(NetworkMessage networkMessage){
+        try {
+            output.writeObject(networkMessage);
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 

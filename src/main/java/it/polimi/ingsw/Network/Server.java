@@ -7,9 +7,11 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.View.VirtualView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,6 +37,11 @@ public class Server {
      * the matchID of the game he is playing and his playerID in that game.
      */
     private final HashMap<String,PlayerInfo> players;
+    /**
+     * List containing the virtual views initialized
+     */
+    private final ArrayList<VirtualView> virtualViews;
+
 
     /**
      * constructor of the Server
@@ -44,6 +51,7 @@ public class Server {
     public Server(int portNumber) {
         this.socketServer = new SocketServer(portNumber,this);
         this.activeMatches = new ArrayList<>();
+        this.virtualViews=new ArrayList<>();
         this.chosenNicknames = new ArrayList<>();
         this.players = new HashMap<>();
     }
@@ -129,8 +137,10 @@ public class Server {
     public void newGame(String nickName, GamePreferencesMessage preferences){
         Game game = new Game();
         GameController gameController = new GameController(game);
+        VirtualView virtualView= new VirtualView();
         gameController.addPlayerToGame(nickName,preferences,true);
         activeMatches.add(gameController);
+        virtualViews.add(virtualView);
         //SEND NEW GAME!
     }
 
@@ -154,6 +164,7 @@ public class Server {
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
+        virtualViews.get(playerInfo.getPlayerID()).setClientHandler(clientHandler);
         System.out.println("Put " + nickName + "'s PlayerInfo in the players HashMap");
     }
 
