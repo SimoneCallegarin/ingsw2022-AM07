@@ -31,12 +31,13 @@ public class ClientListener extends NetworkSubject implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 messageReceived = (NetworkMessage) input.readObject();
-                notifyObserver(messageReceived);
                 if (messageReceived.getMessageType() == MessageType.QUIT) {
                     ServiceMessage sm = (ServiceMessage) messageReceived;
                     System.out.println(sm.getError());
                     cs.disconnect();
                 }
+                else
+                    notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
                 System.out.println("An error occurred...");
                 e.printStackTrace();

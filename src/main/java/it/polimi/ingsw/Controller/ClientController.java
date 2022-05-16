@@ -5,6 +5,7 @@ import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI;
@@ -74,7 +75,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
         switch (message.getMessageType()) {
             case UNAVAILABLE_USERNAME -> cli.askUsername();
             case USERNAME_ACCEPTED -> cli.askGamePreferences();
-            case OK -> cli.askAssistantCard();
+            case OK -> {
+                ServiceMessage sm = (ServiceMessage) message;
+                cli.printOK(sm);
+            }
+            case START_GAME -> cli.startGame();
+            //case GAMECREATION_UPDATE ->
         }
     }
 }
