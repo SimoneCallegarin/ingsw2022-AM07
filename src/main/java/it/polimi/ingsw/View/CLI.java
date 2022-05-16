@@ -74,20 +74,16 @@ public class CLI extends ViewSubject {
      * method used to read the username choice by the player
      */
     public void askUsername() {
-        AtomicBoolean usernameTaken = new AtomicBoolean(true);
-        while (usernameTaken.get()) {
-        System.out.println("Enter your username:\n");
+        System.out.println("Enter your username: ");
         String username = readUserInput();
                 notifyObserver(obs -> {
                     try {
                         obs.onUsername(username);
-                        usernameTaken.set(false);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                 });
         }
-    }
 
     /**
      * this method is used to ask the user the game settings he desires, which are the game mode and the number of Players
@@ -208,6 +204,7 @@ public class CLI extends ViewSubject {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         ConnectionSocket connectionSocket = new ConnectionSocket();
+
         connectionSocket.startConnection();
         //CLI cli = new CLI(connectionSocket);
         //cli.CLIstart();
