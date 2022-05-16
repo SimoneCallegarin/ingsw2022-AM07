@@ -3,15 +3,14 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Controller.GameController;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
-import it.polimi.ingsw.Network.Messages.MessageType;
+
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+
 import it.polimi.ingsw.View.VirtualView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
