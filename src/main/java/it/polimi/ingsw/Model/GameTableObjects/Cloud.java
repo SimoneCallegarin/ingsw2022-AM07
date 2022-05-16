@@ -98,6 +98,11 @@ public class Cloud implements StudentManager {
         return totalNumberOfStudents;
     }
 
+    @Override
+    public HashMap<RealmColors, Integer> getStudents() {
+        return students;
+    }
+
     /**
      * a getter method that gives the id of the cloud
      * @return the id of the cloud
