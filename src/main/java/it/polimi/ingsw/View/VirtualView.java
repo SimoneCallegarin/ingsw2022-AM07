@@ -1,5 +1,6 @@
 package it.polimi.ingsw.View;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Network.ClientHandler;
 import it.polimi.ingsw.Network.Messages.MessageType;
@@ -15,6 +16,12 @@ import java.util.List;
  */
 public class VirtualView implements ModelObserver {
     List<ClientHandler> clientHandler=new ArrayList<>();
+
+    @Override
+    public void onGameCreation(int numPlayers, List<String> nicknames, int whereMNId, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> studentsOnCharacter, int numTower, int money, int generalReserve) {
+        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.GAMECREATION_UPDATE,numPlayers,nicknames,whereMNId,activeCharacter,clouds,studentsOnCharacter,numTower,money,generalReserve);
+        clientHandler.get(0).sendUpdate(gameCreation_updateMsg);
+    }
 
     @Override
     public void onAssistantCard(int idPlayer, int turnOrderPlayed) {

@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface ModelObserver {
 
+    void onGameCreation(int numPlayers,List<String> nicknames,int whereMNId,List<CharacterCard> activeCharacter, List<HashMap<RealmColors,Integer>> clouds, List<HashMap<RealmColors,Integer>> studentsOnCharacter, int numTower, int money, int generalReserve);
+
     void onAssistantCard(int idPlayer, int turnOrderPlayed);
 
     void onStudentMoving_toDining(int idPlayer, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);

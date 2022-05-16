@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
 import it.polimi.ingsw.Model.Enumeration.*;
@@ -184,7 +185,35 @@ public class Game extends ModelSubject {
                 fillClouds();
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 updateOrder(gamePhase);
+
+                List<String> nicknames=new ArrayList<>();
+                for(Player p:players){
+                    nicknames.add(p.getNickname());
+                }
+
+                int whereMNId=gameTable.getIsleManager().getIsleWithMotherNatureIndex();
+
+                List<CharacterCard> activeCharacter = new ArrayList<>(gameTable.getCharacterCards());
+
+                List<HashMap<RealmColors,Integer>> clouds=new ArrayList<>();
+                for(Cloud c:gameTable.getClouds()){
+                    clouds.add(c.getStudents());
+                }
+                int numTower=players.get(0).getDashboard().getTowerStorage().getNumberOfTowers();
+                int money=players.get(0).getMoney();
+                int generalReserve=gameTable.getGeneralMoneyReserve();
+                boolean monkPresent=false;
+                List<HashMap<RealmColors,Integer>> studentsOnCard=new ArrayList<>();
+                for(CharacterCard card:gameTable.getCharacterCards()){
+                    if(card.getCharacterCardName().equals(CharacterCardsName.MONK)){
+                        studentsOnCard.add(card.getStudents());
+                    }
+                }
+
+                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,whereMNId,activeCharacter,clouds,studentsOnCard,numTower,money,generalReserve));
+
             }
+
     }
 
     /**
@@ -320,7 +349,7 @@ public class Game extends ModelSubject {
                     checkUpdateInfluence(idIsle);
                 else {
                     gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
-                    
+
                     notifyObserver(obs->obs.onDenyCard(idPlayer,idIsle,false));
                 }
                 // if the FUNGIST card is played, then we add the students of the chosen color
