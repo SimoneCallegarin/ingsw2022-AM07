@@ -53,7 +53,7 @@ public class CLI extends ViewSubject {
      */
     public void CLIstart(){
         System.out.println("Welcome to Eriantys game!\n");
-        cliDrawer.printTitle();
+        System.out.println(cliDrawer.printTitle());
         askUsername();
         //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
         //trough the VirtualView
@@ -70,14 +70,14 @@ public class CLI extends ViewSubject {
     public void askUsername() {
         System.out.println("Nickname? ");
         String username = readUserInput();
-        notifyObserver(obs -> { obs.onUsername(username); });
+        notifyObserver(obs -> obs.onUsername(username));
     }
 
     /**
      * this method is used to ask the user the game settings he desires, which are the game mode and the number of Players
      */
     public void askGamePreferences() {
-        int numPlayers = 3;
+        int numPlayers;
         /*do {
             if (numPlayers < 2 || numPlayers > 4) {
                 System.out.println("Invalid input, repeat");
@@ -87,7 +87,7 @@ public class CLI extends ViewSubject {
         } while (numPlayers < 2 || numPlayers > 4);*/
         System.out.println("How many players do you want to play with? [2, 3 or 4]");
         numPlayers = Integer.parseInt(readUserInput());
-        boolean expertMode = false;
+        boolean expertMode;
         String modePreference;
         /*do {
             System.out.println("Now type the game mode preferred: Expert or Base?");
@@ -130,7 +130,7 @@ public class CLI extends ViewSubject {
 
     public void askMove(){
         int studentMoves=3;
-        int choice=0;
+        int choice;
         int color;
         boolean characterUsed=false;
         boolean turnFinished=false;
@@ -198,20 +198,15 @@ public class CLI extends ViewSubject {
         System.out.println(message.getError());
     }
 
-    public void startGame() {
-        System.out.println("Game started!");
-        //System.out.println(cliDrawer.printGameTable());
-    }
+    public void startGame() { System.out.println("Game started!"); }
 
-    public void startDrawer() {
-        System.out.println(cliDrawer.printGameTable());
-    }
+    public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 
     public CLIDrawer getCliDrawer() {
         return cliDrawer;
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException {
         CLI cli = new CLI();
         ConnectionSocket connectionSocket = new ConnectionSocket();
         ClientController clientController = new ClientController(cli, connectionSocket, cli.getCliDrawer());

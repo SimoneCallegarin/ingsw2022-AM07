@@ -2,6 +2,7 @@ package it.polimi.ingsw.Observer;
 
 import it.polimi.ingsw.Model.Enumeration.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public interface ModelObserver {
 
-    void onGameCreation(int numPlayers, List<String> nicknames, GameMode gameMode,int whereMNId,List<HashMap<RealmColors,Integer>> entrances, List<HashMap<RealmColors,Integer>> clouds,List<HashMap<RealmColors,Integer>> isleStudents, List<HashMap<RealmColors,Integer>> studentsOnCharacter, int numTower, int money, int generalReserve,List<TowerColors> towerColors,List<String> characterNames,List<Integer> characterCost,List<Integer> denyCards);
+    void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors,Integer>> clouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors,Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards);
 
     void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner);
 

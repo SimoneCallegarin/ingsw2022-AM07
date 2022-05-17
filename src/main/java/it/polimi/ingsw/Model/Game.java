@@ -186,50 +186,50 @@ public class Game extends ModelSubject {
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 updateOrder(gamePhase);
 
-
-                //initialization of data to notify the virtual view with
-                List<String> nicknames=new ArrayList<>();
-                List<HashMap<RealmColors,Integer>> entrances=new ArrayList<>();
-                List<TowerColors> towerColors=new ArrayList<>();
-                for(Player p:players){
-                    towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());
-                    entrances.add(p.getDashboard().getEntrance().getStudents());
-                    System.out.println(entrances.size());
-                    nicknames.add(p.getNickname());
-                }
-
-                int whereMNId=gameTable.getIsleManager().getIsleWithMotherNatureIndex();
-
-                List<HashMap<RealmColors,Integer>> clouds=new ArrayList<>();
-                for(Cloud c:gameTable.getClouds()){
-                    clouds.add(c.getStudents());
-                }
-
-                int numTower=players.get(0).getDashboard().getTowerStorage().getNumberOfTowers();
-                int money=players.get(0).getMoney();
-                int generalReserve=gameTable.getGeneralMoneyReserve();
-
-                List<HashMap<RealmColors,Integer>> studentsOnIsle=new ArrayList<>();
-                for(Isle i:gameTable.getIsleManager().getIsles()){
-                    studentsOnIsle.add(i.getStudents());
-                }
-
-                List<String> characterNames=new ArrayList<>();
-                List<Integer> characterCost=new ArrayList<>();
-                List<Integer> denyCards=new ArrayList<>();
-                List<HashMap<RealmColors,Integer>> studentsOnCard=new ArrayList<>();
-
-                for(CharacterCard card:gameTable.getCharacterCards()){
-                    characterNames.add(card.getCharacterCardName().toString());
-                    characterCost.add(card.getCost());
-                    denyCards.add(card.getDenyCards());
-                    studentsOnCard.add(card.getStudents());
-                }
-
-                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,clouds,studentsOnIsle,studentsOnCard,numTower,money,generalReserve,towerColors,characterNames,characterCost,denyCards));
+                setGameCreationValues();
 
             }
 
+    }
+
+    /**
+     * initialization of data to notify the virtual view with.
+     */
+    private void setGameCreationValues() {
+        // DASHBOARDS:
+        ArrayList<String> nicknames = new ArrayList<>();
+        ArrayList<HashMap<RealmColors,Integer>> entrances = new ArrayList<>();
+        ArrayList<TowerColors> towerColors = new ArrayList<>();
+        ArrayList<Integer> numTowers = new ArrayList<>();
+        for(Player p:players){
+            towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());
+            entrances.add(p.getDashboard().getEntrance().getStudents());
+            nicknames.add(p.getNickname());
+            numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
+        }
+        int whereMNId=gameTable.getIsleManager().getIsleWithMotherNatureIndex();
+        int money=players.get(0).getMoney();
+
+        // GAME TABLE:
+        ArrayList<HashMap<RealmColors,Integer>> clouds=new ArrayList<>();
+        for(Cloud c:gameTable.getClouds()){ clouds.add(c.getStudents()); }
+        int generalReserve=gameTable.getGeneralMoneyReserve();
+
+        ArrayList<HashMap<RealmColors,Integer>> studentsOnIsle=new ArrayList<>();
+        for(Isle i:gameTable.getIsleManager().getIsles()){ studentsOnIsle.add(i.getStudents()); }
+
+        ArrayList<String> characterNames=new ArrayList<>();
+        ArrayList<Integer> characterCost=new ArrayList<>();
+        ArrayList<Integer> denyCards=new ArrayList<>();
+        ArrayList<HashMap<RealmColors,Integer>> studentsOnCard=new ArrayList<>();
+        for(CharacterCard card : gameTable.getCharacterCards()){
+            characterNames.add(card.getCharacterCardName().toString());
+            characterCost.add(card.getCost());
+            denyCards.add(card.getDenyCards());
+            studentsOnCard.add(card.getStudents());
+        }
+
+        notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,clouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards));
     }
 
     /**

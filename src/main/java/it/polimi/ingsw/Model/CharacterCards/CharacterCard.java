@@ -88,9 +88,7 @@ public class CharacterCard implements StudentManager, DenyCardManager {
     }
 
     @Override
-    public HashMap<RealmColors, Integer> getStudents() {
-        return null;
-    }
+    public HashMap<RealmColors, Integer> getStudents() { return students; }
 
     /**
      * a getter method to receive a certain value contained in the students' hashmap

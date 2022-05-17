@@ -86,7 +86,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case GAMECREATION_UPDATE -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 updateHandler.setupStorage(gc, cliDrawer);
-                cli.startDrawer();
+                cli.printChanges();
             }
         }
     }

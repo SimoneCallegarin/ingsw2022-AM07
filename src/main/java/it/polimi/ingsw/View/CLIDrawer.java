@@ -72,6 +72,20 @@ public class CLIDrawer {
     }
 
     /**
+     * Initialize the matrix of a rectangle by placing spaces(" ") in each box.
+     * @param place the matrix that we want to initialize.
+     * @param dimensionX the vertical dimension of the matrix.
+     * @param dimensionY the horizontal dimension of the matrix.
+     */
+    private void initializeRectangle(String[][] place, int dimensionX, int dimensionY) {
+        for(int i=0;i<dimensionX;i++){
+            for (int j=0;j<dimensionY;j++){
+                place[i][j] = " ";
+            }
+        }
+    }
+
+    /**
      * Paints the text given with a color that is used to define a student or a professor.
      * @param color RealmColor used (must be a color between: YELLOW,PINK,BLUE,RED AND GREEN).
      * @param toColor the string that has to be colored.
@@ -227,25 +241,12 @@ public class CLIDrawer {
         for(int i=0; i<storage.getNumberOfPlayers();i++)
             drawDashboard(i);
         drawIsles();
-        drawGeneralMoneyReserve();
-        drawCharacterCards();
+        if(storage.isGameMode()){
+            drawGeneralMoneyReserve();
+            drawCharacterCards();
+        }
         drawClouds();
         drawLegend();
-
-    }
-
-    /**
-     * Initialize the matrix of a rectangle by placing spaces(" ") in each box.
-     * @param place the matrix that we want to initialize.
-     * @param dimensionX the vertical dimension of the matrix.
-     * @param dimensionY the horizontal dimension of the matrix.
-     */
-    private void initializeRectangle(String[][] place, int dimensionX, int dimensionY) {
-        for(int i=0;i<dimensionX;i++){
-            for (int j=0;j<dimensionY;j++){
-                place[i][j] = " ";
-            }
-        }
     }
 
     /**
@@ -285,8 +286,8 @@ public class CLIDrawer {
         gameTable[startingPointX+10][startingPointY+14] = "╩";
         gameTable[startingPointX+1][startingPointY+22] = "╣";
         drawDiscardPile(playerID,startingPointX,startingPointY);
-        drawPlayerMoney(playerID,startingPointX,startingPointY);
-
+        if(storage.isGameMode())
+            drawPlayerMoney(playerID,startingPointX,startingPointY);
     }
 
     /**
@@ -499,7 +500,7 @@ public class CLIDrawer {
         // MOTHER NATURE AND DENY CARDS:
         if(storage.getGameTable().getIsle(isleIndex).isMotherNaturePresent())
             gameTable[startingPointX+3][startingPointY+6] = paintService(CLIColors.HB_WHITE,"■");
-        if(storage.getGameTable().getIsle(isleIndex).getDenyCardsOnIsle()==1)
+        if(storage.getGameTable().getIsle(isleIndex).getDenyCardsNumber()==1)
             gameTable[startingPointX+3][startingPointY+6] = paintService(CLIColors.HB_WHITE,"!");
         // TOWERS:
         String towerColor = "T";
@@ -653,7 +654,7 @@ public class CLIDrawer {
             gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2-18+10*i] = Integer.valueOf(storage.getGameTable().getCharacterCard(i).getCharacterCardCost()).toString();
             gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2-17+10*i] = "$";
             gameTable[TABLE_DIMENSION_X/2+4][TABLE_DIMENSION_Y/2-16+10*i] = Integer.valueOf(i).toString();
-            if(storage.getGameTable().getCharacterCardStudents(i)!=0){
+            if(storage.getGameTable().getCharacterCard(i).getNumberOfStudents()!=0){
                 for (RealmColors color : RealmColors.values()){
                     gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCharacterCard(i).getStudentsByColor(color)).toString());
                     cont++;
