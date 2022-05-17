@@ -4,19 +4,32 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 
 public class ServiceMessage extends NetworkMessage {
 
-    private final String error;
+    private final String message;
+    private final int playerID;
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public ServiceMessage(MessageType mt, String error, int playerID) {
+        super(mt);
+        this.message = error;
+        this.playerID = playerID;
+    }
 
     public ServiceMessage(MessageType mt, String error) {
         super(mt);
-        this.error = error;
+        this.message = error;
+        this.playerID = -1;
     }
 
     public ServiceMessage(MessageType mt) {
         super(mt);
-        this.error = "null";
+        this.message = "null";
+        this.playerID = -1;
     }
 
-    public String getError(){ return error; }
+    public String getMessage(){ return message; }
 
     /*@Override
     public String toString() {

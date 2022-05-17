@@ -109,7 +109,7 @@ public class ClientHandler implements Runnable {
                         if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
                             server.broadcastMessage(nickname, new ServiceMessage(MessageType.START_GAME));
                         else
-                            send(new ServiceMessage(MessageType.OK, "You joined a match! Waiting for other players..."));
+                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }
@@ -172,10 +172,10 @@ public class ClientHandler implements Runnable {
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
         System.out.println("QUIT message sent to " + nickname);
-        connected = false;
         if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
             server.onDisconnection(nickname);
-        server.removePlayer(nickname);
+        server.addPlayerToRemove(nickname);
+        connected = false;
         //output.close();
         input.close();
         client.close();

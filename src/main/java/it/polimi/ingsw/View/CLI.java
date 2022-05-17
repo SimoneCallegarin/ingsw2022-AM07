@@ -194,8 +194,8 @@ public class CLI extends ViewSubject {
 
     }
 
-    public void printOK(ServiceMessage message) {
-        System.out.println(message.getError());
+    public void printMessage(ServiceMessage message) {
+        System.out.println(message.getMessage());
     }
 
     public void startGame() { System.out.println("Game started!"); }

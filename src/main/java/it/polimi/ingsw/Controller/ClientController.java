@@ -15,6 +15,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
     ConnectionSocket client;
     UpdateHandler updateHandler;
     CLIDrawer cliDrawer;
+    int playerID;
 
     public ClientController(CLI cli, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.cli = cli;
@@ -78,9 +79,14 @@ public class ClientController implements ViewObserver, NetworkObserver {
         switch (message.getMessageType()) {
             case UNAVAILABLE_USERNAME -> cli.askUsername();
             case USERNAME_ACCEPTED -> cli.askGamePreferences();
+            case MATCH_JOINED -> {
+                ServiceMessage sm = (ServiceMessage) message;
+                playerID = sm.getPlayerID();
+                cli.printMessage(sm);
+            }
             case OK -> {
                 ServiceMessage sm = (ServiceMessage) message;
-                cli.printOK(sm);
+                cli.printMessage(sm);
             }
             case START_GAME -> cli.startGame();
             case GAMECREATION_UPDATE -> {
