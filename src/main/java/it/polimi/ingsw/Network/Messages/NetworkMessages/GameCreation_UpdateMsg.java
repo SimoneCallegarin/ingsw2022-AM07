@@ -10,19 +10,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GameCreation_UpdateMsg extends NetworkMessage{
-    int numPlayers;
-    List<String> nicknames;
-    GameMode gameMode;
-    int whereMNId;
-    List<CharacterCard> activeCharacter;
-    List<HashMap<RealmColors,Integer>> clouds;
-    List<HashMap<RealmColors,Integer>> isleStudents;
-    HashMap<RealmColors,Integer> studentsOnCharacter;
-    List<HashMap<RealmColors,Integer>> entrances;
-    int numTower;
-    int money;
-    int generalReserve;
-    List<TowerColors> towerColors;
+    private int numPlayers;
+    private List<String> nicknames;
+    private GameMode gameMode;
+    private int whereMNId;
+    private List<CharacterCard> activeCharacter;
+    private List<HashMap<RealmColors,Integer>> clouds;
+    private List<HashMap<RealmColors,Integer>> isleStudents;
+    private HashMap<RealmColors,Integer> studentsOnCharacter;
+    private List<HashMap<RealmColors,Integer>> entrances;
+    private int numTower;
+    private int money;
+    private int generalReserve;
+    private List<TowerColors> towerColors;
 
     public GameCreation_UpdateMsg(MessageType messageType, int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<HashMap<RealmColors, Integer>> entrances, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> isleStudents, HashMap<RealmColors, Integer> studentsOnCharacter, int numTower, int money, int generalReserve, List<TowerColors> towerColors) {
         super(messageType);
