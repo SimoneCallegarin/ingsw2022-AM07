@@ -205,15 +205,32 @@ public class Game extends ModelSubject {
                 int money=players.get(0).getMoney();
                 int generalReserve=gameTable.getGeneralMoneyReserve();
                 boolean monkPresent=false;
-                HashMap<RealmColors,Integer> studentsOnCard=new HashMap<>();
+                List<HashMap<RealmColors,Integer>> studentsOnCard=new ArrayList<>();
+                HashMap<RealmColors,Integer> nullHashMap=new HashMap<>();
                 for(RealmColors color:RealmColors.values()){
-                    studentsOnCard.put(color,0);
+                    nullHashMap.put(color,0);
                 }
                 for(CharacterCard card:gameTable.getCharacterCards()){
                     if(card.getCharacterCardName().equals(CharacterCardsName.MONK)){
-                        studentsOnCard.putAll(card.getStudents());
+                        studentsOnCard.add(card.getStudents());
+                    }else{
+                        studentsOnCard.add(nullHashMap);
+                    }
+                    if(card.getCharacterCardName().equals(CharacterCardsName.JESTER))
+                    {
+                        studentsOnCard.add(card.getStudents());
+                    }
+                    else{
+                        studentsOnCard.add(nullHashMap);
+                    }
+                    if(card.getCharacterCardName().equals(CharacterCardsName.SPOILED_PRINCESS)){
+                        studentsOnCard.add(card.getStudents());
+                    }
+                    else{
+                        studentsOnCard.add(nullHashMap);
                     }
                 }
+
                 List<HashMap<RealmColors,Integer>> entrances=new ArrayList<>();
                 for(Player p:players){
                     entrances.add(p.getDashboard().getEntrance().getStudents());
@@ -227,7 +244,17 @@ public class Game extends ModelSubject {
                     studentsOnIsle.add(i.getStudents());
                 }
 
-                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,activeCharacter,clouds,studentsOnIsle,studentsOnCard,numTower,money,generalReserve,towerColors));
+                List<String> characterNames=new ArrayList<>();
+                List<Integer> characterCost=new ArrayList<>();
+                List<Integer> denyCards=new ArrayList<>();
+
+                for(CharacterCard card:gameTable.getCharacterCards()){
+                    characterNames.add(card.getCharacterCardName().toString());
+                    characterCost.add(card.getCost());
+                    denyCards.add(card.getDenyCards());
+                }
+
+                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,activeCharacter,clouds,studentsOnIsle,studentsOnCard,numTower,money,generalReserve,towerColors,characterNames,characterCost,denyCards));
 
             }
 

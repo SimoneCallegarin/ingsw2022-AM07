@@ -17,28 +17,34 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
     private List<CharacterCard> activeCharacter;
     private List<HashMap<RealmColors,Integer>> clouds;
     private List<HashMap<RealmColors,Integer>> isleStudents;
-    private HashMap<RealmColors,Integer> studentsOnCharacter;
+    private List<HashMap<RealmColors,Integer>> studentsOnCharacter;
     private List<HashMap<RealmColors,Integer>> entrances;
     private int numTower;
     private int money;
     private int generalReserve;
     private List<TowerColors> towerColors;
+    private List<String> characterNames;
+    private List<Integer> characterCost;
+    private List<Integer> denyCards;
 
-    public GameCreation_UpdateMsg(MessageType messageType, int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<HashMap<RealmColors, Integer>> entrances, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> isleStudents, HashMap<RealmColors, Integer> studentsOnCharacter, int numTower, int money, int generalReserve, List<TowerColors> towerColors) {
+    public GameCreation_UpdateMsg(MessageType messageType, int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> isleStudents, List<HashMap<RealmColors, Integer>> studentsOnCharacter, List<HashMap<RealmColors, Integer>> entrances, int numTower, int money, int generalReserve, List<TowerColors> towerColors, List<String> characterNames, List<Integer> characterCost, List<Integer> denyCards) {
         super(messageType);
         this.numPlayers = numPlayers;
         this.nicknames = nicknames;
-        this.gameMode=gameMode;
+        this.gameMode = gameMode;
         this.whereMNId = whereMNId;
-        this.entrances=entrances;
         this.activeCharacter = activeCharacter;
         this.clouds = clouds;
-        this.isleStudents=isleStudents;
+        this.isleStudents = isleStudents;
         this.studentsOnCharacter = studentsOnCharacter;
+        this.entrances = entrances;
         this.numTower = numTower;
         this.money = money;
         this.generalReserve = generalReserve;
-        this.towerColors=towerColors;
+        this.towerColors = towerColors;
+        this.characterNames = characterNames;
+        this.characterCost = characterCost;
+        this.denyCards = denyCards;
     }
 
     public int getNumPlayers() {
@@ -69,7 +75,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         return isleStudents;
     }
 
-    public HashMap<RealmColors, Integer> getStudentsOnCharacter() {
+    public List<HashMap<RealmColors, Integer>> getStudentsOnCharacter() {
         return studentsOnCharacter;
     }
 
@@ -91,5 +97,17 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
 
     public List<TowerColors> getTowerColors() {
         return towerColors;
+    }
+
+    public List<String> getCharacterNames() {
+        return characterNames;
+    }
+
+    public List<Integer> getCharacterCost() {
+        return characterCost;
+    }
+
+    public List<Integer> getDenyCards() {
+        return denyCards;
     }
 }
