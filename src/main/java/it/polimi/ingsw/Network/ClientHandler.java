@@ -217,4 +217,11 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    public void sendUpdate(NetworkMessage nm){
+        try {
+            output.writeObject(nm);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }

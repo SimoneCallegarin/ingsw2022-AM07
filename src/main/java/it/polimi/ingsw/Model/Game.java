@@ -186,6 +186,7 @@ public class Game extends ModelSubject {
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 updateOrder(gamePhase);
 
+
                 //initialization of data to notify the virtual view with
                 List<String> nicknames=new ArrayList<>();
                 for(Player p:players){
@@ -204,18 +205,29 @@ public class Game extends ModelSubject {
                 int money=players.get(0).getMoney();
                 int generalReserve=gameTable.getGeneralMoneyReserve();
                 boolean monkPresent=false;
-                List<HashMap<RealmColors,Integer>> studentsOnCard=new ArrayList<>();
+                HashMap<RealmColors,Integer> studentsOnCard=new HashMap<>();
+                for(RealmColors color:RealmColors.values()){
+                    studentsOnCard.put(color,0);
+                }
                 for(CharacterCard card:gameTable.getCharacterCards()){
                     if(card.getCharacterCardName().equals(CharacterCardsName.MONK)){
-                        studentsOnCard.add(card.getStudents());
+                        studentsOnCard.putAll(card.getStudents());
                     }
                 }
                 List<HashMap<RealmColors,Integer>> entrances=new ArrayList<>();
                 for(Player p:players){
                     entrances.add(p.getDashboard().getEntrance().getStudents());
                 }
+                List<TowerColors> towerColors=new ArrayList<>();
+                for(Player p:players){
+                    towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());
+                }
+                List<HashMap<RealmColors,Integer>> studentsOnIsle=new ArrayList<>();
+                for(Isle i:gameTable.getIsleManager().getIsles()){
+                    studentsOnIsle.add(i.getStudents());
+                }
 
-                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,activeCharacter,clouds,studentsOnCard,numTower,money,generalReserve));
+                notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,activeCharacter,clouds,studentsOnIsle,studentsOnCard,numTower,money,generalReserve,towerColors));
 
             }
 
