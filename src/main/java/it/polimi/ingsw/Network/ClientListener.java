@@ -40,7 +40,7 @@ public class ClientListener extends NetworkSubject implements Runnable {
                     notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
                 System.out.println("An error occurred...");
-                e.printStackTrace();
+                //e.printStackTrace();
                 cs.disconnect();
             }
         }
