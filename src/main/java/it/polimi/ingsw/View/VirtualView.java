@@ -19,9 +19,9 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onGameCreation(int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<HashMap<RealmColors,Integer>> entrances, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors,Integer>> isleStudents, List<HashMap<RealmColors, Integer>> studentsOnCharacter, int numTower, int money, int generalReserve,List<TowerColors> towerColors, List<String> characterNames,List<Integer> characterCost,List<Integer> denyCards) {
         GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.GAMECREATION_UPDATE,numPlayers,nicknames,gameMode,whereMNId,clouds,isleStudents, studentsOnCharacter,entrances,numTower,money,generalReserve,towerColors,characterNames,characterCost,denyCards);
-        for(ClientHandler ch: clientHandler){
-            ch.sendUpdate(gameCreation_updateMsg);
-        }
+        //for(ClientHandler ch: clientHandler){
+            //ch.sendUpdate(gameCreation_updateMsg);
+        //}
     }
 
     @Override

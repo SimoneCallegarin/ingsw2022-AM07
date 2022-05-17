@@ -32,6 +32,8 @@ public class Server {
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
     private final ArrayList<String> chosenNicknames;
+
+    private final ArrayList<String> playersToRemove;
     /**
      * HashMap that permits to find the client handler associated to a certain nickname,
      * the matchID of the game he is playing and his playerID in that game.
@@ -53,6 +55,7 @@ public class Server {
         this.activeMatches = new ArrayList<>();
         this.virtualViews=new ArrayList<>();
         this.chosenNicknames = new ArrayList<>();
+        this.playersToRemove = new ArrayList<>();
         this.players = new HashMap<>();
     }
 
@@ -199,6 +202,9 @@ public class Server {
             if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
             }
+        for (String playerToRemove : playersToRemove)
+            removePlayer(playerToRemove);
+        playersToRemove.clear();
         System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
     }
 
@@ -208,6 +214,10 @@ public class Server {
             if(players.get(player).getMatchID() == matchToBroadcast && players.get(player).getClientHandler().isConnected()) {
                 players.get(player).getClientHandler().send(message);
             }
+    }
+
+    public void addPlayerToRemove(String nickname) {
+        playersToRemove.add(nickname);
     }
 
     public static void main(String[] args) {
