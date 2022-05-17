@@ -15,11 +15,11 @@ public class StorageOfModel {
     private GameTableModelView gameTable;
 
 
-    public StorageOfModel(int numberOfPlayers, PlayerModelView[] dashboards, GameTableModelView gameTable, boolean gameMode) {
+    public StorageOfModel(int numberOfPlayers, ArrayList<PlayerModelView> dashboards, GameTableModelView gameTable, boolean gameMode) {
         this.numberOfPlayers = numberOfPlayers;
         this.gameMode = gameMode;
         for(int i=0;i<numberOfPlayers;i++)
-            setDashboard(i,dashboards[i]);
+            setDashboard(i,dashboards.get(i));
         setGameTable(gameTable);
     }
 

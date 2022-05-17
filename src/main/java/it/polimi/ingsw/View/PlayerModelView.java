@@ -50,11 +50,11 @@ public class PlayerModelView {
 
     public String getNickname() { return nickname; }
 
-    public HashMap<RealmColors,Integer> getEntranceStudents() { return entranceStudents; }
+    public int getEntranceStudents(RealmColors color) { return entranceStudents.get(color); }
 
-    public HashMap<RealmColors,Integer> getDiningStudents() { return diningStudents; }
+    public int getDiningStudents(RealmColors color) { return diningStudents.get(color); }
 
-    public HashMap<RealmColors,Integer> getDiningProfessors() { return diningProfessors; }
+    public int getDiningProfessors(RealmColors color) { return diningProfessors.get(color); }
 
     public int getNumOfTowers() { return numOfTowers; }
 

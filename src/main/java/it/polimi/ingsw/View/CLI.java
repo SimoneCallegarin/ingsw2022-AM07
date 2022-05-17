@@ -3,7 +3,6 @@ package it.polimi.ingsw.View;
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
-import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.BufferedReader;

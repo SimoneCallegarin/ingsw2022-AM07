@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import java.util.ArrayList;
 
@@ -13,25 +12,30 @@ public class UpdateHandler {
 
         ArrayList<PlayerModelView> dashboards = new ArrayList<>();
         for(int i=0; i<storage.getNumberOfPlayers(); i++){
-            PlayerModelView dashboard = new PlayerModelView(message.getNicknames().get(i),entranceStudents,message.getNumTower(),towerColor,message.getMoney());
+            PlayerModelView dashboard = new PlayerModelView(message.getNicknames().get(i),message.getEntrances().get(i),message.getNumTower(),message.getTowerColors().get(i), message.getMoney());
             dashboards.add(i,dashboard);
         }
         ArrayList<GameTableModelView.CharacterCard> characterCards = new ArrayList<>();
         ArrayList<GameTableModelView.Isle> isles = new ArrayList<>();
         ArrayList<GameTableModelView.Cloud> clouds = new ArrayList<>();
 
-        for(int i; i<3; i++){
-            GameTableModelView.CharacterCard characterCard = new GameTableModelView.CharacterCard(cost,message.getStudentsOnCharacter(),denycards);
+        for(int i=0; i<3; i++){
+            GameTableModelView.CharacterCard characterCard = new GameTableModelView.CharacterCard(message.getActiveCharacter().get(i).getCharacterCardName(),message.getActiveCharacter().get(i).getCost(),message.getStudentsOnCharacter(),message.getDenyCards());
             characterCards.add(i,characterCard);
         }
-        for(int i; i<12; i++){
-            GameTableModelView.Isle isle = new GameTableModelView.Isle(message.get);
+        for(int i=0; i<12; i++){
+            GameTableModelView.Isle isle;
+            if(i== message.getWhereMNId())
+                isle = new GameTableModelView.Isle(message.getIsleStudents().get(i),true);
+            else
+                isle = new GameTableModelView.Isle(message.getIsleStudents().get(i),false);
+            isles.add(i,isle);
         }
-        for(int i; i<message.getNumPlayers(); i++)
+        for(int i=0; i<message.getNumPlayers(); i++)
             clouds = new GameTableModelView.Cloud();
 
         GameTableModelView gameTable = new GameTableModelView(characterCards,isles,clouds,message.getGeneralReserve());
-        storage = new StorageOfModel(message.getNumPlayers(), gameMode, PlayerModelView[] dashboards, GameTableModelView gameTable);
+        storage = new StorageOfModel(message.getNumPlayers(),dashboards,gameTable,message.getGameMode());
     }
 
     public void updateStorage () { // Receive an update message containing the information about what changed.
