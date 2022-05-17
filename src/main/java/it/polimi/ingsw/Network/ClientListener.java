@@ -4,7 +4,6 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.NetworkSubject;
-import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -33,7 +32,7 @@ public class ClientListener extends NetworkSubject implements Runnable {
                 messageReceived = (NetworkMessage) input.readObject();
                 if (messageReceived.getMessageType() == MessageType.QUIT) {
                     ServiceMessage sm = (ServiceMessage) messageReceived;
-                    System.out.println(sm.getError());
+                    System.out.println(sm.getMessage());
                     cs.disconnect();
                 }
                 else

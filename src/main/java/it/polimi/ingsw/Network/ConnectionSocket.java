@@ -6,7 +6,6 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
-import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.*;
 import java.net.Socket;
@@ -56,7 +55,7 @@ public class ConnectionSocket {
             send(new LoginMessage(nickname));
             messageReceived = (ServiceMessage) input.readObject();
             if (messageReceived.getMessageType() == MessageType.KO)
-                System.out.println(messageReceived.getError() + ", please try again.");
+                System.out.println(messageReceived.getMessage() + ", please try again.");
         } while (messageReceived.getMessageType() != MessageType.OK);
 
         do {
@@ -70,7 +69,7 @@ public class ConnectionSocket {
             send(new GamePreferencesMessage(numberOfPlayers, expertMode));
             messageReceived = (ServiceMessage) input.readObject();
             if (messageReceived.getMessageType() == MessageType.KO)
-                System.out.println(messageReceived.getError() + ", please try again.");
+                System.out.println(messageReceived.getMessage() + ", please try again.");
         } while (messageReceived.getMessageType() != MessageType.OK);
 
         System.out.println("You joined a game!");

@@ -82,10 +82,11 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case MATCH_JOINED -> {
                 ServiceMessage sm = (ServiceMessage) message;
                 playerID = sm.getPlayerID();
+                cli.printMessage(sm);
             }
             case OK -> {
                 ServiceMessage sm = (ServiceMessage) message;
-                cli.printOK(sm);
+                cli.printMessage(sm);
             }
             case START_GAME -> cli.startGame();
             case GAMECREATION_UPDATE -> {
