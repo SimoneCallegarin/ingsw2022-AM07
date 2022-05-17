@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
@@ -9,36 +8,44 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * this message is sent at the creation of the game to set all the necessary parameters to draw the game table
+ */
 public class GameCreation_UpdateMsg extends NetworkMessage{
-    private int numPlayers;
-    private List<String> nicknames;
-    private GameMode gameMode;
-    private int whereMNId;
-    private List<CharacterCard> activeCharacter;
-    private List<HashMap<RealmColors,Integer>> clouds;
-    private List<HashMap<RealmColors,Integer>> isleStudents;
-    private HashMap<RealmColors,Integer> studentsOnCharacter;
-    private List<HashMap<RealmColors,Integer>> entrances;
-    private int numTower;
-    private int money;
-    private int generalReserve;
-    private List<TowerColors> towerColors;
+    private final int numPlayers;
+    private final List<String> nicknames;
+    private final GameMode gameMode;
+    private final int whereMNId;
 
-    public GameCreation_UpdateMsg(MessageType messageType, int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<HashMap<RealmColors, Integer>> entrances, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> isleStudents, HashMap<RealmColors, Integer> studentsOnCharacter, int numTower, int money, int generalReserve, List<TowerColors> towerColors) {
+    private final List<HashMap<RealmColors,Integer>> clouds;
+    private final List<HashMap<RealmColors,Integer>> isleStudents;
+    private final List<HashMap<RealmColors,Integer>> studentsOnCharacter;
+    private final List<HashMap<RealmColors,Integer>> entrances;
+    private final int numTower;
+    private final int money;
+    private final int generalReserve;
+    private final List<TowerColors> towerColors;
+    private final List<String> characterNames;
+    private final List<Integer> characterCost;
+    private final List<Integer> denyCards;
+
+    public GameCreation_UpdateMsg(MessageType messageType, int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> isleStudents, List<HashMap<RealmColors, Integer>> studentsOnCharacter, List<HashMap<RealmColors, Integer>> entrances, int numTower, int money, int generalReserve, List<TowerColors> towerColors, List<String> characterNames, List<Integer> characterCost, List<Integer> denyCards) {
         super(messageType);
         this.numPlayers = numPlayers;
         this.nicknames = nicknames;
-        this.gameMode=gameMode;
+        this.gameMode = gameMode;
         this.whereMNId = whereMNId;
-        this.entrances=entrances;
-        this.activeCharacter = activeCharacter;
         this.clouds = clouds;
-        this.isleStudents=isleStudents;
+        this.isleStudents = isleStudents;
         this.studentsOnCharacter = studentsOnCharacter;
+        this.entrances = entrances;
         this.numTower = numTower;
         this.money = money;
         this.generalReserve = generalReserve;
-        this.towerColors=towerColors;
+        this.towerColors = towerColors;
+        this.characterNames = characterNames;
+        this.characterCost = characterCost;
+        this.denyCards = denyCards;
     }
 
     public int getNumPlayers() {
@@ -57,10 +64,6 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         return whereMNId;
     }
 
-    public List<CharacterCard> getActiveCharacter() {
-        return activeCharacter;
-    }
-
     public List<HashMap<RealmColors, Integer>> getClouds() {
         return clouds;
     }
@@ -69,7 +72,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         return isleStudents;
     }
 
-    public HashMap<RealmColors, Integer> getStudentsOnCharacter() {
+    public List<HashMap<RealmColors, Integer>> getStudentsOnCharacter() {
         return studentsOnCharacter;
     }
 
@@ -91,5 +94,17 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
 
     public List<TowerColors> getTowerColors() {
         return towerColors;
+    }
+
+    public List<String> getCharacterNames() {
+        return characterNames;
+    }
+
+    public List<Integer> getCharacterCost() {
+        return characterCost;
+    }
+
+    public List<Integer> getDenyCards() {
+        return denyCards;
     }
 }
