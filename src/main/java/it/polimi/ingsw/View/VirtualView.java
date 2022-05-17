@@ -1,6 +1,5 @@
 package it.polimi.ingsw.View;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Network.ClientHandler;
 import it.polimi.ingsw.Network.Messages.MessageType;

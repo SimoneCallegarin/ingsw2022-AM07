@@ -1,12 +1,13 @@
 package it.polimi.ingsw.Observer;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
-
 import it.polimi.ingsw.Model.Enumeration.*;
 
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * this interface offers the method used by the model observers to send update of his state in order to update the view accordingly
+ */
 public interface ModelObserver {
 
     void onGameCreation(int numPlayers, List<String> nicknames, GameMode gameMode,int whereMNId,List<HashMap<RealmColors,Integer>> entrances, List<HashMap<RealmColors,Integer>> clouds,List<HashMap<RealmColors,Integer>> isleStudents, List<HashMap<RealmColors,Integer>> studentsOnCharacter, int numTower, int money, int generalReserve,List<TowerColors> towerColors,List<String> characterNames,List<Integer> characterCost,List<Integer> denyCards);
