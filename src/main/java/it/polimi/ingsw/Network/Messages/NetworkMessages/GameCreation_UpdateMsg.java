@@ -56,8 +56,8 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         return nicknames;
     }
 
-    public GameMode getGameMode() {
-        return gameMode;
+    public boolean getGameMode() {
+        return gameMode == GameMode.EXPERT;
     }
 
     public int getWhereMNId() {

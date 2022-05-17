@@ -109,7 +109,7 @@ public class Server {
      * @param nickname of the player that wants to play
      * @param preferences of the player, about the number of players to play with and the game mode chosen
      */
-    public boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences){
+    public boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
         if(!checkValuesValidity(preferences))
             return false;
         int matchID =0;
@@ -126,6 +126,7 @@ public class Server {
             addPlayerToAnExistingLobby(matchID, nickname,preferences);
         players.get(nickname).setMatchID(matchID);
         players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
+        virtualViews.get(matchID).setClientHandler(clientHandler);
         return true;
     }
 
@@ -138,6 +139,7 @@ public class Server {
         Game game = new Game();
         GameController gameController = new GameController(game);
         VirtualView virtualView= new VirtualView();
+        game.addObserver(virtualView);
         gameController.addPlayerToGame(nickName,preferences,true);
         activeMatches.add(gameController);
         virtualViews.add(virtualView);
@@ -164,7 +166,6 @@ public class Server {
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
-        //virtualViews.get(playerInfo.getPlayerID()).setClientHandler(clientHandler);
         System.out.println("Put " + nickName + "'s PlayerInfo in the players HashMap");
     }
 

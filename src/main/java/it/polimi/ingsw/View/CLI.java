@@ -3,7 +3,6 @@ package it.polimi.ingsw.View;
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
-import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.BufferedReader;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * this class implements the command line interface to play trough terminal, it's observed by the connectionSocket which sends messages
@@ -21,9 +19,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-    CLIDrawer cliDrawer=new CLIDrawer();    // it will be received by message
+    CLIDrawer cliDrawer;
 
     public CLI() {
+        cliDrawer = new CLIDrawer();
         //addObserver(connectionSocket);
     }
 
@@ -201,13 +200,21 @@ public class CLI extends ViewSubject {
 
     public void startGame() {
         System.out.println("Game started!");
+        //System.out.println(cliDrawer.printGameTable());
+    }
+
+    public void startDrawer() {
         System.out.println(cliDrawer.printGameTable());
+    }
+
+    public CLIDrawer getCliDrawer() {
+        return cliDrawer;
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         CLI cli = new CLI();
         ConnectionSocket connectionSocket = new ConnectionSocket();
-        ClientController clientController = new ClientController(cli, connectionSocket);
+        ClientController clientController = new ClientController(cli, connectionSocket, cli.getCliDrawer());
         cli.addObserver(clientController);
         connectionSocket.startConnection();
         connectionSocket.getClientListener().addObserver(clientController);

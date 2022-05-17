@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.Enumeration.*;
-import it.polimi.ingsw.Model.Game;
 
 public class CLIDrawer {
 
@@ -43,7 +42,11 @@ public class CLIDrawer {
 
     private final String[][] legend = new String[LEGEND_X][LEGEND_Y+10];
 
-    Game game = new Game();
+    private StorageOfModel storage;
+
+    public void setStorage(StorageOfModel storage) {
+        this.storage = storage;
+    }
 
     /**
      * Permits designing in the gameTable matrix a rectangle with certain dimension and positions.
@@ -188,10 +191,6 @@ public class CLIDrawer {
      */
     public StringBuilder printGameTable() {
         StringBuilder toPrint=new StringBuilder();
-        game.addFirstPlayer("simo_calle",true,4);
-        game.addAnotherPlayer("jack");
-        game.addAnotherPlayer("filippo");
-        game.addAnotherPlayer("TrentAlexanderArnold");
         //LIMITE A 20 CARATTERI PER IL nickname!!! (va imposto).
         createGameTable();
         for(int i=0;i<TABLE_DIMENSION_X;i++){
@@ -225,7 +224,7 @@ public class CLIDrawer {
 
         initializeRectangle(legend,LEGEND_X,LEGEND_Y+10);
 
-        for(int i=0; i<game.getNumberOfPlayers();i++)
+        for(int i=0; i<storage.getNumberOfPlayers();i++)
             drawDashboard(i);
         drawIsles();
         drawGeneralMoneyReserve();
@@ -303,8 +302,8 @@ public class CLIDrawer {
         ╚═════════════════════╝
          */
         drawRectangle(gameTable, startingPointX-1,startingPointY,NICKNAME_X,NICKNAME_Y);
-        int posNickname = (NICKNAME_Y-game.getPlayerByIndex(playerID).getNickname().length())/2;
-        writeLongerString(gameTable,paintService(CLIColors.HB_WHITE,game.getPlayerByIndex(playerID).getNickname()),startingPointX,startingPointY+posNickname);
+        int posNickname = (NICKNAME_Y-storage.getDashboard(playerID).getNickname().length())/2;
+        writeLongerString(gameTable,paintService(CLIColors.HB_WHITE,storage.getDashboard(playerID).getNickname()),startingPointX,startingPointY+posNickname);
     }
 
     /**
@@ -331,7 +330,7 @@ public class CLIDrawer {
         // STUDENTS IN THE ENTRANCE:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
-            gameTable[startingPointX+4+cont][startingPointY+4]=paintStudent(color,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getEntrance().getStudentsByColor(color)).toString());
+            gameTable[startingPointX+4+cont][startingPointY+4]=paintStudent(color,Integer.valueOf(storage.getDashboard(playerID).getEntranceStudents(color)).toString());
             cont++;
         }
     }
@@ -361,8 +360,8 @@ public class CLIDrawer {
         // STUDENTS IN THE DINING ROOM:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
-            gameTable[startingPointX+4+cont][startingPointY+ DINING_AND_TOWERS_Y +1]=paintStudent(color,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color)).toString());
-            if (game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color)>=10)
+            gameTable[startingPointX+4+cont][startingPointY+ DINING_AND_TOWERS_Y +1]=paintStudent(color,Integer.valueOf(storage.getDashboard(playerID).getDiningStudents(color)).toString());
+            if (storage.getDashboard(playerID).getDiningStudents(color)>=10)
                 gameTable[startingPointX+4][startingPointY+ DINING_AND_TOWERS_Y +2] = "";
             cont++;
         }
@@ -370,7 +369,7 @@ public class CLIDrawer {
         //game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(RealmColors.BLUE);
         int contP =0;
         for (RealmColors color : RealmColors.values()){
-            if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getProfessorByColor(color)==1)
+            if(storage.getDashboard(playerID).getDiningProfessors(color)==1)
                 gameTable[startingPointX+4+contP][startingPointY+ DINING_AND_TOWERS_Y +3]=paintStudent(color,"¶");
             contP++;
         }
@@ -399,15 +398,15 @@ public class CLIDrawer {
         drawRectangle(gameTable, startingPointX+1,startingPointY+14,DASHBOARD_PARTS_X,DINING_AND_TOWERS_Y);
         // TOWERS IN THE TOWER STORAGE:
         String towerColor = " ";
-        if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getTowerColor()== TowerColors.WHITE)
+        if(storage.getDashboard(playerID).getTowerColor() == TowerColors.WHITE)
             towerColor= paintTower(TowerColors.WHITE,"W");
-        if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getTowerColor()== TowerColors.BLACK)
+        if(storage.getDashboard(playerID).getTowerColor() == TowerColors.BLACK)
             towerColor= paintTower(TowerColors.BLACK,"B");
-        if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getTowerColor()== TowerColors.GREY)
+        if(storage.getDashboard(playerID).getTowerColor() == TowerColors.GREY)
             towerColor= paintTower(TowerColors.GREY,"G");
-            for(int i=0;i<=game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers();i=i+2){
+            for(int i=0;i<=storage.getDashboard(playerID).getNumOfTowers();i=i+2){
                 gameTable[startingPointX+4+i/2][startingPointY+DINING_AND_TOWERS_Y+9] = towerColor;
-                if(game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers()%2==0 && i==game.getPlayerByIndex(playerID).getDashboard().getTowerStorage().getNumberOfTowers()){
+                if(storage.getDashboard(playerID).getNumOfTowers()%2==0 && i==storage.getDashboard(playerID).getNumOfTowers()){
                     gameTable[startingPointX+4+i/2][startingPointY+DINING_AND_TOWERS_Y+9] = " ";
                     gameTable[startingPointX+4+i/2][startingPointY+DINING_AND_TOWERS_Y+10] = towerColor;
                 }
@@ -438,7 +437,7 @@ public class CLIDrawer {
         drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,SMALL_RECTANGLE_X,SMALL_RECTANGLE_Y);
         // MONEY:
         gameTable[startingPointX+posX][startingPointY+posY+2] = paintService(CLIColors.B_WHITE,"$");
-        gameTable[startingPointX+posX+1][startingPointY+posY+2] = Integer.valueOf(game.getPlayerByIndex(playerID).getMoney()).toString();
+        gameTable[startingPointX+posX+1][startingPointY+posY+2] = Integer.valueOf(storage.getDashboard(playerID).getMoney()).toString();
     }
 
     /**
@@ -464,12 +463,12 @@ public class CLIDrawer {
 
         // TURN ORDER:
         gameTable[startingPointX+posX][startingPointY+posY+1] = paintService(CLIColors.B_WHITE,"T");
-        if(game.getPlayerByIndex(playerID).getDiscardPile().getTurnOrder()!=0)
-            gameTable[startingPointX][startingPointY+posY+1] = Integer.valueOf(game.getPlayerByIndex(playerID).getDiscardPile().getTurnOrder()).toString();
+        if(storage.getDashboard(playerID).getDiscardPileTurnOrder()!=0)
+            gameTable[startingPointX][startingPointY+posY+1] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileTurnOrder()).toString();
         // MOTHER NATURE MOVEMENT:
         gameTable[startingPointX+posX][startingPointY+posY+3] = paintService(CLIColors.B_WHITE,"M");
-        if(game.getPlayerByIndex(playerID).getDiscardPile().getMnMovement()!=0)
-            gameTable[startingPointX][startingPointY+posY+3] = Integer.valueOf(game.getPlayerByIndex(playerID).getDiscardPile().getMnMovement()).toString();
+        if(storage.getDashboard(playerID).getDiscardPileMNMovement()!=0)
+            gameTable[startingPointX][startingPointY+posY+3] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileMNMovement()).toString();
     }
 
     /**
@@ -492,29 +491,29 @@ public class CLIDrawer {
         // STUDENTS IN THE ISLE:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
-            gameTable[startingPointX+2][startingPointY+2+cont*2]=paintStudent(color,Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(color)).toString());
-            if (game.getGameTable().getIsleManager().getIsle(isleIndex).getStudentsByColor(color)>=10)
+            gameTable[startingPointX+2][startingPointY+2+cont*2]=paintStudent(color,Integer.valueOf(storage.getGameTable().getIsle(isleIndex).getStudentsByColor(color)).toString());
+            if (storage.getGameTable().getIsle(isleIndex).getStudentsByColor(color)>=10)
                 gameTable[startingPointX+2][startingPointY+3+cont*2] = "";
             cont++;
         }
         // MOTHER NATURE AND DENY CARDS:
-        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getMotherNature())
+        if(storage.getGameTable().getIsle(isleIndex).isMotherNaturePresent())
             gameTable[startingPointX+3][startingPointY+6] = paintService(CLIColors.HB_WHITE,"■");
-        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getDenyCards()==1)
+        if(storage.getGameTable().getIsle(isleIndex).getDenyCardsOnIsle()==1)
             gameTable[startingPointX+3][startingPointY+6] = paintService(CLIColors.HB_WHITE,"!");
         // TOWERS:
         String towerColor = "T";
-        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor() == TowerColors.WHITE)
+        if(storage.getGameTable().getIsle(isleIndex).getTowerColor() == TowerColors.WHITE)
             towerColor= paintTower(TowerColors.WHITE,"W");
-        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor() == TowerColors.BLACK)
+        if(storage.getGameTable().getIsle(isleIndex).getTowerColor() == TowerColors.BLACK)
             towerColor= paintTower(TowerColors.BLACK,"B");
-        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor() == TowerColors.GREY)
+        if(storage.getGameTable().getIsle(isleIndex).getTowerColor() == TowerColors.GREY)
             towerColor= paintTower(TowerColors.GREY,"G");
-        if(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor()!=TowerColors.NOCOLOR)
-            gameTable[startingPointX+4][startingPointY+5] = paintTower(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor(),Integer.valueOf(game.getGameTable().getIsleManager().getIsle(isleIndex).getNumOfIsles()).toString());
+        if(storage.getGameTable().getIsle(isleIndex).getTowerColor() != TowerColors.NOCOLOR)
+            gameTable[startingPointX+4][startingPointY+5] = paintTower(storage.getGameTable().getIsle(isleIndex).getTowerColor(),Integer.valueOf(storage.getGameTable().getIsle(isleIndex).getTowerNumber()).toString());
         else
             gameTable[startingPointX+4][startingPointY+5] = "0";
-        gameTable[startingPointX+4][startingPointY+6] = paintTower(game.getGameTable().getIsleManager().getIsle(isleIndex).getTowersColor(),"_");
+        gameTable[startingPointX+4][startingPointY+6] = paintTower(storage.getGameTable().getIsle(isleIndex).getTowerColor(),"_");
         gameTable[startingPointX+4][startingPointY+7] = towerColor;
     }
 
@@ -550,7 +549,7 @@ public class CLIDrawer {
                                 ║    0_T    ║   ║    0_T    ║   ║    0_T    ║
                                 ╚═══════════╝   ╚═══════════╝   ╚═══════════╝
          */
-        for(int i=0; i<game.getGameTable().getIsleManager().getIsles().size(); i++){
+        for(int i=0; i<storage.getGameTable().getIsles().size(); i++){
             if(i==0||i==4)
                     drawIsle(4,28+16*i,i);
             if(i>0&&i<4)
@@ -582,11 +581,11 @@ public class CLIDrawer {
         gameTable[12][startingPointY+4] = Integer.valueOf(cloudIndex).toString();
         int cont=0;
         for (RealmColors color : RealmColors.values()){
-            if(game.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)>0){
+            if(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)>0){
                 if(cont<2)
-                    gameTable[9 +1][startingPointY+3+2*cont]=paintStudent(color,Integer.valueOf(game.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
+                    gameTable[9 +1][startingPointY+3+2*cont]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
                 else
-                    gameTable[9 +2][startingPointY+3+2*(cont-2)]=paintStudent(color,Integer.valueOf(game.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
+                    gameTable[9 +2][startingPointY+3+2*(cont-2)]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
 
                 cont++;
             }
@@ -608,7 +607,7 @@ public class CLIDrawer {
          */
         drawRectangle(gameTable, TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-22,CLOUDS_CONTAINER_X,CLOUDS_CONTAINER_Y);
             writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"),TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-3);
-            for(int i=0; i<game.getNumberOfPlayers(); i++){
+            for(int i=0; i<storage.getNumberOfPlayers(); i++){
             drawCloud(TABLE_DIMENSION_Y/2-20+11*i,i);
         }
     }
@@ -626,7 +625,7 @@ public class CLIDrawer {
         drawRectangle(gameTable, TABLE_DIMENSION_X/2+1,TABLE_DIMENSION_Y/2+14,GEN_MONEY_RES_X,GEN_MONEY_RES_Y);
         writeLongerString(gameTable,"MONEY║",TABLE_DIMENSION_X/2+2,TABLE_DIMENSION_Y/2+15);
         gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2+21] = "\b ";
-        writeLongerString(gameTable,Integer.valueOf(game.getGameTable().getGeneralMoneyReserve()).toString()+"$",TABLE_DIMENSION_X/2+3,TABLE_DIMENSION_Y/2+16);
+        writeLongerString(gameTable,Integer.valueOf(storage.getGameTable().getGeneralMoneyReserve()).toString()+"$",TABLE_DIMENSION_X/2+3,TABLE_DIMENSION_Y/2+16);
         gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2+19] = " \b";
     }
 
@@ -651,18 +650,18 @@ public class CLIDrawer {
         int cont=0;
 
         for (int i=0;i<3;i++){
-            gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2-18+10*i] = Integer.valueOf(game.getGameTable().getCharacterCard(i).getCost()).toString();
+            gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2-18+10*i] = Integer.valueOf(storage.getGameTable().getCharacterCard(i).getCharacterCardCost()).toString();
             gameTable[TABLE_DIMENSION_X/2+2][TABLE_DIMENSION_Y/2-17+10*i] = "$";
             gameTable[TABLE_DIMENSION_X/2+4][TABLE_DIMENSION_Y/2-16+10*i] = Integer.valueOf(i).toString();
-            if(game.getGameTable().getCharacterCard(i).getNumberOfStudents()!=0){
+            if(storage.getGameTable().getCharacterCardStudents(i)!=0){
                 for (RealmColors color : RealmColors.values()){
-                    gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont]=paintStudent(color,Integer.valueOf(game.getGameTable().getCharacterCard(i).getStudentsByColor(color)).toString());
+                    gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCharacterCard(i).getStudentsByColor(color)).toString());
                     cont++;
                 }
                 cont=0;
             }
-            if(game.getGameTable().getCharacterCard(i).getDenyCards()!=0)
-                for (int j=0;j<game.getGameTable().getCharacterCard(i).getDenyCards();j++)
+            if(storage.getGameTable().getCharacterCard(i).getDenyCardsOnCharacterCard()!=0)
+                for (int j=0;j<storage.getGameTable().getCharacterCard(i).getDenyCardsOnCharacterCard();j++)
                     gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont+j] = paintTower(TowerColors.WHITE,"!");
         }
     }
@@ -690,28 +689,28 @@ public class CLIDrawer {
         drawRectangle(assistantCards,0,0,ASSISTANT_CARDS_CONTAINER_X,ASSISTANT_CARDS_CONTAINER_Y);
         writeLongerString(assistantCards,paintService(CLIColors.B_WHITE,"PLAYABLE ASSISTANT CARDS"),0,21);
 
-        for(int i=0;i<game.getPlayerByIndex(playerID).getMageDeck().size();i++){
-            if(game.getPlayerByIndex(playerID).getMageDeck().get(i).getTurnOrder()==10){
+        for(int i=0;i<storage.getDashboard(playerID).getAssistantCardsTurnOrder().size();i++){
+            if(storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i) == 10){
                 drawRectangle(assistantCards, 2,ASSISTANT_CARDS_Y*i+i+3,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y+1);
                 assistantCards[3][ASSISTANT_CARDS_Y*i+5+i] = " \b";
                 assistantCards[2][ASSISTANT_CARDS_Y*i+4+i] = paintService(CLIColors.B_WHITE,"T");
-                assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getTurnOrder()).toString();
+                assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i).toString();
                 assistantCards[2][ASSISTANT_CARDS_Y*i+7+i] = paintService(CLIColors.B_WHITE,"M");
-                assistantCards[3][ASSISTANT_CARDS_Y*i+7+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getMnMovement()).toString();
+                assistantCards[3][ASSISTANT_CARDS_Y*i+7+i] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
             }
             else{
                 drawRectangle(assistantCards, 2,ASSISTANT_CARDS_Y*i+i+3,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y);
                 // TURN ORDER:
                 assistantCards[2][ASSISTANT_CARDS_Y*i+4+i] = paintService(CLIColors.B_WHITE,"T");
-                assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getTurnOrder()).toString();
+                assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i).toString();
                 // MOTHER NATURE MOVEMENT:
                 assistantCards[2][ASSISTANT_CARDS_Y*i+6+i] = paintService(CLIColors.B_WHITE,"M");
-                assistantCards[3][ASSISTANT_CARDS_Y*i+6+i] = Integer.valueOf(game.getPlayerByIndex(playerID).getMageDeck().get(i).getMnMovement()).toString();
+                assistantCards[3][ASSISTANT_CARDS_Y*i+6+i] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
             }
         }
 
         for(int i=0;i<ASSISTANT_CARDS_X+4;i++){
-            for (int j=0;j<ASSISTANT_CARDS_Y*(game.getPlayerByIndex(playerID).getMageDeck().size())+16;j++){
+            for (int j=0;j<ASSISTANT_CARDS_Y*(storage.getDashboard(playerID).getAssistantCardsTurnOrder().size())+16;j++){
                 toPrint.append(assistantCards[i][j]);
             }
             toPrint.append("\n");
