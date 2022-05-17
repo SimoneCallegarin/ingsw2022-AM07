@@ -2,6 +2,7 @@ package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Network.ConnectionSocket;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Observer.ViewSubject;
 
@@ -20,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-    CLIDrawer cliDrawer=new CLIDrawer();
+    CLIDrawer cliDrawer=new CLIDrawer();    // it will be received by message
 
     public CLI() {
         //addObserver(connectionSocket);
@@ -55,12 +56,9 @@ public class CLI extends ViewSubject {
         System.out.println("Welcome to Eriantys game!\n");
         cliDrawer.printTitle();
         askUsername();
-        //askGamePreferences();
         //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
         //trough the VirtualView
         //we can't send the game reference trough messages so we need to pass each one of the objects to draw them
-        //System.out.println(cliDrawer.printGameTable());
-        //askAssistantCard();
         //askMove();
         //askMNMovement();
         //askCloud();
@@ -195,6 +193,15 @@ public class CLI extends ViewSubject {
         }
         System.out.println(cliDrawer.printGameTable());
 
+    }
+
+    public void printOK(ServiceMessage message) {
+        System.out.println(message.getError());
+    }
+
+    public void startGame() {
+        System.out.println("Game started!");
+        System.out.println(cliDrawer.printGameTable());
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {

@@ -100,11 +100,17 @@ public class ClientHandler implements Runnable {
                 else
                     accepted = true;
                 if (accepted) {
-                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == 1)
+                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == 1) {
                         System.out.println("Added player: " + nickname + " to a new game.");
-                    else
+                        send(new ServiceMessage(MessageType.OK, "You joined a match! Waiting for other players..."));
+                    }
+                    else {
                         System.out.println("Added player: " + nickname + " to an already existing game with other " + (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() - 1) + " players.");
-                    send(new ServiceMessage(MessageType.OK));
+                        if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
+                            server.broadcastMessage(nickname, new ServiceMessage(MessageType.START_GAME));
+                        else
+                            send(new ServiceMessage(MessageType.OK, "You joined a match! Waiting for other players..."));
+                    }
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }
             }
@@ -165,6 +171,7 @@ public class ClientHandler implements Runnable {
      */
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
+        System.out.println("QUIT message sent to " + nickname);
         connected = false;
         if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
             server.onDisconnection(nickname);
@@ -207,14 +214,6 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             //System.out.println("TIMEOUT EXPIRED or ERROR");
             disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
-        }
-    }
-
-    public void sendUpdate(NetworkMessage networkMessage){
-        try {
-            output.writeObject(networkMessage);
-        }catch (IOException e){
-            e.printStackTrace();
         }
     }
 
