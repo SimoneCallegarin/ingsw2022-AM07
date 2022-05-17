@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * this class implements the command line interface to play trough terminal, it's observed by the connectionSocket which sends messages
@@ -21,7 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-    CLIDrawer cliDrawer=new CLIDrawer();    // it will be received by message
 
     public CLI() {
         //addObserver(connectionSocket);

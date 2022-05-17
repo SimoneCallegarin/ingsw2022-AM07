@@ -94,7 +94,7 @@ public class ClientHandler implements Runnable {
                 System.out.println("Error on received message, waiting for correction...");
             }
             else {
-                if (!server.addPlayerToGame(nickname, preferences))
+                if (!server.addPlayerToGame(nickname, preferences, this))
                     send(new ServiceMessage(MessageType.KO, "Incorrect field"));
                 else
                     accepted = true;

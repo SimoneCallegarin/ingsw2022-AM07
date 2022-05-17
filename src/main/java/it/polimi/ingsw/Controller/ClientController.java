@@ -2,22 +2,22 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Network.ClientHandler;
 import it.polimi.ingsw.Network.ConnectionSocket;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI;
+import it.polimi.ingsw.View.UpdateHandler;
 
 public class ClientController implements ViewObserver, NetworkObserver {
 
     CLI cli;
     ConnectionSocket client;
+    UpdateHandler updateHandler;
 
     public ClientController(CLI cli, ConnectionSocket client) {
         this.cli = cli;
         this.client = client;
+        this.updateHandler = new UpdateHandler();
     }
 
     @Override
@@ -80,7 +80,10 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 cli.printOK(sm);
             }
             case START_GAME -> cli.startGame();
-            //case GAMECREATION_UPDATE ->
+            case GAMECREATION_UPDATE -> {
+                GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
+                updateHandler.setupStorage(gc);
+            }
         }
     }
 }

@@ -43,7 +43,9 @@ public class CLIDrawer {
 
     private final String[][] legend = new String[LEGEND_X][LEGEND_Y+10];
 
-    Game game = new Game();
+    private StorageOfModel storage;
+
+    public CLIDrawer(StorageOfModel storage) { this.storage = storage; }
 
     /**
      * Permits designing in the gameTable matrix a rectangle with certain dimension and positions.
@@ -188,10 +190,6 @@ public class CLIDrawer {
      */
     public StringBuilder printGameTable() {
         StringBuilder toPrint=new StringBuilder();
-        game.addFirstPlayer("simo_calle",true,4);
-        game.addAnotherPlayer("jack");
-        game.addAnotherPlayer("filippo");
-        game.addAnotherPlayer("TrentAlexanderArnold");
         //LIMITE A 20 CARATTERI PER IL nickname!!! (va imposto).
         createGameTable();
         for(int i=0;i<TABLE_DIMENSION_X;i++){
@@ -225,7 +223,7 @@ public class CLIDrawer {
 
         initializeRectangle(legend,LEGEND_X,LEGEND_Y+10);
 
-        for(int i=0; i<game.getNumberOfPlayers();i++)
+        for(int i=0; i<storage.getNumberOfPlayers();i++)
             drawDashboard(i);
         drawIsles();
         drawGeneralMoneyReserve();
@@ -303,8 +301,8 @@ public class CLIDrawer {
         ╚═════════════════════╝
          */
         drawRectangle(gameTable, startingPointX-1,startingPointY,NICKNAME_X,NICKNAME_Y);
-        int posNickname = (NICKNAME_Y-game.getPlayerByIndex(playerID).getNickname().length())/2;
-        writeLongerString(gameTable,paintService(CLIColors.HB_WHITE,game.getPlayerByIndex(playerID).getNickname()),startingPointX,startingPointY+posNickname);
+        int posNickname = (NICKNAME_Y-storage.getDashboard(playerID).getNickname().length())/2;
+        writeLongerString(gameTable,paintService(CLIColors.HB_WHITE,storage.getDashboard(playerID).getNickname()),startingPointX,startingPointY+posNickname);
     }
 
     /**
@@ -331,7 +329,7 @@ public class CLIDrawer {
         // STUDENTS IN THE ENTRANCE:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
-            gameTable[startingPointX+4+cont][startingPointY+4]=paintStudent(color,Integer.valueOf(game.getPlayerByIndex(playerID).getDashboard().getEntrance().getStudentsByColor(color)).toString());
+            gameTable[startingPointX+4+cont][startingPointY+4]=paintStudent(color,storage.getDashboard(playerID).getEntranceStudents().get(color).toString());
             cont++;
         }
     }

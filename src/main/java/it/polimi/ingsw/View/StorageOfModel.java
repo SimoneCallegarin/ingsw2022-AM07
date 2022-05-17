@@ -10,20 +10,14 @@ import java.util.HashMap;
 public class StorageOfModel {
 
     private final int numberOfPlayers;
+    private final boolean gameMode;
     private final ArrayList<PlayerModelView> dashboards = new ArrayList<>();
     private GameTableModelView gameTable;
 
 
-    Game game = new Game();
-    public void runGame() {
-        game.addFirstPlayer("simo_calle",true,4);
-        game.addAnotherPlayer("jack");
-        game.addAnotherPlayer("filippo");
-        game.addAnotherPlayer("TrentAlexanderArnold");
-    }
-
-    public StorageOfModel(int numberOfPlayers, PlayerModelView[] dashboards, GameTableModelView gameTable) {
+    public StorageOfModel(int numberOfPlayers, PlayerModelView[] dashboards, GameTableModelView gameTable, boolean gameMode) {
         this.numberOfPlayers = numberOfPlayers;
+        this.gameMode = gameMode;
         for(int i=0;i<numberOfPlayers;i++)
             setDashboard(i,dashboards[i]);
         setGameTable(gameTable);
@@ -73,4 +67,9 @@ public class StorageOfModel {
 
     public int getNumberOfPlayers() { return numberOfPlayers; }
 
+    public boolean isGameMode() { return gameMode; }
+
+    public PlayerModelView getDashboard(int playerID) { return dashboards.get(playerID); }
+
+    public GameTableModelView getGameTable() { return gameTable; }
 }
