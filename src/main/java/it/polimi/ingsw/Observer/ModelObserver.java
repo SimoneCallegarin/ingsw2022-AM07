@@ -1,22 +1,17 @@
 package it.polimi.ingsw.Observer;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
-import it.polimi.ingsw.Model.DashboardObjects.Dashboard;
-import it.polimi.ingsw.Model.Enumeration.CurrentOrder;
-import it.polimi.ingsw.Model.Enumeration.GameMode;
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.GameTableObjects.Cloud;
-import it.polimi.ingsw.Model.GameTableObjects.Isle;
-import it.polimi.ingsw.View.GameTableModelView;
 
-import java.util.ArrayList;
+import it.polimi.ingsw.Model.Enumeration.*;
+
 import java.util.HashMap;
 import java.util.List;
 
 public interface ModelObserver {
 
     void onGameCreation(int numPlayers, List<String> nicknames, GameMode gameMode,int whereMNId,List<HashMap<RealmColors,Integer>> entrances, List<CharacterCard> activeCharacter, List<HashMap<RealmColors,Integer>> clouds, List<HashMap<RealmColors,Integer>> studentsOnCharacter, int numTower, int money, int generalReserve);
+
+    void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner);
 
     void onAssistantCard(int idPlayer, int turnOrderPlayed);
 

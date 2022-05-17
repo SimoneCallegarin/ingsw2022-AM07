@@ -511,6 +511,16 @@ public class Game extends ModelSubject {
             currentActivePlayer = CurrentOrder.FIRST_PLAYER;
             playerCounter = 0;
         }
+
+        //observer parameters initialization
+        int currentPlayerIndex=0;
+        for(Player p:players){
+            if(p.getOrder().equals(currentActivePlayer)){
+                currentPlayerIndex=players.indexOf(p);
+            }
+        }
+        int finalCurrentPlayerIndex = currentPlayerIndex;
+        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase,-1));
     }
 
     /**
@@ -537,6 +547,16 @@ public class Game extends ModelSubject {
         }
         else
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
+
+
+        int currentPlayerIndex=0;
+        for(Player p:players){
+            if(p.getOrder().equals(currentActivePlayer)){
+                currentPlayerIndex=players.indexOf(p);
+            }
+        }
+        int finalCurrentPlayerIndex = currentPlayerIndex;
+        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase,-1));
     }
 
     /**
@@ -642,9 +662,19 @@ public class Game extends ModelSubject {
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                 endGame = true;
                 winner = p;
+                int currentPlayerIndex=0;
+                for(Player player:players){
+                    if(player.getOrder().equals(currentActivePlayer)){
+                        currentPlayerIndex=players.indexOf(player);
+                    }
+                }
+                int finalCurrentPlayerIndex = currentPlayerIndex;
+
+                notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex, gamePhase ,actionPhase ,players.indexOf(winner)));
                 return;
             }
         }
+
 
         if ((gameTable.getIsleManager().getIsles().size() == 3) || (lastRound && playerCounter == numberOfPlayers-1)) {
             endGame = true;
