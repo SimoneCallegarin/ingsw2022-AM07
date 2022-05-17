@@ -19,8 +19,10 @@ import java.util.concurrent.FutureTask;
 
 public class CLI extends ViewSubject {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    CLIDrawer cliDrawer;
 
     public CLI() {
+        cliDrawer = new CLIDrawer();
         //addObserver(connectionSocket);
     }
 
@@ -198,13 +200,21 @@ public class CLI extends ViewSubject {
 
     public void startGame() {
         System.out.println("Game started!");
+        //System.out.println(cliDrawer.printGameTable());
+    }
+
+    public void startDrawer() {
         System.out.println(cliDrawer.printGameTable());
+    }
+
+    public CLIDrawer getCliDrawer() {
+        return cliDrawer;
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         CLI cli = new CLI();
         ConnectionSocket connectionSocket = new ConnectionSocket();
-        ClientController clientController = new ClientController(cli, connectionSocket);
+        ClientController clientController = new ClientController(cli, connectionSocket, cli.getCliDrawer());
         cli.addObserver(clientController);
         connectionSocket.startConnection();
         connectionSocket.getClientListener().addObserver(clientController);

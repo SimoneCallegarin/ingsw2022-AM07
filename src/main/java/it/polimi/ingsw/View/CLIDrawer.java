@@ -44,7 +44,9 @@ public class CLIDrawer {
 
     private StorageOfModel storage;
 
-    public CLIDrawer(StorageOfModel storage) { this.storage = storage; }
+    public void setStorage(StorageOfModel storage) {
+        this.storage = storage;
+    }
 
     /**
      * Permits designing in the gameTable matrix a rectangle with certain dimension and positions.

@@ -139,6 +139,7 @@ public class Server {
         Game game = new Game();
         GameController gameController = new GameController(game);
         VirtualView virtualView= new VirtualView();
+        game.addObserver(virtualView);
         gameController.addPlayerToGame(nickName,preferences,true);
         activeMatches.add(gameController);
         virtualViews.add(virtualView);

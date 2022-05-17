@@ -23,7 +23,7 @@ public class StorageOfModel {
         setGameTable(gameTable);
     }
 
-    public void setDashboard(int playerID, PlayerModelView player) { this.dashboards.set(playerID,player); }
+    public void setDashboard(int playerID, PlayerModelView player) { this.dashboards.add(playerID,player); }
 
     public void setGameTable(GameTableModelView gameTable) { this.gameTable = gameTable; }
 

@@ -6,6 +6,7 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI;
+import it.polimi.ingsw.View.CLIDrawer;
 import it.polimi.ingsw.View.UpdateHandler;
 
 public class ClientController implements ViewObserver, NetworkObserver {
@@ -13,11 +14,13 @@ public class ClientController implements ViewObserver, NetworkObserver {
     CLI cli;
     ConnectionSocket client;
     UpdateHandler updateHandler;
+    CLIDrawer cliDrawer;
 
-    public ClientController(CLI cli, ConnectionSocket client) {
+    public ClientController(CLI cli, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.cli = cli;
         this.client = client;
         this.updateHandler = new UpdateHandler();
+        this.cliDrawer = cliDrawer;
     }
 
     @Override
@@ -82,7 +85,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case START_GAME -> cli.startGame();
             case GAMECREATION_UPDATE -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
-                updateHandler.setupStorage(gc);
+                updateHandler.setupStorage(gc, cliDrawer);
+                cli.startDrawer();
             }
         }
     }

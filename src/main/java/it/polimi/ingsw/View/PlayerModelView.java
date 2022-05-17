@@ -37,8 +37,12 @@ public class PlayerModelView {
         this.money = money;
         this.discardPileTurnOrder = 0;
         this.discardPileMNMovement = 0;
-        this.assistantCardsTurnOrder = (ArrayList<Integer>) Arrays.asList(1,2,3,4,5,6,7,8,9,10);;
-        this.assistantCardsMNMovement = (ArrayList<Integer>) Arrays.asList(1,1,2,2,3,3,4,4,5,5);
+        this.assistantCardsTurnOrder = new ArrayList<>();
+        for (int i = 0; i < 10; i++)
+            assistantCardsTurnOrder.add(i+1);
+        this.assistantCardsMNMovement = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            assistantCardsMNMovement.add(i+1);
     }
 
     private void fillWith0HashMap() {

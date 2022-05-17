@@ -194,6 +194,7 @@ public class Game extends ModelSubject {
                 for(Player p:players){
                     towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());
                     entrances.add(p.getDashboard().getEntrance().getStudents());
+                    System.out.println(entrances.size());
                     nicknames.add(p.getNickname());
                 }
 
