@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ModelObserver {
 
-    void onGameCreation(int numPlayers, List<String> nicknames, GameMode gameMode,int whereMNId,List<HashMap<RealmColors,Integer>> entrances, List<CharacterCard> activeCharacter, List<HashMap<RealmColors,Integer>> clouds,List<HashMap<RealmColors,Integer>> isleStudents, List<HashMap<RealmColors,Integer>> studentsOnCharacter, int numTower, int money, int generalReserve,List<TowerColors> towerColors,List<String> characterNames,List<Integer> characterCost,List<Integer> denyCards);
+    void onGameCreation(int numPlayers, List<String> nicknames, GameMode gameMode,int whereMNId,List<HashMap<RealmColors,Integer>> entrances, List<HashMap<RealmColors,Integer>> clouds,List<HashMap<RealmColors,Integer>> isleStudents, List<HashMap<RealmColors,Integer>> studentsOnCharacter, int numTower, int money, int generalReserve,List<TowerColors> towerColors,List<String> characterNames,List<Integer> characterCost,List<Integer> denyCards);
 
     void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner);
 

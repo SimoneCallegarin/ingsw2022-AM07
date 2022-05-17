@@ -14,7 +14,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
     private List<String> nicknames;
     private GameMode gameMode;
     private int whereMNId;
-    private List<CharacterCard> activeCharacter;
+
     private List<HashMap<RealmColors,Integer>> clouds;
     private List<HashMap<RealmColors,Integer>> isleStudents;
     private List<HashMap<RealmColors,Integer>> studentsOnCharacter;
@@ -27,13 +27,12 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
     private List<Integer> characterCost;
     private List<Integer> denyCards;
 
-    public GameCreation_UpdateMsg(MessageType messageType, int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<CharacterCard> activeCharacter, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> isleStudents, List<HashMap<RealmColors, Integer>> studentsOnCharacter, List<HashMap<RealmColors, Integer>> entrances, int numTower, int money, int generalReserve, List<TowerColors> towerColors, List<String> characterNames, List<Integer> characterCost, List<Integer> denyCards) {
+    public GameCreation_UpdateMsg(MessageType messageType, int numPlayers, List<String> nicknames, GameMode gameMode, int whereMNId, List<HashMap<RealmColors, Integer>> clouds, List<HashMap<RealmColors, Integer>> isleStudents, List<HashMap<RealmColors, Integer>> studentsOnCharacter, List<HashMap<RealmColors, Integer>> entrances, int numTower, int money, int generalReserve, List<TowerColors> towerColors, List<String> characterNames, List<Integer> characterCost, List<Integer> denyCards) {
         super(messageType);
         this.numPlayers = numPlayers;
         this.nicknames = nicknames;
         this.gameMode = gameMode;
         this.whereMNId = whereMNId;
-        this.activeCharacter = activeCharacter;
         this.clouds = clouds;
         this.isleStudents = isleStudents;
         this.studentsOnCharacter = studentsOnCharacter;
@@ -61,10 +60,6 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
 
     public int getWhereMNId() {
         return whereMNId;
-    }
-
-    public List<CharacterCard> getActiveCharacter() {
-        return activeCharacter;
     }
 
     public List<HashMap<RealmColors, Integer>> getClouds() {
