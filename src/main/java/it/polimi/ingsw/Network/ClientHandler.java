@@ -33,6 +33,7 @@ public class ClientHandler implements Runnable {
     private HandlerPhases handlerPhase;
 
     private ObjectInputStream input;
+
     private ObjectOutputStream output;
 
     private boolean connected;
