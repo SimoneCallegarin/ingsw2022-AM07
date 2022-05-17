@@ -109,7 +109,7 @@ public class ClientHandler implements Runnable {
                         if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
                             server.broadcastMessage(nickname, new ServiceMessage(MessageType.START_GAME));
                         else
-                            send(new ServiceMessage(MessageType.OK, "You joined a match! Waiting for other players..."));
+                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }
