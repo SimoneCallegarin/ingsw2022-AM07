@@ -42,9 +42,9 @@ public class CLIDrawer {
 
     private final String[][] legend = new String[LEGEND_X][LEGEND_Y+10];
 
-    private StorageOfModel storage;
+    private ModelStorage storage;
 
-    public void setStorage(StorageOfModel storage) {
+    public void setStorage(ModelStorage storage) {
         this.storage = storage;
     }
 

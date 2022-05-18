@@ -8,20 +8,20 @@ import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI;
 import it.polimi.ingsw.View.CLIDrawer;
-import it.polimi.ingsw.View.UpdateHandler;
+import it.polimi.ingsw.View.ModelStorage;
 
 public class ClientController implements ViewObserver, NetworkObserver {
 
     CLI cli;
     ConnectionSocket client;
-    UpdateHandler updateHandler;
+    ModelStorage storage;
     CLIDrawer cliDrawer;
     int playerID;
 
     public ClientController(CLI cli, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.cli = cli;
         this.client = client;
-        this.updateHandler = new UpdateHandler();
+        //this.storage = new ModelStorage();
         this.cliDrawer = cliDrawer;
     }
 
@@ -91,13 +91,14 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case START_GAME -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
-                updateHandler.setupStorage(gc, cliDrawer);
+                this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
+                storage.setupStorage(gc, cliDrawer);
                 cli.printChanges();
                 System.out.println("Game started!");
             }
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
-                updateHandler.getStorage().updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMnMovement());
+                storage.updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
                 cli.printChanges();
             }
             case GAMEPHASE_UPDATE -> {
