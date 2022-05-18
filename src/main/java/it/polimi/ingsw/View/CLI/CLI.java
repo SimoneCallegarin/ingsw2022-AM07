@@ -54,17 +54,13 @@ public class CLI extends ViewSubject {
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();
-        //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
-        //trough the VirtualView
-        //we can't send the game reference trough messages so we need to pass each one of the objects to draw them
-        //askMove();
-        //askMNMovement();
-        //askCloud();
-        //the turn changes
+        // The model receives these data through the network then after that it updates,
+        // it sends the new data to the Client through the VirtualView.
+        // We don't send the game reference trough messages, so we need to pass each one of the objects in order to draw them
     }
 
     /**
-     * method used to read the username choice by the player
+     * Reads the username chosen by the player and notifies it to the view.
      */
     public void askUsername() {
         System.out.println("Nickname? ");
@@ -73,7 +69,8 @@ public class CLI extends ViewSubject {
     }
 
     /**
-     * this method is used to ask the user the game settings he desires, which are the game mode and the number of Players
+     * Used to ask the user the game settings he desires, which are the game mode and the number of Players
+     * then it notifies them to the view.
      */
     public void askGamePreferences() {
         int numPlayers;
@@ -124,8 +121,7 @@ public class CLI extends ViewSubject {
         boolean characterUsed=false;
         boolean turnFinished=false;
 
-            //continua a chiedere finchè non esaurisce le mosse per il primo turno o sbaglia l'input
-        while(!turnFinished) {
+        while(!turnFinished) {      // Continue to ask till all the moves are worn out or there's a wrong input.
             System.out.println("What is your next move? Write:");
             System.out.println("-1 to move a student(max " + studentMoves + " other time/s this turn");
             if (!characterUsed) {
@@ -156,9 +152,8 @@ public class CLI extends ViewSubject {
         System.out.println("-3");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onCharacterCard(choice));
-        //to finish
+        // Not finished yet!!!
     }
-
 
     public void askStudentMovement(){
         int color;
@@ -180,7 +175,6 @@ public class CLI extends ViewSubject {
             notifyObserver(obs->obs.onStudentmovement_toIsle(finalChoice));
         }
         System.out.println(cliDrawer.printGameTable());
-
     }
 
     public void printMessage(ServiceMessage message) {
@@ -189,14 +183,10 @@ public class CLI extends ViewSubject {
 
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 
-    public CLIDrawer getCliDrawer() {
-        return cliDrawer;
-    }
-
     public static void main(String[] args) throws ClassNotFoundException {
         CLI cli = new CLI();
         ConnectionSocket connectionSocket = new ConnectionSocket();
-        ClientController clientController = new ClientController(cli, connectionSocket, cli.getCliDrawer());
+        ClientController clientController = new ClientController(cli, connectionSocket, cli.cliDrawer);
         cli.addObserver(clientController);
         connectionSocket.startConnection();
         connectionSocket.getClientListener().addObserver(clientController);

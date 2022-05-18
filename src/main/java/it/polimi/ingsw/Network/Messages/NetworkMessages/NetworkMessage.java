@@ -13,12 +13,6 @@ public abstract class NetworkMessage implements Serializable {
 
     public MessageType getMessageType() { return messageType; }
 
-    /*@Override
-    public String toString() {
-        return "Message{" +
-                "messageType=" + messageType +
-                '}';
-    }*/
 }
 
 

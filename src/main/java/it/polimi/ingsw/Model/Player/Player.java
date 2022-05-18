@@ -16,7 +16,7 @@ public class Player {
     /**
      * This attribute is the nickname of the player
      */
-    private String nickname;
+    private final String nickname;
     /**
      * This attribute indicates the team of the player in a 4 players game
      */
@@ -28,7 +28,7 @@ public class Player {
     /**
      * This attribute is the deck of assistant cards
      */
-    private ArrayList<AssistantCard> mageDeck;
+    private final ArrayList<AssistantCard> mageDeck;
     /**
      * This attribute is the card on the top of the discards pile
      */

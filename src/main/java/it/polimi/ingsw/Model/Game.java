@@ -784,9 +784,11 @@ public class Game extends ModelSubject {
      *         When not used -> set to 0
      */
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
-        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder())
+        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()){
             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
+            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
 
+        }
         if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
             notifyObserver(obs->obs.onDenyCard(idPlayer,value1,true));
         }

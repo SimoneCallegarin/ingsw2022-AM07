@@ -63,9 +63,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         this.characterDenyCards = characterDenyCards;
     }
 
-    public int getNumPlayers() {
-        return numPlayers;
-    }
+    public int getNumPlayers() { return numPlayers; }
 
     public ArrayList<String> getNicknames() {
         return nicknames;

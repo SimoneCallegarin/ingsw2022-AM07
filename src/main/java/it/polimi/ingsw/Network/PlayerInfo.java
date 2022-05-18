@@ -16,4 +16,5 @@ public class PlayerInfo {
     public int getPlayerID() { return playerID; }
 
     public ClientHandler getClientHandler() { return clientHandler; }
+
 }

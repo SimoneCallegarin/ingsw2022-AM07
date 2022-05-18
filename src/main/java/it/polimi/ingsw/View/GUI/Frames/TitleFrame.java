@@ -25,6 +25,5 @@ public class TitleFrame extends JFrame{
         this.add(titleLabel,BorderLayout.CENTER);
         this.pack();
 
-
     }
 }
