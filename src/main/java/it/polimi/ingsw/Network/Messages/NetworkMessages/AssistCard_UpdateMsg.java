@@ -12,6 +12,7 @@ public class AssistCard_UpdateMsg extends NetworkMessage {
     int idPlayer;
     int turnOrderPlayed;
     int movementMNPlayed;
+
     List<Integer> turnOrderDiscardPile;
     List<Integer> movementMNDiscardPile;
 
@@ -34,5 +35,13 @@ public class AssistCard_UpdateMsg extends NetworkMessage {
 
     public int getMovementMNPlayed() {
         return movementMNPlayed;
+    }
+
+    public List<Integer> getTurnOrderDiscardPile() {
+        return turnOrderDiscardPile;
+    }
+
+    public List<Integer> getMovementMNDiscardPile() {
+        return movementMNDiscardPile;
     }
 }

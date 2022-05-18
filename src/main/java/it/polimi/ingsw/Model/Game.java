@@ -310,6 +310,16 @@ public class Game extends ModelSubject {
             }
         }
         notifyObserver(obs->obs.onStudentMoving_toIsle(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idIsle,gameTable.getIsleManager().getIsle(idIsle).getStudents()));
+
+        int currentPlayerIndex=0;
+        for(Player p:players){
+            if(p.getOrder().equals(currentActivePlayer)){
+                currentPlayerIndex=players.indexOf(p);
+                break;
+            }
+        }
+        int finalCurrentPlayerIndex = currentPlayerIndex;
+        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase,-1));
     }
 
     /**
@@ -347,6 +357,16 @@ public class Game extends ModelSubject {
             }
         }
         notifyObserver(obs->obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(),players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
+
+        int currentPlayerIndex=0;
+        for(Player p:players){
+            if(p.getOrder().equals(currentActivePlayer)){
+                currentPlayerIndex=players.indexOf(p);
+                break;
+            }
+        }
+        int finalCurrentPlayerIndex = currentPlayerIndex;
+        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase,-1));
     }
 
     /**

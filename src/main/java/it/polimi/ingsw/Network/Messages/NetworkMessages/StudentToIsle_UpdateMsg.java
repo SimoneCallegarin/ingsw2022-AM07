@@ -11,6 +11,7 @@ public class StudentToIsle_UpdateMsg extends NetworkMessage {
     int idPlayer;
     HashMap<RealmColors, Integer> entrance;
     int isleID;
+
     HashMap<RealmColors, Integer> isleStudent;
 
     public StudentToIsle_UpdateMsg(MessageType messageType, int idPlayer, HashMap<RealmColors, Integer> entrance, int isleID, HashMap<RealmColors, Integer> isleStudent) {
@@ -19,5 +20,17 @@ public class StudentToIsle_UpdateMsg extends NetworkMessage {
         this.entrance = entrance;
         this.isleID = isleID;
         this.isleStudent = isleStudent;
+    }
+
+    public int getIsleID() {
+        return isleID;
+    }
+
+    public HashMap<RealmColors, Integer> getEntrance() {
+        return entrance;
+    }
+
+    public HashMap<RealmColors, Integer> getIsleStudent() {
+        return isleStudent;
     }
 }

@@ -10,7 +10,7 @@ public interface ViewObserver {
 
     void onStudentmovement_toIsle(int isleId);
 
-    void onStudentmovement_toDining(int dining);
+    void onStudentmovement_toDining();
 
     void onCharacterCard(int characterId);
 

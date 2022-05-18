@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public class StudentToDining_UpdateMsg extends NetworkMessage{
     int idPlayer;
+
     HashMap<RealmColors, Integer> entrance;
     HashMap<RealmColors, Integer> dining;
 
@@ -17,5 +18,13 @@ public class StudentToDining_UpdateMsg extends NetworkMessage{
         this.entrance = entrance;
         this.dining = dining;
 
+    }
+
+    public HashMap<RealmColors, Integer> getEntrance() {
+        return entrance;
+    }
+
+    public HashMap<RealmColors, Integer> getDining() {
+        return dining;
     }
 }

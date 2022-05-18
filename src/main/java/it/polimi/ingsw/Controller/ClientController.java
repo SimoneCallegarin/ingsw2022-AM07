@@ -37,17 +37,17 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     @Override
     public void onColorChoice(int color) {
-
+        client.send(new PlayerMoveMessage(MessageType.COLOR_VALUE, playerID, color));
     }
 
     @Override
     public void onStudentmovement_toIsle(int isleId) {
-
+        client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_ISLE, playerID, isleId));
     }
 
     @Override
-    public void onStudentmovement_toDining(int dining) {
-
+    public void onStudentmovement_toDining() {
+        client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING, playerID, playerID));
     }
 
     @Override
@@ -101,6 +101,23 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 storage.updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
                 cli.printChanges();
             }
+            case STUDENTTODINING_UPDATE -> {
+                StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;
+                storage.updateStudentsInEntrance(playerID, std.getEntrance());
+                storage.updateStudentsInDining(playerID, std.getDining());
+                cli.printChanges();
+            }
+            case PROFESSOR_UPDATE -> {
+                Professor_UpdateMsg p = (Professor_UpdateMsg) message;
+                storage.updateProfessorsInDining(playerID, p.getProfessors());
+                cli.printChanges();
+            }
+            case STUDENTTOISLE_UPDATE -> {
+                StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
+                storage.updateStudentsInEntrance(playerID, sti.getEntrance());
+                //storage.updateIsle(isle, sti.getIsleID());
+                cli.printChanges();
+            }
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
                 switch (gp.getGamePhases()) {
@@ -109,6 +126,17 @@ public class ClientController implements ViewObserver, NetworkObserver {
                             cli.askAssistantCard();
                         else
                             System.out.println("Player " + gp.getActivePlayer() + " is choosing the Assistant Card to play");
+                    }
+                    case ACTION_PHASE -> {
+                        switch (gp.getActionPhases()) {
+                            case MOVE_STUDENTS -> {
+                                if (gp.getActivePlayer() == playerID)
+                                    cli.askMove();
+                                else
+                                    System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
+                            }
+                            case MOVE_MOTHER_NATURE -> System.out.println("Someone has to move mother nature");
+                        }
                     }
                 }
             }

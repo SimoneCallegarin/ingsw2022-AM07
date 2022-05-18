@@ -48,6 +48,8 @@ public class CLIDrawer {
         this.storage = storage;
     }
 
+    public ModelStorage getStorage() {return storage;}
+
     /**
      * Permits designing in the gameTable matrix a rectangle with certain dimension and positions.
      * @param place the place where we want to paint the rectangle.

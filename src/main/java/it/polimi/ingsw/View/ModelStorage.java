@@ -117,4 +117,8 @@ public class ModelStorage {
 
     public GameTableModelView getGameTable() { return gameTable; }
 
+    public int getNumberOfIsles() {
+        return gameTable.getIsles().size();
+    }
+
 }

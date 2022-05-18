@@ -9,6 +9,7 @@ public class Professor_UpdateMsg extends NetworkMessage{
     int playerID;
     int otherPlayerID;
     HashMap<RealmColors, Integer> professors;
+
     HashMap<RealmColors, Integer> otherProfessors;
 
     public Professor_UpdateMsg(MessageType messageType, int playerID, int otherPlayerID, HashMap<RealmColors, Integer> professors, HashMap<RealmColors, Integer> otherProfessors) {
@@ -17,5 +18,13 @@ public class Professor_UpdateMsg extends NetworkMessage{
         this.otherPlayerID = otherPlayerID;
         this.professors = professors;
         this.otherProfessors = otherProfessors;
+    }
+
+    public HashMap<RealmColors, Integer> getProfessors() {
+        return professors;
+    }
+
+    public HashMap<RealmColors, Integer> getOtherProfessors() {
+        return otherProfessors;
     }
 }
