@@ -57,7 +57,11 @@ public class StorageOfModel {
 
     public void updateCharacterCard(GameTableModelView.CharacterCard newCharacterCard, int characterCardIndex) { gameTable.setCharacterCard(characterCardIndex,newCharacterCard); }
 
-    public void updateIsle(GameTableModelView.Isle newIsle, int isleID) { gameTable.setIsles(isleID,newIsle); }
+    public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) { gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle); }
+
+    public void updateIsle(GameTableModelView.Isle newIsle, int isleID) { gameTable.setNewIsle(isleID,newIsle); }
+
+    public void updateIsles(ArrayList<GameTableModelView.Isle> newIsles) { gameTable.setIsles(newIsles); }
 
     public void updateCloud(GameTableModelView.Cloud newCloud, int cloudID) { gameTable.setClouds(cloudID,newCloud); }
 

@@ -4,7 +4,6 @@ import it.polimi.ingsw.Model.Enumeration.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * this interface offers the method used by the model observers to send update of his state in order to update the view accordingly
@@ -15,7 +14,7 @@ public interface ModelObserver {
 
     void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner);
 
-    void onAssistantCard(int idPlayer, int turnOrderPlayed,int movementMNPlayed,List<Integer> turnOrderDiscardPile,List<Integer> movementMNDiscardPile);
+    void onAssistantCard(int idPlayer, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrderDiscardPile, ArrayList<Integer> movementMNDiscardPile);
 
     void onStudentMoving_toDining(int idPlayer, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);
 
@@ -23,11 +22,11 @@ public interface ModelObserver {
 
     void onStudentMoving_toIsle(int idPlayer,HashMap<RealmColors,Integer> entrance,int isleID, HashMap<RealmColors,Integer> isleStudents);
 
-    void onMNMovement(int playerId,int isleId,List<HashMap<RealmColors,Integer>> isleStudents, List<Integer> numIsles );
+    void onMNMovement(int playerId,int isleId,ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<Integer> numIsles );
 
     void onCloudUpdate(int playerID,HashMap<RealmColors,Integer> entrance, int cloudId);
 
-    void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney);
+    void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter);
 
     void onDenyCard(int playerId,int isleId,boolean denyCard);
 

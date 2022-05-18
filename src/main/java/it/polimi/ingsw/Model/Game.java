@@ -13,7 +13,6 @@ import it.polimi.ingsw.Observer.ModelSubject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TreeSet;
 
 public class Game extends ModelSubject {
@@ -193,7 +192,7 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * initialization of data to notify the virtual view with.
+     * Initialization of data to notify the virtual view with.
      */
     private void setGameCreationValues() {
         // DASHBOARDS:
@@ -275,15 +274,7 @@ public class Game extends ModelSubject {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
                 players.get(idPlayer).setCardOrder(playerCounter+1);
 
-                //observer parameters initialization
-                ArrayList<Integer> turnOrderDiscardPile=new ArrayList<>();
-                ArrayList<Integer> movementMNDiscardPile=new ArrayList<>();
-                for(AssistantCard ac:players.get(idPlayer).getMageDeck()){
-                    turnOrderDiscardPile.add(ac.getTurnOrder());
-                    movementMNDiscardPile.add(ac.getMnMovement());
-                }
-
-                notifyObserver(obs->obs.onAssistantCard(idPlayer,assistantCardPlayed.getTurnOrder(),assistantCardPlayed.getMnMovement(),turnOrderDiscardPile,movementMNDiscardPile));
+                setAssistantsCardForView(idPlayer);
 
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
@@ -291,6 +282,20 @@ public class Game extends ModelSubject {
                 nextPlayer();
             }
         }
+    }
+
+    /**
+     * Initialize the deck of available assistant cards for the player and the assistant card in the discard pile in order to pass it to the view.
+     * @param idPlayer the id of the player it will be passed the deck.
+     */
+    private void setAssistantsCardForView(int idPlayer) {
+        ArrayList<Integer> turnOrders =new ArrayList<>();
+        ArrayList<Integer> movementsMN =new ArrayList<>();
+        for(AssistantCard ac : getPlayerByIndex(idPlayer).getMageDeck()){
+            turnOrders.add(ac.getTurnOrder());
+            movementsMN.add(ac.getMnMovement());
+        }
+        notifyObserver(obs->obs.onAssistantCard(idPlayer,getPlayerByIndex(idPlayer).getDiscardPile().getTurnOrder(),getPlayerByIndex(idPlayer).getDiscardPile().getTurnOrder(), turnOrders, movementsMN));
     }
 
     /**
@@ -392,18 +397,26 @@ public class Game extends ModelSubject {
                 }
             }
         }
-        //inizialization of parametres to pass to the observer
-        ArrayList<HashMap<RealmColors,Integer>> islestudents=new ArrayList<>();
-        ArrayList<Integer> numIsles=new ArrayList<>();
-        for(Isle isle:gameTable.getIsleManager().getIsles()){
-            islestudents.add(isle.getStudents());
-            numIsles.add(isle.getNumOfIsles());
-        }
-        notifyObserver(obs->obs.onMNMovement(idPlayer,idIsle,islestudents,numIsles));
+        setMoveMNParametersForView(idPlayer,idIsle);
     }
 
     /**
-     * it picks the students present on a certain cloud and puts them in the entrance of the player
+     * Initialize the parameters needed by the view consequently to the movement of mother nature.
+     * @param idPlayer the id of the player that moves mother nature.
+     * @param idIsle the id of the isle where now there's mother nature.
+     */
+    private void setMoveMNParametersForView(int idPlayer, int idIsle) {
+        ArrayList<HashMap<RealmColors,Integer>> isleStudents=new ArrayList<>();
+        ArrayList<Integer> numIsles=new ArrayList<>();
+        for(Isle isle:gameTable.getIsleManager().getIsles()){
+            isleStudents.add(isle.getStudents());
+            numIsles.add(isle.getNumOfIsles());
+        }
+        notifyObserver(obs->obs.onMNMovement(idPlayer,idIsle,isleStudents,numIsles));
+    }
+
+    /**
+     * It picks the students present on a certain cloud and puts them in the entrance of the player
      * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who chose the cloud
      * @param idCloud is the index of the chosen cloud
      */
@@ -531,7 +544,14 @@ public class Game extends ModelSubject {
             playerCounter = 0;
         }
 
-        //observer parameters initialization
+        setParametersOfTurnForView();
+
+    }
+
+    /**
+     * Initialize the parameters that handle the turn order and notifies the view.
+     */
+    private void setParametersOfTurnForView() {
         int currentPlayerIndex=0;
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
