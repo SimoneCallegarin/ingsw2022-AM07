@@ -11,6 +11,7 @@ import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 import it.polimi.ingsw.Observer.ModelSubject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -474,13 +475,18 @@ public class Game extends ModelSubject {
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
             if (getGameTable().getBag().getNumberOfStudents() >= numberOfPlayers*maxMovableStudents) {
+                ArrayList<HashMap<RealmColors,Integer>> cloudsList=new ArrayList<>();
                 for (int i = 0; i < numberOfPlayers; i++) {
                     Cloud cloud = gameTable.getCloud(i);
                     for (int j = 0; j < maxMovableStudents; j++) {
                         RealmColors color = gameTable.getBag().draw();
                         cloud.addStudent(color);
                     }
+                    cloudsList.add(cloud.getStudents());
                 }
+
+
+                notifyObserver(obs->obs.onFillCloud(cloudsList));
             }
             else
                 lastRound = true;
