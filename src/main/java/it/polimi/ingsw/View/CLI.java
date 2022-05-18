@@ -111,10 +111,10 @@ public class CLI extends ViewSubject {
 
     public void askAssistantCard(){
         int choice;
-        System.out.println("Choose an Assistant Card to play:");//to update with the available assistant cards
+        System.out.println("Choose an Assistant Card to play: ");//to update with the available assistant cards
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onAssistantCard(choice));
-        System.out.println(cliDrawer.printGameTable());
+        //System.out.println(cliDrawer.printGameTable());
     }
 
 
@@ -187,8 +187,6 @@ public class CLI extends ViewSubject {
     public void printMessage(ServiceMessage message) {
         System.out.println(message.getMessage());
     }
-
-    public void startGame() { System.out.println("Game started!"); }
 
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 

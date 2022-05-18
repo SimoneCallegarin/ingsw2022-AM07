@@ -51,4 +51,6 @@ public class UpdateHandler {
         // Calls the update methods of the storage.
     }
 
+    public StorageOfModel getStorage() {return storage;}
+
 }

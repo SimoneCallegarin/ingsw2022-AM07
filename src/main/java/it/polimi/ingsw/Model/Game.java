@@ -11,7 +11,6 @@ import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 import it.polimi.ingsw.Observer.ModelSubject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -185,10 +184,8 @@ public class Game extends ModelSubject {
                 this.gamePhase = GamePhases.PLANNING_PHASE;
                 fillClouds();
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
-                updateOrder(gamePhase);
-
                 setGameCreationValues();
-
+                updateOrder(gamePhase);
             }
 
     }
@@ -542,6 +539,7 @@ public class Game extends ModelSubject {
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
                 currentPlayerIndex=players.indexOf(p);
+                break;
             }
         }
         int finalCurrentPlayerIndex = currentPlayerIndex;

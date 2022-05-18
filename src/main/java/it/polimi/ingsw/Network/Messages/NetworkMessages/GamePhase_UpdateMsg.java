@@ -4,7 +4,8 @@ import it.polimi.ingsw.Model.Enumeration.ActionPhases;
 import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Network.Messages.MessageType;
 
-public class GamePhase_UpdateMsg extends NetworkMessage{
+public class GamePhase_UpdateMsg extends NetworkMessage {
+
     int activePlayer;
     GamePhases gamePhases;
     ActionPhases actionPhases;
@@ -16,5 +17,17 @@ public class GamePhase_UpdateMsg extends NetworkMessage{
         this.gamePhases = gamePhases;
         this.actionPhases = actionPhases;
         this.winner = winner;
+    }
+
+    public int getActivePlayer() {
+        return activePlayer;
+    }
+
+    public GamePhases getGamePhases() {
+        return gamePhases;
+    }
+
+    public ActionPhases getActionPhases() {
+        return actionPhases;
     }
 }
