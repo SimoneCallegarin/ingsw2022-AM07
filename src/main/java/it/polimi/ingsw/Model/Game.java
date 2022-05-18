@@ -485,7 +485,6 @@ public class Game extends ModelSubject {
                     cloudsList.add(cloud.getStudents());
                 }
 
-
                 notifyObserver(obs->obs.onFillCloud(cloudsList));
             }
             else
@@ -607,17 +606,20 @@ public class Game extends ModelSubject {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
 
-                    int finalPlayerWhoHasProfessorIndex = playerWhoHasProfessorIndex;
-                    int finalPlayerWhoHasProfessorIndex1 = playerWhoHasProfessorIndex;
-                    notifyObserver(obs->obs.onProfessorUpdate(idPlayer, finalPlayerWhoHasProfessorIndex,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),players.get(finalPlayerWhoHasProfessorIndex1).getDashboard().getDiningRoom().getProfessors()));
                 }
             }
             else {
                 gameTable.removeProfessor(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
-                notifyObserver(obs->obs.onProfessorUpdate(idPlayer,-1,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),null));
             }
+            //observer parameters initialization
+            ArrayList<HashMap<RealmColors,Integer>> professors=new ArrayList<>();
+            for(Player p:players){
+                professors.add(p.getDashboard().getDiningRoom().getProfessors());
+            }
+            notifyObserver(obs->obs.onProfessorUpdate(professors));
         }
+
     }
 
     /**

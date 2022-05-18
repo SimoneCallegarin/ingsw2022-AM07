@@ -2,6 +2,7 @@ package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
 
 import java.util.ArrayList;
 

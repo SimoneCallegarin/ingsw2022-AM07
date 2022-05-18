@@ -49,8 +49,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onProfessorUpdate(int playerID, int otherPlayerID, HashMap<RealmColors, Integer> professors, HashMap<RealmColors, Integer> otherProfessors) {
-        Professor_UpdateMsg professor_updateMsg=new Professor_UpdateMsg(MessageType.PROFESSOR_UPDATE,playerID,otherPlayerID,professors,otherProfessors);
+    public void onProfessorUpdate(ArrayList<HashMap<RealmColors,Integer>> professors) {
+        Professor_UpdateMsg professor_updateMsg=new Professor_UpdateMsg(MessageType.PROFESSOR_UPDATE,professors);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(professor_updateMsg);
         }

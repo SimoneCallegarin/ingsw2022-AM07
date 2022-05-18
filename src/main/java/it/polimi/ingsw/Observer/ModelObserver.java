@@ -19,7 +19,7 @@ public interface ModelObserver {
 
     void onStudentMoving_toDining(int idPlayer, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);
 
-    void onProfessorUpdate(int playerID, int otherPlayerID, HashMap<RealmColors,Integer> professors, HashMap<RealmColors,Integer> otherProfessors);
+    void onProfessorUpdate(ArrayList<HashMap<RealmColors,Integer>> professors);
 
     void onStudentMoving_toIsle(int idPlayer,HashMap<RealmColors,Integer> entrance,int isleID, HashMap<RealmColors,Integer> isleStudents);
 
