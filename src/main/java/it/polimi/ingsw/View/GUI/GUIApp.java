@@ -1,12 +1,6 @@
 package it.polimi.ingsw.View.GUI;
-import it.polimi.ingsw.View.GUI.Frames.TitleFrame;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class GUIApp {
     public static void main(String[] args) {
@@ -25,9 +19,6 @@ public class GUIApp {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(250,250);
         f.setVisible(true);*/
-
-        TitleFrame titleFrame=new TitleFrame();
-
     }
 
 
