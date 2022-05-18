@@ -4,6 +4,7 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,7 +102,11 @@ public class ModelStorage {
 
     public void updateCharacterCard(GameTableModelView.CharacterCard newCharacterCard, int characterCardIndex) { gameTable.setCharacterCard(characterCardIndex,newCharacterCard); }
 
-    public void updateIsle(GameTableModelView.Isle newIsle, int isleID) { gameTable.setIsles(isleID,newIsle); }
+    public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) { gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle); }
+
+    public void updateIsle(GameTableModelView.Isle newIsle, int isleID) { gameTable.setNewIsle(isleID,newIsle); }
+
+    public void updateIsles(ArrayList<GameTableModelView.Isle> newIsles) { gameTable.setIsles(newIsles); }
 
     public void updateCloud(GameTableModelView.Cloud newCloud, int cloudID) { gameTable.setClouds(cloudID,newCloud); }
 

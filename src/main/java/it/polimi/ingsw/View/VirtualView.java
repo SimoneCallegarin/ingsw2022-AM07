@@ -33,8 +33,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onAssistantCard(int idPlayer, int turnOrderPlayed,int movementMNPlayed,List<Integer> turnOrderDiscardPile,List<Integer> movementMNDiscardPile) {
-        AssistCard_UpdateMsg assistCard_updateMsg=new AssistCard_UpdateMsg(MessageType.ASSISTANTCARD_UPDATE,idPlayer,turnOrderPlayed,movementMNPlayed,turnOrderDiscardPile,movementMNDiscardPile);
+    public void onAssistantCard(int idPlayer, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrdersAvailable, ArrayList<Integer> movementsMNAvailable) {
+        AssistCard_UpdateMsg assistCard_updateMsg=new AssistCard_UpdateMsg(MessageType.ASSISTANTCARD_UPDATE,idPlayer,turnOrderPlayed,movementMNPlayed,turnOrdersAvailable,movementsMNAvailable);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(assistCard_updateMsg);
         }
@@ -49,8 +49,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onProfessorUpdate(int playerID, int otherPlayerID, HashMap<RealmColors, Integer> professors, HashMap<RealmColors, Integer> otherProfessors) {
-        Professor_UpdateMsg professor_updateMsg=new Professor_UpdateMsg(MessageType.PROFESSOR_UPDATE,playerID,otherPlayerID,professors,otherProfessors);
+    public void onProfessorUpdate(ArrayList<HashMap<RealmColors,Integer>> professors) {
+        Professor_UpdateMsg professor_updateMsg=new Professor_UpdateMsg(MessageType.PROFESSOR_UPDATE,professors);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(professor_updateMsg);
         }
@@ -65,7 +65,7 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onMNMovement(int idPlayer,int isleId, List<HashMap<RealmColors, Integer>> isleStudents, List<Integer> numIsles) {
+    public void onMNMovement(int idPlayer, int isleId, ArrayList<HashMap<RealmColors, Integer>> isleStudents, ArrayList<Integer> numIsles) {
         MNMovement_UpdateMsg mnMovement_updateMsg=new MNMovement_UpdateMsg(MessageType.MNMOVEMENT_UPDATE,idPlayer,isleId,isleStudents,numIsles);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(mnMovement_updateMsg);
@@ -81,8 +81,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney) {
-        CharacterCard_UpdateMsg characterCard_updateMsg=new CharacterCard_UpdateMsg(MessageType.CHARACTERCARD_UPDATE,characterCardId, idPlayer, generalReserve, playerMoney);
+    public void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter) {
+        CharacterCard_UpdateMsg characterCard_updateMsg=new CharacterCard_UpdateMsg(MessageType.CHARACTERCARD_UPDATE,characterCardId, idPlayer, generalReserve, playerMoney,denyCards,studentsOnCharacter);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(characterCard_updateMsg);
         }
@@ -97,7 +97,7 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onFillCloud(List<HashMap<RealmColors, Integer>> clouds) {
+    public void onFillCloud(ArrayList<HashMap<RealmColors, Integer>> clouds) {
         FillCloud_UpdateMsg fillCloud_updateMsg=new FillCloud_UpdateMsg(MessageType.FILLCLOUD_UPDATE,clouds);
         for(ClientHandler ch:clientHandler){
             ch.send(fillCloud_updateMsg);
