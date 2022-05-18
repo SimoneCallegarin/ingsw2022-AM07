@@ -33,8 +33,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onAssistantCard(int idPlayer, int turnOrderPlayed) {
-        AssistCard_UpdateMsg assistCard_updateMsg=new AssistCard_UpdateMsg(MessageType.ASSISTANTCARD_UPDATE,idPlayer,turnOrderPlayed);
+    public void onAssistantCard(int idPlayer, int turnOrderPlayed,int movementMNPlayed,List<Integer> turnOrderDiscardPile,List<Integer> movementMNDiscardPile) {
+        AssistCard_UpdateMsg assistCard_updateMsg=new AssistCard_UpdateMsg(MessageType.ASSISTANTCARD_UPDATE,idPlayer,turnOrderPlayed,movementMNPlayed,turnOrderDiscardPile,movementMNDiscardPile);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(assistCard_updateMsg);
         }
@@ -73,7 +73,7 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onCloudChoice(int playerId,HashMap<RealmColors, Integer> entrance, int cloudId) {
+    public void onCloudUpdate(int playerId,HashMap<RealmColors, Integer> entrance, int cloudId) {
         Cloud_UpdateMsg cloud_updateMsg=new Cloud_UpdateMsg(MessageType.CLOUDCHOICE_UPDATE,playerId,entrance,cloudId);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(cloud_updateMsg);

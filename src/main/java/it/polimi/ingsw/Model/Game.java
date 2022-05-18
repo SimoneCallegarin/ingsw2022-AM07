@@ -275,7 +275,15 @@ public class Game extends ModelSubject {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
                 players.get(idPlayer).setCardOrder(playerCounter+1);
 
-                notifyObserver(obs->obs.onAssistantCard(idPlayer,assistantCardPlayed.getTurnOrder()));
+                //observer parameters initialization
+                ArrayList<Integer> turnOrderDiscardPile=new ArrayList<>();
+                ArrayList<Integer> movementMNDiscardPile=new ArrayList<>();
+                for(AssistantCard ac:players.get(idPlayer).getMageDeck()){
+                    turnOrderDiscardPile.add(ac.getTurnOrder());
+                    movementMNDiscardPile.add(ac.getMnMovement());
+                }
+
+                notifyObserver(obs->obs.onAssistantCard(idPlayer,assistantCardPlayed.getTurnOrder(),assistantCardPlayed.getMnMovement(),turnOrderDiscardPile,movementMNDiscardPile));
 
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
@@ -385,8 +393,8 @@ public class Game extends ModelSubject {
             }
         }
         //inizialization of parametres to pass to the observer
-        List<HashMap<RealmColors,Integer>> islestudents=new ArrayList<>();
-        List<Integer> numIsles=new ArrayList<>();
+        ArrayList<HashMap<RealmColors,Integer>> islestudents=new ArrayList<>();
+        ArrayList<Integer> numIsles=new ArrayList<>();
         for(Isle isle:gameTable.getIsleManager().getIsles()){
             islestudents.add(isle.getStudents());
             numIsles.add(isle.getNumOfIsles());
@@ -417,7 +425,7 @@ public class Game extends ModelSubject {
                 actionPhase = ActionPhases.MOVE_STUDENTS;
                 nextPlayer();
             }
-            notifyObserver(obs->obs.onCloudChoice(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
+            notifyObserver(obs->obs.onCloudUpdate(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
         }
     }
 

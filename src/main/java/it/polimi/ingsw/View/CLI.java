@@ -78,22 +78,12 @@ public class CLI extends ViewSubject {
      */
     public void askGamePreferences() {
         int numPlayers;
-        /*do {
-            if (numPlayers < 2 || numPlayers > 4) {
-                System.out.println("Invalid input, repeat");
-            }
-            System.out.println("Enter the number of players desired:\n");
-            numPlayers = Integer.parseInt(readUserInput());
-        } while (numPlayers < 2 || numPlayers > 4);*/
+
         System.out.println("How many players do you want to play with? [2, 3 or 4]");
         numPlayers = Integer.parseInt(readUserInput());
         boolean expertMode;
         String modePreference;
-        /*do {
-            System.out.println("Now type the game mode preferred: Expert or Base?");
-            choiceGamemode = readUserInput();
-            gamemode = choiceGamemode.equals("Expert");
-        } while (!choiceGamemode.equals("Expert") && !choiceGamemode.equals("Base"));*/
+
         System.out.println("Do you want to play in Expert mode? [y/n]");
         modePreference = readUserInput();
         expertMode = modePreference.equalsIgnoreCase("y");

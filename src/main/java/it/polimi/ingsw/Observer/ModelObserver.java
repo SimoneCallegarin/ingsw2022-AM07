@@ -15,7 +15,7 @@ public interface ModelObserver {
 
     void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner);
 
-    void onAssistantCard(int idPlayer, int turnOrderPlayed);
+    void onAssistantCard(int idPlayer, int turnOrderPlayed,int movementMNPlayed,List<Integer> turnOrderDiscardPile,List<Integer> movementMNDiscardPile);
 
     void onStudentMoving_toDining(int idPlayer, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);
 
@@ -25,7 +25,7 @@ public interface ModelObserver {
 
     void onMNMovement(int playerId,int isleId,List<HashMap<RealmColors,Integer>> isleStudents, List<Integer> numIsles );
 
-    void onCloudChoice(int playerID,HashMap<RealmColors,Integer> entrance, int cloudId);
+    void onCloudUpdate(int playerID,HashMap<RealmColors,Integer> entrance, int cloudId);
 
     void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney);
 
