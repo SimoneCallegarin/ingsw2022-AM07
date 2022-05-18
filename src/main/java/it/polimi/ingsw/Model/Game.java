@@ -184,10 +184,8 @@ public class Game extends ModelSubject {
                 this.gamePhase = GamePhases.PLANNING_PHASE;
                 fillClouds();
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
-                updateOrder(gamePhase);
-
                 setGameCreationValues();
-
+                updateOrder(gamePhase);
             }
 
     }
@@ -275,7 +273,7 @@ public class Game extends ModelSubject {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
                 players.get(idPlayer).setCardOrder(playerCounter+1);
 
-                notifyObserver(obs->obs.onAssistantCard(idPlayer,assistantCardPlayed.getTurnOrder()));
+                notifyObserver(obs->obs.onAssistantCard(idPlayer,assistantCardPlayed.getTurnOrder(),assistantCardPlayed.getMnMovement()));
 
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
@@ -528,6 +526,7 @@ public class Game extends ModelSubject {
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
                 currentPlayerIndex=players.indexOf(p);
+                break;
             }
         }
         int finalCurrentPlayerIndex = currentPlayerIndex;

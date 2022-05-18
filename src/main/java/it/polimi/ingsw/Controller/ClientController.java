@@ -2,6 +2,7 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Network.ClientHandler;
 import it.polimi.ingsw.Network.ConnectionSocket;
+import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
@@ -56,7 +57,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     @Override
     public void onAssistantCard(int turnOrder) {
-
+        client.send(new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD, playerID, turnOrder));
     }
 
     @Override
@@ -88,11 +89,27 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 ServiceMessage sm = (ServiceMessage) message;
                 cli.printMessage(sm);
             }
-            case START_GAME -> cli.startGame();
-            case GAMECREATION_UPDATE -> {
+            case START_GAME -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 updateHandler.setupStorage(gc, cliDrawer);
                 cli.printChanges();
+                System.out.println("Game started!");
+            }
+            case ASSISTANTCARD_UPDATE -> {
+                AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
+                updateHandler.getStorage().updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMnMovement());
+                cli.printChanges();
+            }
+            case GAMEPHASE_UPDATE -> {
+                GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
+                switch (gp.getGamePhases()) {
+                    case PLANNING_PHASE -> {
+                        if (gp.getActivePlayer() == playerID)
+                            cli.askAssistantCard();
+                        else
+                            System.out.println("Player " + gp.getActivePlayer() + " is choosing the Assistant Card to play");
+                    }
+                }
             }
         }
     }

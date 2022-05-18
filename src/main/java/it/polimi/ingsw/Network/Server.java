@@ -4,10 +4,12 @@ import it.polimi.ingsw.Controller.GameController;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 
+import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.View.VirtualView;
 
 import java.util.ArrayList;
@@ -123,13 +125,20 @@ public class Server {
                 break;
             }
         }
-        if(matchID==activeMatches.size())
-            newGame(nickname,preferences);
-        else
-            addPlayerToAnExistingLobby(matchID, nickname,preferences);
         players.get(nickname).setMatchID(matchID);
-        players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
-        virtualViews.get(matchID).setClientHandler(clientHandler);
+        //players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
+        if(matchID==activeMatches.size()) {
+            newGame(nickname, preferences);
+            players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
+            virtualViews.get(matchID).setClientHandler(clientHandler);
+        }
+        else {
+            players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers());
+            virtualViews.get(matchID).setClientHandler(clientHandler);
+            if (getMatch(getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == getMatch(getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1)
+                clientHandler.send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + getPlayerInfo(nickname).getPlayerID() + "! Game starting soon...", getPlayerInfo(nickname).getPlayerID()));
+            addPlayerToAnExistingLobby(matchID, nickname, preferences);
+        }
         return true;
     }
 

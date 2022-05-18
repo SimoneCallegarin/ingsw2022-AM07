@@ -15,7 +15,7 @@ public interface ModelObserver {
 
     void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner);
 
-    void onAssistantCard(int idPlayer, int turnOrderPlayed);
+    void onAssistantCard(int idPlayer, int turnOrderPlayed, int mnMovement);
 
     void onStudentMoving_toDining(int idPlayer, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);
 

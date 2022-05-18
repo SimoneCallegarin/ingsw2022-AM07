@@ -11,15 +11,15 @@ public class ServiceMessage extends NetworkMessage {
         return playerID;
     }
 
-    public ServiceMessage(MessageType mt, String error, int playerID) {
+    public ServiceMessage(MessageType mt, String message, int playerID) {
         super(mt);
-        this.message = error;
+        this.message = message;
         this.playerID = playerID;
     }
 
-    public ServiceMessage(MessageType mt, String error) {
+    public ServiceMessage(MessageType mt, String message) {
         super(mt);
-        this.message = error;
+        this.message = message;
         this.playerID = -1;
     }
 

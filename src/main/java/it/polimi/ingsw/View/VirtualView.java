@@ -18,7 +18,7 @@ public class VirtualView implements ModelObserver {
 
     @Override
     public void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors, Integer>> clouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors, Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards) {
-        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.GAMECREATION_UPDATE,numPlayers,gameMode,nicknames,clouds,studentsOnCharacter,entrances,isleStudents,whereMNId,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards);
+        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.START_GAME,numPlayers,gameMode,nicknames,clouds,studentsOnCharacter,entrances,isleStudents,whereMNId,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(gameCreation_updateMsg);
         }
@@ -33,8 +33,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onAssistantCard(int idPlayer, int turnOrderPlayed) {
-        AssistCard_UpdateMsg assistCard_updateMsg=new AssistCard_UpdateMsg(MessageType.ASSISTANTCARD_UPDATE,idPlayer,turnOrderPlayed);
+    public void onAssistantCard(int idPlayer, int turnOrderPlayed, int mnMovement) {
+        AssistCard_UpdateMsg assistCard_updateMsg=new AssistCard_UpdateMsg(MessageType.ASSISTANTCARD_UPDATE,idPlayer,turnOrderPlayed, mnMovement);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(assistCard_updateMsg);
         }
