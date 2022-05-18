@@ -183,10 +183,8 @@ public class Game extends ModelSubject {
                 this.gamePhase = GamePhases.PLANNING_PHASE;
                 fillClouds();
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
-                updateOrder(gamePhase);
-
                 setGameCreationValues();
-
+                updateOrder(gamePhase);
             }
 
     }
@@ -487,13 +485,17 @@ public class Game extends ModelSubject {
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
             if (getGameTable().getBag().getNumberOfStudents() >= numberOfPlayers*maxMovableStudents) {
+                ArrayList<HashMap<RealmColors,Integer>> cloudsList=new ArrayList<>();
                 for (int i = 0; i < numberOfPlayers; i++) {
                     Cloud cloud = gameTable.getCloud(i);
                     for (int j = 0; j < maxMovableStudents; j++) {
                         RealmColors color = gameTable.getBag().draw();
                         cloud.addStudent(color);
                     }
+                    cloudsList.add(cloud.getStudents());
                 }
+
+                notifyObserver(obs->obs.onFillCloud(cloudsList));
             }
             else
                 lastRound = true;
@@ -556,6 +558,7 @@ public class Game extends ModelSubject {
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
                 currentPlayerIndex=players.indexOf(p);
+                break;
             }
         }
         int finalCurrentPlayerIndex = currentPlayerIndex;
@@ -621,17 +624,20 @@ public class Game extends ModelSubject {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
 
-                    int finalPlayerWhoHasProfessorIndex = playerWhoHasProfessorIndex;
-                    int finalPlayerWhoHasProfessorIndex1 = playerWhoHasProfessorIndex;
-                    notifyObserver(obs->obs.onProfessorUpdate(idPlayer, finalPlayerWhoHasProfessorIndex,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),players.get(finalPlayerWhoHasProfessorIndex1).getDashboard().getDiningRoom().getProfessors()));
                 }
             }
             else {
                 gameTable.removeProfessor(color);
                 players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
-                notifyObserver(obs->obs.onProfessorUpdate(idPlayer,-1,players.get(idPlayer).getDashboard().getDiningRoom().getProfessors(),null));
             }
+            //observer parameters initialization
+            ArrayList<HashMap<RealmColors,Integer>> professors=new ArrayList<>();
+            for(Player p:players){
+                professors.add(p.getDashboard().getDiningRoom().getProfessors());
+            }
+            notifyObserver(obs->obs.onProfessorUpdate(professors));
         }
+
     }
 
     /**

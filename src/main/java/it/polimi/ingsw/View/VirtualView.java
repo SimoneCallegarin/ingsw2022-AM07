@@ -18,7 +18,7 @@ public class VirtualView implements ModelObserver {
 
     @Override
     public void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors, Integer>> clouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors, Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards) {
-        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.GAMECREATION_UPDATE,numPlayers,gameMode,nicknames,clouds,studentsOnCharacter,entrances,isleStudents,whereMNId,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards);
+        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.START_GAME,numPlayers,gameMode,nicknames,clouds,studentsOnCharacter,entrances,isleStudents,whereMNId,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(gameCreation_updateMsg);
         }
@@ -49,8 +49,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onProfessorUpdate(int playerID, int otherPlayerID, HashMap<RealmColors, Integer> professors, HashMap<RealmColors, Integer> otherProfessors) {
-        Professor_UpdateMsg professor_updateMsg=new Professor_UpdateMsg(MessageType.PROFESSOR_UPDATE,playerID,otherPlayerID,professors,otherProfessors);
+    public void onProfessorUpdate(ArrayList<HashMap<RealmColors,Integer>> professors) {
+        Professor_UpdateMsg professor_updateMsg=new Professor_UpdateMsg(MessageType.PROFESSOR_UPDATE,professors);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(professor_updateMsg);
         }
@@ -93,6 +93,14 @@ public class VirtualView implements ModelObserver {
         DenyCard_UpdateMsg denyCard_updateMsg=new DenyCard_UpdateMsg(MessageType.DENYCARD_UPDATE,playerId,isleId,denyCard);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(denyCard_updateMsg);
+        }
+    }
+
+    @Override
+    public void onFillCloud(List<HashMap<RealmColors, Integer>> clouds) {
+        FillCloud_UpdateMsg fillCloud_updateMsg=new FillCloud_UpdateMsg(MessageType.FILLCLOUD_UPDATE,clouds);
+        for(ClientHandler ch:clientHandler){
+            ch.send(fillCloud_updateMsg);
         }
     }
 

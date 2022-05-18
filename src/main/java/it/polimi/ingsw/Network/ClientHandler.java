@@ -102,14 +102,12 @@ public class ClientHandler implements Runnable {
                 if (accepted) {
                     if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == 1) {
                         System.out.println("Added player: " + nickname + " to a new game.");
-                        send(new ServiceMessage(MessageType.OK, "You joined a match! Waiting for other players..."));
+                        send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
                     else {
                         System.out.println("Added player: " + nickname + " to an already existing game with other " + (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() - 1) + " players.");
-                        if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
-                            server.broadcastMessage(nickname, new ServiceMessage(MessageType.START_GAME));
-                        else
-                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
+                        if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
+                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }
@@ -125,8 +123,8 @@ public class ClientHandler implements Runnable {
      */
     private void handleGame(PlayerMoveMessage pmm) {
         if (handlerPhase == HandlerPhases.RUNNING_PHASE) {
+            send(new ServiceMessage(MessageType.OK, "Message correctly received by server"));
             server.getMatch(server.getPlayerInfo(nickname).getMatchID()).onMessage(pmm);
-            send(new ServiceMessage(MessageType.OK));
         }
         else
             send(new ServiceMessage(MessageType.KO, "Not expecting a game action message"));
@@ -155,7 +153,9 @@ public class ClientHandler implements Runnable {
 
                         }
                         default -> {
-
+                            System.out.println("PLAYER_MOVE message received!");
+                            pmm = (PlayerMoveMessage) message;
+                            handleGame(pmm);
                         }
                     }
                 }
