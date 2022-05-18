@@ -293,7 +293,7 @@ public class Game extends ModelSubject {
             turnOrders.add(ac.getTurnOrder());
             movementsMN.add(ac.getMnMovement());
         }
-        notifyObserver(obs->obs.onAssistantCard(idPlayer,getPlayerByIndex(idPlayer).getDiscardPile().getTurnOrder(),getPlayerByIndex(idPlayer).getDiscardPile().getTurnOrder(), turnOrders, movementsMN));
+        notifyObserver(obs->obs.onAssistantCard(idPlayer,getPlayerByIndex(idPlayer).getDiscardPile().getTurnOrder(),getPlayerByIndex(idPlayer).getDiscardPile().getMnMovement(), turnOrders, movementsMN));
     }
 
     /**
@@ -768,7 +768,7 @@ public class Game extends ModelSubject {
             getGameTable().characterCardPlayed(characterCardIndex);
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
 
-            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,idPlayer,gameTable.getGeneralMoneyReserve(),players.get(idPlayer).getMoney()));
+            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
         }
     }
 

@@ -97,7 +97,7 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onFillCloud(List<HashMap<RealmColors, Integer>> clouds) {
+    public void onFillCloud(ArrayList<HashMap<RealmColors, Integer>> clouds) {
         FillCloud_UpdateMsg fillCloud_updateMsg=new FillCloud_UpdateMsg(MessageType.FILLCLOUD_UPDATE,clouds);
         for(ClientHandler ch:clientHandler){
             ch.send(fillCloud_updateMsg);

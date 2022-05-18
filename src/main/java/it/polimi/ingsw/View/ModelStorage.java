@@ -4,6 +4,7 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

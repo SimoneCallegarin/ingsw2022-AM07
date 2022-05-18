@@ -1,8 +1,7 @@
 package it.polimi.ingsw.View.CLI;
 
 import it.polimi.ingsw.Model.Enumeration.*;
-import it.polimi.ingsw.View.CLI.CLIColors;
-import it.polimi.ingsw.View.StorageOfModel;
+import it.polimi.ingsw.View.ModelStorage;
 
 public class CLIDrawer {
 

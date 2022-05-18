@@ -30,7 +30,6 @@ public interface ModelObserver {
 
     void onDenyCard(int playerId,int isleId,boolean denyCard);
 
-    void onFillCloud(List<HashMap<RealmColors,Integer>> clouds);
-
+    void onFillCloud(ArrayList<HashMap<RealmColors,Integer>> clouds);
 
 }
