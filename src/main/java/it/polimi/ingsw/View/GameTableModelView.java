@@ -54,7 +54,7 @@ public class GameTableModelView {
     }
 
     private final ArrayList<CharacterCard> characterCards;
-    private final ArrayList<Isle> isles;
+    private ArrayList<Isle> isles;
     private final ArrayList<Cloud> clouds;
     private int generalMoneyReserve;
 
@@ -82,10 +82,18 @@ public class GameTableModelView {
         this.characterCards.add(characterCardIndex,characterCard);
     }
 
-    public void setIsles(int isleID, Isle isle) {
+    public void setStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> studentsOnIsle) {
+        Isle newIsle = new Isle(studentsOnIsle,isles.get(isleID).towerNumber,isles.get(isleID).towerColor,isles.get(isleID).denyCards,isles.get(isleID).motherNatureIsPresent);
+        isles.remove(isleID);
+        isles.add(isleID,newIsle);
+    }
+
+    public void setNewIsle(int isleID, Isle isle) {
         this.isles.remove(isleID);
         this.isles.add(isleID,isle);
     }
+
+    public void setIsles(ArrayList<Isle> isles){ this.isles = isles; }
 
     public void setClouds(int cloudID, Cloud cloud) {
         this.clouds.remove(cloudID);

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Controller;
 
-
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
@@ -8,7 +7,6 @@ import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI.CLI;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
-
 import it.polimi.ingsw.View.ModelStorage;
 
 public class ClientController implements ViewObserver, NetworkObserver {
