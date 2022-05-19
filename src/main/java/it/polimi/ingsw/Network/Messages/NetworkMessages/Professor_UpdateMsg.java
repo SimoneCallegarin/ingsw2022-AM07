@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Professor_UpdateMsg extends NetworkMessage{
-    ArrayList<HashMap<RealmColors,Integer>> professors;
+    private final ArrayList<HashMap<RealmColors,Integer>> professors;
 
     public Professor_UpdateMsg(MessageType messageType, ArrayList<HashMap<RealmColors, Integer>> professors) {
         super(messageType);

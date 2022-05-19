@@ -38,6 +38,6 @@ public interface StudentManager {
      * getter for returning the students HashMap
      * @return the student HashMap
      */
-    public HashMap<RealmColors, Integer> getStudents();
+    HashMap<RealmColors, Integer> getStudents();
 
 }

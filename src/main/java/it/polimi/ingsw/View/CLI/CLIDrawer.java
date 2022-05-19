@@ -1,7 +1,7 @@
 package it.polimi.ingsw.View.CLI;
 
 import it.polimi.ingsw.Model.Enumeration.*;
-import it.polimi.ingsw.View.ModelStorage;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 public class CLIDrawer {
 
@@ -208,7 +208,6 @@ public class CLIDrawer {
      */
     public StringBuilder printGameTable() {
         StringBuilder toPrint=new StringBuilder();
-        //LIMITE A 20 CARATTERI PER IL nickname!!! (va imposto).
         createGameTable();
         for(int i=0;i<TABLE_DIMENSION_X;i++){
             for (int j=0;j<TABLE_DIMENSION_Y+LEGEND_Y+10;j++){
@@ -305,6 +304,7 @@ public class CLIDrawer {
         ║      nickname       ║
         ╚═════════════════════╝
          */
+        // The nickname must be from 2 to 20 characters long!
         drawRectangle(gameTable, startingPointX-1,startingPointY,NICKNAME_X,NICKNAME_Y);
         int posNickname = (NICKNAME_Y-storage.getDashboard(playerID).getNickname().length())/2;
         writeLongerString(gameTable,paintService(CLIColors.HB_WHITE,storage.getDashboard(playerID).getNickname()),startingPointX,startingPointY+posNickname);
@@ -433,10 +433,10 @@ public class CLIDrawer {
          */
         int posX=0;
         int posY=0;
-        if(playerID==0){    posX=-1;    posY=24;    }
-        if(playerID==1){    posX=-1;    posY=-6;    }
-        if(playerID==2){    posX=8;     posY=24;    }
-        if(playerID==3){    posX=8;     posY=-6;    }
+        if(playerID==0){    posX=-1;    posY=30;    }
+        if(playerID==1){    posX=-1;    posY=-12;   }
+        if(playerID==2){    posX=8;     posY=30;    }
+        if(playerID==3){    posX=8;     posY=-12;   }
 
         drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,SMALL_RECTANGLE_X,SMALL_RECTANGLE_Y);
         // MONEY:
@@ -458,10 +458,10 @@ public class CLIDrawer {
         */
         int posX=0;
         int posY=0;
-        if(playerID==0){    posX=-1;    posY=30;    }
-        if(playerID==1){    posX=-1;    posY=-12;   }
-        if(playerID==2){    posX=8;     posY=30;    }
-        if(playerID==3){    posX=8;     posY=-12;   }
+        if(playerID==0){    posX=-1;    posY=24;    }
+        if(playerID==1){    posX=-1;    posY=-6;    }
+        if(playerID==2){    posX=8;     posY=24;    }
+        if(playerID==3){    posX=8;     posY=-6;    }
 
         drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y);
 
@@ -574,23 +574,25 @@ public class CLIDrawer {
      * @param startingPointY the vertical position in the gameTable matrix where we will start to store the cloud.
      * @param cloudIndex the index of the cloud in the game.
      */
-    private void drawCloud(int startingPointY, int cloudIndex) {
+    private void drawCloud(int startingPointX, int startingPointY, int cloudIndex) {
          /*
         ╔═══════╗
         ║  s s  ║
         ║  s s  ║
         ╚═══n═══╝
          */
-        drawRectangle(gameTable, 9, startingPointY, CLOUD_X, CLOUD_Y);
-        gameTable[12][startingPointY+4] = Integer.valueOf(cloudIndex).toString();
+        drawRectangle(gameTable, startingPointX, startingPointY, CLOUD_X, CLOUD_Y);
+        gameTable[startingPointX+3][startingPointY+4] = Integer.valueOf(cloudIndex).toString();
         int cont=0;
         for (RealmColors color : RealmColors.values()){
             if(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)>0){
-                if(cont<2)
-                    gameTable[9 +1][startingPointY+3+2*cont]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
-                else
-                    gameTable[9 +2][startingPointY+3+2*(cont-2)]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
+                if(storage.getGameTable().getCloud(cloudIndex).getStudentsOnCloud()!=0){
+                    if(cont<2)
+                        gameTable[startingPointX+1][startingPointY+3+2*cont]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
+                    else
+                        gameTable[startingPointX+2][startingPointY+3+2*(cont-2)]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCloud(cloudIndex).getStudentsByColor(color)).toString());
 
+                }
                 cont++;
             }
         }
@@ -609,11 +611,13 @@ public class CLIDrawer {
         ║  ╚═══n═══╝  ╚═══n═══╝  ╚═══n═══╝  ╚═══n═══╝  ║
         ╚══════════════════════════════════════════════╝
          */
-        drawRectangle(gameTable, TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-22,CLOUDS_CONTAINER_X,CLOUDS_CONTAINER_Y);
-            writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"),TABLE_DIMENSION_X/2-6,TABLE_DIMENSION_Y/2-3);
-            for(int i=0; i<storage.getNumberOfPlayers(); i++){
-            drawCloud(TABLE_DIMENSION_Y/2-20+11*i,i);
-        }
+        int posXBase = 6;
+        if(!storage.isGameMode())
+            posXBase = 3;
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2-posXBase,TABLE_DIMENSION_Y/2-22,CLOUDS_CONTAINER_X,CLOUDS_CONTAINER_Y);
+        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"),TABLE_DIMENSION_X/2-posXBase,TABLE_DIMENSION_Y/2-3);
+        for(int i=0; i<storage.getNumberOfPlayers(); i++)
+            drawCloud(15-posXBase,TABLE_DIMENSION_Y/2-20+11*i,i);
     }
 
     /**

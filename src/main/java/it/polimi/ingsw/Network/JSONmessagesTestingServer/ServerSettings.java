@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Network.JSONmessagesTestingServer;
 
 /**
- * this type of message is used to communicate hostname and port
+ * This type of message is used to set hostname and port.
  */
 public class ServerSettings {
     public static String hostName = "localhost";
@@ -11,10 +11,4 @@ public class ServerSettings {
 
     public static int ReadPortFromJSON() { return port; }
 
-    @Override
-    public String toString() {
-        return  "hostName='" + hostName + '\'' +
-                ", port=" + port +
-                '}';
-    }
 }

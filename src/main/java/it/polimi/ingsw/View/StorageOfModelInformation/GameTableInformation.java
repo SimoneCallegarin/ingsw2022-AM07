@@ -1,4 +1,4 @@
-package it.polimi.ingsw.View;
+package it.polimi.ingsw.View.StorageOfModelInformation;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
@@ -6,7 +6,7 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GameTableModelView {
+public class GameTableInformation {
 
     // We used records for each component of the game table because each time there's a move that changes
     // the game table the UpdateHandler will create a new variable record containing all the updated information,
@@ -51,6 +51,13 @@ public class GameTableModelView {
 
         public int getStudentsByColor(RealmColors color) { return studentsOnCloud.get(color); }
 
+        public int getStudentsOnCloud() {
+            int sum=0;
+            for (RealmColors color : RealmColors.values())
+                sum = studentsOnCloud.get(color) + sum;
+            return sum;
+        }
+
     }
 
     private final ArrayList<CharacterCard> characterCards;
@@ -58,7 +65,7 @@ public class GameTableModelView {
     private final ArrayList<Cloud> clouds;
     private int generalMoneyReserve;
 
-    public GameTableModelView(ArrayList<CharacterCard> characterCards, ArrayList<Isle> isles, ArrayList<Cloud> clouds, int generalMoneyReserve) {
+    public GameTableInformation(ArrayList<CharacterCard> characterCards, ArrayList<Isle> isles, ArrayList<Cloud> clouds, int generalMoneyReserve) {
         this.characterCards = characterCards;
         this.isles = isles;
         this.clouds = clouds;

@@ -1,14 +1,12 @@
 package it.polimi.ingsw.Observer;
 
-import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class ViewSubject {
-    private final List<ViewObserver> viewObserverList=new ArrayList<>();
 
+    private final ArrayList<ViewObserver> viewObserverList=new ArrayList<>();
 
     public void addObserver(ViewObserver viewObserver){
         viewObserverList.add(viewObserver);

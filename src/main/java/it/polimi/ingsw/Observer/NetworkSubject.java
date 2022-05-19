@@ -3,12 +3,10 @@ package it.polimi.ingsw.Observer;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class NetworkSubject {
-    private final List<NetworkObserver> networkObserverList=new ArrayList<>();
 
+    private final ArrayList<NetworkObserver> networkObserverList=new ArrayList<>();
 
     public void addObserver(NetworkObserver networkObserver){
         networkObserverList.add(networkObserver);

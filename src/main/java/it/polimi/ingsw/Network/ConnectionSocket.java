@@ -32,7 +32,6 @@ public class ConnectionSocket {
             output.reset();
         } catch (IOException e) {
             System.err.println("Error in sending message to server");
-            //e.printStackTrace();
         }
     }
 
@@ -41,6 +40,7 @@ public class ConnectionSocket {
         this.port = ServerSettings.ReadPortFromJSON();
     }
 
+    /*
     public void setup() throws IOException, ClassNotFoundException {
         String nickname;
         int numberOfPlayers;
@@ -74,10 +74,11 @@ public class ConnectionSocket {
 
         System.out.println("You joined a game!");
     }
+     */
 
-    public void startConnection() throws ClassNotFoundException {
+    public void startConnection() {
         try {
-            clientSocket = new Socket("localhost", ServerSettings.ReadPortFromJSON());
+            clientSocket = new Socket(host, port);
             System.out.println("Connection established.");
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             input = new ObjectInputStream(clientSocket.getInputStream());
@@ -88,7 +89,6 @@ public class ConnectionSocket {
             cListener = new ClientListener(this, input);
             Thread threadListener = new Thread(cListener);
             threadListener.start();
-            //System.out.println("Listener started!");
         } catch (IOException e) {
             e.printStackTrace();
         }

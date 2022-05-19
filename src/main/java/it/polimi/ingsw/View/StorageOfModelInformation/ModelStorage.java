@@ -1,8 +1,7 @@
-package it.polimi.ingsw.View;
+package it.polimi.ingsw.View.StorageOfModelInformation;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
 
@@ -13,54 +12,56 @@ public class ModelStorage {
 
     private final int numberOfPlayers;
     private final boolean expertMode;
-    private final ArrayList<PlayerModelView> dashboards = new ArrayList<>();
-    private GameTableModelView gameTable;
+    private final ArrayList<PlayerInformation> dashboards = new ArrayList<>();
+    private GameTableInformation gameTable;
 
     public ModelStorage(int numberOfPlayers, boolean expertMode) {
         this.numberOfPlayers = numberOfPlayers;
         this.expertMode = expertMode;
     }
-    /*public StorageOfModel(int numberOfPlayers, ArrayList<PlayerModelView> dashboards, GameTableModelView gameTable, boolean gameMode) {
+    /*
+    public StorageOfModel(int numberOfPlayers, ArrayList<PlayerModelView> dashboards, GameTableModelView gameTable, boolean gameMode) {
         this.numberOfPlayers = numberOfPlayers;
         this.gameMode = gameMode;
         for(int i=0;i<numberOfPlayers;i++)
             setDashboard(i,dashboards.get(i));
         setGameTable(gameTable);
-    }*/
+    }
+    */
 
     public void setupStorage (GameCreation_UpdateMsg message, CLIDrawer cliDrawer) { // Receive a message containing all the information of the game table.
 
         // DASHBOARDS:
-        ArrayList<PlayerModelView> dashboards = new ArrayList<>();
+        ArrayList<PlayerInformation> dashboards = new ArrayList<>();
         for(int i=0; i<message.getNumPlayers(); i++){
-            PlayerModelView dashboard = new PlayerModelView(message.getNicknames().get(i),message.getEntrances().get(i),message.getNumTowers().get(i),message.getTowerColors().get(i), message.getMoney());
+            PlayerInformation dashboard = new PlayerInformation(message.getNicknames().get(i),message.getEntrances().get(i),message.getNumTowers().get(i),message.getTowerColors().get(i), message.getMoney());
             dashboards.add(i,dashboard);
         }
 
         // GAME TABLE:
-        ArrayList<GameTableModelView.CharacterCard> characterCards = new ArrayList<>();
-        ArrayList<GameTableModelView.Isle> isles = new ArrayList<>();
-        ArrayList<GameTableModelView.Cloud> clouds = new ArrayList<>();
+        ArrayList<GameTableInformation.CharacterCard> characterCards = new ArrayList<>();
+        ArrayList<GameTableInformation.Isle> isles = new ArrayList<>();
+        ArrayList<GameTableInformation.Cloud> clouds = new ArrayList<>();
 
         if(message.getGameMode())
             for(int i=0; i<3; i++){
-                GameTableModelView.CharacterCard characterCard = new GameTableModelView.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i));
+                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i));
                 characterCards.add(i,characterCard);
             }
         for(int i=0; i<12; i++){
-            GameTableModelView.Isle isle;
+            GameTableInformation.Isle isle;
             if(i== message.getWhereMNId())
-                isle = new GameTableModelView.Isle(message.getIsleStudents().get(i),0, TowerColors.NOCOLOR,0,true);
+                isle = new GameTableInformation.Isle(message.getIsleStudents().get(i),0, TowerColors.NOCOLOR,0,true);
             else
-                isle = new GameTableModelView.Isle(message.getIsleStudents().get(i),0,TowerColors.NOCOLOR,0,false);
+                isle = new GameTableInformation.Isle(message.getIsleStudents().get(i),0,TowerColors.NOCOLOR,0,false);
             isles.add(i,isle);
         }
         for(int i=0; i<message.getNumPlayers(); i++){
-            GameTableModelView.Cloud cloud = new GameTableModelView.Cloud(message.getClouds().get(i));
+            GameTableInformation.Cloud cloud = new GameTableInformation.Cloud(message.getClouds().get(i));
             clouds.add(i,cloud);
         }
 
-        GameTableModelView gameTable = new GameTableModelView(characterCards,isles,clouds,message.getGeneralReserve());
+        GameTableInformation gameTable = new GameTableInformation(characterCards,isles,clouds,message.getGeneralReserve());
 
         for(int i=0;i<numberOfPlayers;i++)
             setDashboard(i,dashboards.get(i));
@@ -68,11 +69,9 @@ public class ModelStorage {
         cliDrawer.setStorage(this);
     }
 
-    public void setDashboard(int playerID, PlayerModelView player) { this.dashboards.add(playerID,player); }
+    public void setDashboard(int playerID, PlayerInformation player) { this.dashboards.add(playerID,player); }
 
-    public void setGameTable(GameTableModelView gameTable) { this.gameTable = gameTable; }
-
-    // Methods called by the update handler to update:
+    public void setGameTable(GameTableInformation gameTable) { this.gameTable = gameTable; }
 
     // Update dashboard:
 
@@ -103,15 +102,15 @@ public class ModelStorage {
 
     // Update game table:
 
-    public void updateCharacterCard(GameTableModelView.CharacterCard newCharacterCard, int characterCardIndex) { gameTable.setCharacterCard(characterCardIndex,newCharacterCard); }
+    public void updateCharacterCard(GameTableInformation.CharacterCard newCharacterCard, int characterCardIndex) { gameTable.setCharacterCard(characterCardIndex,newCharacterCard); }
 
     public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) { gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle); }
 
-    public void updateIsle(GameTableModelView.Isle newIsle, int isleID) { gameTable.setNewIsle(isleID,newIsle); }
+    public void updateIsle(GameTableInformation.Isle newIsle, int isleID) { gameTable.setNewIsle(isleID,newIsle); }
 
-    public void updateIsles(ArrayList<GameTableModelView.Isle> newIsles) { gameTable.setIsles(newIsles); }
+    public void updateIsles(ArrayList<GameTableInformation.Isle> newIsles) { gameTable.setIsles(newIsles); }
 
-    public void updateCloud(GameTableModelView.Cloud newCloud, int cloudID) { gameTable.setClouds(cloudID,newCloud); }
+    public void updateCloud(GameTableInformation.Cloud newCloud, int cloudID) { gameTable.setClouds(cloudID,newCloud); }
 
     public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) { gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue); }
 
@@ -121,9 +120,9 @@ public class ModelStorage {
 
     public boolean isGameMode() { return expertMode; }
 
-    public PlayerModelView getDashboard(int playerID) { return dashboards.get(playerID); }
+    public PlayerInformation getDashboard(int playerID) { return dashboards.get(playerID); }
 
-    public GameTableModelView getGameTable() { return gameTable; }
+    public GameTableInformation getGameTable() { return gameTable; }
 
     public int getNumberOfIsles() {
         return gameTable.getIsles().size();

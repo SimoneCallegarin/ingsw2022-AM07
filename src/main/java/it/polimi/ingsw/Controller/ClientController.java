@@ -7,7 +7,7 @@ import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI.CLI;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
-import it.polimi.ingsw.View.ModelStorage;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 public class ClientController implements ViewObserver, NetworkObserver {
 
@@ -20,7 +20,6 @@ public class ClientController implements ViewObserver, NetworkObserver {
     public ClientController(CLI cli, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.cli = cli;
         this.client = client;
-        //this.storage = new ModelStorage();
         this.cliDrawer = cliDrawer;
     }
 
@@ -30,9 +29,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
     }
 
     @Override
-    public void onGamePreferences(int numPlayers, Boolean gameMode) {
-        client.send(new GamePreferencesMessage(numPlayers, gameMode));
-    }
+    public void onGamePreferences(int numPlayers, Boolean gameMode) { client.send(new GamePreferencesMessage(numPlayers, gameMode)); }
 
     @Override
     public void onColorChoice(int color) {
@@ -55,9 +52,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
     }
 
     @Override
-    public void onAssistantCard(int turnOrder) {
-        client.send(new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD, playerID, turnOrder));
-    }
+    public void onAssistantCard(int turnOrder) { client.send(new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD, playerID, turnOrder)); }
 
     @Override
     public void onAtomicEffect(int genericValue) {
