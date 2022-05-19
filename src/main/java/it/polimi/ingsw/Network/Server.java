@@ -34,7 +34,10 @@ public class Server {
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
     private final ArrayList<String> chosenNicknames;
-
+    /**
+     * List of players that need to have their nicknames removed from server due to the fact
+     * that they had their connection closed due to an error (timeout) or a logout request.
+     */
     private final ArrayList<String> playersToRemove;
     /**
      * HashMap that permits to find the client handler associated to a certain nickname,
@@ -120,7 +123,7 @@ public class Server {
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
-            if(activeMatches.get(i).getGameMode()==preferences.expertMode && activeMatches.get(i).getNumberOfPlayers()==preferences.numberOfPlayers && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
+            if(activeMatches.get(i).getGameMode()==preferences.isExpert() && activeMatches.get(i).getNumberOfPlayers()==preferences.getNumberOfPlayers() && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
                 matchID=i;
                 break;
             }
@@ -225,9 +228,11 @@ public class Server {
             }
     }
 
-    public void addPlayerToRemove(String nickname) {
-        playersToRemove.add(nickname);
-    }
+    /**
+     * Adds a player's nickname that has to be removed from the server.
+     * @param nickname the nickname of the player that has to be removed.
+     */
+    public void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
 
     public static void main(String[] args) {
 

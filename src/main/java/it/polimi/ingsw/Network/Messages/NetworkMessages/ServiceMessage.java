@@ -7,35 +7,28 @@ public class ServiceMessage extends NetworkMessage {
     private final String message;
     private final int playerID;
 
-    public int getPlayerID() {
-        return playerID;
-    }
-
-    public ServiceMessage(MessageType mt, String message, int playerID) {
-        super(mt);
+    public ServiceMessage(MessageType messageType, String message, int playerID) {
+        super(messageType);
         this.message = message;
         this.playerID = playerID;
     }
 
-    public ServiceMessage(MessageType mt, String message) {
-        super(mt);
+    public ServiceMessage(MessageType messageType, String message) {
+        super(messageType);
         this.message = message;
         this.playerID = -1;
     }
 
-    public ServiceMessage(MessageType mt) {
-        super(mt);
+    public ServiceMessage(MessageType messageType) {
+        super(messageType);
         this.message = "null";
         this.playerID = -1;
     }
 
+    public int getPlayerID() {
+        return playerID;
+    }
+
     public String getMessage(){ return message; }
 
-    /*@Override
-    public String toString() {
-        return "ServiceMessage{" +
-                "messageType=" + getMessageType() +
-                ", message=" + error +
-                '}';
-    }*/
 }

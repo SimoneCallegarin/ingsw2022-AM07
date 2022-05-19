@@ -43,7 +43,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_STUDENT_TODINING() {
-        message = new PlayerMoveMessage(MessageType.VALUE,0,1);
+        message = new PlayerMoveMessage(MessageType.COLOR_VALUE,0,1);
 
         game.addFirstPlayer("simone",false,2);
         game.addAnotherPlayer("giacomo");
@@ -66,7 +66,7 @@ class GameControllerTest {
      */
     @Test
     void onMessage_MOVE_STUDENT_TOISLE() {
-        message = new PlayerMoveMessage(MessageType.VALUE,0,3);
+        message = new PlayerMoveMessage(MessageType.COLOR_VALUE,0,3);
 
         game.addFirstPlayer("simone",false,2);
         game.addAnotherPlayer("giacomo");

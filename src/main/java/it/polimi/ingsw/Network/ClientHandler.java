@@ -9,12 +9,9 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.io.*;
 import java.net.Socket;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
-
 
 /**
  * this class is used to manage the connection to the first client which connects to the server to play.
@@ -119,7 +116,6 @@ public class ClientHandler implements Runnable {
 
     /**
      * handles all player moves and the game development till the game ends.
-     * @throws IOException when there's an error in the exchanged messages.
      */
     private void handleGame(PlayerMoveMessage pmm) {
         if (handlerPhase == HandlerPhases.RUNNING_PHASE) {
@@ -214,14 +210,6 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             //System.out.println("TIMEOUT EXPIRED or ERROR");
             disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
-        }
-    }
-
-    public void sendUpdate(NetworkMessage nm){
-        try {
-            output.writeObject(nm);
-        }catch(IOException e){
-            e.printStackTrace();
         }
     }
 }

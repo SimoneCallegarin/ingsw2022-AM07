@@ -91,7 +91,7 @@ public class GameController {
               he can also change the color of the student to move, in that case the value case is called again to memorize
               the new information.
              */
-            case VALUE -> {
+            case COLOR_VALUE -> {
                 colorIndexSaved = colorIndex;
                 colorIndex = message.getGenericValue();
             }

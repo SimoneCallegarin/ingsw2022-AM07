@@ -4,11 +4,11 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
 public enum CLIColors {
-    //reset and clear
+    // Reset and Clear:
     RESET("\033[0m"),
     CLEAR("\033[H\033[2J"),
 
-    //colors
+    // Other colors:
     HB_WHITE("\033[1;97m"),
     B_WHITE("\033[1;87m"),
     HB_BLACK("\033[1;90m"),
@@ -24,52 +24,28 @@ public enum CLIColors {
     private final String code;
 
 
-    CLIColors(String code) {
-        this.code = code;
-    }
+    CLIColors(String code) { this.code = code; }
 
     @Override
-    public String toString() {
-        return code;
-    }
+    public String toString() { return code; }
 
     public static CLIColors realmColorsConverter(RealmColors color) {
         switch(color){
-            case YELLOW -> {
-                return CLIColors.HB_YELLOW;
-            }
-            case BLUE -> {
-                return CLIColors.HB_BLUE;
-            }
-            case RED -> {
-                return CLIColors.HB_RED;
-            }
-            case PINK -> {
-                return CLIColors.HB_PINK;
-            }
-            case GREEN -> {
-                return CLIColors.HB_GREEN;
-            }
-            default ->{
-                return CLIColors.RESET;
-            }
+            case YELLOW -> { return CLIColors.HB_YELLOW; }
+            case BLUE   -> { return CLIColors.HB_BLUE; }
+            case RED    -> { return CLIColors.HB_RED; }
+            case PINK   -> { return CLIColors.HB_PINK; }
+            case GREEN  -> { return CLIColors.HB_GREEN; }
+            default     -> { return CLIColors.RESET; }
         }
     }
 
     public static CLIColors towerColorsConverter(TowerColors color) {
         switch(color){
-            case WHITE -> {
-                return CLIColors.HB_WHITE;
-            }
-            case BLACK -> {
-                return CLIColors.HB_BLACK;
-            }
-            case GREY -> {
-                return CLIColors.HB_GREY;
-            }
-            default ->{
-                return CLIColors.RESET;
-            }
+            case WHITE -> { return CLIColors.HB_WHITE; }
+            case BLACK -> { return CLIColors.HB_BLACK; }
+            case GREY  -> { return CLIColors.HB_GREY; }
+            default    -> { return CLIColors.RESET; }
         }
     }
 

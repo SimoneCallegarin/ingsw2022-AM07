@@ -3,6 +3,7 @@ package it.polimi.ingsw.View.CLI;
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.BufferedReader;
@@ -54,36 +55,36 @@ public class CLI extends ViewSubject {
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();
-        //the model receives these data through the network then after it updates, it sends the new datas trough to the Client
-        //trough the VirtualView
-        //we can't send the game reference trough messages so we need to pass each one of the objects to draw them
-        //askMove();
-        //askMNMovement();
-        //askCloud();
-        //the turn changes
+        // The model receives these data through the network then after that it updates,
+        // it sends the new data to the Client through the VirtualView.
+        // We don't send the game reference trough messages, so we need to pass each one of the objects in order to draw them
     }
 
     /**
-     * method used to read the username choice by the player
+     * Reads the username chosen by the player and notifies it to the view.
      */
     public void askUsername() {
-        System.out.println("Nickname? ");
+        System.out.println("> Nickname? ");
+        System.out.println("> ");
         String username = readUserInput();
         notifyObserver(obs -> obs.onUsername(username));
     }
 
     /**
-     * this method is used to ask the user the game settings he desires, which are the game mode and the number of Players
+     * Used to ask the user the game settings he desires, which are the game mode and the number of Players
+     * then it notifies them to the view.
      */
     public void askGamePreferences() {
         int numPlayers;
 
-        System.out.println("How many players do you want to play with? [2, 3 or 4]");
+        System.out.println("> How many players do you want to play with? [2, 3 or 4]");
+        System.out.println("> ");
         numPlayers = Integer.parseInt(readUserInput());
         boolean expertMode;
         String modePreference;
 
-        System.out.println("Do you want to play in Expert mode? [y/n]");
+        System.out.println("> Do you want to play in Expert mode? [y/n]");
+        System.out.println("> ");
         modePreference = readUserInput();
         expertMode = modePreference.equalsIgnoreCase("y");
         int finalNumPlayers = numPlayers;
@@ -110,14 +111,54 @@ public class CLI extends ViewSubject {
 
     public void askAssistantCard(){
         int choice;
-        System.out.println("Choose an Assistant Card to play: ");//to update with the available assistant cards
+        System.out.println("> Which Assistant Card you want to play?");//to update with the available assistant cards
+        System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onAssistantCard(choice));
         //System.out.println(cliDrawer.printGameTable());
     }
 
+    public void askMove() {
+        askRealmColor();
+        int choice;
+        System.out.println("> What do you want to do now?");
+        System.out.println("> 0 - CHANGE COLOR");
+        System.out.println("> 1 - MOVE SELECTED STUDENT IN YOUR DINING ROOM");
+        System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
+        choice=Integer.parseInt(readUserInput());
+        switch (choice) {
+            case 0 -> askMove();
+            case 1 -> askDiningRoomMovement();
+            case 2 -> askIsleMovement();
+        }
+    }
 
-    public void askMove(){
+    private void askRealmColor() {
+        int choice;
+        System.out.println("> Which student you want to move from your Entrance?");
+        System.out.println("> 0 - YELLOW");
+        System.out.println("> 1 - PINK");
+        System.out.println("> 2 - BLUE");
+        System.out.println("> 3 - RED");
+        System.out.println("> 4 - GREEN");
+        System.out.println("> ");
+        choice=Integer.parseInt(readUserInput());
+        notifyObserver(obs -> obs.onColorChoice(choice));
+    }
+
+    private void askDiningRoomMovement() {
+        notifyObserver(obs -> obs.onStudentmovement_toDining());
+    }
+
+    private void askIsleMovement() {
+        int choice;
+        System.out.println("> Which isle you want to move your student to? (Select between 0 and " + cliDrawer.getStorage().getNumberOfIsles() + ")");
+        System.out.println("> ");
+        choice=Integer.parseInt(readUserInput());
+        notifyObserver(obs -> obs.onStudentmovement_toIsle(choice));
+    }
+
+    /*public void askMove(){
         int studentMoves=3;
         int choice;
         int color;
@@ -146,7 +187,7 @@ public class CLI extends ViewSubject {
             }
         }
 
-    }
+    }*/
 
     public void askCharacterToPlay(){
         final int choice;
@@ -156,11 +197,11 @@ public class CLI extends ViewSubject {
         System.out.println("-3");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onCharacterCard(choice));
-        //to finish
+        // Not finished yet!!!
     }
 
 
-    public void askStudentMovement(){
+    /*public void askStudentMovement(){
         int color;
         int choice;
         System.out.println("Choose a student color to move from the Entrance");
@@ -181,7 +222,7 @@ public class CLI extends ViewSubject {
         }
         System.out.println(cliDrawer.printGameTable());
 
-    }
+    }*/
 
     public void printMessage(ServiceMessage message) {
         System.out.println(message.getMessage());

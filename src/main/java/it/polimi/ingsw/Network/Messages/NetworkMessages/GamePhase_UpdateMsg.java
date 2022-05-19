@@ -6,10 +6,10 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 
 public class GamePhase_UpdateMsg extends NetworkMessage {
 
-    int activePlayer;
-    GamePhases gamePhases;
-    ActionPhases actionPhases;
-    int winner; //it's the playerID,-1 if there isn't yet a winner
+    private final int activePlayer;
+    private final GamePhases gamePhases;
+    private final ActionPhases actionPhases;
+    private final int winner; //it's the playerID,-1 if there isn't yet a winner
 
     public GamePhase_UpdateMsg(MessageType messageType, int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner) {
         super(messageType);
@@ -19,15 +19,12 @@ public class GamePhase_UpdateMsg extends NetworkMessage {
         this.winner = winner;
     }
 
-    public int getActivePlayer() {
-        return activePlayer;
-    }
+    public int getActivePlayer() { return activePlayer; }
 
-    public GamePhases getGamePhases() {
-        return gamePhases;
-    }
+    public GamePhases getGamePhases() { return gamePhases; }
 
-    public ActionPhases getActionPhases() {
-        return actionPhases;
-    }
+    public ActionPhases getActionPhases() { return actionPhases; }
+
+    public int getWinner() { return winner; }
+
 }

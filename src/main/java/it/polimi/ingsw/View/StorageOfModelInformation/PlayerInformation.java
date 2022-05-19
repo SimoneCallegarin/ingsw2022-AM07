@@ -1,13 +1,12 @@
-package it.polimi.ingsw.View;
+package it.polimi.ingsw.View.StorageOfModelInformation;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
-public class PlayerModelView {
+public class PlayerInformation {
 
     private final String nickname;
     private HashMap<RealmColors,Integer> entranceStudents;
@@ -26,7 +25,7 @@ public class PlayerModelView {
      * Constructor used in the update manager to build an array of the PlayerModelView of each player
      * at the beginning of the game, containing all the information about each player.
      */
-    public PlayerModelView(String nickname, HashMap<RealmColors, Integer> entranceStudents, int numOfTowers, TowerColors towerColor, int money) {
+    public PlayerInformation(String nickname, HashMap<RealmColors, Integer> entranceStudents, int numOfTowers, TowerColors towerColor, int money) {
         fillWith0HashMap();
         this.nickname = nickname;
         this.entranceStudents = entranceStudents;

@@ -11,8 +11,8 @@ import java.util.NoSuchElementException;
 
 public class ClientListener extends NetworkSubject implements Runnable {
 
-    private ConnectionSocket cs;
-    private ObjectInputStream input;
+    private final ConnectionSocket cs;
+    private final ObjectInputStream input;
 
     public ClientListener(ConnectionSocket cs, ObjectInputStream input) {
         this.cs = cs;
@@ -39,7 +39,6 @@ public class ClientListener extends NetworkSubject implements Runnable {
                     notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
                 System.out.println("An error occurred...");
-                //e.printStackTrace();
                 cs.disconnect();
             }
         }

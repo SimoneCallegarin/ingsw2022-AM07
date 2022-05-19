@@ -315,6 +315,8 @@ public class Game extends ModelSubject {
             }
         }
         notifyObserver(obs->obs.onStudentMoving_toIsle(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idIsle,gameTable.getIsleManager().getIsle(idIsle).getStudents()));
+
+        setParametersOfTurnForView();
     }
 
     /**
@@ -352,6 +354,8 @@ public class Game extends ModelSubject {
             }
         }
         notifyObserver(obs->obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(),players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
+
+        setParametersOfTurnForView();
     }
 
     /**
@@ -598,18 +602,10 @@ public class Game extends ModelSubject {
             }
             updateOrder(gamePhase);
         }
-        else
+        else {
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
-
-
-        int currentPlayerIndex=0;
-        for(Player p:players){
-            if(p.getOrder().equals(currentActivePlayer)){
-                currentPlayerIndex=players.indexOf(p);
-            }
+            setParametersOfTurnForView();
         }
-        int finalCurrentPlayerIndex = currentPlayerIndex;
-        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase,-1));
     }
 
     /**
@@ -795,9 +791,11 @@ public class Game extends ModelSubject {
      *         When not used -> set to 0
      */
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
-        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder())
+        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()){
             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
+            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
 
+        }
         if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
             notifyObserver(obs->obs.onDenyCard(idPlayer,value1,true));
         }
