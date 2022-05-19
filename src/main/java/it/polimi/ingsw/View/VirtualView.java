@@ -65,8 +65,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onMNMovement(int idPlayer, int isleId, ArrayList<HashMap<RealmColors, Integer>> isleStudents, ArrayList<Integer> numIsles) {
-        MNMovement_UpdateMsg mnMovement_updateMsg=new MNMovement_UpdateMsg(MessageType.MNMOVEMENT_UPDATE,idPlayer,isleId,isleStudents,numIsles);
+    public void onMNMovement(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles) {
+        MNMovement_UpdateMsg mnMovement_updateMsg=new MNMovement_UpdateMsg(MessageType.MNMOVEMENT_UPDATE,totalIsles,students,towerColors,whereMNId,denyCards,numberOfIsles);
         for(ClientHandler ch: clientHandler){
             ch.sendUpdate(mnMovement_updateMsg);
         }
