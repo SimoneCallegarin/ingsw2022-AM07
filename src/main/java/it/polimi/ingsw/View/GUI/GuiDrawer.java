@@ -69,7 +69,7 @@ public class GuiDrawer extends ViewSubject implements MouseListener {
         //f.getContentPane().removeAll();
         //inputPanel.setLayout(new BoxLayout(inputPanel,BoxLayout.PAGE_AXIS));
 
-        inputPanel.getComponents();
+
         inputPanel.add(new JLabel("Game joined"));
         inputPanel.add(Box.createRigidArea(new Dimension(0,10)));
         inputPanel.add(new JLabel("Insert username"));
