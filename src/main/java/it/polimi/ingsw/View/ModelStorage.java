@@ -80,7 +80,10 @@ public class ModelStorage {
 
     public void updateStudentsInDining(int playerID, HashMap<RealmColors,Integer> students){ dashboards.get(playerID).setDiningStudents(students); }
 
-    public void updateProfessorsInDining(int playerID, HashMap<RealmColors,Integer> professors){ dashboards.get(playerID).setDiningProfessors(professors); }
+    public void updateProfessorsInDining(ArrayList<HashMap<RealmColors,Integer>> professors){
+        for (int i = 0; i < numberOfPlayers; i++)
+            dashboards.get(i).setDiningProfessors(professors.get(i)); 
+    }
 
     public void updateNumberOfTowers(int playerID, int numberOfTowers){ dashboards.get(playerID).setNumOfTowers(numberOfTowers); }
 
