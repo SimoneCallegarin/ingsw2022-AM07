@@ -88,6 +88,6 @@ public class VirtualView implements ModelObserver {
 
     private void broadcastMessage(NetworkMessage message) {
         for(ClientHandler clientHandler : clientHandler)
-            clientHandler.sendUpdate(message);
+            clientHandler.send(message);
     }
 }

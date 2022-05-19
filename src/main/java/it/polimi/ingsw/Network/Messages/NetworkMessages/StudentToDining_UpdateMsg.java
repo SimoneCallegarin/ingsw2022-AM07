@@ -6,6 +6,10 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import java.util.HashMap;
 
 public class StudentToDining_UpdateMsg extends NetworkMessage{
+    public int getIdPlayer() {
+        return idPlayer;
+    }
+
     private final int idPlayer;
     private final HashMap<RealmColors, Integer> entrance;
     private final HashMap<RealmColors, Integer> dining;

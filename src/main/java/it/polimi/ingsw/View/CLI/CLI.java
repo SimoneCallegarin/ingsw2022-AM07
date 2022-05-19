@@ -127,7 +127,7 @@ public class CLI extends ViewSubject {
         System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
         choice=Integer.parseInt(readUserInput());
         switch (choice) {
-            case 0 -> askRealmColor();
+            case 0 -> askMove();
             case 1 -> askDiningRoomMovement();
             case 2 -> askIsleMovement();
         }
@@ -147,7 +147,7 @@ public class CLI extends ViewSubject {
     }
 
     private void askDiningRoomMovement() {
-        notifyObserver(ViewObserver::onStudentmovement_toDining);
+        notifyObserver(obs -> obs.onStudentmovement_toDining());
     }
 
     private void askIsleMovement() {

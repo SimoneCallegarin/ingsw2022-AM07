@@ -212,12 +212,4 @@ public class ClientHandler implements Runnable {
             disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
         }
     }
-
-    public void sendUpdate(NetworkMessage nm){
-        try {
-            output.writeObject(nm);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
 }

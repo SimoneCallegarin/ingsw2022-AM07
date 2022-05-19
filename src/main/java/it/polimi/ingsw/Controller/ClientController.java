@@ -97,19 +97,18 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case STUDENTTODINING_UPDATE -> {
                 StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;
-                storage.updateStudentsInEntrance(playerID, std.getEntrance());
-                storage.updateStudentsInDining(playerID, std.getDining());
+                storage.updateStudentsInEntrance(std.getIdPlayer(), std.getEntrance());
+                storage.updateStudentsInDining(std.getIdPlayer(), std.getDining());
                 cli.printChanges();
             }
             case PROFESSOR_UPDATE -> {
                 Professor_UpdateMsg p = (Professor_UpdateMsg) message;
                 storage.updateProfessorsInDining(p.getProfessors());
-                cli.printChanges();
             }
             case STUDENTTOISLE_UPDATE -> {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
-                storage.updateStudentsInEntrance(playerID, sti.getEntrance());
-                storage.updateStudentsOnIsle(playerID, sti.getIsleStudent());
+                storage.updateStudentsInEntrance(sti.getIdPlayer(), sti.getEntrance());
+                storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudent());
                 cli.printChanges();
             }
             case GAMEPHASE_UPDATE -> {
