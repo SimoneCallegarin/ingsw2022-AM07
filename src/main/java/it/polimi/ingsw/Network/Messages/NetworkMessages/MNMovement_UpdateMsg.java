@@ -1,33 +1,36 @@
 package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.TowerColors;
+import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Network.Messages.MessageType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MNMovement_UpdateMsg extends NetworkMessage{
-    private final int playerID;
-    private final int isleId;
-    private final ArrayList<HashMap<RealmColors,Integer>> isleStudents;
-    private final ArrayList<Integer> numIsles;
+    /**
+     * number of isles on the board
+     */
+    int totalIsles;
 
+    ArrayList<HashMap<RealmColors,Integer>> students;
+    ArrayList<TowerColors> towerColors;
+    int whereMNId;
+    ArrayList<Boolean> denyCards;
+    /**
+     * number of isles per isle
+     */
+    ArrayList<Integer> numberOfIsles;
 
-    public MNMovement_UpdateMsg(MessageType messageType,int playerID, int isleId, ArrayList<HashMap<RealmColors, Integer>> isleStudents, ArrayList<Integer> numIsles) {
+    public MNMovement_UpdateMsg(MessageType messageType, int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles) {
         super(messageType);
-        this.playerID=playerID;
-        this.isleId = isleId;
-        this.isleStudents = isleStudents;
-        this.numIsles = numIsles;
-
+        this.totalIsles = totalIsles;
+        this.students = students;
+        this.towerColors = towerColors;
+        this.whereMNId = whereMNId;
+        this.denyCards = denyCards;
+        this.numberOfIsles = numberOfIsles;
     }
-
-    public int getPlayerID() { return playerID; }
-
-    public int getIsleId() { return isleId; }
-
-    public ArrayList<HashMap<RealmColors, Integer>> getIsleStudents() { return isleStudents; }
-
-    public ArrayList<Integer> getNumIsles() { return numIsles; }
-
 }

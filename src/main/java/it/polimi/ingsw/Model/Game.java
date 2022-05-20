@@ -399,22 +399,33 @@ public class Game extends ModelSubject {
                 }
             }
         }
-        setMoveMNParametersForView(idPlayer,idIsle);
+        setMoveMNParametersForView();
     }
 
     /**
      * Initialize the parameters needed by the view consequently to the movement of mother nature.
-     * @param idPlayer the id of the player that moves mother nature.
-     * @param idIsle the id of the isle where now there's mother nature.
      */
-    private void setMoveMNParametersForView(int idPlayer, int idIsle) {
-        ArrayList<HashMap<RealmColors,Integer>> isleStudents=new ArrayList<>();
+    private void setMoveMNParametersForView() {
+        ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
         ArrayList<Integer> numIsles=new ArrayList<>();
+        ArrayList<TowerColors> towerColors=new ArrayList<>();
+        ArrayList<Boolean> denyCards=new ArrayList<>();
+        int whereMnId=0;
         for(Isle isle:gameTable.getIsleManager().getIsles()){
-            isleStudents.add(isle.getStudents());
+            students.add(isle.getStudents());
             numIsles.add(isle.getNumOfIsles());
+            towerColors.add(isle.getTowersColor());
+            if(isle.getDenyCards()==0){
+                denyCards.add(false);
+            }else{
+                denyCards.add(true);
+            }
+            if(isle.getMotherNature()){
+                whereMnId=isle.getIdIsle();
+            }
         }
-        notifyObserver(obs->obs.onMNMovement(idPlayer,idIsle,isleStudents,numIsles));
+        int finalWhereMnId = whereMnId;
+        notifyObserver(obs->obs.onMNMovement(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles));
     }
 
     /**
