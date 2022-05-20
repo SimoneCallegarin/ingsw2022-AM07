@@ -694,33 +694,29 @@ public class CLIDrawer {
 
         StringBuilder toPrint=new StringBuilder();
 
-        initializeRectangle(assistantCards,ASSISTANT_CARDS_X+4,ASSISTANT_CARDS_Y*10+16);
+        initializeRectangle(assistantCards,ASSISTANT_CARDS_CONTAINER_X,ASSISTANT_CARDS_CONTAINER_Y);
 
         drawRectangle(assistantCards,0,0,ASSISTANT_CARDS_CONTAINER_X,ASSISTANT_CARDS_CONTAINER_Y);
         writeLongerString(assistantCards,paintService(CLIColors.B_WHITE,"PLAYABLE ASSISTANT CARDS"),0,21);
 
+        int bigger=0;
         for(int i=0;i<storage.getDashboard(playerID).getAssistantCardsTurnOrder().size();i++){
             if(storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i) == 10){
-                drawRectangle(assistantCards, 2,ASSISTANT_CARDS_Y*i+i+3,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y+1);
+                bigger=1;
                 assistantCards[3][ASSISTANT_CARDS_Y*i+5+i] = " \b";
-                assistantCards[2][ASSISTANT_CARDS_Y*i+4+i] = paintService(CLIColors.B_WHITE,"T");
-                assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i).toString();
-                assistantCards[2][ASSISTANT_CARDS_Y*i+7+i] = paintService(CLIColors.B_WHITE,"M");
-                assistantCards[3][ASSISTANT_CARDS_Y*i+7+i] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
             }
-            else{
-                drawRectangle(assistantCards, 2,ASSISTANT_CARDS_Y*i+i+3,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y);
+                drawRectangle(assistantCards, 2,ASSISTANT_CARDS_Y*i+i+3,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y+bigger);
                 // TURN ORDER:
                 assistantCards[2][ASSISTANT_CARDS_Y*i+4+i] = paintService(CLIColors.B_WHITE,"T");
                 assistantCards[3][ASSISTANT_CARDS_Y*i+4+i] = storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i).toString();
                 // MOTHER NATURE MOVEMENT:
-                assistantCards[2][ASSISTANT_CARDS_Y*i+6+i] = paintService(CLIColors.B_WHITE,"M");
-                assistantCards[3][ASSISTANT_CARDS_Y*i+6+i] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
-            }
+                assistantCards[2][ASSISTANT_CARDS_Y*i+6+i+bigger] = paintService(CLIColors.B_WHITE,"M");
+                assistantCards[3][ASSISTANT_CARDS_Y*i+6+i+bigger] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
+
         }
 
-        for(int i=0;i<ASSISTANT_CARDS_X+4;i++){
-            for (int j=0;j<ASSISTANT_CARDS_Y*(storage.getDashboard(playerID).getAssistantCardsTurnOrder().size())+16;j++){
+        for(int i=0;i<ASSISTANT_CARDS_CONTAINER_X;i++){
+            for (int j=0;j<ASSISTANT_CARDS_CONTAINER_Y;j++){
                 toPrint.append(assistantCards[i][j]);
             }
             toPrint.append("\n");

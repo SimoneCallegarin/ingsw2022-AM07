@@ -23,7 +23,6 @@ public class CLI extends ViewSubject {
 
     public CLI() {
         cliDrawer = new CLIDrawer();
-        //addObserver(connectionSocket);
     }
 
     /**
@@ -95,11 +94,10 @@ public class CLI extends ViewSubject {
     public void askAssistantCard(int playerID) {
         int choice;
         System.out.println(cliDrawer.printAssistantCards(playerID));
-        System.out.println("> Which Assistant Card you want to play?");//to update with the available assistant cards
+        System.out.println("> Which Assistant Card you want to play? Insert the turn order of the Assistant Card you want to play (T)");//to update with the available assistant cards
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onAssistantCard(choice));
-        //System.out.println(cliDrawer.printGameTable());
     }
 
     public void askMove() {
@@ -131,12 +129,12 @@ public class CLI extends ViewSubject {
     }
 
     private void askDiningRoomMovement() {
-        notifyObserver(obs -> obs.onStudentMovement_toDining());
+        notifyObserver(ViewObserver::onStudentMovement_toDining);
     }
 
     private void askIsleMovement() {
         int choice;
-        System.out.println("> Which isle do you want to move your student to? (Select between 0 and " + cliDrawer.getStorage().getNumberOfIsles() + ")");
+        System.out.println("> Which isle do you want to move your student to? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles()-1) + ")");
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
@@ -157,37 +155,6 @@ public class CLI extends ViewSubject {
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onCloudChoice(choice));
     }
-
-    /*public void askMove(){
-        int studentMoves=3;
-        int choice;
-        int color;
-        boolean characterUsed=false;
-        boolean turnFinished=false;
-
-            //continua a chiedere finchè non esaurisce le mosse per il primo turno o sbaglia l'input
-        while(!turnFinished) {
-            System.out.println("What is your next move? Write:");
-            System.out.println("-1 to move a student(max " + studentMoves + " other time/s this turn");
-            if (!characterUsed) {
-                System.out.println("-2 to play a Character Card");
-            }
-            choice = Integer.parseInt(readUserInput());
-
-            if (choice == 1) {
-                askStudentMovement();
-                studentMoves--;
-                if (studentMoves == 0) {
-                    turnFinished = true;
-                }
-            } else if (choice == 2 && !characterUsed) {
-                askCharacterToPlay();
-            } else {
-                System.out.println("Invalid choice, repeat");
-            }
-        }
-
-    }*/
 
     public void askCharacterToPlay(){
         final int choice;
