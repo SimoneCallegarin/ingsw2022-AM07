@@ -115,8 +115,6 @@ public class ModelStorage {
 
     public GameTableInformation getGameTable() { return gameTable; }
 
-    public int getNumberOfIsles() {
-        return gameTable.getIsles().size();
-    }
+    public int getNumberOfIsles() { return gameTable.getIsles().size(); }
 
 }
