@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
@@ -7,7 +8,11 @@ import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI.CLI;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
+import it.polimi.ingsw.View.StorageOfModelInformation.GameTableInformation;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ClientController implements ViewObserver, NetworkObserver {
 
@@ -58,7 +63,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     @Override
     public void onCloudChoice(int idCloud) {
-
+        client.send(new PlayerMoveMessage(MessageType.CHOOSE_CLOUD, playerID, idCloud));
     }
 
     @Override
@@ -85,6 +90,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
                 storage.updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
+                storage.updateAssistantsCard(ac.getIdPlayer(), ac.getTurnOrders(), ac.getMovementsMN());
                 cli.printChanges();
             }
             case STUDENTTODINING_UPDATE -> {
@@ -105,8 +111,33 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case MNMOVEMENT_UPDATE -> {
                 MNMovement_UpdateMsg mnm = (MNMovement_UpdateMsg) message;
-
+                ArrayList<GameTableInformation.Isle> newIsles = new ArrayList<>();
+                for (int i = 0; i < mnm.getTotalIsles(); i++) {
+                    boolean isMNPresent = mnm.getWhereMNId() == i;
+                    int isDenyCardPresent = 0;
+                    if (mnm.getDenyCards().get(i))
+                        isDenyCardPresent = 1;
+                    GameTableInformation.Isle newIsle = new GameTableInformation.Isle(mnm.getStudents().get(i), mnm.getNumberOfIsles().get(i), mnm.getTowerColors().get(i), isDenyCardPresent, isMNPresent);
+                    newIsles.add(newIsle);
+                }
+                storage.updateIsles(newIsles);
+                cli.printChanges();
             }
+            case CLOUDCHOICE_UPDATE -> {
+                PickFromCloud_UpdateMsg pfc = (PickFromCloud_UpdateMsg) message;
+                HashMap<RealmColors, Integer> emptyCloud = new HashMap<>();
+                for (RealmColors color : RealmColors.values())
+                    emptyCloud.put(color, 0);
+                storage.updateCloud(new GameTableInformation.Cloud(emptyCloud), pfc.getCloudId());
+                storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
+                cli.printChanges();
+            }
+            /*case FILLCLOUD_UPDATE -> {
+                FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
+                for (int i = 0; i < 2; i++)
+                    storage.updateCloud(new GameTableInformation.Cloud(fc.getClouds().get(i)), i);
+                cli.printChanges();
+            }*/
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
                 switch (gp.getGamePhases()) {
@@ -129,6 +160,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
                                     cli.askMNMovement();
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
+                            }
+                            case CHOOSE_CLOUD -> {
+                                if (gp.getActivePlayer() == playerID)
+                                    cli.askCloud();
+                                else
+                                    System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
                             }
                         }
                     }

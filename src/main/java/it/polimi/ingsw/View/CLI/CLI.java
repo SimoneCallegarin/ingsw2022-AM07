@@ -92,15 +92,7 @@ public class CLI extends ViewSubject {
         notifyObserver(obs -> obs.onGamePreferences(finalNumPlayers, finalExpertMode));
     }
 
-    public void askCloud(){
-        int choice;
-        System.out.println("Select the cloud where do you want to take the students from");//to update with the available clouds
-        choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs->obs.onCloudChoice(choice));
-        System.out.println(cliDrawer.printGameTable());
-    }
-
-    public void askAssistantCard() {
+    public void askAssistantCard(int playerID) {
         int choice;
         System.out.println(cliDrawer.printAssistantCards(playerID));
         System.out.println("> Which Assistant Card you want to play?");//to update with the available assistant cards
@@ -139,7 +131,7 @@ public class CLI extends ViewSubject {
     }
 
     private void askDiningRoomMovement() {
-        notifyObserver(obs -> obs.onStudentmovement_toDining());
+        notifyObserver(obs -> obs.onStudentMovement_toDining());
     }
 
     private void askIsleMovement() {
@@ -156,6 +148,14 @@ public class CLI extends ViewSubject {
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onMNMovement(choice));
+    }
+
+    public void askCloud(){
+        int choice;
+        System.out.println("> > Which cloud do you want to take students from?");
+        System.out.println("> ");
+        choice=Integer.parseInt(readUserInput());
+        notifyObserver(obs->obs.onCloudChoice(choice));
     }
 
     /*public void askMove(){

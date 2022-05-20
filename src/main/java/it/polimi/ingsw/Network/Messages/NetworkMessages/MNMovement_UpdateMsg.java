@@ -19,6 +19,7 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
     ArrayList<TowerColors> towerColors;
     int whereMNId;
     ArrayList<Boolean> denyCards;
+
     /**
      * number of isles per isle
      */
@@ -32,5 +33,29 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
         this.whereMNId = whereMNId;
         this.denyCards = denyCards;
         this.numberOfIsles = numberOfIsles;
+    }
+
+    public int getTotalIsles() {
+        return totalIsles;
+    }
+
+    public ArrayList<HashMap<RealmColors, Integer>> getStudents() {
+        return students;
+    }
+
+    public ArrayList<TowerColors> getTowerColors() {
+        return towerColors;
+    }
+
+    public int getWhereMNId() {
+        return whereMNId;
+    }
+
+    public ArrayList<Boolean> getDenyCards() {
+        return denyCards;
+    }
+
+    public ArrayList<Integer> getNumberOfIsles() {
+        return numberOfIsles;
     }
 }
