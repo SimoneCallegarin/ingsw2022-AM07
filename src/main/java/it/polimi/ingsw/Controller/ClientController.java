@@ -61,7 +61,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     @Override
     public void onMNMovement(int idIsle) {
-
+        client.send(new PlayerMoveMessage(MessageType.MOVE_MOTHERNATURE, playerID, idIsle));
     }
 
     @Override
@@ -111,6 +111,10 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudent());
                 cli.printChanges();
             }
+            case MNMOVEMENT_UPDATE -> {
+                MNMovement_UpdateMsg mnm = (MNMovement_UpdateMsg) message;
+
+            }
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
                 switch (gp.getGamePhases()) {
@@ -128,7 +132,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
                             }
-                            case MOVE_MOTHER_NATURE -> System.out.println("Someone has to move mother nature");
+                            case MOVE_MOTHER_NATURE -> {
+                                if (gp.getActivePlayer() == playerID)
+                                    cli.askMNMovement();
+                                else
+                                    System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
+                            }
                         }
                     }
                 }

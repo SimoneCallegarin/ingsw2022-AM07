@@ -100,22 +100,12 @@ public class CLI extends ViewSubject {
         System.out.println(cliDrawer.printGameTable());
     }
 
-    public void askMNMovement(){
-        int choice;
-        System.out.println("Select the isle id where you want to move Mother Nature");//to update with the available movements
-        choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs->obs.onMNMovement(choice));
-        System.out.println(cliDrawer.printGameTable());
-    }
-
-
-    public void askAssistantCard(){
+    public void askAssistantCard() {
         int choice;
         System.out.println("> Which Assistant Card you want to play?");//to update with the available assistant cards
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onAssistantCard(choice));
-        //System.out.println(cliDrawer.printGameTable());
     }
 
     public void askMove() {
@@ -135,7 +125,7 @@ public class CLI extends ViewSubject {
 
     private void askRealmColor() {
         int choice;
-        System.out.println("> Which student you want to move from your Entrance?");
+        System.out.println("> Which student do you want to move from your Entrance?");
         System.out.println("> 0 - YELLOW");
         System.out.println("> 1 - PINK");
         System.out.println("> 2 - BLUE");
@@ -152,10 +142,18 @@ public class CLI extends ViewSubject {
 
     private void askIsleMovement() {
         int choice;
-        System.out.println("> Which isle you want to move your student to? (Select between 0 and " + cliDrawer.getStorage().getNumberOfIsles() + ")");
+        System.out.println("> Which isle do you want to move your student to? (Select between 0 and " + cliDrawer.getStorage().getNumberOfIsles() + ")");
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs -> obs.onStudentmovement_toIsle(choice));
+    }
+
+    public void askMNMovement() {
+        int choice;
+        System.out.println("> > Which isle do you want to move Mother Nature to?");
+        System.out.println("> ");
+        choice=Integer.parseInt(readUserInput());
+        notifyObserver(obs->obs.onMNMovement(choice));
     }
 
     /*public void askMove(){
