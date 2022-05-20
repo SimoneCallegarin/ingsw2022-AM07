@@ -3,32 +3,60 @@ package it.polimi.ingsw.View.GUI;
 import it.polimi.ingsw.Observer.ViewSubject;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
-public class GuiDrawer extends ViewSubject implements MouseListener {
+
+public class GuiDrawer extends ViewSubject {
     //create the window
     private final String frameTitle="Eriantys Game";
-    private final String inputPanelTitle="WELCOME TO ERIANTYS";
     private final String submitButton="Submit";
-
+    /**
+     * the frame containing all the GUI
+     */
     JFrame f=new JFrame(frameTitle);
-    JPanel inputPanel=new JPanel();
-    JTextField serverIPInput=new JTextField();
-    JTextField serverPortInput=new JTextField();
+    /**
+     * the panel for the user inputs
+     */
+    JPanel serverPreferences=new JPanel();
+    /**
+     * the panel for the user inputs
+     */
+    JPanel userPreferences=new JPanel();
+    /**
+     * the user inputs panel container, it switches between the two on successful submit button press
+     */
+    JPanel userInputContainer=new JPanel(new CardLayout());
+    /**
+     * Text field for server IP input
+     */
+    JTextField serverIPInputText=new JTextField();
+    /**
+     * Text field for server Port input
+     */
+    JTextField serverPortInputText=new JTextField();
+
     JTextField usernameInput=new JTextField();
     JTextField gamemodeInput=new JTextField();
     JTextField numberPlayersInput=new JTextField();
 
+    /**
+     * submit button used to enter the text choices made by the player
+     */
     JButton submit=new JButton(submitButton);
+    /**
+     * on this button press the player will join a lobby and wait for the game to start
+     */
+    JButton startGame=new JButton("Start game");
 
     public GuiDrawer() throws HeadlessException {
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(1920,1080);
         f.setVisible(true);
+
         //set my content pane where I'll add my components
         JPanel contentPane=new JPanel();
         contentPane.setBackground(Color.blue);
@@ -37,84 +65,82 @@ public class GuiDrawer extends ViewSubject implements MouseListener {
         contentPane.add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.WEST);
         contentPane.add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.EAST);
         contentPane.add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.NORTH);
-        contentPane.add(Box.createRigidArea(new Dimension(500,380)),BorderLayout.SOUTH);
+        contentPane.add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.SOUTH);
 
         f.setContentPane(contentPane);
+
+        //setting correct dimensions for text fields
+        serverIPInputText.setMaximumSize(new Dimension(700,25));
+        serverPortInputText.setMaximumSize(new Dimension(700,25));
+        usernameInput.setMaximumSize(new Dimension(700,25));
+        gamemodeInput.setMaximumSize(new Dimension(700,25));
+        numberPlayersInput.setMaximumSize(new Dimension(700,25));
+
+        //initialize the container
+        userInputContainer.add(serverPreferences,"Server parameters choice");
+        userInputContainer.add(userPreferences,"Game preferences choice");
+
 
         DrawServerSettingsForm();
 
     }
 
     private void DrawServerSettingsForm(){
-        //create the area where i'll show the title and the input forms
 
-        inputPanel.setLayout(new BoxLayout(inputPanel,BoxLayout.PAGE_AXIS));
+        //create the area where i'll show the title and the server input forms
+        serverPreferences.setLayout(new BoxLayout(serverPreferences,BoxLayout.PAGE_AXIS));
+        String serverPreferencesTitle = "WELCOME TO ERIANTYS";
+        serverPreferences.add(new JLabel(serverPreferencesTitle));
 
-        inputPanel.add(new JLabel(inputPanelTitle));
         //an invisible separator
-        inputPanel.add(Box.createRigidArea(new Dimension(0,10)));
-        //add the form
-        inputPanel.add(new JLabel("Insert server ip"));
-        inputPanel.add(serverIPInput);
-        inputPanel.add(new JLabel("Insert server port"));
-        inputPanel.add(serverPortInput);
-        submit.addMouseListener(this);
-        inputPanel.add(submit);
+        serverPreferences.add(Box.createRigidArea(new Dimension(0,10)));
+
+        //add the server form
+        serverPreferences.add(new JLabel("Insert server ip"));
+        serverPreferences.add(serverIPInputText);
+        serverPreferences.add(new JLabel("Insert server port"));
+        serverPreferences.add(serverPortInputText);
+
+        submit.addActionListener(e -> {
+            String serverIp= serverIPInputText.getText();
+            String serverPort= serverPortInputText.getText();
+            System.out.println(serverIp+" "+serverPort);
+            //notify the observer
+            CardLayout cl=(CardLayout) userInputContainer.getLayout();
+            cl.show(userInputContainer,"Game preferences choice");
+        });
+        serverPreferences.add(submit);
+
+        userPreferences.setLayout(new BoxLayout(userPreferences,BoxLayout.PAGE_AXIS));
+        String userPreferencesTitle = "Connected to server, input your game preferences";
+        userPreferences.add(new JLabel(userPreferencesTitle));
+
+        userPreferences.add(Box.createRigidArea(new Dimension(0,10)));
+
+        userPreferences.add(new JLabel("Insert username"));
+        userPreferences.add(usernameInput);
+        userPreferences.add(new JLabel("Insert gamemode"));
+        userPreferences.add(gamemodeInput);
+        userPreferences.add(new JLabel("Insert number of players"));
+        userPreferences.add(numberPlayersInput);
+        startGame.addActionListener(e -> {
+            //notifyObserver
+            boolean gamemode;
+            if(gamemodeInput.getText().equals("Expert")){
+                gamemode=true;
+            }else{gamemode=false;}
+
+            notifyObserver(obs->obs.onUsername(usernameInput.getText()));
+            notifyObserver(obs->obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()),gamemode));
+            //change window
+
+        });
+        userPreferences.add(startGame);
+
 
         //putting all together
-        f.getContentPane().add(inputPanel,BorderLayout.CENTER);
-    }
-
-    private void DrawUserPreferencesForm(){
-        //f.getContentPane().removeAll();
-        //inputPanel.setLayout(new BoxLayout(inputPanel,BoxLayout.PAGE_AXIS));
-
-
-        inputPanel.add(new JLabel("Game joined"));
-        inputPanel.add(Box.createRigidArea(new Dimension(0,10)));
-        inputPanel.add(new JLabel("Insert username"));
-        inputPanel.add(usernameInput);
-        inputPanel.add(new JLabel("Insert gamemode[Expert/Base]"));
-        inputPanel.add(gamemodeInput);
-        inputPanel.add(new JLabel("Insert number of players[2,3,4]"));
-        inputPanel.add(numberPlayersInput);
-        submit.addMouseListener(this);
-        inputPanel.add(submit);
-
-        f.getContentPane().add(inputPanel,BorderLayout.CENTER);
-
-
+        f.getContentPane().add(userInputContainer,BorderLayout.CENTER);
     }
 
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-       String serverIp= serverIPInput.getText();
-       String serverPort= serverPortInput.getText();
-       System.out.println(serverIp+" "+serverPort);
-       DrawUserPreferencesForm();
-       //notify the observer
-
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
 }
