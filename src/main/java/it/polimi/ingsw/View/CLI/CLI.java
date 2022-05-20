@@ -92,25 +92,9 @@ public class CLI extends ViewSubject {
         notifyObserver(obs -> obs.onGamePreferences(finalNumPlayers, finalExpertMode));
     }
 
-    public void askCloud(){
+    public void askAssistantCard(int playerID) {
         int choice;
-        System.out.println("Select the cloud where do you want to take the students from");//to update with the available clouds
-        choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs->obs.onCloudChoice(choice));
-        System.out.println(cliDrawer.printGameTable());
-    }
-
-    public void askMNMovement(){
-        int choice;
-        System.out.println("Select the isle id where you want to move Mother Nature");//to update with the available movements
-        choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs->obs.onMNMovement(choice));
-        System.out.println(cliDrawer.printGameTable());
-    }
-
-
-    public void askAssistantCard(){
-        int choice;
+        System.out.println(cliDrawer.printAssistantCards(playerID));
         System.out.println("> Which Assistant Card you want to play?");//to update with the available assistant cards
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
@@ -135,7 +119,7 @@ public class CLI extends ViewSubject {
 
     private void askRealmColor() {
         int choice;
-        System.out.println("> Which student you want to move from your Entrance?");
+        System.out.println("> Which student do you want to move from your Entrance?");
         System.out.println("> 0 - YELLOW");
         System.out.println("> 1 - PINK");
         System.out.println("> 2 - BLUE");
@@ -147,15 +131,31 @@ public class CLI extends ViewSubject {
     }
 
     private void askDiningRoomMovement() {
-        notifyObserver(obs -> obs.onStudentmovement_toDining());
+        notifyObserver(obs -> obs.onStudentMovement_toDining());
     }
 
     private void askIsleMovement() {
         int choice;
-        System.out.println("> Which isle you want to move your student to? (Select between 0 and " + cliDrawer.getStorage().getNumberOfIsles() + ")");
+        System.out.println("> Which isle do you want to move your student to? (Select between 0 and " + cliDrawer.getStorage().getNumberOfIsles() + ")");
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs -> obs.onStudentmovement_toIsle(choice));
+        notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
+    }
+
+    public void askMNMovement() {
+        int choice;
+        System.out.println("> > Which isle do you want to move Mother Nature to?");
+        System.out.println("> ");
+        choice=Integer.parseInt(readUserInput());
+        notifyObserver(obs->obs.onMNMovement(choice));
+    }
+
+    public void askCloud(){
+        int choice;
+        System.out.println("> > Which cloud do you want to take students from?");
+        System.out.println("> ");
+        choice=Integer.parseInt(readUserInput());
+        notifyObserver(obs->obs.onCloudChoice(choice));
     }
 
     /*public void askMove(){
@@ -200,29 +200,7 @@ public class CLI extends ViewSubject {
         // Not finished yet!!!
     }
 
-
-    /*public void askStudentMovement(){
-        int color;
-        int choice;
-        System.out.println("Choose a student color to move from the Entrance");
-        System.out.println("Colors available:");
-        color=(Integer.parseInt(readUserInput()));
-        notifyObserver(obs->obs.onColorChoice(color));
-
-        System.out.println("Choose where to move the student");
-        System.out.println("-1 to DiningRoom\n-2 to an Isle");
-        choice=Integer.parseInt(readUserInput());
-        if(choice==1){
-            notifyObserver(obs->obs.onStudentmovement_toDining(0));//to update with the idPlayer value
-        }else{
-            System.out.println("Write the id of the isle where you want to move the student");
-            choice=Integer.parseInt(readUserInput());
-            int finalChoice = choice;
-            notifyObserver(obs->obs.onStudentmovement_toIsle(finalChoice));
-        }
-        System.out.println(cliDrawer.printGameTable());
-
-    }*/
+    // at the end of the game -> cliDrawer.printWinner(winnerID);
 
     public void printMessage(ServiceMessage message) {
         System.out.println(message.getMessage());

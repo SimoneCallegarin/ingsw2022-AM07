@@ -390,16 +390,19 @@ public class Game extends ModelSubject {
                         gameTable.getIsleManager().getIsle(idIsle).addStudent(colorForFungist);
                 studentsRemovedByFungist = 0;
                 checkEndGame();
-                if (!lastRound)
+                if (!lastRound) {
                     actionPhase = ActionPhases.CHOOSE_CLOUD;
+                    setMoveMNParametersForView();
+                    setParametersOfTurnForView();
+                }
                 else {
                     playerCounter++;
                     actionPhase = ActionPhases.MOVE_STUDENTS;
+                    setMoveMNParametersForView();
                     nextPlayer();
                 }
             }
         }
-        setMoveMNParametersForView();
     }
 
     /**
@@ -449,9 +452,9 @@ public class Game extends ModelSubject {
                 studentsCounter = 0;
                 playerCounter++;
                 actionPhase = ActionPhases.MOVE_STUDENTS;
+                notifyObserver(obs->obs.onCloudUpdate(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
                 nextPlayer();
             }
-            notifyObserver(obs->obs.onCloudUpdate(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
         }
     }
 

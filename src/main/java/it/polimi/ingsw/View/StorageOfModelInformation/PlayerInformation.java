@@ -40,8 +40,8 @@ public class PlayerInformation {
         for (int i = 0; i < 10; i++)
             assistantCardsTurnOrder.add(i+1);
         this.assistantCardsMNMovement = new ArrayList<>();
-        for (int i = 0; i < 5; i++)
-            assistantCardsMNMovement.add(i+1);
+        for (int i = 0; i < 10; i++)
+            assistantCardsMNMovement.add(i/2+1);
     }
 
     private void fillWith0HashMap() {
