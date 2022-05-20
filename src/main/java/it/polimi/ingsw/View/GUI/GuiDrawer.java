@@ -4,9 +4,6 @@ import it.polimi.ingsw.Observer.ViewSubject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 
 
 public class GuiDrawer extends ViewSubject {
@@ -28,7 +25,12 @@ public class GuiDrawer extends ViewSubject {
     /**
      * the user inputs panel container, it switches between the two on successful submit button press
      */
-    JPanel userInputContainer=new JPanel(new CardLayout());
+    JPanel userInputPanelManager=new JPanel(new CardLayout());
+    /**
+     * the general panel manager switches between the screen where the user will submit his server and game preferencess
+     * and the screen where the actual game will take place
+     */
+    JPanel generalPanelManager=new JPanel(new CardLayout());
     /**
      * Text field for server IP input
      */
@@ -37,11 +39,9 @@ public class GuiDrawer extends ViewSubject {
      * Text field for server Port input
      */
     JTextField serverPortInputText=new JTextField();
-
-    JTextField usernameInput=new JTextField();
-    JTextField gamemodeInput=new JTextField();
+    JTextField usernameInputText =new JTextField();
+    JTextField gamemodeInputText =new JTextField();
     JTextField numberPlayersInput=new JTextField();
-
     /**
      * submit button used to enter the text choices made by the player
      */
@@ -56,61 +56,52 @@ public class GuiDrawer extends ViewSubject {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(1920,1080);
         f.setVisible(true);
-
-        //set my content pane where I'll add my components
-        JPanel contentPane=new JPanel();
-        contentPane.setBackground(Color.blue);
-        contentPane.setLayout(new BorderLayout());
-        //aligning the inputPane in the center
-        contentPane.add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.WEST);
-        contentPane.add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.EAST);
-        contentPane.add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.NORTH);
-        contentPane.add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.SOUTH);
-
-        f.setContentPane(contentPane);
+        //set my initial content pane where I add my user input manager
+        InitialBackgroundPanel contentPane=new InitialBackgroundPanel(new BorderLayout());
+        contentPane.add(userInputPanelManager,BorderLayout.CENTER);
+        //add it to the general manager
+        generalPanelManager.add(contentPane,"User Input");
+        //add my general panel manager as my content pane to switch between user input screen and the actual game
+        f.setContentPane(generalPanelManager);
 
         //setting correct dimensions for text fields
         serverIPInputText.setMaximumSize(new Dimension(700,25));
         serverPortInputText.setMaximumSize(new Dimension(700,25));
-        usernameInput.setMaximumSize(new Dimension(700,25));
-        gamemodeInput.setMaximumSize(new Dimension(700,25));
+        usernameInputText.setMaximumSize(new Dimension(700,25));
+        gamemodeInputText.setMaximumSize(new Dimension(700,25));
         numberPlayersInput.setMaximumSize(new Dimension(700,25));
-
         //initialize the container
-        userInputContainer.add(serverPreferences,"Server parameters choice");
-        userInputContainer.add(userPreferences,"Game preferences choice");
+        userInputPanelManager.add(serverPreferences,"Server parameters choice");
+        userInputPanelManager.add(userPreferences,"Game preferences choice");
 
-
-        DrawServerSettingsForm();
+        DrawUserSettingsForm();
 
     }
 
-    private void DrawServerSettingsForm(){
+    private void DrawUserSettingsForm(){
 
         //create the area where i'll show the title and the server input forms
         serverPreferences.setLayout(new BoxLayout(serverPreferences,BoxLayout.PAGE_AXIS));
         String serverPreferencesTitle = "WELCOME TO ERIANTYS";
         serverPreferences.add(new JLabel(serverPreferencesTitle));
-
         //an invisible separator
         serverPreferences.add(Box.createRigidArea(new Dimension(0,10)));
-
         //add the server form
         serverPreferences.add(new JLabel("Insert server ip"));
         serverPreferences.add(serverIPInputText);
         serverPreferences.add(new JLabel("Insert server port"));
         serverPreferences.add(serverPortInputText);
-
         submit.addActionListener(e -> {
             String serverIp= serverIPInputText.getText();
             String serverPort= serverPortInputText.getText();
             System.out.println(serverIp+" "+serverPort);
             //notify the observer
-            CardLayout cl=(CardLayout) userInputContainer.getLayout();
-            cl.show(userInputContainer,"Game preferences choice");
+            CardLayout cl=(CardLayout) userInputPanelManager.getLayout();
+            cl.show(userInputPanelManager,"Game preferences choice");
         });
         serverPreferences.add(submit);
 
+        //same general layout for the user preferences form
         userPreferences.setLayout(new BoxLayout(userPreferences,BoxLayout.PAGE_AXIS));
         String userPreferencesTitle = "Connected to server, input your game preferences";
         userPreferences.add(new JLabel(userPreferencesTitle));
@@ -118,29 +109,32 @@ public class GuiDrawer extends ViewSubject {
         userPreferences.add(Box.createRigidArea(new Dimension(0,10)));
 
         userPreferences.add(new JLabel("Insert username"));
-        userPreferences.add(usernameInput);
+        userPreferences.add(usernameInputText);
         userPreferences.add(new JLabel("Insert gamemode"));
-        userPreferences.add(gamemodeInput);
+        userPreferences.add(gamemodeInputText);
         userPreferences.add(new JLabel("Insert number of players"));
         userPreferences.add(numberPlayersInput);
         startGame.addActionListener(e -> {
             //notifyObserver
             boolean gamemode;
-            if(gamemodeInput.getText().equals("Expert")){
-                gamemode=true;
-            }else{gamemode=false;}
-
-            notifyObserver(obs->obs.onUsername(usernameInput.getText()));
+            gamemode= gamemodeInputText.getText().equals("Expert");
+            notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
             notifyObserver(obs->obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()),gamemode));
             //change window
 
+            GameScreenDrawer();
         });
         userPreferences.add(startGame);
 
 
-        //putting all together
-        f.getContentPane().add(userInputContainer,BorderLayout.CENTER);
     }
 
+    private void GameScreenDrawer(){
+        GameScreenPanel gameScreenPanel=new GameScreenPanel(new BorderLayout());//to update
+        generalPanelManager.add(gameScreenPanel,"Game Screen");
+        //switch to the actual game screen
+        CardLayout cl=(CardLayout) generalPanelManager.getLayout();
+        cl.show(generalPanelManager,"Game Screen");
+    }
 
 }

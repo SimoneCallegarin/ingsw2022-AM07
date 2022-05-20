@@ -8,11 +8,8 @@ public class GUIApp {
 
     public static void main(String[] args) {
         //create the EDT to manage the event
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                GuiDrawer gd=createAndShowGUI();
-            }
+        SwingUtilities.invokeLater(() -> {
+            GuiDrawer gd=createAndShowGUI();
         });
     }
 
