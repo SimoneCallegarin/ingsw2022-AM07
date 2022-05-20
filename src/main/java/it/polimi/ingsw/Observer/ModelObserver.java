@@ -22,7 +22,7 @@ public interface ModelObserver {
 
     void onStudentMoving_toIsle(int idPlayer,HashMap<RealmColors,Integer> entrance,int isleID, HashMap<RealmColors,Integer> isleStudents);
 
-    void onMNMovement(int playerId,int isleId,ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<Integer> numIsles );
+    void onMNMovement(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles );
 
     void onCloudUpdate(int playerID,HashMap<RealmColors,Integer> entrance, int cloudId);
 

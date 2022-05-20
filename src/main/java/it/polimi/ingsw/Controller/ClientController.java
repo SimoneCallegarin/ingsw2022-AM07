@@ -24,27 +24,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
     }
 
     @Override
-    public void onUsername(String username) {
-        client.send(new LoginMessage(username));
-    }
+    public void onUsername(String username) { client.send(new LoginMessage(username)); }
 
     @Override
     public void onGamePreferences(int numPlayers, Boolean gameMode) { client.send(new GamePreferencesMessage(numPlayers, gameMode)); }
 
     @Override
-    public void onColorChoice(int color) {
-        client.send(new PlayerMoveMessage(MessageType.COLOR_VALUE, playerID, color));
-    }
+    public void onColorChoice(int color) { client.send(new PlayerMoveMessage(MessageType.COLOR_VALUE, playerID, color)); }
 
     @Override
-    public void onStudentmovement_toIsle(int isleId) {
-        client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_ISLE, playerID, isleId));
-    }
+    public void onStudentMovement_toIsle(int isleId) { client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_ISLE, playerID, isleId)); }
 
     @Override
-    public void onStudentmovement_toDining() {
-        client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING, playerID, playerID));
-    }
+    public void onStudentMovement_toDining() { client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING, playerID, playerID)); }
 
     @Override
     public void onCharacterCard(int characterId) {
@@ -120,7 +112,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 switch (gp.getGamePhases()) {
                     case PLANNING_PHASE -> {
                         if (gp.getActivePlayer() == playerID)
-                            cli.askAssistantCard();
+                            cli.askAssistantCard(playerID);
                         else
                             System.out.println("Player " + gp.getActivePlayer() + " is choosing the Assistant Card to play");
                     }

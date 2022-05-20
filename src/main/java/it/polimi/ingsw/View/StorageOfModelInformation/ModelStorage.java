@@ -19,15 +19,6 @@ public class ModelStorage {
         this.numberOfPlayers = numberOfPlayers;
         this.expertMode = expertMode;
     }
-    /*
-    public StorageOfModel(int numberOfPlayers, ArrayList<PlayerModelView> dashboards, GameTableModelView gameTable, boolean gameMode) {
-        this.numberOfPlayers = numberOfPlayers;
-        this.gameMode = gameMode;
-        for(int i=0;i<numberOfPlayers;i++)
-            setDashboard(i,dashboards.get(i));
-        setGameTable(gameTable);
-    }
-    */
 
     public void setupStorage (GameCreation_UpdateMsg message, CLIDrawer cliDrawer) { // Receive a message containing all the information of the game table.
 
