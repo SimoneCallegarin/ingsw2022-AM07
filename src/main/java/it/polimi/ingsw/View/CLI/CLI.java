@@ -109,8 +109,9 @@ public class CLI extends ViewSubject {
     }
 
 
-    public void askAssistantCard(){
+    public void askAssistantCard(int playerID){
         int choice;
+        System.out.println(cliDrawer.printAssistantCards(playerID));
         System.out.println("> Which Assistant Card you want to play?");//to update with the available assistant cards
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
@@ -147,7 +148,7 @@ public class CLI extends ViewSubject {
     }
 
     private void askDiningRoomMovement() {
-        notifyObserver(obs -> obs.onStudentmovement_toDining());
+        notifyObserver(ViewObserver::onStudentMovement_toDining);
     }
 
     private void askIsleMovement() {
@@ -155,39 +156,8 @@ public class CLI extends ViewSubject {
         System.out.println("> Which isle you want to move your student to? (Select between 0 and " + cliDrawer.getStorage().getNumberOfIsles() + ")");
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs -> obs.onStudentmovement_toIsle(choice));
+        notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
     }
-
-    /*public void askMove(){
-        int studentMoves=3;
-        int choice;
-        int color;
-        boolean characterUsed=false;
-        boolean turnFinished=false;
-
-            //continua a chiedere finchè non esaurisce le mosse per il primo turno o sbaglia l'input
-        while(!turnFinished) {
-            System.out.println("What is your next move? Write:");
-            System.out.println("-1 to move a student(max " + studentMoves + " other time/s this turn");
-            if (!characterUsed) {
-                System.out.println("-2 to play a Character Card");
-            }
-            choice = Integer.parseInt(readUserInput());
-
-            if (choice == 1) {
-                askStudentMovement();
-                studentMoves--;
-                if (studentMoves == 0) {
-                    turnFinished = true;
-                }
-            } else if (choice == 2 && !characterUsed) {
-                askCharacterToPlay();
-            } else {
-                System.out.println("Invalid choice, repeat");
-            }
-        }
-
-    }*/
 
     public void askCharacterToPlay(){
         final int choice;
@@ -200,29 +170,7 @@ public class CLI extends ViewSubject {
         // Not finished yet!!!
     }
 
-
-    /*public void askStudentMovement(){
-        int color;
-        int choice;
-        System.out.println("Choose a student color to move from the Entrance");
-        System.out.println("Colors available:");
-        color=(Integer.parseInt(readUserInput()));
-        notifyObserver(obs->obs.onColorChoice(color));
-
-        System.out.println("Choose where to move the student");
-        System.out.println("-1 to DiningRoom\n-2 to an Isle");
-        choice=Integer.parseInt(readUserInput());
-        if(choice==1){
-            notifyObserver(obs->obs.onStudentmovement_toDining(0));//to update with the idPlayer value
-        }else{
-            System.out.println("Write the id of the isle where you want to move the student");
-            choice=Integer.parseInt(readUserInput());
-            int finalChoice = choice;
-            notifyObserver(obs->obs.onStudentmovement_toIsle(finalChoice));
-        }
-        System.out.println(cliDrawer.printGameTable());
-
-    }*/
+    // at the end of the game -> cliDrawer.printWinner(winnerID);
 
     public void printMessage(ServiceMessage message) {
         System.out.println(message.getMessage());
@@ -234,7 +182,7 @@ public class CLI extends ViewSubject {
         return cliDrawer;
     }
 
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
         CLI cli = new CLI();
         ConnectionSocket connectionSocket = new ConnectionSocket();
         ClientController clientController = new ClientController(cli, connectionSocket, cli.getCliDrawer());

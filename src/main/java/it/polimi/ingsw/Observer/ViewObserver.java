@@ -8,9 +8,9 @@ public interface ViewObserver {
 
     void onColorChoice(int color);
 
-    void onStudentmovement_toIsle(int isleId);
+    void onStudentMovement_toIsle(int isleId);
 
-    void onStudentmovement_toDining();
+    void onStudentMovement_toDining();
 
     void onCharacterCard(int characterId);
 
