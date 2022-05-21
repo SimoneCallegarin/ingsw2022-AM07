@@ -1,5 +1,7 @@
 package it.polimi.ingsw.View.GUI;
 
+import it.polimi.ingsw.Model.Game;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,10 +11,11 @@ import java.io.InputStream;
 
 public class GameScreenPanel extends JPanel {
 
-    public GameScreenPanel(LayoutManager layout) {
-        super(layout);
-        setBackground(Color.CYAN);
+    Game game;
 
+    public GameScreenPanel(LayoutManager layout, Game game) {
+        super(layout);
+        this.game=game;
     }
 
     @Override
@@ -25,10 +28,12 @@ public class GameScreenPanel extends JPanel {
         }catch (IOException e) {
             e.printStackTrace();
         }
+
         g.drawImage(img,0,0,500,250,null);
         g.drawImage(img,1050,0,500,250,null);
         g.drawImage(img,0,550,500,250,null);
         g.drawImage(img,1050,550,500,250,null);
+        setBackground(Color.CYAN);
 
 
     }

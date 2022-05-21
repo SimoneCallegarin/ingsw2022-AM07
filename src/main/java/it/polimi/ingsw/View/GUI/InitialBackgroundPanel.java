@@ -34,6 +34,13 @@ public class InitialBackgroundPanel extends JPanel {
             e.printStackTrace();
         }
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
+        url=cl.getResourceAsStream("LOGO CRANIO CREATIONS_bianco.png");
+        try {
+            img=ImageIO.read(url);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        g.drawImage(img,1350,600,200,200,null);
 
     }
 }
