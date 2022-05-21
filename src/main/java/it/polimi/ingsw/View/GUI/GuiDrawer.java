@@ -27,7 +27,7 @@ public class GuiDrawer extends ViewSubject {
      */
     JPanel userInputPanelManager=new JPanel(new CardLayout());
     /**
-     * the general panel manager switches between the screen where the user will submit his server and game preferencess
+     * the general panel manager switches between the screen where the user will submit his server and game preferences
      * and the screen where the actual game will take place
      */
     JPanel generalPanelManager=new JPanel(new CardLayout());
@@ -40,7 +40,7 @@ public class GuiDrawer extends ViewSubject {
      */
     JTextField serverPortInputText=new JTextField();
     JTextField usernameInputText =new JTextField();
-    JTextField gamemodeInputText =new JTextField();
+    JTextField gameModeInputText =new JTextField();
     JTextField numberPlayersInput=new JTextField();
     /**
      * submit button used to enter the text choices made by the player
@@ -57,7 +57,7 @@ public class GuiDrawer extends ViewSubject {
         f.setSize(1920,1080);
         f.setVisible(true);
         //set my initial content pane where I add my user input manager
-        InitialBackgroundPanel contentPane=new InitialBackgroundPanel(new BorderLayout());
+        InitialBackgroundPanel contentPane =new InitialBackgroundPanel(new BorderLayout());
         contentPane.add(userInputPanelManager,BorderLayout.CENTER);
         //add it to the general manager
         generalPanelManager.add(contentPane,"User Input");
@@ -68,7 +68,7 @@ public class GuiDrawer extends ViewSubject {
         serverIPInputText.setMaximumSize(new Dimension(700,25));
         serverPortInputText.setMaximumSize(new Dimension(700,25));
         usernameInputText.setMaximumSize(new Dimension(700,25));
-        gamemodeInputText.setMaximumSize(new Dimension(700,25));
+        gameModeInputText.setMaximumSize(new Dimension(700,25));
         numberPlayersInput.setMaximumSize(new Dimension(700,25));
         //initialize the container
         userInputPanelManager.add(serverPreferences,"Server parameters choice");
@@ -76,11 +76,13 @@ public class GuiDrawer extends ViewSubject {
 
         DrawUserSettingsForm();
 
+        // f.pack();
+
     }
 
     private void DrawUserSettingsForm(){
 
-        //create the area where i'll show the title and the server input forms
+        //create the area where it wll be shown the title and the server input forms
         serverPreferences.setLayout(new BoxLayout(serverPreferences,BoxLayout.PAGE_AXIS));
         String serverPreferencesTitle = "WELCOME TO ERIANTYS";
         serverPreferences.add(new JLabel(serverPreferencesTitle));
@@ -110,14 +112,14 @@ public class GuiDrawer extends ViewSubject {
 
         userPreferences.add(new JLabel("Insert username"));
         userPreferences.add(usernameInputText);
-        userPreferences.add(new JLabel("Insert gamemode"));
-        userPreferences.add(gamemodeInputText);
+        userPreferences.add(new JLabel("Insert game mode"));
+        userPreferences.add(gameModeInputText);
         userPreferences.add(new JLabel("Insert number of players"));
         userPreferences.add(numberPlayersInput);
         startGame.addActionListener(e -> {
             //notifyObserver
             boolean gamemode;
-            gamemode= gamemodeInputText.getText().equals("Expert");
+            gamemode= gameModeInputText.getText().equals("Expert");
             notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
             notifyObserver(obs->obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()),gamemode));
             //change window

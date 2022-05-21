@@ -20,20 +20,26 @@ public class InitialBackgroundPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.EAST);
         add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.NORTH);
         add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.SOUTH);
-
     }
 
     @Override
     protected void paintComponent(Graphics g) {
+        printImage(g,"eriantys background.jpg",0,0,getWidth(),getHeight());
+        printImage(g,"LOGO CRANIO CREATIONS_bianco.png",1750,800,140,200);
+
+    }
+
+    private void printImage(Graphics g, String image, int posX, int posY, int width, int height) {
         ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream("eryantis background.jpg");
+        InputStream url = cl.getResourceAsStream(image);
         BufferedImage img= null;
         try {
-            img = ImageIO.read(url);
+            if (url != null)
+                img = ImageIO.read(url);
         }catch (IOException e) {
             e.printStackTrace();
         }
-        g.drawImage(img,0,0,getWidth(),getHeight(),null);
-
+        g.drawImage(img, posX, posY, width, height, null);
     }
+
 }

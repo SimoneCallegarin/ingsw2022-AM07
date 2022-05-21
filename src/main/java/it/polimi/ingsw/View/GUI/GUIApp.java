@@ -8,18 +8,13 @@ public class GUIApp {
 
     public static void main(String[] args) {
         //create the EDT to manage the event
-        SwingUtilities.invokeLater(() -> {
-            GuiDrawer gd=createAndShowGUI();
-        });
+        SwingUtilities.invokeLater(GUIApp::createAndShowGUI);
     }
 
-    private static GuiDrawer createAndShowGUI(){
+    private static void createAndShowGUI(){
         System.out.println("Created GUI on EDT? "+
                 SwingUtilities.isEventDispatchThread());
-        GuiDrawer gd=new GuiDrawer();
-        return gd;
+        new GuiDrawer();
     }
-
-
 
 }
