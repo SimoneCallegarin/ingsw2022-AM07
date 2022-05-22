@@ -3,6 +3,7 @@ package it.polimi.ingsw.View.StorageOfModelInformation;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.MNMovement_UpdateMsg;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
 
 import java.util.ArrayList;
@@ -75,7 +76,10 @@ public class ModelStorage {
             dashboards.get(i).setDiningProfessors(professors.get(i)); 
     }
 
-    public void updateNumberOfTowers(int playerID, int numberOfTowers){ dashboards.get(playerID).setNumOfTowers(numberOfTowers); }
+    public void updateNumberOfTowers(ArrayList<Integer> numTowers) {
+        for (int i = 0; i < numberOfPlayers; i++)
+            dashboards.get(i).setNumOfTowers(numTowers.get(i));
+    }
 
     public void updateColorOfTowers(int playerID, TowerColors towersColor){ dashboards.get(playerID).setTowerColor(towersColor); }
 
@@ -99,9 +103,30 @@ public class ModelStorage {
 
     public void updateIsle(GameTableInformation.Isle newIsle, int isleID) { gameTable.setNewIsle(isleID,newIsle); }
 
-    public void updateIsles(ArrayList<GameTableInformation.Isle> newIsles) { gameTable.setIsles(newIsles); }
+    public void updateIsles(MNMovement_UpdateMsg mnm) {
+        ArrayList<GameTableInformation.Isle> newIsles = new ArrayList<>();
+        for (int i = 0; i < mnm.getTotalIsles(); i++) {
+            boolean isMNPresent = mnm.getWhereMNId() == i;
+            int isDenyCardPresent = 0;
+            if (mnm.getDenyCards().get(i))
+                isDenyCardPresent = 1;
+            GameTableInformation.Isle newIsle = new GameTableInformation.Isle(mnm.getStudents().get(i), mnm.getNumberOfIsles().get(i), mnm.getTowerColors().get(i), isDenyCardPresent, isMNPresent);
+            newIsles.add(newIsle);
+        }
+        gameTable.setIsles(newIsles);
+    }
 
-    public void updateCloud(GameTableInformation.Cloud newCloud, int cloudID) { gameTable.setClouds(cloudID,newCloud); }
+    public void updateCloud(HashMap<RealmColors, Integer> newCloud, int cloudID) {
+        GameTableInformation.Cloud updatedCloud = new GameTableInformation.Cloud(newCloud);
+        gameTable.setCloud(cloudID,updatedCloud);
+    }
+
+    public void updateClouds(ArrayList<HashMap<RealmColors, Integer>> clouds) {
+        for (int i = 0; i < numberOfPlayers; i++) {
+            GameTableInformation.Cloud newCloud = new GameTableInformation.Cloud(clouds.get(i));
+            gameTable.setCloud(i, newCloud);
+        }
+    }
 
     public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) { gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue); }
 

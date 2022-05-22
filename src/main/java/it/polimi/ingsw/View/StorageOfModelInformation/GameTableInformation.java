@@ -102,9 +102,9 @@ public class GameTableInformation {
 
     public void setIsles(ArrayList<Isle> isles){ this.isles = isles; }
 
-    public void setClouds(int cloudID, Cloud cloud) {
+    public void setCloud(int cloudID, Cloud cloud) {
         this.clouds.remove(cloudID);
-        this.clouds.add(cloud);
+        this.clouds.add(cloudID, cloud);
     }
 
     public void setGeneralMoneyReserve(int generalMoneyReserve) { this.generalMoneyReserve = generalMoneyReserve; }
