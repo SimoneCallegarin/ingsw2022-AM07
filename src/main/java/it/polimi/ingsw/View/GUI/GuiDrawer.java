@@ -1,12 +1,18 @@
 package it.polimi.ingsw.View.GUI;
 
+import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
 
 
 public class GuiDrawer extends ViewSubject {
+
+    ModelStorage modelStorage;
+    Game game;
+
     //create the window
     private final String frameTitle="Eriantys Game";
     private final String submitButton="Submit";
@@ -51,7 +57,9 @@ public class GuiDrawer extends ViewSubject {
      */
     JButton startGame=new JButton("Start game");
 
-    public GuiDrawer() throws HeadlessException {
+    public GuiDrawer(Game game) throws HeadlessException {
+        //to change
+        this.game=game;
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(1920,1080);
@@ -132,11 +140,18 @@ public class GuiDrawer extends ViewSubject {
     }
 
     private void GameScreenDrawer(){
-        GameScreenPanel gameScreenPanel=new GameScreenPanel(new BorderLayout());//to update
+        GameScreenPanel gameScreenPanel=new GameScreenPanel(new BorderLayout(),game);//to update
         generalPanelManager.add(gameScreenPanel,"Game Screen");
         //switch to the actual game screen
         CardLayout cl=(CardLayout) generalPanelManager.getLayout();
         cl.show(generalPanelManager,"Game Screen");
     }
 
+    public ModelStorage getModelStorage() {
+        return modelStorage;
+    }
+
+    public void setModelStorage(ModelStorage modelStorage) {
+        this.modelStorage = modelStorage;
+    }
 }
