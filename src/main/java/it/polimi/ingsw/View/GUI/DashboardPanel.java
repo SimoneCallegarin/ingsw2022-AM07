@@ -50,7 +50,7 @@ public class DashboardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        InputStream url = cl.getResourceAsStream("PLANCIA GIOCO_2.png");
+        InputStream url = cl.getResourceAsStream("PLANCIA GIOCO V.png");
         BufferedImage img= null;
         try {
             img = ImageIO.read(url);
