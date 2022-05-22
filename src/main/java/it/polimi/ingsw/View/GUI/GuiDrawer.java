@@ -11,6 +11,7 @@ import java.awt.*;
 public class GuiDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
+    Game game;
 
     //create the window
     private final String frameTitle="Eriantys Game";
@@ -56,12 +57,12 @@ public class GuiDrawer extends ViewSubject {
      */
     JButton startGame=new JButton("Start game");
 
-    public GuiDrawer() throws HeadlessException {
+    public GuiDrawer(Game game) throws HeadlessException {
         //to change
-
+        this.game=game;
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(1920,1080);
+        f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setVisible(true);
         //set my initial content pane where I add my user input manager
         InitialBackgroundPanel contentPane =new InitialBackgroundPanel(new BorderLayout());
@@ -139,7 +140,7 @@ public class GuiDrawer extends ViewSubject {
     }
 
     private void GameScreenDrawer(){
-        GameScreenPanel gameScreenPanel=new GameScreenPanel(new BorderLayout());
+        GameScreenPanel gameScreenPanel=new GameScreenPanel(new GridLayout(2,2,400,400),game);
         generalPanelManager.add(gameScreenPanel,"Game Screen");
         //switch to the actual game screen
         CardLayout cl=(CardLayout) generalPanelManager.getLayout();

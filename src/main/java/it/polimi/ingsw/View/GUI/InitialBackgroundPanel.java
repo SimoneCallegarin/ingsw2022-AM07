@@ -19,13 +19,13 @@ public class InitialBackgroundPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.WEST);
         add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.EAST);
         add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.NORTH);
-        add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.SOUTH);
+        add(Box.createRigidArea(new Dimension(500,280)),BorderLayout.SOUTH);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         printImage(g,"eriantys background.jpg",0,0,getWidth(),getHeight());
-        printImage(g,"LOGO CRANIO CREATIONS_bianco.png",1750,800,140,200);
+        printImage(g,"LOGO CRANIO CREATIONS_bianco.png",1550,800,140,200);
 
     }
 

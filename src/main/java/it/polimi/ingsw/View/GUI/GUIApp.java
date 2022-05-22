@@ -2,6 +2,8 @@ package it.polimi.ingsw.View.GUI;
 
 
 
+import it.polimi.ingsw.Model.Game;
+
 import javax.swing.*;
 
 public class GUIApp {
@@ -14,7 +16,12 @@ public class GUIApp {
     private static void createAndShowGUI(){
         System.out.println("Created GUI on EDT? "+
                 SwingUtilities.isEventDispatchThread());
-        new GuiDrawer();
+        Game game=new Game();
+        game.addFirstPlayer("filo",true,4);
+        game.addAnotherPlayer("calle");
+        game.addAnotherPlayer("jack");
+        game.addAnotherPlayer("comfy");
+        new GuiDrawer(game);
     }
 
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.View.GUI;
 
+import it.polimi.ingsw.Model.Game;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,26 +10,19 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class GameScreenPanel extends JPanel {
+    Game game;
 
-    public GameScreenPanel(LayoutManager layout) {
+    public GameScreenPanel(LayoutManager layout, Game game) {
         super(layout);
         setBackground(Color.CYAN);
+        this.game=game;
+        printDashboard();
+
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream("PLANCIA GIOCO V.png");
-        BufferedImage img= null;
-        try {
-            img = ImageIO.read(url);
-        }catch (IOException e) {
-            e.printStackTrace();
+    private void printDashboard(){
+        for(int i=0;i<game.getNumberOfPlayers();i++){
+            add(new DashboardPanel(new GridBagLayout(),game));
         }
-        g.drawImage(img,0,0,250,500,null);
-        g.drawImage(img,getWidth()-250,0,250,500,null);
-        g.drawImage(img,0,510,250,500,null);
-        g.drawImage(img,getWidth()-250,510,250,500,null);
-        // COSTANTI
     }
 }
