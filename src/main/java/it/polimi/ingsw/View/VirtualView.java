@@ -16,8 +16,8 @@ public class VirtualView implements ModelObserver {
     ArrayList<ClientHandler> clientHandler=new ArrayList<>();
 
     @Override
-    public void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors, Integer>> clouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors, Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards) {
-        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.START_GAME,numPlayers,gameMode,nicknames,clouds,studentsOnCharacter,entrances,isleStudents,whereMNId,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards);
+    public void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors, Integer>> emptyClouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors, Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards) {
+        GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.START_GAME,numPlayers,gameMode,nicknames,emptyClouds,studentsOnCharacter,entrances,isleStudents,whereMNId,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards);
         for(ClientHandler ch: clientHandler){
             ch.send(gameCreation_updateMsg);
         }
@@ -64,8 +64,8 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onMNMovement(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles) {
-        MNMovement_UpdateMsg mnMovement_updateMsg=new MNMovement_UpdateMsg(MessageType.MNMOVEMENT_UPDATE,totalIsles,students,towerColors,whereMNId,denyCards,numberOfIsles);
+    public void onMNMovement(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers) {
+        MNMovement_UpdateMsg mnMovement_updateMsg=new MNMovement_UpdateMsg(MessageType.MNMOVEMENT_UPDATE,totalIsles,students,towerColors,whereMNId,denyCards,numberOfIsles, numberOfTowers);
         for(ClientHandler ch: clientHandler){
             ch.send(mnMovement_updateMsg);
         }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Network.Messages.MessageType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,9 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
      */
     ArrayList<Integer> numberOfIsles;
 
-    public MNMovement_UpdateMsg(MessageType messageType, int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles) {
+    ArrayList<Integer> numberOfTowers;
+
+    public MNMovement_UpdateMsg(MessageType messageType, int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers) {
         super(messageType);
         this.totalIsles = totalIsles;
         this.students = students;
@@ -33,6 +36,7 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
         this.whereMNId = whereMNId;
         this.denyCards = denyCards;
         this.numberOfIsles = numberOfIsles;
+        this.numberOfTowers = numberOfTowers;
     }
 
     public int getTotalIsles() {
@@ -57,5 +61,9 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
 
     public ArrayList<Integer> getNumberOfIsles() {
         return numberOfIsles;
+    }
+
+    public ArrayList<Integer> getNumberOfTowers() {
+        return numberOfTowers;
     }
 }
