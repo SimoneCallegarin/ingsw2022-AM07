@@ -58,8 +58,6 @@ public class GuiDrawer extends ViewSubject {
 
     public GuiDrawer() throws HeadlessException {
         //to change
-
-
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(1920,1080);
         f.setVisible(true);
@@ -131,7 +129,7 @@ public class GuiDrawer extends ViewSubject {
             notifyObserver(obs->obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()),gamemode));
             //change window
 
-            GameScreenDrawer();
+            GameScreenDrawer();     // it will be called by the client handler1
         });
         userPreferences.add(startGame);
 

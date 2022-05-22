@@ -26,7 +26,6 @@ public class DashboardPanel extends JPanel {
     public DashboardPanel(LayoutManager layout, Game game) {
         super(layout);
         this.game=game;
-
     }
 
     @Override
@@ -48,6 +47,5 @@ public class DashboardPanel extends JPanel {
         greenStudentUrl=cl.getResourceAsStream("student_green.png");
         pinkStudentUrl=cl.getResourceAsStream("student_pink.png");
         blueStudentUrl=cl.getResourceAsStream("student_blue.png");
-
     }
 }

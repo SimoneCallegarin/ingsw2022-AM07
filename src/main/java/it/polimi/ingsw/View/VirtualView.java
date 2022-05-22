@@ -8,13 +8,12 @@ import it.polimi.ingsw.Observer.ModelObserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * this class observes the model and send client view updates through the server
  */
 public class VirtualView implements ModelObserver {
-    List<ClientHandler> clientHandler=new ArrayList<>();
+    ArrayList<ClientHandler> clientHandler=new ArrayList<>();
 
     @Override
     public void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors, Integer>> clouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors, Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards) {

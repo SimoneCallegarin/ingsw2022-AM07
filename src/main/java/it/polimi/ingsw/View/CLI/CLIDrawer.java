@@ -463,16 +463,22 @@ public class CLIDrawer {
         if(playerID==2){    posX=8;     posY=24;    }
         if(playerID==3){    posX=8;     posY=-6;    }
 
-        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y);
+        int bigger = 0;
+        if(storage.getDashboard(playerID).getDiscardPileTurnOrder() == 10){
+            bigger=1;
+            gameTable[startingPointX][startingPointY+posY+2] = " \b";
+        }
+
+        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y+bigger);
 
         // TURN ORDER:
         gameTable[startingPointX+posX][startingPointY+posY+1] = paintService(CLIColors.B_WHITE,"T");
         if(storage.getDashboard(playerID).getDiscardPileTurnOrder()!=0)
             gameTable[startingPointX][startingPointY+posY+1] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileTurnOrder()).toString();
         // MOTHER NATURE MOVEMENT:
-        gameTable[startingPointX+posX][startingPointY+posY+3] = paintService(CLIColors.B_WHITE,"M");
+        gameTable[startingPointX+posX][startingPointY+posY+3+bigger] = paintService(CLIColors.B_WHITE,"M");
         if(storage.getDashboard(playerID).getDiscardPileMNMovement()!=0)
-            gameTable[startingPointX][startingPointY+posY+3] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileMNMovement()).toString();
+            gameTable[startingPointX][startingPointY+posY+3+bigger] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileMNMovement()).toString();
     }
 
     /**
@@ -710,7 +716,6 @@ public class CLIDrawer {
                 // MOTHER NATURE MOVEMENT:
                 assistantCards[2][ASSISTANT_CARDS_Y*i+6+i+bigger] = paintService(CLIColors.B_WHITE,"M");
                 assistantCards[3][ASSISTANT_CARDS_Y*i+6+i+bigger] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
-
         }
 
         for(int i=0;i<ASSISTANT_CARDS_CONTAINER_X;i++){
