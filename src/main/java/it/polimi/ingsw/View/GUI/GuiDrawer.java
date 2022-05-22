@@ -11,7 +11,6 @@ import java.awt.*;
 public class GuiDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
-    Game game;
 
     //create the window
     private final String frameTitle="Eriantys Game";
@@ -57,9 +56,9 @@ public class GuiDrawer extends ViewSubject {
      */
     JButton startGame=new JButton("Start game");
 
-    public GuiDrawer(Game game) throws HeadlessException {
+    public GuiDrawer() throws HeadlessException {
         //to change
-        this.game=game;
+
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(1920,1080);
@@ -140,7 +139,7 @@ public class GuiDrawer extends ViewSubject {
     }
 
     private void GameScreenDrawer(){
-        GameScreenPanel gameScreenPanel=new GameScreenPanel(new BorderLayout(),game);//to update
+        GameScreenPanel gameScreenPanel=new GameScreenPanel(new BorderLayout());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
         //switch to the actual game screen
         CardLayout cl=(CardLayout) generalPanelManager.getLayout();
