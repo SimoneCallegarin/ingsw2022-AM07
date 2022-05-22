@@ -3,8 +3,6 @@ package it.polimi.ingsw.View.CLI;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import java.util.ArrayList;
-
 public class CLIDrawer {
 
     private static final int TITLE_X = 22;
