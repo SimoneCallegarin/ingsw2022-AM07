@@ -9,10 +9,10 @@
 |:-------------------|:--------------------------------------------------:|
 | Basic rules        | 🟢 |
 | Complete rules     | 🟢 |
-| Socket             | 🟡 |
-| GUI                | 🔴 |
-| CLI                | 🟡 |
-| Multiple games     | 🟡 |
+| Socket             | 🟢 |
+| GUI                | 🟡 |
+| CLI                | 🟢 |
+| Multiple games     | 🟢 |
 | 12 Character cards | 🟢 |
 | 4 Players match    | 🟢 |
 
