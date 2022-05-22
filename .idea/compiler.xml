@@ -9,5 +9,8 @@
         <module name="ingsw2022-AM07" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ingsw2022-AM07" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
