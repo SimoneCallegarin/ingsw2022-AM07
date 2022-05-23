@@ -28,6 +28,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
     private final ArrayList<String> characterNames;
     private final ArrayList<Integer> characterCost;
     private final ArrayList<Integer> characterDenyCards;
+    private final ArrayList<String> characterCardsDescription;
 
     public GameCreation_UpdateMsg(MessageType messageType,
                                   int numPlayers,
@@ -44,7 +45,8 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
                                   ArrayList<TowerColors> towerColors,
                                   ArrayList<String> characterNames,
                                   ArrayList<Integer> characterCost,
-                                  ArrayList<Integer> characterDenyCards) {
+                                  ArrayList<Integer> characterDenyCards,
+                                  ArrayList<String> characterCardsDescription) {
         super(messageType);
         this.numPlayers = numPlayers;
         this.nicknames = nicknames;
@@ -61,6 +63,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         this.characterNames = characterNames;
         this.characterCost = characterCost;
         this.characterDenyCards = characterDenyCards;
+        this.characterCardsDescription = characterCardsDescription;
     }
 
     public int getNumPlayers() { return numPlayers; }
@@ -117,7 +120,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         return characterCost;
     }
 
-    public ArrayList<Integer> getDenyCards() {
-        return characterDenyCards;
-    }
+    public ArrayList<Integer> getDenyCards() { return characterDenyCards; }
+
+    public ArrayList<String> getCharacterCardsDescription() { return characterCardsDescription; }
 }

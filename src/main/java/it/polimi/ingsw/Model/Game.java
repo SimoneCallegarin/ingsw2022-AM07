@@ -219,14 +219,16 @@ public class Game extends ModelSubject {
         ArrayList<Integer> characterCost=new ArrayList<>();
         ArrayList<Integer> denyCards=new ArrayList<>();
         ArrayList<HashMap<RealmColors,Integer>> studentsOnCard=new ArrayList<>();
+        ArrayList<String> characterCardsDescription = new ArrayList<>();
         for(CharacterCard card : gameTable.getCharacterCards()){
             characterNames.add(card.getCharacterCardName().toString());
             characterCost.add(card.getCost());
             denyCards.add(card.getDenyCards());
             studentsOnCard.add(card.getStudents());
+            characterCardsDescription.add(card.getCharacterCardDescription());
         }
 
-        notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,emptyClouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards));
+        notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,emptyClouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards,characterCardsDescription));
     }
 
     /**

@@ -14,7 +14,8 @@ public class GameTableInformation {
 
     public record CharacterCard(String characterCardName, int characterCardCost,
                                 HashMap<RealmColors,Integer> studentsOnCharacterCard,
-                                int denyCardsOnCharacterCard) {
+                                int denyCardsOnCharacterCard,
+                                String description) {
 
         public String getCharacterCardName() { return characterCardName; }
 
@@ -30,6 +31,8 @@ public class GameTableInformation {
         public int getStudentsByColor(RealmColors color) { return studentsOnCharacterCard.get(color); }
 
         public int getDenyCardsOnCharacterCard() { return denyCardsOnCharacterCard; }
+
+        public String getDescription() { return description; }
 
     }
 

@@ -3,6 +3,8 @@ package it.polimi.ingsw.View.CLI;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
+import java.util.ArrayList;
+
 public class CLIDrawer {
 
     private static final int TITLE_X = 22;
@@ -34,6 +36,8 @@ public class CLIDrawer {
     private static final int ASSISTANT_CARDS_CONTAINER_Y = 66;
     private static final int LEGEND_X = 16;
     private static final int LEGEND_Y = 40;
+    private static final int CHARACTER_CARDS_DESCRIPTION_X = 17;
+    private static final int CHARACTER_CARDS_DESCRIPTION_Y = 116;
 
     private final String[][] title = new String[TITLE_X][TITLE_Y];
 
@@ -42,6 +46,8 @@ public class CLIDrawer {
     private final String[][] assistantCards = new String[ASSISTANT_CARDS_X+4][ASSISTANT_CARDS_Y*10+16];
 
     private final String[][] legend = new String[LEGEND_X][LEGEND_Y+10];
+
+    private final String[][] characterCardsEffects = new String[CHARACTER_CARDS_DESCRIPTION_X][CHARACTER_CARDS_DESCRIPTION_Y];
 
     private ModelStorage storage;
 
@@ -143,7 +149,7 @@ public class CLIDrawer {
      * If the string is already colored the amount of backspaces will be equal to the string length minus 10,
      * else it will be equal to the string length minus 2.
      * @param place the matrix where the backspaces will be stored.
-     * @param stringToWrite the string we wanted to write
+     * @param stringToWrite the string we wanted to write.
      * @param posX the horizontal position of the matrix where the string will be stored.
      *             Used to find the position to place the backspaces.
      * @param posY the vertical position of the matrix where the string will be stored.
@@ -158,6 +164,41 @@ public class CLIDrawer {
         for (int i = 0; i< lengthUsed-1; i++)
             stringOfBackSpaces = stringOfBackSpaces.concat("\b");
         place[posX][posY+ lengthUsed]=stringOfBackSpaces;
+    }
+
+    /**
+     * Writes longer strings that contains one or more newline characters in it.
+     * @param place the matrix where string produced will be stored.
+     * @param stringToWrite the string we wanted to write.
+     * @param posX the horizontal position of the matrix where the string will be stored.
+     */
+    private void writeStringWithNewlines(String[][] place, String stringToWrite, int posX) {
+        ArrayList<String> temp = new ArrayList<>();
+        int beginIndex=0;
+        for (int i = 0; i< stringToWrite.length(); i++){
+            if(stringToWrite.charAt(i)=='\n'){
+                temp.add((String) stringToWrite.subSequence(beginIndex,i));
+                beginIndex=i+1;
+            }
+        }
+        temp.add((String) stringToWrite.subSequence(beginIndex, stringToWrite.length()));
+        for (int i=0; i<temp.size(); i++){
+            writeLongerString(place,temp.get(i),posX+i,6);
+            characterCardsEffects[posX+i][110]=" \b";
+        }
+    }
+
+    /**
+     * Counts the number of newlines characters.
+     * @param toCheck the string we wanted to check.
+     * @return the number of newlines characters in the given string.
+     */
+    private int numberOfNewlineCharacters(String toCheck) {
+        int count=0;
+        for (int i=0; i<toCheck.length(); i++)
+            if(toCheck.charAt(i)=='\n')
+                count++;
+        return count;
     }
 
     /**
@@ -490,6 +531,11 @@ public class CLIDrawer {
      * @param startingPointY the vertical position in the gameTable matrix where we will start to store the team information.
      */
     private void drawTeams(int playerID, int startingPointX, int startingPointY) {
+        /*
+        TEAMS
+        ║ n ║
+        ╚═══╝
+        */
         int posX=0;
         int posY=0;
         if(playerID==0){    posX=-1;    posY=35;    }
@@ -703,6 +749,50 @@ public class CLIDrawer {
                 for (int j=0;j<storage.getGameTable().getCharacterCard(i).getDenyCardsOnCharacterCard();j++)
                     gameTable[TABLE_DIMENSION_X/2+3][TABLE_DIMENSION_Y/2-18+10*i+cont+j] = paintTower(TowerColors.WHITE,"!");
         }
+    }
+
+    /**
+     * Draws the descriptions of the effect of each playable character card.
+     * @return a stringBuilder containing the description and the name of each playable character card.
+     */
+    public StringBuilder drawCharacterCardsEffects() {
+        /*
+        ╔═════════════════════════════════════════════Playable Character Cards═════════════════════════════════════════════╗
+        ║                                                                                                                  ║
+        ║  CHARACTER CARD 0 :                                                                                              ║
+        ║     Description...                                                                                               ║
+        ║                                                                                                                  ║
+        ║  CHARACTER CARD 1 :                                                                                              ║
+        ║     Description...                                                                                               ║
+        ║                                                                                                                  ║
+        ║  CHARACTER CARD 2 :                                                                                              ║
+        ║     Description...                                                                                               ║
+        ║                                                                                                                  ║
+        ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+         */
+
+        StringBuilder toPrint=new StringBuilder();
+
+        initializeRectangle(characterCardsEffects,CHARACTER_CARDS_DESCRIPTION_X,CHARACTER_CARDS_DESCRIPTION_Y);
+
+        int temp=0;
+        for (int i=0; i<3; i++){
+            writeLongerString(characterCardsEffects,paintService(CLIColors.B_WHITE,storage.getGameTable().getCharacterCard(i).characterCardName()+" :"),temp+2,3);
+            writeStringWithNewlines(characterCardsEffects,storage.getGameTable().getCharacterCard(i).getDescription(), temp+3);
+            temp = numberOfNewlineCharacters(storage.getGameTable().getCharacterCard(i).getDescription()) + temp + 3;
+        }
+
+        drawRectangle(characterCardsEffects,0,0,CHARACTER_CARDS_DESCRIPTION_X,CHARACTER_CARDS_DESCRIPTION_Y);
+
+        writeLongerString(characterCardsEffects,paintService(CLIColors.B_WHITE,"PLAYABLE CHARACTER CARDS"),0,46);
+
+        for(int i=0;i<CHARACTER_CARDS_DESCRIPTION_X;i++){
+            for (int j=0;j<CHARACTER_CARDS_DESCRIPTION_Y;j++){
+                toPrint.append(characterCardsEffects[i][j]);
+            }
+            toPrint.append("\n");
+        }
+        return toPrint;
     }
 
     /**

@@ -37,7 +37,7 @@ public class ModelStorage {
 
         if(message.getGameMode())
             for(int i=0; i<3; i++){
-                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i));
+                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i),message.getCharacterCardsDescription().get(i));
                 characterCards.add(i,characterCard);
             }
         for(int i=0; i<12; i++){

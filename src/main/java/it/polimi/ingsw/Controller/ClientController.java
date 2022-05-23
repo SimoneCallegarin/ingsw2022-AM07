@@ -84,7 +84,6 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
                 storage.setupStorage(gc, cliDrawer);
-                //cli.printChanges();
                 System.out.println("Game started!");
             }
             case FILLCLOUD_UPDATE -> {
