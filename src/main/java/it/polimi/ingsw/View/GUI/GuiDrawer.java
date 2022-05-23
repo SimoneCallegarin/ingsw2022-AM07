@@ -12,6 +12,8 @@ public class GuiDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
     Game game;
+    private  final int DASHBOARD_WIDTH = 250;
+
 
     //create the window
     private final String frameTitle="Eriantys Game";
@@ -140,7 +142,7 @@ public class GuiDrawer extends ViewSubject {
     }
 
     private void GameScreenDrawer(){
-        GameScreenPanel gameScreenPanel=new GameScreenPanel(new GridLayout(2,2,950,25),game);
+        GameScreenPanel gameScreenPanel=new GameScreenPanel(new GridLayout(2,2,f.getSize().width-2*DASHBOARD_WIDTH,0),game);
         generalPanelManager.add(gameScreenPanel,"Game Screen");
         //switch to the actual game screen
         CardLayout cl=(CardLayout) generalPanelManager.getLayout();

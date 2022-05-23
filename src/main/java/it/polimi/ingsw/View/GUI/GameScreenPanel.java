@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class GameScreenPanel extends JPanel {
     Game game;
     private  final int DASHBOARD_WIDTH = 250;
-    private  final int DASHBOARD_HEIGHT = 500;
+    private  final int DASHBOARD_HEIGHT = 800;
 
     private Graphics g;
 
@@ -36,7 +36,7 @@ public class GameScreenPanel extends JPanel {
         setBackground(Color.CYAN);
         this.game=game;
         for(int i=0; i<4;i++){
-            add(new DashboardPanel(new GridBagLayout(),game));                       // 4 -> storage.getNumberOfPlayers();
+            add(new DashboardPanel(game,DASHBOARD_WIDTH,DASHBOARD_HEIGHT));                       // 4 -> storage.getNumberOfPlayers();
         }
     }
 

@@ -10,12 +10,13 @@ public class DiningPanel extends JPanel {
     GridBagConstraints c;
     Game game;
 
-    public DiningPanel(LayoutManager layout, Game game) {
+    public DiningPanel(LayoutManager layout, Game game, int width, int heigth) {
         super(layout);
         c=new GridBagConstraints();
         this.game=game;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
+        setSize(width, heigth);
         InitializeDining();
 
     }
@@ -27,7 +28,7 @@ public class DiningPanel extends JPanel {
             for (int i = 0; i < game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(color); i++) {
                 c.gridx=column;
                 c.gridy=row;
-                add(new StudentButton(color));
+                add(new StudentButton(color),c);
                 row++;
             }
             row=0;

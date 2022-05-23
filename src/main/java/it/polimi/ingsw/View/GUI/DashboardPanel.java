@@ -15,11 +15,11 @@ public class DashboardPanel extends JPanel {
     ClassLoader cl=this.getClass().getClassLoader();
 
 
-    public DashboardPanel(LayoutManager layout, Game game) {
-        super(layout);
+    public DashboardPanel( Game game,int width,int height) {
+        setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.game=game;
         c=new GridBagConstraints();
-
+        setSize(width,height);
         initializeDashboard();
     }
 
@@ -38,12 +38,15 @@ public class DashboardPanel extends JPanel {
     }
 
     private void initializeDashboard(){
+        int entranceHeight;
+        c.fill=GridBagConstraints.HORIZONTAL;
         c.gridx=0;
-        c.gridy=0;
-        add(new EntrancePanel(new GridBagLayout(),game),c);
+        c.gridy=2;
+        add(new EntrancePanel(new GridBagLayout(),game, getWidth(),100),c);
         c.gridy=1;
-        add(new DiningPanel(new GridBagLayout(),game),c);
-        //add DiningPanel
+        add(new DiningPanel(new GridBagLayout(),game,getWidth(),600),c);
+        c.gridy=0;
+        add(new TowerStoragePanel((new GridBagLayout()),game, getWidth(),100),c);
     }
 
 }

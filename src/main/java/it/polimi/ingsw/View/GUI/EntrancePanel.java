@@ -12,12 +12,13 @@ public class EntrancePanel extends JPanel {
     GridBagConstraints c;
     Game game;
 
-    public EntrancePanel(LayoutManager layout,Game game) {
+    public EntrancePanel(LayoutManager layout, Game game, int width, int heigth) {
         super(layout);
         c=new GridBagConstraints();
         this.game=game;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
+        setSize(new Dimension(width,heigth));
         //loading the images from resource folder
         InitializeEntrance();
     }
@@ -25,7 +26,7 @@ public class EntrancePanel extends JPanel {
     private void InitializeEntrance(){
         int row=0;
         int column=0;
-        c.insets=new Insets(10,7,10,7);
+        c.insets=new Insets(7,7,7,7);
 
 
         for (RealmColors color:game.getPlayerByIndex(0).getDashboard().getEntrance().getStudents().keySet()) {
