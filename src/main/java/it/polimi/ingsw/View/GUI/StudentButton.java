@@ -21,11 +21,11 @@ public class StudentButton extends JButton {
     private void printStudent(RealmColors color){
         InputStream url=null;
         switch(color){
-            case YELLOW ->url=cl.getResourceAsStream("student_yellow.png");
-            case BLUE -> url=cl.getResourceAsStream("student_blue.png");
-            case RED -> url=cl.getResourceAsStream("student_red.png");
-            case PINK -> url=cl.getResourceAsStream("student_pink.png");
-            case GREEN -> url=cl.getResourceAsStream("student_green.png");
+            case YELLOW ->url=cl.getResourceAsStream("Dashboard/Students/Yellow.png");
+            case BLUE -> url=cl.getResourceAsStream("Dashboard/Students/Blue.png");
+            case RED -> url=cl.getResourceAsStream("Dashboard/Students/Red.png");
+            case PINK -> url=cl.getResourceAsStream("Dashboard/Students/Pink.png");
+            case GREEN -> url=cl.getResourceAsStream("Dashboard/Students/Green.png");
         }
         BufferedImage img=null;
         try{
@@ -34,7 +34,8 @@ public class StudentButton extends JButton {
         }catch (IOException e){
             e.printStackTrace();
         }
-        setIcon(new ImageIcon(img));
+        if (img != null)
+            setIcon(new ImageIcon(img));
     }
 
 

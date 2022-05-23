@@ -24,12 +24,12 @@ public class InitialBackgroundPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        printImage(g,"Background.png",0,0,getWidth(),getHeight());
+        printBackground(g, getWidth(),getHeight());
     }
 
-    private void printImage(Graphics g, String image, int posX, int posY, int width, int height) {
+    private void printBackground(Graphics g, int width, int height) {
         ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream(image);
+        InputStream url = cl.getResourceAsStream("Background.png");
         BufferedImage img= null;
         try {
             if (url != null)
@@ -37,7 +37,7 @@ public class InitialBackgroundPanel extends JPanel {
         }catch (IOException e) {
             e.printStackTrace();
         }
-        g.drawImage(img, posX, posY, width, height, null);
+        g.drawImage(img, 0, 0, width, height, null);
     }
 
 }

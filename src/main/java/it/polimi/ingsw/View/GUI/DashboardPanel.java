@@ -29,7 +29,8 @@ public class DashboardPanel extends JPanel {
         InputStream url = cl.getResourceAsStream("Dashboard/Complete.png");
         BufferedImage img= null;
         try {
-            img = ImageIO.read(url);
+            if (url != null)
+                img = ImageIO.read(url);
         }catch (IOException e) {
             e.printStackTrace();
         }
