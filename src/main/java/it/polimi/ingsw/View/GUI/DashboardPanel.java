@@ -11,21 +11,16 @@ import java.io.InputStream;
 
 public class DashboardPanel extends JPanel {
     Game game;
-    ClassLoader cl = this.getClass().getClassLoader();
-    InputStream redStudentUrl;
-    InputStream yellowStudentUrl;
-    InputStream greenStudentUrl;
-    InputStream pinkStudentUrl;
-    InputStream blueStudentUrl;
-    BufferedImage redStudentImg;
-    BufferedImage yellowStudentImg;
-    BufferedImage greenStudentImg;
-    BufferedImage pinkStudentImg;
-    BufferedImage blueStudentImg;
+    GridBagConstraints c;
+    ClassLoader cl=this.getClass().getClassLoader();
+
 
     public DashboardPanel(LayoutManager layout, Game game) {
         super(layout);
         this.game=game;
+        c=new GridBagConstraints();
+
+        initializeDashboard();
     }
 
     @Override
@@ -42,10 +37,12 @@ public class DashboardPanel extends JPanel {
     }
 
     private void initializeDashboard(){
-        redStudentUrl = cl.getResourceAsStream("Dashboard/Students/Red.png");
-        yellowStudentUrl = cl.getResourceAsStream("Dashboard/Students/Yellow.png");
-        greenStudentUrl = cl.getResourceAsStream("Dashboard/Students/Green.png");
-        pinkStudentUrl = cl.getResourceAsStream("Dashboard/Students/Pink.png");
-        blueStudentUrl = cl.getResourceAsStream("Dashboard/Students/Blue.png");
+        c.gridx=0;
+        c.gridy=0;
+        add(new EntrancePanel(new GridBagLayout(),game),c);
+        c.gridy=1;
+        add(new DiningPanel(new GridBagLayout(),game),c);
+        //add DiningPanel
     }
+
 }

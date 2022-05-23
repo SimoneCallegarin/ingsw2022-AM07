@@ -1,5 +1,7 @@
 package it.polimi.ingsw.View.GUI;
 
+import it.polimi.ingsw.Model.Game;
+
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
@@ -10,9 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class GameScreenPanel extends JPanel {
-
-    private static final int DASHBOARD_WIDTH = 250;
-    private static final int DASHBOARD_HEIGHT = 500;
+    Game game;
+    private  final int DASHBOARD_WIDTH = 250;
+    private  final int DASHBOARD_HEIGHT = 500;
 
     private Graphics g;
 
@@ -29,15 +31,21 @@ public class GameScreenPanel extends JPanel {
      *
      * @param layout the LayoutManager to use
      */
-    public GameScreenPanel(LayoutManager layout) {
+    public GameScreenPanel(LayoutManager layout, Game game) {
         super(layout);
+        setBackground(Color.CYAN);
+        this.game=game;
+        for(int i=0; i<4;i++){
+            add(new DashboardPanel(new GridBagLayout(),game));                       // 4 -> storage.getNumberOfPlayers();
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         setGraphics(g);
-        for(int i=0; i<4;i++)           // 4 -> storage.getNumberOfPlayers();
-            printDashboards(i);
+
+            //printDashboards(i);
+
     }
 
     /*
