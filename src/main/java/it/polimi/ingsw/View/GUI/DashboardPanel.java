@@ -31,7 +31,7 @@ public class DashboardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        InputStream url = cl.getResourceAsStream("PLANCIA GIOCO V.png");
+        InputStream url = cl.getResourceAsStream("Dashboard/Complete.png");
         BufferedImage img= null;
         try {
             img = ImageIO.read(url);
@@ -42,10 +42,10 @@ public class DashboardPanel extends JPanel {
     }
 
     private void initializeDashboard(){
-        redStudentUrl=cl.getResourceAsStream("student_red.png");
-        yellowStudentUrl=cl.getResourceAsStream("student_yellow.png");
-        greenStudentUrl=cl.getResourceAsStream("student_green.png");
-        pinkStudentUrl=cl.getResourceAsStream("student_pink.png");
-        blueStudentUrl=cl.getResourceAsStream("student_blue.png");
+        redStudentUrl = cl.getResourceAsStream("Dashboard/Students/Red.png");
+        yellowStudentUrl = cl.getResourceAsStream("Dashboard/Students/Yellow.png");
+        greenStudentUrl = cl.getResourceAsStream("Dashboard/Students/Green.png");
+        pinkStudentUrl = cl.getResourceAsStream("Dashboard/Students/Pink.png");
+        blueStudentUrl = cl.getResourceAsStream("Dashboard/Students/Blue.png");
     }
 }

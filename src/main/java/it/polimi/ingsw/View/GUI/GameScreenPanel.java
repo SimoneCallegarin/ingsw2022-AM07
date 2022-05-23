@@ -57,7 +57,7 @@ public class GameScreenPanel extends JPanel {
 
     private void printDashboard(int posX, int posY) {
         ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream("PLANCIA GIOCO V.png");
+        InputStream url = cl.getResourceAsStream("Dashboard/Complete.png");
         BufferedImage img= null;
         try {
             if (url != null)

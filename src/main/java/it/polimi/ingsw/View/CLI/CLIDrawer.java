@@ -483,6 +483,12 @@ public class CLIDrawer {
             gameTable[startingPointX+posX+1][startingPointY+posY+3+bigger] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileMNMovement()).toString();
     }
 
+    /**
+     * Draws the team of each player in a 4 players match.
+     * @param playerID the id of the player.
+     * @param startingPointX the horizontal position in the gameTable matrix where we will start to store the team information.
+     * @param startingPointY the vertical position in the gameTable matrix where we will start to store the team information.
+     */
     private void drawTeams(int playerID, int startingPointX, int startingPointY) {
         int posX=0;
         int posY=0;

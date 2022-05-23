@@ -24,9 +24,7 @@ public class InitialBackgroundPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        printImage(g,"eriantys background.jpg",0,0,getWidth(),getHeight());
-        printImage(g,"LOGO CRANIO CREATIONS_bianco.png",1750,800,140,200);
-
+        printImage(g,"Initial_Background.png",0,0,getWidth(),getHeight());
     }
 
     private void printImage(Graphics g, String image, int posX, int posY, int width, int height) {
