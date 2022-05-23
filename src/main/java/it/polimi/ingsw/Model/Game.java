@@ -181,9 +181,9 @@ public class Game extends ModelSubject {
 
             if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
                 this.gamePhase = GamePhases.PLANNING_PHASE;
-                fillClouds();
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
                 setGameCreationValues();
+                fillClouds();
                 updateOrder(gamePhase);
             }
 
@@ -210,8 +210,8 @@ public class Game extends ModelSubject {
         int money=players.get(0).getMoney();
 
         // GAME TABLE:
-        ArrayList<HashMap<RealmColors,Integer>> clouds=new ArrayList<>();
-        for(Cloud c:gameTable.getClouds()){ clouds.add(c.getStudents()); }
+        ArrayList<HashMap<RealmColors,Integer>> emptyClouds=new ArrayList<>();
+        for(Cloud c:gameTable.getClouds()){ emptyClouds.add(c.getStudents()); }
         int generalReserve=gameTable.getGeneralMoneyReserve();
 
         ArrayList<HashMap<RealmColors,Integer>> studentsOnIsle=new ArrayList<>();
@@ -228,7 +228,7 @@ public class Game extends ModelSubject {
             studentsOnCard.add(card.getStudents());
         }
 
-        notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,clouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards,squads));
+        notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,emptyClouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards,squads));
     }
 
     /**
@@ -415,6 +415,7 @@ public class Game extends ModelSubject {
         ArrayList<Integer> numIsles=new ArrayList<>();
         ArrayList<TowerColors> towerColors=new ArrayList<>();
         ArrayList<Boolean> denyCards=new ArrayList<>();
+        ArrayList<Integer> numTowers = new ArrayList<>();
         int whereMnId=0;
         for(Isle isle:gameTable.getIsleManager().getIsles()){
             students.add(isle.getStudents());
@@ -429,8 +430,10 @@ public class Game extends ModelSubject {
                 whereMnId=isle.getIdIsle();
             }
         }
+        for (Player p : players)
+            numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
         int finalWhereMnId = whereMnId;
-        notifyObserver(obs->obs.onMNMovement(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles));
+        notifyObserver(obs->obs.onMNMovement(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
     }
 
     /**

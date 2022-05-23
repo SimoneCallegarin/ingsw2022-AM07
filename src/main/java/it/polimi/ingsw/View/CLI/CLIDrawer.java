@@ -8,7 +8,7 @@ public class CLIDrawer {
     private static final int TITLE_X = 22;
     private static final int TITLE_Y = 174;
     private static final int TABLE_DIMENSION_X = 28;
-    private static final int TABLE_DIMENSION_Y = 133;
+    private static final int TABLE_DIMENSION_Y = 135;
     private static final int ASSISTANT_CARDS_X = 3;
     private static final int ASSISTANT_CARDS_Y = 5;
     private static final int NICKNAME_X = 3;
@@ -233,7 +233,7 @@ public class CLIDrawer {
         ║           ║
         ║           ║
         ╚═══════════╝
-          28 X 133
+          28 X 135
          */
         initializeRectangle(gameTable,TABLE_DIMENSION_X,TABLE_DIMENSION_Y);
         drawRectangle(gameTable, 0,0, TABLE_DIMENSION_X, TABLE_DIMENSION_Y);
@@ -290,6 +290,8 @@ public class CLIDrawer {
         drawDiscardPile(playerID,startingPointX,startingPointY);
         if(storage.isGameMode())
             drawPlayerMoney(playerID,startingPointX,startingPointY);
+        if(getStorage().getNumberOfPlayers()==4)
+            drawTeams(playerID,startingPointX,startingPointY);
     }
 
     /**
@@ -466,7 +468,7 @@ public class CLIDrawer {
         int bigger = 0;
         if(storage.getDashboard(playerID).getDiscardPileTurnOrder() == 10){
             bigger=1;
-            gameTable[startingPointX][startingPointY+posY+2] = " \b";
+            gameTable[startingPointX+posX+1][startingPointY+posY+2] = " \b";
         }
 
         drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,ASSISTANT_CARDS_X,ASSISTANT_CARDS_Y+bigger);
@@ -474,11 +476,28 @@ public class CLIDrawer {
         // TURN ORDER:
         gameTable[startingPointX+posX][startingPointY+posY+1] = paintService(CLIColors.B_WHITE,"T");
         if(storage.getDashboard(playerID).getDiscardPileTurnOrder()!=0)
-            gameTable[startingPointX][startingPointY+posY+1] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileTurnOrder()).toString();
+            gameTable[startingPointX+posX+1][startingPointY+posY+1] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileTurnOrder()).toString();
         // MOTHER NATURE MOVEMENT:
         gameTable[startingPointX+posX][startingPointY+posY+3+bigger] = paintService(CLIColors.B_WHITE,"M");
         if(storage.getDashboard(playerID).getDiscardPileMNMovement()!=0)
-            gameTable[startingPointX][startingPointY+posY+3+bigger] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileMNMovement()).toString();
+            gameTable[startingPointX+posX+1][startingPointY+posY+3+bigger] = Integer.valueOf(storage.getDashboard(playerID).getDiscardPileMNMovement()).toString();
+    }
+
+    private void drawTeams(int playerID, int startingPointX, int startingPointY) {
+        int posX=0;
+        int posY=0;
+        if(playerID==0){    posX=-1;    posY=35;    }
+        if(playerID==1){    posX=-1;    posY=-19;   }
+        if(playerID==2){    posX=8;     posY=35;    }
+        if(playerID==3){    posX=8;     posY=-19;   }
+
+        drawRectangle(gameTable,startingPointX+posX,startingPointY+posY+1,3,5);
+
+        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"TEAMS"),startingPointX+posX,startingPointY+posY+1);
+        if (playerID==0||playerID==2)
+            gameTable[startingPointX+posX+1][startingPointY+posY+3] = "1";
+        else
+            gameTable[startingPointX+posX+1][startingPointY+posY+3] = "2";
     }
 
     /**
@@ -561,17 +580,17 @@ public class CLIDrawer {
          */
         for(int i=0; i<storage.getGameTable().getIsles().size(); i++){
             if(i==0||i==4)
-                    drawIsle(4,28+16*i,i);
+                    drawIsle(4,29+16*i,i);
             if(i>0&&i<4)
-                drawIsle(1,28+16*i,i);
+                drawIsle(1,29+16*i,i);
             if(i==5)
-                drawIsle(11,92,i);
+                drawIsle(11,93,i);
             if(i==6 || i==10)
-                drawIsle(18,92-16*(i-6),i);
+                drawIsle(18,93-16*(i-6),i);
             if(i>6&&i<10)
-                drawIsle(21,92-16*(i-6),i);
+                drawIsle(21,93-16*(i-6),i);
             if(i==11)
-                drawIsle(11,28,i);
+                drawIsle(11,29,i);
         }
     }
 
@@ -620,10 +639,10 @@ public class CLIDrawer {
         int posXBase = 6;
         if(!storage.isGameMode())
             posXBase = 3;
-        drawRectangle(gameTable, TABLE_DIMENSION_X/2-posXBase,TABLE_DIMENSION_Y/2-22,CLOUDS_CONTAINER_X,CLOUDS_CONTAINER_Y);
-        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"),TABLE_DIMENSION_X/2-posXBase,TABLE_DIMENSION_Y/2-3);
+        drawRectangle(gameTable, TABLE_DIMENSION_X/2-posXBase,TABLE_DIMENSION_Y/2-23,CLOUDS_CONTAINER_X,CLOUDS_CONTAINER_Y);
+        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"),TABLE_DIMENSION_X/2-posXBase,TABLE_DIMENSION_Y/2-4);
         for(int i=0; i<storage.getNumberOfPlayers(); i++)
-            drawCloud(15-posXBase,TABLE_DIMENSION_Y/2-20+11*i,i);
+            drawCloud(15-posXBase,TABLE_DIMENSION_Y/2-21+11*i,i);
     }
 
     /**

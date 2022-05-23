@@ -84,8 +84,13 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
                 storage.setupStorage(gc, cliDrawer);
-                cli.printChanges();
+                //cli.printChanges();
                 System.out.println("Game started!");
+            }
+            case FILLCLOUD_UPDATE -> {
+                FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
+                storage.updateClouds(fc.getClouds());
+                cli.printChanges();
             }
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
@@ -111,33 +116,16 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case MNMOVEMENT_UPDATE -> {
                 MNMovement_UpdateMsg mnm = (MNMovement_UpdateMsg) message;
-                ArrayList<GameTableInformation.Isle> newIsles = new ArrayList<>();
-                for (int i = 0; i < mnm.getTotalIsles(); i++) {
-                    boolean isMNPresent = mnm.getWhereMNId() == i;
-                    int isDenyCardPresent = 0;
-                    if (mnm.getDenyCards().get(i))
-                        isDenyCardPresent = 1;
-                    GameTableInformation.Isle newIsle = new GameTableInformation.Isle(mnm.getStudents().get(i), mnm.getNumberOfIsles().get(i), mnm.getTowerColors().get(i), isDenyCardPresent, isMNPresent);
-                    newIsles.add(newIsle);
-                }
-                storage.updateIsles(newIsles);
+                storage.updateIsles(mnm);
+                storage.updateNumberOfTowers(mnm.getNumberOfTowers());
                 cli.printChanges();
             }
             case CLOUDCHOICE_UPDATE -> {
                 PickFromCloud_UpdateMsg pfc = (PickFromCloud_UpdateMsg) message;
-                HashMap<RealmColors, Integer> emptyCloud = new HashMap<>();
-                for (RealmColors color : RealmColors.values())
-                    emptyCloud.put(color, 0);
-                storage.updateCloud(new GameTableInformation.Cloud(emptyCloud), pfc.getCloudId());
+                storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
                 storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
                 cli.printChanges();
             }
-            /*case FILLCLOUD_UPDATE -> {
-                FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
-                for (int i = 0; i < 2; i++)
-                    storage.updateCloud(new GameTableInformation.Cloud(fc.getClouds().get(i)), i);
-                cli.printChanges();
-            }*/
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
                 switch (gp.getGamePhases()) {
