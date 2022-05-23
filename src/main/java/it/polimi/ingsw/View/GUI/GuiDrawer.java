@@ -140,7 +140,7 @@ public class GuiDrawer extends ViewSubject {
     }
 
     private void GameScreenDrawer(){
-        GameScreenPanel gameScreenPanel=new GameScreenPanel(new GridLayout(2,2,400,400),game);
+        GameScreenPanel gameScreenPanel=new GameScreenPanel(new GridLayout(2,2,950,25),game);
         generalPanelManager.add(gameScreenPanel,"Game Screen");
         //switch to the actual game screen
         CardLayout cl=(CardLayout) generalPanelManager.getLayout();

@@ -12,38 +12,14 @@ import java.io.InputStream;
 public class DashboardPanel extends JPanel {
     Game game;
     GridBagConstraints c;
-    ClassLoader cl = this.getClass().getClassLoader();
-    InputStream redStudentUrl;
-    InputStream yellowStudentUrl;
-    InputStream greenStudentUrl;
-    InputStream pinkStudentUrl;
-    InputStream blueStudentUrl;
-    BufferedImage redStudentImg;
-    BufferedImage yellowStudentImg;
-    BufferedImage greenStudentImg;
-    BufferedImage pinkStudentImg;
-    BufferedImage blueStudentImg;
+    ClassLoader cl=this.getClass().getClassLoader();
+
 
     public DashboardPanel(LayoutManager layout, Game game) {
         super(layout);
         this.game=game;
         c=new GridBagConstraints();
 
-        //loading the images from resource folder
-        redStudentUrl=cl.getResourceAsStream("student_red.png");
-        yellowStudentUrl=cl.getResourceAsStream("student_yellow.png");
-        greenStudentUrl=cl.getResourceAsStream("student_green.png");
-        pinkStudentUrl=cl.getResourceAsStream("student_pink.png");
-        blueStudentUrl=cl.getResourceAsStream("student_blue.png");
-        try{
-            redStudentImg=ImageIO.read(redStudentUrl);
-            yellowStudentImg=ImageIO.read(yellowStudentUrl);
-            greenStudentImg=ImageIO.read(greenStudentUrl);
-            pinkStudentImg=ImageIO.read(pinkStudentUrl);
-            blueStudentImg=ImageIO.read(blueStudentUrl);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
         initializeDashboard();
     }
 
@@ -62,7 +38,12 @@ public class DashboardPanel extends JPanel {
     }
 
     private void initializeDashboard(){
-
+        c.gridx=0;
+        c.gridy=0;
+        add(new EntrancePanel(new GridBagLayout(),game),c);
+        c.gridy=1;
+        add(new DiningPanel(new GridBagLayout(),game),c);
+        //add DiningPanel
     }
 
 }

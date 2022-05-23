@@ -198,11 +198,13 @@ public class Game extends ModelSubject {
         ArrayList<HashMap<RealmColors,Integer>> entrances = new ArrayList<>();
         ArrayList<TowerColors> towerColors = new ArrayList<>();
         ArrayList<Integer> numTowers = new ArrayList<>();
+        ArrayList<Squads> squads=new ArrayList<>();
         for(Player p:players){
             towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());
             entrances.add(p.getDashboard().getEntrance().getStudents());
             nicknames.add(p.getNickname());
             numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
+            squads.add(p.getSquad());
         }
         int whereMNId=gameTable.getIsleManager().getIsleWithMotherNatureIndex();
         int money=players.get(0).getMoney();
@@ -226,7 +228,7 @@ public class Game extends ModelSubject {
             studentsOnCard.add(card.getStudents());
         }
 
-        notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,clouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards));
+        notifyObserver(obs->obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,clouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards,squads));
     }
 
     /**

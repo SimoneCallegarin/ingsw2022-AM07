@@ -2,6 +2,7 @@ package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
 import it.polimi.ingsw.Model.Enumeration.GameMode;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.Squads;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Network.Messages.MessageType;
 
@@ -28,6 +29,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
     private final ArrayList<String> characterNames;
     private final ArrayList<Integer> characterCost;
     private final ArrayList<Integer> characterDenyCards;
+    private final ArrayList<Squads> squads;
 
     public GameCreation_UpdateMsg(MessageType messageType,
                                   int numPlayers,
@@ -44,7 +46,8 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
                                   ArrayList<TowerColors> towerColors,
                                   ArrayList<String> characterNames,
                                   ArrayList<Integer> characterCost,
-                                  ArrayList<Integer> characterDenyCards) {
+                                  ArrayList<Integer> characterDenyCards,
+                                  ArrayList<Squads> squads) {
         super(messageType);
         this.numPlayers = numPlayers;
         this.nicknames = nicknames;
@@ -61,6 +64,7 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
         this.characterNames = characterNames;
         this.characterCost = characterCost;
         this.characterDenyCards = characterDenyCards;
+        this.squads=squads;
     }
 
     public int getNumPlayers() { return numPlayers; }
@@ -119,5 +123,13 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
 
     public ArrayList<Integer> getDenyCards() {
         return characterDenyCards;
+    }
+
+    public ArrayList<Integer> getCharacterDenyCards() {
+        return characterDenyCards;
+    }
+
+    public ArrayList<Squads> getSquads() {
+        return squads;
     }
 }
