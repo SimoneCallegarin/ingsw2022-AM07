@@ -26,7 +26,7 @@ public interface ModelObserver {
 
     void onCloudUpdate(int playerID,HashMap<RealmColors,Integer> entrance, int cloudId);
 
-    void onCharacterCard(int characterCardId, int idPlayer, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter);
+    void onCharacterCard(int characterCardId, int cardCost, int idPlayer, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter);
 
     void onDenyCard(int playerId,int isleId,boolean denyCard);
 

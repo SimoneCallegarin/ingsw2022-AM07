@@ -20,6 +20,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
     ConnectionSocket client;
     ModelStorage storage;
     CLIDrawer cliDrawer;
+    String username;
+    boolean expertMode = false;
     int playerID;
 
     public ClientController(CLI cli, ConnectionSocket client, CLIDrawer cliDrawer) {
@@ -29,10 +31,16 @@ public class ClientController implements ViewObserver, NetworkObserver {
     }
 
     @Override
-    public void onUsername(String username) { client.send(new LoginMessage(username)); }
+    public void onUsername(String username) {
+        this.username = username;
+        client.send(new LoginMessage(username));
+    }
 
     @Override
-    public void onGamePreferences(int numPlayers, Boolean gameMode) { client.send(new GamePreferencesMessage(numPlayers, gameMode)); }
+    public void onGamePreferences(int numPlayers, Boolean expertMode) {
+        this.expertMode = expertMode;
+        client.send(new GamePreferencesMessage(numPlayers, expertMode));
+    }
 
     @Override
     public void onColorChoice(int color) { client.send(new PlayerMoveMessage(MessageType.COLOR_VALUE, playerID, color)); }
@@ -44,9 +52,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
     public void onStudentMovement_toDining() { client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING, playerID, playerID)); }
 
     @Override
-    public void onCharacterCard(int characterId) {
-
-    }
+    public void onCharacterCard(int characterId) { client.send(new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD, playerID, characterId)); }
 
     @Override
     public void onAssistantCard(int turnOrder) { client.send(new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD, playerID, turnOrder)); }
@@ -126,6 +132,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
                 cli.printChanges();
             }
+            case CHARACTERCARD_UPDATE -> {
+                CharacterCard_UpdateMsg cc = (CharacterCard_UpdateMsg) message;
+                storage.updateMoney(cc.getPlayerID(), cc.getPlayerMoney());
+                storage.updateGeneralMoneyReserve(cc.getGeneralReserve());
+                cli.printChanges();
+            }
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
                 switch (gp.getGamePhases()) {
@@ -139,7 +151,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         switch (gp.getActionPhases()) {
                             case MOVE_STUDENTS -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    cli.askMove();
+                                    cli.askMove(expertMode);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
                             }
