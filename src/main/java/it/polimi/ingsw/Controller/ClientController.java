@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
@@ -23,6 +24,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
     String username;
     boolean expertMode = false;
     int playerID;
+    CharacterCardsName lastCharacterUsed;
 
     public ClientController(CLI cli, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.cli = cli;
@@ -59,7 +61,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     @Override
     public void onAtomicEffect(int genericValue) {
-
+        client.send(new PlayerMoveMessage(MessageType.ACTIVATE_ATOMIC_EFFECT, playerID, genericValue));
     }
 
     @Override
@@ -133,6 +135,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case CHARACTERCARD_UPDATE -> {
                 CharacterCard_UpdateMsg cc = (CharacterCard_UpdateMsg) message;
+                lastCharacterUsed = cc.getCardName();
                 storage.updateMoney(cc.getPlayerID(), cc.getPlayerMoney());
                 storage.updateGeneralMoneyReserve(cc.getGeneralReserve());
                 cli.printChanges();
@@ -165,6 +168,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
                                     cli.askCloud();
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
+                            }
+                            case CHARACTER_CARD_PHASE -> {
+                                if (gp.getActivePlayer() == playerID)
+                                    cli.askCharacterEffectParameters(lastCharacterUsed);
+                                else
+                                    System.out.println("Player " + gp.getActivePlayer() + " is using a character card...");
                             }
                         }
                     }

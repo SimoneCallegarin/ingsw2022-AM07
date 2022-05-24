@@ -1,5 +1,6 @@
 package it.polimi.ingsw.View;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Network.ClientHandler;
 import it.polimi.ingsw.Network.Messages.MessageType;
@@ -80,11 +81,16 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
-    public void onCharacterCard(int characterCardId, int cardCost, int idPlayer, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter) {
-        CharacterCard_UpdateMsg characterCard_updateMsg=new CharacterCard_UpdateMsg(MessageType.CHARACTERCARD_UPDATE,characterCardId, cardCost, idPlayer, generalReserve, playerMoney,denyCards,studentsOnCharacter);
+    public void onCharacterCard(int characterCardId, CharacterCardsName cardName, int cardCost, int idPlayer, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter) {
+        CharacterCard_UpdateMsg characterCard_updateMsg=new CharacterCard_UpdateMsg(MessageType.CHARACTERCARD_UPDATE,characterCardId, cardName, cardCost, idPlayer, generalReserve, playerMoney,denyCards,studentsOnCharacter);
         for(ClientHandler ch: clientHandler){
             ch.send(characterCard_updateMsg);
         }
+    }
+
+    @Override
+    public void onEffectActivation() {
+
     }
 
     @Override

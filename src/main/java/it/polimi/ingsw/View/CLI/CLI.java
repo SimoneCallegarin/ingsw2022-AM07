@@ -205,8 +205,9 @@ public class CLI extends ViewSubject {
 
     public void askCharacterEffectParameters(CharacterCardsName characterName) {
         switch (characterName) {
-            case MONK -> {
-
+            case FARMER,MAGICAL_LETTER_CARRIER,CENTAUR,KNIGHT -> {
+                System.out.println("Activating " + characterName.toString() + "'s character card effect...");
+                notifyObserver(obs->obs.onAtomicEffect(-1));
             }
         }
     }
@@ -219,7 +220,7 @@ public class CLI extends ViewSubject {
 
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 
-    private void printAvailableCharacters() { /*System.out.println(cliDrawer.printCharacterDescriptions());*/ }
+    private void printAvailableCharacters() { System.out.println(cliDrawer.drawCharacterCardsEffects()); }
 
     public CLIDrawer getCliDrawer() {
         return cliDrawer;
