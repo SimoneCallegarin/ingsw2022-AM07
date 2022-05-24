@@ -219,7 +219,7 @@ public class CLI extends ViewSubject {
 
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 
-    private void printAvailableCharacters() { /*System.out.println(cliDrawer.printCharacterDescriptions());*/ }
+    private void printAvailableCharacters() { System.out.println(cliDrawer.drawCharacterCardsEffects()); }
 
     public CLIDrawer getCliDrawer() {
         return cliDrawer;
