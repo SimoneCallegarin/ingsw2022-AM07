@@ -11,10 +11,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+
 public class GameScreenPanel extends JPanel {
     Game game;
     private  final int DASHBOARD_WIDTH = 250;
     private  final int DASHBOARD_HEIGHT = 800;
+    GridBagConstraints c;
 
     private Graphics g;
 
@@ -33,11 +35,38 @@ public class GameScreenPanel extends JPanel {
      */
     public GameScreenPanel(LayoutManager layout, Game game) {
         super(layout);
-        setBackground(Color.CYAN);
         this.game=game;
-        for(int i=0; i<4;i++){
-            add(new DashboardPanel(game,DASHBOARD_WIDTH,DASHBOARD_HEIGHT));                       // 4 -> storage.getNumberOfPlayers();
-        }
+        c= new GridBagConstraints();
+
+
+        c.gridx=0;
+        c.gridy=1;
+        add(new DashboardPanel(game),c);
+
+        c.gridy=0;
+        add(new DashboardPanel(game),c);
+
+
+        c.gridy=0;
+        c.gridx=1;
+        c.gridwidth=2;
+        c.gridheight=2;
+        c.ipady=900;
+        c.ipadx=900;
+        add(new IsleManagerPanel(),c);
+
+
+        c.gridx=3;
+        c.gridy=0;
+        c.gridheight=1;
+        c.gridwidth=1;
+        c.ipady=0;
+        c.ipadx=0;
+        add(new DashboardPanel(game),c);
+
+
+        c.gridy=1;
+        add(new DashboardPanel(game),c);
     }
 
     @Override

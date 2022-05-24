@@ -10,13 +10,13 @@ public class DiningPanel extends JPanel {
     GridBagConstraints c;
     Game game;
 
-    public DiningPanel(LayoutManager layout, Game game, int width, int heigth) {
+    public DiningPanel(LayoutManager layout, Game game) {
         super(layout);
         c=new GridBagConstraints();
         this.game=game;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
-        setSize(width, heigth);
+
         InitializeDining();
 
     }

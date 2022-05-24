@@ -10,13 +10,12 @@ public class TowerStoragePanel extends JPanel {
     Game game;
     GridBagConstraints c;
 
-    public TowerStoragePanel(LayoutManager layout, Game game,int width, int height) {
+    public TowerStoragePanel(LayoutManager layout, Game game) {
         super(layout);
         this.game=game;
         setOpaque(false);
         c=new GridBagConstraints();
         setBorder(BorderFactory.createLineBorder(Color.black));
-        setSize(width,height);
         InitializeTowerStorage();
     }
 

@@ -12,13 +12,12 @@ public class EntrancePanel extends JPanel {
     GridBagConstraints c;
     Game game;
 
-    public EntrancePanel(LayoutManager layout, Game game, int width, int heigth) {
+    public EntrancePanel(LayoutManager layout, Game game) {
         super(layout);
         c=new GridBagConstraints();
         this.game=game;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
-        setSize(new Dimension(width,heigth));
         //loading the images from resource folder
         InitializeEntrance();
     }
