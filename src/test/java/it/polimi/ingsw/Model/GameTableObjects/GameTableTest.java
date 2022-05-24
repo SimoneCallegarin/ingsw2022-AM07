@@ -73,7 +73,7 @@ class GameTableTest {
 
         game.playCharacterCard(0,0);
 
-        assertEquals(19,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
 
     }
 

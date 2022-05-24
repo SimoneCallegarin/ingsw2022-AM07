@@ -1490,7 +1490,7 @@ class ActionPhaseTest {
         game.activateAtomicEffect(0,0,0,2);
 
         assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
-        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(17,game.getGameTable().getGeneralMoneyReserve());
         assertEquals(1,game.getPlayerByIndex(0).getMoney());
 
     }
@@ -1541,7 +1541,7 @@ class ActionPhaseTest {
         game.activateAtomicEffect(0,0,0,2);
 
         assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
-        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(17,game.getGameTable().getGeneralMoneyReserve());
         assertEquals(1,game.getPlayerByIndex(0).getMoney());
 
     }
@@ -1575,7 +1575,7 @@ class ActionPhaseTest {
         game.activateAtomicEffect(0,0,2,0);
 
         assertEquals(3,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.BLUE));
-        assertEquals(19,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(17,game.getGameTable().getGeneralMoneyReserve());
         assertEquals(1,game.getPlayerByIndex(0).getMoney());
 
     }

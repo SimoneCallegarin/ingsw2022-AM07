@@ -490,10 +490,13 @@ class GamePlaySomeCharacterCardsTest {
         assertTrue(game.getGameTable().getIsleManager().getIsle(7).getMotherNature());
 
         game.playCharacterCard(1,0);
+        assertEquals(CharacterCardsName.FUNGIST,game.getPlayerByIndex(1).getCharacterCardPlayed());
         game.activateAtomicEffect(1,0,0,0);
         // player 0 influence on isle 8 = 0
         // player 1 influence on isle 8 = 1
         // value1 = 0 = YELLOW
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         game.moveMotherNature(1,8);
         assertTrue(game.getGameTable().getIsleManager().getIsle(8).getMotherNature());
         assertEquals(TowerColors.BLACK, game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
