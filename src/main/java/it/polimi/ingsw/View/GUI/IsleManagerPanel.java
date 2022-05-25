@@ -7,19 +7,13 @@ public class IsleManagerPanel extends JPanel {
 
     public IsleManagerPanel() {
         setBackground(Color.CYAN);
-        setLayout(new GridLayout(7,7));
+        setLayout(new GridBagLayout());
 
-        JPanel bluePanel=new JPanel();
-        bluePanel.setBackground(Color.CYAN);
-        for(int row=0;row<7;row++){
-            for(int column=0;column<7;column++){
-                if(column%2==0) {
-                    add(new IslePanel());
-                }else{
-                    add(bluePanel);
-                }
-            }
-        }
+
+
+        GridBagConstraints c=new GridBagConstraints();
+        setBorder(BorderFactory.createLineBorder(Color.black));
+
     }
 
 }

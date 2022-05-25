@@ -16,7 +16,7 @@ public class GameScreenPanel extends JPanel {
     Game game;
     private  final int DASHBOARD_WIDTH = 250;
     private  final int DASHBOARD_HEIGHT = 800;
-    GridBagConstraints c;
+    GridBagConstraints dashboardConstraints;
 
     private Graphics g;
 
@@ -33,93 +33,43 @@ public class GameScreenPanel extends JPanel {
      *
      * @param layout the LayoutManager to use
      */
-    public GameScreenPanel(LayoutManager layout, Game game) {
+    public GameScreenPanel(LayoutManager layout, Game game, int frameWidth, int frameHeight) {
         super(layout);
         this.game=game;
-        c= new GridBagConstraints();
+        setPreferredSize(new Dimension(frameWidth,frameHeight));
+        JPanel dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
+        JPanel dashboardContainerPanel2=new JPanel(new GridLayout(2,1));
+
+        GridBagConstraints gamescreenConstraints=new GridBagConstraints();
+        GridBagConstraints DCPConstraints=new GridBagConstraints();//dashboard container panel constraints
+        //first i divide the gamescreen in 3 columns and 1 row and i made the isleManagerPanel take the most space in the center
+        gamescreenConstraints.gridy=0;
+        gamescreenConstraints.weighty=1;
+        gamescreenConstraints.weightx=1;
+        gamescreenConstraints.fill=GridBagConstraints.BOTH;
+
+        gamescreenConstraints.gridx=1;
+        add(new IsleManagerPanel(),gamescreenConstraints);
+
+        //then i add the two dashboard container Panel on the left and on the right and i set the weights in order to correctly size the dashboard
+        gamescreenConstraints.weightx=0.2;
+        gamescreenConstraints.weighty=0.2;
+        gamescreenConstraints.gridx=0;
+        add(dashboardContainerPanel1,gamescreenConstraints);
+
+        gamescreenConstraints.gridx=2;
+        add(dashboardContainerPanel2,gamescreenConstraints);
 
 
-        c.gridx=0;
-        c.gridy=1;
-        add(new DashboardPanel(game),c);
 
-        c.gridy=0;
-        add(new DashboardPanel(game),c);
+        //then i add the 4 dashbpoard to the containers
+        dashboardContainerPanel1.add(new DashboardPanel(game));
+        dashboardContainerPanel2.add(new DashboardPanel(game));
 
+        dashboardContainerPanel1.add(new DashboardPanel(game));
+        dashboardContainerPanel2.add(new DashboardPanel(game));
 
-        c.gridy=0;
-        c.gridx=1;
-        c.gridwidth=2;
-        c.gridheight=2;
-        c.ipady=900;
-        c.ipadx=900;
-        add(new IsleManagerPanel(),c);
-
-
-        c.gridx=3;
-        c.gridy=0;
-        c.gridheight=1;
-        c.gridwidth=1;
-        c.ipady=0;
-        c.ipadx=0;
-        add(new DashboardPanel(game),c);
-
-
-        c.gridy=1;
-        add(new DashboardPanel(game),c);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        setGraphics(g);
-
-            //printDashboards(i);
 
     }
 
-    /*
-    private void printImage(Graphics g, String image, int posX, int posY, int width, int height) {
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream(image);
-        BufferedImage img= null;
-        try {
-            if (url != null)
-                img = ImageIO.read(url);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(img, posX, posY, width, height, null);
-    }
-    */
-
-    private void printDashboard(int posX, int posY) {
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream("PLANCIA GIOCO V.png");
-        BufferedImage img= null;
-        try {
-            if (url != null)
-                img = ImageIO.read(url);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(img, posX, posY, DASHBOARD_WIDTH, DASHBOARD_HEIGHT,null);
-    }
-
-    public void printDashboards(int playerID) {
-        int posX;
-        int posY;
-
-        if(playerID==0||playerID==2)
-            posX = 0;
-        else
-            posX = getWidth()-DASHBOARD_WIDTH;
-
-        if(playerID==0||playerID==1)
-            posY = 0;
-        else
-            posY = DASHBOARD_HEIGHT+10;
-
-        printDashboard(posX,posY);
-
-    }
 }

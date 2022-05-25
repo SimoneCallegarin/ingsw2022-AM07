@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +34,7 @@ public class TowerButton extends JButton {
         }catch (IOException e){
             e.printStackTrace();
         }
-        setIcon(new ImageIcon(img));
+        ImageIcon towerImg=new ImageIcon(img);
+        setIcon(towerImg);
     }
 }

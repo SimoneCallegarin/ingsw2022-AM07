@@ -11,6 +11,8 @@ public class IslePanel extends JPanel {
 
     public IslePanel() {
         setOpaque(false);
+        setBorder(BorderFactory.createLineBorder(Color.black));
+        setMinimumSize(new Dimension(100,100));
     }
 
     @Override

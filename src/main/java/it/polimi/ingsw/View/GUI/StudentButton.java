@@ -4,6 +4,7 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +27,7 @@ public class StudentButton extends JButton {
             case RED -> url=cl.getResourceAsStream("student_red.png");
             case PINK -> url=cl.getResourceAsStream("student_pink.png");
             case GREEN -> url=cl.getResourceAsStream("student_green.png");
+            default -> url=cl.getResourceAsStream("cerchi.png");
         }
         BufferedImage img=null;
         try{

@@ -11,14 +11,22 @@ import java.io.InputStream;
 
 public class DashboardPanel extends JPanel {
     Game game;
-    GridBagConstraints c;
+    GridBagConstraints entranceConstraints;
+    GridBagConstraints diningConstraints;
+    GridBagConstraints towerStorageConstraints;
+
     ClassLoader cl=this.getClass().getClassLoader();
 
 
     public DashboardPanel( Game game) {
-        setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+        setLayout(new GridBagLayout());
+        setBorder(BorderFactory.createLineBorder(Color.black));
         this.game=game;
-        c=new GridBagConstraints();
+        entranceConstraints =new GridBagConstraints();
+        diningConstraints= new GridBagConstraints();
+        towerStorageConstraints= new GridBagConstraints();
+
+
         initializeDashboard();
     }
 
@@ -37,15 +45,24 @@ public class DashboardPanel extends JPanel {
     }
 
     private void initializeDashboard(){
-        int entranceHeight;
-        c.fill=GridBagConstraints.HORIZONTAL;
-        c.gridx=0;
-        c.gridy=2;
-        add(new EntrancePanel(new GridBagLayout(),game),c);
-        c.gridy=1;
-        add(new DiningPanel(new GridBagLayout(),game),c);
-        c.gridy=0;
-        add(new TowerStoragePanel((new GridBagLayout()),game),c);
+        entranceConstraints.fill=GridBagConstraints.BOTH;
+        entranceConstraints.gridy=0;
+        entranceConstraints.weightx=1;
+        entranceConstraints.weighty=0.35;
+        add(new TowerStoragePanel(game),entranceConstraints);
+
+        diningConstraints.fill=GridBagConstraints.BOTH;
+        diningConstraints.gridy=1;
+        diningConstraints.weightx=1;
+        diningConstraints.weighty=1;
+        add(new DiningPanel(game),diningConstraints);
+
+        towerStorageConstraints.fill=GridBagConstraints.BOTH;
+        towerStorageConstraints.gridy=2;
+        towerStorageConstraints.weightx=1;
+        towerStorageConstraints.weighty=0.25;
+        add(new EntrancePanel(game),towerStorageConstraints);
+
     }
 
 }

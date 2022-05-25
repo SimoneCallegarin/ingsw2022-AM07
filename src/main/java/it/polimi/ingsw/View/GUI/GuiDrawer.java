@@ -67,7 +67,7 @@ public class GuiDrawer extends ViewSubject {
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setVisible(true);
         //set my initial content pane where I add my user input manager
-        InitialBackgroundPanel contentPane =new InitialBackgroundPanel(new BorderLayout());
+        InitialBackgroundPanel contentPane =new InitialBackgroundPanel(new BorderLayout(),f.getWidth(),f.getHeight());
         contentPane.add(userInputPanelManager,BorderLayout.CENTER);
         //add it to the general manager
         generalPanelManager.add(contentPane,"User Input");
@@ -142,11 +142,12 @@ public class GuiDrawer extends ViewSubject {
     }
 
     private void GameScreenDrawer(){
-        GameScreenPanel gameScreenPanel=new GameScreenPanel(new GridBagLayout(),game);
+        GameScreenPanel gameScreenPanel=new GameScreenPanel(new GridBagLayout(),game,f.getWidth(),f.getHeight());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
         //switch to the actual game screen
         CardLayout cl=(CardLayout) generalPanelManager.getLayout();
         cl.show(generalPanelManager,"Game Screen");
+
     }
 
     public ModelStorage getModelStorage() {
