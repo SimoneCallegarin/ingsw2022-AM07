@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 public class GameScreenPanel extends JPanel {
     Game game;
     private  final int DASHBOARD_WIDTH = 250;

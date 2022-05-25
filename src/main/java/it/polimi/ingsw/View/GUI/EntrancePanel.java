@@ -4,7 +4,6 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 

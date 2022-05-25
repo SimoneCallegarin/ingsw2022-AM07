@@ -28,6 +28,10 @@ public class CharacterCard implements StudentManager, DenyCardManager {
      * This attribute contains the number of deny cards that are on a character card if it has a setupEffect
      */
     private int denyCards;
+    /**
+     * The description of the effect of the character card.
+     */
+    private final String characterCardDescription;
 
     /**
      * Constructor of a character card
@@ -42,6 +46,7 @@ public class CharacterCard implements StudentManager, DenyCardManager {
         for (RealmColors rc : RealmColors.values())
             students.put(rc, 0);
         this.denyCards = 0;
+        this.characterCardDescription = characterCardName.getCharacterCardDescription(characterCardName);
     }
 
     /**
@@ -54,9 +59,12 @@ public class CharacterCard implements StudentManager, DenyCardManager {
     /**
      * @return the name of the card
      */
-    public CharacterCardsName getCharacterCardName() {
-        return characterCardName;
-    }
+    public CharacterCardsName getCharacterCardName() { return characterCardName; }
+
+    /**
+     * @return the description of the effect of the card.
+     */
+    public String getCharacterCardDescription () { return characterCardDescription; }
 
     /**
      * @return if the card has been already used previously in the game
