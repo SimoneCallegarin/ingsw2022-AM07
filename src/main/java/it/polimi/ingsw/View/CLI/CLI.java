@@ -1,6 +1,7 @@
 package it.polimi.ingsw.View.CLI;
 
 import it.polimi.ingsw.Controller.ClientController;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
@@ -10,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import org.fusesource.jansi.AnsiConsole;
+
 
 /**
  * this class implements the command line interface to play trough terminal, it's observed by the connectionSocket which sends messages
@@ -51,6 +54,7 @@ public class CLI extends ViewSubject {
      * CLI start
      */
     public void CLIstart(){
+        AnsiConsole.systemInstall();
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();
@@ -100,18 +104,54 @@ public class CLI extends ViewSubject {
         notifyObserver(obs->obs.onAssistantCard(choice));
     }
 
-    public void askMove() {
-        askRealmColor();
+    public void askMove(boolean expertMode) {
+        int initialChoice = 0;
+        if (expertMode) {
+            System.out.println("> What do you want to do?");
+            System.out.println("> 0 - SELECT A STUDENT TO MOVE");
+            System.out.println("> 1 - PLAY A CHARACTER CARD");
+            initialChoice=Integer.parseInt(readUserInput());
+            switch (initialChoice) {
+                case 0 -> askRealmColor();
+                case 1 -> printAvailableCharacters();
+                default -> {
+                    System.out.println("Not acceptable value. Please, try again.");
+                    askMove(true);
+                }
+            }
+        }
+        else
+            askRealmColor();
         int choice;
         System.out.println("> What do you want to do now?");
-        System.out.println("> 0 - CHANGE COLOR");
-        System.out.println("> 1 - MOVE SELECTED STUDENT IN YOUR DINING ROOM");
-        System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
-        choice=Integer.parseInt(readUserInput());
+        System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
+        if (initialChoice == 0) {
+            System.out.println("> 1 - MOVE SELECTED STUDENT IN YOUR DINING ROOM");
+            System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
+        }
+        else
+            System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
+        choice = Integer.parseInt(readUserInput());
         switch (choice) {
-            case 0 -> askMove();
-            case 1 -> askDiningRoomMovement();
-            case 2 -> askIsleMovement();
+            case 0 -> askMove(expertMode);
+            case 1 -> {
+                if (initialChoice == 0)
+                    askDiningRoomMovement();
+                else
+                    askCharacterToPlay();
+            }
+            case 2 -> {
+                if (initialChoice == 0)
+                    askIsleMovement();
+                else {
+                    System.out.println("Not acceptable value. Please, try again.");
+                    askMove(true);
+                }
+            }
+            default -> {
+                System.out.println("Not acceptable value. Please, try again.");
+                askMove(expertMode);
+            }
         }
     }
 
@@ -142,7 +182,7 @@ public class CLI extends ViewSubject {
 
     public void askMNMovement() {
         int choice;
-        System.out.println("> > Which isle do you want to move Mother Nature to?");
+        System.out.println("> Which isle do you want to move Mother Nature to?");
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onMNMovement(choice));
@@ -158,13 +198,19 @@ public class CLI extends ViewSubject {
 
     public void askCharacterToPlay(){
         final int choice;
-        System.out.println("Choose a CharacterCard to Play");
-        System.out.println("-1");
-        System.out.println("-2");
-        System.out.println("-3");
+        System.out.println("> Which character card do you want to activate?");
+        System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onCharacterCard(choice));
         // Not finished yet!!!
+    }
+
+    public void askCharacterEffectParameters(CharacterCardsName characterName) {
+        switch (characterName) {
+            case MONK -> {
+
+            }
+        }
     }
 
     // at the end of the game -> cliDrawer.printWinner(winnerID);
@@ -174,6 +220,8 @@ public class CLI extends ViewSubject {
     }
 
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
+
+    private void printAvailableCharacters() { System.out.println(cliDrawer.drawCharacterCardsEffects()); }
 
     public CLIDrawer getCliDrawer() {
         return cliDrawer;

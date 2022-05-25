@@ -6,7 +6,6 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 public enum CLIColors {
     // Reset and Clear:
     RESET("\033[0m"),
-    CLEAR("\033[H\033[2J"),
 
     // Other colors:
     HB_WHITE("\033[1;97m"),

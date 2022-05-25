@@ -156,7 +156,8 @@ public class GameTable implements DenyCardManager {
      * @param index the index of the character card played
      */
     public void characterCardPlayed(int index) {
-        generalMoneyReserve += getCharacterCard(index).getCost();
+        if(getCharacterCard(index).isUsed())
+            generalMoneyReserve += getCharacterCard(index).getCost();
     }
 
     /**

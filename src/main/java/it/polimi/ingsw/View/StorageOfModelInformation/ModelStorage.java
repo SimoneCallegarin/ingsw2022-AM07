@@ -26,7 +26,7 @@ public class ModelStorage {
         // DASHBOARDS:
         ArrayList<PlayerInformation> dashboards = new ArrayList<>();
         for(int i=0; i<message.getNumPlayers(); i++){
-            PlayerInformation dashboard = new PlayerInformation(message.getNicknames().get(i),message.getEntrances().get(i),message.getNumTowers().get(i),message.getTowerColors().get(i), message.getMoney());
+            PlayerInformation dashboard = new PlayerInformation(message.getNicknames().get(i),message.getSquads().get(i),message.getEntrances().get(i),message.getNumTowers().get(i),message.getTowerColors().get(i), message.getMoney());
             dashboards.add(i,dashboard);
         }
 
@@ -97,7 +97,10 @@ public class ModelStorage {
 
     // Update game table:
 
-    public void updateCharacterCard(GameTableInformation.CharacterCard newCharacterCard, int characterCardIndex) { gameTable.setCharacterCard(characterCardIndex,newCharacterCard); }
+    public void updateCharacterCard(int characterCardIndex, int cost, HashMap<RealmColors,Integer> characterCardsStudents, int denyCards) {
+        GameTableInformation.CharacterCard newCharacterCard = new GameTableInformation.CharacterCard(gameTable.getCharacterCard(characterCardIndex).characterCardName(),cost,characterCardsStudents,denyCards,gameTable.getCharacterCard(characterCardIndex).getDescription());
+        gameTable.setCharacterCard(characterCardIndex,newCharacterCard);
+    }
 
     public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) { gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle); }
 
