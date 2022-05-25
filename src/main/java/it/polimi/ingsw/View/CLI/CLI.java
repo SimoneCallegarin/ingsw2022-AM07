@@ -7,11 +7,12 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import org.fusesource.jansi.AnsiConsole;
+//import org.fusesource.jansi.AnsiConsole;
 
 
 /**
@@ -54,7 +55,7 @@ public class CLI extends ViewSubject {
      * CLI start
      */
     public void CLIstart(){
-        AnsiConsole.systemInstall();
+        //AnsiConsole.systemInstall();
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();
