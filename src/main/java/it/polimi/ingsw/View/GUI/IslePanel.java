@@ -19,7 +19,7 @@ public class IslePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         ClassLoader cl=this.getClass().getClassLoader();
-        InputStream url=cl.getResourceAsStream("island1.png");
+        InputStream url=cl.getResourceAsStream("GameTable/Isles/island1.png");
         BufferedImage img=null;
         try{
             img= ImageIO.read(url);
