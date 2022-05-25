@@ -1,11 +1,9 @@
 package it.polimi.ingsw.View.GUI;
 
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +21,9 @@ public class TowerButton extends JButton {
     private void printTower(TowerColors color){
         InputStream url=null;
         switch (color){
-            case BLACK -> url=cl.getResourceAsStream("black_tower.png");
-            case WHITE -> url=cl.getResourceAsStream("white_tower.png");
-            case GREY -> url=cl.getResourceAsStream("grey_tower.png");
+            case BLACK -> url=cl.getResourceAsStream("Dashboard/Tower_storage/black_tower.png");
+            case WHITE -> url=cl.getResourceAsStream("Dashboard/Tower_storage/white_tower.png");
+            case GREY -> url=cl.getResourceAsStream("Dashboard/Tower_storage/grey_tower.png");
         }
         BufferedImage img=null;
         try {
