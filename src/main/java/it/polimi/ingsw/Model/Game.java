@@ -586,7 +586,7 @@ public class Game extends ModelSubject {
     /**
      * Initialize the parameters that handle the turn order and notifies the view.
      */
-    private void setParametersOfTurnForView() {
+    public void setParametersOfTurnForView() {
         int currentPlayerIndex=0;
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
@@ -997,7 +997,6 @@ public class Game extends ModelSubject {
      */
     public void setActionPhase(ActionPhases actionPhase) {
         this.actionPhase = actionPhase;
-        setParametersOfTurnForView();
     }
 
 }

@@ -77,7 +77,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     @Override
     public void onEndCharacterPhase() {
-        client.send(new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE));
+        client.send(new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE, playerID, -1));
     }
 
     @Override
