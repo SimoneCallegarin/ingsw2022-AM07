@@ -1,4 +1,4 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.Buttons;
 
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 

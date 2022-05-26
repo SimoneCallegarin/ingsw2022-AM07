@@ -1,4 +1,4 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Model.Game;
 
@@ -11,9 +11,9 @@ import java.io.InputStream;
 
 public class DashboardPanel extends JPanel {
     Game game;
-    GridBagConstraints entranceConstraints;
-    GridBagConstraints diningConstraints;
     GridBagConstraints towerStorageConstraints;
+    GridBagConstraints diningConstraints;
+    GridBagConstraints entranceConstraints;
 
     ClassLoader cl=this.getClass().getClassLoader();
 
@@ -22,9 +22,9 @@ public class DashboardPanel extends JPanel {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
         this.game=game;
-        entranceConstraints =new GridBagConstraints();
+        towerStorageConstraints =new GridBagConstraints();
         diningConstraints= new GridBagConstraints();
-        towerStorageConstraints= new GridBagConstraints();
+        entranceConstraints= new GridBagConstraints();
 
 
         initializeDashboard();
@@ -45,11 +45,12 @@ public class DashboardPanel extends JPanel {
     }
 
     private void initializeDashboard(){
-        entranceConstraints.fill=GridBagConstraints.BOTH;
-        entranceConstraints.gridy=0;
-        entranceConstraints.weightx=1;
-        entranceConstraints.weighty=0.35;
-        add(new TowerStoragePanel(game),entranceConstraints);
+        towerStorageConstraints.fill=GridBagConstraints.BOTH;
+        towerStorageConstraints.gridy=0;
+        towerStorageConstraints.weightx=1;
+        towerStorageConstraints.weighty=0.35;
+        towerStorageConstraints.ipady=-90;
+        add(new TowerStoragePanel(game), towerStorageConstraints);
 
         diningConstraints.fill=GridBagConstraints.BOTH;
         diningConstraints.gridy=1;
@@ -57,11 +58,12 @@ public class DashboardPanel extends JPanel {
         diningConstraints.weighty=1;
         add(new DiningPanel(game),diningConstraints);
 
-        towerStorageConstraints.fill=GridBagConstraints.BOTH;
-        towerStorageConstraints.gridy=2;
-        towerStorageConstraints.weightx=1;
-        towerStorageConstraints.weighty=0.25;
-        add(new EntrancePanel(game),towerStorageConstraints);
+        entranceConstraints.fill=GridBagConstraints.BOTH;
+        entranceConstraints.gridy=2;
+        entranceConstraints.weightx=1;
+        entranceConstraints.weighty=0.25;
+        entranceConstraints.ipady=-50;
+        add(new EntrancePanel(game),entranceConstraints);
 
     }
 

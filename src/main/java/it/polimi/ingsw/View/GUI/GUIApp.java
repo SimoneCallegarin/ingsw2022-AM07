@@ -22,9 +22,12 @@ public class GUIApp {
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("jack");
         game.addAnotherPlayer("comfy");
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
+        for(RealmColors color:RealmColors.values()){
+            for(int i=0;i<10;i++){
+                game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(color);
+            }
+            game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(color);
+        }
         new GuiDrawer(game);
     }
 

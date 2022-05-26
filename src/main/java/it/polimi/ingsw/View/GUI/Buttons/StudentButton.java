@@ -1,4 +1,4 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.Buttons;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 
@@ -23,7 +23,7 @@ public class StudentButton extends JButton {
         InputStream url=null;
         switch(color){
             case YELLOW ->url=cl.getResourceAsStream("Dashboard/Students/Yellow.png");
-            case BLUE -> url=cl.getResourceAsStream("Blue.png");
+            case BLUE -> url=cl.getResourceAsStream("Dashboard/Students/Blue.png");
             case RED -> url=cl.getResourceAsStream("Dashboard/Students/Red.png");
             case PINK -> url=cl.getResourceAsStream("Dashboard/Students/Pink.png");
             case GREEN -> url=cl.getResourceAsStream("Dashboard/Students/Green.png");

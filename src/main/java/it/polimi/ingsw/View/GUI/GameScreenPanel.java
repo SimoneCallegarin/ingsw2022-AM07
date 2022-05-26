@@ -2,14 +2,12 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Model.Game;
 
+import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.IslesPanels.IsleManagerPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class GameScreenPanel extends JPanel {
     Game game;
@@ -48,10 +46,10 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        add(new IsleManagerPanel(),gamescreenConstraints);
+        add(new IsleManagerPanel(game),gamescreenConstraints);
 
         //then i add the two dashboard container Panel on the left and on the right and i set the weights in order to correctly size the dashboard
-        gamescreenConstraints.weightx=0.2;
+        gamescreenConstraints.weightx=0.05;
         gamescreenConstraints.weighty=0.2;
         gamescreenConstraints.gridx=0;
         add(dashboardContainerPanel1,gamescreenConstraints);
