@@ -57,6 +57,14 @@ public class VirtualView implements ModelObserver {
     }
 
     @Override
+    public void onMoneyUpdate(int playerID, int money, int generalMoneyReserve) {
+        Money_UpdateMsg playerMoney_updateMsg = new Money_UpdateMsg(MessageType.MONEY_UPDATE, playerID, money, generalMoneyReserve);
+        for(ClientHandler ch: clientHandler){
+            ch.send(playerMoney_updateMsg);
+        }
+    }
+
+    @Override
     public void onStudentMoving_toIsle(int idPlayer, HashMap<RealmColors, Integer> entrance, int isleID, HashMap<RealmColors, Integer> isleStudents) {
         StudentToIsle_UpdateMsg studentToIsle_updateMsg=new StudentToIsle_UpdateMsg(MessageType.STUDENTTOISLE_UPDATE,idPlayer,entrance,isleID,isleStudents);
         for(ClientHandler ch: clientHandler){
@@ -88,9 +96,76 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    //MONK, JESTER
+    @Override
+    public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int id, HashMap<RealmColors,Integer> students) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, id, students);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
+    }
+
+    //FARMER
+    @Override
+    public void onEffectActivation(ArrayList<HashMap<RealmColors,Integer>> professors) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, professors);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
+    }
+
+    //HERALD
+    @Override
+    public void onEffectActivation(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, totalIsles, students, towerColors, whereMNId, denyCards, numberOfIsles, numberOfTowers);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
+    }
+
+    //MAGICAL_LETTER_CARRIER
+    @Override
+    public void onEffectActivation(int playerID, int turnOrder, int mnMovement) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, playerID, turnOrder, mnMovement);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
+    }
+
+    @Override
+    //GRANDMA
+    public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, isleID, denyCard);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
+    }
+
+    //CENTAUR, KNIGHT, FUNGIST
     @Override
     public void onEffectActivation() {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
+    }
 
+    //MINSTREL, THIEF
+    @Override
+    public void onEffectActivation(ArrayList<HashMap<RealmColors,Integer>> studentsInEntrance, ArrayList<HashMap<RealmColors,Integer>> studentsInDining) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, studentsInEntrance, studentsInDining);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
+    }
+
+    //SPOILED_PRINCESS
+    @Override
+    public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, ArrayList<HashMap<RealmColors,Integer>> studentsInDining) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, studentsInDining);
+        for(ClientHandler ch: clientHandler){
+            ch.send(effectActivation_updateMsg);
+        }
     }
 
     @Override

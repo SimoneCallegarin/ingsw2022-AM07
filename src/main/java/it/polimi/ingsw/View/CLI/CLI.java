@@ -110,7 +110,7 @@ public class CLI extends ViewSubject {
             System.out.println("> 1 - PLAY A CHARACTER CARD");
             initialChoice=Integer.parseInt(readUserInput());
             switch (initialChoice) {
-                case 0 -> askRealmColor();
+                case 0 -> askRealmColor("your Entrance");
                 case 1 -> printAvailableCharacters();
                 default -> {
                     System.out.println("Not acceptable value. Please, try again.");
@@ -119,7 +119,7 @@ public class CLI extends ViewSubject {
             }
         }
         else
-            askRealmColor();
+            askRealmColor("your Entrance");
         int choice;
         System.out.println("> What do you want to do now?");
         System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
@@ -153,9 +153,9 @@ public class CLI extends ViewSubject {
         }
     }
 
-    private void askRealmColor() {
+    private void askRealmColor(String place) {
         int choice;
-        System.out.println("> Which student do you want to move from your Entrance?");
+        System.out.println("> Which student do you want to move from " + place + "?");
         System.out.println("> 0 - YELLOW");
         System.out.println("> 1 - PINK");
         System.out.println("> 2 - BLUE");
@@ -204,10 +204,109 @@ public class CLI extends ViewSubject {
     }
 
     public void askCharacterEffectParameters(CharacterCardsName characterName) {
+        int choice;
+        System.out.println("> You activated the " + characterName.toString() + "!");
         switch (characterName) {
             case FARMER,MAGICAL_LETTER_CARRIER,CENTAUR,KNIGHT -> {
-                System.out.println("Activating " + characterName.toString() + "'s character card effect...");
                 notifyObserver(obs->obs.onAtomicEffect(-1));
+            }
+            case MONK -> {
+                askRealmColor("the character card");
+                System.out.println("> Which isle do you want to move the student to? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles()-1) + ")");
+                System.out.println("> ");
+                choice=Integer.parseInt(readUserInput());
+                notifyObserver(obs->obs.onAtomicEffect(choice));
+            }
+            case HERALD -> {
+                System.out.println("> Which isle do you want to calculate influence on? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles()-1) + ")");
+                System.out.println("> ");
+                choice=Integer.parseInt(readUserInput());
+                notifyObserver(obs->obs.onAtomicEffect(choice));
+            }
+            case GRANDMA_HERBS -> {
+                System.out.println("> Which isle do you want to put a deny card on? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles()-1) + ")");
+                System.out.println("> ");
+                choice=Integer.parseInt(readUserInput());
+                notifyObserver(obs->obs.onAtomicEffect(choice));
+            }
+            case JESTER -> {
+                boolean endPhase;
+                String exchange;
+                System.out.println("> Do you want to exchange students? [y/n]");
+                System.out.println("> ");
+                exchange = readUserInput();
+                endPhase = exchange.equalsIgnoreCase("n");
+                if (endPhase)
+                    notifyObserver(ViewObserver::onEndCharacterPhase);
+                else {
+                    askRealmColor("the character card");
+                    int exchangeChoice;
+                    System.out.println("> Which student do you want to remove from your Entrance?");
+                    System.out.println("> 0 - YELLOW");
+                    System.out.println("> 1 - PINK");
+                    System.out.println("> 2 - BLUE");
+                    System.out.println("> 3 - RED");
+                    System.out.println("> 4 - GREEN");
+                    System.out.println("> ");
+                    exchangeChoice=Integer.parseInt(readUserInput());
+                    notifyObserver(obs -> obs.onAtomicEffect(exchangeChoice));
+                }
+            }
+            case FUNGIST -> {
+                System.out.println("> Which color you don't want to consider for influence calculation in this turn?");
+                System.out.println("> 0 - YELLOW");
+                System.out.println("> 1 - PINK");
+                System.out.println("> 2 - BLUE");
+                System.out.println("> 3 - RED");
+                System.out.println("> 4 - GREEN");
+                System.out.println("> ");
+                choice=Integer.parseInt(readUserInput());
+                notifyObserver(obs->obs.onAtomicEffect(choice));
+            }
+            case MINSTREL -> {
+                boolean endPhase;
+                String exchange;
+                System.out.println("> Do you want to exchange students? [y/n]");
+                System.out.println("> ");
+                exchange = readUserInput();
+                endPhase = exchange.equalsIgnoreCase("n");
+                if (endPhase)
+                    notifyObserver(ViewObserver::onEndCharacterPhase);
+                else {
+                    askRealmColor("your Dining");
+                    int exchangeChoice;
+                    System.out.println("> Which student do you want to remove from your Entrance?");
+                    System.out.println("> 0 - YELLOW");
+                    System.out.println("> 1 - PINK");
+                    System.out.println("> 2 - BLUE");
+                    System.out.println("> 3 - RED");
+                    System.out.println("> 4 - GREEN");
+                    System.out.println("> ");
+                    exchangeChoice=Integer.parseInt(readUserInput());
+                    notifyObserver(obs -> obs.onAtomicEffect(exchangeChoice));
+                }
+            }
+            case SPOILED_PRINCESS -> {
+                System.out.println("> Which student do you want to move from the character card to your Dining?");
+                System.out.println("> 0 - YELLOW");
+                System.out.println("> 1 - PINK");
+                System.out.println("> 2 - BLUE");
+                System.out.println("> 3 - RED");
+                System.out.println("> 4 - GREEN");
+                System.out.println("> ");
+                choice=Integer.parseInt(readUserInput());
+                notifyObserver(obs -> obs.onAtomicEffect(choice));
+            }
+            case THIEF -> {
+                System.out.println("> Which color you want to be removed from Dining Rooms?");
+                System.out.println("> 0 - YELLOW");
+                System.out.println("> 1 - PINK");
+                System.out.println("> 2 - BLUE");
+                System.out.println("> 3 - RED");
+                System.out.println("> 4 - GREEN");
+                System.out.println("> ");
+                choice=Integer.parseInt(readUserInput());
+                notifyObserver(obs->obs.onAtomicEffect(choice));
             }
         }
     }
