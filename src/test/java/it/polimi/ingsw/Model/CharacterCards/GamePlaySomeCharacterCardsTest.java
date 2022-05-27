@@ -4,6 +4,10 @@ import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import org.junit.jupiter.api.Test;
 
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -12,6 +16,51 @@ import static org.junit.jupiter.api.Assertions.*;
 class GamePlaySomeCharacterCardsTest {
 
     Game game = new Game();
+
+    /**
+     * We are testing the general money reserve.
+     */
+    @Test
+    void general_Money_Reserve() {
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        assertEquals(1,game.getGameTable().getCharacterCard(0).getCost());
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+        //we play the character card we want
+        game.playCharacterCard(0,0);
+        //and then the controller will activate the atomic effect of each card for the number of times needed
+        game.activateAtomicEffect(0,0,1,10);
+
+        assertEquals(2,game.getGameTable().getCharacterCard(0).getCost());
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+        game.setActionPhase(ActionPhases.MOVE_STUDENTS);
+        game.moveStudentInDiningRoom(0, 0);
+        game.moveStudentInDiningRoom(0, 0);
+        game.moveStudentInDiningRoom(0, 0);
+        game.setActionPhase(ActionPhases.MOVE_STUDENTS);
+        game.moveStudentInDiningRoom(0, 0);
+        game.moveStudentInDiningRoom(0, 0);
+        game.moveStudentInDiningRoom(0, 0);
+
+        assertEquals(16,game.getGameTable().getGeneralMoneyReserve());
+
+        game.getPlayerByIndex(0).setNotAlreadyPlayedACardThisTurn();
+
+        //we play the character card we want
+        game.playCharacterCard(0,0);
+        //and then the controller will activate the atomic effect of each card for the number of times needed
+        game.activateAtomicEffect(0,0,1,10);
+
+        assertEquals(2,game.getGameTable().getCharacterCard(0).getCost());
+        assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+    }
 
     /**
      * We are testing the behaviour of the MONK
@@ -53,6 +102,28 @@ class GamePlaySomeCharacterCardsTest {
     }
 
     /**
+     * We are testing the students on the MONK
+     */
+    @Test
+    void students_on_MONK_CharacterCard() {
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+        // 4 students randomly extracted from the bag now put on the character card
+        HashMap<RealmColors,Integer> studentsOnMonk = game.getGameTable().getCharacterCard(0).getStudents();
+
+        //we play the character card we want
+        game.playCharacterCard(0,0);
+        //and then the controller will activate the atomic effect of each card for the number of times needed
+        game.activateAtomicEffect(0,0,1,10);
+
+        // 4 student on the character card (4 randomly extracted during set up + 1 extracted in game)
+        assertEquals(4,game.getGameTable().getCharacterCard(0).getNumberOfStudents());
+    }
+
+    /**
      * We are testing the behaviour of the GRANDMA_HERBS
      */
     @Test
@@ -78,6 +149,14 @@ class GamePlaySomeCharacterCardsTest {
         game.checkUpdateProfessor(1,RealmColors.RED);
         assertEquals(1,game.getPlayerByIndex(1).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.RED));
 
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(2).getOrder());
+        game.getPlayerByIndex(2).gainMoney();
+
+        game.playCharacterCard(2,0);
+
+        game.activateAtomicEffect(2,0,0,0);
+
         game.getPlayerByIndex(2).getDashboard().getDiningRoom().addStudent(RealmColors.PINK);
         game.checkUpdateProfessor(2,RealmColors.PINK);
         game.getPlayerByIndex(2).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
@@ -90,14 +169,6 @@ class GamePlaySomeCharacterCardsTest {
         //  simone: 1 YELLOW, 1 GREEN, 1 BLUE
         //  giacomo: 2 RED
         //  filippo: 1 PINK, 1 YELLOW, 1 RED
-
-        game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.setCurrentActivePlayer(game.getPlayerByIndex(2).getOrder());
-        game.getPlayerByIndex(2).gainMoney();
-
-        game.playCharacterCard(2,0);
-
-        game.activateAtomicEffect(2,0,0,0);
 
         assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.YELLOW));
         assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.PINK));

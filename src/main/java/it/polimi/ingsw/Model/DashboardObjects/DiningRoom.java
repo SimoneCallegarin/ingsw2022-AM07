@@ -69,7 +69,7 @@ public class DiningRoom implements StudentManager {
         temp = students.get(color);
         if (temp < maxStudentsPerColor)
             temp += 1;
-        students.put(color, temp);
+        students.put(color,temp);
     }
 
     /**
