@@ -9,6 +9,7 @@ import it.polimi.ingsw.Model.GameTableObjects.GameTable;
 import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
+import it.polimi.ingsw.Observer.ModelObserver;
 import it.polimi.ingsw.Observer.ModelSubject;
 
 import java.util.ArrayList;
@@ -81,6 +82,8 @@ public class Game extends ModelSubject {
      * It divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase
      */
     private ActionPhases actionPhase;
+
+    private ActionPhases lastActionPhase;
     /**
      * It indicates who is the current active player that is playing his turn
      */
@@ -98,6 +101,8 @@ public class Game extends ModelSubject {
      * when checking the influence the turn the FUNGIST has been played
      */
     private int studentsRemovedByFungist=0;
+
+    private int atomicEffectCounter = 0;
 
     /**
      * Game constructor
@@ -243,45 +248,53 @@ public class Game extends ModelSubject {
         boolean onlyChoice = true;
         AssistantCard assistantCardPlayed = players.get(idPlayer).getAssistantCardByTurnOrder(turnOrderPlayed);
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
-                if (p.getDiscardPile() != null) {
-                    if (p.getDiscardPile().equals(assistantCardPlayed)) {
-                        alreadyPlayed = true;
-                        break;
-                    }
-                }
-            }
-
-            if (alreadyPlayed) {
-                alreadyPlayed = false;
-                for (AssistantCard ac : players.get(idPlayer).getMageDeck()) {
-                    for (Player p : players) {
-                        if (p.getDiscardPile() != null) {
-                            if (p.getDiscardPile().equals(ac)) {
-                                alreadyPlayed = true;
-                                break;
-                            }
+            if (assistantCardPlayed != null) {
+                for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
+                    if (p.getDiscardPile() != null) {
+                        if (p.getDiscardPile().equals(assistantCardPlayed)) {
+                            alreadyPlayed = true;
+                            break;
                         }
                     }
-                    if (!alreadyPlayed) {
-                        onlyChoice = false;
-                        break;
-                    }
-                    alreadyPlayed = false;
                 }
-                alreadyPlayed = true;
-            }
 
-            if (!alreadyPlayed || onlyChoice) {
-                players.get(idPlayer).playAssistantCard(assistantCardPlayed);
-                players.get(idPlayer).setCardOrder(playerCounter+1);
+                if (alreadyPlayed) {
+                    alreadyPlayed = false;
+                    for (AssistantCard ac : players.get(idPlayer).getMageDeck()) {
+                        for (Player p : players) {
+                            if (p.getDiscardPile() != null) {
+                                if (p.getDiscardPile().equals(ac)) {
+                                    alreadyPlayed = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!alreadyPlayed) {
+                            onlyChoice = false;
+                            break;
+                        }
+                        alreadyPlayed = false;
+                    }
+                    alreadyPlayed = true;
+                }
+
+                if (!alreadyPlayed || onlyChoice) {
+                    players.get(idPlayer).playAssistantCard(assistantCardPlayed);
+                    players.get(idPlayer).setCardOrder(playerCounter + 1);
 
                 notifyAssistantsCard(idPlayer);
 
-                if (players.get(idPlayer).isMageDeckEmpty())
-                    lastRound = true;
-                playerCounter++;
-                nextPlayer();
+                    if (players.get(idPlayer).isMageDeckEmpty())
+                        lastRound = true;
+                    playerCounter++;
+                    nextPlayer();
+                } else {
+                    notifyObserver(obs -> obs.onKO(idPlayer, "You cannot play this card, please select another one"));
+                    setParametersOfTurnForView();
+                }
+            } else {
+                notifyObserver(obs -> obs.onKO(idPlayer, "You don't have this card, please select another one"));
+                setParametersOfTurnForView();
             }
         }
     }
@@ -309,16 +322,23 @@ public class Game extends ModelSubject {
     public void moveStudentInIsle(int idPlayer, int idIsle, int colorIndex) {
         RealmColors color = RealmColors.getColor(colorIndex);
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
-            gameTable.getIsleManager().getIsle(idIsle).addStudent(color);
-            studentsCounter++;
+            if (players.get(idPlayer).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
+                if (idIsle >= 0 && idIsle < gameTable.getIsleManager().getIsles().size()) {
+                    players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
+                    gameTable.getIsleManager().getIsle(idIsle).addStudent(color);
+                    studentsCounter++;
 
-            if (studentsCounter == maxMovableStudents) {
-                actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
-                studentsCounter = 0;
-            }
+                    if (studentsCounter == maxMovableStudents) {
+                        actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+                        studentsCounter = 0;
+                    }
+
+                    notifyObserver(obs -> obs.onStudentMoving_toIsle(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(), idIsle, gameTable.getIsleManager().getIsle(idIsle).getStudents()));
+                } else
+                    notifyObserver(obs -> obs.onKO(idPlayer, "Isle " + idIsle + " doesn't exist, please select another one"));
+            } else
+                notifyObserver(obs -> obs.onKO(idPlayer, "You don't have enough " + color.toString() + " students, please select another color"));
         }
-        notifyObserver(obs->obs.onStudentMoving_toIsle(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idIsle,gameTable.getIsleManager().getIsle(idIsle).getStudents()));
 
         notifyTurn();
     }
@@ -332,32 +352,38 @@ public class Game extends ModelSubject {
         RealmColors color = RealmColors.getColor(colorIndex);
         int indexFarmer=0;
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
-                players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
-                players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
-                // if FARMER character card is played by the player this turn
-                // then each time is checked if the player has an equal number of students of another
-                // player that owe the professor of that color
-                if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getCharacterCardPlayed()== CharacterCardsName.FARMER){
-                    while(gameTable.getCharacterCard(indexFarmer).getCharacterCardName()==CharacterCardsName.FARMER)
-                        indexFarmer++;
-                    activateAtomicEffect(idPlayer,indexFarmer,0,0);
-                }
-                // checking if the student is added in third, sixth or ninth position of the dining room
-                if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
-                    players.get(idPlayer).gainMoney();
-                    gameTable.studentInMoneyPosition();
-                }
-                checkUpdateProfessor(idPlayer, color);
-                studentsCounter++;
+            if (players.get(idPlayer).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
+                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
+                    players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
+                    players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
+                    // if FARMER character card is played by the player this turn
+                    // then each time is checked if the player has an equal number of students of another
+                    // player that owe the professor of that color
+                    if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FARMER) {
+                        while (gameTable.getCharacterCard(indexFarmer).getCharacterCardName() == CharacterCardsName.FARMER)
+                            indexFarmer++;
+                        activateAtomicEffect(idPlayer, indexFarmer, 0, 0);
+                    }
+                    // checking if the student is added in third, sixth or ninth position of the dining room
+                    if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
+                        players.get(idPlayer).gainMoney();
+                        gameTable.studentInMoneyPosition();
+                        notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, players.get(idPlayer).getMoney(), gameTable.getGeneralMoneyReserve()));
+                    }
+                    checkUpdateProfessor(idPlayer, color);
+                    studentsCounter++;
 
-                if (studentsCounter == maxMovableStudents) {
-                    actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
-                    studentsCounter = 0;
-                }
-            }
+                    if (studentsCounter == maxMovableStudents) {
+                        actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
+                        studentsCounter = 0;
+                    }
+
+                    notifyObserver(obs -> obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(), players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
+                } else
+                    notifyObserver(obs -> obs.onKO(idPlayer, "Your " + color.toString() + " Dining Room is full! You can't add " + color + " students, please select another color"));
+            } else
+                notifyObserver(obs -> obs.onKO(idPlayer, "You don't have enough " + color.toString() + " students, please select another color"));
         }
-        notifyObserver(obs->obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(),players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
 
         notifyTurn();
     }
@@ -369,42 +395,49 @@ public class Game extends ModelSubject {
      */
     public void moveMotherNature(int idPlayer, int idIsle) {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_MOTHER_NATURE && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).getDiscardPile().getMnMovement())) {
-                gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
-                gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
-                gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
-                // if the FUNGIST card is played, then we remove the students of the chosen color from the selected isle
-                // then we proceed to calculate the influence on the isle
-                if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)
-                    while(gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != 0){
-                        gameTable.getIsleManager().getIsle(idIsle).removeStudent(colorForFungist);
-                        studentsRemovedByFungist += 1;
-                    }
-                if(gameTable.getIsleManager().getIsle(idIsle).getDenyCards()==0)
-                    checkUpdateInfluence(idIsle);
-                else {
-                    gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
+            if (idIsle >= 0 && idIsle < gameTable.getIsleManager().getIsles().size()) {
+                if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).getDiscardPile().getMnMovement())) {
+                    gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
+                    gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
+                    gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
+                    // if the FUNGIST card is played, then we remove the students of the chosen color from the selected isle
+                    // then we proceed to calculate the influence on the isle
+                    if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)
+                        while (gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != 0) {
+                            gameTable.getIsleManager().getIsle(idIsle).removeStudent(colorForFungist);
+                            studentsRemovedByFungist += 1;
+                        }
+                    if (gameTable.getIsleManager().getIsle(idIsle).getDenyCards() == 0)
+                        checkUpdateInfluence(idIsle);
+                    else {
+                        gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
 
-                    notifyObserver(obs->obs.onDenyCard(idPlayer,idIsle,false));
+                        notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
+                    }
+                    // if the FUNGIST card is played, then we add the students of the chosen color
+                    // that were removed from the selected isle
+                    if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)
+                        while (gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != studentsRemovedByFungist)
+                            gameTable.getIsleManager().getIsle(idIsle).addStudent(colorForFungist);
+                    studentsRemovedByFungist = 0;
+                    checkEndGame();
+                    if (!lastRound) {
+                        actionPhase = ActionPhases.CHOOSE_CLOUD;
+                        notifyMNMovement();
+                        notifyTurn();
+                    } else {
+                        playerCounter++;
+                        actionPhase = ActionPhases.MOVE_STUDENTS;
+                        notifyMNMovement();
+                        nextPlayer();
+                    }
+                } else {
+                    notifyObserver(obs -> obs.onKO(idPlayer, "You can't go that far! Please select a suitable isle"));
+                    setParametersOfTurnForView();
                 }
-                // if the FUNGIST card is played, then we add the students of the chosen color
-                // that were removed from the selected isle
-                if(gameMode==GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed()==CharacterCardsName.FUNGIST)
-                    while(gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != studentsRemovedByFungist)
-                        gameTable.getIsleManager().getIsle(idIsle).addStudent(colorForFungist);
-                studentsRemovedByFungist = 0;
-                checkEndGame();
-                if (!lastRound) {
-                    actionPhase = ActionPhases.CHOOSE_CLOUD;
-                    notifyMNMovement();
-                    notifyTurn();
-                }
-                else {
-                    playerCounter++;
-                    actionPhase = ActionPhases.MOVE_STUDENTS;
-                    notifyMNMovement();
-                    nextPlayer();
-                }
+            } else {
+                notifyObserver(obs -> obs.onKO(idPlayer, "Isle " + idIsle + " doesn't exist, please select another one"));
+                setParametersOfTurnForView();
             }
         }
     }
@@ -445,22 +478,30 @@ public class Game extends ModelSubject {
      */
     public void pickStudentsFromCloud(int idPlayer, int idCloud) {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.CHOOSE_CLOUD && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            if (!gameTable.getCloud(idCloud).isEmpty()) {
-                while (studentsCounter < maxMovableStudents) {
-                    for (RealmColors rc : RealmColors.values()) {
-                        if (gameTable.getCloud(idCloud).getStudentsByColor(rc) >= 1) {
-                            gameTable.getCloud(idCloud).removeStudent(rc);
-                            players.get(idPlayer).getDashboard().getEntrance().addStudent(rc);
-                            break;
+            if (idCloud >= 0 && idCloud < numberOfPlayers) {
+                if (!gameTable.getCloud(idCloud).isEmpty()) {
+                    while (studentsCounter < maxMovableStudents) {
+                        for (RealmColors rc : RealmColors.values()) {
+                            if (gameTable.getCloud(idCloud).getStudentsByColor(rc) >= 1) {
+                                gameTable.getCloud(idCloud).removeStudent(rc);
+                                players.get(idPlayer).getDashboard().getEntrance().addStudent(rc);
+                                break;
+                            }
                         }
+                        studentsCounter++;
                     }
-                    studentsCounter++;
+                    studentsCounter = 0;
+                    playerCounter++;
+                    actionPhase = ActionPhases.MOVE_STUDENTS;
+                    notifyObserver(obs -> obs.onCloudUpdate(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(), idCloud));
+                    nextPlayer();
+                } else {
+                    notifyObserver(obs -> obs.onKO(idPlayer, "Cloud " + idCloud + " is empty! Please select another one"));
+                    setParametersOfTurnForView();
                 }
-                studentsCounter = 0;
-                playerCounter++;
-                actionPhase = ActionPhases.MOVE_STUDENTS;
-                notifyObserver(obs->obs.onCloudUpdate(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idCloud));
-                nextPlayer();
+            } else {
+                notifyObserver(obs -> obs.onKO(idPlayer, "Cloud " + idCloud + " doesn't exist, please select another one"));
+                setParametersOfTurnForView();
             }
         }
     }
@@ -637,7 +678,7 @@ public class Game extends ModelSubject {
             }
 
             if (someoneHasProfessor) {
-                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)) {
+                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color) || (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) >= players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color) && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed().equals(CharacterCardsName.FARMER))) {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
 
@@ -784,8 +825,9 @@ public class Game extends ModelSubject {
         if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder() && players.get(idPlayer).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()){
             getGameTable().characterCardPlayed(characterCardIndex);
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+            lastActionPhase = actionPhase;
             actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
-            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
+            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(),getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
             notifyTurn();
         }
     }
@@ -804,11 +846,71 @@ public class Game extends ModelSubject {
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()){
             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
+            notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+            setParametersOfTurnForView();
+            //notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(),getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
 
         }
-        if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
+        /*if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
             notifyObserver(obs->obs.onDenyCard(idPlayer,value1,true));
+        }*/
+    }
+
+    private void notifyEffectUpdate(int characterCardIndex, int idPlayer, int value1, int value2) {
+        CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
+        switch (cardName) {
+            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value2, getGameTable().getIsleManager().getIsle(value2).getStudents()));
+            case FARMER -> {
+                ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
+                for (Player p : players) {
+                    professors.add(p.getDashboard().getDiningRoom().getProfessors());
+                }
+                notifyObserver(obs -> obs.onEffectActivation(professors));
+            }
+            case HERALD -> {
+                ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
+                ArrayList<Integer> numIsles=new ArrayList<>();
+                ArrayList<TowerColors> towerColors=new ArrayList<>();
+                ArrayList<Boolean> denyCards=new ArrayList<>();
+                ArrayList<Integer> numTowers = new ArrayList<>();
+                int whereMnId=0;
+                for(Isle isle:gameTable.getIsleManager().getIsles()){
+                    students.add(isle.getStudents());
+                    numIsles.add(isle.getNumOfIsles());
+                    towerColors.add(isle.getTowersColor());
+                    if(isle.getDenyCards()==0){
+                        denyCards.add(false);
+                    }else{
+                        denyCards.add(true);
+                    }
+                    if(isle.getMotherNature()){
+                        whereMnId=isle.getIdIsle();
+                    }
+                }
+                for (Player p : players)
+                    numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
+                int finalWhereMnId = whereMnId;
+                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
+            }
+            case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getTurnOrder(), players.get(idPlayer).getDiscardPile().getMnMovement()));
+            case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
+            case CENTAUR, KNIGHT, FUNGIST -> notifyObserver(ModelObserver::onEffectActivation);
+            case JESTER -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents()));
+            case MINSTREL, THIEF -> {
+                ArrayList<HashMap<RealmColors, Integer>> studentsInEntrances = new ArrayList<>();
+                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
+                for (Player p : players) {
+                    studentsInEntrances.add(p.getDashboard().getEntrance().getStudents());
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
+                }
+                notifyObserver(obs -> obs.onEffectActivation(studentsInEntrances, studentsInDinings));
+            }
+            case SPOILED_PRINCESS -> {
+                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
+                for (Player p : players)
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
+                notifyObserver(obs -> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), studentsInDinings));
+            }
         }
     }
 
@@ -911,10 +1013,18 @@ public class Game extends ModelSubject {
      */
     public ActionPhases getActionPhase() { return actionPhase; }
 
+    public ActionPhases getLastActionPhase() { return lastActionPhase; }
+
+    public int getAtomicEffectCounter() {return atomicEffectCounter;}
+
+    public void increaseAtomicEffectCounter() {atomicEffectCounter++;}
+
     /**
      * Setter method for the action phase
      * @param actionPhase indicates in which phase of the action phase we are
      */
-    public void setActionPhase(ActionPhases actionPhase) { this.actionPhase = actionPhase; }
+    public void setActionPhase(ActionPhases actionPhase) {
+        this.actionPhase = actionPhase;
+    }
 
 }
