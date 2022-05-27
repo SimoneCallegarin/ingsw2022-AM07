@@ -96,6 +96,12 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    @Override
+    public void onKO(int playerID, String errorMessage) {
+        ServiceMessage ko = new ServiceMessage(MessageType.KO, errorMessage);
+        (clientHandler.get(playerID)).send(ko);
+    }
+
     //MONK, JESTER
     @Override
     public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int id, HashMap<RealmColors,Integer> students) {

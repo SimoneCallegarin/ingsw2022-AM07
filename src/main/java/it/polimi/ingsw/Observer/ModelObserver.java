@@ -31,6 +31,8 @@ public interface ModelObserver {
 
     void onCharacterCard(int characterCardId, CharacterCardsName cardName, int cardCost, int idPlayer, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter);
 
+    void onKO(int playerID, String errorMessage);
+
     //MONK, JESTER
     void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int id, HashMap<RealmColors,Integer> students);
 

@@ -56,7 +56,7 @@ public class EffectInGameFactory {
                 break;
 
             case HERALD:
-                game.checkUpdateInfluence(value2);
+                game.checkUpdateInfluence(value1);
                 game.checkEndGame();
                 game.setActionPhase(game.getLastActionPhase());
                 break;

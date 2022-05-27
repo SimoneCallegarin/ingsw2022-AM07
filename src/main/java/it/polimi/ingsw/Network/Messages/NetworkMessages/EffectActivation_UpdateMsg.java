@@ -99,7 +99,7 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
         this.denyCard = denyCard;
     }
 
-    // CENTAUR, KNIGHT, FUNGIST (& FARMER)
+    // CENTAUR, KNIGHT, FUNGIST
     public EffectActivation_UpdateMsg(MessageType messageType) {
         super(messageType);
     }

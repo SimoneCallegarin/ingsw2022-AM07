@@ -89,7 +89,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 playerID = sm.getPlayerID();
                 cli.printMessage(sm);
             }
-            case OK -> {
+            case OK, KO -> {
                 ServiceMessage sm = (ServiceMessage) message;
                 cli.printMessage(sm);
             }
