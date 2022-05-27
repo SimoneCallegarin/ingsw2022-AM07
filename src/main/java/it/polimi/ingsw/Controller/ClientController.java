@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
@@ -23,6 +24,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
     String username;
     boolean expertMode = false;
     int playerID;
+    CharacterCardsName lastCharacterUsed;
+    boolean firstFarmerActivation = true;
 
     public ClientController(CLI cli, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.cli = cli;
@@ -59,7 +62,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     @Override
     public void onAtomicEffect(int genericValue) {
-
+        client.send(new PlayerMoveMessage(MessageType.ACTIVATE_ATOMIC_EFFECT, playerID, genericValue));
     }
 
     @Override
@@ -70,6 +73,11 @@ public class ClientController implements ViewObserver, NetworkObserver {
     @Override
     public void onCloudChoice(int idCloud) {
         client.send(new PlayerMoveMessage(MessageType.CHOOSE_CLOUD, playerID, idCloud));
+    }
+
+    @Override
+    public void onEndCharacterPhase() {
+        client.send(new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE, playerID, -1));
     }
 
     @Override
@@ -90,7 +98,6 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
                 storage.setupStorage(gc, cliDrawer);
-                //cli.printChanges();
                 System.out.println("Game started!");
             }
             case FILLCLOUD_UPDATE -> {
@@ -114,6 +121,11 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 Professor_UpdateMsg p = (Professor_UpdateMsg) message;
                 storage.updateProfessorsInDining(p.getProfessors());
             }
+            case MONEY_UPDATE -> {
+                Money_UpdateMsg m = (Money_UpdateMsg) message;
+                storage.updateMoney(m.getPlayerID(), m.getPlayerMoney());
+                storage.updateGeneralMoneyReserve(m.getGeneralMoneyReserve());
+            }
             case STUDENTTOISLE_UPDATE -> {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
                 storage.updateStudentsInEntrance(sti.getIdPlayer(), sti.getEntrance());
@@ -134,9 +146,67 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case CHARACTERCARD_UPDATE -> {
                 CharacterCard_UpdateMsg cc = (CharacterCard_UpdateMsg) message;
+                lastCharacterUsed = cc.getCardName();
+                if (lastCharacterUsed == CharacterCardsName.FARMER)
+                    firstFarmerActivation = true;
                 storage.updateMoney(cc.getPlayerID(), cc.getPlayerMoney());
                 storage.updateGeneralMoneyReserve(cc.getGeneralReserve());
+                storage.updateCharacterCard(cc.getCharacterCardId(), cc.getCardCost(), cc.getStudentsOnCharacter(), cc.getDenyCards());
                 cli.printChanges();
+            }
+            case EFFECTACTIVATION_UPDATE -> {
+                EffectActivation_UpdateMsg ea = (EffectActivation_UpdateMsg) message;
+                switch (lastCharacterUsed) {
+                    case MONK -> {
+                        storage.updateCharacterCard(ea.getCharacterCardIndex(), ea.getCardCost(), ea.getStudentsOnCard(), ea.getDenyCardsOnPlace());
+                        storage.updateStudentsOnIsle(ea.getId(), ea.getStudentsInPlace());
+                        cli.printChanges();
+                    }
+                    case FARMER -> {
+                        if (firstFarmerActivation) {
+                            storage.updateProfessorsInDining(ea.getProfessors());
+                            firstFarmerActivation = false;
+                        }
+                        cli.printChanges();
+                    }
+                    case HERALD -> {
+                        storage.updateIsles(ea);
+                        storage.updateNumberOfTowers(ea.getNumberOfTowers());
+                        cli.printChanges();
+                    }
+                    case MAGICAL_LETTER_CARRIER -> storage.updateDiscardPile(ea.getPlayerID(), ea.getTurnOrder(), ea.getMnMovement());
+                    case GRANDMA_HERBS -> {
+                        storage.updateCharacterCard(ea.getCharacterCardIndex(), ea.getCardCost(), ea.getStudentsOnCard(), ea.getDenyCardsOnPlace());
+                        storage.updateDenyOnIsle(ea.getIsleID(), ea.getDenyCard());
+                        cli.printChanges();
+                    }
+                    case JESTER -> {
+                        storage.updateCharacterCard(ea.getCharacterCardIndex(), ea.getCardCost(), ea.getStudentsOnCard(), ea.getDenyCardsOnPlace());
+                        storage.updateStudentsInEntrance(ea.getId(), ea.getStudentsInPlace());
+                        cli.printChanges();
+                    }
+                    case MINSTREL -> {
+                        for (int i = 0; i < storage.getNumberOfPlayers(); i++) {
+                            storage.updateStudentsInEntrance(i, ea.getStudents().get(i));
+                            storage.updateStudentsInDining(i, ea.getStudentsInDining().get(i));
+                        }
+                        cli.printChanges();
+                    }
+                    case SPOILED_PRINCESS -> {
+                        storage.updateCharacterCard(ea.getCharacterCardIndex(), ea.getCardCost(), ea.getStudentsOnCard(), ea.getDenyCardsOnPlace());
+                        for (int i = 0; i < storage.getNumberOfPlayers(); i++)
+                            storage.updateStudentsInDining(i, ea.getStudentsInDining().get(i));
+                        cli.printChanges();
+                    }
+                    case THIEF -> {
+                        for (int i = 0; i < storage.getNumberOfPlayers(); i++)
+                            storage.updateStudentsInDining(i, ea.getStudentsInDining().get(i));
+                        cli.printChanges();
+                    }
+                    case CENTAUR, KNIGHT, FUNGIST -> {
+                        cli.printChanges();
+                    }
+                }
             }
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
@@ -166,6 +236,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
                                     cli.askCloud();
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
+                            }
+                            case CHARACTER_CARD_PHASE -> {
+                                if (gp.getActivePlayer() == playerID)
+                                    cli.askCharacterEffectParameters(lastCharacterUsed);
+                                else
+                                    System.out.println("Player " + gp.getActivePlayer() + " is using a character card...");
                             }
                         }
                     }

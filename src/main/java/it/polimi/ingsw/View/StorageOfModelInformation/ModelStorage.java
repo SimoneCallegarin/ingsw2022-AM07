@@ -2,6 +2,7 @@ package it.polimi.ingsw.View.StorageOfModelInformation;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.EffectActivation_UpdateMsg;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.MNMovement_UpdateMsg;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
@@ -37,7 +38,7 @@ public class ModelStorage {
 
         if(message.getGameMode())
             for(int i=0; i<3; i++){
-                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i));
+                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i),message.getCharacterCardsDescription().get(i));
                 characterCards.add(i,characterCard);
             }
         for(int i=0; i<12; i++){
@@ -97,11 +98,18 @@ public class ModelStorage {
 
     // Update game table:
 
-    public void updateCharacterCard(GameTableInformation.CharacterCard newCharacterCard, int characterCardIndex) { gameTable.setCharacterCard(characterCardIndex,newCharacterCard); }
+    public void updateCharacterCard(int characterCardIndex, int cost, HashMap<RealmColors,Integer> characterCardsStudents, int denyCards) {
+        GameTableInformation.CharacterCard newCharacterCard = new GameTableInformation.CharacterCard(gameTable.getCharacterCard(characterCardIndex).characterCardName(),cost,characterCardsStudents,denyCards,gameTable.getCharacterCard(characterCardIndex).getDescription());
+        gameTable.setCharacterCard(characterCardIndex,newCharacterCard);
+    }
 
     public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) { gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle); }
 
-    public void updateIsle(GameTableInformation.Isle newIsle, int isleID) { gameTable.setNewIsle(isleID,newIsle); }
+    public void updateDenyOnIsle(int isleID, int denyCard) { gameTable.setDenyOnIsle(isleID,denyCard); }
+
+    public void updateIsle(GameTableInformation.Isle newIsle, int isleID) {
+        gameTable.setNewIsle(isleID,newIsle);
+    }
 
     public void updateIsles(MNMovement_UpdateMsg mnm) {
         ArrayList<GameTableInformation.Isle> newIsles = new ArrayList<>();
@@ -111,6 +119,19 @@ public class ModelStorage {
             if (mnm.getDenyCards().get(i))
                 isDenyCardPresent = 1;
             GameTableInformation.Isle newIsle = new GameTableInformation.Isle(mnm.getStudents().get(i), mnm.getNumberOfIsles().get(i), mnm.getTowerColors().get(i), isDenyCardPresent, isMNPresent);
+            newIsles.add(newIsle);
+        }
+        gameTable.setIsles(newIsles);
+    }
+
+    public void updateIsles(EffectActivation_UpdateMsg ea) {
+        ArrayList<GameTableInformation.Isle> newIsles = new ArrayList<>();
+        for (int i = 0; i < ea.getTotalIsles(); i++) {
+            boolean isMNPresent = ea.getWhereMNId() == i;
+            int isDenyCardPresent = 0;
+            if (ea.getDenyCards().get(i))
+                isDenyCardPresent = 1;
+            GameTableInformation.Isle newIsle = new GameTableInformation.Isle(ea.getStudents().get(i), ea.getNumberOfIsles().get(i), ea.getTowerColors().get(i), isDenyCardPresent, isMNPresent);
             newIsles.add(newIsle);
         }
         gameTable.setIsles(newIsles);

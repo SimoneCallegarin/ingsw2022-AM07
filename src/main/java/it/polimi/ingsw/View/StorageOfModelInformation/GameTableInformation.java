@@ -14,7 +14,8 @@ public class GameTableInformation {
 
     public record CharacterCard(String characterCardName, int characterCardCost,
                                 HashMap<RealmColors,Integer> studentsOnCharacterCard,
-                                int denyCardsOnCharacterCard) {
+                                int denyCardsOnCharacterCard,
+                                String description) {
 
         public String getCharacterCardName() { return characterCardName; }
 
@@ -30,6 +31,8 @@ public class GameTableInformation {
         public int getStudentsByColor(RealmColors color) { return studentsOnCharacterCard.get(color); }
 
         public int getDenyCardsOnCharacterCard() { return denyCardsOnCharacterCard; }
+
+        public String getDescription() { return description; }
 
     }
 
@@ -91,6 +94,12 @@ public class GameTableInformation {
 
     public void setStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> studentsOnIsle) {
         Isle newIsle = new Isle(studentsOnIsle,isles.get(isleID).towerNumber,isles.get(isleID).towerColor,isles.get(isleID).denyCards,isles.get(isleID).motherNatureIsPresent);
+        isles.remove(isleID);
+        isles.add(isleID,newIsle);
+    }
+
+    public void setDenyOnIsle(int isleID, int denyCard) {
+        Isle newIsle = new Isle(isles.get(isleID).studentsOnIsle,isles.get(isleID).towerNumber,isles.get(isleID).towerColor,denyCard,isles.get(isleID).motherNatureIsPresent);
         isles.remove(isleID);
         isles.add(isleID,newIsle);
     }
