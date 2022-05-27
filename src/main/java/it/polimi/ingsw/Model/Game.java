@@ -9,6 +9,7 @@ import it.polimi.ingsw.Model.GameTableObjects.GameTable;
 import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
+import it.polimi.ingsw.Observer.ModelObserver;
 import it.polimi.ingsw.Observer.ModelSubject;
 
 import java.util.ArrayList;
@@ -81,6 +82,8 @@ public class Game extends ModelSubject {
      * It divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase
      */
     private ActionPhases actionPhase;
+
+    private ActionPhases lastActionPhase;
     /**
      * It indicates who is the current active player that is playing his turn
      */
@@ -89,6 +92,8 @@ public class Game extends ModelSubject {
      * It's the factory that permits to build the effect of each playable character card
      */
     private final EffectInGameFactory effectInGameFactory;
+
+    private boolean firstFarmerActivation = true;
     /**
      * Saves the color chosen by the player when activating the FUNGIST character card
      */
@@ -98,6 +103,8 @@ public class Game extends ModelSubject {
      * when checking the influence the turn the FUNGIST has been played
      */
     private int studentsRemovedByFungist=0;
+
+    private int atomicEffectCounter = 0;
 
     /**
      * Game constructor
@@ -347,6 +354,7 @@ public class Game extends ModelSubject {
                 if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color)%3 == 0){
                     players.get(idPlayer).gainMoney();
                     gameTable.studentInMoneyPosition();
+                    notifyObserver(obs->obs.onMoneyUpdate(idPlayer, players.get(idPlayer).getMoney(), gameTable.getGeneralMoneyReserve()));
                 }
                 checkUpdateProfessor(idPlayer, color);
                 studentsCounter++;
@@ -578,7 +586,7 @@ public class Game extends ModelSubject {
     /**
      * Initialize the parameters that handle the turn order and notifies the view.
      */
-    private void setParametersOfTurnForView() {
+    public void setParametersOfTurnForView() {
         int currentPlayerIndex=0;
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
@@ -783,8 +791,9 @@ public class Game extends ModelSubject {
         if (gamePhase == GamePhases.ACTION_PHASE && !getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder() && players.get(idPlayer).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()){
             getGameTable().characterCardPlayed(characterCardIndex);
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+            lastActionPhase = actionPhase;
             actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
-            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
+            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(),getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
             setParametersOfTurnForView();
         }
     }
@@ -803,11 +812,76 @@ public class Game extends ModelSubject {
     public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()){
             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-            notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
+            notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+            setParametersOfTurnForView();
+            //notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(),getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
 
         }
-        if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
+        /*if(getGameTable().getCharacterCard(characterCardIndex).getCharacterCardName()==CharacterCardsName.GRANDMA_HERBS){
             notifyObserver(obs->obs.onDenyCard(idPlayer,value1,true));
+        }*/
+    }
+
+    private void notifyEffectUpdate(int characterCardIndex, int idPlayer, int value1, int value2) {
+        CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
+        switch (cardName) {
+            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), 0, getGameTable().getCharacterCard(characterCardIndex).getStudents(), value2, getGameTable().getIsleManager().getIsle(value2).getStudents()));
+            case FARMER -> {
+                if (firstFarmerActivation) {
+                    ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
+                    for (Player p : players) {
+                        professors.add(p.getDashboard().getDiningRoom().getProfessors());
+                    }
+                    firstFarmerActivation = false;
+                    notifyObserver(obs -> obs.onEffectActivation(professors));
+                }
+                else
+                    notifyObserver(ModelObserver::onEffectActivation);
+            }
+            case HERALD -> {
+                ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
+                ArrayList<Integer> numIsles=new ArrayList<>();
+                ArrayList<TowerColors> towerColors=new ArrayList<>();
+                ArrayList<Boolean> denyCards=new ArrayList<>();
+                ArrayList<Integer> numTowers = new ArrayList<>();
+                int whereMnId=0;
+                for(Isle isle:gameTable.getIsleManager().getIsles()){
+                    students.add(isle.getStudents());
+                    numIsles.add(isle.getNumOfIsles());
+                    towerColors.add(isle.getTowersColor());
+                    if(isle.getDenyCards()==0){
+                        denyCards.add(false);
+                    }else{
+                        denyCards.add(true);
+                    }
+                    if(isle.getMotherNature()){
+                        whereMnId=isle.getIdIsle();
+                    }
+                }
+                for (Player p : players)
+                    numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
+                int finalWhereMnId = whereMnId;
+                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
+            }
+            case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getMnMovement(), players.get(idPlayer).getDiscardPile().getMnMovement()));
+            case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
+            case CENTAUR, KNIGHT, FUNGIST -> notifyObserver(ModelObserver::onEffectActivation);
+            case JESTER -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents()));
+            case MINSTREL, THIEF -> {
+                ArrayList<HashMap<RealmColors, Integer>> studentsInEntrances = new ArrayList<>();
+                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
+                for (Player p : players) {
+                    studentsInEntrances.add(p.getDashboard().getEntrance().getStudents());
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
+                }
+                notifyObserver(obs -> obs.onEffectActivation(studentsInEntrances, studentsInDinings));
+            }
+            case SPOILED_PRINCESS -> {
+                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
+                for (Player p : players)
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
+                notifyObserver(obs -> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), studentsInDinings));
+            }
         }
     }
 
@@ -910,10 +984,18 @@ public class Game extends ModelSubject {
      */
     public ActionPhases getActionPhase() { return actionPhase; }
 
+    public ActionPhases getLastActionPhase() { return lastActionPhase; }
+
+    public int getAtomicEffectCounter() {return atomicEffectCounter;}
+
+    public void increaseAtomicEffectCounter() {atomicEffectCounter++;}
+
     /**
      * Setter method for the action phase
      * @param actionPhase indicates in which phase of the action phase we are
      */
-    public void setActionPhase(ActionPhases actionPhase) { this.actionPhase = actionPhase; }
+    public void setActionPhase(ActionPhases actionPhase) {
+        this.actionPhase = actionPhase;
+    }
 
 }
