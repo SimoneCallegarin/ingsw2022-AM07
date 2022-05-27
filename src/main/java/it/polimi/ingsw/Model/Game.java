@@ -92,8 +92,6 @@ public class Game extends ModelSubject {
      * It's the factory that permits to build the effect of each playable character card
      */
     private final EffectInGameFactory effectInGameFactory;
-
-    private boolean firstFarmerActivation = true;
     /**
      * Saves the color chosen by the player when activating the FUNGIST character card
      */
@@ -826,18 +824,13 @@ public class Game extends ModelSubject {
     private void notifyEffectUpdate(int characterCardIndex, int idPlayer, int value1, int value2) {
         CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
         switch (cardName) {
-            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), 0, getGameTable().getCharacterCard(characterCardIndex).getStudents(), value2, getGameTable().getIsleManager().getIsle(value2).getStudents()));
+            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value2, getGameTable().getIsleManager().getIsle(value2).getStudents()));
             case FARMER -> {
-                if (firstFarmerActivation) {
-                    ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
-                    for (Player p : players) {
-                        professors.add(p.getDashboard().getDiningRoom().getProfessors());
-                    }
-                    firstFarmerActivation = false;
-                    notifyObserver(obs -> obs.onEffectActivation(professors));
+                ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
+                for (Player p : players) {
+                    professors.add(p.getDashboard().getDiningRoom().getProfessors());
                 }
-                else
-                    notifyObserver(ModelObserver::onEffectActivation);
+                notifyObserver(obs -> obs.onEffectActivation(professors));
             }
             case HERALD -> {
                 ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
@@ -864,7 +857,7 @@ public class Game extends ModelSubject {
                 int finalWhereMnId = whereMnId;
                 notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
             }
-            case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getMnMovement(), players.get(idPlayer).getDiscardPile().getMnMovement()));
+            case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getTurnOrder(), players.get(idPlayer).getDiscardPile().getMnMovement()));
             case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
             case CENTAUR, KNIGHT, FUNGIST -> notifyObserver(ModelObserver::onEffectActivation);
             case JESTER -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents()));
