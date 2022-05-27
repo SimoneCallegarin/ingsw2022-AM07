@@ -18,16 +18,18 @@ public class GUIApp {
         System.out.println("Created GUI on EDT? "+
                 SwingUtilities.isEventDispatchThread());
         Game game=new Game();
-        game.addFirstPlayer("filo",true,4);
+        game.addFirstPlayer("filo",true,3);
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("jack");
-        game.addAnotherPlayer("comfy");
+        //game.addAnotherPlayer("comfy");
+        /*
         for(RealmColors color:RealmColors.values()){
             for(int i=0;i<10;i++){
                 game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(color);
             }
             game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(color);
         }
+        */
         new GuiDrawer(game);
     }
 

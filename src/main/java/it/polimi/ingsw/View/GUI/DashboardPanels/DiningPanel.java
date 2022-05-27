@@ -9,23 +9,25 @@ import java.awt.*;
 public class DiningPanel extends JPanel {
     GridBagConstraints c;
     Game game;
+    int playerID;
 
-    public DiningPanel(Game game) {
+    public DiningPanel(Game game,int playerID) {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
         this.game = game;
+        this.playerID=playerID;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
 
-        InitializeDining();
+        InitializeDining(playerID);
 
     }
 
-    private void InitializeDining() {
-        ProfessorPanel professorPanel=new ProfessorPanel(game);
+    private void InitializeDining(int playerID) {
+        ProfessorPanel professorPanel=new ProfessorPanel(game,playerID);
         professorPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         professorPanel.setOpaque(false);
-        DiningStudentsPanel studentsPanel=new DiningStudentsPanel(game);
+        DiningStudentsPanel studentsPanel=new DiningStudentsPanel(game,playerID);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
         c.fill=GridBagConstraints.BOTH;

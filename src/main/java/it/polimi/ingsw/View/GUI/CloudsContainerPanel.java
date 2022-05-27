@@ -16,7 +16,7 @@ public class CloudsContainerPanel extends JPanel {
         JPanel cloudContainer=new JPanel(new GridLayout(1,game.getGameTable().getClouds().size()));
         cloudContainer.setBackground(Color.CYAN);
         for(int i=0;i<game.getGameTable().getClouds().size();i++){
-            cloudContainer.add(new CloudPanel(game));
+            cloudContainer.add(new CloudPanel(game,i));
         }
 
         mainConstraints.fill=GridBagConstraints.BOTH;

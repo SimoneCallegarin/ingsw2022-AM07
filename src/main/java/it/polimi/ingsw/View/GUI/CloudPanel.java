@@ -16,14 +16,14 @@ public class CloudPanel extends JPanel {
     Game game;
     GridBagConstraints constraints;
 
-    public CloudPanel(Game game) {
+    public CloudPanel(Game game,int cloudID) {
         cl=this.getClass().getClassLoader();
         this.game=game;
         setLayout(new GridBagLayout());
         constraints =new GridBagConstraints();
         setBackground(Color.CYAN);
         setOpaque(false);
-        InitializeCloud();
+        InitializeCloud(cloudID);
     }
 
     @Override
@@ -39,12 +39,12 @@ public class CloudPanel extends JPanel {
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
-    private void InitializeCloud(){
+    private void InitializeCloud(int cloudID){
         constraints.gridx=0;
         constraints.gridy=0;
 
         for(RealmColors color:RealmColors.values()){
-            for(int i=0;i<game.getGameTable().getCloud(0).getStudentsByColor(color);i++){
+            for(int i=0;i<game.getGameTable().getCloud(cloudID).getStudentsByColor(color);i++){
                 add(new StudentButton(color), constraints);
                 if(constraints.gridx==3){
                     constraints.gridx=-1;

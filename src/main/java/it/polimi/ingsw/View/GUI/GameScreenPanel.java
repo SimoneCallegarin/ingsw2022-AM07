@@ -8,6 +8,7 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameScreenPanel extends JPanel {
     Game game;
@@ -34,11 +35,15 @@ public class GameScreenPanel extends JPanel {
         super(layout);
         this.game=game;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
+        ArrayList<JPanel> dashboardContainers=new ArrayList<>();
         JPanel dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
+        dashboardContainerPanel1.setBackground(Color.CYAN);
         JPanel dashboardContainerPanel2=new JPanel(new GridLayout(2,1));
+        dashboardContainerPanel2.setBackground(Color.CYAN);
+        dashboardContainers.add(dashboardContainerPanel1);
+        dashboardContainers.add(dashboardContainerPanel2);
 
         GridBagConstraints gamescreenConstraints=new GridBagConstraints();
-        GridBagConstraints DCPConstraints=new GridBagConstraints();//dashboard container panel constraints
         //first i divide the gamescreen in 3 columns and 1 row and i made the isleManagerPanel take the most space in the center
         gamescreenConstraints.gridy=0;
         gamescreenConstraints.weighty=1;
@@ -59,13 +64,21 @@ public class GameScreenPanel extends JPanel {
 
 
 
-        //then i add the 4 dashbpoard to the containers
+        //then i add the 4 dashbpoard to the containers: first one in the top-left, second top-right, third bottom-left, fourth bottom-right
+        for(int i=0;i<game.getNumberOfPlayers();i++){
+           if(i%2==0){
+               dashboardContainers.get(0).add(new DashboardPanel(game,i));
+           }else{
+               dashboardContainers.get(1).add(new DashboardPanel(game,i));
+           }
+        }
+        /*
         dashboardContainerPanel1.add(new DashboardPanel(game));
         dashboardContainerPanel2.add(new DashboardPanel(game));
 
         dashboardContainerPanel1.add(new DashboardPanel(game));
         dashboardContainerPanel2.add(new DashboardPanel(game));
-
+        */
 
     }
 

@@ -63,6 +63,7 @@ public class GuiDrawer extends ViewSubject {
         //to change
         this.game=game;
 
+        //screen frame initialization
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setVisible(true);
@@ -89,7 +90,6 @@ public class GuiDrawer extends ViewSubject {
 
         DrawUserSettingsForm();
 
-        // f.pack();
 
     }
 
@@ -106,11 +106,15 @@ public class GuiDrawer extends ViewSubject {
         serverPreferences.add(serverIPInputText);
         serverPreferences.add(new JLabel("Insert server port"));
         serverPreferences.add(serverPortInputText);
-        submit.addActionListener(e -> {
-            String serverIp= serverIPInputText.getText();
-            String serverPort= serverPortInputText.getText();
-            System.out.println(serverIp+" "+serverPort);
-            //notify the observer
+        submit.addActionListener(e -> {//on button press
+
+            String serverIp = serverIPInputText.getText();
+            String serverPort = serverPortInputText.getText();
+            if (serverIp.equals("") || serverPort.equals("")) {
+                    JOptionPane.showMessageDialog(serverPreferences, "Invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+            //need to notify the observer
             CardLayout cl=(CardLayout) userInputPanelManager.getLayout();
             cl.show(userInputPanelManager,"Game preferences choice");
         });
@@ -130,13 +134,15 @@ public class GuiDrawer extends ViewSubject {
         userPreferences.add(new JLabel("Insert number of players"));
         userPreferences.add(numberPlayersInput);
         startGame.addActionListener(e -> {
-            //notifyObserver
+            if(gameModeInputText.getText().equals("") || usernameInputText.getText().equals("")){
+                JOptionPane.showMessageDialog(serverPreferences, "Invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             boolean gamemode;
             gamemode= gameModeInputText.getText().equals("Expert");
             notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
             notifyObserver(obs->obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()),gamemode));
             //change window
-
             GameScreenDrawer();     // it will be called by the client handler1
         });
         userPreferences.add(startGame);

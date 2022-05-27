@@ -14,18 +14,19 @@ public class DashboardPanel extends JPanel {
     GridBagConstraints towerStorageConstraints;
     GridBagConstraints diningConstraints;
     GridBagConstraints entranceConstraints;
+    int playerID;
 
     ClassLoader cl=this.getClass().getClassLoader();
 
 
-    public DashboardPanel( Game game) {
+    public DashboardPanel( Game game, int playerID) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
         this.game=game;
+        this.playerID=playerID;
         towerStorageConstraints =new GridBagConstraints();
         diningConstraints= new GridBagConstraints();
         entranceConstraints= new GridBagConstraints();
-
 
         initializeDashboard();
     }
@@ -33,7 +34,7 @@ public class DashboardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        InputStream url = cl.getResourceAsStream("Dashboard/Complete.png");
+        InputStream url = cl.getResourceAsStream("Dashboard/Semi_empty.png");
         BufferedImage img= null;
         try {
             if (url != null)
@@ -50,20 +51,20 @@ public class DashboardPanel extends JPanel {
         towerStorageConstraints.weightx=1;
         towerStorageConstraints.weighty=0.35;
         towerStorageConstraints.ipady=-90;
-        add(new TowerStoragePanel(game), towerStorageConstraints);
+        add(new TowerStoragePanel(game,playerID), towerStorageConstraints);
 
         diningConstraints.fill=GridBagConstraints.BOTH;
         diningConstraints.gridy=1;
         diningConstraints.weightx=1;
         diningConstraints.weighty=1;
-        add(new DiningPanel(game),diningConstraints);
+        add(new DiningPanel(game,playerID),diningConstraints);
 
         entranceConstraints.fill=GridBagConstraints.BOTH;
         entranceConstraints.gridy=2;
         entranceConstraints.weightx=1;
         entranceConstraints.weighty=0.25;
         entranceConstraints.ipady=-50;
-        add(new EntrancePanel(game),entranceConstraints);
+        add(new EntrancePanel(game,playerID),entranceConstraints);
 
     }
 

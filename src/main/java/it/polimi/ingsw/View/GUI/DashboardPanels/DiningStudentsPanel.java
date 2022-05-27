@@ -3,22 +3,23 @@ package it.polimi.ingsw.View.GUI.DashboardPanels;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.EmptyPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DiningStudentsPanel extends JPanel {
     Game game;
+    int playerID;
 
-    public DiningStudentsPanel(Game game) {
+    public DiningStudentsPanel(Game game, int playerID) {
         this.game = game;
+        this.playerID=playerID;
         GridLayout gridLayout=new GridLayout(1,5);
         gridLayout.setHgap(-35);
         setLayout(gridLayout);
-        InitializeDiningStudents();
+        InitializeDiningStudents(playerID);
     }
-    private void InitializeDiningStudents(){
+    private void InitializeDiningStudents(int playerID){
         GridLayout gridLayout=new GridLayout(10,1);
         gridLayout.setVgap(-13);
         JPanel greenLane=new JPanel(gridLayout);
@@ -39,7 +40,7 @@ public class DiningStudentsPanel extends JPanel {
                 JPanel emptyPanel=new JPanel();
                 emptyPanel.setOpaque(false);
                 emptyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-                if(game.getPlayerByIndex(0).getDashboard().getDiningRoom().getStudentsByColor(color)-(i+1)>=0) {
+                if(game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color)-(i+1)>=0) {
                     switch (color) {
                         case YELLOW -> yellowLane.add(new StudentButton(color));
                         case BLUE -> blueLane.add(new StudentButton(color));

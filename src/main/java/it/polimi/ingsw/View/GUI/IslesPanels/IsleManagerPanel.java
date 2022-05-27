@@ -37,19 +37,19 @@ public class IsleManagerPanel extends JPanel {
         c.gridy=0;
         c.gridx=0;
         add(isleContainerSx,c);
-        isleContainerSx.add(new IslePanel(game));
-        isleContainerSx.add(new IslePanel(game));
-        isleContainerSx.add(new IslePanel(game));
-        isleContainerSx.add(new IslePanel(game));
+        isleContainerSx.add(new IslePanel(game,0));
+        isleContainerSx.add(new IslePanel(game,1));
+        isleContainerSx.add(new IslePanel(game,2));
+        isleContainerSx.add(new IslePanel(game,3));
 
         c.gridx=2;
         c.weighty=0.5;
         c.weightx=0.5;
         add(isleContainerDx,c);
-        isleContainerDx.add(new IslePanel(game));
-        isleContainerDx.add(new IslePanel(game));
-        isleContainerDx.add(new IslePanel(game));
-        isleContainerDx.add(new IslePanel(game));
+        isleContainerDx.add(new IslePanel(game,4));
+        isleContainerDx.add(new IslePanel(game,5));
+        isleContainerDx.add(new IslePanel(game,6));
+        isleContainerDx.add(new IslePanel(game,7));
 
         c.gridx=1;
         c.weighty=1;
@@ -59,10 +59,10 @@ public class IsleManagerPanel extends JPanel {
             firstIsleContainer1x2.setBackground(Color.CYAN);
             JPanel secondIsleContainer1x2=new JPanel(new GridLayout(1,2));
             secondIsleContainer1x2.setBackground(Color.CYAN);
-            firstIsleContainer1x2.add(new IslePanel(game));
-            firstIsleContainer1x2.add(new IslePanel(game));
-            secondIsleContainer1x2.add(new IslePanel(game));
-            secondIsleContainer1x2.add(new IslePanel(game));
+            firstIsleContainer1x2.add(new IslePanel(game,8));
+            firstIsleContainer1x2.add(new IslePanel(game,9));
+            secondIsleContainer1x2.add(new IslePanel(game,10));
+            secondIsleContainer1x2.add(new IslePanel(game,11));
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridx=0;
@@ -85,10 +85,6 @@ public class IsleManagerPanel extends JPanel {
             centerConstraints.weightx=0.5;
             centerConstraints.weighty=0.5;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
-
-
-
-
 
     }
 
