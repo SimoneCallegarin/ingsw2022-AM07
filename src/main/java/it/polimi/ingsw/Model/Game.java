@@ -643,7 +643,7 @@ public class Game extends ModelSubject {
             }
 
             if (someoneHasProfessor) {
-                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)) {
+                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color) || (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) >= players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color) && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed().equals(CharacterCardsName.FARMER))) {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
 
