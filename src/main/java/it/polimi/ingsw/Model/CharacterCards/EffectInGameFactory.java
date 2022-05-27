@@ -56,7 +56,7 @@ public class EffectInGameFactory {
                 break;
 
             case HERALD:
-                game.checkUpdateInfluence(value2);
+                game.checkUpdateInfluence(value1);
                 game.checkEndGame();
                 game.setActionPhase(game.getLastActionPhase());
                 break;
@@ -120,7 +120,7 @@ public class EffectInGameFactory {
                 game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color1);
                 game.setActionPhase(game.getLastActionPhase());
                 break;
-            default:
+            case KNIGHT, CENTAUR:
                 game.setActionPhase(game.getLastActionPhase());
                 break;
         }

@@ -21,14 +21,6 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
     int whereMNId;
     ArrayList<Boolean> denyCards;
 
-    public HashMap<RealmColors, Integer> getStudentsInPlace() {
-        return studentsInPlace;
-    }
-
-    public int getDenyCard() {
-        return denyCard;
-    }
-
     HashMap<RealmColors,Integer> studentsInPlace;
 
     /**
@@ -107,7 +99,7 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
         this.denyCard = denyCard;
     }
 
-    // CENTAUR, KNIGHT, FUNGIST (& FARMER)
+    // CENTAUR, KNIGHT, FUNGIST
     public EffectActivation_UpdateMsg(MessageType messageType) {
         super(messageType);
     }
@@ -155,6 +147,14 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
 
     public ArrayList<Boolean> getDenyCards() {
         return denyCards;
+    }
+
+    public HashMap<RealmColors, Integer> getStudentsInPlace() {
+        return studentsInPlace;
+    }
+
+    public int getDenyCard() {
+        return denyCard;
     }
 
     public ArrayList<Integer> getNumberOfIsles() {
