@@ -182,7 +182,7 @@ public class Game extends ModelSubject {
             if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
                 this.gamePhase = GamePhases.PLANNING_PHASE;
                 firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
-                setGameCreationValues();
+                notifyGameCreationValues();
                 fillClouds();
                 updateOrder(gamePhase);
             }
@@ -192,7 +192,7 @@ public class Game extends ModelSubject {
     /**
      * Initialization of data to notify the virtual view with.
      */
-    private void setGameCreationValues() {
+    private void notifyGameCreationValues() {
         // DASHBOARDS:
         ArrayList<String> nicknames = new ArrayList<>();
         ArrayList<HashMap<RealmColors,Integer>> entrances = new ArrayList<>();
@@ -276,7 +276,7 @@ public class Game extends ModelSubject {
                 players.get(idPlayer).playAssistantCard(assistantCardPlayed);
                 players.get(idPlayer).setCardOrder(playerCounter+1);
 
-                setAssistantsCardForView(idPlayer);
+                notifyAssistantsCard(idPlayer);
 
                 if (players.get(idPlayer).isMageDeckEmpty())
                     lastRound = true;
@@ -290,7 +290,7 @@ public class Game extends ModelSubject {
      * Initialize the deck of available assistant cards for the player and the assistant card in the discard pile in order to pass it to the view.
      * @param idPlayer the id of the player it will be passed the deck.
      */
-    private void setAssistantsCardForView(int idPlayer) {
+    private void notifyAssistantsCard(int idPlayer) {
         ArrayList<Integer> turnOrders =new ArrayList<>();
         ArrayList<Integer> movementsMN =new ArrayList<>();
         for(AssistantCard ac : getPlayerByIndex(idPlayer).getMageDeck()){
@@ -320,7 +320,7 @@ public class Game extends ModelSubject {
         }
         notifyObserver(obs->obs.onStudentMoving_toIsle(idPlayer,players.get(idPlayer).getDashboard().getEntrance().getStudents(),idIsle,gameTable.getIsleManager().getIsle(idIsle).getStudents()));
 
-        setParametersOfTurnForView();
+        notifyTurn();
     }
 
     /**
@@ -359,7 +359,7 @@ public class Game extends ModelSubject {
         }
         notifyObserver(obs->obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(),players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
 
-        setParametersOfTurnForView();
+        notifyTurn();
     }
 
     /**
@@ -396,13 +396,13 @@ public class Game extends ModelSubject {
                 checkEndGame();
                 if (!lastRound) {
                     actionPhase = ActionPhases.CHOOSE_CLOUD;
-                    setMoveMNParametersForView();
-                    setParametersOfTurnForView();
+                    notifyMNMovement();
+                    notifyTurn();
                 }
                 else {
                     playerCounter++;
                     actionPhase = ActionPhases.MOVE_STUDENTS;
-                    setMoveMNParametersForView();
+                    notifyMNMovement();
                     nextPlayer();
                 }
             }
@@ -412,7 +412,7 @@ public class Game extends ModelSubject {
     /**
      * Initialize the parameters needed by the view consequently to the movement of mother nature.
      */
-    private void setMoveMNParametersForView() {
+    private void notifyMNMovement() {
         ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
         ArrayList<Integer> numIsles=new ArrayList<>();
         ArrayList<TowerColors> towerColors=new ArrayList<>();
@@ -571,14 +571,14 @@ public class Game extends ModelSubject {
             playerCounter = 0;
         }
 
-        setParametersOfTurnForView();
+        notifyTurn();
 
     }
 
     /**
      * Initialize the parameters that handle the turn order and notifies the view.
      */
-    private void setParametersOfTurnForView() {
+    private void notifyTurn() {
         int currentPlayerIndex=0;
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
@@ -614,7 +614,7 @@ public class Game extends ModelSubject {
         }
         else {
             currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);
-            setParametersOfTurnForView();
+            notifyTurn();
         }
     }
 
@@ -717,7 +717,7 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * it checks if the game has ended and updates the proper end game variables
+     * It checks if the game has ended and updates the proper end game variables.
      */
     public void checkEndGame() {
         for (Player p : players) {
@@ -786,7 +786,7 @@ public class Game extends ModelSubject {
             getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
             actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
             notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
-            setParametersOfTurnForView();
+            notifyTurn();
         }
     }
 

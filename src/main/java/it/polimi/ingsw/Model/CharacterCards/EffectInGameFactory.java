@@ -54,8 +54,8 @@ public class EffectInGameFactory {
                 break;
 
             case HERALD:
-                game.checkUpdateInfluence(value2);
-                game.checkEndGame();
+                game.checkUpdateInfluence(value2);      // put this in another class.
+                //game.checkEndGame();
                 break;
 
             case MAGICAL_LETTER_CARRIER:
@@ -71,7 +71,7 @@ public class EffectInGameFactory {
                 break;
 
             case FUNGIST:
-                game.setColorForFungist(value1);
+                game.setColorForFungist(value1);        // make gametable set the boolean
                 break;
 
             case MINSTREL:
