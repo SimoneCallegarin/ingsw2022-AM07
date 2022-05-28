@@ -65,10 +65,13 @@ public class CLI extends ViewSubject {
      * Reads the username chosen by the player and notifies it to the view.
      */
     public void askUsername() {
-        System.out.println("> Nickname? ");
+        System.out.println("> Nickname? [NOTE: it must be between 2 and 20 characters long]");
         System.out.println("> ");
         String username = readUserInput();
-        notifyObserver(obs -> obs.onUsername(username));
+        if (username.length() >= 2 && username.length() <= 20)
+            notifyObserver(obs -> obs.onUsername(username));
+        else
+            askUsername();
     }
 
     /**
@@ -178,20 +181,98 @@ public class CLI extends ViewSubject {
         notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
     }
 
-    public void askMNMovement() {
-        int choice;
-        System.out.println("> Which isle do you want to move Mother Nature to?");
-        System.out.println("> ");
-        choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs->obs.onMNMovement(choice));
+    public void askMNMovement(boolean expertMode) {
+        int initialChoice = 0;
+        if (expertMode) {
+            System.out.println("> What do you want to do?");
+            System.out.println("> 0 - SELECT THE ISLE FOR MOTHER NATURE MOVEMENT");
+            System.out.println("> 1 - PLAY A CHARACTER CARD");
+            initialChoice=Integer.parseInt(readUserInput());
+            switch (initialChoice) {
+                case 0 -> System.out.println("Okay!");
+                case 1 -> printAvailableCharacters();
+                default -> {
+                    System.out.println("Not acceptable value. Please, try again.");
+                    askMNMovement(true);
+                }
+            }
+        }
+        if(expertMode) {
+            int choice;
+            System.out.println("> What do you want to do now?");
+            System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
+            if (initialChoice == 0) {
+                System.out.println("> 1 - CHOOSE ISLE");
+            } else
+                System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
+            choice = Integer.parseInt(readUserInput());
+            switch (choice) {
+                case 0 -> askMNMovement(true);
+                case 1 -> {
+                    if (initialChoice == 0) {
+                        System.out.println("> Which isle do you want to move Mother Nature to?");
+                        System.out.println("> ");
+                        int isleChoice=Integer.parseInt(readUserInput());
+                        notifyObserver(obs->obs.onMNMovement(isleChoice));
+                    }
+                    else
+                        askCharacterToPlay();
+                }
+            }
+        }
+        else {
+            System.out.println("> Which isle do you want to move Mother Nature to?");
+            System.out.println("> ");
+            int isleChoice = Integer.parseInt(readUserInput());
+            notifyObserver(obs -> obs.onMNMovement(isleChoice));
+        }
     }
 
-    public void askCloud(){
-        int choice;
-        System.out.println("> > Which cloud do you want to take students from?");
-        System.out.println("> ");
-        choice=Integer.parseInt(readUserInput());
-        notifyObserver(obs->obs.onCloudChoice(choice));
+    public void askCloud(boolean expertMode){
+        int initialChoice = 0;
+        if (expertMode) {
+            System.out.println("> What do you want to do?");
+            System.out.println("> 0 - SELECT THE CLOUD YOU WANT TO PICK STUDENTS FROM");
+            System.out.println("> 1 - PLAY A CHARACTER CARD");
+            initialChoice=Integer.parseInt(readUserInput());
+            switch (initialChoice) {
+                case 0 -> System.out.println("Okay!");
+                case 1 -> printAvailableCharacters();
+                default -> {
+                    System.out.println("Not acceptable value. Please, try again.");
+                    askCloud(true);
+                }
+            }
+        }
+        if(expertMode) {
+            int choice;
+            System.out.println("> What do you want to do now?");
+            System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
+            if (initialChoice == 0) {
+                System.out.println("> 1 - CHOOSE CLOUD");
+            } else
+                System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
+            choice = Integer.parseInt(readUserInput());
+            switch (choice) {
+                case 0 -> askCloud(true);
+                case 1 -> {
+                    if (initialChoice == 0) {
+                        System.out.println("> Which cloud do you want to take students from?");
+                        System.out.println("> ");
+                        int cloudChoice=Integer.parseInt(readUserInput());
+                        notifyObserver(obs->obs.onCloudChoice(cloudChoice));
+                    }
+                    else
+                        askCharacterToPlay();
+                }
+            }
+        }
+        else {
+            System.out.println("> Which cloud do you want to take students from?");
+            System.out.println("> ");
+            int cloudChoice = Integer.parseInt(readUserInput());
+            notifyObserver(obs -> obs.onCloudChoice(cloudChoice));
+        }
     }
 
     public void askCharacterToPlay(){
@@ -200,7 +281,6 @@ public class CLI extends ViewSubject {
         System.out.println("> ");
         choice=Integer.parseInt(readUserInput());
         notifyObserver(obs->obs.onCharacterCard(choice));
-        // Not finished yet!!!
     }
 
     public void askCharacterEffectParameters(CharacterCardsName characterName) {

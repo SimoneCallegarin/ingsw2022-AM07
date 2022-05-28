@@ -213,13 +213,13 @@ public class ClientController implements ViewObserver, NetworkObserver {
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    cli.askMNMovement();
+                                    cli.askMNMovement(expertMode);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    cli.askCloud();
+                                    cli.askCloud(expertMode);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
                             }
