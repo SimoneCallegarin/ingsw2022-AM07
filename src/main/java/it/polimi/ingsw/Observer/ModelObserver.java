@@ -46,7 +46,7 @@ public interface ModelObserver {
     void onEffectActivation(int playerID, int turnOrder, int mnMovement);
 
     //GRANDMA
-    void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard);
+    void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, int isleID, int denyCard);
 
     //CENTAUR, KNIGHT, FUNGIST
     void onEffectActivation();

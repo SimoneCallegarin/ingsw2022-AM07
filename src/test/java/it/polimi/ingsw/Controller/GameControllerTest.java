@@ -52,6 +52,14 @@ class GameControllerTest {
         game.setActionPhase(ActionPhases.MOVE_STUDENTS);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
+        for (RealmColors color : RealmColors.values()){
+            if(color!=RealmColors.PINK)
+                while(game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(color)!=0){
+                    game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(color);
+                    game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.PINK);
+                }
+        }
+
         gameController.onMessage(message);
 
         message = new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING,0,0);
@@ -76,6 +84,14 @@ class GameControllerTest {
         game.setGamePhase(GamePhases.ACTION_PHASE);
         game.setActionPhase(ActionPhases.MOVE_STUDENTS);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        for (RealmColors color : RealmColors.values()){
+            if(color!=RealmColors.RED)
+                while(game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(color)!=0){
+                    game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(color);
+                    game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.RED);
+                }
+        }
 
         gameController.onMessage(message);
 
@@ -156,7 +172,7 @@ class GameControllerTest {
     }
 
     /**
-     * we are testing if the pLAY_CHARACTERCARD message works properly
+     * We are testing if the PLAY_CHARACTERCARD message works properly.
      */
     @Test
     void onMessage_PLAY_CHARACTERCARD() {
@@ -173,6 +189,13 @@ class GameControllerTest {
         gameController.onMessage(message);
 
         message = new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD,0,0);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        message = new PlayerMoveMessage(MessageType.ACTIVATE_ATOMIC_EFFECT,0,0);
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());

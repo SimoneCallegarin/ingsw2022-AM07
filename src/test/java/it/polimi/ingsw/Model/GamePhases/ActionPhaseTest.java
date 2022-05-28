@@ -1435,6 +1435,14 @@ class ActionPhaseTest {
 
         assertEquals(1,game.getPlayerByIndex(0).getMoney());
 
+        for (RealmColors color : RealmColors.values()){
+            if(color!=RealmColors.YELLOW)
+            while(game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(color)!=0){
+                game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(color);
+                game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.YELLOW);
+            }
+        }
+
         game.moveStudentInDiningRoom(0,0);
         game.moveStudentInDiningRoom(0,0);
         game.moveStudentInDiningRoom(0,0);

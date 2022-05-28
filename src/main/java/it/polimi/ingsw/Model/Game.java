@@ -290,11 +290,11 @@ public class Game extends ModelSubject {
                     nextPlayer();
                 } else {
                     notifyObserver(obs -> obs.onKO(idPlayer, "You cannot play this card, please select another one"));
-                    setParametersOfTurnForView();
+                    notifyTurn();
                 }
             } else {
                 notifyObserver(obs -> obs.onKO(idPlayer, "You don't have this card, please select another one"));
-                setParametersOfTurnForView();
+                notifyTurn();
             }
         }
     }
@@ -411,8 +411,15 @@ public class Game extends ModelSubject {
                         checkUpdateInfluence(idIsle);
                     else {
                         gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
-
+                        int grandmaIndex = 0;
+                        for (int i=0; i<3; i++)
+                            if(gameTable.getCharacterCard(i).getCharacterCardName() == CharacterCardsName.GRANDMA_HERBS){
+                                grandmaIndex = i;
+                                break;
+                            }
+                        gameTable.getCharacterCard(grandmaIndex).addDenyCard();
                         notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
+                        notifyEffectUpdate(grandmaIndex,idPlayer,idIsle,-1);
                     }
                     // if the FUNGIST card is played, then we add the students of the chosen color
                     // that were removed from the selected isle
@@ -433,11 +440,11 @@ public class Game extends ModelSubject {
                     }
                 } else {
                     notifyObserver(obs -> obs.onKO(idPlayer, "You can't go that far! Please select a suitable isle"));
-                    setParametersOfTurnForView();
+                    notifyTurn();
                 }
             } else {
                 notifyObserver(obs -> obs.onKO(idPlayer, "Isle " + idIsle + " doesn't exist, please select another one"));
-                setParametersOfTurnForView();
+                notifyTurn();
             }
         }
     }
@@ -497,11 +504,11 @@ public class Game extends ModelSubject {
                     nextPlayer();
                 } else {
                     notifyObserver(obs -> obs.onKO(idPlayer, "Cloud " + idCloud + " is empty! Please select another one"));
-                    setParametersOfTurnForView();
+                    notifyTurn();
                 }
             } else {
                 notifyObserver(obs -> obs.onKO(idPlayer, "Cloud " + idCloud + " doesn't exist, please select another one"));
-                setParametersOfTurnForView();
+                notifyTurn();
             }
         }
     }
@@ -619,7 +626,7 @@ public class Game extends ModelSubject {
     /**
      * Initialize the parameters that handle the turn order and notifies the view.
      */
-    private void notifyTurn() {
+    public void notifyTurn() {
         int currentPlayerIndex=0;
         for(Player p:players){
             if(p.getOrder().equals(currentActivePlayer)){
@@ -847,7 +854,7 @@ public class Game extends ModelSubject {
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()){
             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
             notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
-            setParametersOfTurnForView();
+            notifyTurn();
             //notifyObserver(obs->obs.onCharacterCard(characterCardIndex,getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(),getGameTable().getCharacterCards().get(characterCardIndex).getCost(),idPlayer,getGameTable().getGeneralMoneyReserve(),getPlayerByIndex(idPlayer).getMoney(),getGameTable().getCharacterCard(characterCardIndex).getDenyCards(),getGameTable().getCharacterCard(characterCardIndex).getStudents()));
 
         }
@@ -893,7 +900,7 @@ public class Game extends ModelSubject {
                 notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
             }
             case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getTurnOrder(), players.get(idPlayer).getDiscardPile().getMnMovement()));
-            case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
+            case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
             case CENTAUR, KNIGHT, FUNGIST -> notifyObserver(ModelObserver::onEffectActivation);
             case JESTER -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents()));
             case MINSTREL, THIEF -> {

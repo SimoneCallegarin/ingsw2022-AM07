@@ -89,7 +89,7 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
     }
 
     // GRANDMA
-    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard) {
+    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, int isleID, int denyCard) {
         super(messageType);
         this.characterCardIndex = characterCardIndex;
         this.cardCost = cardCost;

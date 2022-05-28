@@ -98,7 +98,7 @@ public class GameController {
             }
             case GAMEPHASE_UPDATE -> {
                 game.setActionPhase(game.getLastActionPhase());
-                game.setParametersOfTurnForView();
+                game.notifyTurn();
             }
         }
     }
