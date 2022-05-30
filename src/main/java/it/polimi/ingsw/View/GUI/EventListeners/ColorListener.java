@@ -33,6 +33,7 @@ public class ColorListener extends ViewSubject implements MouseListener  {
         System.out.println(finalColorPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
         dashboardListened.getDining().setCLickable();//so after at least one student button press the dining room is set clickable
+
     }
 
     @Override

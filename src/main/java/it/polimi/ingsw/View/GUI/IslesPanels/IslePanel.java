@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
+import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,9 +19,12 @@ public class IslePanel extends JPanel {
 
     Game game;
     GridBagConstraints constraints;
+    int isleID;
+    DenyCardPanel denyCard;
 
     public IslePanel(Game game,int isleID) {
         this.game=game;
+        this.isleID=isleID;
         setLayout(new GridBagLayout());
         constraints=new GridBagConstraints();
         setOpaque(false);
@@ -43,7 +47,7 @@ public class IslePanel extends JPanel {
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
-    private void InitializeIsle(int isleID){
+    public void InitializeIsle(int isleID){
         JPanel studentContainer=new JPanel(new GridBagLayout());
         studentContainer.setOpaque(false);
         JPanel towerContainer=new JPanel(new GridBagLayout());
@@ -89,7 +93,31 @@ public class IslePanel extends JPanel {
             }
             add(towerContainer,constraints);
         }
+    }
 
+    public void setClickable(){
+        addMouseListener(new IsleListener(this));
+    }
 
+    public void removeClickable(){
+        removeMouseListener(this.getMouseListeners()[0]);
+    }
+
+    public int getIsleID() {
+        return isleID;
+    }
+
+    public void addDenyCard(){
+      denyCard=new DenyCardPanel();
+      constraints.gridy++;
+      constraints.ipady=30;
+      constraints.ipadx=30;
+      add(denyCard,constraints);
+      this.validate();
+    }
+
+    public void removeDenyCard(){
+        remove(denyCard);
+        this.revalidate();
     }
 }

@@ -118,6 +118,10 @@ public class GameScreenPanel extends JPanel {
 
     }
 
+    /**
+     * this method set the dashboard entrance clickable in order to select a student to move
+     * @param playerID the playerID used to identify which dashboard set movable
+     */
     public void setClickableStudents(int playerID) {
         switch (playerID){
             case 0->{

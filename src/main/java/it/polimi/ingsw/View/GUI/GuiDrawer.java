@@ -178,8 +178,6 @@ public class GuiDrawer extends ViewSubject {
         //switch to the actual game screen
         CardLayout cl=(CardLayout) generalPanelManager.getLayout();
         cl.show(generalPanelManager,"Game Screen");
-        SetMovableOptions(false,0);
-
     }
 
     public int ShowAssistantCardForm(int playerID) {
@@ -204,9 +202,14 @@ public class GuiDrawer extends ViewSubject {
     }
 
     public void SetMovableOptions(boolean gamemode, int playerID){
+        JOptionPane.showMessageDialog(f,"Now you can move a student by clicking on the entrance of your dashboard\n" +
+                "and then clicking on the isle where you want to move the student or your dining room");
         gameScreenPanel.setClickableStudents(playerID);
-        if(gamemode)
-        gameScreenPanel.setClickableCharacters();
+        if(gamemode){
+            gameScreenPanel.setClickableCharacters();
+            JOptionPane.showMessageDialog(f,"Since you are playing in Expert mode,\n you can also click on a character card to" +
+                    "activate his effect, given you have enough coins");
+        }
     }
 
     public ModelStorage getModelStorage() {

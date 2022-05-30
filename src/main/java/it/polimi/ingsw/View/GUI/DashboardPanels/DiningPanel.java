@@ -54,7 +54,7 @@ public class DiningPanel extends JPanel {
 
     /**
      * this method is called by the Color Listener after one student button press
-     * 
+     *
      */
     public void setCLickable(){
         addMouseListener(new DiningListener(this));

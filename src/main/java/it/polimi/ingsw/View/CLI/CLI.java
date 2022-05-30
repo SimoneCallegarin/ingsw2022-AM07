@@ -6,6 +6,7 @@ import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.View;
 
 
 import java.io.BufferedReader;
@@ -21,7 +22,7 @@ import java.util.concurrent.FutureTask;
  * with the player accordingly.
  */
 
-public class CLI extends ViewSubject {
+public class CLI extends ViewSubject implements View {
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
     CLIDrawer cliDrawer;
 

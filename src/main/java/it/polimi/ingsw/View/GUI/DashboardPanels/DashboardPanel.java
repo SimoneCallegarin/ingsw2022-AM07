@@ -19,6 +19,7 @@ public class DashboardPanel extends JPanel {
 
     EntrancePanel entrance;
     GridBagConstraints entranceConstraints;
+
     int playerID;
 
     ClassLoader cl=this.getClass().getClassLoader();
@@ -54,6 +55,7 @@ public class DashboardPanel extends JPanel {
     }
 
     private void initializeDashboard(){
+
         towerStorageConstraints.fill=GridBagConstraints.BOTH;
         towerStorageConstraints.gridy=0;
         towerStorageConstraints.weightx=1;
