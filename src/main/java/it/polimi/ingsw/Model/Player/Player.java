@@ -234,4 +234,7 @@ public class Player {
      */
     public void setNotAlreadyPlayedACardThisTurn() { this.alreadyPlayedACardThisTurn = false; }
 
+    public Mages getMage() {
+        return mage;
+    }
 }

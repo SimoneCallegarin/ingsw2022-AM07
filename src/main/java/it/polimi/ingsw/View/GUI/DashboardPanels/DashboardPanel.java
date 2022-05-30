@@ -11,8 +11,13 @@ import java.io.InputStream;
 
 public class DashboardPanel extends JPanel {
     Game game;
+    TowerStoragePanel towerStorage;
     GridBagConstraints towerStorageConstraints;
+
+    DiningPanel dining;
     GridBagConstraints diningConstraints;
+
+    EntrancePanel entrance;
     GridBagConstraints entranceConstraints;
     int playerID;
 
@@ -24,6 +29,9 @@ public class DashboardPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.black));
         this.game=game;
         this.playerID=playerID;
+        this.towerStorage=new TowerStoragePanel(game, playerID);
+        this.dining=new DiningPanel(game,playerID);
+        this.entrance=new EntrancePanel(game,playerID);
         towerStorageConstraints =new GridBagConstraints();
         diningConstraints= new GridBagConstraints();
         entranceConstraints= new GridBagConstraints();
@@ -51,21 +59,32 @@ public class DashboardPanel extends JPanel {
         towerStorageConstraints.weightx=1;
         towerStorageConstraints.weighty=0.35;
         towerStorageConstraints.ipady=-90;
-        add(new TowerStoragePanel(game,playerID), towerStorageConstraints);
+        add(towerStorage, towerStorageConstraints);
 
         diningConstraints.fill=GridBagConstraints.BOTH;
         diningConstraints.gridy=1;
         diningConstraints.weightx=1;
         diningConstraints.weighty=1;
-        add(new DiningPanel(game,playerID),diningConstraints);
+        add(dining,diningConstraints);
 
         entranceConstraints.fill=GridBagConstraints.BOTH;
         entranceConstraints.gridy=2;
         entranceConstraints.weightx=1;
         entranceConstraints.weighty=0.25;
         entranceConstraints.ipady=-50;
-        add(new EntrancePanel(game,playerID),entranceConstraints);
-
+        add(entrance,entranceConstraints);
     }
 
+
+    public TowerStoragePanel getTowerStorage() {
+        return towerStorage;
+    }
+
+    public DiningPanel getDining() {
+        return dining;
+    }
+
+    public EntrancePanel getEntrance() {
+        return entrance;
+    }
 }

@@ -15,7 +15,6 @@ public enum RealmColors {
             case 4 -> GREEN;
             default -> null;
         };
-
     }
 
 }

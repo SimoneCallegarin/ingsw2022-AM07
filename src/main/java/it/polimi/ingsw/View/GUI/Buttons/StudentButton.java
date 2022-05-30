@@ -12,8 +12,10 @@ import java.io.InputStream;
 public class StudentButton extends JButton {
 
     ClassLoader cl=this.getClass().getClassLoader();
+    RealmColors color;
 
     public StudentButton(RealmColors color) {
+        this.color=color;
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
         printStudent(color);
@@ -39,5 +41,7 @@ public class StudentButton extends JButton {
         setIcon(new ImageIcon(img));
     }
 
-
+    public RealmColors getColor() {
+        return color;
+    }
 }

@@ -10,6 +10,11 @@ import java.awt.*;
 public class DiningStudentsPanel extends JPanel {
     Game game;
     int playerID;
+    private JPanel greenLane;
+    private JPanel redLane;
+    private JPanel yellowLane;
+    private JPanel pinkLane;
+    private JPanel blueLane;
 
     public DiningStudentsPanel(Game game, int playerID) {
         this.game = game;
@@ -22,15 +27,15 @@ public class DiningStudentsPanel extends JPanel {
     private void InitializeDiningStudents(int playerID){
         GridLayout gridLayout=new GridLayout(10,1);
         gridLayout.setVgap(-13);
-        JPanel greenLane=new JPanel(gridLayout);
+        greenLane=new JPanel(gridLayout);
         greenLane.setOpaque(false);
-        JPanel redLane=new JPanel(gridLayout);
+        redLane=new JPanel(gridLayout);
         redLane.setOpaque(false);
-        JPanel yellowLane=new JPanel(gridLayout);
+        yellowLane=new JPanel(gridLayout);
         yellowLane.setOpaque(false);
-        JPanel pinkLane=new JPanel(gridLayout);
+        pinkLane=new JPanel(gridLayout);
         pinkLane.setOpaque(false);
-        JPanel blueLane=new JPanel(gridLayout);
+        blueLane=new JPanel(gridLayout);
         blueLane.setOpaque(false);
 
 
@@ -58,6 +63,6 @@ public class DiningStudentsPanel extends JPanel {
         add(yellowLane);
         add(pinkLane);
         add(blueLane);
-
     }
+
 }
