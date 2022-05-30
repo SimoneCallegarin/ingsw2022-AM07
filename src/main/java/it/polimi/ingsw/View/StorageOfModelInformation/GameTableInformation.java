@@ -98,6 +98,12 @@ public class GameTableInformation {
         isles.add(isleID,newIsle);
     }
 
+    public void setDenyOnIsle(int isleID, int denyCard) {
+        Isle newIsle = new Isle(isles.get(isleID).studentsOnIsle,isles.get(isleID).towerNumber,isles.get(isleID).towerColor,denyCard,isles.get(isleID).motherNatureIsPresent);
+        isles.remove(isleID);
+        isles.add(isleID,newIsle);
+    }
+
     public void setNewIsle(int isleID, Isle isle) {
         this.isles.remove(isleID);
         this.isles.add(isleID,isle);

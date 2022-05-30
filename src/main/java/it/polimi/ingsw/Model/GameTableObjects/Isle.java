@@ -86,9 +86,7 @@ public class Isle implements StudentManager, DenyCardManager {
      * @return the value we want
      */
     @Override
-    public int getStudentsByColor(RealmColors color) {
-        return students.get(color);
-    }
+    public int getStudentsByColor(RealmColors color) { return students.get(color); }
 
     /**
      * this method when called gives the number of students in the cloud
@@ -146,7 +144,7 @@ public class Isle implements StudentManager, DenyCardManager {
                     influence += students.get(c);
         }
         if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor()) && player.getCharacterCardPlayed()!= CharacterCardsName.CENTAUR){
-            influence+= numOfIsles;
+            influence += numOfIsles;
         }
         if(player.getAlreadyPlayedACardThisTurn() && player.getCharacterCardPlayed()== CharacterCardsName.KNIGHT)
             influence += 2;
@@ -157,50 +155,42 @@ public class Isle implements StudentManager, DenyCardManager {
      * getter method that gives the id of the current isle
      * @return the id of the isle
      */
-    public int getIdIsle() {
-        return idIsle;
-    }
+    public int getIdIsle() { return idIsle; }
 
     /**
      * getter method that gives the number of current isles
      * @return the number of current isles
      */
-    public int getNumOfIsles() {
-        return numOfIsles;
-    }
+    public int getNumOfIsles() { return numOfIsles; }
 
     /**
      * getter method that permits to know if there's mother nature on the isle
      * @return true if mother nature is present, false instead
      */
-    public boolean getMotherNature() {
-        return motherNature;
-    }
+    public boolean getMotherNature() { return motherNature; }
 
     /**
      * this method gives the color of the towers that are on the isle
      * @return the color of the towers
      */
-    public TowerColors getTowersColor(){
-        return tower;
-    }
+    public TowerColors getTowersColor(){ return tower; }
 
     /**
      * this method permits to update the id of the isle when unified (it is used by the isle manager)
      * @param idIsle the new id of the isle
      */
-    public void setIdIsle(int idIsle) {this.idIsle = idIsle;}
+    public void setIdIsle(int idIsle) { this.idIsle = idIsle; }
 
     /**
      * this method permits to update the number of isle of the isle when unified (it is used by the isle manager)
      * @param numOfIsles the new number of isle that noe compose the isle
      */
-    public void setNumOfIsles(int numOfIsles) {this.numOfIsles = numOfIsles;}
+    public void setNumOfIsles(int numOfIsles) { this.numOfIsles = numOfIsles; }
 
     /**
      * this method permits to update the color of the isle when conquered by another player (it is used by the isle manager)
      */
-    public void setTower(TowerColors c){this.tower=c;}
+    public void setTower(TowerColors c){ this.tower=c; }
 
     /**
      * this method permits setting if there's or not mother nature on an isle
@@ -212,7 +202,5 @@ public class Isle implements StudentManager, DenyCardManager {
      * getter for returning the students HashMap
      * @return the student HashMap
      */
-    public HashMap<RealmColors, Integer> getStudents() {
-        return students;
-    }
+    public HashMap<RealmColors, Integer> getStudents() { return students; }
 }

@@ -4,6 +4,8 @@ import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -35,7 +37,7 @@ class GamePlaySomeCharacterCardsTest {
         // 4 students randomly extracted from the bag now put on the character card
         assertEquals(4,game.getGameTable().getCharacterCard(0).getNumberOfStudents());
 
-        //we add a yellow student in the character card (5 students on it now)
+        //we add a pink student in the character card (5 students on it now)
         game.getGameTable().getCharacterCard(0).addStudent(RealmColors.PINK);
         //we keep trace on how many students there are at the start of the game in the isle 0 (because there can be 1 or none)
         int studentsOnIsle0 = game.getGameTable().getIsleManager().getIsle(10).getNumberOfStudents();
@@ -49,6 +51,44 @@ class GamePlaySomeCharacterCardsTest {
         // 96 students - 1 student extracted from the bag and put on the character card
         assertEquals(95,game.getGameTable().getBag().getNumberOfStudents());
         // 5 student on the character card (4 randomly extracted during set up + 1 extracted in game)
+        assertEquals(5,game.getGameTable().getCharacterCard(0).getNumberOfStudents());
+    }
+
+    /**
+     * We are testing the number of students on the MONK
+     */
+    @Test
+    void students_on_MONK_CharacterCard() {
+        game.addFirstPlayer("simone", true, 2);
+        game.addAnotherPlayer("giacomo");
+
+        game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        HashMap<RealmColors,Integer> initialStudentsOnMonk = new HashMap<>();
+        HashMap<RealmColors,Integer> finalStudentsOnMonk = new HashMap<>();
+        //we add a yellow student in the character card (5 students on it now)
+        game.getGameTable().getCharacterCard(0).addStudent(RealmColors.YELLOW);
+
+        for (RealmColors color : RealmColors.values())
+            initialStudentsOnMonk.put(color,game.getGameTable().getCharacterCard(0).getStudentsByColor(color));
+
+        assertEquals(5,game.getGameTable().getCharacterCard(0).getNumberOfStudents());
+
+        game.playCharacterCard(0,0);
+        game.activateAtomicEffect(0,0,0,10);
+
+        for (RealmColors color : RealmColors.values())
+            finalStudentsOnMonk.put(color,game.getGameTable().getCharacterCard(0).getStudentsByColor(color));
+
+
+        assertTrue(initialStudentsOnMonk.get(RealmColors.YELLOW)>=finalStudentsOnMonk.get(RealmColors.YELLOW));
+        assertTrue(initialStudentsOnMonk.get(RealmColors.PINK)<=finalStudentsOnMonk.get(RealmColors.PINK));
+        assertTrue(initialStudentsOnMonk.get(RealmColors.GREEN)<=finalStudentsOnMonk.get(RealmColors.GREEN));
+        assertTrue(initialStudentsOnMonk.get(RealmColors.BLUE)<=finalStudentsOnMonk.get(RealmColors.BLUE));
+        assertTrue(initialStudentsOnMonk.get(RealmColors.RED)<=finalStudentsOnMonk.get(RealmColors.RED));
+
         assertEquals(5,game.getGameTable().getCharacterCard(0).getNumberOfStudents());
     }
 
@@ -224,12 +264,12 @@ class GamePlaySomeCharacterCardsTest {
         game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
-        if(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()<10)
-            game.moveMotherNature(0,game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()+2);
-        else
-            game.moveMotherNature(0,game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()-10);
+        game.getGameTable().getIsleManager().getIsle(10).setMotherNature(false);
+        game.getGameTable().getIsleManager().setIsleWithMotherNatureIndex(10);
+        game.moveMotherNature(0,11);
 
         assertEquals(0,game.getGameTable().getIsleManager().getIsle(game.getGameTable().getIsleManager().getIsleWithMotherNatureIndex()).getDenyCards());
+        assertEquals(4,game.getGameTable().getCharacterCard(0).getDenyCards());
     }
 
     /**

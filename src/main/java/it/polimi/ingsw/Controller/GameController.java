@@ -69,20 +69,21 @@ public class GameController {
             }
             case PLAY_CHARACTER_CARD ->{
                 if (game.getGamePhase() == GamePhases.ACTION_PHASE && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()){
-                    game.playCharacterCard(message.getPlayerID(), message.getGenericValue());
                     characterCardPlayedIndex = message.getGenericValue();
-                    CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.getGenericValue()).getCharacterCardName();
-                    switch (characterCardPlayed){
-                        case FARMER,HERALD,MAGICAL_LETTER_CARRIER -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,-1,-1);
-                    }
+                    game.playCharacterCard(message.getPlayerID(), characterCardPlayedIndex);
                 }
             }
             case ACTIVATE_ATOMIC_EFFECT ->{
-                CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(message.getGenericValue()).getCharacterCardName();
-                switch (characterCardPlayed){
-                    case MONK,GRANDMA_HERBS,SPOILED_PRINCESS,THIEF -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,colorIndex,-1);
-                    case JESTER,MINSTREL -> game.activateAtomicEffect(message.getPlayerID(),characterCardPlayedIndex,colorIndex,colorIndexSaved);
-                    //still missing the choice of the number of students to move
+                if (game.getGamePhase() == GamePhases.ACTION_PHASE && game.getActionPhase() == ActionPhases.CHARACTER_CARD_PHASE && game.getCurrentActivePlayer() == game.getPlayerByIndex(message.getPlayerID()).getOrder()) {
+                    CharacterCardsName characterCardPlayed = game.getGameTable().getCharacterCard(characterCardPlayedIndex).getCharacterCardName();
+                    switch (characterCardPlayed) {
+                        case FARMER, MAGICAL_LETTER_CARRIER, CENTAUR, KNIGHT -> game.activateAtomicEffect(message.getPlayerID(), characterCardPlayedIndex, -1, -1);
+                        //case SPOILED_PRINCESS, THIEF, FUNGIST -> game.activateAtomicEffect(message.getPlayerID(), characterCardPlayedIndex, colorIndex, -1);
+                        case GRANDMA_HERBS, HERALD, SPOILED_PRINCESS, THIEF, FUNGIST -> game.activateAtomicEffect(message.getPlayerID(), characterCardPlayedIndex, message.getGenericValue(), -1);
+                        //case JESTER, MINSTREL -> game.activateAtomicEffect(message.getPlayerID(), characterCardPlayedIndex, colorIndex, colorIndexSaved);
+                        case MONK, JESTER, MINSTREL -> game.activateAtomicEffect(message.getPlayerID(), characterCardPlayedIndex, colorIndex, message.getGenericValue());
+                        //still missing the choice of the number of students to move
+                    }
                 }
             }
             /*
@@ -92,8 +93,12 @@ public class GameController {
               the new information.
              */
             case COLOR_VALUE -> {
-                colorIndexSaved = colorIndex;
+                //colorIndexSaved = colorIndex;
                 colorIndex = message.getGenericValue();
+            }
+            case GAMEPHASE_UPDATE -> {
+                game.setActionPhase(game.getLastActionPhase());
+                game.notifyTurn();
             }
         }
     }

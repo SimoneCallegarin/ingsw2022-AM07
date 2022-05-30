@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Network.Messages.MessageType;
 
@@ -7,6 +9,7 @@ import java.util.HashMap;
 
 public class CharacterCard_UpdateMsg extends NetworkMessage{
     private final int characterCardId;
+    private final CharacterCardsName cardName;
     private final int cardCost;
     private final int playerID;
     private final int generalReserve;
@@ -14,9 +17,10 @@ public class CharacterCard_UpdateMsg extends NetworkMessage{
     private final int denyCards;
     private final HashMap<RealmColors,Integer> studentsOnCharacter;
 
-    public CharacterCard_UpdateMsg(MessageType messageType, int characterCardId, int cardCost, int playerID, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter) {
+    public CharacterCard_UpdateMsg(MessageType messageType, int characterCardId, CharacterCardsName cardName, int cardCost, int playerID, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter) {
         super(messageType);
         this.characterCardId = characterCardId;
+        this.cardName = cardName;
         this.cardCost = cardCost;
         this.playerID = playerID;
         this.generalReserve = generalReserve;
@@ -26,6 +30,8 @@ public class CharacterCard_UpdateMsg extends NetworkMessage{
     }
 
     public int getCharacterCardId() { return characterCardId; }
+
+    public CharacterCardsName getCardName() { return cardName; }
 
     public int getCardCost() { return cardCost; }
 
