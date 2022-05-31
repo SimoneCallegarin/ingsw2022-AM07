@@ -2,18 +2,16 @@ package it.polimi.ingsw.View.CLI;
 
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.View;
 
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-//import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiConsole;
 
 
 /**
@@ -23,20 +21,19 @@ import java.util.concurrent.FutureTask;
  */
 
 public class CLI extends ViewSubject implements View {
-    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-    CLIDrawer cliDrawer;
 
-    public CLI() {
-        cliDrawer = new CLIDrawer();
-    }
+    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final CLIDrawer cliDrawer;
+    public CLI() { cliDrawer = new CLIDrawer(); }
 
     /**
      * method used to launch a thread for user input reading
      */
     //need to make it always run not only when the method is called
-    public String readUserInput(){
+    public String readUserInput(){ return getString(br); }
 
-        FutureTask<String> asyncInput=new FutureTask<>(() -> br.readLine());
+    public static String getString(BufferedReader br) {
+        FutureTask<String> asyncInput=new FutureTask<>(br::readLine);
         Thread inputThread = new Thread(asyncInput);
         inputThread.start();
         String userInput = null;
@@ -48,15 +45,13 @@ public class CLI extends ViewSubject implements View {
             Thread.currentThread().interrupt();
         }
         return userInput;
-
-
     }
 
     /**
      * CLI start
      */
-    public void CLIstart(){
-        //AnsiConsole.systemInstall();
+    public void VIEWstart(){
+        AnsiConsole.systemInstall();
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();
@@ -442,6 +437,8 @@ public class CLI extends ViewSubject implements View {
         }
     }
 
+    public void addObs(ClientController clientController) { addObserver(clientController); }
+
     // at the end of the game -> cliDrawer.printWinner(winnerID);
 
     public void printMessage(ServiceMessage message) {
@@ -452,18 +449,5 @@ public class CLI extends ViewSubject implements View {
 
     private void printAvailableCharacters() { System.out.println(cliDrawer.drawCharacterCardsEffects()); }
 
-    public CLIDrawer getCliDrawer() {
-        return cliDrawer;
-    }
-
-    public static void main(String[] args) throws ClassNotFoundException {
-        CLI cli = new CLI();
-        ConnectionSocket connectionSocket = new ConnectionSocket();
-        ClientController clientController = new ClientController(cli, connectionSocket, cli.getCliDrawer());
-        cli.addObserver(clientController);
-        connectionSocket.startConnection();
-        connectionSocket.getClientListener().addObserver(clientController);
-        cli.CLIstart();
-    }
-
+    public CLIDrawer getDrawer() { return cliDrawer; }
 }

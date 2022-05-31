@@ -1,25 +1,24 @@
 package it.polimi.ingsw.Network;
 
-import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class ConnectionSocket {
 
-    private final String host;
+    private final String address;
     private final int port;
 
-    public ClientListener getClientListener() {
-        return cListener;
-    }
+    public ClientListener getClientListener() { return cListener; }
 
-    ClientListener cListener;
-    ClientPingSender cPingSender;
-    ObjectInputStream input;
-    ObjectOutputStream output;
-    Socket clientSocket = null;
+    private ClientListener cListener;
+    private ClientPingSender cPingSender;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
+    private Socket clientSocket = null;
 
     public void send(NetworkMessage message) {
         try {
@@ -30,27 +29,22 @@ public class ConnectionSocket {
         }
     }
 
-    public ConnectionSocket() {
-        this.host = ServerSettings.ReadHostFromJSON();
-        this.port = ServerSettings.ReadPortFromJSON();
+    public ConnectionSocket(String address, int port) {
+        this.address = address;
+        this.port = port;
     }
 
-    public void startConnection() {
-        try {
-            clientSocket = new Socket(host, port);
+    public void startConnection() throws IOException {
+            clientSocket = new Socket(address, port);
             System.out.println("Connection established.");
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             input = new ObjectInputStream(clientSocket.getInputStream());
             cPingSender = new ClientPingSender(this);
             Thread threadSender = new Thread(cPingSender);
             threadSender.start();
-            //setup();
             cListener = new ClientListener(this, input);
             Thread threadListener = new Thread(cListener);
             threadListener.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void disconnect() {
