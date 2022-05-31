@@ -1,17 +1,27 @@
 package it.polimi.ingsw.View.GUI;
 
-
-
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Controller.ClientController;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.Network.ConnectionSocket;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
-public class GUIApp {
+public class GUIApp extends ViewSubject implements View {
+
+    static GuiDrawer guiDrawer;
+    static int playerID;
 
     public static void main(String[] args) {
-        //create the EDT to manage the event
+        //create the EDT to manage the events
+        GUIApp guiApp=new GUIApp();
         SwingUtilities.invokeLater(GUIApp::createAndShowGUI);
+        ConnectionSocket connectionSocket=new ConnectionSocket();
+
     }
 
     private static void createAndShowGUI(){
@@ -22,10 +32,62 @@ public class GUIApp {
         game.addAnotherPlayer("calle");
         game.addAnotherPlayer("jack");
         game.addAnotherPlayer("comfy");
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        new GuiDrawer(game);
+        /*
+        for(RealmColors color:RealmColors.values()){
+            for(int i=0;i<10;i++){
+                game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(color);
+            }
+            game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(color);
+        }
+        */
+        guiDrawer=new GuiDrawer(game);
+    }
+
+
+    @Override
+    public void askUsername() {
+
+    }
+
+    @Override
+    public void askGamePreferences() {
+
+    }
+
+    @Override
+    public void askAssistantCard(int playerID) {
+        int turnOrder=guiDrawer.ShowAssistantCardForm(playerID);
+        notifyObserver(obs->obs.onAssistantCard(turnOrder));
+    }
+
+    @Override
+    public void askMove(boolean expertMode) {
+
+    }
+
+    @Override
+    public void printMessage(ServiceMessage message) {
+
+    }
+
+    @Override
+    public void printChanges() {
+
+    }
+
+    @Override
+    public void askMNMovement() {
+
+    }
+
+    @Override
+    public void askCloud() {
+
+    }
+
+    @Override
+    public void askCharacterEffectParameters(CharacterCardsName characterName) {
+
     }
 
 }
