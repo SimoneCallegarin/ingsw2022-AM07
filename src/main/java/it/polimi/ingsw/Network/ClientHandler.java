@@ -156,32 +156,34 @@ public class ClientHandler implements Runnable {
             send(new ServiceMessage(MessageType.KO, "Not expecting a game action message"));
     }
 
+    /**
+     * Handles the user connection with the server during:
+     *  - the choice of the nickname;
+     *  - the choice of the game preferences;
+     *  - each move correctly done by the player;
+     *  - a logout by the player.
+     * @throws IOException when receiving a wrong input by the client.
+     */
     private void handleConnection() throws IOException {
-        LoginMessage lm;
-        GamePreferencesMessage gpm;
-        PlayerMoveMessage pmm;
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 NetworkMessage message = (NetworkMessage) input.readObject();
-                if (message != null && message.getMessageType() != MessageType.PING) {
+                if (message != null && message.getMessageType() != MessageType.PING) {  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     switch (message.getMessageType()) {
                         case LOGIN -> {
                             System.out.println("LOGIN message received!");
-                            lm = (LoginMessage) message;
-                            logPlayer(lm);
+                            logPlayer((LoginMessage) message);
                         }
                         case GAME_SETUP_INFO -> {
                             System.out.println("GAME_SETUP_INFO message received from " + nickname + "!");
-                            gpm = (GamePreferencesMessage) message;
-                            addPlayerToGame(gpm);
+                            addPlayerToGame((GamePreferencesMessage) message);
                         }
                         case LOGOUT -> {
-
+                            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         }
                         default -> {
                             System.out.println("PLAYER_MOVE message received!");
-                            pmm = (PlayerMoveMessage) message;
-                            handleGame(pmm);
+                            handleGame((PlayerMoveMessage) message);
                         }
                     }
                 }
@@ -192,7 +194,7 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * it will remove all data saved in the server, connected to the player associated with this client handler.
+     * Removes all data saved in the server about the player associated with this client handler.
      * @throws IOException when there's an error in the exchanged messages.
      */
     private void shutConnection(String error) throws IOException {
@@ -202,12 +204,14 @@ public class ClientHandler implements Runnable {
             server.onDisconnection(nickname);
         server.addPlayerToRemove(nickname);
         connected = false;
-        //output.close();
         input.close();
         client.close();
-        //System.out.println("Stream closing successful!");
     }
 
+    /**
+     * Handles the disconnection of the player by shutting down the client handler of the player.
+     * @param error the type of error occurred for the player that disconnected.
+     */
     public void disconnect(String error) {
         if (connected) {
             System.out.println("TIMEOUT EXPIRED or ERROR");
@@ -222,6 +226,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Getter method that returns if the client is still connected.
+     * @return true if the client is still connected, else false.
+     */
     public boolean isConnected() { return connected; }
 
     /**
@@ -240,6 +248,10 @@ public class ClientHandler implements Runnable {
             return true;
     }
 
+    /**
+     * Sends messages to the client.
+     * @param message the message that has to be sent.
+     */
     public void send(NetworkMessage message) {
         try {
             output.writeObject(message);
@@ -249,12 +261,14 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Runs thread ClientHandler.
+     */
     @Override
     public void run() {
         try {
             handleConnection();
         } catch (IOException e) {
-            //System.out.println("TIMEOUT EXPIRED or ERROR");
             disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
         }
     }

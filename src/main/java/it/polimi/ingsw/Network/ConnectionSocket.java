@@ -3,23 +3,53 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ConnectionSocket {
 
-    private final String address;
+    /**
+     * Host name of the server that the ConnectionSocket is trying to connect.
+     */
+    private final String host;
+    /**
+     * Port where the server is listening and through where the ConnectionSocket is trying to connect.
+     */
     private final int port;
-
-    public ClientListener getClientListener() { return cListener; }
-
+    /**
+     * The thread client side that permits to handle his disconnection (due to quit message or errors).
+     */
     private ClientListener cListener;
+    /**
+     * The Thread client side that handles ping messages exchange with the server.
+     */
     private ClientPingSender cPingSender;
+    /**
+     * Input stream.
+     */
     private ObjectInputStream input;
+    /**
+     * Output stream.
+     */
     private ObjectOutputStream output;
-    private Socket clientSocket = null;
+    /**
+     * Socket of the client.
+     */
+    private Socket clientSocket;
 
+    /**
+     * Constructor of ConnectionSocket.
+     * @param host of the server that the ConnectionSocket is trying to connect.
+     * @param port through where the ConnectionSocket is trying to connect.
+     */
+    public ConnectionSocket(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
+    /**
+     * Sends messages to the server.
+     * @param message that will be sent to the server.
+     */
     public void send(NetworkMessage message) {
         try {
             output.writeObject(message);
@@ -29,24 +59,35 @@ public class ConnectionSocket {
         }
     }
 
-    public ConnectionSocket(String address, int port) {
-        this.address = address;
-        this.port = port;
-    }
-
+    /**
+     * Starts the connection between client and server,
+     * also initializes various objects that handles the connection:
+     *  - Socket -> stream socket;
+     *  - ObjectOutputStream -> Input stream;
+     *  - ObjectInputStream -> Input stream;
+     *  - ClientPingSender -> handles ping messages exchange;
+     *  - ClientListener -> handle eventual client disconnections.
+     * @throws IOException when it isn't possible to establish a connection with the server.
+     */
     public void startConnection() throws IOException {
-            clientSocket = new Socket(address, port);
+            clientSocket = new Socket(host, port);
             System.out.println("Connection established.");
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             input = new ObjectInputStream(clientSocket.getInputStream());
+            // ClientPingSender:
             cPingSender = new ClientPingSender(this);
             Thread threadSender = new Thread(cPingSender);
             threadSender.start();
+            // ClientListener:
             cListener = new ClientListener(this, input);
             Thread threadListener = new Thread(cListener);
             threadListener.start();
     }
 
+    /**
+     * Handles the client disconnection by stopping all the threads that were associated with the client
+     * and closing the streams and the ConnectionSocket itself.
+     */
     public void disconnect() {
         System.out.println("Closing connection...");
         cListener.stopListener();
@@ -59,5 +100,11 @@ public class ConnectionSocket {
             System.out.println("Error occurred during disconnection");
         }
     }
+
+    /**
+     * Getter method for the client listener.
+     * @return the client listener associated to this ConnectionSocket.
+     */
+    public ClientListener getClientListener() { return cListener; }
 }
 

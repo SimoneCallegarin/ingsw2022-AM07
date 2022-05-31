@@ -17,53 +17,61 @@ import static it.polimi.ingsw.View.CLI.CLI.getString;
 
 public class App {
 
-    private View view;
-
+    /**
+     * Input stream.
+     */
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-    private String address;
+    /**
+     * Host name of the server (default is "localhost").
+     */
+    private String host;
+    /**
+     * Port where the server is listening (default is 1234).
+     */
     private int port;
+    /**
+     * It's the CLI or the GUI basing on the user choice.
+     */
+    private View view;
+    /**
+     * It's 0 if the user chooses the CLI, it's 1 if he chooses the GUI.
+     */
     private int choice;
+    /**
+     * The connection socket of the client.
+     */
     private ConnectionSocket connectionSocket;
 
+    /**
+     * Asks the user to write the host name of the server (default is "localhost").
+     */
     private void selectAddress() {
         System.out.println("Choose address (leave empty to set \"localhost\"):");
-        address = readUserInput();
-        if(address.isEmpty())
-            address = "localhost";
+        host = readUserInput();
+        if(host.isEmpty())
+            host = "localhost";
     }
 
+    /**
+     * Asks the user to write the port where to communicate with the server (default is 1234).
+     */
     private void selectPort() {
         System.out.println("Choose a port(leave empty to set \"1234\"):");
         String stringPort = readUserInput();
         if (stringPort.isEmpty())
             port = 1234;
         else
-            port = Integer.parseInt(stringPort);
+            try {
+                port = Integer.parseInt(stringPort);
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong port format, the port must be a sequence of numbers only!");
+                selectPort();
+            }
     }
 
-    private void initializeConnection(App app) {
-        try {
-            app.connectionSocket = new ConnectionSocket(app.address,app.port);
-            app.connectionSocket.startConnection();
-        } catch (UnknownHostException e) {
-            app.selectAddress();
-            initializeConnection(app);
-        } catch (ConnectException e) {
-            app.selectPort();
-            initializeConnection(app);
-        } catch (IOException e) {
-            app.selectAddress();
-            app.selectPort();
-            initializeConnection(app);
-        }
-
-        ClientController clientController = new ClientController(app.view, app.connectionSocket, app.view.getDrawer());
-        app.connectionSocket.getClientListener().addObserver(clientController);
-        app.view.addObs(clientController);
-
-    }
-
+    /**
+     * Asks the user if he wants to play using the CLI (0) or the GUI (1).
+     */
     private void askChooseCLIorGUI() {
         do {
             System.out.println("Choose:");
@@ -75,13 +83,54 @@ public class App {
         }while (choice != 0 && choice != 1);
     }
 
+    /**
+     * Initialize the connection between the connection socket and the server
+     * using the parameters asked previously to the client.
+     */
+    private void initializeConnection() {
+        // Asking address and port for the first time:
+        selectAddress();
+        selectPort();
+        // Checking if the connection is possible:
+        establishConnection();
+
+        ClientController clientController = new ClientController(view, connectionSocket, view.getDrawer());
+        view.addObs(clientController);
+        connectionSocket.getClientListener().addObserver(clientController);
+    }
+
+    /**
+     * Establishes a stable connection with the server if it's available at a certain port and host name.
+     */
+    private void establishConnection() {
+        try {
+            connectionSocket = new ConnectionSocket(host,port);
+            connectionSocket.startConnection();
+        } catch (UnknownHostException e) {
+            selectAddress();
+            establishConnection();
+        } catch (ConnectException e) {
+            selectPort();
+            establishConnection();
+        } catch (IOException e) {
+            selectAddress();
+            selectPort();
+            establishConnection();
+        }
+    }
+
+    /**
+     * Reads what the user write in the buffer using his keyboard.
+     * @return what the user wrote.
+     */
     public String readUserInput(){ return getString(br); }
 
+    /**
+     * MAIN of the app that runs CLI or GUI and connects to the server.
+     */
     public static void main(String[] args) {
 
         App app = new App();
-
-
 
         if(app.choice==0){ app.view = new CLI(); }
         else{
@@ -89,7 +138,7 @@ public class App {
             SwingUtilities.invokeLater(GUIApp::createAndShowGUI);   //create the EDT to manage the events.
         }
 
-        app.initializeConnection(app);
+        app.initializeConnection();
 
         app.askChooseCLIorGUI();
 

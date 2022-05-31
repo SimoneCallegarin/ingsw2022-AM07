@@ -12,14 +12,14 @@ import it.polimi.ingsw.View.View;
 
 public class ClientController implements ViewObserver, NetworkObserver {
 
-    View view;
-    ConnectionSocket client;
-    ModelStorage storage;
-    CLIDrawer cliDrawer;
-    String username;
-    boolean expertMode = false;
-    int playerID;
-    CharacterCardsName lastCharacterUsed;
+    private View view;
+    private ConnectionSocket client;
+    private ModelStorage storage;
+    private CLIDrawer cliDrawer;
+    private String username;
+    private boolean expertMode = false;
+    private int playerID;
+    private CharacterCardsName lastCharacterUsed;
 
     public ClientController(View cli, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.view = cli;
