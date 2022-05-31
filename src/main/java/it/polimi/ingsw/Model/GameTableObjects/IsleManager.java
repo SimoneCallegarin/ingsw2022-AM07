@@ -94,13 +94,9 @@ public class IsleManager {
             unifyIsle(previousIsleIndex-previousIsleOffsetIndex, idIsle-idIsleOffsetIndex);
     }
 
-    public int getIsleWithMotherNatureIndex() {
-        return isleWithMotherNatureIndex;
-    }
+    public int getIsleWithMotherNatureIndex() { return isleWithMotherNatureIndex; }
 
-    public void setIsleWithMotherNatureIndex(int newMNIsleIndex) {
-        isleWithMotherNatureIndex = newMNIsleIndex;
-    }
+    public void setIsleWithMotherNatureIndex(int newMNIsleIndex) { isleWithMotherNatureIndex = newMNIsleIndex; }
 
     private void updateIsleWithMotherNatureIndex() {
         for (Isle i : isles) {
@@ -147,7 +143,7 @@ public class IsleManager {
      * @param index the index associated to a certain isle in the ArrayList
      * @return the isle associated to that index
      */
-    public Isle getIsle(int index){return isles.get(index);}
+    public Isle getIsle(int index){ return isles.get(index); }
 
     /**
      * method used only for testing
@@ -155,5 +151,4 @@ public class IsleManager {
      * @return the list of active isles
      */
     public ArrayList<Isle> getIsles() { return isles; }
-
 }

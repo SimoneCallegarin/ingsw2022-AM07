@@ -20,25 +20,21 @@ public class AssistantCard {
     }
 
     /**
+     * getter method that gives the turn order value of the assistant card
+     */
+    public int getTurnOrder() { return turnOrder; }
+
+    /**
      * getter method that gives the quantity of possible mother nature movements of the assistant card
      * @return the possible mother nature movements
      */
-    public int getMnMovement() {
-        return mnMovement;
-    }
+    public int getMnMovement() { return mnMovement; }
 
     /**
      * this method is used by the MAGICAL LETTER CARRIER
      * to increase the possible movement of mother nature by 2
      */
-    public void increaseMnMovement(){mnMovement=mnMovement+2;}
-
-    /**
-     * getter method that gives the turn order value of the assistant card
-     */
-    public int getTurnOrder() {
-        return turnOrder;
-    }
+    public void increaseMnMovement(){ mnMovement=mnMovement+2; }
 
     /**
      * method that permits a comparison between two assistant cards, basing the comparison between their turn order

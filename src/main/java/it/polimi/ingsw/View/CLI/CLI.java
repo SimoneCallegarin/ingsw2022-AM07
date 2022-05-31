@@ -9,9 +9,10 @@ import it.polimi.ingsw.Observer.ViewSubject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.sql.SQLOutput;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import org.fusesource.jansi.AnsiConsole;
+
 
 /**
  * this class implements the command line interface to play trough terminal, it's observed by the connectionSocket which sends messages
@@ -53,6 +54,7 @@ public class CLI extends ViewSubject {
      * CLI start
      */
     public void CLIstart(){
+        AnsiConsole.systemInstall();
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();

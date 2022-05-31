@@ -147,9 +147,7 @@ public class GameTable implements DenyCardManager {
      * @param index of the character card we want
      * @return the playable character card with that index
      */
-    public CharacterCard getCharacterCard(int index) {
-        return characterCards.get(index);
-    }
+    public CharacterCard getCharacterCard(int index) { return characterCards.get(index); }
 
     /**
      * this method will update the number of money when a character card is played
@@ -176,7 +174,7 @@ public class GameTable implements DenyCardManager {
     }
 
     /**
-     * this method add a deny card to the deny card manager, anyway it isn't really used in the game
+     * Adds a deny card to the deny card manager, anyway it isn't really used in the game.
      */
     @Override
     public void addDenyCard() { denyCards += 1; }
@@ -185,9 +183,7 @@ public class GameTable implements DenyCardManager {
      * this method remove a deny card to the deny card manager
      */
     @Override
-    public void removeDenyCard(){
-        denyCards -= 1;
-    }
+    public void removeDenyCard(){ denyCards -= 1; }
 
     /**
      * this method gives the number of deny cards on the deny card manager

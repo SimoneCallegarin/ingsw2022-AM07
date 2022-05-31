@@ -12,20 +12,17 @@ import java.io.InputStream;
  */
 public class InitialBackgroundPanel extends JPanel {
 
-    public InitialBackgroundPanel(LayoutManager layout) {
+    public InitialBackgroundPanel(LayoutManager layout, int screenDimensionX, int screenDimensionY) {
         super(layout);
-        setBackground(Color.blue);
         //adding borders
-        add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.WEST);
-        add(Box.createRigidArea(new Dimension(600,300)),BorderLayout.EAST);
-        add(Box.createRigidArea(new Dimension(500,340)),BorderLayout.NORTH);
-        add(Box.createRigidArea(new Dimension(500,280)),BorderLayout.SOUTH);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.WEST);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.EAST);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.NORTH);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.SOUTH);
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        printBackground(g, getWidth(),getHeight());
-    }
+    protected void paintComponent(Graphics g) { printBackground(g, getWidth(),getHeight()); }
 
     private void printBackground(Graphics g, int width, int height) {
         ClassLoader cl = this.getClass().getClassLoader();

@@ -27,7 +27,7 @@ public class ModelStorage {
         // DASHBOARDS:
         ArrayList<PlayerInformation> dashboards = new ArrayList<>();
         for(int i=0; i<message.getNumPlayers(); i++){
-            PlayerInformation dashboard = new PlayerInformation(message.getNicknames().get(i),message.getEntrances().get(i),message.getNumTowers().get(i),message.getTowerColors().get(i), message.getMoney());
+            PlayerInformation dashboard = new PlayerInformation(message.getNicknames().get(i),message.getSquads().get(i),message.getEntrances().get(i),message.getNumTowers().get(i),message.getTowerColors().get(i), message.getMoney());
             dashboards.add(i,dashboard);
         }
 

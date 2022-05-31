@@ -546,10 +546,9 @@ public class CLIDrawer {
         drawRectangle(gameTable,startingPointX+posX,startingPointY+posY+1,3,5);
 
         writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"TEAMS"),startingPointX+posX,startingPointY+posY+1);
-        if (playerID==0||playerID==2)
-            gameTable[startingPointX+posX+1][startingPointY+posY+3] = "1";
-        else
-            gameTable[startingPointX+posX+1][startingPointY+posY+3] = "2";
+
+        gameTable[startingPointX+posX+1][startingPointY+posY+3] = Integer.valueOf(storage.getDashboard(playerID).getTeam()).toString();
+
     }
 
     /**
@@ -816,7 +815,7 @@ public class CLIDrawer {
         initializeRectangle(assistantCards,ASSISTANT_CARDS_CONTAINER_X,ASSISTANT_CARDS_CONTAINER_Y);
 
         drawRectangle(assistantCards,0,0,ASSISTANT_CARDS_CONTAINER_X,ASSISTANT_CARDS_CONTAINER_Y);
-        writeLongerString(assistantCards,paintService(CLIColors.B_WHITE,"PLAYABLE ASSISTANT CARDS"),0,21);
+        writeLongerString(assistantCards,paintService(CLIColors.B_WHITE,"PLAYABLE ASSISTANT CARDS"),0,20);
 
         int bigger=0;
         for(int i=0;i<storage.getDashboard(playerID).getAssistantCardsTurnOrder().size();i++){

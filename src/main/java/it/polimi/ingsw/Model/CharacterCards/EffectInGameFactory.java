@@ -39,7 +39,6 @@ public class EffectInGameFactory {
             case MONK:
                 studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,color1,color2);
                 studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,color1, color2);
-                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case FARMER:
@@ -56,8 +55,8 @@ public class EffectInGameFactory {
                 break;
 
             case HERALD:
-                game.checkUpdateInfluence(value1);
-                game.checkEndGame();
+                game.checkUpdateInfluence(value2);      // put this in another class.
+                //game.checkEndGame();
                 game.setActionPhase(game.getLastActionPhase());
                 break;
 
@@ -123,6 +122,7 @@ public class EffectInGameFactory {
             case KNIGHT, CENTAUR:
                 game.setActionPhase(game.getLastActionPhase());
                 break;
+
         }
     }
 }

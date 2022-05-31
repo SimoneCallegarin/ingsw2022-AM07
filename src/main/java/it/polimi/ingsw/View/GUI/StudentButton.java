@@ -4,6 +4,7 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,10 +23,11 @@ public class StudentButton extends JButton {
         InputStream url=null;
         switch(color){
             case YELLOW ->url=cl.getResourceAsStream("Dashboard/Students/Yellow.png");
-            case BLUE -> url=cl.getResourceAsStream("Dashboard/Students/Blue.png");
+            case BLUE -> url=cl.getResourceAsStream("Blue.png");
             case RED -> url=cl.getResourceAsStream("Dashboard/Students/Red.png");
             case PINK -> url=cl.getResourceAsStream("Dashboard/Students/Pink.png");
             case GREEN -> url=cl.getResourceAsStream("Dashboard/Students/Green.png");
+            default -> url=cl.getResourceAsStream("Dashboard/Circles.png");
         }
         BufferedImage img=null;
         try{
@@ -34,8 +36,7 @@ public class StudentButton extends JButton {
         }catch (IOException e){
             e.printStackTrace();
         }
-        if (img != null)
-            setIcon(new ImageIcon(img));
+        setIcon(new ImageIcon(img));
     }
 
 

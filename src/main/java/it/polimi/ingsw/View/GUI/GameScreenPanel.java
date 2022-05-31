@@ -14,7 +14,8 @@ import java.io.InputStream;
 public class GameScreenPanel extends JPanel {
     Game game;
     private  final int DASHBOARD_WIDTH = 250;
-    private  final int DASHBOARD_HEIGHT = 500;
+    private  final int DASHBOARD_HEIGHT = 800;
+    GridBagConstraints dashboardConstraints;
 
     private Graphics g;
 
@@ -31,66 +32,43 @@ public class GameScreenPanel extends JPanel {
      *
      * @param layout the LayoutManager to use
      */
-    public GameScreenPanel(LayoutManager layout, Game game) {
+    public GameScreenPanel(LayoutManager layout, Game game, int frameWidth, int frameHeight) {
         super(layout);
-        setBackground(Color.CYAN);
         this.game=game;
-        for(int i=0; i<4;i++){
-            add(new DashboardPanel(new GridBagLayout(),game));                       // 4 -> storage.getNumberOfPlayers();
-        }
-    }
+        setPreferredSize(new Dimension(frameWidth,frameHeight));
+        JPanel dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
+        JPanel dashboardContainerPanel2=new JPanel(new GridLayout(2,1));
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        setGraphics(g);
+        GridBagConstraints gamescreenConstraints=new GridBagConstraints();
+        GridBagConstraints DCPConstraints=new GridBagConstraints();//dashboard container panel constraints
+        //first i divide the gamescreen in 3 columns and 1 row and i made the isleManagerPanel take the most space in the center
+        gamescreenConstraints.gridy=0;
+        gamescreenConstraints.weighty=1;
+        gamescreenConstraints.weightx=1;
+        gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
-            //printDashboards(i);
+        gamescreenConstraints.gridx=1;
+        add(new IsleManagerPanel(),gamescreenConstraints);
 
-    }
+        //then i add the two dashboard container Panel on the left and on the right and i set the weights in order to correctly size the dashboard
+        gamescreenConstraints.weightx=0.2;
+        gamescreenConstraints.weighty=0.2;
+        gamescreenConstraints.gridx=0;
+        add(dashboardContainerPanel1,gamescreenConstraints);
 
-    /*
-    private void printImage(Graphics g, String image, int posX, int posY, int width, int height) {
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream(image);
-        BufferedImage img= null;
-        try {
-            if (url != null)
-                img = ImageIO.read(url);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(img, posX, posY, width, height, null);
-    }
-    */
+        gamescreenConstraints.gridx=2;
+        add(dashboardContainerPanel2,gamescreenConstraints);
 
-    private void printDashboard(int posX, int posY) {
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = cl.getResourceAsStream("Dashboard/Complete.png");
-        BufferedImage img= null;
-        try {
-            if (url != null)
-                img = ImageIO.read(url);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(img, posX, posY, DASHBOARD_WIDTH, DASHBOARD_HEIGHT,null);
-    }
 
-    public void printDashboards(int playerID) {
-        int posX;
-        int posY;
 
-        if(playerID==0||playerID==2)
-            posX = 0;
-        else
-            posX = getWidth()-DASHBOARD_WIDTH;
+        //then i add the 4 dashbpoard to the containers
+        dashboardContainerPanel1.add(new DashboardPanel(game));
+        dashboardContainerPanel2.add(new DashboardPanel(game));
 
-        if(playerID==0||playerID==1)
-            posY = 0;
-        else
-            posY = DASHBOARD_HEIGHT+10;
+        dashboardContainerPanel1.add(new DashboardPanel(game));
+        dashboardContainerPanel2.add(new DashboardPanel(game));
 
-        printDashboard(posX,posY);
 
     }
+
 }
