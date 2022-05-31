@@ -3,7 +3,7 @@ package it.polimi.ingsw.View.GUI.IslesPanels;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.AssistantCardPanel;
 import it.polimi.ingsw.View.GUI.CharacterPanel;
-import it.polimi.ingsw.View.GUI.CloudsContainerPanel;
+import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
 import it.polimi.ingsw.View.GUI.MagePanel;
 
 import javax.swing.*;

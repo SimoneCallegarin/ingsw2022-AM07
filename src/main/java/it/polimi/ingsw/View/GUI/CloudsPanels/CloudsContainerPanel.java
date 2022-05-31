@@ -1,6 +1,7 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.CloudsPanels;
 
 import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.View.GUI.CloudsPanels.CloudPanel;
 
 import javax.swing.*;
 import java.awt.*;

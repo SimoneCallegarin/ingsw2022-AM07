@@ -10,11 +10,11 @@ import java.awt.event.MouseListener;
 /**
  * this class is added to student buttons to listen to a mouse click and notify the view observers of the button color selected
  */
-public class ColorListener extends ViewSubject implements MouseListener  {
+public class EntranceListener extends ViewSubject implements MouseListener  {
 
     DashboardPanel dashboardListened;
 
-    public ColorListener(DashboardPanel dashboardListened) {
+    public EntranceListener(DashboardPanel dashboardListened) {
         this.dashboardListened = dashboardListened;
     }
 

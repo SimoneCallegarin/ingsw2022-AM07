@@ -3,12 +3,10 @@ package it.polimi.ingsw.View.GUI.DashboardPanels;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.EventListeners.ColorListener;
+import it.polimi.ingsw.View.GUI.EventListeners.EntranceListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 /**
  * this panel is inserted in the Dashboard panel and represents the dashboard entrance. It contains students button.
@@ -59,7 +57,7 @@ public class EntrancePanel extends JPanel{
      */
     public void setClickable(){
         for(int i=0;i<this.getComponentCount();i++){
-            this.getComponent(i).addMouseListener(new ColorListener((DashboardPanel) this.getParent()));
+            this.getComponent(i).addMouseListener(new EntranceListener((DashboardPanel) this.getParent()));
         }
     }
 
