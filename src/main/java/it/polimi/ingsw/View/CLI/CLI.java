@@ -8,12 +8,9 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.View;
 
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-//import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiConsole;
 
 
 /**
@@ -23,8 +20,8 @@ import java.util.concurrent.FutureTask;
  */
 
 public class CLI extends ViewSubject implements View {
-    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
     CLIDrawer cliDrawer;
+    Thread inputThread;
 
     public CLI() {
         cliDrawer = new CLIDrawer();
@@ -34,21 +31,21 @@ public class CLI extends ViewSubject implements View {
      * method used to launch a thread for user input reading
      */
     //need to make it always run not only when the method is called
-    public String readUserInput(){
+    public String readUserInput() throws ExecutionException {
 
-        FutureTask<String> asyncInput=new FutureTask<>(() -> br.readLine());
-        Thread inputThread = new Thread(asyncInput);
+        FutureTask<String> asyncInput = new FutureTask<>(new InputReadCall());
+        inputThread = new Thread(asyncInput);
         inputThread.start();
+
         String userInput = null;
         try {
              userInput = asyncInput.get();
         }
-        catch (InterruptedException | ExecutionException e){
+        catch (InterruptedException e){
             asyncInput.cancel(true);
             Thread.currentThread().interrupt();
         }
         return userInput;
-
 
     }
 
@@ -56,7 +53,7 @@ public class CLI extends ViewSubject implements View {
      * CLI start
      */
     public void CLIstart(){
-        //AnsiConsole.systemInstall();
+        AnsiConsole.systemInstall();
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();
@@ -69,13 +66,17 @@ public class CLI extends ViewSubject implements View {
      * Reads the username chosen by the player and notifies it to the view.
      */
     public void askUsername() {
-        System.out.println("> Nickname? [NOTE: it must be between 2 and 20 characters long]");
-        System.out.println("> ");
-        String username = readUserInput();
-        if (username.length() >= 2 && username.length() <= 20)
-            notifyObserver(obs -> obs.onUsername(username));
-        else
-            askUsername();
+        try {
+            System.out.println("> Nickname? [NOTE: it must be between 2 and 20 characters long]");
+            System.out.println("> ");
+            String username = readUserInput();
+            if (username.length() >= 2 && username.length() <= 20)
+                notifyObserver(obs -> obs.onUsername(username));
+            else
+                askUsername();
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
+        }
     }
 
     /**
@@ -101,6 +102,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askGamePreferences();
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -115,6 +118,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askAssistantCard(playerID);
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -169,6 +174,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askMove(expertMode);
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -187,6 +194,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askRealmColor(place);
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -204,6 +213,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askIsleMovement();
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -259,6 +270,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askMNMovement(expertMode);
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -314,6 +327,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askCloud(expertMode);
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -327,6 +342,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askCharacterToPlay();
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -439,6 +456,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askCharacterEffectParameters(characterName);
+        } catch (ExecutionException ee) {
+            System.err.println("Closing input read");
         }
     }
 
@@ -454,6 +473,13 @@ public class CLI extends ViewSubject implements View {
 
     public CLIDrawer getCliDrawer() {
         return cliDrawer;
+    }
+
+    @Override
+    public void disconnect(ServiceMessage message) {
+        inputThread.interrupt();
+        System.out.println(message.getMessage());
+        System.exit(1);
     }
 
     public static void main(String[] args) throws ClassNotFoundException {

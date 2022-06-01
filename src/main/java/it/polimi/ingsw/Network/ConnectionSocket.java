@@ -5,6 +5,7 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.FutureTask;
 
 public class ConnectionSocket {
 
@@ -44,7 +45,6 @@ public class ConnectionSocket {
             cPingSender = new ClientPingSender(this);
             Thread threadSender = new Thread(cPingSender);
             threadSender.start();
-            //setup();
             cListener = new ClientListener(this, input);
             Thread threadListener = new Thread(cListener);
             threadListener.start();

@@ -198,10 +198,10 @@ public class ClientHandler implements Runnable {
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
         System.out.println("QUIT message sent to " + nickname);
-        if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
-            server.onDisconnection(nickname);
         server.addPlayerToRemove(nickname);
         connected = false;
+        if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
+            server.onDisconnection(nickname);
         //output.close();
         input.close();
         client.close();

@@ -18,12 +18,12 @@ public interface View {
 
      void printChanges();
 
-     void askMNMovement();
+     void askMNMovement(boolean expertMode);
 
-     void askCloud();
+     void askCloud(boolean expertMode);
 
      void askCharacterEffectParameters(CharacterCardsName characterName);
 
-
+     void disconnect(ServiceMessage message);
 
 }

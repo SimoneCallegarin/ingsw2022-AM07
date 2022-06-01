@@ -76,17 +76,22 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void askMNMovement() {
+    public void askMNMovement(boolean expertMode) {
 
     }
 
     @Override
-    public void askCloud() {
+    public void askCloud(boolean expertMode) {
 
     }
 
     @Override
     public void askCharacterEffectParameters(CharacterCardsName characterName) {
+
+    }
+
+    @Override
+    public void disconnect(ServiceMessage message) {
 
     }
 
