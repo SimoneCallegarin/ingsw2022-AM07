@@ -1,6 +1,7 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DashboardPanel extends JPanel {
-    Game game;
+
     TowerStoragePanel towerStorage;
     GridBagConstraints towerStorageConstraints;
 
@@ -25,14 +26,14 @@ public class DashboardPanel extends JPanel {
     ClassLoader cl=this.getClass().getClassLoader();
 
 
-    public DashboardPanel( Game game, int playerID) {
+    public DashboardPanel(ModelStorage storage, int playerID) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
-        this.game=game;
+
         this.playerID=playerID;
-        this.towerStorage=new TowerStoragePanel(game, playerID);
-        this.dining=new DiningPanel(game,playerID);
-        this.entrance=new EntrancePanel(game,playerID);
+        this.towerStorage=new TowerStoragePanel(storage, playerID);
+        this.dining=new DiningPanel(storage,playerID);
+        this.entrance=new EntrancePanel(storage,playerID);
         towerStorageConstraints =new GridBagConstraints();
         diningConstraints= new GridBagConstraints();
         entranceConstraints= new GridBagConstraints();

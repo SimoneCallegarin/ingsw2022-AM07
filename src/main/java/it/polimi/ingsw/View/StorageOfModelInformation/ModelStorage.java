@@ -2,6 +2,7 @@ package it.polimi.ingsw.View.StorageOfModelInformation;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
+import it.polimi.ingsw.Model.Player.Player;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.EffectActivation_UpdateMsg;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.MNMovement_UpdateMsg;
@@ -22,7 +23,7 @@ public class ModelStorage {
         this.expertMode = expertMode;
     }
 
-    public void setupStorage (GameCreation_UpdateMsg message, CLIDrawer cliDrawer) { // Receive a message containing all the information of the game table.
+    public void setupStorage (GameCreation_UpdateMsg message) { // Receive a message containing all the information of the game table.
 
         // DASHBOARDS:
         ArrayList<PlayerInformation> dashboards = new ArrayList<>();
@@ -59,7 +60,7 @@ public class ModelStorage {
         for(int i=0;i<numberOfPlayers;i++)
             setDashboard(i,dashboards.get(i));
         setGameTable(gameTable);
-        cliDrawer.setStorage(this);
+
     }
 
     public void setDashboard(int playerID, PlayerInformation player) { this.dashboards.add(playerID,player); }

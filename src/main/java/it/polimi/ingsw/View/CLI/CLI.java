@@ -459,7 +459,8 @@ public class CLI extends ViewSubject implements View {
     public static void main(String[] args) throws ClassNotFoundException {
         CLI cli = new CLI();
         ConnectionSocket connectionSocket = new ConnectionSocket();
-        ClientController clientController = new ClientController(cli, connectionSocket, cli.getCliDrawer());
+        ClientController clientController = new ClientController(cli, connectionSocket,false);
+        clientController.setCliDrawer(cli.getCliDrawer());
         cli.addObserver(clientController);
         connectionSocket.startConnection();
         connectionSocket.getClientListener().addObserver(clientController);

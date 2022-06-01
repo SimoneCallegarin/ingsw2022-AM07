@@ -7,6 +7,7 @@ import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,13 +18,13 @@ import java.io.InputStream;
 
 public class IslePanel extends JPanel {
 
-    Game game;
+    ModelStorage storage;
     GridBagConstraints constraints;
     int isleID;
     DenyCardPanel denyCard;
 
-    public IslePanel(Game game,int isleID) {
-        this.game=game;
+    public IslePanel(ModelStorage storage,int isleID) {
+        this.storage=storage;
         this.isleID=isleID;
         setLayout(new GridBagLayout());
         constraints=new GridBagConstraints();
@@ -58,7 +59,7 @@ public class IslePanel extends JPanel {
         constraints.gridx=0;
         constraints.gridy=0;
 
-        if(game.getGameTable().getIsleManager().getIsle(isleID).getMotherNature()){
+        if(storage.getGameTable().getIsle(isleID).motherNatureIsPresent()){
             add(new MNButton(),constraints);
             constraints.gridy++;
         }
@@ -66,7 +67,7 @@ public class IslePanel extends JPanel {
         studentConstraints.gridx=0;
         studentConstraints.gridy=0;
         for(RealmColors color:RealmColors.values()) {
-            for (int i = 0; i < game.getGameTable().getIsleManager().getIsle(isleID).getStudentsByColor(color); i++) {
+            for (int i = 0; i < storage.getGameTable().getIsle(isleID).getStudentsByColor(color); i++) {
                 studentContainer.add(new StudentButton(color),studentConstraints);
                 if(studentConstraints.gridx==3){
                     studentConstraints.gridx=-1;
@@ -82,9 +83,9 @@ public class IslePanel extends JPanel {
         towerConstraints.gridx=0;
         towerConstraints.gridy=0;
 
-        if(game.getGameTable().getIsleManager().getIsle(isleID).getTowersColor()!= TowerColors.NOCOLOR) {
-            for (int i = 0; i < game.getGameTable().getIsleManager().getIsle(isleID).getNumOfIsles(); i++) {
-                towerContainer.add(new TowerButton(game.getGameTable().getIsleManager().getIsle(isleID).getTowersColor()),towerConstraints);
+        if(storage.getGameTable().getIsle(isleID).getTowerColor()!= TowerColors.NOCOLOR) {
+            for (int i = 0; i < storage.getGameTable().getIsle(isleID).getTowerNumber(); i++) {
+                towerContainer.add(new TowerButton(storage.getGameTable().getIsle(isleID).getTowerColor()),towerConstraints);
                 if(towerConstraints.gridx==3){
                     towerConstraints.gridx=-1;
                     towerConstraints.gridy++;

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.EventListeners.EntranceListener;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,31 +17,30 @@ import java.awt.*;
 
 public class EntrancePanel extends JPanel{
     GridBagConstraints c;
-    Game game;
     int playerID;
     RealmColors colorSelected;
 
 
-    public EntrancePanel(Game game, int playerID) {
+    public EntrancePanel(ModelStorage storage, int playerID) {
         setLayout(new GridBagLayout());
         c=new GridBagConstraints();
-        this.game=game;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
-        InitializeEntrance(playerID);
+        InitializeEntrance(playerID,storage);
 
     }
 
     /**
      * this method initialize the students in the entrance according to the model information
      * @param playerID the player ID used to identify the entrance Dashboard
+     * @param storage the model storage where the entrance information are memorized
      */
-    private void InitializeEntrance(int playerID){
+    private void InitializeEntrance(int playerID, ModelStorage storage){
         c.gridx=0;
         c.gridy=0;
         c.insets=new Insets(0,9,3,7);
         for(RealmColors color:RealmColors.values()){
-            for(int i=0;i<game.getPlayerByIndex(playerID).getDashboard().getEntrance().getStudentsByColor(color);i++){
+            for(int i=0;i<storage.getDashboard(playerID).getDiningStudents(color);i++){
                 add(new StudentButton(color),c);
                 if(c.gridx==4){
                     c.gridy=1;

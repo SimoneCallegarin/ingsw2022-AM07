@@ -7,6 +7,7 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
+import it.polimi.ingsw.View.GUI.GuiDrawer;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import it.polimi.ingsw.View.View;
 
@@ -16,15 +17,38 @@ public class ClientController implements ViewObserver, NetworkObserver {
     ConnectionSocket client;
     ModelStorage storage;
     CLIDrawer cliDrawer;
+    GuiDrawer guiDrawer;
     String username;
     boolean expertMode = false;
+    boolean GUI;
     int playerID;
     CharacterCardsName lastCharacterUsed;
 
-    public ClientController(View cli, ConnectionSocket client, CLIDrawer cliDrawer) {
+    public ClientController(View cli, ConnectionSocket client,boolean GUI) {
         this.view = cli;
         this.client = client;
-        this.cliDrawer = cliDrawer;
+        this.GUI=GUI;
+    }
+
+    /**
+     * this method set the ClientController cliDrawer attribute
+     * @param cliDrawer the cliDrawer reference to set as attribute
+     */
+    public void setCliDrawer(CLIDrawer cliDrawer){
+        this.cliDrawer=cliDrawer;
+    }
+
+    public void setStorageForCLI(){
+        cliDrawer.setStorage(storage);
+    }
+
+    public void setGuiDrawer(GuiDrawer guiDrawer){
+        this.guiDrawer=guiDrawer;
+
+    }
+
+    public void setStorageForGUI(){
+        guiDrawer.setModelStorage(storage);
     }
 
     @Override
@@ -91,7 +115,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case START_GAME -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
-                storage.setupStorage(gc, cliDrawer);
+                storage.setupStorage(gc);
+                if(GUI){
+                    setStorageForGUI();
+                }else{
+                    setStorageForCLI();
+                }
                 System.out.println("Game started!");
             }
             case FILLCLOUD_UPDATE -> {
@@ -208,13 +237,13 @@ public class ClientController implements ViewObserver, NetworkObserver {
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    view.askMNMovement();
+                                    view.askMNMovement(expertMode);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    view.askCloud();
+                                    view.askCloud(expertMode);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
                             }
@@ -230,4 +259,6 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
         }
     }
+
+
 }

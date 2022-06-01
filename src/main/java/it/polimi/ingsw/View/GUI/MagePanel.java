@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MagePanel extends JPanel {
-    Mages mage;
+    int mage;
 
-    public MagePanel(Mages mage) {
-        this.mage=mage;
+    public MagePanel(int i) {
+        this.mage=i;
     }
 
     @Override
@@ -22,10 +22,10 @@ public class MagePanel extends JPanel {
         ClassLoader cl=this.getClass().getClassLoader();
         InputStream url=null;
         switch (mage){
-            case MYSTICAL_WIZARD -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/MYSTICAL_WIZARD.png");
-            case WEALTHY_KING -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/WEALTHY_KING.png");
-            case CLEVER_WITCH -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/CLEVER_WITCH.png");
-            case ANCIENT_SAGE -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/ANCIENT_SAGE.png");
+            case 0 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/MYSTICAL_WIZARD.png");
+            case 1 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/WEALTHY_KING.png");
+            case 2 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/CLEVER_WITCH.png");
+            case 3 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/ANCIENT_SAGE.png");
         }
         BufferedImage img= null;
         try {

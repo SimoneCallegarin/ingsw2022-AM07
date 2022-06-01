@@ -11,9 +11,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameScreenPanel extends JPanel {
-    Game game;
-
-    private Graphics g;
 
     private ModelStorage storage;
 
@@ -28,21 +25,14 @@ public class GameScreenPanel extends JPanel {
     DashboardPanel dashboard3;
     DashboardPanel dashboard4;
 
-
-    private void setGraphics(Graphics g) { this.g = g; }
-
-    public void setStorage(ModelStorage storage) { this.storage = storage; }
-
-    public ModelStorage getStorage() { return storage; }
-
     /**
      * Create a new buffered JPanel with the specified layout manager
      *
      * @param layout the LayoutManager to use
      */
-    public GameScreenPanel(LayoutManager layout, Game game, int frameWidth, int frameHeight) {
+    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight) {
         super(layout);
-        this.game=game;
+        this.storage=storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
         dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
@@ -58,7 +48,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(game);
+        tableCenterPanel=new TableCenterPanel(storage);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then i add the two dashboard container Panel on the left and on the right and i set the weights in order to correctly size the dashboard
@@ -82,26 +72,26 @@ public class GameScreenPanel extends JPanel {
         }
 
         */
-        switch (game.getNumberOfPlayers()){
+        switch (storage.getNumberOfPlayers()){
             case 2->{
-                dashboard1=new DashboardPanel(game,0);
-                dashboard2=new DashboardPanel(game,1);
+                dashboard1=new DashboardPanel(storage,0);
+                dashboard2=new DashboardPanel(storage,1);
                 dashboardContainerPanel1.add(dashboard1);
                 dashboardContainerPanel2.add(dashboard2);
             }
             case 3->{
-                dashboard1=new DashboardPanel(game,0);
-                dashboard2=new DashboardPanel(game,1);
-                dashboard3=new DashboardPanel(game,2);
+                dashboard1=new DashboardPanel(storage,0);
+                dashboard2=new DashboardPanel(storage,1);
+                dashboard3=new DashboardPanel(storage,2);
                 dashboardContainerPanel1.add(dashboard1);
                 dashboardContainerPanel1.add(dashboard3);
                 dashboardContainerPanel2.add(dashboard2);
             }
             case 4->{
-                dashboard1=new DashboardPanel(game,0);
-                dashboard2=new DashboardPanel(game,1);
-                dashboard3=new DashboardPanel(game,2);
-                dashboard4=new DashboardPanel(game,3);
+                dashboard1=new DashboardPanel(storage,0);
+                dashboard2=new DashboardPanel(storage,1);
+                dashboard3=new DashboardPanel(storage,2);
+                dashboard4=new DashboardPanel(storage,3);
                 dashboardContainerPanel1.add(dashboard1);
                 dashboardContainerPanel1.add(dashboard3);
                 dashboardContainerPanel2.add(dashboard2);

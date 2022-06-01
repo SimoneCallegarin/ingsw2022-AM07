@@ -117,4 +117,8 @@ public class GameTableInformation {
     }
 
     public void setGeneralMoneyReserve(int generalMoneyReserve) { this.generalMoneyReserve = generalMoneyReserve; }
+
+    public ArrayList<Cloud> getClouds() {
+        return clouds;
+    }
 }

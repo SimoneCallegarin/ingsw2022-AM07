@@ -3,6 +3,7 @@ package it.polimi.ingsw.View.GUI.CloudsPanels;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,12 +14,12 @@ import java.io.InputStream;
 
 public class CloudPanel extends JPanel {
     ClassLoader cl;
-    Game game;
+    ModelStorage storage;
     GridBagConstraints constraints;
 
-    public CloudPanel(Game game,int cloudID) {
+    public CloudPanel(ModelStorage storage,int cloudID) {
         cl=this.getClass().getClassLoader();
-        this.game=game;
+        this.storage=storage;
         setLayout(new GridBagLayout());
         constraints =new GridBagConstraints();
         setBackground(Color.CYAN);
@@ -44,7 +45,7 @@ public class CloudPanel extends JPanel {
         constraints.gridy=0;
 
         for(RealmColors color:RealmColors.values()){
-            for(int i=0;i<game.getGameTable().getCloud(cloudID).getStudentsByColor(color);i++){
+            for(int i=0;i<storage.getGameTable().getCloud(cloudID).getStudentsByColor(color);i++){
                 add(new StudentButton(color), constraints);
                 if(constraints.gridx==3){
                     constraints.gridx=-1;

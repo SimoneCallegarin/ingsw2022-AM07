@@ -2,56 +2,51 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewSubject;
-import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
 public class GUIApp extends ViewSubject implements View {
 
-    static GuiDrawer guiDrawer;
+    GuiDrawer guiDrawer;
     static int playerID;
 
     public static void main(String[] args) {
-        //create the EDT to manage the events
         GUIApp guiApp=new GUIApp();
-        SwingUtilities.invokeLater(GUIApp::createAndShowGUI);
+        GuiDrawer guiDrawer=new GuiDrawer();
         ConnectionSocket connectionSocket=new ConnectionSocket();
-
+        ClientController clientController=new ClientController(guiApp,connectionSocket,true);
+        clientController.setGuiDrawer(guiDrawer);
+        guiApp.addObserver(clientController);
+        guiDrawer.addObserver(clientController);
+        connectionSocket.startConnection();
+        connectionSocket.getClientListener().addObserver(clientController);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                guiApp.GUIstart(guiDrawer);
+            }
+        });
     }
 
-    private static void createAndShowGUI(){
-        System.out.println("Created GUI on EDT? "+
-                SwingUtilities.isEventDispatchThread());
-        Game game=new Game();
-        game.addFirstPlayer("filo",true,4);
-        game.addAnotherPlayer("calle");
-        game.addAnotherPlayer("jack");
-        game.addAnotherPlayer("comfy");
-        /*
-        for(RealmColors color:RealmColors.values()){
-            for(int i=0;i<10;i++){
-                game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(color);
-            }
-            game.getPlayerByIndex(0).getDashboard().getDiningRoom().addProfessor(color);
-        }
-        */
-        guiDrawer=new GuiDrawer(game);
+    public void GUIstart(GuiDrawer drawer){
+        //it creates the first screen where the user inputs his game preferences
+        this.guiDrawer=drawer;
+        drawer.screeInitialization();
     }
 
 
     @Override
     public void askUsername() {
-
+        guiDrawer.showUsernameForm();
     }
 
     @Override
     public void askGamePreferences() {
-
+        guiDrawer.showGamePreferencesForm();
     }
 
     @Override
@@ -76,12 +71,12 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void askMNMovement() {
+    public void askMNMovement(boolean expertMode) {
 
     }
 
     @Override
-    public void askCloud() {
+    public void askCloud(boolean expertMode) {
 
     }
 
