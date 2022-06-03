@@ -85,6 +85,8 @@ public class PlayerInformation {
 
     public ArrayList<Integer> getAssistantCardsMNMovement() { return assistantCardsMNMovement; }
 
+    public int getMaxAssistantCard() { return assistantCardsTurnOrder.get(assistantCardsTurnOrder.size()-1); }
+
 
     // SETTERS:
 

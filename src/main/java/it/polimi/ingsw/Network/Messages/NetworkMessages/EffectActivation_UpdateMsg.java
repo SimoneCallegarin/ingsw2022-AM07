@@ -9,56 +9,54 @@ import java.util.HashMap;
 
 public class EffectActivation_UpdateMsg extends NetworkMessage {
 
-    int playerID;
+    private int playerID;
     /**
      * number of isles on the board
      */
-    int totalIsles;
+    private int totalIsles;
 
-    ArrayList<HashMap<RealmColors,Integer>> students;
-    ArrayList<HashMap<RealmColors,Integer>> studentsInDining;
-    ArrayList<TowerColors> towerColors;
-    int whereMNId;
-    ArrayList<Boolean> denyCards;
+    private ArrayList<HashMap<RealmColors,Integer>> students;
+    private ArrayList<HashMap<RealmColors,Integer>> studentsInDining;
+    private ArrayList<TowerColors> towerColors;
+    private int whereMNId;
+    private ArrayList<Boolean> denyCards;
 
-    HashMap<RealmColors,Integer> studentsInPlace;
+    private HashMap<RealmColors,Integer> studentsInPlace;
 
     /**
      * number of isles per isle
      */
-    ArrayList<Integer> numberOfIsles;
+    private ArrayList<Integer> numberOfIsles;
 
-    ArrayList<Integer> numberOfTowers;
+    private ArrayList<Integer> numberOfTowers;
 
-    int characterCardIndex;
-    int cardCost;
+    private int characterCardIndex;
+    private int cardCost;
 
-    int turnOrder;
-    int mnMovement;
+    private int turnOrder;
+    private int mnMovement;
 
-    int isleID;
-    int denyCard;
+    private int isleID;
+    private int denyCard;
 
-    public int getId() {
-        return id;
-    }
+    public int getColor() { return color; }
 
-    int id;
+    private int color;
 
-    int denyCardsOnPlace;
+    private int denyCardsOnPlace;
 
-    ArrayList<HashMap<RealmColors,Integer>> professors;
+    private ArrayList<HashMap<RealmColors,Integer>> professors;
 
-    HashMap<RealmColors,Integer> studentsOnCard;
+    private HashMap<RealmColors,Integer> studentsOnCard;
 
     // MONK, JESTER
-    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int id, HashMap<RealmColors,Integer> students) {
+    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int color, HashMap<RealmColors,Integer> students) {
         super(messageType);
         this.characterCardIndex = characterCardIndex;
         this.cardCost = cardCost;
         this.denyCardsOnPlace = denyCardsOnCard;
         this.studentsOnCard = studentsOnCard;
-        this.id = id;
+        this.color = color;
         this.studentsInPlace = students;
     }
 
@@ -94,7 +92,6 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
         this.characterCardIndex = characterCardIndex;
         this.cardCost = cardCost;
         this.denyCardsOnPlace = denyCardsOnCard;
-        this.studentsOnCard = studentsOnCard;
         this.isleID = isleID;
         this.denyCard = denyCard;
     }

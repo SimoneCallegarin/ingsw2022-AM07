@@ -16,7 +16,8 @@ public class ConnectionSocket {
      */
     private final int port;
     /**
-     * The thread client side that permits to handle his disconnection (due to quit message or errors).
+     * The thread client side that permits to handle his disconnection (due to quit message or errors),
+     * and that notifies to the ClientController all other messages.
      */
     private ClientListener cListener;
     /**

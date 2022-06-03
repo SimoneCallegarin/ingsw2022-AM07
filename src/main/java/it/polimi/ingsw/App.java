@@ -73,14 +73,19 @@ public class App {
      * Asks the user if he wants to play using the CLI (0) or the GUI (1).
      */
     private void askChooseCLIorGUI() {
-        do {
-            System.out.println("Choose:");
-            System.out.println("0 -> CLI");
-            System.out.println("1 -> GUI");
-            choice = Integer.parseInt(readUserInput());
-            if (choice != 0 && choice != 1)
-                System.out.println("Wrong value!");
-        }while (choice != 0 && choice != 1);
+        try {
+            do {
+                System.out.println("Choose:");
+                System.out.println("0 -> CLI");
+                System.out.println("1 -> GUI");
+                choice = Integer.parseInt(readUserInput());
+                if (choice != 0 && choice != 1)
+                    System.out.println("Wrong value!");
+            }while (choice != 0 && choice != 1);
+        } catch (NumberFormatException nf) {
+            System.out.println("You didn't insert a suitable number! Please, try again...");
+            askChooseCLIorGUI();
+        }
     }
 
     /**

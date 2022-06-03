@@ -82,8 +82,6 @@ public class ModelStorage {
             dashboards.get(i).setNumOfTowers(numTowers.get(i));
     }
 
-    public void updateColorOfTowers(int playerID, TowerColors towersColor){ dashboards.get(playerID).setTowerColor(towersColor); }
-
     public void updateMoney(int playerID, int money){ dashboards.get(playerID).setMoney(money); }
 
     public void updateDiscardPile(int playerID, int turnOrder, int mnMovement){
@@ -106,10 +104,6 @@ public class ModelStorage {
     public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) { gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle); }
 
     public void updateDenyOnIsle(int isleID, int denyCard) { gameTable.setDenyOnIsle(isleID,denyCard); }
-
-    public void updateIsle(GameTableInformation.Isle newIsle, int isleID) {
-        gameTable.setNewIsle(isleID,newIsle);
-    }
 
     public void updateIsles(MNMovement_UpdateMsg mnm) {
         ArrayList<GameTableInformation.Isle> newIsles = new ArrayList<>();
