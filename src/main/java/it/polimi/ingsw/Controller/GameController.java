@@ -107,10 +107,22 @@ public class GameController {
             game.addAnotherPlayer(nickname);
     }
 
+    /**
+     * Getter method for the actual number of players of the game.
+     * @return ActualNumberOfPlayers.
+     */
     public int getActualNumberOfPlayers() { return game.getActualNumberOfPlayers(); }
 
+    /**
+     * Getter method for the of the game.
+     * @return the game mode.
+     */
     public boolean getGameMode() { return game.isGameMode(); }
 
+    /**
+     * Getter method for the number of players of the game.
+     * @return the number of players.
+     */
     public int getNumberOfPlayers() { return game.getNumberOfPlayers(); }
 
 }

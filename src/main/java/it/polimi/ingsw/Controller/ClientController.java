@@ -229,7 +229,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 switch (lastCharacterUsed) {
                     case MONK -> {
                         storage.updateCharacterCard(ea.getCharacterCardIndex(), ea.getCardCost(), ea.getStudentsOnCard(), ea.getDenyCardsOnPlace());
-                        storage.updateStudentsOnIsle(ea.getColor(), ea.getStudentsInPlace());
+                        storage.updateStudentsOnIsle(ea.getId(), ea.getStudentsInPlace());
                     }
                     case FARMER -> storage.updateProfessorsInDining(ea.getProfessors());
                     case HERALD -> {
@@ -243,7 +243,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                     }
                     case JESTER -> {
                         storage.updateCharacterCard(ea.getCharacterCardIndex(), ea.getCardCost(), ea.getStudentsOnCard(), ea.getDenyCardsOnPlace());
-                        storage.updateStudentsInEntrance(ea.getColor(), ea.getStudentsInPlace());
+                        storage.updateStudentsInEntrance(ea.getId(), ea.getStudentsInPlace());
                     }
                     case MINSTREL -> {
                         for (int i = 0; i < storage.getNumberOfPlayers(); i++) {

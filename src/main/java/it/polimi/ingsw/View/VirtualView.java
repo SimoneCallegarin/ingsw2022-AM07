@@ -176,6 +176,32 @@ public class VirtualView implements ModelObserver {
     }
 
     /**
+     * Sends a DenyCard_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * @param playerID ID of the player that moved mother nature on an isle with a deny card on it.
+     * @param isleID ID of the isle where the player moved mother nature, where there's a deny card.
+     * @param denyCard number of deny cards on the isle.
+     */
+    @Override
+    public void onDenyCard(int playerID, int isleID, boolean denyCard) {
+        DenyCard_UpdateMsg denyCard_updateMsg=new DenyCard_UpdateMsg(MessageType.DENYCARD_UPDATE,playerID,isleID,denyCard);
+        for(ClientHandler ch : clientHandler){
+            ch.send(denyCard_updateMsg);
+        }
+    }
+
+    /**
+     * Sends a FillCloud_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * @param clouds students on each cloud when are refilled.
+     */
+    @Override
+    public void onFillCloud(ArrayList<HashMap<RealmColors, Integer>> clouds) {
+        FillCloud_UpdateMsg fillCloud_updateMsg=new FillCloud_UpdateMsg(MessageType.FILLCLOUD_UPDATE,clouds);
+        for(ClientHandler ch : clientHandler){
+            ch.send(fillCloud_updateMsg);
+        }
+    }
+
+    /**
      * Sends a KO to the player that occurred in an error.
      * @param playerID ID of the player that receive the KO message.
      * @param errorMessage brief description of what the error is.
@@ -207,12 +233,13 @@ public class VirtualView implements ModelObserver {
 
     /**
      * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the MONK / JESTER.
      * @param characterCardIndex index of the character card played.
      * @param cardCost cost of the character card played.
-     * @param denyCardsOnCard
-     * @param studentsOnCard
-     * @param value2
-     * @param students
+     * @param denyCardsOnCard deny cards on the character card played.
+     * @param studentsOnCard students on the character card played.
+     * @param color color of the first student chosen.
+     * @param students students on the chosen isle (MONK) / player entrance (JESTER).
      */
     //MONK, JESTER
     @Override
@@ -223,6 +250,11 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    /**
+     * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the FARMER.
+     * @param professors on each player dining room.
+     */
     //FARMER
     @Override
     public void onEffectActivation(ArrayList<HashMap<RealmColors,Integer>> professors) {
@@ -232,6 +264,17 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    /**
+     * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the HERALD.
+     * @param totalIsles the actual number of isles.
+     * @param students students on each isle.
+     * @param towerColors colors of the towers on each isle.
+     * @param whereMNID isle where there's mother nature.
+     * @param denyCards number of deny cards on each isle.
+     * @param numberOfIsles indicates for each group of isles how many isles are in it (unified isles there are 2 or more isles).
+     * @param numberOfTowers number of towers in the player tower storage.
+     */
     //HERALD
     @Override
     public void onEffectActivation(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNID, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers) {
@@ -241,6 +284,13 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    /**
+     * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the MAGICAL_LETTER_CARRIER.
+     * @param playerID ID of the player that played the character card.
+     * @param turnOrder turn order of the assistant card in the discard pile.
+     * @param mnMovement possible mother nature movement of the assistant card in the discard pile.
+     */
     //MAGICAL_LETTER_CARRIER
     @Override
     public void onEffectActivation(int playerID, int turnOrder, int mnMovement) {
@@ -250,8 +300,17 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    /**
+     * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the GRANDMA_HERBS.
+     * @param characterCardIndex the index of the character card played.
+     * @param cardCost the cost of the character card played.
+     * @param denyCardsOnCard number of deny cards on the character card played.
+     * @param isleID ID of the isle chosen by the player in which it will be put a deny card.
+     * @param denyCard number of deny cards on the isle chosen.
+     */
     @Override
-    //GRANDMA
+    //GRANDMA_HERBS
     public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, int isleID, int denyCard) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, isleID, denyCard);
         for(ClientHandler ch : clientHandler){
@@ -259,6 +318,10 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    /**
+     * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the CENTAUR / KNIGHT / FUNGIST.
+     */
     //CENTAUR, KNIGHT, FUNGIST
     @Override
     public void onEffectActivation() {
@@ -268,6 +331,12 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    /**
+     * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the MINSTREL, THIEF.
+     * @param studentsInEntrance students on the entrance of each player.
+     * @param studentsInDining students on the dining room of each player.
+     */
     //MINSTREL, THIEF
     @Override
     public void onEffectActivation(ArrayList<HashMap<RealmColors,Integer>> studentsInEntrance, ArrayList<HashMap<RealmColors,Integer>> studentsInDining) {
@@ -277,28 +346,21 @@ public class VirtualView implements ModelObserver {
         }
     }
 
+    /**
+     * Sends an EffectActivation_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * It's used to activate the effect of the SPOILED_PRINCESS.
+     * @param characterCardIndex index of the character card played.
+     * @param cardCost the cost of the character card played.
+     * @param denyCardsOnCard number of deny cards on the character card.
+     * @param studentsOnCard students on the character card.
+     * @param studentsInDining students on the dining room of each player.
+     */
     //SPOILED_PRINCESS
     @Override
     public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, ArrayList<HashMap<RealmColors,Integer>> studentsInDining) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, studentsInDining);
         for(ClientHandler ch : clientHandler){
             ch.send(effectActivation_updateMsg);
-        }
-    }
-
-    @Override
-    public void onDenyCard(int playerId, int isleId, boolean denyCard) {
-        DenyCard_UpdateMsg denyCard_updateMsg=new DenyCard_UpdateMsg(MessageType.DENYCARD_UPDATE,playerId,isleId,denyCard);
-        for(ClientHandler ch : clientHandler){
-            ch.send(denyCard_updateMsg);
-        }
-    }
-
-    @Override
-    public void onFillCloud(ArrayList<HashMap<RealmColors, Integer>> clouds) {
-        FillCloud_UpdateMsg fillCloud_updateMsg=new FillCloud_UpdateMsg(MessageType.FILLCLOUD_UPDATE,clouds);
-        for(ClientHandler ch : clientHandler){
-            ch.send(fillCloud_updateMsg);
         }
     }
 

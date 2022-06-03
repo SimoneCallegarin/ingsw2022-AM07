@@ -950,7 +950,7 @@ public class Game extends ModelSubject {
                 for (Player p : players)
                     numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
                 int finalWhereMnId = whereMnId;
-                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
+                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId, denyCards, numIsles, numTowers));
             }
             case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getTurnOrder(), players.get(idPlayer).getDiscardPile().getMnMovement()));
             case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
