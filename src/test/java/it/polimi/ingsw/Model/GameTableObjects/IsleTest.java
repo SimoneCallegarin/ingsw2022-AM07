@@ -6,6 +6,8 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Model.Player.Player;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class IsleTest {
@@ -66,26 +68,30 @@ class IsleTest {
      * if there's also the tower, and if there's nothing relative to the player
      */
     @Test
-    void getInfluence() {
-        Player p=new Player("filobuda", 2, 0, Squads.SQUAD1);
+    void getInfluences() {
 
+        ArrayList<Player> players = new ArrayList<>();
+
+        Player p1 = new Player("filo", 2, 0, Squads.NO_SQUAD);
+        Player p2 = new Player("calle", 2, 1, Squads.NO_SQUAD);
+
+        players.add(p1);
+        players.add(p2);
 
         isleTest.addStudent(RealmColors.RED);
-        p.getDashboard().getDiningRoom().addProfessor(RealmColors.RED);
-        assertEquals(isleTest.getInfluence(p),1);
+        p1.getDashboard().getDiningRoom().addProfessor(RealmColors.RED);
+        assertEquals(isleTest.getInfluences(players).get(0),1);
 
-        isleTest.setTower( p.getDashboard().getTowerStorage().getTowerColor());
-        assertEquals(isleTest.getInfluence(p),2);
+        isleTest.setTower(p1.getDashboard().getTowerStorage().getTowerColor());
+        assertEquals(isleTest.getInfluences(players).get(0),2);
 
         isleTest.setTower(TowerColors.NOCOLOR);
         isleTest.removeStudent(RealmColors.RED);
-        assertEquals(isleTest.getInfluence(p),0);
+        assertEquals(isleTest.getInfluences(players).get(0),0);
 
     }
 
     @Test
-    void getDenyCards(){
-        assertEquals(0,isleTest.getDenyCards());
-    }
+    void getDenyCards(){ assertEquals(0,isleTest.getDenyCards()); }
 
 }

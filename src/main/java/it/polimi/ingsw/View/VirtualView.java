@@ -57,11 +57,11 @@ public class VirtualView implements ModelObserver {
 
     /**
      * Sends a GamePhase_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
-     * It contains the information about the game phase and who is the active player.
+     * It contains the information about the game phase and who is the active player but also on the winner if there's one.
      * @param activePlayer the player that is now the active one.
      * @param gamePhase game phase in which the game is now.
      * @param actionPhase action phase in which the game is now.
-     * @param winner if the end is coming to the end then it will contain the ID of the player who won or if there's a draw.
+     * @param winner if the game is coming to the end then it will contain the ID of the player who won or if there's a draw.
      */
     @Override
     public void onGamePhases(int activePlayer, GamePhases gamePhase, ActionPhases actionPhase, int winner) {
@@ -74,10 +74,10 @@ public class VirtualView implements ModelObserver {
     /**
      * Sends an AssistCard_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
      * @param playerID ID of the player that played the assistant card.
-     * @param turnOrderPlayed the turn order of the assistant card played that now is in the discard pile.
-     * @param movementMNPlayed the mother nature possible movement of the assistant card played that now is in the discard pile.
-     * @param turnOrdersAvailable list of all the turn orders of the assistant cards of the player that he hasn't played yet.
-     * @param movementsMNAvailable list of all the possible mother nature movement of the assistant cards of the player that he hasn't played yet.
+     * @param turnOrderPlayed Turn order of the assistant card played that now is in the discard pile.
+     * @param movementMNPlayed Mother nature possible movement of the assistant card played that now is in the discard pile.
+     * @param turnOrdersAvailable List of all the turn orders of the assistant cards that the player hasn't played yet.
+     * @param movementsMNAvailable List of all the possible mother nature movement of the assistant cards that the player hasn't played yet.
      */
     @Override
     public void onAssistantCard(int playerID, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrdersAvailable, ArrayList<Integer> movementsMNAvailable) {
@@ -133,7 +133,7 @@ public class VirtualView implements ModelObserver {
      * @param playerID ID of the player that got his money changed
      *                 (by gaining from the dining room or by losing them from playing a character card).
      * @param money number of money of the player now.
-     * @param generalMoneyReserve the general money reserve updated number of money.
+     * @param generalMoneyReserve general money reserve updated number of money.
      */
     @Override
     public void onMoneyUpdate(int playerID, int money, int generalMoneyReserve) {

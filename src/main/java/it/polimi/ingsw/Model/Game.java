@@ -369,11 +369,7 @@ public class Game extends ModelSubject {
                             activateAtomicEffect(idPlayer, indexFarmer, 0, 0);
                         }
                         // checking if the student is added in third, sixth or ninth position of the dining room
-                        if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
-                            players.get(idPlayer).gainMoney();
-                            gameTable.studentInMoneyPosition();
-                            notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, players.get(idPlayer).getMoney(), gameTable.getGeneralMoneyReserve()));
-                        }
+                        checkStudentInMoneyPosition(idPlayer,color);
                         checkUpdateProfessor(idPlayer, color);
                         studentsCounter++;
 
@@ -392,6 +388,19 @@ public class Game extends ModelSubject {
         }
 
         notifyTurn();
+    }
+
+    /**
+     * Checking if the student is added in third, sixth or ninth position of the dining room.
+     * @param idPlayer ID of the player that placed a student in his dining room.
+     * @param color color of the student placed.
+     */
+    private void checkStudentInMoneyPosition(int idPlayer, RealmColors color) {
+        if (isGameMode() && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
+            players.get(idPlayer).gainMoney();
+            gameTable.studentInMoneyPosition();
+            notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, players.get(idPlayer).getMoney(), gameTable.getGeneralMoneyReserve()));
+        }
     }
 
     /**
@@ -619,7 +628,7 @@ public class Game extends ModelSubject {
 
             for (Player p : players) {
                 if (p.getOrder() == CurrentOrder.FIRST_PLAYER)
-                    firstPlayerIndex = p.getDashboard().getIdDashboard();
+                    firstPlayerIndex = p.getDashboard().getDashboardID();
             }
             currentActivePlayer = CurrentOrder.FIRST_PLAYER;
             playerCounter = 0;
@@ -684,7 +693,7 @@ public class Game extends ModelSubject {
 
             for (Player p : players) {
                 if (p.getDashboard().getDiningRoom().getProfessorByColor(color) == 1) {
-                    playerWhoHasProfessorIndex = p.getDashboard().getIdDashboard();
+                    playerWhoHasProfessorIndex = p.getDashboard().getDashboardID();
                     someoneHasProfessor = true;
                     break;
                 }
@@ -724,7 +733,7 @@ public class Game extends ModelSubject {
             for (int i = 0; i < 2; i++) {
                 for (Player p : players) {
                     if (p.getSquad() == Squads.getSquads(i))
-                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
+                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID());
                 }
                 if (tempInfluence == majorInfluence)
                     draw = true;
@@ -738,11 +747,11 @@ public class Game extends ModelSubject {
         }
         else {
             for (Player p : players) {
-                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) == majorInfluence)
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID()) == majorInfluence)
                     draw = true;
-                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) > majorInfluence) {
-                    majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
-                    conquerorIndex = p.getDashboard().getIdDashboard();
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID()) > majorInfluence) {
+                    majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID());
+                    conquerorIndex = p.getDashboard().getDashboardID();
                     draw = false;
                 }
             }
@@ -803,7 +812,7 @@ public class Game extends ModelSubject {
                     draw = true;
                 if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage) {
                     minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
-                    winnerIndex = p.getDashboard().getIdDashboard();
+                    winnerIndex = p.getDashboard().getDashboardID();
                     draw = false;
                 }
             }
@@ -816,7 +825,7 @@ public class Game extends ModelSubject {
                         drawEndGame = true;
                     if (p.getDashboard().getDiningRoom().getNumberOfProfessors() > majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {
                         majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();
-                        winnerIndex = p.getDashboard().getIdDashboard();
+                        winnerIndex = p.getDashboard().getDashboardID();
                         drawEndGame = false;
                     }
                 }
@@ -1009,9 +1018,7 @@ public class Game extends ModelSubject {
      * Getter method that tells if the game mode is expert or not.
      * @return true if expert, else false
      */
-    public boolean isGameMode() {
-        return gameMode == GameMode.EXPERT;
-    }
+    public boolean isGameMode() { return gameMode == GameMode.EXPERT; }
 
     /**
      * Getter method that returns the list of players who are playing the game
