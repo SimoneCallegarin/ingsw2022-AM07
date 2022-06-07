@@ -4,10 +4,6 @@ import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.Model.Game;
 import org.junit.jupiter.api.Test;
 
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -29,15 +25,25 @@ class GamePlaySomeCharacterCardsTest {
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
 
         assertEquals(1,game.getGameTable().getCharacterCard(0).getCost());
+        assertEquals(1,game.getPlayerByIndex(0).getMoney());
         assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
 
-        //we play the character card we want
+        // we play the character card we want
         game.playCharacterCard(0,0);
-        //and then the controller will activate the atomic effect of each card for the number of times needed
+        // and then the controller will activate the atomic effect of each card for the number of times needed
         game.activateAtomicEffect(0,0,1,10);
 
         assertEquals(2,game.getGameTable().getCharacterCard(0).getCost());
+        assertEquals(0,game.getPlayerByIndex(0).getMoney());
         assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
+
+        for (RealmColors color : RealmColors.values()) {
+            while(game.getPlayerByIndex(0).getDashboard().getEntrance().getStudentsByColor(color) != 0)
+                game.getPlayerByIndex(0).getDashboard().getEntrance().removeStudent(color);
+        }
+
+        for(int i=0; i<7; i++)
+            game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.YELLOW);
 
         game.setActionPhase(ActionPhases.MOVE_STUDENTS);
         game.moveStudentInDiningRoom(0, 0);
@@ -49,17 +55,18 @@ class GamePlaySomeCharacterCardsTest {
         game.moveStudentInDiningRoom(0, 0);
 
         assertEquals(16,game.getGameTable().getGeneralMoneyReserve());
+        assertEquals(2,game.getPlayerByIndex(0).getMoney());
 
         game.getPlayerByIndex(0).setNotAlreadyPlayedACardThisTurn();
 
-        //we play the character card we want
+        // we play the character card we want another time
         game.playCharacterCard(0,0);
-        //and then the controller will activate the atomic effect of each card for the number of times needed
+        // and then the controller will activate the atomic effect of each card for the number of times needed
         game.activateAtomicEffect(0,0,1,10);
 
         assertEquals(2,game.getGameTable().getCharacterCard(0).getCost());
+        assertEquals(0,game.getPlayerByIndex(0).getMoney());
         assertEquals(18,game.getGameTable().getGeneralMoneyReserve());
-
     }
 
     /**
@@ -112,7 +119,6 @@ class GamePlaySomeCharacterCardsTest {
         game.setGamePhase(GamePhases.ACTION_PHASE);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
         // 4 students randomly extracted from the bag now put on the character card
-        HashMap<RealmColors,Integer> studentsOnMonk = game.getGameTable().getCharacterCard(0).getStudents();
 
         //we play the character card we want
         game.playCharacterCard(0,0);
@@ -492,7 +498,7 @@ class GamePlaySomeCharacterCardsTest {
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
         //player 0 influence on isle 8 = 0
         //player 1 influence on isle 8 = 1
-        assertEquals(0,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
+        assertEquals(0,game.getGameTable().getIsleManager().getIsle(8).getInfluences(game.getPlayers()).get(0));
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
@@ -501,8 +507,8 @@ class GamePlaySomeCharacterCardsTest {
         //player 0 influence on isle 8 = 2
         //player 1 influence on isle 8 = 1
         game.activateAtomicEffect(0,0,0,0);
-        assertEquals(2,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
-        assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(1)));
+        assertEquals(2,game.getGameTable().getIsleManager().getIsle(8).getInfluences(game.getPlayers()).get(0));
+        assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluences(game.getPlayers()).get(1));
 
         game.checkUpdateInfluence(8);
 
@@ -541,8 +547,8 @@ class GamePlaySomeCharacterCardsTest {
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
         // player 0 influence on isle 8 = 2
         // player 1 influence on isle 8 = 1
-        assertEquals(2,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(0)));
-        assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluence(game.getPlayerByIndex(1)));
+        assertEquals(2,game.getGameTable().getIsleManager().getIsle(8).getInfluences(game.getPlayers()).get(0));
+        assertEquals(1,game.getGameTable().getIsleManager().getIsle(8).getInfluences(game.getPlayers()).get(1));
 
         game.setGamePhase(GamePhases.PLANNING_PHASE);
         game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);

@@ -179,14 +179,14 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
-                storage.updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
-                storage.updateAssistantsCard(ac.getIdPlayer(), ac.getTurnOrders(), ac.getMovementsMN());
+                storage.updateDiscardPile(ac.getPlayerID(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
+                storage.updateAssistantsCard(ac.getPlayerID(), ac.getTurnOrders(), ac.getMovementsMN());
                 view.printChanges();
             }
             case STUDENTTODINING_UPDATE -> {
                 StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;
-                storage.updateStudentsInEntrance(std.getIdPlayer(), std.getEntrance());
-                storage.updateStudentsInDining(std.getIdPlayer(), std.getDining());
+                storage.updateStudentsInEntrance(std.getPlayerID(), std.getEntrance());
+                storage.updateStudentsInDining(std.getPlayerID(), std.getDining());
                 view.printChanges();
             }
             case PROFESSOR_UPDATE -> {
@@ -200,8 +200,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case STUDENTTOISLE_UPDATE -> {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
-                storage.updateStudentsInEntrance(sti.getIdPlayer(), sti.getEntrance());
-                storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudent());
+                storage.updateStudentsInEntrance(sti.getPlayerID(), sti.getEntrance());
+                storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudents());
                 view.printChanges();
             }
             case MNMOVEMENT_UPDATE -> {
