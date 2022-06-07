@@ -214,8 +214,10 @@ public class Server {
             if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
             }
-        for (String playerToRemove : playersToRemove)
+        for (String playerToRemove : playersToRemove) {
             removePlayer(playerToRemove);
+            System.out.println("Removed player " + playerToRemove);
+        }
         playersToRemove.clear();
         System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
     }

@@ -23,6 +23,6 @@ public interface View {
 
      void askCharacterEffectParameters(CharacterCardsName characterName);
 
-
+     void disconnect(ServiceMessage message);
 
 }
