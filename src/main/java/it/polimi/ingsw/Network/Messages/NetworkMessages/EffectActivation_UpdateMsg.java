@@ -170,12 +170,12 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
      * @param denyCard number of deny cards on the isle chosen.
      */
     // GRANDMA_HERBS
-    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, int isleID, int denyCard) {
+    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard) {
         super(messageType);
         this.characterCardIndex = characterCardIndex;
         this.cardCost = cardCost;
         this.denyCardsOnPlace = denyCardsOnCard;
-        this.studentsOnCard = studentsOnCard;       //!!!!!!!!!!!!!!!!!!!!
+        this.studentsOnCard = studentsOnCard;
         this.isleID = isleID;
         this.denyCard = denyCard;
     }
@@ -340,5 +340,11 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
      * @return the firstColor.
      */
     public int getId() { return id; }
+
+    @Override
+    public String toString() {
+        return "EffectActivationMessage: {" +
+                "professors: " + professors + "}";
+    }
 
 }

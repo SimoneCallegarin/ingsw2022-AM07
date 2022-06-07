@@ -262,6 +262,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                     }
                     case CENTAUR, KNIGHT, FUNGIST -> { }
                 }
+                System.out.println(ea.toString());
                 view.printChanges();
             }
             case GAMEPHASE_UPDATE -> {

@@ -37,8 +37,9 @@ public class EffectInGameFactory {
         */
         switch (characterCard.getCharacterCardName()){
             case MONK:
-                studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,color1,color2);
+                studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value2),ColorsForEffects.SELECT,color1,null);
                 studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,color1, color2);
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case FARMER:
@@ -46,7 +47,7 @@ public class EffectInGameFactory {
                     for(RealmColors c : RealmColors.values()){
                         if(p.getDashboard().getDiningRoom().getProfessorByColor(c)==1)
                             if(player.getDashboard().getDiningRoom().getStudentsByColor(c)==p.getDashboard().getDiningRoom().getStudentsByColor(c)){
-                                p.getDashboard().getDiningRoom().removeStudent(c);
+                                p.getDashboard().getDiningRoom().removeProfessor(c);
                                 player.getDashboard().getDiningRoom().addProfessor(c);
                             }
                     }
@@ -55,8 +56,21 @@ public class EffectInGameFactory {
                 break;
 
             case HERALD:
-                game.checkUpdateInfluence(value2);      // put this in another class.
-                //game.checkEndGame();
+                if (game.getGameTable().getIsleManager().getIsle(value1).getDenyCards() == 0)
+                    game.checkUpdateInfluence(value1);
+                else {
+                    game.getGameTable().getIsleManager().getIsle(value1).removeDenyCard();
+                    int grandmaIndex = 0;
+                    for (int i=0; i<3; i++)
+                        if(game.getGameTable().getCharacterCard(i).getCharacterCardName() == CharacterCardsName.GRANDMA_HERBS){
+                            grandmaIndex = i;
+                            break;
+                        }
+                    game.getGameTable().getCharacterCard(grandmaIndex).addDenyCard();
+                    //notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
+                    game.notifyEffectUpdate(grandmaIndex,player.getDashboard().getIdDashboard(),value1,-1);
+                }
+                game.checkEndGame();
                 game.setActionPhase(game.getLastActionPhase());
                 break;
 

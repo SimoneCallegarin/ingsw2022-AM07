@@ -248,6 +248,7 @@ public class VirtualView implements ModelObserver {
         for(ClientHandler ch : clientHandler){
             ch.send(effectActivation_updateMsg);
         }
+        //System.out.println(effectActivation_updateMsg.toString());
     }
 
     /**
@@ -262,6 +263,7 @@ public class VirtualView implements ModelObserver {
         for(ClientHandler ch : clientHandler){
             ch.send(effectActivation_updateMsg);
         }
+        System.out.println(effectActivation_updateMsg.toString());
     }
 
     /**
@@ -311,8 +313,8 @@ public class VirtualView implements ModelObserver {
      */
     @Override
     //GRANDMA_HERBS
-    public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, int isleID, int denyCard) {
-        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, isleID, denyCard);
+    public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard) {
+        EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, isleID, denyCard);
         for(ClientHandler ch : clientHandler){
             ch.send(effectActivation_updateMsg);
         }
