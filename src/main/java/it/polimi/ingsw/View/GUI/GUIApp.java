@@ -79,4 +79,9 @@ public class GUIApp extends ViewSubject implements View {
 
     }
 
+    @Override
+    public void disconnect(ServiceMessage message) {
+
+    }
+
 }
