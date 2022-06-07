@@ -1,6 +1,5 @@
 package it.polimi.ingsw.View.GUI.IslesPanels;
 
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.AssistantCardPanel;
 import it.polimi.ingsw.View.GUI.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
@@ -16,7 +15,6 @@ import java.awt.*;
 public class TableCenterPanel extends JPanel {
 
     ModelStorage storage;
-
     /**
      * the panel containing the leftmost three isles;
      */
@@ -29,7 +27,6 @@ public class TableCenterPanel extends JPanel {
      * the center panel containing two rows of isles and a center row containing the clouds and the character cards
      */
     JPanel isleContainerCenter;
-
     /**
      * the panel containing the discard pile (or the mage) and the coins for the first and third player (displayed on the left)
      */
@@ -50,9 +47,34 @@ public class TableCenterPanel extends JPanel {
      * panel that contains the character cards
      */
     JPanel charactersContainer;
+    /**
+     * panel containing the discard pile, the coins and the username (and squad) of the first player
+     */
+    JPanel assistantAndMoneyPanel1;
+    /**
+     * panel containing the discard pile, the coins and the username (and squad) of the second player
+     */
+    JPanel assistantAndMoneyPanel2;
+    /**
+     * panel containing the discard pile, the coins and the username (and squad) of the third player
+     */
+    JPanel assistantAndMoneyPanel3;
+    /**
+     * panel containing the discard pile, the coins and the username (and squad) of the fourth player
+     */
+    JPanel assistantAndMoneyPanel4;
+    /**
+     * constraints used to add the assistant card and the labels for money and username (and squad) in the assistantAndMoneyPanels
+     */
+    GridBagConstraints assistantAndMoneyConstraints;
+    /**
+     * username of the player using the GUI
+     */
+    String usernamePlaying;
 
-    public TableCenterPanel(ModelStorage storage) {
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying) {
         this.storage=storage;
+        this.usernamePlaying=usernamePlaying;
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
@@ -78,15 +100,15 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyContainerDx =new JPanel(gridLayout);
         assistantAndMoneyContainerDx.setBackground(Color.CYAN);
 
-        JPanel assistantAndMoneyPanel1=new JPanel(new GridBagLayout());
+        assistantAndMoneyPanel1=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel1.setBackground(Color.CYAN);
-        JPanel assistantAndMoneyPanel2=new JPanel(new GridBagLayout());
+        assistantAndMoneyPanel2=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel2.setBackground(Color.CYAN);
-        JPanel assistantAndMoneyPanel3=new JPanel(new GridBagLayout());
+        assistantAndMoneyPanel3=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel3.setBackground(Color.CYAN);
-        JPanel assistantAndMoneyPanel4=new JPanel(new GridBagLayout());
+        assistantAndMoneyPanel4=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel4.setBackground(Color.CYAN);
-        GridBagConstraints assistantAndMoneyConstraints=new GridBagConstraints();
+        assistantAndMoneyConstraints=new GridBagConstraints();
 
         assistantAndMoneyConstraints.gridy=0;
         assistantAndMoneyConstraints.gridx=0;
@@ -102,9 +124,14 @@ public class TableCenterPanel extends JPanel {
         int idxSx=0;
         int idxDx=0;
         for(int i=0;i<storage.getNumberOfPlayers();i++){
+            StringBuilder usernameLabel=new StringBuilder("Username:"+storage.getDashboard(i).getNickname());
+            if(storage.getDashboard(i).getNickname().equals(this.usernamePlaying)){
+                usernameLabel.append("(you)");
+            }
+
+            assistantAndMoneyConstraints.weighty=0.1;
             if(i%2==0){
-                assistantAndMoneyConstraints.weighty=0.1;
-                ((JPanel) assistantAndMoneyContainerSx.getComponent(idxSx)).add(new JLabel("Username:"+storage.getDashboard(i).getNickname()),assistantAndMoneyConstraints);
+                ((JPanel) assistantAndMoneyContainerSx.getComponent(idxSx)).add(new JLabel(String.valueOf(usernameLabel)),assistantAndMoneyConstraints);
                 if(storage.getNumberOfPlayers()==4){
                     assistantAndMoneyConstraints.gridy++;
                     assistantAndMoneyConstraints.weighty=0.1;
@@ -116,8 +143,7 @@ public class TableCenterPanel extends JPanel {
                 assistantAndMoneyConstraints.gridy=0;
                 idxSx++;
             }else{
-                assistantAndMoneyConstraints.weighty=0.1;
-                ((JPanel) assistantAndMoneyContainerDx.getComponent(idxDx)).add(new JLabel("Username:"+storage.getDashboard(i).getNickname()),assistantAndMoneyConstraints);
+                ((JPanel) assistantAndMoneyContainerDx.getComponent(idxDx)).add(new JLabel(String.valueOf(usernameLabel)),assistantAndMoneyConstraints);
                 if(storage.getNumberOfPlayers()==4){
                     assistantAndMoneyConstraints.gridy++;
                     assistantAndMoneyConstraints.weighty=0.1;
@@ -227,7 +253,7 @@ public class TableCenterPanel extends JPanel {
 
     }
 
-    public void UpdateAssistCard(int playerID, int turnOrder){
+    public void updateOwnAssistCard(int playerID, int turnOrder){
         switch(playerID){
             case 0->{
                 assistantAndMoneyContainerSx.remove(0);
@@ -250,6 +276,57 @@ public class TableCenterPanel extends JPanel {
                 assistantAndMoneyContainerDx.validate();
             }
         }
+    }
+
+    public void updateAllAssistCard(){
+
+        assistantAndMoneyConstraints.gridx=0;
+        if(storage.getNumberOfPlayers()==4){
+        assistantAndMoneyConstraints.gridy=2;
+        }else{
+            assistantAndMoneyConstraints.gridy=1;
+        }
+        assistantAndMoneyConstraints.weighty=1;
+        assistantAndMoneyConstraints.fill=GridBagConstraints.BOTH;
+
+        for(int i=0;i< storage.getNumberOfPlayers();i++) {
+            if (storage.getDashboard(i).getDiscardPileTurnOrder() != 0) {//update only if the assistant card has been played
+                switch (i) {
+                    case 0 ->{
+                        //assistantAndMoneyPanel1.remove(1);
+                        assistantAndMoneyPanel1.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
+                        assistantAndMoneyPanel1.validate();//if you change a component that's already been displayed you need to validate it to display the changes
+                    }
+                    case 1 ->{
+                        //assistantAndMoneyPanel2.remove(1);
+                        assistantAndMoneyPanel2.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
+                        assistantAndMoneyPanel2.validate();
+                    }
+                    case 2 ->{
+                        //assistantAndMoneyPanel3.remove(1);
+                        assistantAndMoneyPanel3.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
+                        assistantAndMoneyPanel3.validate();
+                    }
+                    case 3 ->{
+                        //assistantAndMoneyPanel4.remove(1);
+                        assistantAndMoneyPanel4.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
+                        assistantAndMoneyPanel4.validate();
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateCoins(){
+
+    }
+
+    public void updateIsle(){
+
+    }
+
+    public void updateIsleLayout(){
+
     }
 
 }

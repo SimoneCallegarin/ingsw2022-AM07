@@ -10,9 +10,8 @@ import it.polimi.ingsw.View.View;
 import javax.swing.*;
 
 public class GUIApp extends ViewSubject implements View {
-
     GuiDrawer guiDrawer;
-    static int playerID;
+
 
     public static void main(String[] args) {
         GUIApp guiApp=new GUIApp();
@@ -24,12 +23,7 @@ public class GUIApp extends ViewSubject implements View {
         guiDrawer.addObserver(clientController);
         connectionSocket.startConnection();
         connectionSocket.getClientListener().addObserver(clientController);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                guiApp.GUIstart(guiDrawer);
-            }
-        });
+        SwingUtilities.invokeLater(() -> guiApp.GUIstart(guiDrawer));
     }
 
     public void GUIstart(GuiDrawer drawer){
@@ -51,13 +45,13 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askAssistantCard(int playerID) {
-        int turnOrder=guiDrawer.ShowAssistantCardForm(playerID);
-        notifyObserver(obs->obs.onAssistantCard(turnOrder));
+        guiDrawer.ShowAssistantCardForm(playerID);
+
     }
 
     @Override
     public void askMove(boolean expertMode) {
-
+        guiDrawer.showMoveOptions(expertMode);
     }
 
     @Override
@@ -67,7 +61,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void printChanges() {
-
+        guiDrawer.updateGameScreenPanel();
     }
 
     @Override

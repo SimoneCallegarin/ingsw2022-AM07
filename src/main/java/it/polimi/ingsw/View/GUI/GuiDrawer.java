@@ -1,24 +1,21 @@
 package it.polimi.ingsw.View.GUI;
 
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class GuiDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
-    Game game;
 
     //create the window
     private final String frameTitle="Eriantys Game";
-    private final String submitButton="Submit";
+
     /**
      * the frame containing all the GUI
      */
@@ -62,9 +59,13 @@ public class GuiDrawer extends ViewSubject {
      * panel where the actual game will take place
      */
     GameScreenPanel gameScreenPanel;
+    /**
+     * the username of the player currently using the GUI
+     */
+    String usernamePlaying;
 
     /**
-     * this method initialize the firt screen when you open the app where you'll be asked the username, the game mode and the
+     * this method initialize the first screen when you open the app where you'll be asked the username, the game mode and the
      * number of Players. It uses a frame whose content pane is a General Panel Manager which will switch between the Initial Background panel
      * where the user will input his game preferences, and the proper game screen where the actual game will take place.
      * The InitialBackground class contains a userInputPanel which will switch between the username form and the game preferences form.
@@ -115,6 +116,7 @@ public class GuiDrawer extends ViewSubject {
                JOptionPane.showMessageDialog(userInputPanel,"Invalid input","Error",JOptionPane.ERROR_MESSAGE);
                return;
            }
+           usernamePlaying=usernameInputText.getText();
            notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
         });
         usernameForm.add(submitUsername);
@@ -157,47 +159,91 @@ public class GuiDrawer extends ViewSubject {
      * this method shows a loading screen while waiting for other players to join and loading the game
      */
     public void showLoadingScreen(){
+
         //need to update the loading screen graphics
         generalPanelManager.add(new LoadingScreen(),"Loading Screen");
         cl.show(generalPanelManager,"Loading Screen");
     }
 
-    public void ShowGameScreen(){
-        gameScreenPanel=new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight());
+    public void createGameScreen(){
+        //initialize the game screen and add it to the generalPanelManager
+        gameScreenPanel=new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying);
         generalPanelManager.add(gameScreenPanel,"Game Screen");
+    }
+
+    /**
+     * this method uses the general panel manager card layout to switch between the InitialBackground panel and the GameScreen panel
+     */
+    public void showGameScreen(){
         //switch to the actual game screen
         cl.show(generalPanelManager,"Game Screen");
     }
 
-    public int ShowAssistantCardForm(int playerID) {
+    /**
+     * this method opens a JOptionPane to select the assistant card. Each assistant card displayed is a button which on press updates
+     * the relative player discard pile
+     * @param playerID the playerID used to decide which character card display and which discard pile update
+     */
+    public void ShowAssistantCardForm(int playerID) {
+        AtomicInteger turnOrder = new AtomicInteger();
         JPanel buttonContainer = new JPanel();
-        JButton[] buttons = new JButton[game.getPlayerByIndex(playerID).getMageDeck().size()];
-        int finalI1 = 0;
-        for (int i = 0; i < game.getPlayerByIndex(playerID).getMageDeck().size(); i++) {
-            buttons[i] = (new AssistantCardButton(game.getPlayerByIndex(playerID).getMageDeck().get(i).getTurnOrder()));
+        JButton[] buttons = new JButton[modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size()];
+        for (int i = 0; i < modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {
+            buttons[i] = (new AssistantCardButton(i+1));
             //idk what the hell is going on with these variables
-            int finalI = i;
-            finalI1 = i;
-            int finalI2 = finalI1;
+            int finalI1 = i;
+            int finalI = i+1;
             buttons[i].addActionListener(e -> {
-                gameScreenPanel.tableCenterPanel.UpdateAssistCard(playerID, game.getPlayerByIndex(playerID).getMageDeck().get(finalI2).getTurnOrder());
+                gameScreenPanel.tableCenterPanel.updateAllAssistCard();
+                turnOrder.set(finalI);
+
             });
             buttonContainer.add(buttons[i]);
         }
         JScrollPane scrollPane = new JScrollPane(buttonContainer);
-        scrollPane.setPreferredSize(new Dimension(1000, 600));
+        scrollPane.setPreferredSize(new Dimension(600, 400));
         JOptionPane.showMessageDialog(f, scrollPane, "Play Assistant Card", JOptionPane.PLAIN_MESSAGE);
-        return game.getPlayerByIndex(playerID).getMageDeck().get(finalI1).getTurnOrder();
+        notifyObserver(obs->obs.onAssistantCard(turnOrder.get()));
     }
 
-    public void SetMovableOptions(boolean gamemode, int playerID){
-        JOptionPane.showMessageDialog(f,"Now you can move a student by clicking on the entrance of your dashboard\n" +
-                "and then clicking on the isle where you want to move the student or your dining room");
-        gameScreenPanel.setClickableStudents(playerID);
-        if(gamemode){
-            gameScreenPanel.setClickableCharacters();
-            JOptionPane.showMessageDialog(f,"Since you are playing in Expert mode,\n you can also click on a character card to" +
-                    "activate his effect, given you have enough coins");
+    public void showMoveOptions(boolean expertMode){
+        StringBuilder message=new StringBuilder("Now you can move a student from your entrance to your dining room or to an isle of your preference" +
+                " by clicking on a student in your entrance and then on the isle/dining room.");
+        if(expertMode){
+            message.append("\nSince you are playing on Expert Mode you can also click on a character card to activate its effect");
+        }
+        JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
+
+        gameScreenPanel.setClickableStudents(modelStorage.getCurrentPlayingID(),getViewObserverList());
+        gameScreenPanel.setClickableCharacters();
+    }
+
+
+    public void updateGameScreenPanel(){
+        boolean gameStart=true;
+        for(int i=0;i<modelStorage.getChanges().size();i++){
+            switch(modelStorage.getChanges().get(i)){
+                case CLOUDS_CHANGED -> {
+                    if(gameStart) {
+                        createGameScreen();
+                        showGameScreen();
+                        gameStart=false;
+                    }else{
+                        //update with cloud update
+                    }
+                }
+                case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAllAssistCard();
+                case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(modelStorage.getCurrentPlayingID());
+                case STUDENTDINING_CHANGED -> gameScreenPanel.updateDinings(modelStorage.getCurrentPlayingID());
+                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
+                case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins();
+                case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
+                case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle();
+                case ISLELAYOUT_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                //missing case character card and cloud changes
+
+
+            }
         }
     }
 

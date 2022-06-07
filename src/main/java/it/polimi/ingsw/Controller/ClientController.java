@@ -16,8 +16,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
     View view;
     ConnectionSocket client;
     ModelStorage storage;
-    CLIDrawer cliDrawer;
-    GuiDrawer guiDrawer;
+    private CLIDrawer cliDrawer;
+    private GuiDrawer guiDrawer;
     String username;
     boolean expertMode = false;
     boolean GUI;
@@ -125,7 +125,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case FILLCLOUD_UPDATE -> {
                 FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
-                storage.updateClouds(fc.getClouds());
+                storage.updateFillClouds(fc.getClouds());
                 view.printChanges();
             }
             case ASSISTANTCARD_UPDATE -> {
@@ -163,8 +163,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case CLOUDCHOICE_UPDATE -> {
                 PickFromCloud_UpdateMsg pfc = (PickFromCloud_UpdateMsg) message;
-                storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
                 storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
+                storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
                 view.printChanges();
             }
             case CHARACTERCARD_UPDATE -> {

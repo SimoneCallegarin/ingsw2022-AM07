@@ -1,11 +1,13 @@
 package it.polimi.ingsw.View.GUI.EventListeners;
 
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 /**
  * this class is added to student buttons to listen to a mouse click and notify the view observers of the button color selected
@@ -13,9 +15,12 @@ import java.awt.event.MouseListener;
 public class EntranceListener extends ViewSubject implements MouseListener  {
 
     DashboardPanel dashboardListened;
+    ArrayList<ViewObserver> observers;
 
-    public EntranceListener(DashboardPanel dashboardListened) {
+    public EntranceListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList) {
         this.dashboardListened = dashboardListened;
+        observers=viewObserverList;
+        addAllObservers(viewObserverList);
     }
 
     @Override
@@ -32,7 +37,7 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
         int finalColorPressed = colorPressed;
         System.out.println(finalColorPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
-        dashboardListened.getDining().setCLickable();//so after at least one student button press the dining room is set clickable
+        dashboardListened.getDining().setCLickable(observers);//so after at least one student button press the dining room is set clickable
 
     }
 

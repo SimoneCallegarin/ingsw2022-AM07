@@ -55,7 +55,7 @@ public class DashboardPanel extends JPanel {
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
-    private void initializeDashboard(){
+    public void initializeDashboard(){
 
         towerStorageConstraints.fill=GridBagConstraints.BOTH;
         towerStorageConstraints.gridy=0;
