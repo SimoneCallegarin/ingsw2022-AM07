@@ -7,10 +7,10 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.View;
+//import org.fusesource.jansi.AnsiConsole;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import org.fusesource.jansi.AnsiConsole;
 
 
 /**
@@ -53,7 +53,7 @@ public class CLI extends ViewSubject implements View {
      * CLI start
      */
     public void CLIstart(){
-        AnsiConsole.systemInstall();
+        //AnsiConsole.systemInstall();
         System.out.println("Welcome to Eriantys game!\n");
         System.out.println(cliDrawer.printTitle());
         askUsername();
@@ -467,7 +467,7 @@ public class CLI extends ViewSubject implements View {
         System.out.println(message.getMessage());
     }
 
-    public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
+    public void printChanges(int playerID) { System.out.println(cliDrawer.printGameTable()); }
 
     private void printAvailableCharacters() { System.out.println(cliDrawer.drawCharacterCardsEffects()); }
 

@@ -17,7 +17,6 @@ public class ModelStorage {
     private final ArrayList<PlayerInformation> dashboards = new ArrayList<>();
     private GameTableInformation gameTable;
     private final ArrayList<ModelChanges> changes;
-    private int currentPlayingID;
 
     public ModelStorage(int numberOfPlayers, boolean expertMode) {
         this.numberOfPlayers = numberOfPlayers;
@@ -73,26 +72,20 @@ public class ModelStorage {
 
     public void updateStudentsInEntrance(int playerID, HashMap<RealmColors,Integer> students){
         dashboards.get(playerID).setEntranceStudents(students);
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.ENTRANCE_CHANGED);
-        currentPlayingID=playerID;
     }
 
     public void updateStudentsInDining(int playerID, HashMap<RealmColors,Integer> students){
         dashboards.get(playerID).setDiningStudents(students);
 
         changes.add(ModelChanges.STUDENTDINING_CHANGED);
-        currentPlayingID=playerID;
     }
 
     public void updateProfessorsInDining(ArrayList<HashMap<RealmColors,Integer>> professors){
         for (int i = 0; i < numberOfPlayers; i++)
             dashboards.get(i).setDiningProfessors(professors.get(i));
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.PROFDINING_CHANGED);
     }
 
@@ -107,21 +100,15 @@ public class ModelStorage {
 
     public void updateMoney(int playerID, int money){
         dashboards.get(playerID).setMoney(money);
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.COINS_CHANGED);
-        currentPlayingID=playerID;
     }
 
     public void updateDiscardPile(int playerID, int turnOrder, int mnMovement){
         dashboards.get(playerID).setDiscardPileTurnOrder(turnOrder);
         dashboards.get(playerID).setDiscardPileMNMovement(mnMovement);
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.DISCARDPILE_CHANGED);
-        currentPlayingID=playerID;
     }
 
     public void updateAssistantsCard(int playerID, ArrayList<Integer> assistantCardsTurnOrder, ArrayList<Integer> assistantCardsMNMovement) {
@@ -146,9 +133,7 @@ public class ModelStorage {
     }
 
     public void updateDenyOnIsle(int isleID, int denyCard) { gameTable.setDenyOnIsle(isleID,denyCard);
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.ISLE_CHANGED);
     }
 
@@ -167,9 +152,7 @@ public class ModelStorage {
             newIsles.add(newIsle);
         }
         gameTable.setIsles(newIsles);
-        for(int i=0;i<changes.size();i++) {
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.ISLELAYOUT_CHANGED);
     }
 
@@ -184,18 +167,14 @@ public class ModelStorage {
             newIsles.add(newIsle);
         }
         gameTable.setIsles(newIsles);
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.ISLELAYOUT_CHANGED);
     }
 
     public void updateCloud(HashMap<RealmColors, Integer> newCloud, int cloudID) {
         GameTableInformation.Cloud updatedCloud = new GameTableInformation.Cloud(newCloud);
         gameTable.setCloud(cloudID,updatedCloud);
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+
         changes.add(ModelChanges.CLOUDS_CHANGED);
     }
 
@@ -210,6 +189,12 @@ public class ModelStorage {
     public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) {
         gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue);
         changes.add(ModelChanges.GNRLRESERVE_CHANGED);
+    }
+
+    public void removeChanges(){
+        for(int i=0;i<changes.size();i++){
+            changes.remove(i);
+        }
     }
 
     // GETTERS:
@@ -232,7 +217,4 @@ public class ModelStorage {
         return changes;
     }
 
-    public int getCurrentPlayingID() {
-        return currentPlayingID;
-    }
 }

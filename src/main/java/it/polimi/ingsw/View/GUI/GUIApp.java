@@ -35,7 +35,8 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askUsername() {
-        guiDrawer.showUsernameForm();
+       String username= guiDrawer.showUsernameForm();
+       notifyObserver(obs->obs.onUsername(username));
     }
 
     @Override
@@ -45,7 +46,8 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askAssistantCard(int playerID) {
-        guiDrawer.ShowAssistantCardForm(playerID);
+        int turnOrder=guiDrawer.ShowAssistantCardForm(playerID);
+        notifyObserver(obs->obs.onAssistantCard(turnOrder));
 
     }
 
@@ -56,12 +58,12 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void printMessage(ServiceMessage message) {
-
+        guiDrawer.showServiceMessage(message.getMessage());
     }
 
     @Override
-    public void printChanges() {
-        guiDrawer.updateGameScreenPanel();
+    public void printChanges(int playerID) {
+        guiDrawer.updateGameScreenPanel(playerID);
     }
 
     @Override

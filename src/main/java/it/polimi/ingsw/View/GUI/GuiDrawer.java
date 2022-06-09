@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GuiDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
+    private int playerID;
 
-    //create the window
     private final String frameTitle="Eriantys Game";
 
     /**
@@ -102,7 +102,8 @@ public class GuiDrawer extends ViewSubject {
      * an error message and makes the user reinsert the input). If the input is acceptable it notifies the clientController who forward the
      * information to the server.
      */
-    public void showUsernameForm(){
+    public String showUsernameForm(){
+        String username;
         //switch in the initial background panel
         cl.show(generalPanelManager,"User Input");
         //initialize the username form
@@ -117,10 +118,10 @@ public class GuiDrawer extends ViewSubject {
                return;
            }
            usernamePlaying=usernameInputText.getText();
-           notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
         });
         usernameForm.add(submitUsername);
         userInputPanel.add(usernameForm,"Username form");
+        return usernamePlaying;
     }
 
     /**
@@ -184,7 +185,7 @@ public class GuiDrawer extends ViewSubject {
      * the relative player discard pile
      * @param playerID the playerID used to decide which character card display and which discard pile update
      */
-    public void ShowAssistantCardForm(int playerID) {
+    public int ShowAssistantCardForm(int playerID) {
         AtomicInteger turnOrder = new AtomicInteger();
         JPanel buttonContainer = new JPanel();
         JButton[] buttons = new JButton[modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size()];
@@ -203,7 +204,7 @@ public class GuiDrawer extends ViewSubject {
         JScrollPane scrollPane = new JScrollPane(buttonContainer);
         scrollPane.setPreferredSize(new Dimension(600, 400));
         JOptionPane.showMessageDialog(f, scrollPane, "Play Assistant Card", JOptionPane.PLAIN_MESSAGE);
-        notifyObserver(obs->obs.onAssistantCard(turnOrder.get()));
+        return turnOrder.get();
     }
 
     public void showMoveOptions(boolean expertMode){
@@ -214,27 +215,29 @@ public class GuiDrawer extends ViewSubject {
         }
         JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
 
-        gameScreenPanel.setClickableStudents(modelStorage.getCurrentPlayingID(),getViewObserverList());
+        gameScreenPanel.setClickableStudents(playerID,getViewObserverList());
         gameScreenPanel.setClickableCharacters();
     }
 
 
-    public void updateGameScreenPanel(){
+    public void updateGameScreenPanel(int playerID){
         boolean gameStart=true;
         for(int i=0;i<modelStorage.getChanges().size();i++){
             switch(modelStorage.getChanges().get(i)){
                 case CLOUDS_CHANGED -> {
                     if(gameStart) {
+                        this.playerID=playerID;
                         createGameScreen();
                         showGameScreen();
                         gameStart=false;
                     }else{
                         //update with cloud update
                     }
+
                 }
                 case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAllAssistCard();
-                case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(modelStorage.getCurrentPlayingID());
-                case STUDENTDINING_CHANGED -> gameScreenPanel.updateDinings(modelStorage.getCurrentPlayingID());
+                case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(playerID);
+                case STUDENTDINING_CHANGED -> gameScreenPanel.updateDinings(playerID);
                 case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins();
                 case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
@@ -242,9 +245,13 @@ public class GuiDrawer extends ViewSubject {
                 case ISLELAYOUT_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsleLayout();
                 //missing case character card and cloud changes
 
-
             }
+            modelStorage.getChanges().remove(i);
         }
+    }
+
+    public void showServiceMessage(String serviceMessage){
+        JOptionPane.showMessageDialog(f,serviceMessage,"error",JOptionPane.PLAIN_MESSAGE);
     }
 
     public ModelStorage getModelStorage() {

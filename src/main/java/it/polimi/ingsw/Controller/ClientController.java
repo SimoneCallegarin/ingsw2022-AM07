@@ -130,19 +130,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case FILLCLOUD_UPDATE -> {
                 FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
                 storage.updateFillClouds(fc.getClouds());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
                 storage.updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
                 storage.updateAssistantsCard(ac.getIdPlayer(), ac.getTurnOrders(), ac.getMovementsMN());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case STUDENTTODINING_UPDATE -> {
                 StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;
                 storage.updateStudentsInEntrance(std.getIdPlayer(), std.getEntrance());
                 storage.updateStudentsInDining(std.getIdPlayer(), std.getDining());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case PROFESSOR_UPDATE -> {
                 Professor_UpdateMsg p = (Professor_UpdateMsg) message;
@@ -157,19 +157,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
                 storage.updateStudentsInEntrance(sti.getIdPlayer(), sti.getEntrance());
                 storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudent());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case MNMOVEMENT_UPDATE -> {
                 MNMovement_UpdateMsg mnm = (MNMovement_UpdateMsg) message;
                 storage.updateIsles(mnm);
                 storage.updateNumberOfTowers(mnm.getNumberOfTowers());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case CLOUDCHOICE_UPDATE -> {
                 PickFromCloud_UpdateMsg pfc = (PickFromCloud_UpdateMsg) message;
                 storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
                 storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case CHARACTERCARD_UPDATE -> {
                 CharacterCard_UpdateMsg cc = (CharacterCard_UpdateMsg) message;
@@ -177,7 +177,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 storage.updateMoney(cc.getPlayerID(), cc.getPlayerMoney());
                 storage.updateGeneralMoneyReserve(cc.getGeneralReserve());
                 storage.updateCharacterCard(cc.getCharacterCardId(), cc.getCardCost(), cc.getStudentsOnCharacter(), cc.getDenyCards());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case EFFECTACTIVATION_UPDATE -> {
                 EffectActivation_UpdateMsg ea = (EffectActivation_UpdateMsg) message;
@@ -220,7 +220,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                     case CENTAUR, KNIGHT, FUNGIST -> {
                     }
                 }
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
