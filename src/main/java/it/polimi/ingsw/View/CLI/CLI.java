@@ -22,8 +22,6 @@ import org.fusesource.jansi.AnsiConsole;
  */
 
 public class CLI extends ViewSubject implements View {
-    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-    CLIDrawer cliDrawer;
 
     /**
      * The bufferReader that reads the input stream.

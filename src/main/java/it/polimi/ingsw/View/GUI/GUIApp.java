@@ -13,7 +13,6 @@ import javax.swing.*;
 public class GUIApp extends ViewSubject implements View {
 
     private static GuiDrawer guiDrawer;
-    private static int playerID;
 
     public static void createAndShowGUI(){
         System.out.println("Created GUI on EDT? "+

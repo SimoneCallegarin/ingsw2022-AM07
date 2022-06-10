@@ -98,10 +98,6 @@ public class App {
         selectPort();
         // Checking if the connection is possible:
         establishConnection();
-
-        ClientController clientController = new ClientController(view, connectionSocket, view.getDrawer());
-        view.addObs(clientController);
-        connectionSocket.getClientListener().addObserver(clientController);
     }
 
     /**
@@ -137,15 +133,19 @@ public class App {
 
         App app = new App();
 
+        app.initializeConnection();
+
+        app.askChooseCLIorGUI();
+
         if(app.choice==0){ app.view = new CLI(); }
         else{
             app.view = new GUIApp();
             SwingUtilities.invokeLater(GUIApp::createAndShowGUI);   //create the EDT to manage the events.
         }
 
-        app.initializeConnection();
-
-        app.askChooseCLIorGUI();
+        ClientController clientController = new ClientController(app.view, app.connectionSocket, app.view.getDrawer());
+        app.view.addObs(clientController);
+        app.connectionSocket.getClientListener().addObserver(clientController);
 
         app.view.VIEWstart();
 
