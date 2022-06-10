@@ -17,13 +17,15 @@ public interface View {
 
      void printMessage(ServiceMessage message);
 
-     void printChanges();
+     void printChanges(int playerID);
 
      void askMNMovement(boolean expertMode);
 
      void askCloud(boolean expertMode);
 
      void askCharacterEffectParameters(CharacterCardsName characterName);
+
+     void disconnect(ServiceMessage message);
 
      CLIDrawer getDrawer();
 

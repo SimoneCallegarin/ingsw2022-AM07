@@ -1,29 +1,30 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.EventListeners.DiningListener;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class DiningPanel extends JPanel {
     GridBagConstraints c;
-    Game game;
+
     int playerID;
     ProfessorPanel professorPanel;
     DiningStudentsPanel studentsPanel;
 
 
-    public DiningPanel(Game game,int playerID) {
+    public DiningPanel(ModelStorage storage, int playerID) {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
-        this.game = game;
+
         this.playerID=playerID;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
 
-        InitializeDining(playerID);
+        InitializeDining(playerID,storage);
 
     }
 
@@ -31,11 +32,11 @@ public class DiningPanel extends JPanel {
      * this method initialize the dining room according to the model state
      * @param playerID the player ID used to identify the dining room
      */
-    private void InitializeDining(int playerID) {
-        professorPanel=new ProfessorPanel(game,playerID);
+    public void InitializeDining(int playerID,ModelStorage storage) {
+        professorPanel=new ProfessorPanel(storage,playerID);
         professorPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         professorPanel.setOpaque(false);
-        studentsPanel=new DiningStudentsPanel(game,playerID);
+        studentsPanel=new DiningStudentsPanel(storage,playerID);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
         c.fill=GridBagConstraints.BOTH;
@@ -55,9 +56,10 @@ public class DiningPanel extends JPanel {
     /**
      * this method is called by the Color Listener after one student button press
      *
+     * @param observers
      */
-    public void setCLickable(){
-        addMouseListener(new DiningListener(this));
+    public void setCLickable(ArrayList<ViewObserver> observers){
+        addMouseListener(new DiningListener(this,observers));
     }
 
     public void removeCLickable(){

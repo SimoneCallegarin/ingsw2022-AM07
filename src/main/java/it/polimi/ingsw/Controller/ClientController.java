@@ -7,6 +7,7 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
+import it.polimi.ingsw.View.GUI.GuiDrawer;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import it.polimi.ingsw.View.View;
 
@@ -15,6 +16,9 @@ import it.polimi.ingsw.View.View;
  */
 public class ClientController implements ViewObserver, NetworkObserver {
 
+    private GuiDrawer guiDrawer;
+    String username;
+    boolean GUI;
     /**
      * The view that the ClientController is observing.
      */
@@ -32,7 +36,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
     /**
      * It handles the graphical part of the CLI.
      */
-    private final CLIDrawer cliDrawer;      // CLIDrawer!!!!!!!! direi GUIDrawer!
+    private CLIDrawer cliDrawer;      // CLIDrawer!!!!!!!! direi GUIDrawer!
     /**
      * Saves if the game is played in expert game mode (true) or in base (false).
      */
@@ -46,18 +50,31 @@ public class ClientController implements ViewObserver, NetworkObserver {
      */
     private CharacterCardsName lastCharacterUsed;
 
-
     /**
      * ClientController constructor.
      * @param view it can be the CLI or the GUI.
      * @param client identifies the client at network layer.
-     * @param cliDrawer the class that manage the graphical part of the CLI.
+     * @param GUI true if the player is playing on a GUI, else false.
      */
-    public ClientController(View view, ConnectionSocket client, CLIDrawer cliDrawer) {
+    public ClientController(View view, ConnectionSocket client,boolean GUI) {
         this.view = view;
         this.client = client;
-        this.cliDrawer = cliDrawer;
+        this.GUI=GUI;
     }
+
+    /**
+     * this method set the ClientController cliDrawer attribute
+     * @param cliDrawer the cliDrawer reference to set as attribute
+     */
+    public void setCliDrawer(CLIDrawer cliDrawer){
+        this.cliDrawer=cliDrawer;
+    }
+
+    public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
+
+    public void setGuiDrawer(GuiDrawer guiDrawer){ this.guiDrawer=guiDrawer; }
+
+    public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
 
     /**
      * Sends the server a message containing the username chosen by the client ,
@@ -65,7 +82,10 @@ public class ClientController implements ViewObserver, NetworkObserver {
      * @param username chosen by the player.
      */
     @Override
-    public void onUsername(String username) { client.send(new LoginMessage(username)); }
+    public void onUsername(String username) {
+        this.username = username;
+        client.send(new LoginMessage(username));
+    }
 
     /**
      * Sends the server a message containing the game preferences chosen by the client.
@@ -169,25 +189,30 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case START_GAME -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
-                storage.setupStorage(gc, cliDrawer);
+                storage.setupStorage(gc);
+                if(GUI){
+                    setStorageForGUI();
+                }else{
+                    setStorageForCLI();
+                }
                 System.out.println("Game started!");
             }
             case FILLCLOUD_UPDATE -> {
                 FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
-                storage.updateClouds(fc.getClouds());
-                view.printChanges();
+                storage.updateFillClouds(fc.getClouds());
+                view.printChanges(playerID);
             }
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
                 storage.updateDiscardPile(ac.getPlayerID(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
                 storage.updateAssistantsCard(ac.getPlayerID(), ac.getTurnOrders(), ac.getMovementsMN());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case STUDENTTODINING_UPDATE -> {
                 StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;
                 storage.updateStudentsInEntrance(std.getPlayerID(), std.getEntrance());
                 storage.updateStudentsInDining(std.getPlayerID(), std.getDining());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case PROFESSOR_UPDATE -> {
                 Professor_UpdateMsg p = (Professor_UpdateMsg) message;
@@ -202,19 +227,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
                 storage.updateStudentsInEntrance(sti.getPlayerID(), sti.getEntrance());
                 storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudents());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case MNMOVEMENT_UPDATE -> {
                 MNMovement_UpdateMsg mnm = (MNMovement_UpdateMsg) message;
                 storage.updateIsles(mnm);
                 storage.updateNumberOfTowers(mnm.getNumberOfTowers());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case CLOUDCHOICE_UPDATE -> {
                 PickFromCloud_UpdateMsg pfc = (PickFromCloud_UpdateMsg) message;
-                storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
                 storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
-                view.printChanges();
+                storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
+                view.printChanges(playerID);
             }
             case CHARACTERCARD_UPDATE -> {
                 CharacterCard_UpdateMsg cc = (CharacterCard_UpdateMsg) message;
@@ -222,7 +247,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 storage.updateMoney(cc.getPlayerID(), cc.getPlayerMoney());
                 storage.updateGeneralMoneyReserve(cc.getGeneralReserve());
                 storage.updateCharacterCard(cc.getCharacterCardId(), cc.getCardCost(), cc.getStudentsOnCharacter(), cc.getDenyCards());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case EFFECTACTIVATION_UPDATE -> {
                 EffectActivation_UpdateMsg ea = (EffectActivation_UpdateMsg) message;
@@ -262,8 +287,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                     }
                     case CENTAUR, KNIGHT, FUNGIST -> { }
                 }
-                System.out.println(ea.toString());
-                view.printChanges();
+                view.printChanges(playerID);
             }
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;

@@ -5,7 +5,7 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.EffectActivation_UpdateMsg;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.MNMovement_UpdateMsg;
-import it.polimi.ingsw.View.CLI.CLIDrawer;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +16,15 @@ public class ModelStorage {
     private final boolean expertMode;
     private final ArrayList<PlayerInformation> dashboards = new ArrayList<>();
     private GameTableInformation gameTable;
+    private final ArrayList<ModelChanges> changes;
 
     public ModelStorage(int numberOfPlayers, boolean expertMode) {
         this.numberOfPlayers = numberOfPlayers;
         this.expertMode = expertMode;
+        changes=new ArrayList<>();
     }
 
-    public void setupStorage (GameCreation_UpdateMsg message, CLIDrawer cliDrawer) { // Receive a message containing all the information of the game table.
+    public void setupStorage (GameCreation_UpdateMsg message) { // Receive a message containing all the information of the game table.
 
         // DASHBOARDS:
         ArrayList<PlayerInformation> dashboards = new ArrayList<>();
@@ -59,7 +61,7 @@ public class ModelStorage {
         for(int i=0;i<numberOfPlayers;i++)
             setDashboard(i,dashboards.get(i));
         setGameTable(gameTable);
-        cliDrawer.setStorage(this);
+
     }
 
     public void setDashboard(int playerID, PlayerInformation player) { this.dashboards.add(playerID,player); }
@@ -68,30 +70,51 @@ public class ModelStorage {
 
     // Update dashboard:
 
-    public void updateStudentsInEntrance(int playerID, HashMap<RealmColors,Integer> students){ dashboards.get(playerID).setEntranceStudents(students); }
+    public void updateStudentsInEntrance(int playerID, HashMap<RealmColors,Integer> students){
+        dashboards.get(playerID).setEntranceStudents(students);
 
-    public void updateStudentsInDining(int playerID, HashMap<RealmColors,Integer> students){ dashboards.get(playerID).setDiningStudents(students); }
+        changes.add(ModelChanges.ENTRANCE_CHANGED);
+    }
+
+    public void updateStudentsInDining(int playerID, HashMap<RealmColors,Integer> students){
+        dashboards.get(playerID).setDiningStudents(students);
+
+        changes.add(ModelChanges.STUDENTDINING_CHANGED);
+    }
 
     public void updateProfessorsInDining(ArrayList<HashMap<RealmColors,Integer>> professors){
         for (int i = 0; i < numberOfPlayers; i++)
-            dashboards.get(i).setDiningProfessors(professors.get(i)); 
+            dashboards.get(i).setDiningProfessors(professors.get(i));
+
+        changes.add(ModelChanges.PROFDINING_CHANGED);
     }
 
     public void updateNumberOfTowers(ArrayList<Integer> numTowers) {
         for (int i = 0; i < numberOfPlayers; i++)
             dashboards.get(i).setNumOfTowers(numTowers.get(i));
+
+        changes.add(ModelChanges.TOWERSTORAGE_CHANGED);
     }
 
-    public void updateMoney(int playerID, int money){ dashboards.get(playerID).setMoney(money); }
+    public void updateColorOfTowers(int playerID, TowerColors towersColor){ dashboards.get(playerID).setTowerColor(towersColor); }
+
+    public void updateMoney(int playerID, int money){
+        dashboards.get(playerID).setMoney(money);
+
+        changes.add(ModelChanges.COINS_CHANGED);
+    }
 
     public void updateDiscardPile(int playerID, int turnOrder, int mnMovement){
         dashboards.get(playerID).setDiscardPileTurnOrder(turnOrder);
         dashboards.get(playerID).setDiscardPileMNMovement(mnMovement);
+
+        changes.add(ModelChanges.DISCARDPILE_CHANGED);
     }
 
     public void updateAssistantsCard(int playerID, ArrayList<Integer> assistantCardsTurnOrder, ArrayList<Integer> assistantCardsMNMovement) {
         dashboards.get(playerID).setAssistantCardsTurnOrder(assistantCardsTurnOrder);
         dashboards.get(playerID).setAssistantCardsMNMovement(assistantCardsMNMovement);
+
     }
 
     // Update game table:
@@ -99,11 +122,24 @@ public class ModelStorage {
     public void updateCharacterCard(int characterCardIndex, int cost, HashMap<RealmColors,Integer> characterCardsStudents, int denyCards) {
         GameTableInformation.CharacterCard newCharacterCard = new GameTableInformation.CharacterCard(gameTable.getCharacterCard(characterCardIndex).characterCardName(),cost,characterCardsStudents,denyCards,gameTable.getCharacterCard(characterCardIndex).getDescription());
         gameTable.setCharacterCard(characterCardIndex,newCharacterCard);
+
+        changes.add(ModelChanges.CHARACTERCARD_CHANGED);
     }
 
-    public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) { gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle); }
+    public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) {
+        gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle);
 
-    public void updateDenyOnIsle(int isleID, int denyCard) { gameTable.setDenyOnIsle(isleID,denyCard); }
+        changes.add(ModelChanges.ISLE_CHANGED);
+    }
+
+    public void updateDenyOnIsle(int isleID, int denyCard) { gameTable.setDenyOnIsle(isleID,denyCard);
+
+        changes.add(ModelChanges.ISLE_CHANGED);
+    }
+
+    public void updateIsle(GameTableInformation.Isle newIsle, int isleID) {
+        gameTable.setNewIsle(isleID,newIsle);
+    }
 
     public void updateIsles(MNMovement_UpdateMsg mnm) {
         ArrayList<GameTableInformation.Isle> newIsles = new ArrayList<>();
@@ -116,6 +152,8 @@ public class ModelStorage {
             newIsles.add(newIsle);
         }
         gameTable.setIsles(newIsles);
+
+        changes.add(ModelChanges.ISLELAYOUT_CHANGED);
     }
 
     public void updateIsles(EffectActivation_UpdateMsg ea) {
@@ -129,26 +167,44 @@ public class ModelStorage {
             newIsles.add(newIsle);
         }
         gameTable.setIsles(newIsles);
+
+        changes.add(ModelChanges.ISLELAYOUT_CHANGED);
     }
 
     public void updateCloud(HashMap<RealmColors, Integer> newCloud, int cloudID) {
         GameTableInformation.Cloud updatedCloud = new GameTableInformation.Cloud(newCloud);
         gameTable.setCloud(cloudID,updatedCloud);
+
+        changes.add(ModelChanges.CLOUDS_CHANGED);
     }
 
-    public void updateClouds(ArrayList<HashMap<RealmColors, Integer>> clouds) {
+    public void updateFillClouds(ArrayList<HashMap<RealmColors, Integer>> clouds) {
         for (int i = 0; i < numberOfPlayers; i++) {
             GameTableInformation.Cloud newCloud = new GameTableInformation.Cloud(clouds.get(i));
             gameTable.setCloud(i, newCloud);
         }
+        changes.add(ModelChanges.CLOUDS_CHANGED);
     }
 
-    public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) { gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue); }
+    public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) {
+        gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue);
+        changes.add(ModelChanges.GNRLRESERVE_CHANGED);
+    }
+
+    public void removeChanges(){
+        for(int i=0;i<changes.size();i++){
+            changes.remove(i);
+        }
+    }
 
     // GETTERS:
 
     public int getNumberOfPlayers() { return numberOfPlayers; }
 
+    /**
+     * getter for the gamemode
+     * @return return true if the gamemode is expert
+     */
     public boolean isGameMode() { return expertMode; }
 
     public PlayerInformation getDashboard(int playerID) { return dashboards.get(playerID); }
@@ -156,5 +212,9 @@ public class ModelStorage {
     public GameTableInformation getGameTable() { return gameTable; }
 
     public int getNumberOfIsles() { return gameTable.getIsles().size(); }
+
+    public ArrayList<ModelChanges> getChanges() {
+        return changes;
+    }
 
 }

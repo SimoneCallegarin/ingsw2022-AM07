@@ -424,6 +424,7 @@ public class CLI extends ViewSubject implements View {
         notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
     }
 
+    public void printChanges(int playerID) { System.out.println(cliDrawer.printGameTable()); }
     /**
      * Asks the player in which isle he wants to move mother nature.
      * Notifies the choice to the ClientController.

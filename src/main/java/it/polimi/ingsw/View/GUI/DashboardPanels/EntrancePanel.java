@@ -1,12 +1,14 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.EventListeners.EntranceListener;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * this panel is inserted in the Dashboard panel and represents the dashboard entrance. It contains students button.
@@ -17,31 +19,27 @@ import java.awt.*;
 
 public class EntrancePanel extends JPanel{
     GridBagConstraints c;
-    Game game;
-    int playerID;
-    RealmColors colorSelected;
 
-
-    public EntrancePanel(Game game, int playerID) {
+    public EntrancePanel(ModelStorage storage, int playerID) {
         setLayout(new GridBagLayout());
         c=new GridBagConstraints();
-        this.game=game;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
-        InitializeEntrance(playerID);
+        initializeEntrance(playerID,storage);
 
     }
 
     /**
      * this method initialize the students in the entrance according to the model information
      * @param playerID the player ID used to identify the entrance Dashboard
+     * @param storage the model storage where the entrance information are memorized
      */
-    private void InitializeEntrance(int playerID){
+    public void initializeEntrance(int playerID, ModelStorage storage){
         c.gridx=0;
         c.gridy=0;
         c.insets=new Insets(0,9,3,7);
         for(RealmColors color:RealmColors.values()){
-            for(int i=0;i<game.getPlayerByIndex(playerID).getDashboard().getEntrance().getStudentsByColor(color);i++){
+            for(int i=0;i<storage.getDashboard(playerID).getEntranceStudents(color);i++){
                 add(new StudentButton(color),c);
                 if(c.gridx==4){
                     c.gridy=1;
@@ -54,10 +52,11 @@ public class EntrancePanel extends JPanel{
 
     /**
      * this method is called when the player can move the students in order to listen to clicks on a student
+     * @param viewObserverList the observer list to pass to the entrance listener
      */
-    public void setClickable(){
+    public void setClickable(ArrayList<ViewObserver> viewObserverList){
         for(int i=0;i<this.getComponentCount();i++){
-            this.getComponent(i).addMouseListener(new EntranceListener((DashboardPanel) this.getParent()));
+            this.getComponent(i).addMouseListener(new EntranceListener((DashboardPanel) this.getParent(),viewObserverList));
         }
     }
 
