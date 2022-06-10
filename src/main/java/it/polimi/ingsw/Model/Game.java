@@ -102,6 +102,8 @@ public class Game extends ModelSubject {
      */
     private int studentsRemovedByFungist=0;
 
+    private int farmerOffset = 0;
+
     private int atomicEffectCounter = 0;
 
     /**
@@ -363,17 +365,12 @@ public class Game extends ModelSubject {
                         // if FARMER character card is played by the player this turn
                         // then each time is checked if the player has an equal number of students of another
                         // player that owe the professor of that color
-                        if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FARMER) {
-                            while (gameTable.getCharacterCard(indexFarmer).getCharacterCardName() == CharacterCardsName.FARMER)
-                                indexFarmer++;
-                            activateAtomicEffect(idPlayer, indexFarmer, 0, 0);
-                        }
+                        if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FARMER)
+                            farmerOffset = 1;
+                        else
+                            farmerOffset = 0;
                         // checking if the student is added in third, sixth or ninth position of the dining room
-                        if (gameMode == GameMode.EXPERT && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
-                            players.get(idPlayer).gainMoney();
-                            gameTable.studentInMoneyPosition();
-                            notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, players.get(idPlayer).getMoney(), gameTable.getGeneralMoneyReserve()));
-                        }
+                        checkStudentInMoneyPosition(idPlayer,color);
                         checkUpdateProfessor(idPlayer, color);
                         studentsCounter++;
 
@@ -392,6 +389,19 @@ public class Game extends ModelSubject {
         }
 
         notifyTurn();
+    }
+
+    /**
+     * Checking if the student is added in third, sixth or ninth position of the dining room.
+     * @param idPlayer ID of the player that placed a student in his dining room.
+     * @param color color of the student placed.
+     */
+    private void checkStudentInMoneyPosition(int idPlayer, RealmColors color) {
+        if (isGameMode() && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
+            players.get(idPlayer).gainMoney();
+            gameTable.studentInMoneyPosition();
+            notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, players.get(idPlayer).getMoney(), gameTable.getGeneralMoneyReserve()));
+        }
     }
 
     /**
@@ -424,7 +434,7 @@ public class Game extends ModelSubject {
                                 break;
                             }
                         gameTable.getCharacterCard(grandmaIndex).addDenyCard();
-                        notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
+                        //notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
                         notifyEffectUpdate(grandmaIndex,idPlayer,idIsle,-1);
                     }
                     // if the FUNGIST card is played, then we add the students of the chosen color
@@ -619,7 +629,7 @@ public class Game extends ModelSubject {
 
             for (Player p : players) {
                 if (p.getOrder() == CurrentOrder.FIRST_PLAYER)
-                    firstPlayerIndex = p.getDashboard().getIdDashboard();
+                    firstPlayerIndex = p.getDashboard().getDashboardID();
             }
             currentActivePlayer = CurrentOrder.FIRST_PLAYER;
             playerCounter = 0;
@@ -684,17 +694,16 @@ public class Game extends ModelSubject {
 
             for (Player p : players) {
                 if (p.getDashboard().getDiningRoom().getProfessorByColor(color) == 1) {
-                    playerWhoHasProfessorIndex = p.getDashboard().getIdDashboard();
+                    playerWhoHasProfessorIndex = p.getDashboard().getDashboardID();
                     someoneHasProfessor = true;
                     break;
                 }
             }
 
             if (someoneHasProfessor) {
-                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color) || (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) >= players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color) && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed().equals(CharacterCardsName.FARMER))) {
+                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)-farmerOffset) {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
                     players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
-
                 }
             }
             else {
@@ -725,7 +734,7 @@ public class Game extends ModelSubject {
             for (int i = 0; i < 2; i++) {
                 for (Player p : players) {
                     if (p.getSquad() == Squads.getSquads(i))
-                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
+                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID());
                 }
                 if (tempInfluence == majorInfluence)
                     draw = true;
@@ -739,11 +748,11 @@ public class Game extends ModelSubject {
         }
         else {
             for (Player p : players) {
-                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) == majorInfluence)
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID()) == majorInfluence)
                     draw = true;
-                if (gameTable.getIsleManager().getIsle(idIsle).getInfluence(p) > majorInfluence) {
-                    majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluence(p);
-                    conquerorIndex = p.getDashboard().getIdDashboard();
+                if (gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID()) > majorInfluence) {
+                    majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID());
+                    conquerorIndex = p.getDashboard().getDashboardID();
                     draw = false;
                 }
             }
@@ -804,7 +813,7 @@ public class Game extends ModelSubject {
                     draw = true;
                 if (p.getDashboard().getTowerStorage().getNumberOfTowers() < minorNumOfTowersInStorage) {
                     minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();
-                    winnerIndex = p.getDashboard().getIdDashboard();
+                    winnerIndex = p.getDashboard().getDashboardID();
                     draw = false;
                 }
             }
@@ -817,7 +826,7 @@ public class Game extends ModelSubject {
                         drawEndGame = true;
                     if (p.getDashboard().getDiningRoom().getNumberOfProfessors() > majorProfessors && p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {
                         majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();
-                        winnerIndex = p.getDashboard().getIdDashboard();
+                        winnerIndex = p.getDashboard().getDashboardID();
                         drawEndGame = false;
                     }
                 }
@@ -881,10 +890,21 @@ public class Game extends ModelSubject {
                         notifyObserver(obs -> obs.onKO(idPlayer, "You've selected a color that doesn't exist, please select another one"));
                     notifyTurn();
                 }
-                case GRANDMA_HERBS, HERALD -> {
+                case HERALD -> {
                     if (value1 >= 0 && value1 < gameTable.getIsleManager().getIsles().size()) {
                         effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
                         notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                    }
+                    else
+                        notifyObserver(obs -> obs.onKO(idPlayer, "You've selected an isle that doesn't exist, please select another one"));
+                    notifyTurn();
+                }
+                case GRANDMA_HERBS -> {
+                    if (value1 >= 0 && value1 < gameTable.getIsleManager().getIsles().size()) {
+                        if (getGameTable().getCharacterCards().get(characterCardIndex).getDenyCards() > 0) {
+                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
+                            notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                        }
                     }
                     else
                         notifyObserver(obs -> obs.onKO(idPlayer, "You've selected an isle that doesn't exist, please select another one"));
@@ -901,8 +921,12 @@ public class Game extends ModelSubject {
                 }
                 case MONK -> {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 < gameTable.getIsleManager().getIsles().size())) {
-                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-                        notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                        if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) > 0) {
+                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
+                            notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                        }
+                        else
+                            notifyObserver(obs -> obs.onKO(idPlayer, "There aren't enough " + RealmColors.getColor(value1).toString() + " students on the card, please select another color"));
                     }
                     else
                         notifyObserver(obs -> obs.onKO(idPlayer, "You've selected a color or an isle that doesn't exist, please try again"));
@@ -917,7 +941,7 @@ public class Game extends ModelSubject {
         }
     }
 
-    private void notifyEffectUpdate(int characterCardIndex, int idPlayer, int value1, int value2) {
+    public void notifyEffectUpdate(int characterCardIndex, int idPlayer, int value1, int value2) {
         CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
         switch (cardName) {
             case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value2, getGameTable().getIsleManager().getIsle(value2).getStudents()));
@@ -951,10 +975,10 @@ public class Game extends ModelSubject {
                 for (Player p : players)
                     numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
                 int finalWhereMnId = whereMnId;
-                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
+                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId, denyCards, numIsles, numTowers));
             }
             case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getTurnOrder(), players.get(idPlayer).getDiscardPile().getMnMovement()));
-            case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
+            case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
             case CENTAUR, KNIGHT, FUNGIST -> notifyObserver(ModelObserver::onEffectActivation);
             case JESTER -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents()));
             case MINSTREL, THIEF -> {
@@ -1010,9 +1034,7 @@ public class Game extends ModelSubject {
      * Getter method that tells if the game mode is expert or not.
      * @return true if expert, else false
      */
-    public boolean isGameMode() {
-        return gameMode == GameMode.EXPERT;
-    }
+    public boolean isGameMode() { return gameMode == GameMode.EXPERT; }
 
     /**
      * Getter method that returns the list of players who are playing the game

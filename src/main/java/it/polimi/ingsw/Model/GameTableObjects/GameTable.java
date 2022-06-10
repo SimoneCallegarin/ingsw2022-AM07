@@ -42,16 +42,16 @@ public class GameTable implements DenyCardManager {
     private final EffectSetupFactory effectSetupFactory = new EffectSetupFactory();
 
     /**
-     * this is the general money reserve that is filled with 20 money
-     * it is updated when a player plays a character card
-     * or when he fills the space of the dining room that gives money
+     * General money reserve that is filled with 20 money.
+     * It is updated when a player plays a character card
+     * or when he fills a space on the dining room that gives one money.
      */
     private int generalMoneyReserve;
 
     /**
-     * GameTable constructor
-     * @param numberOfPlayers that are going to play the game, chosen by the first player that joins the match
-     * @param gameMode of the game, chosen by the first player that joins the match
+     * GameTable constructor.
+     * @param numberOfPlayers that are going to play the game, chosen by the first player that joins the match.
+     * @param gameMode of the game, chosen by the first player that joins the match.
      */
     public GameTable(int numberOfPlayers, GameMode gameMode) {
         this.isleManager = new IsleManager();
@@ -75,10 +75,11 @@ public class GameTable implements DenyCardManager {
         for (RealmColors rc : RealmColors.values()) {
             professors.put(rc, 1);
         }
-           
+
         this.characterCards = new ArrayList<>(3);
         if (gameMode.equals(GameMode.EXPERT))
             extractAndSetUsableCharacterCards();
+        //set3CharacterCards(CharacterCardsName.MONK,CharacterCardsName.MONK,CharacterCardsName.MONK);
 
         this.denyCards = 4;
         this.generalMoneyReserve = 0;
@@ -88,8 +89,7 @@ public class GameTable implements DenyCardManager {
     }
 
     /**
-     * this method takes care of the character cards
-     * it extract 3 random character cards and build them with their cost and effects
+     * Extracts 3 random character cards and build them properly with their cost and effects.
      */
     public void extractAndSetUsableCharacterCards() {
         int extraction;
@@ -108,50 +108,54 @@ public class GameTable implements DenyCardManager {
     }
 
     /**
-     * getter method that gives the cloud of a certain given id
-     * @param idCloud the id of the cloud we want to return
-     * @return the cloud associated to that id
+     * Getter method that gives the cloud of a certain given id.
+     * @param idCloud the ID of the cloud we want to return.
+     * @return the cloud associated to that ID.
      */
     public Cloud getCloud(int idCloud) { return clouds.get(idCloud); }
 
     /**
-     * getter method that gives the current isle manager for the game table
-     * @return the current isle manager
+     * Getter method that gives the current isle manager for the game table.
+     * @return the current isle manager.
      */
     public IsleManager getIsleManager() {
         return isleManager;
     }
 
     /**
-     * getter method that gives the current bag for the game table
-     * @return the current bag
+     * getter method that gives the current bag for the game table.
+     * @return the current bag.
      */
-    public Bag getBag() {
-        return bag;
-    }
+    public Bag getBag() { return bag; }
 
+    /**
+     * TESTING PURPOSE ONLY.
+     * Getter method for the number of professors.
+     * @return the number of professors on the game table.
+     */
     public int getNumberOfProfessors() {
         int totalNumberOfProfessors = 0;
-        for (RealmColors rc : RealmColors.values()){
+        for (RealmColors rc : RealmColors.values())
             totalNumberOfProfessors = totalNumberOfProfessors + professors.get(rc);
-        }
         return totalNumberOfProfessors;
     }
 
-    public void removeProfessor(RealmColors color) {
-        professors.put(color, 0);
-    }
+    /**
+     * Removes the professor from the game table.
+     * @param color color of the professors that has to be removed.
+     */
+    public void removeProfessor(RealmColors color) { professors.put(color, 0); }
 
     /**
-     * getter method that gives one of the playable character cards in the list
-     * @param index of the character card we want
-     * @return the playable character card with that index
+     * Getter method that gives one of the playable character cards in the list.
+     * @param index of the character card we want.
+     * @return the playable character card with that index.
      */
     public CharacterCard getCharacterCard(int index) { return characterCards.get(index); }
 
     /**
-     * this method will update the number of money when a character card is played
-     * @param index the index of the character card played
+     * This method will update the number of money when a character card is played.
+     * @param index the index of the character card played.
      */
     public void characterCardPlayed(int index) {
         if(getCharacterCard(index).isUsed())
@@ -159,19 +163,15 @@ public class GameTable implements DenyCardManager {
     }
 
     /**
-     * this method is called when a player
-     * places a student in the 3°, 6° or 9° position
-     * and gains one money
+     * This method is called when a player places a student in the 3°, 6° or 9° position and gains one money.
      */
     public void studentInMoneyPosition() { generalMoneyReserve -= 1; }
 
     /**
-     * getter method to return the general money reserve value
-     * @return the number of money still available on the game table
+     * Getter method to return the general money reserve value.
+     * @return the number of money still available on the game table.
      */
-    public int getGeneralMoneyReserve() {
-        return generalMoneyReserve;
-    }
+    public int getGeneralMoneyReserve() { return generalMoneyReserve; }
 
     /**
      * Adds a deny card to the deny card manager, anyway it isn't really used in the game.
@@ -180,21 +180,21 @@ public class GameTable implements DenyCardManager {
     public void addDenyCard() { denyCards += 1; }
 
     /**
-     * this method remove a deny card to the deny card manager
+     * Removes a deny card from the deny card manager.
      */
     @Override
     public void removeDenyCard(){ denyCards -= 1; }
 
     /**
-     * this method gives the number of deny cards on the deny card manager
-     * @return the number of deny cards
+     * Getter method for the number of deny cards on the deny card manager.
+     * @return the number of deny cards.
      */
     @Override
     public int getDenyCards() { return denyCards; }
 
     /**
-     * method used only for Testing purpose
-     * it deletes all the other character cards created and creates a new character card received in input
+     * TESTING PURPOSE ONLY.
+     * Deletes all the other character cards created and creates a new character card received in input.
      * @param characterCardsName the name of the character card we want to add
      */
     public void setCharacterCards(CharacterCardsName characterCardsName){
@@ -223,11 +223,51 @@ public class GameTable implements DenyCardManager {
             effectSetupFactory.getEffect(this,characterCards.get(0));
     }
 
-    public ArrayList<Cloud> getClouds() {
-        return clouds;
+    /**
+     * TESTING PURPOSE ONLY:
+     * Deletes all the other character cards created and creates 3 new character cards received in input.
+     */
+    public void set3CharacterCards(CharacterCardsName characterCardsName0,CharacterCardsName characterCardsName1,CharacterCardsName characterCardsName2){
+        for(int index = 0;index<3;index++){
+            switch (getCharacterCard(index).getCharacterCardName()) {
+                case MONK, JESTER, SPOILED_PRINCESS -> {
+                    for(RealmColors colors : RealmColors.values()) {
+                        for(int i=getCharacterCard(index).getStudentsByColor(colors); i>0;i--){
+                            getBag().addStudent(colors);
+                            getCharacterCard(index).removeStudent(colors);
+                        }
+                    }
+                }
+                case GRANDMA_HERBS -> {
+                    for(int i=0;i<4;i++) {
+                        addDenyCard();
+                        getCharacterCard(index).removeDenyCard();
+                    }
+                }
+            }
+        }
+
+        characterCards.clear();
+        characterCards.add(new CharacterCard(characterCardsName0));
+        characterCards.add(new CharacterCard(characterCardsName1));
+        characterCards.add(new CharacterCard(characterCardsName2));
+        if(characterCardsName0.equals(CharacterCardsName.MONK)||characterCardsName0.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName0.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName0.equals(CharacterCardsName.JESTER))
+            effectSetupFactory.getEffect(this,characterCards.get(0));
+        if(characterCardsName1.equals(CharacterCardsName.MONK)||characterCardsName1.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName1.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName1.equals(CharacterCardsName.JESTER))
+            effectSetupFactory.getEffect(this,characterCards.get(1));
+        if(characterCardsName2.equals(CharacterCardsName.MONK)||characterCardsName2.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName2.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName2.equals(CharacterCardsName.JESTER))
+            effectSetupFactory.getEffect(this,characterCards.get(2));
     }
 
-    public ArrayList<CharacterCard> getCharacterCards() {
-        return characterCards;
-    }
+    /**
+     * Getter method for the clouds.
+     * @return number of clouds on the game table.
+     */
+    public ArrayList<Cloud> getClouds() { return clouds; }
+
+    /**
+     * Getter method for the character cards playable.
+     * @return a list of playable character cards.
+     */
+    public ArrayList<CharacterCard> getCharacterCards() { return characterCards; }
 }

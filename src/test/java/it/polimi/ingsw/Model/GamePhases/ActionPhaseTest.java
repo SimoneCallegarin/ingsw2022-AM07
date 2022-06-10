@@ -571,10 +571,10 @@ class ActionPhaseTest {
         // manually setting the correct getActionPhase() stage
         game.setActionPhase(ActionPhases.MOVE_MOTHER_NATURE);
         // checking if the influence of each player is correct
-        assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(0)));
-        assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(1)));
-        assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(2)));
-        assertEquals(1, game.getGameTable().getIsleManager().getIsle(10).getInfluence(game.getPlayerByIndex(3)));
+        assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluences(game.getPlayers()).get(0));
+        assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluences(game.getPlayers()).get(1));
+        assertEquals(2, game.getGameTable().getIsleManager().getIsle(10).getInfluences(game.getPlayers()).get(2));
+        assertEquals(1, game.getGameTable().getIsleManager().getIsle(10).getInfluences(game.getPlayers()).get(3));
         // moving mother nature
         game.moveMotherNature(game.getFirstPlayerIndex(), 10);
         // checking if the movement has been done correctly

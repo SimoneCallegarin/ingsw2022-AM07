@@ -2,36 +2,28 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
 import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
 public class GUIApp extends ViewSubject implements View {
-    GuiDrawer guiDrawer;
 
+    private static GuiDrawer guiDrawer;
 
-    public static void main(String[] args) {
-        GUIApp guiApp=new GUIApp();
-        GuiDrawer guiDrawer=new GuiDrawer();
-        ConnectionSocket connectionSocket=new ConnectionSocket();
-        ClientController clientController=new ClientController(guiApp,connectionSocket,true);
-        clientController.setGuiDrawer(guiDrawer);
-        guiApp.addObserver(clientController);
-        guiDrawer.addObserver(clientController);
-        connectionSocket.startConnection();
-        connectionSocket.getClientListener().addObserver(clientController);
-        SwingUtilities.invokeLater(() -> guiApp.GUIstart(guiDrawer));
+    public GUIApp() { SwingUtilities.invokeLater(GUIApp::createAndShowGUI); }
+
+    public static void createAndShowGUI(){
+        guiDrawer = new GuiDrawer();
+        SwingUtilities.invokeLater(() -> GUIstart());
     }
 
-    public void GUIstart(GuiDrawer drawer){
-        //it creates the first screen where the user inputs his game preferences
-        this.guiDrawer=drawer;
-        drawer.screeInitialization();
+    public static void GUIstart(){
+        // It creates the first screen where the user inputs his game preferences.
+        guiDrawer.screeInitialization();
     }
-
 
     @Override
     public void askUsername() {
@@ -47,7 +39,6 @@ public class GUIApp extends ViewSubject implements View {
     public void askAssistantCard(int playerID) {
         int turnOrder=guiDrawer.ShowAssistantCardForm(playerID);
         notifyObserver(obs->obs.onAssistantCard(turnOrder));
-
     }
 
     @Override
@@ -81,8 +72,24 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
+    public CLIDrawer getCLIDrawer() {
+        //return guiDrawer;
+        return null;
+    }
+
+    @Override
+    public void addObs(ClientController clientController) { addObserver(clientController); }
+
+    @Override
+    public void VIEWstart() {
+
+    }
+
+    @Override
     public void disconnect(ServiceMessage message) {
 
     }
+
+    public GuiDrawer getGUIDrawer() { return guiDrawer; }
 
 }

@@ -1,7 +1,10 @@
 package it.polimi.ingsw.View;
 
+import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
+import it.polimi.ingsw.View.GUI.GuiDrawer;
 
 public interface View {
 
@@ -25,4 +28,11 @@ public interface View {
 
      void disconnect(ServiceMessage message);
 
+     CLIDrawer getCLIDrawer();
+
+     GuiDrawer getGUIDrawer();
+
+     void VIEWstart();
+
+     void addObs(ClientController clientController);
 }

@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Interface.DenyCardManager;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 import it.polimi.ingsw.Model.Player.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -105,17 +106,13 @@ public class Isle implements StudentManager, DenyCardManager {
      * this method add a deny card to the isle
      */
     @Override
-    public void addDenyCard() {
-        this.denyCard=true;
-    }
+    public void addDenyCard() { this.denyCard=true; }
 
     /**
      * this method remove a deny card to the isle
      */
     @Override
-    public void removeDenyCard() {
-        this.denyCard=false;
-    }
+    public void removeDenyCard() { this.denyCard=false; }
 
     /**
      * this method gives the number of deny cards on the deny card manager
@@ -129,24 +126,47 @@ public class Isle implements StudentManager, DenyCardManager {
         return present;
     }
 
+    /**
+     * Calculates the influences of each player on the Isle.
+     * @param players players that are playing the game.
+     * @return the influences of each player on the Isle.
+     */
+    public ArrayList<Integer> getInfluences(ArrayList<Player> players) {
+
+        ArrayList<Integer> influences = new ArrayList<>();
+        boolean centaurPlayed = false;
+
+        for(Player p : players)
+            if(p.getAlreadyPlayedACardThisTurn() && p.getCharacterCardPlayed().equals(CharacterCardsName.CENTAUR)){
+                centaurPlayed = true;
+                break;
+            }
+
+        for(int i=0; i<players.size(); i++) {
+            influences.add(getInfluence(players.get(i)));
+            if(centaurPlayed && players.get(i).getDashboard().getTowerStorage().getTowerColor().equals(getTowersColor()))
+                influences.set(i,influences.get(i) - numOfIsles) ;
+        }
+
+        return influences;
+    }
 
     /**
-     * getInfluence is the method used to calculate the Player influence on the Isle
-     * according to the professors on his dashboard and
-     * the students and the professors on the Isle
-     * @param player the player we want to calculate the influence of
-     * @return the influence of that player in the isle
+     * Used to calculate the Player influence on the Isle
+     * according to the professors on his dashboard,
+     * the students and the towers on the Isle.
+     * @param player the player we want to calculate the influence of.
+     * @return the influence of the player in the isle.
      */
-    public int getInfluence(Player player){
-        int influence=0;
+    private int getInfluence(Player player){
+        int influence = 0;
         for(RealmColors c: RealmColors.values()){
             if(player.getDashboard().getDiningRoom().getProfessorByColor(c)!=0)
                     influence += students.get(c);
         }
-        if(tower.equals(player.getDashboard().getTowerStorage().getTowerColor()) && player.getCharacterCardPlayed()!= CharacterCardsName.CENTAUR){
+        if(player.getDashboard().getTowerStorage().getTowerColor().equals(getTowersColor()))
             influence += numOfIsles;
-        }
-        if(player.getAlreadyPlayedACardThisTurn() && player.getCharacterCardPlayed()== CharacterCardsName.KNIGHT)
+        if(player.getAlreadyPlayedACardThisTurn() && player.getCharacterCardPlayed() == CharacterCardsName.KNIGHT)
             influence += 2;
         return influence;
     }

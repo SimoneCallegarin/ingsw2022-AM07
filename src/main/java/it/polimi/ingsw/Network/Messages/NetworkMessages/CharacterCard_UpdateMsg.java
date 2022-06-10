@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Network.Messages.MessageType;

@@ -51,9 +51,7 @@ public class CLIDrawer {
 
     private ModelStorage storage;
 
-    public void setStorage(ModelStorage storage) {
-        this.storage = storage;
-    }
+    public void setStorage(ModelStorage storage) { this.storage = storage; }
 
     public ModelStorage getStorage() {return storage;}
 
