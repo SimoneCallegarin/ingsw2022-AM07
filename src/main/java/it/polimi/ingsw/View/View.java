@@ -1,8 +1,9 @@
 package it.polimi.ingsw.View;
 
+import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
-import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
 
 public interface View {
 
@@ -24,6 +25,9 @@ public interface View {
 
      void askCharacterEffectParameters(CharacterCardsName characterName);
 
-     void disconnect(ServiceMessage message);
+     CLIDrawer getDrawer();
 
+     void VIEWstart();
+
+     void addObs(ClientController clientController);
 }

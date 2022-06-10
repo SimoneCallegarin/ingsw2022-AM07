@@ -83,6 +83,8 @@ public class GameTableInformation {
 
     public Cloud getCloud(int cloudID) { return clouds.get(cloudID); }
 
+    public int getNumOfClouds() { return clouds.size(); }
+
     public int getGeneralMoneyReserve() { return generalMoneyReserve; }
 
     // SETTERS:

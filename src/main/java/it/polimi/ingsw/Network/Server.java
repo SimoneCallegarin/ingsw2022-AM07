@@ -222,14 +222,6 @@ public class Server {
         System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
     }
 
-    public void broadcastMessage(String nickname, NetworkMessage message) {
-        int matchToBroadcast = getPlayerInfo(nickname).getMatchID();
-        for (String player : chosenNicknames)
-            if(players.get(player).getMatchID() == matchToBroadcast && players.get(player).getClientHandler().isConnected()) {
-                players.get(player).getClientHandler().send(message);
-            }
-    }
-
     /**
      * Adds a player's nickname that has to be removed from the server.
      * @param nickname the nickname of the player that has to be removed.

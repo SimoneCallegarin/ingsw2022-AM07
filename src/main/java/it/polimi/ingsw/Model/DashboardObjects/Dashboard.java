@@ -7,7 +7,7 @@ public class Dashboard {
     /**
      * this is the identification number of the dashboard
      */
-    private final int idDashboard;
+    private final int dashboardID;
     /**
      * this is the entrance of the dashboard
      */
@@ -24,13 +24,13 @@ public class Dashboard {
     /**
      * Dashboard constructor: here are set the maximum dimension of each depending on the number of players and the game mode
      */
-    public Dashboard(int numOfPlayers, int idDashboard) {
+    public Dashboard(int numOfPlayers, int dashboardID) {
 
         int maxEntranceStudents;
         int maxStorageTowers;
 
-        this.idDashboard = idDashboard;
-        TowerColors towerColor = TowerColors.getColor(idDashboard);
+        this.dashboardID = dashboardID;
+        TowerColors towerColor = TowerColors.getColor(dashboardID);
 
         if (numOfPlayers == 3) {
             maxEntranceStudents = 9;
@@ -43,7 +43,7 @@ public class Dashboard {
 
         this.entrance = new Entrance(maxEntranceStudents);
         this.diningRoom = new DiningRoom();
-        if((idDashboard==2||idDashboard==3)&&numOfPlayers==4) {
+        if((dashboardID ==2|| dashboardID ==3)&&numOfPlayers==4) {
             maxStorageTowers = 0;
             towerColor = TowerColors.getColor(3);
         }
@@ -54,32 +54,24 @@ public class Dashboard {
      * Getter method
      * @return the dashboard id
      */
-    public int getIdDashboard() {
-        return idDashboard;
-    }
+    public int getDashboardID() { return dashboardID; }
 
     /**
      * Getter method
      * @return the entrance of the dashboard
      */
-    public Entrance getEntrance() {
-        return entrance;
-    }
+    public Entrance getEntrance() { return entrance; }
 
     /**
      * Getter method
      * @return the dining room of the dashboard
      */
-    public DiningRoom getDiningRoom() {
-        return diningRoom;
-    }
+    public DiningRoom getDiningRoom() { return diningRoom; }
 
     /**
      * Getter method
      * @return the tower storage of the dashboard
      */
-    public TowerStorage getTowerStorage() {
-        return towerStorage;
-    }
+    public TowerStorage getTowerStorage() { return towerStorage; }
 
 }

@@ -10,70 +10,148 @@ import it.polimi.ingsw.View.CLI.CLIDrawer;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import it.polimi.ingsw.View.View;
 
+/**
+ * Observe the ClientListener and the view.
+ */
 public class ClientController implements ViewObserver, NetworkObserver {
 
-    View view;
-    ConnectionSocket client;
-    ModelStorage storage;
-    CLIDrawer cliDrawer;
-    String username;
-    boolean expertMode = false;
-    int playerID;
-    CharacterCardsName lastCharacterUsed;
+    /**
+     * The view that the ClientController is observing.
+     */
+    private final View view;
+    /**
+     * Establishes the connection of the client with the server, starts threads for some task (pinger and listener)
+     * and initializes other useful variables in order to maintain a working and stable connection with the server.
+     * In particular, it starts the ClientListener that is observed by the ClientController.
+     */
+    private final ConnectionSocket client;
+    /**
+     * It's light version of the model used to store visible information about the model that are used by the view.
+     */
+    private ModelStorage storage;
+    /**
+     * It handles the graphical part of the CLI.
+     */
+    private final CLIDrawer cliDrawer;      // CLIDrawer!!!!!!!! direi GUIDrawer!
+    /**
+     * Saves if the game is played in expert game mode (true) or in base (false).
+     */
+    private boolean expertMode = false;
+    /**
+     * The ID of the player associated to this ClientController.
+     */
+    private int playerID;
+    /**
+     * The name of the last character card that was used by the player.
+     */
+    private CharacterCardsName lastCharacterUsed;
 
-    public ClientController(View cli, ConnectionSocket client, CLIDrawer cliDrawer) {
-        this.view = cli;
+
+    /**
+     * ClientController constructor.
+     * @param view it can be the CLI or the GUI.
+     * @param client identifies the client at network layer.
+     * @param cliDrawer the class that manage the graphical part of the CLI.
+     */
+    public ClientController(View view, ConnectionSocket client, CLIDrawer cliDrawer) {
+        this.view = view;
         this.client = client;
         this.cliDrawer = cliDrawer;
     }
 
+    /**
+     * Sends the server a message containing the username chosen by the client ,
+     * it still has to be checked by the server if it's an available nickname or not.
+     * @param username chosen by the player.
+     */
     @Override
-    public void onUsername(String username) {
-        this.username = username;
-        client.send(new LoginMessage(username));
-    }
+    public void onUsername(String username) { client.send(new LoginMessage(username)); }
 
+    /**
+     * Sends the server a message containing the game preferences chosen by the client.
+     * They are first checked by the CLI itself
+     * in order to prevent the entry of lexically uncorrected data, or not acceptable values.
+     * Then they are checked by the server and if all is correct
+     * then the player will be added to a new or an already existing game.
+     * @param numPlayers the player wants to play with.
+     * @param expertMode true if the player decides to play in expert mode, else false.
+     */
     @Override
     public void onGamePreferences(int numPlayers, Boolean expertMode) {
         this.expertMode = expertMode;
         client.send(new GamePreferencesMessage(numPlayers, expertMode));
     }
 
+    // All the following messages contains a messageType,
+    // a playerID that refers to the player associated to this ClientController
+    // and a genericValue that will change meaning based on the scope of the message.
+    /**
+     * Sends the server a message containing the color he chose.
+     * @param color the player chose.
+     */
     @Override
     public void onColorChoice(int color) { client.send(new PlayerMoveMessage(MessageType.COLOR_VALUE, playerID, color)); }
 
+    /**
+     * Sends the server a message containing the ID of the isle where he wants to place the previously selected student.
+     * @param isleId of the isle chosen.
+     */
     @Override
     public void onStudentMovement_toIsle(int isleId) { client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_ISLE, playerID, isleId)); }
 
+    /**
+     * Sends the server a message containing a non-relevant generic value
+     * (this is because it isn't required any other value in order to move a student to the dining).
+     */
     @Override
-    public void onStudentMovement_toDining() { client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING, playerID, playerID)); }
+    public void onStudentMovement_toDining() { client.send(new PlayerMoveMessage(MessageType.MOVE_STUDENT_TO_DINING, playerID, -1)); }
 
-    @Override
-    public void onCharacterCard(int characterId) { client.send(new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD, playerID, characterId)); }
-
+    /**
+     * Sends the server a message containing the turn order of the assistant card the player decided to play.
+     * @param turnOrder of the assistant card chosen.
+     */
     @Override
     public void onAssistantCard(int turnOrder) { client.send(new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD, playerID, turnOrder)); }
 
+    /**
+     * Sends the server a message containing the index of the character card that has been played.
+     * @param characterId the index of the character card chosen.
+     */
     @Override
-    public void onAtomicEffect(int genericValue) {
-        client.send(new PlayerMoveMessage(MessageType.ACTIVATE_ATOMIC_EFFECT, playerID, genericValue));
-    }
+    public void onCharacterCard(int characterId) { client.send(new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD, playerID, characterId)); }
 
+    /**
+     * Sends the server a message containing the value useful in order to activate the effect of the character card played.
+     * @param genericValue assumes different meaning based on the character card played (it can be a color or an isleID)
+     */
     @Override
-    public void onMNMovement(int idIsle) {
-        client.send(new PlayerMoveMessage(MessageType.MOVE_MOTHERNATURE, playerID, idIsle));
-    }
+    public void onAtomicEffect(int genericValue) { client.send(new PlayerMoveMessage(MessageType.ACTIVATE_ATOMIC_EFFECT, playerID, genericValue)); }
 
+    /**
+     * Sends the server a message containing the ID of the isle where the player wants to move mother nature.
+     * @param idIsle ID of the chosen isle.
+     */
     @Override
-    public void onCloudChoice(int idCloud) {
-        client.send(new PlayerMoveMessage(MessageType.CHOOSE_CLOUD, playerID, idCloud));
-    }
+    public void onMNMovement(int idIsle) { client.send(new PlayerMoveMessage(MessageType.MOVE_MOTHERNATURE, playerID, idIsle)); }
 
+    /**
+     * Sends the server a message containing the ID of the cloud picked by the player.
+     * @param idCloud ID of the chosen cloud.
+     */
     @Override
-    public void onEndCharacterPhase() {
-        client.send(new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE, playerID, -1));
-    }
+    public void onCloudChoice(int idCloud) { client.send(new PlayerMoveMessage(MessageType.CHOOSE_CLOUD, playerID, idCloud)); }
 
+    /**
+     * Sends the server a message containing a non-relevant generic value
+     * (this is because it isn't required any other value in order to notify the end of the character card phase)
+     */
+    @Override
+    public void onEndCharacterPhase() { client.send(new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE, playerID, -1)); }
+
+    /**
+     * Updates the view relying on the messageType of the message received from the server.
+     * @param message received from the server.
+     */
     @Override
     public void update(NetworkMessage message) {
         switch (message.getMessageType()) {
@@ -105,14 +183,14 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
-                storage.updateDiscardPile(ac.getIdPlayer(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
-                storage.updateAssistantsCard(ac.getIdPlayer(), ac.getTurnOrders(), ac.getMovementsMN());
+                storage.updateDiscardPile(ac.getPlayerID(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
+                storage.updateAssistantsCard(ac.getPlayerID(), ac.getTurnOrders(), ac.getMovementsMN());
                 view.printChanges();
             }
             case STUDENTTODINING_UPDATE -> {
                 StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;
-                storage.updateStudentsInEntrance(std.getIdPlayer(), std.getEntrance());
-                storage.updateStudentsInDining(std.getIdPlayer(), std.getDining());
+                storage.updateStudentsInEntrance(std.getPlayerID(), std.getEntrance());
+                storage.updateStudentsInDining(std.getPlayerID(), std.getDining());
                 view.printChanges();
             }
             case PROFESSOR_UPDATE -> {
@@ -126,8 +204,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
             }
             case STUDENTTOISLE_UPDATE -> {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
-                storage.updateStudentsInEntrance(sti.getIdPlayer(), sti.getEntrance());
-                storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudent());
+                storage.updateStudentsInEntrance(sti.getPlayerID(), sti.getEntrance());
+                storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudents());
                 view.printChanges();
             }
             case MNMOVEMENT_UPDATE -> {
@@ -157,9 +235,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         storage.updateCharacterCard(ea.getCharacterCardIndex(), ea.getCardCost(), ea.getStudentsOnCard(), ea.getDenyCardsOnPlace());
                         storage.updateStudentsOnIsle(ea.getId(), ea.getStudentsInPlace());
                     }
-                    case FARMER -> {
-                        storage.updateProfessorsInDining(ea.getProfessors());
-                    }
+                    case FARMER -> storage.updateProfessorsInDining(ea.getProfessors());
                     case HERALD -> {
                         storage.updateIsles(ea);
                         storage.updateNumberOfTowers(ea.getNumberOfTowers());
@@ -188,9 +264,9 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         for (int i = 0; i < storage.getNumberOfPlayers(); i++)
                             storage.updateStudentsInDining(i, ea.getStudentsInDining().get(i));
                     }
-                    case CENTAUR, KNIGHT, FUNGIST -> {
-                    }
+                    case CENTAUR, KNIGHT, FUNGIST -> { }
                 }
+                System.out.println(ea.toString());
                 view.printChanges();
             }
             case GAMEPHASE_UPDATE -> {

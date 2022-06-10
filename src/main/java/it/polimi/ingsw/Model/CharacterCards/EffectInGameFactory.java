@@ -35,94 +35,99 @@ public class EffectInGameFactory {
          in the method that get changed by their activation
          ISLE -> getInfluence();
         */
-        switch (characterCard.getCharacterCardName()){
-            case MONK:
-                studentMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)),ColorsForEffects.SELECT,color1,color2);
-                studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,color1, color2);
-                break;
-
-            case FARMER:
-                for(Player p : game.getPlayers()){
-                    for(RealmColors c : RealmColors.values()){
-                        if(p.getDashboard().getDiningRoom().getProfessorByColor(c)==1)
-                            if(player.getDashboard().getDiningRoom().getStudentsByColor(c)==p.getDashboard().getDiningRoom().getStudentsByColor(c)){
-                                p.getDashboard().getDiningRoom().removeStudent(c);
+        switch (characterCard.getCharacterCardName()) {
+            case MONK -> {
+                studentMovementEffect.effect(characterCard, game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)), ColorsForEffects.SELECT, color1, null);
+                studentMovementEffect.effect(game.getGameTable().getBag(), characterCard, ColorsForEffects.RANDOM, color1, color2);
+                game.setActionPhase(game.getLastActionPhase());
+            }
+            case FARMER -> {
+                for (Player p : game.getPlayers()) {
+                    for (RealmColors c : RealmColors.values()) {
+                        if (p.getDashboard().getDiningRoom().getProfessorByColor(c) == 1)
+                            if (player.getDashboard().getDiningRoom().getStudentsByColor(c) == p.getDashboard().getDiningRoom().getStudentsByColor(c)) {
+                                p.getDashboard().getDiningRoom().removeProfessor(c);
                                 player.getDashboard().getDiningRoom().addProfessor(c);
                             }
                     }
                 }
                 game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case HERALD:
-                game.checkUpdateInfluence(value2);      // put this in another class.
-                //game.checkEndGame();
+            }
+            case HERALD -> {
+                if (game.getGameTable().getIsleManager().getIsle(value1).getDenyCards() == 0)
+                    game.checkUpdateInfluence(value1);
+                else {
+                    game.getGameTable().getIsleManager().getIsle(value1).removeDenyCard();
+                    int grandmaIndex = 0;
+                    for (int i=0; i<3; i++)
+                        if(game.getGameTable().getCharacterCard(i).getCharacterCardName() == CharacterCardsName.GRANDMA_HERBS){
+                            grandmaIndex = i;
+                            break;
+                        }
+                    game.getGameTable().getCharacterCard(grandmaIndex).addDenyCard();
+                    //notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
+                    game.notifyEffectUpdate(grandmaIndex,player.getDashboard().getDashboardID(),value1,-1);
+                }
+                game.checkEndGame();
                 game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case MAGICAL_LETTER_CARRIER:
+            }
+            case MAGICAL_LETTER_CARRIER -> {
                 player.getDiscardPile().increaseMnMovement();
                 game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case GRANDMA_HERBS:
-                denyCardMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value1));
+            }
+            case GRANDMA_HERBS -> {
+                denyCardMovementEffect.effect(characterCard, game.getGameTable().getIsleManager().getIsle(value1));
                 game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case JESTER:
-                studentMovementEffect.effect(characterCard,player.getDashboard().getEntrance(),ColorsForEffects.SELECT,color1, color2);
+            }
+            case JESTER -> {
+                studentMovementEffect.effect(characterCard, player.getDashboard().getEntrance(), ColorsForEffects.SELECT, color1, color2);
                 game.increaseAtomicEffectCounter();
                 if (game.getAtomicEffectCounter() == 3)
                     game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case FUNGIST:
+            }
+            case FUNGIST -> {
                 game.setColorForFungist(value1);
                 game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case MINSTREL:
-                studentMovementEffect.effect(player.getDashboard().getDiningRoom(),player.getDashboard().getEntrance(),ColorsForEffects.SELECT,color1,color2);
-                // checking if the student is added in third, sixth or ninth position of the dining room
-                if (game.isGameMode() && player.getDashboard().getDiningRoom().getStudentsByColor(color2)%3 == 0){
-                    game.getGameTable().studentInMoneyPosition();
-                    player.gainMoney();
-                    game.notifyObserver(obs->obs.onMoneyUpdate(player.getDashboard().getIdDashboard(), player.getMoney(), game.getGameTable().getGeneralMoneyReserve()));
-                }
-                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color1);
-                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color2);
+            }
+            case MINSTREL -> {
+                studentMovementEffect.effect(player.getDashboard().getDiningRoom(), player.getDashboard().getEntrance(), ColorsForEffects.SELECT, color1, color2);
+                checkStudentInMoneyPosition(game,player.getDashboard().getDashboardID(),color2);
+                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);
+                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color2);
                 game.increaseAtomicEffectCounter();
                 if (game.getAtomicEffectCounter() == 2)
                     game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case SPOILED_PRINCESS:
-                studentMovementEffect.effect(characterCard,player.getDashboard().getDiningRoom(),ColorsForEffects.SELECT,color1, color2);
-                studentMovementEffect.effect(game.getGameTable().getBag(),characterCard,ColorsForEffects.RANDOM,color1,color2);
-                // checking if the student is added in third, sixth or ninth position of the dining room
-                if (game.isGameMode() && player.getDashboard().getDiningRoom().getStudentsByColor(color1)%3 == 0){
-                    game.getGameTable().studentInMoneyPosition();
-                    player.gainMoney();
-                    game.notifyObserver(obs->obs.onMoneyUpdate(player.getDashboard().getIdDashboard(), player.getMoney(), game.getGameTable().getGeneralMoneyReserve()));
-                }
-                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color1);
+            }
+            case SPOILED_PRINCESS -> {
+                studentMovementEffect.effect(characterCard, player.getDashboard().getDiningRoom(), ColorsForEffects.SELECT, color1, color2);
+                studentMovementEffect.effect(game.getGameTable().getBag(), characterCard, ColorsForEffects.RANDOM, color1, color2);
+                checkStudentInMoneyPosition(game,player.getDashboard().getDashboardID(),color1);
+                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);
                 game.setActionPhase(game.getLastActionPhase());
-                break;
-
-            case THIEF:
+            }
+            case THIEF -> {
                 for (Player p : game.getPlayers())
                     for (int j = 0; j < 3; j++) {
                         if (p.getDashboard().getDiningRoom().getStudentsByColor(color1) > 0)
                             studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, color1, color2);
                     }
-                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color1);
+                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);
                 game.setActionPhase(game.getLastActionPhase());
-                break;
-            case KNIGHT, CENTAUR:
-                game.setActionPhase(game.getLastActionPhase());
-                break;
+            }
+            case KNIGHT, CENTAUR -> game.setActionPhase(game.getLastActionPhase());
+        }
+    }
 
+    /**
+     * Checking if the student is added in third, sixth or ninth position of the dining room.
+     * @param idPlayer ID of the player that placed a student in his dining room.
+     * @param color color of the student placed.
+     */
+    private void checkStudentInMoneyPosition(Game game, int idPlayer, RealmColors color) {
+        if (game.getPlayerByIndex(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
+            game.getPlayerByIndex(idPlayer).gainMoney();
+            game.getGameTable().studentInMoneyPosition();
+            game.notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, game.getPlayerByIndex(idPlayer).getMoney(), game.getGameTable().getGeneralMoneyReserve()));
         }
     }
 }

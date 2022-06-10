@@ -3,28 +3,19 @@ package it.polimi.ingsw.View.GUI;
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewSubject;
-import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
 import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
 public class GUIApp extends ViewSubject implements View {
 
-    static GuiDrawer guiDrawer;
-    static int playerID;
+    private static GuiDrawer guiDrawer;
+    private static int playerID;
 
-    public static void main(String[] args) {
-        //create the EDT to manage the events
-        GUIApp guiApp=new GUIApp();
-        SwingUtilities.invokeLater(GUIApp::createAndShowGUI);
-        ConnectionSocket connectionSocket=new ConnectionSocket();
-
-    }
-
-    private static void createAndShowGUI(){
+    public static void createAndShowGUI(){
         System.out.println("Created GUI on EDT? "+
                 SwingUtilities.isEventDispatchThread());
         Game game=new Game();
@@ -91,7 +82,16 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void disconnect(ServiceMessage message) {
+    public CLIDrawer getDrawer() {
+        //return guiDrawer;
+        return null;
+    }
+
+    @Override
+    public void addObs(ClientController clientController) { addObserver(clientController); }
+
+    @Override
+    public void VIEWstart() {
 
     }
 

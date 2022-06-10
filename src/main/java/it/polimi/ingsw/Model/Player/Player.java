@@ -83,7 +83,8 @@ public class Player {
             this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1));
         }
 
-        this.money = 1;
+        //this.money = 1;
+        this.money = 3;
     }
 
     public AssistantCard getAssistantCardByTurnOrder(int turnOrder) {

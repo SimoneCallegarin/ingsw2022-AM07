@@ -8,13 +8,9 @@ public abstract class ViewSubject {
 
     private final ArrayList<ViewObserver> viewObserverList=new ArrayList<>();
 
-    public void addObserver(ViewObserver viewObserver){
-        viewObserverList.add(viewObserver);
-    }
+    public void addObserver(ViewObserver viewObserver){ viewObserverList.add(viewObserver); }
 
-    public void removeObserver(ViewObserver viewObserver){
-        viewObserverList.remove(viewObserver);
-    }
+    public void removeObserver(ViewObserver viewObserver){ viewObserverList.remove(viewObserver); }
 
     public void notifyObserver(Consumer<ViewObserver> lambda){
         for (ViewObserver observer : viewObserverList) {

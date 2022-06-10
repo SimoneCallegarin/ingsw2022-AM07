@@ -5,25 +5,51 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import java.util.ArrayList;
 
 /**
- * this message is sent everytime a player plays an Assistant Card
+ * Message sent everytime a player plays an Assistant Card.
  */
 public class AssistCard_UpdateMsg extends NetworkMessage {
-    private final int idPlayer;
+    /**
+     * ID of the player that played the assistant card.
+     */
+    private final int playerID;
+    /**
+     * Turn order of the assistant card played that now is in the discard pile.
+     */
     private final int turnOrderPlayed;
+    /**
+     * Mother nature possible movement of the assistant card played that now is in the discard pile.
+     */
     private final int movementMNPlayed;
+    /**
+     * List of all the turn orders of the assistant cards that the player hasn't played yet.
+     */
     private final ArrayList<Integer> turnOrders;
+    /**
+     * List of all the possible mother nature movement of the assistant cards that the player hasn't played yet.
+     */
     private final ArrayList<Integer> movementsMN;
 
-    public AssistCard_UpdateMsg(MessageType messageType, int idPlayer, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrdersAvailable, ArrayList<Integer> movementsMNAvailable) {
+    /**
+     *
+     * @param messageType It will be ASSISTANTCARD_UPDATE.
+     * @param playerID ID of the player that played the assistant card.
+     * @param turnOrderPlayed Turn order of the assistant card played that now is in the discard pile.
+     * @param movementMNPlayed Mother nature possible movement of the assistant card played that now is in the discard pile.
+     * @param turnOrdersAvailable List of all the turn orders of the assistant cards that the player hasn't played yet.
+     * @param movementsMNAvailable List of all the possible mother nature movement of the assistant cards that the player hasn't played yet.
+     */
+    public AssistCard_UpdateMsg(MessageType messageType, int playerID, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrdersAvailable, ArrayList<Integer> movementsMNAvailable) {
         super(messageType);
-        this.idPlayer=idPlayer;
+        this.playerID = playerID;
         this.turnOrderPlayed=turnOrderPlayed;
         this.movementMNPlayed=movementMNPlayed;
         this.turnOrders= turnOrdersAvailable;
         this.movementsMN= movementsMNAvailable;
     }
 
-    public int getIdPlayer() { return idPlayer; }
+    // GETTERS:
+
+    public int getPlayerID() { return playerID; }
 
     public int getTurnOrderPlayed() { return turnOrderPlayed; }
 
