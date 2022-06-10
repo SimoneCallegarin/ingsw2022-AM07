@@ -16,7 +16,6 @@ import it.polimi.ingsw.View.View;
  */
 public class ClientController implements ViewObserver, NetworkObserver {
 
-    private GuiDrawer guiDrawer;
     String username;
     boolean GUI;
     /**
@@ -36,7 +35,11 @@ public class ClientController implements ViewObserver, NetworkObserver {
     /**
      * It handles the graphical part of the CLI.
      */
-    private CLIDrawer cliDrawer;      // CLIDrawer!!!!!!!! direi GUIDrawer!
+    private CLIDrawer cliDrawer;
+
+
+
+    private GuiDrawer guiDrawer;
     /**
      * Saves if the game is played in expert game mode (true) or in base (false).
      */
@@ -56,23 +59,21 @@ public class ClientController implements ViewObserver, NetworkObserver {
      * @param client identifies the client at network layer.
      * @param GUI true if the player is playing on a GUI, else false.
      */
-    public ClientController(View view, ConnectionSocket client,boolean GUI) {
+    public ClientController(View view, ConnectionSocket client, boolean GUI, CLIDrawer cliDrawer) {
         this.view = view;
         this.client = client;
-        this.GUI=GUI;
+        this.GUI = GUI;
+        this.cliDrawer = cliDrawer;
     }
 
-    /**
-     * this method set the ClientController cliDrawer attribute
-     * @param cliDrawer the cliDrawer reference to set as attribute
-     */
-    public void setCliDrawer(CLIDrawer cliDrawer){
-        this.cliDrawer=cliDrawer;
+    public ClientController(View view, ConnectionSocket client, boolean GUI, GuiDrawer guiDrawer) {
+        this.view = view;
+        this.client = client;
+        this.GUI = GUI;
+        this.guiDrawer = guiDrawer;
     }
 
     public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
-
-    public void setGuiDrawer(GuiDrawer guiDrawer){ this.guiDrawer=guiDrawer; }
 
     public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
 

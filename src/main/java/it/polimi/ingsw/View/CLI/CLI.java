@@ -2,10 +2,10 @@ package it.polimi.ingsw.View.CLI;
 
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.GUI.GuiDrawer;
 import it.polimi.ingsw.View.View;
 
 import java.io.BufferedReader;
@@ -524,11 +524,19 @@ public class CLI extends ViewSubject implements View {
         notifyObserver(obs -> obs.onAtomicEffect(choice));
     }
 
+    @Override
+    public void disconnect(ServiceMessage message) {
+
+    }
+
     // GETTER:
 
     /**
      * Getter method for the CLIDrawer.
      * @return the CLIDrawer.
      */
-    public CLIDrawer getDrawer() { return cliDrawer; }
+    public CLIDrawer getCLIDrawer() { return cliDrawer; }
+
+    @Override
+    public GuiDrawer getGUIDrawer() { return null; }
 }

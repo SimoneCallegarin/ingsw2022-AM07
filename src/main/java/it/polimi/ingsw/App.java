@@ -4,9 +4,9 @@ import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.View.CLI.CLI;
 import it.polimi.ingsw.View.GUI.GUIApp;
+import it.polimi.ingsw.View.GUI.GuiDrawer;
 import it.polimi.ingsw.View.View;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -137,13 +137,20 @@ public class App {
 
         app.askChooseCLIorGUI();
 
-        if(app.choice==0){ app.view = new CLI(); }
+        ClientController clientController;
+
+        if(app.choice==0){
+            app.view = new CLI();
+            clientController = new ClientController(app.view, app.connectionSocket, false, app.view.getCLIDrawer());
+        }
         else{
             app.view = new GUIApp();
-            SwingUtilities.invokeLater(GUIApp::createAndShowGUI);   //create the EDT to manage the events.
+            clientController = new ClientController(app.view, app.connectionSocket, true, app.view.getGUIDrawer());
         }
 
-        ClientController clientController = new ClientController(app.view, app.connectionSocket, app.view.getDrawer());
+           /* clientController.setGuiDrawer(app.view.getDrawer());
+            app.view.getDrawer().addObserver(clientController); */
+
         app.view.addObs(clientController);
         app.connectionSocket.getClientListener().addObserver(clientController);
 

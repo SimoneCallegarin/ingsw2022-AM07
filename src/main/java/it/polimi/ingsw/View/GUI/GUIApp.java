@@ -2,26 +2,27 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
 import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
 public class GUIApp extends ViewSubject implements View {
 
-    private GuiDrawer guiDrawer;
+    private static GuiDrawer guiDrawer;
 
-    private static void createAndShowGUI(){
+    public GUIApp() { SwingUtilities.invokeLater(GUIApp::createAndShowGUI); }
+
+    public static void createAndShowGUI(){
         guiDrawer = new GuiDrawer();
-        SwingUtilities.invokeLater(() -> GUIstart(guiDrawer));
+        SwingUtilities.invokeLater(() -> GUIstart());
     }
 
-    public void GUIstart(GuiDrawer drawer){
-        //it creates the first screen where the user inputs his game preferences
-        this.guiDrawer = drawer;
-        drawer.screeInitialization();
+    public static void GUIstart(){
+        // It creates the first screen where the user inputs his game preferences.
+        guiDrawer.screeInitialization();
     }
 
     @Override
@@ -72,7 +73,7 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public CLIDrawer getDrawer() {
+    public CLIDrawer getCLIDrawer() {
         //return guiDrawer;
         return null;
     }
@@ -84,5 +85,12 @@ public class GUIApp extends ViewSubject implements View {
     public void VIEWstart() {
 
     }
+
+    @Override
+    public void disconnect(ServiceMessage message) {
+
+    }
+
+    public GuiDrawer getGUIDrawer() { return guiDrawer; }
 
 }
