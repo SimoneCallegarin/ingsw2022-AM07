@@ -102,8 +102,7 @@ public class GuiDrawer extends ViewSubject {
      * an error message and makes the user reinsert the input). If the input is acceptable it notifies the clientController who forward the
      * information to the server.
      */
-    public String showUsernameForm(){
-        String username;
+    public void showUsernameForm(){
         //switch in the initial background panel
         cl.show(generalPanelManager,"User Input");
         //initialize the username form
@@ -118,10 +117,10 @@ public class GuiDrawer extends ViewSubject {
                return;
            }
            usernamePlaying=usernameInputText.getText();
+           notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
         });
         usernameForm.add(submitUsername);
         userInputPanel.add(usernameForm,"Username form");
-        return usernamePlaying;
     }
 
     /**
@@ -138,6 +137,7 @@ public class GuiDrawer extends ViewSubject {
         gamePreferences.add(new JLabel("Input the gamemode[Base or Expert]"));
         gamePreferences.add(gameModeInputText);
         startGame.addActionListener(e -> {
+            //add try catch
             int numPlayers=Integer.parseInt(numberPlayersInput.getText());
             if (numPlayers!=2 && numPlayers!=3 && numPlayers!=4) {
                 JOptionPane.showMessageDialog(userInputPanel, "Invalid number of players input", "Error", JOptionPane.ERROR_MESSAGE);
@@ -147,6 +147,7 @@ public class GuiDrawer extends ViewSubject {
                 JOptionPane.showMessageDialog(userInputPanel, "Invalid gamemode input", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
             notifyObserver(obs -> obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()), gameModeInputText.getText().equals("Expert")));
             showLoadingScreen();
         });
@@ -190,12 +191,12 @@ public class GuiDrawer extends ViewSubject {
         JPanel buttonContainer = new JPanel();
         JButton[] buttons = new JButton[modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size()];
         for (int i = 0; i < modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {
-            buttons[i] = (new AssistantCardButton(i+1));
+            buttons[i] = (new AssistantCardButton(modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i)));
             //idk what the hell is going on with these variables
             int finalI1 = i;
             int finalI = i+1;
             buttons[i].addActionListener(e -> {
-                gameScreenPanel.tableCenterPanel.updateAllAssistCard();
+                //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 turnOrder.set(finalI);
 
             });
@@ -207,21 +208,29 @@ public class GuiDrawer extends ViewSubject {
         return turnOrder.get();
     }
 
+    /**
+     * this method create a JOptionPane to inform the player about the available moves in that game phase and then set clickable the entrance of the
+     * player dashboard and/or the character cards
+     * @param expertMode the game mode boolean used to decide whether to set the character cards clickable
+     */
     public void showMoveOptions(boolean expertMode){
         StringBuilder message=new StringBuilder("Now you can move a student from your entrance to your dining room or to an isle of your preference" +
                 " by clicking on a student in your entrance and then on the isle/dining room.");
         if(expertMode){
             message.append("\nSince you are playing on Expert Mode you can also click on a character card to activate its effect");
+            gameScreenPanel.setClickableCharacters();
         }
         JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
 
         gameScreenPanel.setClickableStudents(playerID,getViewObserverList());
-        gameScreenPanel.setClickableCharacters();
+
+
     }
 
 
     public void updateGameScreenPanel(int playerID){
         boolean gameStart=true;
+
         for(int i=0;i<modelStorage.getChanges().size();i++){
             switch(modelStorage.getChanges().get(i)){
                 case CLOUDS_CHANGED -> {
@@ -246,12 +255,12 @@ public class GuiDrawer extends ViewSubject {
                 //missing case character card and cloud changes
 
             }
-            modelStorage.getChanges().remove(i);
         }
+        modelStorage.getChanges().clear();
     }
 
     public void showServiceMessage(String serviceMessage){
-        JOptionPane.showMessageDialog(f,serviceMessage,"error",JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(f,serviceMessage,"Service information",JOptionPane.PLAIN_MESSAGE);
     }
 
     public ModelStorage getModelStorage() {

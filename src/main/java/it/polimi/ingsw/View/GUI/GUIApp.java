@@ -35,8 +35,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askUsername() {
-       String username= guiDrawer.showUsernameForm();
-       notifyObserver(obs->obs.onUsername(username));
+       guiDrawer.showUsernameForm();
     }
 
     @Override

@@ -59,7 +59,8 @@ public class DiningPanel extends JPanel {
      * @param observers
      */
     public void setCLickable(ArrayList<ViewObserver> observers){
-        addMouseListener(new DiningListener(this,observers));
+        EntrancePanel pairedEntrance=((DashboardPanel)this.getParent()).getEntrance();
+        addMouseListener(new DiningListener(this,pairedEntrance,observers));
     }
 
     public void removeCLickable(){
