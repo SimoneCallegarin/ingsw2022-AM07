@@ -32,7 +32,7 @@ public interface View {
 
      GuiDrawer getGUIDrawer();
 
-     void VIEWstart();
+     void ViewStart();
 
      void addObs(ClientController clientController);
 }

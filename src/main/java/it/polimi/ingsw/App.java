@@ -4,7 +4,6 @@ import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Network.ConnectionSocket;
 import it.polimi.ingsw.View.CLI.CLI;
 import it.polimi.ingsw.View.GUI.GUIApp;
-import it.polimi.ingsw.View.GUI.GuiDrawer;
 import it.polimi.ingsw.View.View;
 
 import java.io.BufferedReader;
@@ -148,13 +147,14 @@ public class App {
             clientController = new ClientController(app.view, app.connectionSocket, true, app.view.getGUIDrawer());
         }
 
-           /* clientController.setGuiDrawer(app.view.getDrawer());
-            app.view.getDrawer().addObserver(clientController); */
 
         app.view.addObs(clientController);
+        if(app.choice==1){//if it's a GUI
+            app.view.getGUIDrawer().addObserver(clientController);
+        }
         app.connectionSocket.getClientListener().addObserver(clientController);
 
-        app.view.VIEWstart();
+        app.view.ViewStart();
 
     }
 }

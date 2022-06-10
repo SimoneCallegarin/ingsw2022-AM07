@@ -13,11 +13,8 @@ public class GUIApp extends ViewSubject implements View {
 
     private static GuiDrawer guiDrawer;
 
-    public GUIApp() { SwingUtilities.invokeLater(GUIApp::createAndShowGUI); }
-
-    public static void createAndShowGUI(){
+    public GUIApp() {
         guiDrawer = new GuiDrawer();
-        SwingUtilities.invokeLater(() -> GUIstart());
     }
 
     public static void GUIstart(){
@@ -81,8 +78,8 @@ public class GUIApp extends ViewSubject implements View {
     public void addObs(ClientController clientController) { addObserver(clientController); }
 
     @Override
-    public void VIEWstart() {
-
+    public void ViewStart() {
+        SwingUtilities.invokeLater(GUIApp::GUIstart);
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import org.fusesource.jansi.AnsiConsole;
+//import org.fusesource.jansi.AnsiConsole;
 
 
 /**
@@ -59,8 +59,8 @@ public class CLI extends ViewSubject implements View {
     /**
      * Starts the CLI.
      */
-    public void VIEWstart(){
-        AnsiConsole.systemInstall();
+    public void ViewStart(){
+        //AnsiConsole.systemInstall();
         System.out.println(cliDrawer.printTitle());
         askUsername();
     }
