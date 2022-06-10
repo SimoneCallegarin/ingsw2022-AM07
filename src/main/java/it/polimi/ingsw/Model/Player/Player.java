@@ -105,16 +105,12 @@ public class Player {
         this.mageDeck.remove(assistantCard);
     }
 
-    public boolean isMageDeckEmpty() {
-        return mageDeck.isEmpty();
-    }
+    public boolean isMageDeckEmpty() { return mageDeck.isEmpty(); }
 
     /**
      * this method increase the number of money of the player by 1
      */
-    public void gainMoney(){
-        this.money += 1;
-    }
+    public void gainMoney(){ this.money += 1; }
 
     /**
      * this method permits the player to play a character card
@@ -144,9 +140,7 @@ public class Player {
      * @param isleID the ID of the isle chosen by the player
      * @return the ID of the isle chosen by the player
      */
-    public int selectIsleId(int isleID){
-        return isleID;
-    }
+    public int selectIsleId(int isleID){ return isleID; }
 
     /**
      * Getter method for the nickname.
@@ -158,13 +152,13 @@ public class Player {
      * Getter method for the player team.
      * @return the team of the player.
      */
-    public Squads getSquad() {return squad;}
+    public Squads getSquad() { return squad; }
 
     /**
      * Getter method for the discard pile.
      * @return the assistant card on the top of the discard pile.
      */
-    public AssistantCard getDiscardPile() {return discardPile;}
+    public AssistantCard getDiscardPile() { return discardPile; }
 
     /**
      * Setter method to set the discard pile to null value.
@@ -234,4 +228,7 @@ public class Player {
      */
     public void setNotAlreadyPlayedACardThisTurn() { this.alreadyPlayedACardThisTurn = false; }
 
+    public Mages getMage() {
+        return mage;
+    }
 }

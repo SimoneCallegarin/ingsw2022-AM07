@@ -19,20 +19,36 @@ import java.util.NoSuchElementException;
  */
 public class ClientHandler implements Runnable {
 
-    private final Server server;
-    private final Socket client;
-
     /**
-     * The nickname of the player associated to this client handler
+     * The server that the ClientHandler has to connect with his client.
+     */
+    private final Server server;
+    /**
+     * The client that has to be connected to the server through the ClientHandler.
+     */
+    private final Socket client;
+    /**
+     * The nickname of the player associated to this client handler.
      */
     private String nickname;
-
+    /**
+     * Specify in which phase the ClientHandler is:
+     *  - LOGIN_PHASE -> when the client is choosing his nickname;
+     *  - GAME_SETUP_PHASE -> when the player is choosing his game preferences;
+     *  - RUNNING_PHASE -> when the game already started.
+     */
     private HandlerPhases handlerPhase;
-
+    /**
+     * Input stream.
+     */
     private ObjectInputStream input;
-
+    /**
+     * Output stream.
+     */
     private ObjectOutputStream output;
-
+    /**
+     * True if the ClientHandler is connected to the server, else false.
+     */
     private boolean connected;
 
     /**
@@ -54,49 +70,51 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * logs in the player and checks if it's using a valid nickname
+     * Logs in the player and checks if it's using a valid nickname.
      */
     private void logPlayer(LoginMessage loginMessage) {
-        boolean accepted = false;
-        if (handlerPhase == HandlerPhases.LOGIN_PHASE) {
-            if (loginMessage.getMessageType() != MessageType.LOGIN) {
-                send(new ServiceMessage(MessageType.KO, "Wrong message"));
-                System.out.println("Error on received message, waiting for correction...");
-            }
-            else {
-                if ((!server.setNickNamesChosen(loginMessage)))
-                    send(new ServiceMessage(MessageType.UNAVAILABLE_USERNAME, "Already taken nickname"));
-                else
-                    accepted = true;
-                if (accepted) {
-                    server.setPlayer(loginMessage.getNickname(), this);
-                    nickname = loginMessage.getNickname();
-                    System.out.println("Nickname selected: " + "\"" + nickname + "\"");
-                    send(new ServiceMessage(MessageType.USERNAME_ACCEPTED));
-                    handlerPhase = HandlerPhases.GAME_SETUP_PHASE;
-                }
-            }
-        }
+        if (handlerPhase == HandlerPhases.LOGIN_PHASE)
+            if(checkMessageType(loginMessage,MessageType.LOGIN))
+                if (checkNicknameValidity(loginMessage))
+                    logValidPlayer(loginMessage);
         else
             send(new ServiceMessage(MessageType.KO, "Not expecting a login message"));
+    }
+
+    /**
+     * Checks if the nickname chosen by the player is available.
+     * @param loginMessage the login message sent by the player.
+     * @return true if the nickname is available, else false.
+     */
+    private boolean checkNicknameValidity(LoginMessage loginMessage) {
+        if (!server.setNickNamesChosen(loginMessage)){
+            send(new ServiceMessage(MessageType.UNAVAILABLE_USERNAME, "Already taken nickname"));
+            return false;
+        }
+        else
+            return true;
+    }
+
+    /**
+     * Add the nickname chosen by the player to the list of already taken nickname in the server
+     * and also store it in this ClientHandler.
+     * @param loginMessage the login message sent by the player.
+     */
+    private void logValidPlayer(LoginMessage loginMessage) {
+        server.setPlayer(loginMessage.getNickname(), this);
+        nickname = loginMessage.getNickname();
+        System.out.println("Nickname selected: " + "\"" + nickname + "\"");
+        send(new ServiceMessage(MessageType.USERNAME_ACCEPTED));
+        handlerPhase = HandlerPhases.GAME_SETUP_PHASE;
     }
 
     /**
      * adds the player to a game, using some server methods that permits to find the matchID of the game he will play
      */
     private void addPlayerToGame(GamePreferencesMessage preferences){
-        boolean accepted = false;
-        if (handlerPhase == HandlerPhases.GAME_SETUP_PHASE) {
-            if (preferences.getMessageType() != MessageType.GAME_SETUP_INFO) {
-                send(new ServiceMessage(MessageType.KO, "Wrong message type"));
-                System.out.println("Error on received message, waiting for correction...");
-            }
-            else {
-                if (!server.addPlayerToGame(nickname, preferences, this))
-                    send(new ServiceMessage(MessageType.KO, "Incorrect field"));
-                else
-                    accepted = true;
-                if (accepted) {
+        if (handlerPhase == HandlerPhases.GAME_SETUP_PHASE)
+            if (checkMessageType(preferences,MessageType.GAME_SETUP_INFO))
+                if (checkGamePreferencesValues(preferences)) {
                     if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == 1) {
                         System.out.println("Added player: " + nickname + " to a new game.");
                         send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
@@ -108,10 +126,22 @@ public class ClientHandler implements Runnable {
                     }
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }
-            }
-        }
         else
             send(new ServiceMessage(MessageType.KO, "Not expecting a game preferences message"));
+    }
+
+    /**
+     * Checks if the game preferences of the player are valid.
+     * @param preferences the game preferences of the player.
+     * @return true if valid, else false.
+     */
+    private boolean checkGamePreferencesValues(GamePreferencesMessage preferences) {
+        if (!server.addPlayerToGame(nickname, preferences, this)) {
+            send(new ServiceMessage(MessageType.KO, "Incorrect field"));
+            return false;
+        }
+        else
+            return true;
     }
 
     /**
@@ -168,10 +198,10 @@ public class ClientHandler implements Runnable {
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
         System.out.println("QUIT message sent to " + nickname);
-        if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
-            server.onDisconnection(nickname);
         server.addPlayerToRemove(nickname);
         connected = false;
+        if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
+            server.onDisconnection(nickname);
         //output.close();
         input.close();
         client.close();
@@ -192,7 +222,23 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public boolean isConnected() {return connected;}
+    public boolean isConnected() { return connected; }
+
+    /**
+     * Checks if the MessageType of the message received is the MessageType required.
+     * @param message the message that has a MessageType that has to be checked.
+     * @param messageType the MessageType requested.
+     * @return true if the MessageType of the message and the required one matches, else false.
+     */
+    private boolean checkMessageType(NetworkMessage message, MessageType messageType) {
+        if (message.getMessageType() != messageType) {
+            send(new ServiceMessage(MessageType.KO, "Wrong message"));
+            System.out.println("Error on received message, waiting for correction...");
+            return false;
+        }
+        else
+            return true;
+    }
 
     public void send(NetworkMessage message) {
         try {

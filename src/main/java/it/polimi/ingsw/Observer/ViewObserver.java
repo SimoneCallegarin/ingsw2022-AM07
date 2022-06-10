@@ -22,4 +22,6 @@ public interface ViewObserver {
 
     void onCloudChoice(int idCloud);
 
+    void onEndCharacterPhase();
+
 }

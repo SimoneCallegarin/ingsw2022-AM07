@@ -51,27 +51,35 @@ public class EffectInGameFactory {
                             }
                     }
                 }
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case HERALD:
-                game.checkUpdateInfluence(value2);
-                game.checkEndGame();
+                game.checkUpdateInfluence(value2);      // put this in another class.
+                //game.checkEndGame();
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case MAGICAL_LETTER_CARRIER:
                 player.getDiscardPile().increaseMnMovement();
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case GRANDMA_HERBS:
                 denyCardMovementEffect.effect(characterCard,game.getGameTable().getIsleManager().getIsle(value1));
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case JESTER:
                 studentMovementEffect.effect(characterCard,player.getDashboard().getEntrance(),ColorsForEffects.SELECT,color1, color2);
+                game.increaseAtomicEffectCounter();
+                if (game.getAtomicEffectCounter() == 3)
+                    game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case FUNGIST:
                 game.setColorForFungist(value1);
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case MINSTREL:
@@ -80,7 +88,13 @@ public class EffectInGameFactory {
                 if (game.isGameMode() && player.getDashboard().getDiningRoom().getStudentsByColor(color2)%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
+                    game.notifyObserver(obs->obs.onMoneyUpdate(player.getDashboard().getIdDashboard(), player.getMoney(), game.getGameTable().getGeneralMoneyReserve()));
                 }
+                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color1);
+                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color2);
+                game.increaseAtomicEffectCounter();
+                if (game.getAtomicEffectCounter() == 2)
+                    game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case SPOILED_PRINCESS:
@@ -90,7 +104,10 @@ public class EffectInGameFactory {
                 if (game.isGameMode() && player.getDashboard().getDiningRoom().getStudentsByColor(color1)%3 == 0){
                     game.getGameTable().studentInMoneyPosition();
                     player.gainMoney();
+                    game.notifyObserver(obs->obs.onMoneyUpdate(player.getDashboard().getIdDashboard(), player.getMoney(), game.getGameTable().getGeneralMoneyReserve()));
                 }
+                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color1);
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
             case THIEF:
@@ -99,6 +116,11 @@ public class EffectInGameFactory {
                         if (p.getDashboard().getDiningRoom().getStudentsByColor(color1) > 0)
                             studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, color1, color2);
                     }
+                game.checkUpdateProfessor(player.getDashboard().getIdDashboard(), color1);
+                game.setActionPhase(game.getLastActionPhase());
+                break;
+            case KNIGHT, CENTAUR:
+                game.setActionPhase(game.getLastActionPhase());
                 break;
 
         }
