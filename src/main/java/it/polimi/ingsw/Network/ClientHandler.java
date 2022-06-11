@@ -179,8 +179,8 @@ public class ClientHandler implements Runnable {
 
                         }
                         default -> {
-                            System.out.println("PLAYER_MOVE message received!");
                             pmm = (PlayerMoveMessage) message;
+                            System.out.println("PLAYER_MOVE message received from " + nickname + ": " + pmm);
                             handleGame(pmm);
                         }
                     }
