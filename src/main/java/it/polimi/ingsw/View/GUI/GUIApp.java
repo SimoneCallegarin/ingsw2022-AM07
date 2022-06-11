@@ -11,13 +11,13 @@ import javax.swing.*;
 
 public class GUIApp extends ViewSubject implements View {
 
-    private static GuiDrawer guiDrawer;
+    private final GuiDrawer guiDrawer;
 
     public GUIApp() {
         guiDrawer = new GuiDrawer();
     }
 
-    public static void GUIstart(){
+    public void GUIstart(){
         // It creates the first screen where the user inputs his game preferences.
         guiDrawer.screeInitialization();
     }
@@ -79,7 +79,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void ViewStart() {
-        SwingUtilities.invokeLater(GUIApp::GUIstart);
+        SwingUtilities.invokeLater(() -> guiDrawer.screeInitialization());
     }
 
     @Override
