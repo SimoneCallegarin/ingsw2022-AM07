@@ -19,22 +19,24 @@ import java.util.ArrayList;
 
 public class EntrancePanel extends JPanel{
     GridBagConstraints c;
+    int playerID;
 
     public EntrancePanel(ModelStorage storage, int playerID) {
+        this.playerID=playerID;
         setLayout(new GridBagLayout());
         c=new GridBagConstraints();
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
-        initializeEntrance(playerID,storage);
+
+        initializeEntrance(storage);
 
     }
 
     /**
      * this method initialize the students in the entrance according to the model information
-     * @param playerID the player ID used to identify the entrance Dashboard
      * @param storage the model storage where the entrance information are memorized
      */
-    public void initializeEntrance(int playerID, ModelStorage storage){
+    public void initializeEntrance(ModelStorage storage){
         c.gridx=0;
         c.gridy=0;
         c.insets=new Insets(0,9,3,7);
@@ -48,6 +50,8 @@ public class EntrancePanel extends JPanel{
                 c.gridx++;
             }
         }
+        this.validate();
+        this.repaint();
     }
 
     /**
@@ -70,9 +74,10 @@ public class EntrancePanel extends JPanel{
     }
 
     public void resetEntrance(){
-        for(int i=0;i<this.getComponentCount();i++){
-            this.remove(i);
-        }
+        this.removeAll();
+
+        this.validate();
+        this.repaint();
     }
 
 }

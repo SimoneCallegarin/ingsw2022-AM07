@@ -82,9 +82,7 @@ public class DiningStudentsPanel extends JPanel {
 
     public void resetStudents() {
         for(int i=0;i<lanes.size();i++){
-            for(int j=0;j<lanes.get(i).getComponentCount();j++){
-                lanes.get(i).remove(j);
-            }
+            lanes.get(i).removeAll();
         }
     }
 }

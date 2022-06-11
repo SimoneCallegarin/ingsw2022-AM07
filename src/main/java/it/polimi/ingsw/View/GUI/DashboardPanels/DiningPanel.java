@@ -24,16 +24,16 @@ public class DiningPanel extends JPanel {
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
 
-        initializeProfessorPanel(playerID,storage);
-        initializeStudentDining(playerID,storage);
+        initializeProfessorPanel(storage);
+        initializeStudentDining(storage);
 
     }
 
     /**
      * this method initialize the dining room according to the model state
-     * @param playerID the player ID used to identify the dining room
+     * @param storage the model storage to retrieve game data from
      */
-    public void initializeStudentDining(int playerID, ModelStorage storage) {
+    public void initializeStudentDining( ModelStorage storage) {
         studentsPanel=new DiningStudentsPanel(storage,playerID);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
@@ -47,7 +47,7 @@ public class DiningPanel extends JPanel {
         this.repaint();
     }
 
-    public void initializeProfessorPanel(int playerID, ModelStorage storage){
+    public void initializeProfessorPanel( ModelStorage storage){
         professorPanel=new ProfessorPanel(storage,playerID);
         professorPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         professorPanel.setOpaque(false);

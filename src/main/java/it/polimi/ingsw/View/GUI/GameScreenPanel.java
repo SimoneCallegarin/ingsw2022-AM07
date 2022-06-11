@@ -121,19 +121,19 @@ public class GameScreenPanel extends JPanel {
         switch(playerID){
             case 0->{
                 dashboard1.getEntrance().resetEntrance();
-                dashboard1.getEntrance().initializeEntrance(playerID,storage);
+                dashboard1.getEntrance().initializeEntrance(storage);
             }
             case 1->{
                 dashboard2.getEntrance().resetEntrance();
-                dashboard2.getEntrance().initializeEntrance(playerID,storage);
+                dashboard2.getEntrance().initializeEntrance(storage);
             }
             case 2->{
                 dashboard3.getEntrance().resetEntrance();
-                dashboard3.getEntrance().initializeEntrance(playerID,storage);
+                dashboard3.getEntrance().initializeEntrance(storage);
             }
             case 3->{
                 dashboard4.getEntrance().resetEntrance();
-                dashboard4.getEntrance().initializeEntrance(playerID,storage);
+                dashboard4.getEntrance().initializeEntrance(storage);
             }
         }
     }
@@ -142,19 +142,19 @@ public class GameScreenPanel extends JPanel {
         switch (playerID){
             case 0->{
                 dashboard1.getDining().resetStudentDining();
-                dashboard1.getDining().initializeStudentDining(playerID,storage);
+                dashboard1.getDining().initializeStudentDining(storage);
             }
             case 1->{
                 dashboard2.getDining().resetStudentDining();
-                dashboard2.getDining().initializeStudentDining(playerID,storage);
+                dashboard2.getDining().initializeStudentDining(storage);
             }
             case 2->{
                 dashboard3.getDining().resetStudentDining();
-                dashboard3.getDining().initializeStudentDining(playerID,storage);
+                dashboard3.getDining().initializeStudentDining(storage);
             }
             case 3->{
                 dashboard4.getDining().resetStudentDining();
-                dashboard4.getDining().initializeStudentDining(playerID,storage);
+                dashboard4.getDining().initializeStudentDining(storage);
             }
         }
     }

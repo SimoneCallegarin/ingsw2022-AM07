@@ -268,25 +268,25 @@ public class TableCenterPanel extends JPanel {
             if (storage.getDashboard(i).getDiscardPileTurnOrder() != 0) {//update only if the assistant card has been played
                 switch (i) {
                     case 0 ->{
-                        //assistantAndMoneyPanel1.remove(1);
+                        assistantAndMoneyPanel1.remove(assistantAndMoneyConstraints.gridy);
                         assistantAndMoneyPanel1.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel1.validate();//if you change a component that's already been displayed you need to validate it to display the changes
 
                     }
                     case 1 ->{
-                        //assistantAndMoneyPanel2.remove(1);
+                        assistantAndMoneyPanel2.remove(assistantAndMoneyConstraints.gridy);
                         assistantAndMoneyPanel2.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel2.validate();
 
                     }
                     case 2 ->{
-                        //assistantAndMoneyPanel3.remove(1);
+                        assistantAndMoneyPanel3.remove(assistantAndMoneyConstraints.gridy);
                         assistantAndMoneyPanel3.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel3.validate();
 
                     }
                     case 3 ->{
-                        //assistantAndMoneyPanel4.remove(1);
+                        assistantAndMoneyPanel4.remove(assistantAndMoneyConstraints.gridy);
                         assistantAndMoneyPanel4.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel4.validate();
 

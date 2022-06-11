@@ -20,11 +20,11 @@ public class TowerStoragePanel extends JPanel {
         setOpaque(false);
         c=new GridBagConstraints();
         setBorder(BorderFactory.createLineBorder(Color.black));
-        InitializeTowerStorage(playerID,storage);
+        InitializeTowerStorage(storage);
 
     }
 
-    private void InitializeTowerStorage(int playerID,ModelStorage storage){
+    private void InitializeTowerStorage(ModelStorage storage){
         TowerColors color=storage.getDashboard(playerID).getTowerColor();
         c.insets=new Insets(5,5,5,5);
         c.gridy=0;
