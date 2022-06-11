@@ -69,4 +69,10 @@ public class EntrancePanel extends JPanel{
         }
     }
 
+    public void resetEntrance(){
+        for(int i=0;i<this.getComponentCount();i++){
+            this.remove(i);
+        }
+    }
+
 }

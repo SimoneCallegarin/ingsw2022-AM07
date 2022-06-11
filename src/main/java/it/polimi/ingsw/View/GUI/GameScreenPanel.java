@@ -117,21 +117,45 @@ public class GameScreenPanel extends JPanel {
 
     }
 
-    public void updateEntrance(int currentPlayingID){
-        switch(currentPlayingID){
-            case 0->dashboard1.getEntrance().initializeEntrance(currentPlayingID,storage);
-            case 1->dashboard2.getEntrance().initializeEntrance(currentPlayingID,storage);
-            case 2->dashboard3.getEntrance().initializeEntrance(currentPlayingID,storage);
-            case 3->dashboard4.getEntrance().initializeEntrance(currentPlayingID,storage);
+    public void updateEntrance(int playerID){
+        switch(playerID){
+            case 0->{
+                dashboard1.getEntrance().resetEntrance();
+                dashboard1.getEntrance().initializeEntrance(playerID,storage);
+            }
+            case 1->{
+                dashboard2.getEntrance().resetEntrance();
+                dashboard2.getEntrance().initializeEntrance(playerID,storage);
+            }
+            case 2->{
+                dashboard3.getEntrance().resetEntrance();
+                dashboard3.getEntrance().initializeEntrance(playerID,storage);
+            }
+            case 3->{
+                dashboard4.getEntrance().resetEntrance();
+                dashboard4.getEntrance().initializeEntrance(playerID,storage);
+            }
         }
     }
 
-    public void updateDinings(int currentPlayingID){
-        switch (currentPlayingID){
-            case 0->dashboard1.getDining().InitializeDining(currentPlayingID,storage);
-            case 1->dashboard2.getDining().InitializeDining(currentPlayingID,storage);
-            case 2->dashboard3.getDining().InitializeDining(currentPlayingID,storage);
-            case 3->dashboard4.getDining().InitializeDining(currentPlayingID,storage);
+    public void updateStudentDinings(int playerID){
+        switch (playerID){
+            case 0->{
+                dashboard1.getDining().resetStudentDining();
+                dashboard1.getDining().initializeStudentDining(playerID,storage);
+            }
+            case 1->{
+                dashboard2.getDining().resetStudentDining();
+                dashboard2.getDining().initializeStudentDining(playerID,storage);
+            }
+            case 2->{
+                dashboard3.getDining().resetStudentDining();
+                dashboard3.getDining().initializeStudentDining(playerID,storage);
+            }
+            case 3->{
+                dashboard4.getDining().resetStudentDining();
+                dashboard4.getDining().initializeStudentDining(playerID,storage);
+            }
         }
     }
 

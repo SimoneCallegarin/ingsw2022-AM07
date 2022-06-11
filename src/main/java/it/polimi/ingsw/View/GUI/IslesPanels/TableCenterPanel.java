@@ -253,31 +253,6 @@ public class TableCenterPanel extends JPanel {
 
     }
 
-    public void updateOwnAssistCard(int playerID, int turnOrder){
-        switch(playerID){
-            case 0->{
-                assistantAndMoneyContainerSx.remove(0);
-                assistantAndMoneyContainerSx.add(new AssistantCardPanel(turnOrder),0);
-                assistantAndMoneyContainerSx.validate();//if you change a component that's already been displayed you need to validate it to display the changes
-            }
-            case 1->{
-                assistantAndMoneyContainerDx.remove(0);
-                assistantAndMoneyContainerDx.add(new AssistantCardPanel(turnOrder),0);
-                assistantAndMoneyContainerDx.validate();
-            }
-            case 2->{
-                assistantAndMoneyContainerSx.remove(1);
-                assistantAndMoneyContainerSx.add(new AssistantCardPanel(turnOrder),1);
-                assistantAndMoneyContainerSx.validate();
-            }
-            case 3->{
-                assistantAndMoneyContainerDx.remove(1);
-                assistantAndMoneyContainerDx.add(new AssistantCardPanel(turnOrder),1);
-                assistantAndMoneyContainerDx.validate();
-            }
-        }
-    }
-
     public void updateAllAssistCard(){
 
         assistantAndMoneyConstraints.gridx=0;
@@ -296,21 +271,25 @@ public class TableCenterPanel extends JPanel {
                         //assistantAndMoneyPanel1.remove(1);
                         assistantAndMoneyPanel1.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel1.validate();//if you change a component that's already been displayed you need to validate it to display the changes
+
                     }
                     case 1 ->{
                         //assistantAndMoneyPanel2.remove(1);
                         assistantAndMoneyPanel2.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel2.validate();
+
                     }
                     case 2 ->{
                         //assistantAndMoneyPanel3.remove(1);
                         assistantAndMoneyPanel3.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel3.validate();
+
                     }
                     case 3 ->{
                         //assistantAndMoneyPanel4.remove(1);
                         assistantAndMoneyPanel4.add(new AssistantCardPanel(storage.getDashboard(i).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
                         assistantAndMoneyPanel4.validate();
+
                     }
                 }
             }

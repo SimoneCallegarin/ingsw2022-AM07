@@ -48,5 +48,13 @@ public class ProfessorPanel extends JPanel {
         } else {
             add(new EmptyPanel());
         }
+        this.validate();
+        this.repaint();
+    }
+
+    public void resetProfessors() {
+        for(int i=0;i<this.getComponentCount();i++){
+            this.remove(i);
+        }
     }
 }

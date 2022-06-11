@@ -227,7 +227,11 @@ public class GuiDrawer extends ViewSubject {
 
     }
 
-
+    /**
+     * this method update the gamescreen panel according to the changes occurred in the modelStorage. The GuiDrawer reads the changes arraylist
+     * in the modelStorage to correctly know which component to update.
+     * @param playerID the playerId passed from the ClientController, it's the ID related to the change occurred
+     */
     public void updateGameScreenPanel(int playerID){
         boolean gameStart=true;
 
@@ -235,7 +239,7 @@ public class GuiDrawer extends ViewSubject {
             switch(modelStorage.getChanges().get(i)){
                 case CLOUDS_CHANGED -> {
                     if(gameStart) {
-                        this.playerID=playerID;
+                        this.playerID=playerID;//set the ID of the player using the GUI
                         createGameScreen();
                         showGameScreen();
                         gameStart=false;
@@ -246,7 +250,7 @@ public class GuiDrawer extends ViewSubject {
                 }
                 case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(playerID);
-                case STUDENTDINING_CHANGED -> gameScreenPanel.updateDinings(playerID);
+                case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(playerID);
                 case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins();
                 case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
