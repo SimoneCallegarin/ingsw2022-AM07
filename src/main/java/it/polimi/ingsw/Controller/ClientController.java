@@ -207,7 +207,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
                 storage.updateDiscardPile(ac.getPlayerID(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
                 storage.updateAssistantsCard(ac.getPlayerID(), ac.getTurnOrders(), ac.getMovementsMN());
-                view.printChanges(playerID);
+                view.printChanges(ac.getPlayerID());
             }
             case STUDENTTODINING_UPDATE -> {
                 StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;

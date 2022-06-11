@@ -248,7 +248,7 @@ public class GuiDrawer extends ViewSubject {
                     }
 
                 }
-                case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAllAssistCard();
+                case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAssistCard(playerID);
                 case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(playerID);
                 case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(playerID);
                 case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
