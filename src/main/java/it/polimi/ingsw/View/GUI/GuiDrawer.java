@@ -222,9 +222,8 @@ public class GuiDrawer extends ViewSubject {
         JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
 
         gameScreenPanel.setClickableStudents(playerID,getViewObserverList());
-
-
     }
+
 
     /**
      * this method update the gamescreen panel according to the changes occurred in the modelStorage. The GuiDrawer reads the changes arraylist

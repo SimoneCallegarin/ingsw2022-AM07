@@ -17,10 +17,6 @@ public class GUIApp extends ViewSubject implements View {
         guiDrawer = new GuiDrawer();
     }
 
-    public void GUIstart(){
-        // It creates the first screen where the user inputs his game preferences.
-        guiDrawer.screeInitialization();
-    }
 
     @Override
     public void askUsername() {
@@ -79,7 +75,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void ViewStart() {
-        SwingUtilities.invokeLater(() -> guiDrawer.screeInitialization());
+        SwingUtilities.invokeLater(guiDrawer::screeInitialization);
     }
 
     @Override

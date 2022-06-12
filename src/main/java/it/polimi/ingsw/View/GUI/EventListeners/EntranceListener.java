@@ -13,7 +13,11 @@ import java.util.ArrayList;
  * this class is added to student buttons to listen to a mouse click and notify the view observers of the button color selected
  */
 public class EntranceListener extends ViewSubject implements MouseListener  {
-
+    /**
+     * this boolean is used to set the dining clickable only one time and avoid adding multiple listeners to it and sending
+     * multiple studentToDining messages to the server
+     */
+    static boolean diningClickable;
     DashboardPanel dashboardListened;
     ArrayList<ViewObserver> observers;
 
@@ -21,6 +25,7 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
         this.dashboardListened = dashboardListened;
         observers=viewObserverList;
         addAllObservers(viewObserverList);
+        diningClickable=false;
     }
 
     @Override
@@ -37,8 +42,10 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
         int finalColorPressed = colorPressed;
         System.out.println(finalColorPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
-        dashboardListened.getDining().setCLickable(observers);//so after at least one student button press the dining room is set clickable
-
+        if(!diningClickable) {
+            dashboardListened.getDining().setCLickable(observers);//so after at least one student button press the dining room is set clickable
+            diningClickable=true;
+        }
     }
 
     @Override
