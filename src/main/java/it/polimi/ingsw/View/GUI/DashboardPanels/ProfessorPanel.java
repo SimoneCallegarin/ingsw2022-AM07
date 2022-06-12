@@ -53,8 +53,8 @@ public class ProfessorPanel extends JPanel {
     }
 
     public void resetProfessors() {
-        for(int i=0;i<this.getComponentCount();i++){
-            this.remove(i);
-        }
+        this.removeAll();
+        this.validate();
+        this.repaint();
     }
 }

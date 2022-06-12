@@ -82,6 +82,8 @@ public class DiningPanel extends JPanel {
         this.getStudentsPanel().resetStudents();
     }
 
+    public void resetProfessorDining(){this.getProfessorPanel().resetProfessors();}
+
     public ProfessorPanel getProfessorPanel() {
         return professorPanel;
     }

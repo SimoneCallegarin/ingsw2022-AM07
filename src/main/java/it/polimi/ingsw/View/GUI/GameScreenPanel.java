@@ -54,7 +54,7 @@ public class GameScreenPanel extends JPanel {
         tableCenterPanel=new TableCenterPanel(storage,usernamePlaying);
         add(tableCenterPanel,gamescreenConstraints);
 
-        //then i add the two dashboard container Panel on the left and on the right and i set the weights in order to correctly size the dashboard
+        //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
         gamescreenConstraints.weightx=0.05;
         gamescreenConstraints.weighty=0.2;
         gamescreenConstraints.gridx=0;
@@ -98,18 +98,10 @@ public class GameScreenPanel extends JPanel {
      */
     public void setClickableStudents(int playerID, ArrayList<ViewObserver> viewObserverList) {
         switch (playerID){
-            case 0->{
-                dashboard1.getEntrance().setClickable(viewObserverList);
-            }
-            case 1->{
-                dashboard2.getEntrance().setClickable(viewObserverList);
-            }
-            case 2->{
-                dashboard3.getEntrance().setClickable(viewObserverList);
-            }
-            case 3->{
-                dashboard4.getEntrance().setClickable(viewObserverList);
-            }
+            case 0-> dashboard1.getEntrance().setClickable(viewObserverList);
+            case 1-> dashboard2.getEntrance().setClickable(viewObserverList);
+            case 2-> dashboard3.getEntrance().setClickable(viewObserverList);
+            case 3-> dashboard4.getEntrance().setClickable(viewObserverList);
         }
     }
 
@@ -159,8 +151,25 @@ public class GameScreenPanel extends JPanel {
         }
     }
 
-    public void updateProfessors(){
-
+    public void updateProfessors(int playerID){
+        switch(playerID){
+            case 0->{
+                dashboard1.getDining().resetProfessorDining();
+                dashboard1.getDining().initializeProfessorPanel(storage);
+            }
+            case 1->{
+                dashboard2.getDining().resetProfessorDining();
+                dashboard2.getDining().initializeProfessorPanel(storage);
+            }
+            case 2->{
+                dashboard3.getDining().resetProfessorDining();
+                dashboard3.getDining().initializeProfessorPanel(storage);
+            }
+            case 3->{
+                dashboard4.getDining().resetProfessorDining();
+                dashboard4.getDining().initializeProfessorPanel(storage);
+            }
+        }
     }
 
     public void updateTowerStorages(){

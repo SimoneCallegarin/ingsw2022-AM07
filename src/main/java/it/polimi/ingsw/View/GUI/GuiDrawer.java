@@ -193,7 +193,6 @@ public class GuiDrawer extends ViewSubject {
         for (int i = 0; i < modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {
             buttons[i] = (new AssistantCardButton(modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i)));
             //idk what the hell is going on with these variables
-            int finalI1 = i;
             int finalI = i+1;
             buttons[i].addActionListener(e -> {
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
@@ -251,7 +250,7 @@ public class GuiDrawer extends ViewSubject {
                 case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAssistCard(playerID);
                 case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(playerID);
                 case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(playerID);
-                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
+                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors(playerID);
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins();
                 case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
                 case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle();
