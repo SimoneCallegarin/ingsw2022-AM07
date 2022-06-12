@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 
-import static it.polimi.ingsw.View.CLI.CLI.getString;
+//import static it.polimi.ingsw.View.CLI.CLI.getString;
 
 public class App {
 
@@ -44,9 +44,9 @@ public class App {
     /**
      * Asks the user to write the host name of the server (default is "localhost").
      */
-    private void selectAddress() {
+    private void selectAddress() throws IOException {
         System.out.println("Choose address (leave empty to set \"localhost\"):");
-        host = readUserInput();
+        host = br.readLine();
         if(host.isEmpty())
             host = "localhost";
     }
@@ -54,9 +54,9 @@ public class App {
     /**
      * Asks the user to write the port where to communicate with the server (default is 1234).
      */
-    private void selectPort() {
+    private void selectPort() throws IOException {
         System.out.println("Choose a port(leave empty to set \"1234\"):");
-        String stringPort = readUserInput();
+        String stringPort = br.readLine();
         if (stringPort.isEmpty())
             port = 1234;
         else
@@ -77,11 +77,11 @@ public class App {
                 System.out.println("Choose:");
                 System.out.println("0 -> CLI");
                 System.out.println("1 -> GUI");
-                choice = Integer.parseInt(readUserInput());
+                choice = Integer.parseInt(br.readLine());
                 if (choice != 0 && choice != 1)
                     System.out.println("Wrong value!");
             }while (choice != 0 && choice != 1);
-        } catch (NumberFormatException nf) {
+        } catch (NumberFormatException | IOException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askChooseCLIorGUI();
         }
@@ -91,7 +91,7 @@ public class App {
      * Initialize the connection between the connection socket and the server
      * using the parameters asked previously to the client.
      */
-    private void initializeConnection() {
+    private void initializeConnection() throws IOException {
         // Asking address and port for the first time:
         selectAddress();
         selectPort();
@@ -102,7 +102,7 @@ public class App {
     /**
      * Establishes a stable connection with the server if it's available at a certain port and host name.
      */
-    private void establishConnection() {
+    private void establishConnection() throws IOException {
         try {
             connectionSocket = new ConnectionSocket(host,port);
             connectionSocket.startConnection();
@@ -123,12 +123,12 @@ public class App {
      * Reads what the user write in the buffer using his keyboard.
      * @return what the user wrote.
      */
-    public String readUserInput(){ return getString(br); }
+    //public String readUserInput(){ return getString(br); }
 
     /**
      * MAIN of the app that runs CLI or GUI and connects to the server.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         App app = new App();
 

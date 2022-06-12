@@ -23,10 +23,11 @@ import java.util.concurrent.FutureTask;
 
 public class CLI extends ViewSubject implements View {
 
+    Thread inputThread;
     /**
      * The bufferReader that reads the input stream.
      */
-    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    //private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     /**
      * Drawer of the CLI, draws the game table and other things.
      */
@@ -40,16 +41,16 @@ public class CLI extends ViewSubject implements View {
     /**
      * Launches a thread for user input reading.
      */
-    public String readUserInput() { return getString(br); } //need to make it always run not only when the method is called
-    public static String getString(BufferedReader br) {
-        FutureTask<String> asyncInput=new FutureTask<>(br::readLine);
-        Thread inputThread = new Thread(asyncInput);
+    //public static String getString() { return getString(br); } //need to make it always run not only when the method is called
+    public String readUserInput() throws ExecutionException {
+        FutureTask<String> asyncInput = new FutureTask<>(new InputReadCall());
+        inputThread = new Thread(asyncInput);
         inputThread.start();
         String userInput = null;
         try {
              userInput = asyncInput.get();
         }
-        catch (InterruptedException | ExecutionException e){
+        catch (InterruptedException e){
             asyncInput.cancel(true);
             Thread.currentThread().interrupt();
         }
@@ -94,13 +95,17 @@ public class CLI extends ViewSubject implements View {
      * Reads the username chosen by the player and notifies it to the view.
      */
     public void askUsername() {
-        System.out.println("> What is your nickname? [NOTE: it must be between 2 and 20 characters long]");
-        System.out.println("> ");
-        String username = readUserInput();
-        if (username.length() >= 2 && username.length() <= 20)
-            notifyObserver(obs -> obs.onUsername(username));
-        else
-            askUsername();
+        try {
+            System.out.println("> What is your nickname? [NOTE: it must be between 2 and 20 characters long]");
+            System.out.println("> ");
+            String username = readUserInput();
+            if (username.length() >= 2 && username.length() <= 20)
+                notifyObserver(obs -> obs.onUsername(username));
+            else
+                askUsername();
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
+        }
     }
 
     /**
@@ -125,6 +130,9 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             return askNumOfPlayers();
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
+            return 0;
         }
     }
 
@@ -134,6 +142,7 @@ public class CLI extends ViewSubject implements View {
      * @return the game mode the player wants to play with.
      */
     private boolean askGameMode() {
+        try {
             String modePreference;
             boolean expertMode;
             System.out.println("> Do you want to play in Expert mode? [y/n]");
@@ -141,6 +150,10 @@ public class CLI extends ViewSubject implements View {
             modePreference = readUserInput();
             expertMode = modePreference.equalsIgnoreCase("y");
             return expertMode;
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
+            return false;
+        }
     }
 
     /**
@@ -148,41 +161,45 @@ public class CLI extends ViewSubject implements View {
      * @param expertMode true if expert game mode, else false.
      */
     public void askMove(boolean expertMode) {
-        int initialChoice = 0;
-        if (expertMode)
-            initialChoice = askWhatToDo("SELECT A STUDENT TO MOVE", true);
-        else
-            askStudent("Entrance");
-        System.out.println("> What do you want to do now?");
-        System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
-        if (initialChoice == 0) {
-            System.out.println("> 1 - MOVE SELECTED STUDENT IN YOUR DINING ROOM");
-            System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
-        }
-        if (initialChoice == 1)
-            System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
-        switch (Integer.parseInt(readUserInput())) {
-            case 0 -> askMove(expertMode);
-            case 1 -> {
-                if (initialChoice == 0)
-                    askDiningRoomMovement();
-                else if (initialChoice == 1)
-                    askCharacterCard();
-                else
-                    askMove(true);
+        try {
+            int initialChoice = 0;
+            if (expertMode)
+                initialChoice = askWhatToDo("SELECT A STUDENT TO MOVE", true);
+            else
+                askStudent("Entrance");
+            System.out.println("> What do you want to do now?");
+            System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
+            if (initialChoice == 0) {
+                System.out.println("> 1 - MOVE SELECTED STUDENT IN YOUR DINING ROOM");
+                System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
             }
-            case 2 -> {
-                if (initialChoice == 0)
-                    askIsleMovement();
-                else {
+            if (initialChoice == 1)
+                System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
+            switch (Integer.parseInt(readUserInput())) {
+                case 0 -> askMove(expertMode);
+                case 1 -> {
+                    if (initialChoice == 0)
+                        askDiningRoomMovement();
+                    else if (initialChoice == 1)
+                        askCharacterCard();
+                    else
+                        askMove(true);
+                }
+                case 2 -> {
+                    if (initialChoice == 0)
+                        askIsleMovement();
+                    else {
+                        System.out.println("Not acceptable value. Please, try again.");
+                        askMove(true);
+                    }
+                }
+                default -> {
                     System.out.println("Not acceptable value. Please, try again.");
-                    askMove(true);
+                    askMove(expertMode);
                 }
             }
-            default -> {
-                System.out.println("Not acceptable value. Please, try again.");
-                askMove(expertMode);
-            }
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
         }
     }
 
@@ -191,34 +208,37 @@ public class CLI extends ViewSubject implements View {
      * @param expertMode true if expert game mode, else false.
      */
     public void askMNMovement(boolean expertMode) {
-        if (expertMode) {
-            int initialChoice = askWhatToDo("SELECT THE ISLE FOR MOTHER NATURE MOVEMENT", false);
-            int choice;
-            System.out.println("> What do you want to do now?");
-            System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
-            if (initialChoice == 0)
-                System.out.println("> 1 - CHOOSE ISLE");
-            if (initialChoice == 1)
-                System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
-            choice = Integer.parseInt(readUserInput());
-            switch (choice) {
-                case 0 -> askMNMovement(true);
-                case 1 -> {
-                    if (initialChoice == 0)
-                        askIsleMotherNature();
-                    else if (initialChoice == 1)
-                        askCharacterCard();
-                    else
+        try {
+            if (expertMode) {
+                int initialChoice = askWhatToDo("SELECT THE ISLE FOR MOTHER NATURE MOVEMENT", false);
+                int choice;
+                System.out.println("> What do you want to do now?");
+                System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
+                if (initialChoice == 0)
+                    System.out.println("> 1 - CHOOSE ISLE");
+                if (initialChoice == 1)
+                    System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
+                choice = Integer.parseInt(readUserInput());
+                switch (choice) {
+                    case 0 -> askMNMovement(true);
+                    case 1 -> {
+                        if (initialChoice == 0)
+                            askIsleMotherNature();
+                        else if (initialChoice == 1)
+                            askCharacterCard();
+                        else
+                            askMNMovement(true);
+                    }
+                    default -> {
+                        System.out.println("Not acceptable value. Please, try again.");
                         askMNMovement(true);
+                    }
                 }
-                default -> {
-                    System.out.println("Not acceptable value. Please, try again.");
-                    askMNMovement(true);
-                }
-            }
+            } else
+                askIsleMotherNature();
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
         }
-        else
-            askIsleMotherNature();
     }
 
     /**
@@ -259,6 +279,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askCloud(expertMode);
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
         }
     }
 
@@ -303,11 +325,16 @@ public class CLI extends ViewSubject implements View {
      * @return true if the player wants to exchange students, else false.
      */
     private boolean askExchange() {
-        String exchange;
-        System.out.println("> Do you want to exchange students? [y/n]");
-        System.out.println("> ");
-        exchange = readUserInput();
-        return exchange.equalsIgnoreCase("n");
+        try {
+            String exchange;
+            System.out.println("> Do you want to exchange students? [y/n]");
+            System.out.println("> ");
+            exchange = readUserInput();
+            return exchange.equalsIgnoreCase("n");
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
+            return false;
+        }
     }
 
     /**
@@ -335,6 +362,9 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             return askNumber(request,color,max);
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
+            return 0;
         }
     }
 
@@ -359,22 +389,27 @@ public class CLI extends ViewSubject implements View {
      * @return the choice of the player.
      */
     private int askWhatToDo(String S_0, boolean move) {
-        int choice;
-        System.out.println("> What do you want to do?");
-        System.out.println("> 0 - " + S_0);
-        System.out.println("> 1 - " + "PLAY A CHARACTER CARD");
-        choice = Integer.parseInt(readUserInput());
-        switch (choice) {
-            case 0 -> {
-                if(move)
-                    askStudent("Entrance");
-                else
-                    System.out.println("Okay!");
+        try {
+            int choice;
+            System.out.println("> What do you want to do?");
+            System.out.println("> 0 - " + S_0);
+            System.out.println("> 1 - " + "PLAY A CHARACTER CARD");
+            choice = Integer.parseInt(readUserInput());
+            switch (choice) {
+                case 0 -> {
+                    if (move)
+                        askStudent("Entrance");
+                    else
+                        System.out.println("Okay!");
+                }
+                case 1 -> printAvailableCharacters();
+                default -> System.out.println("Not acceptable value. You will be asked to try again");
             }
-            case 1 -> printAvailableCharacters();
-            default -> System.out.println("Not acceptable value. You will be asked to try again");
+            return choice;
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
+            return 0;
         }
-        return choice;
     }
 
     /**
@@ -395,6 +430,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askAssistantCard(playerID);
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
         }
         int finalChoice = choice;
         notifyObserver(obs -> obs.onAssistantCard(finalChoice));
@@ -526,7 +563,9 @@ public class CLI extends ViewSubject implements View {
 
     @Override
     public void disconnect(ServiceMessage message) {
-
+        inputThread.interrupt();
+        System.out.println(message.getMessage());
+        System.exit(1);
     }
 
     // GETTER:
