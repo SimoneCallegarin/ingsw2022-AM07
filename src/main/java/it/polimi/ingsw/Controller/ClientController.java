@@ -11,6 +11,9 @@ import it.polimi.ingsw.View.GUI.GuiDrawer;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import it.polimi.ingsw.View.View;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Observe the ClientListener and the view.
  */
@@ -37,7 +40,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
      */
     private CLIDrawer cliDrawer;
 
-
+    private final ExecutorService taskQueue;
 
     private GuiDrawer guiDrawer;
     /**
@@ -64,6 +67,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
         this.client = client;
         this.GUI = GUI;
         this.cliDrawer = cliDrawer;
+        taskQueue = Executors.newSingleThreadExecutor();
     }
 
     public ClientController(View view, ConnectionSocket client, boolean GUI, GuiDrawer guiDrawer) {
@@ -71,6 +75,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
         this.client = client;
         this.GUI = GUI;
         this.guiDrawer = guiDrawer;
+        taskQueue = Executors.newSingleThreadExecutor();
     }
 
     public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
@@ -187,6 +192,10 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 ServiceMessage sm = (ServiceMessage) message;
                 view.printMessage(sm);
             }
+            case QUIT -> {
+                ServiceMessage sm = (ServiceMessage) message;
+                view.disconnect(sm);
+            }
             case START_GAME -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
@@ -296,7 +305,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 switch (gp.getGamePhases()) {
                     case PLANNING_PHASE -> {
                         if (gp.getActivePlayer() == playerID)
-                            view.askAssistantCard(playerID);
+                            taskQueue.execute(() -> view.askAssistantCard(playerID));
                         else
                             System.out.println("Player " + gp.getActivePlayer() + " is choosing the Assistant Card to play");
                     }
@@ -304,25 +313,25 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         switch (gp.getActionPhases()) {
                             case MOVE_STUDENTS -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    view.askMove(expertMode);
+                                    taskQueue.execute(() -> view.askMove(expertMode));
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    view.askMNMovement(expertMode);
+                                    taskQueue.execute(() -> view.askMNMovement(expertMode));
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    view.askCloud(expertMode);
+                                    taskQueue.execute(() -> view.askCloud(expertMode));
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
                             }
                             case CHARACTER_CARD_PHASE -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    view.askCharacterEffectParameters(lastCharacterUsed);
+                                    taskQueue.execute(() -> view.askCharacterEffectParameters(lastCharacterUsed));
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is using a character card...");
                             }

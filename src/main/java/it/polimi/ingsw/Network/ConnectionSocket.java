@@ -57,6 +57,8 @@ public class ConnectionSocket {
             output.reset();
         } catch (IOException e) {
             System.err.println("Error in sending message to server");
+            disconnect();
+            System.exit(1);
         }
     }
 
@@ -99,6 +101,7 @@ public class ConnectionSocket {
             clientSocket.close();
         } catch (IOException e) {
             System.out.println("Error occurred during disconnection");
+            e.printStackTrace();
         }
     }
 

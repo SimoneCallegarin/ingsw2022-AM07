@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLOutput;
 import java.util.NoSuchElementException;
 
 /**
@@ -51,6 +52,8 @@ public class ClientHandler implements Runnable {
      */
     private boolean connected;
 
+    private final Object outputLock;
+
     /**
      * constructor of the client handler
      * @param server the server associated to this client handler
@@ -61,6 +64,7 @@ public class ClientHandler implements Runnable {
         this.client = socket;
         this.handlerPhase = HandlerPhases.LOGIN_PHASE;
         this.connected = true;
+        this.outputLock = new Object();
         try {
             this.input = new ObjectInputStream(socket.getInputStream());
             this.output = new ObjectOutputStream(socket.getOutputStream());
@@ -187,6 +191,7 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (NoSuchElementException | ClassNotFoundException e) {
+            System.out.println("NoSuchElementException thrown by: " + nickname);
             disconnect("NoSuchElementException thrown");
         }
     }
@@ -200,17 +205,12 @@ public class ClientHandler implements Runnable {
         System.out.println("QUIT message sent to " + nickname);
         server.addPlayerToRemove(nickname);
         connected = false;
-        if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
-            server.onDisconnection(nickname);
-        //output.close();
-        input.close();
         client.close();
-        //System.out.println("Stream closing successful!");
     }
 
     public void disconnect(String error) {
         if (connected) {
-            System.out.println("TIMEOUT EXPIRED or ERROR");
+            System.out.println("TIMEOUT EXPIRED or ERROR " + "(" + nickname + ")");
             try {
                 shutConnection(error);
             } catch (IOException e) {
@@ -219,6 +219,8 @@ public class ClientHandler implements Runnable {
             }
             Thread.currentThread().interrupt();
             System.out.println("Interrupting client handler thread of player " + nickname);
+            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
+                server.onDisconnection(nickname);
         }
     }
 
@@ -242,8 +244,10 @@ public class ClientHandler implements Runnable {
 
     public void send(NetworkMessage message) {
         try {
-            output.writeObject(message);
-            output.reset();
+            synchronized (outputLock) {
+                output.writeObject(message);
+                output.reset();
+            }
         } catch (IOException e) {
             System.out.println("Unreachable client");
         }
@@ -254,8 +258,10 @@ public class ClientHandler implements Runnable {
         try {
             handleConnection();
         } catch (IOException e) {
-            //System.out.println("TIMEOUT EXPIRED or ERROR");
-            disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
+            if (connected) {
+                System.out.println("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST " + "(" + nickname + ")");
+                disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
+            }
         }
     }
 }
