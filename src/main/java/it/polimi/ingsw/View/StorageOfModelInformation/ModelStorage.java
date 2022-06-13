@@ -160,6 +160,7 @@ public class ModelStorage {
         }
         gameTable.setIsles(newIsles);
 
+
         modelChanges.toUpdate.add(ToUpdate.ISLELAYOUT_CHANGED);
         modelChanges.isleID=mnm.getWhereMNId();
     }

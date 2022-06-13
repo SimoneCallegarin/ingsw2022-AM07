@@ -13,10 +13,10 @@ public class MNButton extends JButton {
     public MNButton() {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        PrintMN();
+        printMN();
     }
 
-    private void PrintMN(){
+    private void printMN(){
         InputStream url=null;
         url=cl.getResourceAsStream("GameTable/mother_nature.png");
         BufferedImage img=null;

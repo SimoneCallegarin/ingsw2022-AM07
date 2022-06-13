@@ -325,7 +325,10 @@ public class TableCenterPanel extends JPanel {
     }
 
     public void updateIsleLayout(){
-
+        for (int i=0;i<islesPanels.size();i++){
+            islesPanels.get(i).resetIsle();
+            islesPanels.get(i).initializeIsle();
+        }
     }
 
     public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance){
@@ -334,9 +337,18 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
+    public void setMNClickable(ArrayList<ViewObserver> viewObserverList){
+        for(int i=0;i<islesPanels.size();i++){
+            if(!islesPanels.get(i).motherNature){
+                islesPanels.get(i).setClickableForMN(viewObserverList);
+            }
+        }
+
+    }
+
+
     public void removeIslesClickable(){
         for(int i=0;i<islesPanels.size();i++){
-            System.out.println("listener on isle"+i+": "+islesPanels.get(i).getMouseListeners().length);
             islesPanels.get(i).removeMouseListener(islesPanels.get(i).getMouseListeners()[0]);
         }
     }

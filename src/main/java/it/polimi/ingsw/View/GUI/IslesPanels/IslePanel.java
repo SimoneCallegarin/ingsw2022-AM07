@@ -2,9 +2,11 @@ package it.polimi.ingsw.View.GUI.IslesPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
+import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
@@ -13,12 +15,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class IslePanel extends JPanel {
 
     ModelStorage storage;
     GridBagConstraints constraints;
     int isleID;
+    boolean motherNature=false;
     DenyCardPanel denyCard;
 
     public IslePanel(ModelStorage storage,int isleID) {
@@ -60,6 +64,7 @@ public class IslePanel extends JPanel {
         if(storage.getGameTable().getIsle(isleID).motherNatureIsPresent()){
             add(new MNButton(),constraints);
             constraints.gridy++;
+            motherNature=true;
         }
 
         studentConstraints.gridx=0;
@@ -99,6 +104,14 @@ public class IslePanel extends JPanel {
 
     public int getIsleID() {
         return isleID;
+    }
+
+    public void setClickableForMN(ArrayList<ViewObserver> viewObserverList){
+        this.addMouseListener(new MNListener(viewObserverList,isleID,this));
+    }
+
+    public void removeClickableForMN(){
+        this.removeMouseListener(this.getMouseListeners()[0]);
     }
 
     public void resetIsle(){

@@ -228,6 +228,13 @@ public class GuiDrawer extends ViewSubject {
         gameScreenPanel.setClickableStudents(modelChanges.getPlayerID(),getViewObserverList());
     }
 
+    public void showMNMovement(){
+        String message="Now you can move mother nature by clicking on the island where you want to move her";
+        JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);
+
+        gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
+    }
+
 
     /**
      * this method update the gamescreen panel according to the changes occurred in the modelStorage. The GuiDrawer reads the changes arraylist

@@ -51,7 +51,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askMNMovement(boolean expertMode) {
-
+        guiDrawer.showMNMovement();
     }
 
     @Override
