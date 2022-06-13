@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -20,11 +19,11 @@ public class TowerStoragePanel extends JPanel {
         setOpaque(false);
         c=new GridBagConstraints();
         setBorder(BorderFactory.createLineBorder(Color.black));
-        InitializeTowerStorage(storage);
+        initializeTowerStorage(storage);
 
     }
 
-    private void InitializeTowerStorage(ModelStorage storage){
+    public void initializeTowerStorage(ModelStorage storage){
         TowerColors color=storage.getDashboard(playerID).getTowerColor();
         c.insets=new Insets(5,5,5,5);
         c.gridy=0;
@@ -39,6 +38,13 @@ public class TowerStoragePanel extends JPanel {
             c.gridx++;
         }
 
+        this.validate();
+        this.repaint();
+    }
 
+    public void resetTowerStorage() {
+        this.removeAll();
+        this.validate();
+        this.repaint();
     }
 }

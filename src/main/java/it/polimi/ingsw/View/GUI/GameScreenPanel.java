@@ -172,7 +172,24 @@ public class GameScreenPanel extends JPanel {
         }
     }
 
-    public void updateTowerStorages(){
-
+    public void updateTowerStorages(int playerID){
+        switch(playerID){
+            case 0->{
+                dashboard1.getTowerStorage().resetTowerStorage();
+                dashboard1.getTowerStorage().initializeTowerStorage(storage);
+            }
+            case 1->{
+                dashboard2.getTowerStorage().resetTowerStorage();
+                dashboard2.getTowerStorage().initializeTowerStorage(storage);
+            }
+            case 2->{
+                dashboard3.getTowerStorage().resetTowerStorage();
+                dashboard3.getTowerStorage().initializeTowerStorage(storage);
+            }
+            case 3->{
+                dashboard4.getTowerStorage().resetTowerStorage();
+                dashboard4.getTowerStorage().initializeTowerStorage(storage);
+            }
+        }
     }
 }

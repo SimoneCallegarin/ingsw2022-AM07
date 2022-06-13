@@ -261,7 +261,7 @@ public class GuiDrawer extends ViewSubject {
                 case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
                 case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins();
-                case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
+                case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages(modelChanges.getPlayingID());
                 case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
                 case ISLELAYOUT_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsleLayout();
                 //missing case character card and cloud changes
