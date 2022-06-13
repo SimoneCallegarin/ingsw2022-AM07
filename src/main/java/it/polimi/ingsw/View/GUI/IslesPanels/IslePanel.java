@@ -2,11 +2,9 @@ package it.polimi.ingsw.View.GUI.IslesPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
-import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
@@ -31,7 +29,7 @@ public class IslePanel extends JPanel {
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
 
-        InitializeIsle(isleID);
+        initializeIsle();
     }
 
     @Override
@@ -48,7 +46,7 @@ public class IslePanel extends JPanel {
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
-    public void InitializeIsle(int isleID){
+    public void initializeIsle(){
         JPanel studentContainer=new JPanel(new GridBagLayout());
         studentContainer.setOpaque(false);
         JPanel towerContainer=new JPanel(new GridBagLayout());
@@ -94,15 +92,19 @@ public class IslePanel extends JPanel {
             }
             add(towerContainer,constraints);
         }
-    }
 
-
-    public void removeClickable(){
-        removeMouseListener(this.getMouseListeners()[0]);
+        this.validate();
+        this.repaint();
     }
 
     public int getIsleID() {
         return isleID;
+    }
+
+    public void resetIsle(){
+        this.removeAll();
+        this.validate();
+        this.repaint();
     }
 
     public void addDenyCard(){

@@ -320,7 +320,8 @@ public class TableCenterPanel extends JPanel {
     }
 
     public void updateIsle(int isleID){
-
+        islesPanels.get(isleID).resetIsle();
+        islesPanels.get(isleID).initializeIsle();
     }
 
     public void updateIsleLayout(){
