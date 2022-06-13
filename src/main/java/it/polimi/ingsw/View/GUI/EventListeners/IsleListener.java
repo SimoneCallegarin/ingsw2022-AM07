@@ -1,23 +1,34 @@
 package it.polimi.ingsw.View.GUI.EventListeners;
 
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.IslePanel;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class IsleListener extends ViewSubject implements MouseListener {
 
-    IslePanel isleListened;
+    TableCenterPanel tableCenterPanel;
+    EntrancePanel entrance;
+    int idListened;
 
-    public IsleListener(IslePanel isleListened) {
-        this.isleListened=isleListened;
+    public IsleListener(TableCenterPanel tableCenterPanel, ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, int idListened) {
+        this.tableCenterPanel=tableCenterPanel;
+        addAllObservers(viewObserverList);
+        this.entrance=entrance;
+        this.idListened=idListened;
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        notifyObserver(obs->obs.onStudentMovement_toIsle(isleListened.getIsleID()));
-        isleListened.removeClickable();
+        notifyObserver(obs->obs.onStudentMovement_toIsle(idListened));
+        tableCenterPanel.removeIslesClickable();
+        entrance.removeClickable();
     }
 
     @Override

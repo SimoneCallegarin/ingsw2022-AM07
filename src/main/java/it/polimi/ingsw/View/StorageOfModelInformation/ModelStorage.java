@@ -16,12 +16,12 @@ public class ModelStorage {
     private final boolean expertMode;
     private final ArrayList<PlayerInformation> dashboards = new ArrayList<>();
     private GameTableInformation gameTable;
-    private final ArrayList<ModelChanges> changes;
+    private final ModelChanges modelChanges;
 
     public ModelStorage(int numberOfPlayers, boolean expertMode) {
         this.numberOfPlayers = numberOfPlayers;
         this.expertMode = expertMode;
-        changes=new ArrayList<>();
+        modelChanges=new ModelChanges();
     }
 
     public void setupStorage (GameCreation_UpdateMsg message) { // Receive a message containing all the information of the game table.
@@ -73,27 +73,29 @@ public class ModelStorage {
     public void updateStudentsInEntrance(int playerID, HashMap<RealmColors,Integer> students){
         dashboards.get(playerID).setEntranceStudents(students);
 
-        changes.add(ModelChanges.ENTRANCE_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.ENTRANCE_CHANGED);
+        modelChanges.playingID =playerID;
     }
 
     public void updateStudentsInDining(int playerID, HashMap<RealmColors,Integer> students){
         dashboards.get(playerID).setDiningStudents(students);
 
-        changes.add(ModelChanges.STUDENTDINING_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.STUDENTDINING_CHANGED);
+        modelChanges.playingID =playerID;
     }
 
     public void updateProfessorsInDining(ArrayList<HashMap<RealmColors,Integer>> professors){
         for (int i = 0; i < numberOfPlayers; i++)
             dashboards.get(i).setDiningProfessors(professors.get(i));
 
-        changes.add(ModelChanges.PROFDINING_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.PROFDINING_CHANGED);
     }
 
     public void updateNumberOfTowers(ArrayList<Integer> numTowers) {
         for (int i = 0; i < numberOfPlayers; i++)
             dashboards.get(i).setNumOfTowers(numTowers.get(i));
 
-        changes.add(ModelChanges.TOWERSTORAGE_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.TOWERSTORAGE_CHANGED);
     }
 
     public void updateColorOfTowers(int playerID, TowerColors towersColor){ dashboards.get(playerID).setTowerColor(towersColor); }
@@ -101,14 +103,16 @@ public class ModelStorage {
     public void updateMoney(int playerID, int money){
         dashboards.get(playerID).setMoney(money);
 
-        changes.add(ModelChanges.COINS_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.COINS_CHANGED);
+        modelChanges.playingID =playerID;
     }
 
     public void updateDiscardPile(int playerID, int turnOrder, int mnMovement){
         dashboards.get(playerID).setDiscardPileTurnOrder(turnOrder);
         dashboards.get(playerID).setDiscardPileMNMovement(mnMovement);
 
-        changes.add(ModelChanges.DISCARDPILE_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.DISCARDPILE_CHANGED);
+        modelChanges.playingID =playerID;
     }
 
     public void updateAssistantsCard(int playerID, ArrayList<Integer> assistantCardsTurnOrder, ArrayList<Integer> assistantCardsMNMovement) {
@@ -123,18 +127,21 @@ public class ModelStorage {
         GameTableInformation.CharacterCard newCharacterCard = new GameTableInformation.CharacterCard(gameTable.getCharacterCard(characterCardIndex).characterCardName(),cost,characterCardsStudents,denyCards,gameTable.getCharacterCard(characterCardIndex).getDescription());
         gameTable.setCharacterCard(characterCardIndex,newCharacterCard);
 
-        changes.add(ModelChanges.CHARACTERCARD_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.CHARACTERCARD_CHANGED);
+        modelChanges.characterID=characterCardIndex;
     }
 
     public void updateStudentsOnIsle(int isleID, HashMap<RealmColors,Integer> newStudentsOnIsle) {
         gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle);
 
-        changes.add(ModelChanges.ISLE_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.ISLE_CHANGED);
+        modelChanges.isleID=isleID;
     }
 
     public void updateDenyOnIsle(int isleID, int denyCard) { gameTable.setDenyOnIsle(isleID,denyCard);
 
-        changes.add(ModelChanges.ISLE_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.ISLE_CHANGED);
+        modelChanges.isleID=isleID;
     }
 
     public void updateIsle(GameTableInformation.Isle newIsle, int isleID) {
@@ -153,7 +160,8 @@ public class ModelStorage {
         }
         gameTable.setIsles(newIsles);
 
-        changes.add(ModelChanges.ISLELAYOUT_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.ISLELAYOUT_CHANGED);
+        modelChanges.isleID=mnm.getWhereMNId();
     }
 
     public void updateIsles(EffectActivation_UpdateMsg ea) {
@@ -168,14 +176,15 @@ public class ModelStorage {
         }
         gameTable.setIsles(newIsles);
 
-        changes.add(ModelChanges.ISLELAYOUT_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.ISLELAYOUT_CHANGED);
     }
 
     public void updateCloud(HashMap<RealmColors, Integer> newCloud, int cloudID) {
         GameTableInformation.Cloud updatedCloud = new GameTableInformation.Cloud(newCloud);
         gameTable.setCloud(cloudID,updatedCloud);
 
-        changes.add(ModelChanges.CLOUDS_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.CLOUDS_CHANGED);
+        modelChanges.cloudID=cloudID;
     }
 
     public void updateFillClouds(ArrayList<HashMap<RealmColors, Integer>> clouds) {
@@ -183,18 +192,13 @@ public class ModelStorage {
             GameTableInformation.Cloud newCloud = new GameTableInformation.Cloud(clouds.get(i));
             gameTable.setCloud(i, newCloud);
         }
-        changes.add(ModelChanges.CLOUDS_CHANGED);
+        modelChanges.toUpdate.add(ToUpdate.CLOUDS_CHANGED);
     }
 
     public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) {
         gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue);
-        changes.add(ModelChanges.GNRLRESERVE_CHANGED);
-    }
 
-    public void removeChanges(){
-        for(int i=0;i<changes.size();i++){
-            changes.remove(i);
-        }
+        modelChanges.toUpdate.add(ToUpdate.GNRLRESERVE_CHANGED);
     }
 
     // GETTERS:
@@ -213,8 +217,7 @@ public class ModelStorage {
 
     public int getNumberOfIsles() { return gameTable.getIsles().size(); }
 
-    public ArrayList<ModelChanges> getChanges() {
-        return changes;
+    public ModelChanges getModelChanges() {
+        return modelChanges;
     }
-
 }

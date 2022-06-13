@@ -191,6 +191,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
                 storage.setupStorage(gc);
+                storage.getModelChanges().setPlayerID(playerID);
                 if(GUI){
                     setStorageForGUI();
                 }else{
@@ -201,19 +202,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case FILLCLOUD_UPDATE -> {
                 FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
                 storage.updateFillClouds(fc.getClouds());
-                view.printChanges(playerID);
+                view.printChanges();
             }
             case ASSISTANTCARD_UPDATE -> {
                 AssistCard_UpdateMsg ac = (AssistCard_UpdateMsg) message;
                 storage.updateDiscardPile(ac.getPlayerID(), ac.getTurnOrderPlayed(), ac.getMovementMNPlayed());
                 storage.updateAssistantsCard(ac.getPlayerID(), ac.getTurnOrders(), ac.getMovementsMN());
-                view.printChanges(ac.getPlayerID());
+                view.printChanges();
             }
             case STUDENTTODINING_UPDATE -> {
                 StudentToDining_UpdateMsg std = (StudentToDining_UpdateMsg) message;
                 storage.updateStudentsInEntrance(std.getPlayerID(), std.getEntrance());
                 storage.updateStudentsInDining(std.getPlayerID(), std.getDining());
-                view.printChanges(std.getPlayerID());
+                view.printChanges();
             }
             case PROFESSOR_UPDATE -> {
                 Professor_UpdateMsg p = (Professor_UpdateMsg) message;
@@ -228,19 +229,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
                 storage.updateStudentsInEntrance(sti.getPlayerID(), sti.getEntrance());
                 storage.updateStudentsOnIsle(sti.getIsleID(), sti.getIsleStudents());
-                view.printChanges(playerID);
+                view.printChanges();
             }
             case MNMOVEMENT_UPDATE -> {
                 MNMovement_UpdateMsg mnm = (MNMovement_UpdateMsg) message;
                 storage.updateIsles(mnm);
                 storage.updateNumberOfTowers(mnm.getNumberOfTowers());
-                view.printChanges(playerID);
+                view.printChanges();
             }
             case CLOUDCHOICE_UPDATE -> {
                 PickFromCloud_UpdateMsg pfc = (PickFromCloud_UpdateMsg) message;
                 storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
                 storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
-                view.printChanges(playerID);
+                view.printChanges();
             }
             case CHARACTERCARD_UPDATE -> {
                 CharacterCard_UpdateMsg cc = (CharacterCard_UpdateMsg) message;
@@ -248,7 +249,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 storage.updateMoney(cc.getPlayerID(), cc.getPlayerMoney());
                 storage.updateGeneralMoneyReserve(cc.getGeneralReserve());
                 storage.updateCharacterCard(cc.getCharacterCardId(), cc.getCardCost(), cc.getStudentsOnCharacter(), cc.getDenyCards());
-                view.printChanges(playerID);
+                view.printChanges();
             }
             case EFFECTACTIVATION_UPDATE -> {
                 EffectActivation_UpdateMsg ea = (EffectActivation_UpdateMsg) message;
@@ -288,7 +289,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                     }
                     case CENTAUR, KNIGHT, FUNGIST -> { }
                 }
-                view.printChanges(playerID);
+                view.printChanges();
             }
             case GAMEPHASE_UPDATE -> {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;

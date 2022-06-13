@@ -1,8 +1,11 @@
 package it.polimi.ingsw.View.GUI.IslesPanels;
 
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.AssistantCardPanel;
 import it.polimi.ingsw.View.GUI.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 import it.polimi.ingsw.View.GUI.MagePanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -316,7 +319,7 @@ public class TableCenterPanel extends JPanel {
 
     }
 
-    public void updateIsle(){
+    public void updateIsle(int isleID){
 
     }
 
@@ -324,4 +327,16 @@ public class TableCenterPanel extends JPanel {
 
     }
 
+    public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance){
+        for(int i=0;i<islesPanels.size();i++){
+            islesPanels.get(i).addMouseListener(new IsleListener(this,viewObserverList,entrance,islesPanels.get(i).getIsleID()));
+        }
+    }
+
+    public void removeIslesClickable(){
+        for(int i=0;i<islesPanels.size();i++){
+            System.out.println("listener on isle"+i+": "+islesPanels.get(i).getMouseListeners().length);
+            islesPanels.get(i).removeMouseListener(islesPanels.get(i).getMouseListeners()[0]);
+        }
+    }
 }

@@ -96,9 +96,6 @@ public class IslePanel extends JPanel {
         }
     }
 
-    public void setClickable(){
-        addMouseListener(new IsleListener(this));
-    }
 
     public void removeClickable(){
         removeMouseListener(this.getMouseListeners()[0]);

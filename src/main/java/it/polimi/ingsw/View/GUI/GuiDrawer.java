@@ -2,6 +2,7 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -63,6 +64,9 @@ public class GuiDrawer extends ViewSubject {
      * the username of the player currently using the GUI
      */
     String usernamePlaying;
+
+
+    ModelChanges modelChanges;
 
     /**
      * this method initialize the first screen when you open the app where you'll be asked the username, the game mode and the
@@ -221,23 +225,22 @@ public class GuiDrawer extends ViewSubject {
         }
         JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
 
-        gameScreenPanel.setClickableStudents(playerID,getViewObserverList());
+        gameScreenPanel.setClickableStudents(modelChanges.getPlayerID(),getViewObserverList());
     }
 
 
     /**
      * this method update the gamescreen panel according to the changes occurred in the modelStorage. The GuiDrawer reads the changes arraylist
      * in the modelStorage to correctly know which component to update.
-     * @param playerID the playerId passed from the ClientController, it's the ID related to the change occurred
      */
-    public void updateGameScreenPanel(int playerID){
+    public void updateGameScreenPanel(){
         boolean gameStart=true;
 
-        for(int i=0;i<modelStorage.getChanges().size();i++){
-            switch(modelStorage.getChanges().get(i)){
+
+        for(int i=0;i<modelChanges.getToUpdate().size();i++){
+            switch(modelChanges.getToUpdate().get(i)){
                 case CLOUDS_CHANGED -> {
                     if(gameStart) {
-                        this.playerID=playerID;//set the ID of the player using the GUI
                         createGameScreen();
                         showGameScreen();
                         gameStart=false;
@@ -246,19 +249,19 @@ public class GuiDrawer extends ViewSubject {
                     }
 
                 }
-                case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAssistCard(playerID);
-                case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(playerID);
-                case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(playerID);
-                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors(playerID);
+                case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
+                case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
+                case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
+                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins();
                 case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
-                case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle();
+                case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getPlayingID());
                 case ISLELAYOUT_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsleLayout();
                 //missing case character card and cloud changes
 
             }
         }
-        modelStorage.getChanges().clear();
+        modelChanges.getToUpdate().clear();
     }
 
     public void showServiceMessage(String serviceMessage){
@@ -271,5 +274,6 @@ public class GuiDrawer extends ViewSubject {
 
     public void setModelStorage(ModelStorage modelStorage) {
         this.modelStorage = modelStorage;
+        modelChanges=modelStorage.getModelChanges();
     }
 }

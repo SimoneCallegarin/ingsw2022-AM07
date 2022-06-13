@@ -4,6 +4,7 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.EventListeners.EntranceListener;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -57,10 +58,11 @@ public class EntrancePanel extends JPanel{
     /**
      * this method is called when the player can move the students in order to listen to clicks on a student
      * @param viewObserverList the observer list to pass to the entrance listener
+     * @param tableCenterPanel the table center panel used by the entrance listener to set the isles clickable after one click
      */
-    public void setClickable(ArrayList<ViewObserver> viewObserverList){
+    public void setClickable(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
         for(int i=0;i<this.getComponentCount();i++){
-            this.getComponent(i).addMouseListener(new EntranceListener((DashboardPanel) this.getParent(),viewObserverList));
+            this.getComponent(i).addMouseListener(new EntranceListener((DashboardPanel) this.getParent(),viewObserverList,tableCenterPanel,this));
         }
     }
 

@@ -45,8 +45,8 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void printChanges(int playerID) {
-        guiDrawer.updateGameScreenPanel(playerID);
+    public void printChanges() {
+        guiDrawer.updateGameScreenPanel();
     }
 
     @Override

@@ -18,7 +18,7 @@ public interface View {
 
      void printMessage(ServiceMessage message);
 
-     void printChanges(int playerID);
+     void printChanges();
 
      void askMNMovement(boolean expertMode);
 

@@ -98,10 +98,10 @@ public class GameScreenPanel extends JPanel {
      */
     public void setClickableStudents(int playerID, ArrayList<ViewObserver> viewObserverList) {
         switch (playerID){
-            case 0-> dashboard1.getEntrance().setClickable(viewObserverList);
-            case 1-> dashboard2.getEntrance().setClickable(viewObserverList);
-            case 2-> dashboard3.getEntrance().setClickable(viewObserverList);
-            case 3-> dashboard4.getEntrance().setClickable(viewObserverList);
+            case 0-> dashboard1.getEntrance().setClickable(viewObserverList,tableCenterPanel);
+            case 1-> dashboard2.getEntrance().setClickable(viewObserverList,tableCenterPanel);
+            case 2-> dashboard3.getEntrance().setClickable(viewObserverList,tableCenterPanel);
+            case 3-> dashboard4.getEntrance().setClickable(viewObserverList,tableCenterPanel);
         }
     }
 

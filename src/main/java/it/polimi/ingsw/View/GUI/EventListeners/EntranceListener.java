@@ -4,6 +4,8 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,18 +16,22 @@ import java.util.ArrayList;
  */
 public class EntranceListener extends ViewSubject implements MouseListener  {
     /**
-     * this boolean is used to set the dining clickable only one time and avoid adding multiple listeners to it and sending
-     * multiple studentToDining messages to the server
+     * this boolean is used to set the dining and the isles clickable only one time and avoid adding multiple listeners to it and sending
+     * multiple studentToDining/studentToIsle messages to the server
      */
-    static boolean diningClickable;
+    static boolean setClickable;
+    EntrancePanel entrance;
+    TableCenterPanel tableCenter;
     DashboardPanel dashboardListened;
     ArrayList<ViewObserver> observers;
 
-    public EntranceListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList) {
+    public EntranceListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance) {
+        this.entrance=entrance;
         this.dashboardListened = dashboardListened;
+        this.tableCenter=tableCenter;
         observers=viewObserverList;
         addAllObservers(viewObserverList);
-        diningClickable=false;
+        setClickable =false;
     }
 
     @Override
@@ -42,9 +48,10 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
         int finalColorPressed = colorPressed;
         System.out.println(finalColorPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
-        if(!diningClickable) {
+        if(!setClickable) {
             dashboardListened.getDining().setCLickable(observers);//so after at least one student button press the dining room is set clickable
-            diningClickable=true;
+            tableCenter.setIslesClickable(getViewObserverList(),entrance);
+            setClickable =true;
         }
     }
 
