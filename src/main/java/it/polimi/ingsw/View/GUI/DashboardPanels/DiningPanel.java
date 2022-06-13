@@ -2,6 +2,7 @@ package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.EventListeners.DiningListener;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -66,9 +67,9 @@ public class DiningPanel extends JPanel {
      * this method is called by the Color Listener after one student button press
      * @param observers the observers list which are notified by the listener
      */
-    public void setCLickable(ArrayList<ViewObserver> observers){
+    public void setCLickable(ArrayList<ViewObserver> observers, TableCenterPanel tableCenterPanel){
         EntrancePanel pairedEntrance=((DashboardPanel)this.getParent()).getEntrance();
-        addMouseListener(new DiningListener(this,pairedEntrance,observers));
+        addMouseListener(new DiningListener(this,pairedEntrance,observers,tableCenterPanel));
     }
 
     /**

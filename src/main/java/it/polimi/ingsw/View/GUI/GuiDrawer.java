@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GuiDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
-    private int playerID;
 
     private final String frameTitle="Eriantys Game";
 
@@ -245,6 +244,7 @@ public class GuiDrawer extends ViewSubject {
 
 
         for(int i=0;i<modelChanges.getToUpdate().size();i++){
+
             switch(modelChanges.getToUpdate().get(i)){
                 case CLOUDS_CHANGED -> {
                     if(gameStart) {
@@ -256,16 +256,95 @@ public class GuiDrawer extends ViewSubject {
                     }
 
                 }
-                case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
-                case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
-                case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
-                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
-                case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins();
-                case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages(modelChanges.getPlayingID());
-                case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
-                case ISLELAYOUT_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                case DISCARDPILE_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground()  {
+                            gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
+                case ENTRANCE_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground()  {
+                            gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
+                case STUDENTDINING_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground()  {
+                            gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
+                case PROFDINING_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground()  {
+                            gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
+                case COINS_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground()  {
+                            gameScreenPanel.tableCenterPanel.updateCoins();
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.tableCenterPanel.updateCoins();
+                case TOWERSTORAGE_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground()  {
+                            gameScreenPanel.updateTowerStorages(modelChanges.getPlayingID());
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.updateTowerStorages(modelChanges.getPlayingID());
+                case ISLE_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground() {
+                            gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
+                case ISLELAYOUT_CHANGED ->{
+                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground()  {
+                            gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                            return null;
+                        }
+                    };
+                    swingWorker.execute();
+                }
+                //gameScreenPanel.tableCenterPanel.updateIsleLayout();
                 //missing case character card and cloud changes
-
             }
         }
         modelChanges.getToUpdate().clear();

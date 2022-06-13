@@ -49,8 +49,8 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
         System.out.println(finalColorPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
         if(!setClickable) {
-            dashboardListened.getDining().setCLickable(observers);//so after at least one student button press the dining room is set clickable
-            tableCenter.setIslesClickable(getViewObserverList(),entrance);
+            dashboardListened.getDining().setCLickable(observers,tableCenter);//so after at least one student button press the dining room is set clickable
+            tableCenter.setIslesClickable(getViewObserverList(),entrance,dashboardListened.getDining());
             setClickable =true;
         }
     }

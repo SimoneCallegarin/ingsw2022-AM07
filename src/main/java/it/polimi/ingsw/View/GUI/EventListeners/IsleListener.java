@@ -2,6 +2,7 @@ package it.polimi.ingsw.View.GUI.EventListeners;
 
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.IslePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
@@ -14,19 +15,21 @@ public class IsleListener extends ViewSubject implements MouseListener {
 
     TableCenterPanel tableCenterPanel;
     EntrancePanel entrance;
+    DiningPanel dining;
     int idListened;
 
-    public IsleListener(TableCenterPanel tableCenterPanel, ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, int idListened) {
+    public IsleListener(TableCenterPanel tableCenterPanel, ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, int idListened, DiningPanel dining) {
         this.tableCenterPanel=tableCenterPanel;
         addAllObservers(viewObserverList);
         this.entrance=entrance;
         this.idListened=idListened;
-
+        this.dining=dining;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         notifyObserver(obs->obs.onStudentMovement_toIsle(idListened));
+
         tableCenterPanel.removeIslesClickable();
         entrance.removeClickable();
     }

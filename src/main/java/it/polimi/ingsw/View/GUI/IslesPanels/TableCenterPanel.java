@@ -4,6 +4,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.AssistantCardPanel;
 import it.polimi.ingsw.View.GUI.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 import it.polimi.ingsw.View.GUI.MagePanel;
@@ -331,9 +332,9 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
-    public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance){
+    public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, DiningPanel dining){
         for(int i=0;i<islesPanels.size();i++){
-            islesPanels.get(i).addMouseListener(new IsleListener(this,viewObserverList,entrance,islesPanels.get(i).getIsleID()));
+            islesPanels.get(i).addMouseListener(new IsleListener(this,viewObserverList,entrance,islesPanels.get(i).getIsleID(),dining));
         }
     }
 
