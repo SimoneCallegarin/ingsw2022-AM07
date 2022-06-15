@@ -8,8 +8,6 @@ import it.polimi.ingsw.Observer.ViewSubject;
 import it.polimi.ingsw.View.GUI.GuiDrawer;
 import it.polimi.ingsw.View.View;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 //import org.fusesource.jansi.AnsiConsole;
@@ -25,10 +23,6 @@ public class CLI extends ViewSubject implements View {
 
     Thread inputThread;
     /**
-     * The bufferReader that reads the input stream.
-     */
-    //private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    /**
      * Drawer of the CLI, draws the game table and other things.
      */
     private final CLIDrawer cliDrawer;
@@ -41,7 +35,6 @@ public class CLI extends ViewSubject implements View {
     /**
      * Launches a thread for user input reading.
      */
-    //public static String getString() { return getString(br); } //need to make it always run not only when the method is called
     public String readUserInput() throws ExecutionException {
         FutureTask<String> asyncInput = new FutureTask<>(new InputReadCall());
         inputThread = new Thread(asyncInput);
@@ -461,7 +454,6 @@ public class CLI extends ViewSubject implements View {
         notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
     }
 
-    public void printChanges(int playerID) { System.out.println(cliDrawer.printGameTable()); }
     /**
      * Asks the player in which isle he wants to move mother nature.
      * Notifies the choice to the ClientController.
@@ -574,8 +566,13 @@ public class CLI extends ViewSubject implements View {
      * Getter method for the CLIDrawer.
      * @return the CLIDrawer.
      */
+    @Override
     public CLIDrawer getCLIDrawer() { return cliDrawer; }
 
+    /**
+     * Getter method for the GUIDrawer.
+     * @return null because the CLI doesn't have a GUIDrawer.
+     */
     @Override
     public GuiDrawer getGUIDrawer() { return null; }
 }

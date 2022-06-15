@@ -355,7 +355,6 @@ public class Game extends ModelSubject {
      */
     public void moveStudentInDiningRoom(int idPlayer, int colorIndex) {
         RealmColors color = RealmColors.getColor(colorIndex);
-        int indexFarmer=0;
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
             if (colorIndex >= 0 && colorIndex <= 4) {
                 if (players.get(idPlayer).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
@@ -446,12 +445,12 @@ public class Game extends ModelSubject {
                     checkEndGame();
                     if (!lastRound) {
                         actionPhase = ActionPhases.CHOOSE_CLOUD;
-                        notifyMNMovement();
+                        notifyMNMovement(false);
                         notifyTurn();
                     } else {
                         playerCounter++;
                         actionPhase = ActionPhases.MOVE_STUDENTS;
-                        notifyMNMovement();
+                        notifyMNMovement(false);
                         nextPlayer();
                     }
                 } else {
@@ -468,14 +467,14 @@ public class Game extends ModelSubject {
     /**
      * Initialize the parameters needed by the view consequently to the movement of mother nature.
      */
-    private void notifyMNMovement() {
-        ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
-        ArrayList<Integer> numIsles=new ArrayList<>();
-        ArrayList<TowerColors> towerColors=new ArrayList<>();
-        ArrayList<Boolean> denyCards=new ArrayList<>();
+    private void notifyMNMovement(boolean isEffect) {
+        ArrayList<HashMap<RealmColors,Integer>> students = new ArrayList<>();
+        ArrayList<Integer> numIsles = new ArrayList<>();
+        ArrayList<TowerColors> towerColors = new ArrayList<>();
+        ArrayList<Boolean> denyCards = new ArrayList<>();
         ArrayList<Integer> numTowers = new ArrayList<>();
-        int whereMnId=0;
-        for(Isle isle:gameTable.getIsleManager().getIsles()){
+        int whereMnId = 0;
+        for(Isle isle : gameTable.getIsleManager().getIsles()){
             students.add(isle.getStudents());
             numIsles.add(isle.getNumOfIsles());
             towerColors.add(isle.getTowersColor());
@@ -491,7 +490,10 @@ public class Game extends ModelSubject {
         for (Player p : players)
             numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
         int finalWhereMnId = whereMnId;
-        notifyObserver(obs->obs.onMNMovement(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
+        if (isEffect)
+            notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(), students, towerColors, finalWhereMnId, denyCards, numIsles, numTowers));
+        else
+            notifyObserver(obs->obs.onMNMovement(gameTable.getIsleManager().getIsles().size(), students, towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
     }
 
     /**
@@ -952,31 +954,7 @@ public class Game extends ModelSubject {
                 }
                 notifyObserver(obs -> obs.onEffectActivation(professors));
             }
-            case HERALD -> {
-                ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
-                ArrayList<Integer> numIsles=new ArrayList<>();
-                ArrayList<TowerColors> towerColors=new ArrayList<>();
-                ArrayList<Boolean> denyCards=new ArrayList<>();
-                ArrayList<Integer> numTowers = new ArrayList<>();
-                int whereMnId=0;
-                for(Isle isle:gameTable.getIsleManager().getIsles()){
-                    students.add(isle.getStudents());
-                    numIsles.add(isle.getNumOfIsles());
-                    towerColors.add(isle.getTowersColor());
-                    if(isle.getDenyCards()==0){
-                        denyCards.add(false);
-                    }else{
-                        denyCards.add(true);
-                    }
-                    if(isle.getMotherNature()){
-                        whereMnId=isle.getIdIsle();
-                    }
-                }
-                for (Player p : players)
-                    numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
-                int finalWhereMnId = whereMnId;
-                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId, denyCards, numIsles, numTowers));
-            }
+            case HERALD -> { notifyMNMovement(true); }
             case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getTurnOrder(), players.get(idPlayer).getDiscardPile().getMnMovement()));
             case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
             case CENTAUR, KNIGHT, FUNGIST -> notifyObserver(ModelObserver::onEffectActivation);
