@@ -7,14 +7,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Professor_UpdateMsg extends NetworkMessage{
+    /**
+     * Professors in all the players dashboards.
+     */
     private final ArrayList<HashMap<RealmColors,Integer>> professors;
 
+    /**
+     * Professor_UpdateMsg constructor.
+     * @param messageType it will be PROFESSOR_UPDATE.
+     * @param professors professors of all the players.
+     */
     public Professor_UpdateMsg(MessageType messageType, ArrayList<HashMap<RealmColors, Integer>> professors) {
         super(messageType);
         this.professors = professors;
     }
 
-    public ArrayList<HashMap<RealmColors, Integer>> getProfessors() {
-        return professors;
-    }
+    /**
+     * Getter method for the professors.
+     * @return the professors in all the players dashboards.
+     */
+    public ArrayList<HashMap<RealmColors, Integer>> getProfessors() { return professors; }
 }

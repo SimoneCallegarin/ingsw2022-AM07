@@ -7,23 +7,82 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * this interface offers the method used by the model observers to send update of his state in order to update the view accordingly
+ * Interface that offers the methods used by the model observers to send updates of his state in order to update the view accordingly.
  */
 public interface ModelObserver {
 
+    /**
+     * Updates the ModelStorage by adding all the components of the game that are modified or created at the start of the game.
+     * @param numPlayers Number of players of the game.
+     * @param nicknames Nicknames of each player.
+     * @param gameMode Game mode of the game.
+     * @param whereMNId ID of the isle where there's mother nature.
+     * @param entrances Students on each entrance.
+     * @param emptyClouds clouds Students on each cloud (they will be empty at the start of the game).
+     * @param isleStudents Students on each isle.
+     * @param studentsOnCharacter Students on each character card.
+     * @param numTowers Number of towers of each player.
+     * @param money Number of money of each player.
+     * @param generalReserve Number of money in the general money reserve.
+     * @param towerColors Color of the towers on each tower storage.
+     * @param characterNames Name of each character card.
+     * @param characterCost Cost of each character card.
+     * @param denyCards Deny cards on each character card.
+     * @param characterCardsDescription Brief description of each character card.
+     * @param squads Team of each player.
+     */
     void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors,Integer>> emptyClouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors,Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards, ArrayList<String> characterCardsDescription, ArrayList<Squads> squads);
 
+    /**
+     * Updates the ModelStorage when there's a change of the turn or when the game is ending.
+     * @param activePlayer The player that this turn is the active one.
+     * @param gamePhases The actual game phase of the turn.
+     * @param actionPhases The actual sub-phase of the action phase of the turn.
+     * @param winner It's equal to the player ID,or to -1 if there isn't a winner yet.
+     */
     void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases, int winner);
 
-    void onAssistantCard(int idPlayer, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrderDiscardPile, ArrayList<Integer> movementMNDiscardPile);
+    /**
+     * Updates the ModelStorage when an assistant card is played.
+     * @param playerID ID of the player that played the assistant card.
+     * @param turnOrderPlayed Turn order of the assistant card played that now is in the discard pile.
+     * @param movementMNPlayed Mother nature possible movement of the assistant card played that now is in the discard pile.
+     * @param turnOrdersAvailable List of all the turn orders of the assistant cards that the player hasn't played yet.
+     * @param movementsMNAvailable List of all the possible mother nature movement of the assistant cards that the player hasn't played yet.
+     */
+    void onAssistantCard(int playerID, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrdersAvailable, ArrayList<Integer> movementsMNAvailable);
 
-    void onStudentMoving_toDining(int idPlayer, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);
+    /**
+     * Updates the ModelStorage when a student is moved on the dining room.
+     * @param playerID ID of the player that moved the student from his entrance to his dining room.
+     * @param entrance students on his entrance.
+     * @param dining students on his dining room.
+     */
+    void onStudentMoving_toDining(int playerID, HashMap<RealmColors,Integer> entrance, HashMap<RealmColors,Integer> dining);
 
+    /**
+     * Updates the ModelStorage when a student is moved on the dining room and there's a change in the professors.
+     * @param professors professors of all the players.
+     */
     void onProfessorUpdate(ArrayList<HashMap<RealmColors,Integer>> professors);
 
+    /**
+     * Updates the ModelStorage when there's a change in the money of a player and the general money reserve.
+     * (by gaining one from the dining room or by losing them from playing a character card).
+     * @param playerID ID of the player that got his money changed.
+     * @param money number of money of the player now.
+     * @param generalMoneyReserve general money reserve updated number of money.
+     */
     void onMoneyUpdate(int playerID, int money, int generalMoneyReserve);
 
-    void onStudentMoving_toIsle(int idPlayer,HashMap<RealmColors,Integer> entrance,int isleID, HashMap<RealmColors,Integer> isleStudents);
+    /**
+     * Updates the ModelStorage when a player moves a student on an isle.
+     * @param playerID ID of the player that placed a student on an isle.
+     * @param entrance students on the entrance of the player.
+     * @param isleID ID of the isle where the player placed the student.
+     * @param isleStudents students of the isle where the player placed the student.
+     */
+    void onStudentMoving_toIsle(int playerID, HashMap<RealmColors,Integer> entrance, int isleID, HashMap<RealmColors,Integer> isleStudents);
 
     void onMNMovement(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers);
 
@@ -46,7 +105,7 @@ public interface ModelObserver {
     void onEffectActivation(int playerID, int turnOrder, int mnMovement);
 
     //GRANDMA
-    void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, int isleID, int denyCard);
+    void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard);
 
     //CENTAUR, KNIGHT, FUNGIST
     void onEffectActivation();

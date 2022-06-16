@@ -1,4 +1,4 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.Buttons;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class emptyStudentButton extends JButton {
         setPreferredSize(new Dimension(25,25));
         BufferedImage img=null;
         try{
-            img= ImageIO.read(cl.getResourceAsStream("cerchi.png"));
+            img= ImageIO.read(cl.getResourceAsStream("Dashboard/circles.png"));
         }catch(IOException e){
             e.printStackTrace();
         }

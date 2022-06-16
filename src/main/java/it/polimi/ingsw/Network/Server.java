@@ -7,7 +7,6 @@ import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.View.VirtualView;
@@ -31,6 +30,10 @@ public class Server {
      */
     private final ArrayList<GameController> activeMatches;
     /**
+     * List containing the virtual views initialized
+     */
+    private final ArrayList<VirtualView> virtualViews;
+    /**
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
     private final ArrayList<String> chosenNicknames;
@@ -44,11 +47,6 @@ public class Server {
      * the matchID of the game he is playing and his playerID in that game.
      */
     private final HashMap<String,PlayerInfo> players;
-    /**
-     * List containing the virtual views initialized
-     */
-    private final ArrayList<VirtualView> virtualViews;
-
 
     /**
      * constructor of the Server
@@ -210,22 +208,17 @@ public class Server {
     public void onDisconnection(String nickname) {
         System.out.println("Deleting match number " + getPlayerInfo(nickname).getMatchID());
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
+        activeMatches.remove(matchToEnd);
+        virtualViews.remove(matchToEnd);
         for (String player : chosenNicknames)
-            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected())
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
-            }
-        for (String playerToRemove : playersToRemove)
+        for (String playerToRemove : playersToRemove) {
             removePlayer(playerToRemove);
+            System.out.println("Removed player " + playerToRemove);
+        }
         playersToRemove.clear();
         System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
-    }
-
-    public void broadcastMessage(String nickname, NetworkMessage message) {
-        int matchToBroadcast = getPlayerInfo(nickname).getMatchID();
-        for (String player : chosenNicknames)
-            if(players.get(player).getMatchID() == matchToBroadcast && players.get(player).getClientHandler().isConnected()) {
-                players.get(player).getClientHandler().send(message);
-            }
     }
 
     /**
@@ -243,8 +236,8 @@ public class Server {
             hostName = args[0];
             portNumber = Integer.parseInt(args[1]);
         }else{
-            hostName = ServerSettings.ReadHostFromJSON();
-            portNumber = ServerSettings.ReadPortFromJSON();
+            hostName = ServerSettings.getHostName();
+            portNumber = ServerSettings.getPort();
         }
 
         Server server = new Server(portNumber);

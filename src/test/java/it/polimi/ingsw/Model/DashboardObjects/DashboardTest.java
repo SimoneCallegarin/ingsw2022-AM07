@@ -14,7 +14,7 @@ class DashboardTest {
     @Test
     public void basicDashboardCreation() {
         Dashboard d = new Dashboard(2, 1);
-        assertEquals(1, d.getIdDashboard());
+        assertEquals(1, d.getDashboardID());
         Entrance e = d.getEntrance();
         assertEquals(0, e.getNumberOfStudents());
         e.addStudent(RealmColors.YELLOW);

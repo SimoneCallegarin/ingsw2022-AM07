@@ -21,6 +21,7 @@ public class ClientListener extends NetworkSubject implements Runnable {
 
     public void stopListener() {
         Thread.currentThread().interrupt();
+        System.out.println("Thread listener interrupted");
     }
 
     @Override
@@ -31,17 +32,14 @@ public class ClientListener extends NetworkSubject implements Runnable {
             try {
                 messageReceived = (NetworkMessage) input.readObject();
                 if (messageReceived.getMessageType() == MessageType.QUIT) {
-                    ServiceMessage sm = (ServiceMessage) messageReceived;
-                    System.out.println(sm.getMessage());
+                    System.err.println("QUIT message received");
                     cs.disconnect();
                 }
-                else
-                    notifyObserver(messageReceived);
+                notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
                 System.out.println("An error occurred...");
                 cs.disconnect();
             }
         }
-        System.out.println("Thread listener interrupted");
     }
 }

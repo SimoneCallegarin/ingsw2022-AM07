@@ -1,46 +1,49 @@
 package it.polimi.ingsw.View.GUI;
 
-import it.polimi.ingsw.Model.Game;
 
+
+import it.polimi.ingsw.Observer.ViewObserver;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+
 
 public class GameScreenPanel extends JPanel {
-    Game game;
-    private  final int DASHBOARD_WIDTH = 250;
-    private  final int DASHBOARD_HEIGHT = 800;
-    GridBagConstraints dashboardConstraints;
 
-    private Graphics g;
+    private final ModelStorage storage;
 
-    private ModelStorage storage;
+    JPanel dashboardContainerPanel1;
 
-    private void setGraphics(Graphics g) { this.g = g; }
+    JPanel dashboardContainerPanel2;
 
-    public void setStorage(ModelStorage storage) { this.storage = storage; }
+    TableCenterPanel tableCenterPanel;
 
-    public ModelStorage getStorage() { return storage; }
+    DashboardPanel dashboard1;
+    DashboardPanel dashboard2;
+    DashboardPanel dashboard3;
+    DashboardPanel dashboard4;
 
     /**
      * Create a new buffered JPanel with the specified layout manager
      *
      * @param layout the LayoutManager to use
+     * @param usernamePlaying the username of the current player using the GUI to pass to the tableCenter to highlight which is his dashboard
      */
-    public GameScreenPanel(LayoutManager layout, Game game, int frameWidth, int frameHeight) {
+    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying) {
         super(layout);
-        this.game=game;
+        this.storage=storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
-        JPanel dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
-        JPanel dashboardContainerPanel2=new JPanel(new GridLayout(2,1));
+        dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
+        dashboardContainerPanel1.setBackground(Color.CYAN);
+        dashboardContainerPanel2=new JPanel(new GridLayout(2,1));
+        dashboardContainerPanel2.setBackground(Color.CYAN);
+
 
         GridBagConstraints gamescreenConstraints=new GridBagConstraints();
-        GridBagConstraints DCPConstraints=new GridBagConstraints();//dashboard container panel constraints
         //first i divide the gamescreen in 3 columns and 1 row and i made the isleManagerPanel take the most space in the center
         gamescreenConstraints.gridy=0;
         gamescreenConstraints.weighty=1;
@@ -48,10 +51,11 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        add(new IsleManagerPanel(),gamescreenConstraints);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying);
+        add(tableCenterPanel,gamescreenConstraints);
 
-        //then i add the two dashboard container Panel on the left and on the right and i set the weights in order to correctly size the dashboard
-        gamescreenConstraints.weightx=0.2;
+        //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
+        gamescreenConstraints.weightx=0.05;
         gamescreenConstraints.weighty=0.2;
         gamescreenConstraints.gridx=0;
         add(dashboardContainerPanel1,gamescreenConstraints);
@@ -59,16 +63,133 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.gridx=2;
         add(dashboardContainerPanel2,gamescreenConstraints);
 
+        switch (storage.getNumberOfPlayers()){
+            case 2->{
+                dashboard1=new DashboardPanel(storage,0);
+                dashboard2=new DashboardPanel(storage,1);
+                dashboardContainerPanel1.add(dashboard1);
+                dashboardContainerPanel2.add(dashboard2);
+            }
+            case 3->{
+                dashboard1=new DashboardPanel(storage,0);
+                dashboard2=new DashboardPanel(storage,1);
+                dashboard3=new DashboardPanel(storage,2);
+                dashboardContainerPanel1.add(dashboard1);
+                dashboardContainerPanel1.add(dashboard3);
+                dashboardContainerPanel2.add(dashboard2);
+            }
+            case 4->{
+                dashboard1=new DashboardPanel(storage,0);
+                dashboard2=new DashboardPanel(storage,1);
+                dashboard3=new DashboardPanel(storage,2);
+                dashboard4=new DashboardPanel(storage,3);
+                dashboardContainerPanel1.add(dashboard1);
+                dashboardContainerPanel1.add(dashboard3);
+                dashboardContainerPanel2.add(dashboard2);
+                dashboardContainerPanel2.add(dashboard4);
+            }
+        }
+    }
 
+    /**
+     * this method set the dashboard entrance clickable in order to select a student to move
+     * @param playerID the playerID used to identify which dashboard set movable
+     * @param viewObserverList the observer list to pass to the entrance listener
+     */
+    public void setClickableStudents(int playerID, ArrayList<ViewObserver> viewObserverList) {
+        switch (playerID){
+            case 0-> dashboard1.getEntrance().setClickable(viewObserverList,tableCenterPanel);
+            case 1-> dashboard2.getEntrance().setClickable(viewObserverList,tableCenterPanel);
+            case 2-> dashboard3.getEntrance().setClickable(viewObserverList,tableCenterPanel);
+            case 3-> dashboard4.getEntrance().setClickable(viewObserverList,tableCenterPanel);
+        }
+    }
 
-        //then i add the 4 dashbpoard to the containers
-        dashboardContainerPanel1.add(new DashboardPanel(game));
-        dashboardContainerPanel2.add(new DashboardPanel(game));
-
-        dashboardContainerPanel1.add(new DashboardPanel(game));
-        dashboardContainerPanel2.add(new DashboardPanel(game));
-
+    public void setClickableCharacters(){
 
     }
 
+    public void updateEntrance(int playerID){
+        switch(playerID){
+            case 0->{
+                dashboard1.getEntrance().resetEntrance();
+                dashboard1.getEntrance().initializeEntrance(storage);
+            }
+            case 1->{
+                dashboard2.getEntrance().resetEntrance();
+                dashboard2.getEntrance().initializeEntrance(storage);
+            }
+            case 2->{
+                dashboard3.getEntrance().resetEntrance();
+                dashboard3.getEntrance().initializeEntrance(storage);
+            }
+            case 3->{
+                dashboard4.getEntrance().resetEntrance();
+                dashboard4.getEntrance().initializeEntrance(storage);
+            }
+        }
+    }
+
+    public void updateStudentDinings(int playerID){
+        switch (playerID){
+            case 0->{
+                dashboard1.getDining().resetStudentDining();
+                dashboard1.getDining().initializeStudentDining(storage);
+            }
+            case 1->{
+                dashboard2.getDining().resetStudentDining();
+                dashboard2.getDining().initializeStudentDining(storage);
+            }
+            case 2->{
+                dashboard3.getDining().resetStudentDining();
+                dashboard3.getDining().initializeStudentDining(storage);
+            }
+            case 3->{
+                dashboard4.getDining().resetStudentDining();
+                dashboard4.getDining().initializeStudentDining(storage);
+            }
+        }
+    }
+
+    public void updateProfessors(int playerID){
+        switch(playerID){
+            case 0->{
+                dashboard1.getDining().resetProfessorDining();
+                dashboard1.getDining().initializeProfessorPanel(storage);
+            }
+            case 1->{
+                dashboard2.getDining().resetProfessorDining();
+                dashboard2.getDining().initializeProfessorPanel(storage);
+            }
+            case 2->{
+                dashboard3.getDining().resetProfessorDining();
+                dashboard3.getDining().initializeProfessorPanel(storage);
+            }
+            case 3->{
+                dashboard4.getDining().resetProfessorDining();
+                dashboard4.getDining().initializeProfessorPanel(storage);
+            }
+        }
+    }
+
+    public void updateTowerStorages(int playerID){
+        switch(playerID){
+            case 0->{
+                dashboard1.getTowerStorage().resetTowerStorage();
+                dashboard1.getTowerStorage().initializeTowerStorage(storage);
+            }
+            case 1->{
+                dashboard2.getTowerStorage().resetTowerStorage();
+                dashboard2.getTowerStorage().initializeTowerStorage(storage);
+            }
+            case 2->{
+                dashboard3.getTowerStorage().resetTowerStorage();
+                dashboard3.getTowerStorage().initializeTowerStorage(storage);
+            }
+            case 3->{
+                dashboard4.getTowerStorage().resetTowerStorage();
+                dashboard4.getTowerStorage().initializeTowerStorage(storage);
+            }
+        }
+    }
 }

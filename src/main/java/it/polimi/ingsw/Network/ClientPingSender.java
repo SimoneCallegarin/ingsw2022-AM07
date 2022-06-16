@@ -8,9 +8,9 @@ import java.util.TimerTask;
 
 public class ClientPingSender implements Runnable {
 
-    ConnectionSocket cs;
-    Timer timer;
-    TimerTask ping;
+    private final ConnectionSocket cs;
+    private final Timer timer;
+    private final TimerTask ping;
 
     class Pinger extends TimerTask {
 
@@ -33,8 +33,6 @@ public class ClientPingSender implements Runnable {
     }
 
     @Override
-    public void run() {
-        timer.schedule(ping, 100, 1000);
-    }
+    public void run() { timer.schedule(ping, 100, 1000); }
 
 }

@@ -22,6 +22,10 @@ public class Player {
      */
     private final Squads squad;
     /**
+     * This attribute represents the name of the mage deck chosen
+     */
+    private final Mages mage;
+    /**
      * This attribute is the deck of assistant cards
      */
     private final ArrayList<AssistantCard> mageDeck;
@@ -65,6 +69,7 @@ public class Player {
 
         this.dashboard = new Dashboard(numOfPlayers, idDashboard);
 
+        this.mage = Mages.getMage(idDashboard);
         this.mageDeck = new ArrayList<>(10);
         this.discardPile = new AssistantCard(0,0);
 
@@ -78,7 +83,8 @@ public class Player {
             this.mageDeck.add(i, new AssistantCard(i+1, (i/2)+1));
         }
 
-        this.money = 1;
+        //this.money = 1;
+        this.money = 3;
     }
 
     public AssistantCard getAssistantCardByTurnOrder(int turnOrder) {
@@ -223,4 +229,7 @@ public class Player {
      */
     public void setNotAlreadyPlayedACardThisTurn() { this.alreadyPlayedACardThisTurn = false; }
 
+    public Mages getMage() {
+        return mage;
+    }
 }

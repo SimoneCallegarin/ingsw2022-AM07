@@ -14,8 +14,8 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 
 /**
- * this class is used to manage the connection to the first client which connects to the server to play.
- * It has to get the setup choices by the first player and his moves.
+ * This class is used to manage the connection of a client that connects to the server.
+ * It has to get the setup choices by the first player and his moves, then it will handle the game.
  */
 public class ClientHandler implements Runnable {
 
@@ -51,6 +51,8 @@ public class ClientHandler implements Runnable {
      */
     private boolean connected;
 
+    private final Object outputLock;
+
     /**
      * constructor of the client handler
      * @param server the server associated to this client handler
@@ -61,6 +63,7 @@ public class ClientHandler implements Runnable {
         this.client = socket;
         this.handlerPhase = HandlerPhases.LOGIN_PHASE;
         this.connected = true;
+        this.outputLock = new Object();
         try {
             this.input = new ObjectInputStream(socket.getInputStream());
             this.output = new ObjectOutputStream(socket.getOutputStream());
@@ -109,13 +112,13 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * adds the player to a game, using some server methods that permits to find the matchID of the game he will play
+     * Adds the player to a game, using some server methods that permits to find the matchID of the game he will play
      */
     private void addPlayerToGame(GamePreferencesMessage preferences){
         if (handlerPhase == HandlerPhases.GAME_SETUP_PHASE)
             if (checkMessageType(preferences,MessageType.GAME_SETUP_INFO))
                 if (checkGamePreferencesValues(preferences)) {
-                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == 1) {
+                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1) {
                         System.out.println("Added player: " + nickname + " to a new game.");
                         send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
@@ -179,46 +182,46 @@ public class ClientHandler implements Runnable {
 
                         }
                         default -> {
-                            System.out.println("PLAYER_MOVE message received!");
                             pmm = (PlayerMoveMessage) message;
+                            System.out.println("PLAYER_MOVE message received from " + nickname + ": " + pmm);
                             handleGame(pmm);
                         }
                     }
                 }
             }
         } catch (NoSuchElementException | ClassNotFoundException e) {
+            System.out.println("NoSuchElementException thrown by: " + nickname);
             disconnect("NoSuchElementException thrown");
         }
     }
 
     /**
-     * it will remove all data saved in the server, connected to the player associated with this client handler.
-     * @throws IOException when there's an error in the exchanged messages.
+     * Removes all data saved in the server, connected to the player associated with this client handler.
      */
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
         System.out.println("QUIT message sent to " + nickname);
-        if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
-            server.onDisconnection(nickname);
         server.addPlayerToRemove(nickname);
         connected = false;
-        //output.close();
-        input.close();
         client.close();
-        //System.out.println("Stream closing successful!");
     }
 
+    /**
+     * Handles the disconnection of a player.
+     * @param error reason why the player left.
+     */
     public void disconnect(String error) {
         if (connected) {
-            System.out.println("TIMEOUT EXPIRED or ERROR");
+            System.out.println("TIMEOUT EXPIRED or ERROR " + "(" + nickname + ")");
             try {
                 shutConnection(error);
             } catch (IOException e) {
                 System.err.println("Error in stream closing");
-                e.printStackTrace();
             }
             Thread.currentThread().interrupt();
             System.out.println("Interrupting client handler thread of player " + nickname);
+            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
+                server.onDisconnection(nickname);
         }
     }
 
@@ -242,8 +245,10 @@ public class ClientHandler implements Runnable {
 
     public void send(NetworkMessage message) {
         try {
-            output.writeObject(message);
-            output.reset();
+            synchronized (outputLock) {
+                output.writeObject(message);
+                output.reset();
+            }
         } catch (IOException e) {
             System.out.println("Unreachable client");
         }
@@ -254,8 +259,10 @@ public class ClientHandler implements Runnable {
         try {
             handleConnection();
         } catch (IOException e) {
-            //System.out.println("TIMEOUT EXPIRED or ERROR");
-            disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
+            if (connected) {
+                System.out.println("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST " + "(" + nickname + ")");
+                disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
+            }
         }
     }
 }

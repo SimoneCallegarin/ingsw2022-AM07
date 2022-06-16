@@ -1,4 +1,4 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.IslesPanels;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -7,19 +7,17 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class IslePanel extends JPanel {
+public class DenyCardPanel extends JPanel {
 
-    public IslePanel() {
+    public DenyCardPanel() {
         setOpaque(false);
-        setBorder(BorderFactory.createLineBorder(Color.black));
-        setMinimumSize(new Dimension(100,100));
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         ClassLoader cl=this.getClass().getClassLoader();
-        InputStream url=cl.getResourceAsStream("GameTable/Isles/island1.png");
+        InputStream url=cl.getResourceAsStream("GameTable/Isles/deny_island_icon.png");
         BufferedImage img=null;
         try{
             img= ImageIO.read(url);

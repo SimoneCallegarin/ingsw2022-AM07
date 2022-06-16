@@ -1,31 +1,88 @@
 package it.polimi.ingsw.View.GUI;
 
-
-
-import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Game;
+import it.polimi.ingsw.Controller.ClientController;
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.View.CLI.CLIDrawer;
+import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
-public class GUIApp {
+public class GUIApp extends ViewSubject implements View {
 
-    public static void main(String[] args) {
-        //create the EDT to manage the event
-        SwingUtilities.invokeLater(GUIApp::createAndShowGUI);
+    private final GuiDrawer guiDrawer;
+
+    public GUIApp() {
+        guiDrawer = new GuiDrawer();
     }
 
-    private static void createAndShowGUI(){
-        System.out.println("Created GUI on EDT? "+
-                SwingUtilities.isEventDispatchThread());
-        Game game=new Game();
-        game.addFirstPlayer("filo",true,4);
-        game.addAnotherPlayer("calle");
-        game.addAnotherPlayer("jack");
-        game.addAnotherPlayer("comfy");
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        new GuiDrawer(game);
+
+    @Override
+    public void askUsername() {
+       guiDrawer.showUsernameForm();
     }
+
+    @Override
+    public void askGamePreferences() {
+        guiDrawer.showGamePreferencesForm();
+    }
+
+    @Override
+    public void askAssistantCard(int playerID) {
+        int turnOrder=guiDrawer.ShowAssistantCardForm(playerID);
+        notifyObserver(obs->obs.onAssistantCard(turnOrder));
+    }
+
+    @Override
+    public void askMove(boolean expertMode) {
+        guiDrawer.showMoveOptions(expertMode);
+    }
+
+    @Override
+    public void printMessage(ServiceMessage message) {
+        guiDrawer.showServiceMessage(message.getMessage());
+    }
+
+    @Override
+    public void printChanges() {
+        guiDrawer.updateGameScreenPanel();
+    }
+
+    @Override
+    public void askMNMovement(boolean expertMode) {
+        guiDrawer.showMNMovement();
+    }
+
+    @Override
+    public void askCloud(boolean expertMode) {
+
+    }
+
+    @Override
+    public void askCharacterEffectParameters(CharacterCardsName characterName) {
+
+    }
+
+    @Override
+    public CLIDrawer getCLIDrawer() {
+        //return guiDrawer;
+        return null;
+    }
+
+    @Override
+    public void addObs(ClientController clientController) { addObserver(clientController); }
+
+    @Override
+    public void ViewStart() {
+        SwingUtilities.invokeLater(guiDrawer::screeInitialization);
+    }
+
+    @Override
+    public void disconnect(ServiceMessage message) {
+
+    }
+
+    public GuiDrawer getGUIDrawer() { return guiDrawer; }
 
 }
