@@ -11,12 +11,11 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.*;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.NoSuchElementException;
 
 /**
- * this class is used to manage the connection to the first client which connects to the server to play.
- * It has to get the setup choices by the first player and his moves.
+ * This class is used to manage the connection of a client that connects to the server.
+ * It has to get the setup choices by the first player and his moves, then it will handle the game.
  */
 public class ClientHandler implements Runnable {
 
@@ -113,13 +112,13 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * adds the player to a game, using some server methods that permits to find the matchID of the game he will play
+     * Adds the player to a game, using some server methods that permits to find the matchID of the game he will play
      */
     private void addPlayerToGame(GamePreferencesMessage preferences){
         if (handlerPhase == HandlerPhases.GAME_SETUP_PHASE)
             if (checkMessageType(preferences,MessageType.GAME_SETUP_INFO))
                 if (checkGamePreferencesValues(preferences)) {
-                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == 1) {
+                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1) {
                         System.out.println("Added player: " + nickname + " to a new game.");
                         send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
@@ -197,8 +196,7 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * it will remove all data saved in the server, connected to the player associated with this client handler.
-     * @throws IOException when there's an error in the exchanged messages.
+     * Removes all data saved in the server, connected to the player associated with this client handler.
      */
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
@@ -208,6 +206,10 @@ public class ClientHandler implements Runnable {
         client.close();
     }
 
+    /**
+     * Handles the disconnection of a player.
+     * @param error reason why the player left.
+     */
     public void disconnect(String error) {
         if (connected) {
             System.out.println("TIMEOUT EXPIRED or ERROR " + "(" + nickname + ")");
@@ -215,7 +217,6 @@ public class ClientHandler implements Runnable {
                 shutConnection(error);
             } catch (IOException e) {
                 System.err.println("Error in stream closing");
-                e.printStackTrace();
             }
             Thread.currentThread().interrupt();
             System.out.println("Interrupting client handler thread of player " + nickname);

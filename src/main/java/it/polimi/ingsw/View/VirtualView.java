@@ -18,7 +18,7 @@ public class VirtualView implements ModelObserver {
     /**
      * List of client handler associated to players that are playing the same game (that is observed by the VirtualView).
      */
-    private final ArrayList<ClientHandler> clientHandler=new ArrayList<>();
+    private final ArrayList<ClientHandler> clientHandler = new ArrayList<>();
 
     /**
      * Adds a ClientHandler to the list of players that are playing the same game observed by the VirtualView.

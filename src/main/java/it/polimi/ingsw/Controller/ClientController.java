@@ -19,34 +19,34 @@ import java.util.concurrent.Executors;
  */
 public class ClientController implements ViewObserver, NetworkObserver {
 
-    String username;
-    boolean GUI;
     /**
      * The view that the ClientController is observing.
      */
     private final View view;
+    /**
+     * It handles the graphical part of the CLI.
+     */
+    private CLIDrawer cliDrawer;
+    /**
+     * It handles the graphical part of the GUI.
+     */
+    private GuiDrawer guiDrawer;
+    /**
+     * True if the player is playing with the GUI, else if the player is playing with the CLI it's false.
+     */
+    private final boolean GUI;
+    /**
+     * It's light version of the model used to store visible information about the model that are used by the view.
+     */
+    private ModelStorage storage;
     /**
      * Establishes the connection of the client with the server, starts threads for some task (pinger and listener)
      * and initializes other useful variables in order to maintain a working and stable connection with the server.
      * In particular, it starts the ClientListener that is observed by the ClientController.
      */
     private final ConnectionSocket client;
-    /**
-     * It's light version of the model used to store visible information about the model that are used by the view.
-     */
-    private ModelStorage storage;
-    /**
-     * It handles the graphical part of the CLI.
-     */
-    private CLIDrawer cliDrawer;
-
+//!!!!!!!!!!!!!!!!!!!!!!!!!!
     private final ExecutorService taskQueue;
-
-    private GuiDrawer guiDrawer;
-    /**
-     * Saves if the game is played in expert game mode (true) or in base (false).
-     */
-    private boolean expertMode = false;
     /**
      * The ID of the player associated to this ClientController.
      */
@@ -83,15 +83,12 @@ public class ClientController implements ViewObserver, NetworkObserver {
     public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
 
     /**
-     * Sends the server a message containing the username chosen by the client ,
+     * Sends the server a message containing the username chosen by the client,
      * it still has to be checked by the server if it's an available nickname or not.
      * @param username chosen by the player.
      */
     @Override
-    public void onUsername(String username) {
-        this.username = username;
-        client.send(new LoginMessage(username));
-    }
+    public void onUsername(String username) { client.send(new LoginMessage(username)); }
 
     /**
      * Sends the server a message containing the game preferences chosen by the client.
@@ -103,10 +100,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
      * @param expertMode true if the player decides to play in expert mode, else false.
      */
     @Override
-    public void onGamePreferences(int numPlayers, Boolean expertMode) {
-        this.expertMode = expertMode;
-        client.send(new GamePreferencesMessage(numPlayers, expertMode));
-    }
+    public void onGamePreferences(int numPlayers, Boolean expertMode) { client.send(new GamePreferencesMessage(numPlayers, expertMode)); }
 
     // All the following messages contains a messageType,
     // a playerID that refers to the player associated to this ClientController
@@ -313,19 +307,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         switch (gp.getActionPhases()) {
                             case MOVE_STUDENTS -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askMove(expertMode));
+                                    taskQueue.execute(() -> view.askMove(storage.isGameMode()));
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askMNMovement(expertMode));
+                                    taskQueue.execute(() -> view.askMNMovement(storage.isGameMode()));
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askCloud(expertMode));
+                                    taskQueue.execute(() -> view.askCloud(storage.isGameMode()));
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
                             }

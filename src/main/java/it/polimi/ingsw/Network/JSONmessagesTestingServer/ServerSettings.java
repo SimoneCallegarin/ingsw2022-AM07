@@ -7,8 +7,8 @@ public class ServerSettings {
     public static String hostName = "localhost";
     public static int port = 1234;
 
-    public static String ReadHostFromJSON() { return hostName; }
+    public static String getHostName() { return hostName; }
 
-    public static int ReadPortFromJSON() { return port; }
+    public static int getPort() { return port; }
 
 }
