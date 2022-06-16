@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 //import static it.polimi.ingsw.View.CLI.CLI.getString;
@@ -23,7 +24,7 @@ public class App {
     /**
      * Host name of the server (default is "localhost").
      */
-    private String host;
+    private InetAddress host;
     /**
      * Port where the server is listening (default is 1234).
      */
@@ -46,9 +47,11 @@ public class App {
      */
     private void selectAddress() throws IOException {
         System.out.println("Choose address (leave empty to set \"localhost\"):");
-        host = br.readLine();
-        if(host.isEmpty())
-            host = "localhost";
+        String choice = br.readLine();
+        if(choice.isEmpty())
+            host = InetAddress.getByName("localhost");
+        else
+            host = InetAddress.getByName(choice);
     }
 
     /**

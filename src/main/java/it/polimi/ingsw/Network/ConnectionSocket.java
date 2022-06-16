@@ -3,6 +3,7 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class ConnectionSocket {
@@ -10,7 +11,7 @@ public class ConnectionSocket {
     /**
      * Host name of the server that the ConnectionSocket is trying to connect.
      */
-    private final String host;
+    private final InetAddress host;
     /**
      * Port where the server is listening and through where the ConnectionSocket is trying to connect.
      */
@@ -42,7 +43,7 @@ public class ConnectionSocket {
      * @param host of the server that the ConnectionSocket is trying to connect.
      * @param port through where the ConnectionSocket is trying to connect.
      */
-    public ConnectionSocket(String host, int port) {
+    public ConnectionSocket(InetAddress host, int port) {
         this.host = host;
         this.port = port;
     }
