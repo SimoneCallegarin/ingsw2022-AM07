@@ -29,7 +29,6 @@ public class ClientPingSender implements Runnable {
 
     public void stopPinger() {
         ping.cancel();
-        System.out.println("Thread pinger interrupted");
     }
 
     @Override
