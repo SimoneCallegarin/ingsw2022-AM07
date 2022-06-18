@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Model.CharacterCards;
 
 /**
- * The name associated to each character card of the game
+ * The name associated to each character card of the game.
  */
 public enum CharacterCardsName {
     MONK,
@@ -18,9 +18,9 @@ public enum CharacterCardsName {
     THIEF;
 
     /**
-     * Associate a card to a number that is used in the initial extraction of three character cards.
-     * @param index associated to the character card
-     * @return the name of the character card associated to that index
+     * Associates a card to a number that is used in the initial extraction of three character cards.
+     * @param index associated to the character card.
+     * @return the name of the character card associated to that index.
      */
     public static CharacterCardsName getCharacterCardName(int index){
         return switch (index) {
@@ -43,7 +43,7 @@ public enum CharacterCardsName {
     /**
      * Associates a character card to his relative cost at the start of the game.
      * @param characterCardName the name of the character card we want to know the cost.
-     * @return the cost of that character card
+     * @return the cost of that character card.
      */
     public int getCharacterCardStartingCost(CharacterCardsName characterCardName) {
         return switch (characterCardName) {
