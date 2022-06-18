@@ -179,7 +179,9 @@ public class ClientHandler implements Runnable {
                             addPlayerToGame(gpm);
                         }
                         case LOGOUT -> {
-
+                            System.out.println("LOGOUT message received from " + nickname + "!");
+                            System.out.println("CLOSING CONNECTION DUE TO A LOGOUT REQUEST " + "(" + nickname + ")");
+                            disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
                         }
                         default -> {
                             pmm = (PlayerMoveMessage) message;
@@ -212,7 +214,6 @@ public class ClientHandler implements Runnable {
      */
     public void disconnect(String error) {
         if (connected) {
-            System.out.println("TIMEOUT EXPIRED or ERROR " + "(" + nickname + ")");
             try {
                 shutConnection(error);
             } catch (IOException e) {
@@ -220,7 +221,7 @@ public class ClientHandler implements Runnable {
             }
             Thread.currentThread().interrupt();
             System.out.println("Interrupting client handler thread of player " + nickname);
-            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
+            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST"))
                 server.onDisconnection(nickname);
         }
     }
@@ -260,8 +261,8 @@ public class ClientHandler implements Runnable {
             handleConnection();
         } catch (IOException e) {
             if (connected) {
-                System.out.println("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST " + "(" + nickname + ")");
-                disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
+                System.out.println("CLOSING CONNECTION DUE TO AN ERROR " + "(" + nickname + ")");
+                disconnect("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST");
             }
         }
     }
