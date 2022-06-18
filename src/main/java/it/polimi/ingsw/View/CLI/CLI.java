@@ -21,11 +21,38 @@ import java.util.concurrent.FutureTask;
 
 public class CLI extends ViewSubject implements View {
 
-    Thread inputThread;
     /**
      * Drawer of the CLI, draws the game table and other things.
      */
     private final CLIDrawer cliDrawer;
+
+    /**
+     * Thread used for reading user input
+     */
+    Thread inputThread;
+
+    /**
+     * Constants used for a better readability: they determine if it is necessary to change execution flow or not
+     */
+    private static final int CONTINUE_TASK = 200;
+    private static final int RESTART_TASK = 400;
+    private static final int DELETE_TASK = 401;
+
+    /**
+     * Integer that contains the value of the current execution flow
+     */
+    private int statusFlow = 200;
+
+    /**
+     * Boolean that is true if we are playing in a expert mode game
+     */
+    private boolean expertMode;
+
+    /**
+     * Boolean that is true if the askCharacterCard method has been called,
+     * it prevents the possibility that a character card could be played while another one is going to be activated
+     */
+    private boolean characterActivated = false;
 
     /**
      * Constructor of the CLI.
@@ -80,11 +107,6 @@ public class CLI extends ViewSubject implements View {
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 
     /**
-     * Prints all available character cards for a certain game with a brief description.
-     */
-    private void printAvailableCharacters() { System.out.println(cliDrawer.drawCharacterCardsEffects()); }
-
-    /**
      * Reads the username chosen by the player and notifies it to the view.
      */
     public void askUsername() {
@@ -137,7 +159,6 @@ public class CLI extends ViewSubject implements View {
     private boolean askGameMode() {
         try {
             String modePreference;
-            boolean expertMode;
             System.out.println("> Do you want to play in Expert mode? [y/n]");
             System.out.println("> ");
             modePreference = readUserInput();
@@ -150,47 +171,68 @@ public class CLI extends ViewSubject implements View {
     }
 
     /**
-     * Asks the player what does he want to do when the game is at the beginning of the action phase in its first step.
-     * @param expertMode true if expert game mode, else false.
+     * Asks the player which assistant card he wants to play.
+     * Notifies the choice to the ClientController.
+     * @param playerID the id of the player who is playing the assistant card.
      */
-    public void askMove(boolean expertMode) {
+    public void askAssistantCard(int playerID) {
+        characterActivated = false;
         try {
-            int initialChoice = 0;
-            if (expertMode)
-                initialChoice = askWhatToDo("SELECT A STUDENT TO MOVE", true);
-            else
-                askStudent("Entrance");
-            System.out.println("> What do you want to do now?");
-            System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
-            if (initialChoice == 0) {
-                System.out.println("> 1 - MOVE SELECTED STUDENT IN YOUR DINING ROOM");
-                System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
-            }
-            if (initialChoice == 1)
-                System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
-            switch (Integer.parseInt(readUserInput())) {
-                case 0 -> askMove(expertMode);
-                case 1 -> {
-                    if (initialChoice == 0)
-                        askDiningRoomMovement();
-                    else if (initialChoice == 1)
-                        askCharacterCard();
-                    else
-                        askMove(true);
+            System.out.println(cliDrawer.printAssistantCards(playerID));
+            System.out.println("Which Assistant Card you want to play? Insert the turn order of the Assistant Card you want to play (T)");
+            String choice = readUserInput();
+            checkInput(choice, true);
+            if (statusFlow == CONTINUE_TASK) {
+                int chosenCard = Integer.parseInt(choice);
+                if (chosenCard > cliDrawer.getStorage().getDashboard(playerID).getMaxAssistantCard() || chosenCard < 1) {
+                    System.out.println("You don't have this card, please select another one");
+                    askAssistantCard(playerID);
                 }
-                case 2 -> {
-                    if (initialChoice == 0)
-                        askIsleMovement();
-                    else {
-                        System.out.println("Not acceptable value. Please, try again.");
-                        askMove(true);
+                notifyObserver(obs -> obs.onAssistantCard(chosenCard));
+            }
+            else if (statusFlow == RESTART_TASK)
+                askAssistantCard(playerID);
+        } catch (NumberFormatException nf) {
+            System.out.println("You didn't insert a suitable number! Please, try again...");
+            askAssistantCard(playerID);
+        } catch (ExecutionException ee) {
+            System.out.println("Closing input read thread");
+        }
+    }
+
+    /**
+     * Asks the player what does he want to do when the game is at the beginning of the action phase in its first step.
+     */
+    public void askMove() {
+        characterActivated = false;
+        try {
+            askStudent("Entrance");
+            if (statusFlow == CONTINUE_TASK) {
+                String choice;
+                do {
+                    System.out.println("> What do you want to do now?");
+                    System.out.println("> 0 - CHANGE COLOR");
+                    System.out.println("> 1 - MOVE SELECTED STUDENT IN YOUR DINING ROOM");
+                    System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
+                    choice = readUserInput();
+                    checkInput(choice, expertMode);
+                } while (statusFlow == RESTART_TASK);
+                if (statusFlow == CONTINUE_TASK) {
+                    int chosenOption = Integer.parseInt(choice);
+                    switch (chosenOption) {
+                        case 0 -> askMove();
+                        case 1 -> notifyObserver(ViewObserver::onStudentMovement_toDining);
+                        case 2 -> askIsleMovement();
+                        default -> {
+                            System.out.println("Not acceptable value. Please, try again.");
+                            askMove();
+                        }
                     }
                 }
-                default -> {
-                    System.out.println("Not acceptable value. Please, try again.");
-                    askMove(expertMode);
-                }
             }
+        } catch (NumberFormatException nf) {
+            System.out.println("You didn't insert a suitable number! Please, try again...");
+            askMove();
         } catch (ExecutionException ee) {
             System.out.println("Closing input read thread");
         }
@@ -198,83 +240,22 @@ public class CLI extends ViewSubject implements View {
 
     /**
      * Asks the player what does he want to do when the game is in the action phase in its second step.
-     * @param expertMode true if expert game mode, else false.
      */
-    public void askMNMovement(boolean expertMode) {
-        try {
-            if (expertMode) {
-                int initialChoice = askWhatToDo("SELECT THE ISLE FOR MOTHER NATURE MOVEMENT", false);
-                int choice;
-                System.out.println("> What do you want to do now?");
-                System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
-                if (initialChoice == 0)
-                    System.out.println("> 1 - CHOOSE ISLE");
-                if (initialChoice == 1)
-                    System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
-                choice = Integer.parseInt(readUserInput());
-                switch (choice) {
-                    case 0 -> askMNMovement(true);
-                    case 1 -> {
-                        if (initialChoice == 0)
-                            askIsleMotherNature();
-                        else if (initialChoice == 1)
-                            askCharacterCard();
-                        else
-                            askMNMovement(true);
-                    }
-                    default -> {
-                        System.out.println("Not acceptable value. Please, try again.");
-                        askMNMovement(true);
-                    }
-                }
-            } else
-                askIsleMotherNature();
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread");
-        }
+    public void askMNMovement() {
+        characterActivated = false;
+        int choice = askNumber("Which isle do you want to move Mother Nature to?",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
+        if (statusFlow == CONTINUE_TASK)
+            notifyObserver(obs -> obs.onMNMovement(choice));
     }
 
     /**
      * Asks the player what does he want to do when the game is in the action phase in its third step.
-     * @param expertMode true if expert game mode, else false.
      */
-    public void askCloud(boolean expertMode) {
-        try {
-            if (expertMode) {
-                int initialChoice = askWhatToDo("SELECT THE CLOUD YOU WANT TO PICK STUDENTS FROM", false);
-                int choice;
-                System.out.println("> What do you want to do now?");
-                System.out.println("> 0 - GO BACK TO THE PREVIOUS CHOICE");
-                if (initialChoice == 0) {
-                    System.out.println("> 1 - CHOOSE CLOUD");
-                }
-                if (initialChoice == 1)
-                    System.out.println("> 1 - CHOOSE CHARACTER CARD TO ACTIVATE");
-                choice = Integer.parseInt(readUserInput());
-                switch (choice) {
-                    case 0 -> askCloud(true);
-                    case 1 -> {
-                        if (initialChoice == 0)
-                            askCloud();
-                        else if (initialChoice == 1)
-                            askCharacterCard();
-                        else
-                            askCloud(true);
-                    }
-                    default -> {
-                        System.out.println("Not acceptable value. Please, try again.");
-                        askCloud(true);
-                    }
-                }
-            }
-            else
-                askCloud();
-        } catch (NumberFormatException nf) {
-            System.out.println("You didn't insert a suitable number! Please, try again...");
-            askCloud(expertMode);
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread");
-        }
+    public void askCloud() {
+        characterActivated = false;
+        int choice = askNumber("Which cloud do you want to take students from?",false,cliDrawer.getStorage().getGameTable().getNumOfClouds());
+        if (statusFlow == CONTINUE_TASK)
+            notifyObserver(obs -> obs.onCloudChoice(choice));
     }
 
     /**
@@ -286,30 +267,50 @@ public class CLI extends ViewSubject implements View {
         switch (characterName) {
             case FARMER, MAGICAL_LETTER_CARRIER, CENTAUR, KNIGHT -> notifyObserver(obs -> obs.onAtomicEffect(-1));
             case MONK -> {
-                askMoveStudentFromCard();
-                askIsleMovementMONK();
+                int chosenStudent = askNumber("Which student do you want to move from the character card?",true,5);
+                notifyObserver(obs -> obs.onColorChoice(chosenStudent));
+                int chosenIsle = askNumber("Which isle do you want to move your student to? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
+                notifyObserver(obs -> obs.onAtomicEffect(chosenIsle));
             }
-            case HERALD -> askIsleInfluenceCount();
-            case GRANDMA_HERBS -> askIsleDenyCard();
+            case HERALD -> {
+                int chosenIsle = askNumber("Which isle do you want to calculate influence on? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")", false, (cliDrawer.getStorage().getNumberOfIsles() - 1));
+                notifyObserver(obs -> obs.onAtomicEffect(chosenIsle));
+            }
+            case GRANDMA_HERBS -> {
+                int chosenIsle = askNumber("Which isle do you want to put a deny card on? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
+                notifyObserver(obs -> obs.onAtomicEffect(chosenIsle));
+            }
             case JESTER -> {
                 if (askExchange())
                     notifyObserver(ViewObserver::onEndCharacterPhase);
                 else {
-                    askMoveStudentFromCard();
-                    askStudentCharacter();
+                    int chosenCharacterStudent = askNumber("Which student do you want to move from the character card?",true,5);
+                    notifyObserver(obs -> obs.onColorChoice(chosenCharacterStudent));
+                    int chosenEntranceStudent = askNumber("Which student do you want to move from your Entrance?",true,5);
+                    notifyObserver(obs -> obs.onAtomicEffect(chosenEntranceStudent));
                 }
             }
-            case FUNGIST -> askNotConsideredColor();
+            case FUNGIST -> {
+                int chosenColor = askNumber("Which color you don't want to consider for influence calculation in this turn?",true,5);
+                notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
+            }
             case MINSTREL -> {
                 if (askExchange())
                     notifyObserver(ViewObserver::onEndCharacterPhase);
                 else {
                     askStudent("Dining Room");
-                    askStudentCharacter();
+                    int chosenStudent = askNumber("Which student do you want to move from your Entrance?",true,5);
+                    notifyObserver(obs -> obs.onAtomicEffect(chosenStudent));
                 }
             }
-            case SPOILED_PRINCESS -> askStudentFromCharacterToDining();
-            case THIEF -> askRemoveStudentDining();
+            case SPOILED_PRINCESS -> {
+                int chosenStudent = askNumber(" Which student do you want to move from the character card to your Dining?",true,5);
+                notifyObserver(obs -> obs.onAtomicEffect(chosenStudent));
+            }
+            case THIEF -> {
+                int chosenColor = askNumber("Which color you want to be removed from Dining Rooms?", true, 5);
+                notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
+            }
         }
     }
 
@@ -340,18 +341,31 @@ public class CLI extends ViewSubject implements View {
      */
     private int askNumber(String request, boolean color, int max) {
         try {
-            int choice;
             System.out.println("> "+ request);
-            if (color)
-                printColors();
+            if (color) {
+                System.out.println("> 0 - YELLOW");
+                System.out.println("> 1 - PINK");
+                System.out.println("> 2 - BLUE");
+                System.out.println("> 3 - RED");
+                System.out.println("> 4 - GREEN");
+                System.out.println("> ");
+            }
             else
                 System.out.println("> ");
-            choice = Integer.parseInt(readUserInput());
-            if (choice>max || choice<0){
-                System.out.println("You didn't insert a suitable number! Please, try again...");
-                return askNumber(request,color,max);
+            String choice = readUserInput();
+            checkInput(choice, false);
+            if (statusFlow == CONTINUE_TASK) {
+                int chosenNumber = Integer.parseInt(choice);
+                if (chosenNumber > max || chosenNumber < 0) {
+                    System.out.println("You didn't insert a suitable number! Please, try again...");
+                    return askNumber(request, color, max);
+                }
+                return chosenNumber;
             }
-            return choice;
+            else if (statusFlow == RESTART_TASK)
+                return askNumber(request, color, max);
+            else
+                return -1;
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             return askNumber(request,color,max);
@@ -361,74 +375,7 @@ public class CLI extends ViewSubject implements View {
         }
     }
 
-    /**
-     * Prints the integer value associated to each color, in order to permit the player to choose a color.
-     */
-    private void printColors() {
-        System.out.println("> 0 - YELLOW");
-        System.out.println("> 1 - PINK");
-        System.out.println("> 2 - BLUE");
-        System.out.println("> 3 - RED");
-        System.out.println("> 4 - GREEN");
-        System.out.println("> ");
-    }
-
     // SINGLE METHODS FOR ASKING REQUEST:
-
-    /**
-     * Asks the player what he wants to do between two alternatives during the three steps of the action phase.
-     * @param S_0 first possible alternative.
-     * @param move true if in the first step of the action phase, else false.
-     * @return the choice of the player.
-     */
-    private int askWhatToDo(String S_0, boolean move) {
-        try {
-            int choice;
-            System.out.println("> What do you want to do?");
-            System.out.println("> 0 - " + S_0);
-            System.out.println("> 1 - " + "PLAY A CHARACTER CARD");
-            choice = Integer.parseInt(readUserInput());
-            switch (choice) {
-                case 0 -> {
-                    if (move)
-                        askStudent("Entrance");
-                    else
-                        System.out.println("Okay!");
-                }
-                case 1 -> printAvailableCharacters();
-                default -> System.out.println("Not acceptable value. You will be asked to try again");
-            }
-            return choice;
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread");
-            return 0;
-        }
-    }
-
-    /**
-     * Asks the player which assistant card he wants to play.
-     * Notifies the choice to the ClientController.
-     * @param playerID the id of the player who is playing the assistant card.
-     */
-    public void askAssistantCard(int playerID) {
-        int choice = 0;
-        try {
-            System.out.println(cliDrawer.printAssistantCards(playerID));
-            System.out.println("Which Assistant Card you want to play? Insert the turn order of the Assistant Card you want to play (T)");
-            choice = Integer.parseInt(readUserInput());
-            if (choice>cliDrawer.getStorage().getDashboard(playerID).getMaxAssistantCard() || choice<1){
-                System.out.println("You don't have this card, please select another one");
-                askAssistantCard(playerID);
-            }
-        } catch (NumberFormatException nf) {
-            System.out.println("You didn't insert a suitable number! Please, try again...");
-            askAssistantCard(playerID);
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread");
-        }
-        int finalChoice = choice;
-        notifyObserver(obs -> obs.onAssistantCard(finalChoice));
-    }
 
     /**
      * Asks the player which student he wants to move from a certain place.
@@ -437,13 +384,9 @@ public class CLI extends ViewSubject implements View {
      */
     private void askStudent(String place) {
         int choice = askNumber("Which student do you want to move from your "+ place + "?",true,5);
-        notifyObserver(obs -> obs.onColorChoice(choice));
+        if (statusFlow == CONTINUE_TASK)
+            notifyObserver(obs -> obs.onColorChoice(choice));
     }
-
-    /**
-     * Notifies the ClientController that the student is going to be moved in the dining room.
-     */
-    private void askDiningRoomMovement() { notifyObserver(ViewObserver::onStudentMovement_toDining); }
 
     /**
      * Asks the player in which isle he wants to move the students.
@@ -451,25 +394,8 @@ public class CLI extends ViewSubject implements View {
      */
     private void askIsleMovement() {
         int choice = askNumber("Which isle do you want to move your student to? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
-        notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
-    }
-
-    /**
-     * Asks the player in which isle he wants to move mother nature.
-     * Notifies the choice to the ClientController.
-     */
-    private void askIsleMotherNature() {
-        int choice = askNumber("Which isle do you want to move Mother Nature to?",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
-        notifyObserver(obs -> obs.onMNMovement(choice));
-    }
-
-    /**
-     * Asks the player which cloud he wants to take the students from.
-     * Notifies the choice to the ClientController.
-     */
-    private void askCloud() {
-        int choice = askNumber("Which cloud do you want to take students from?",false,cliDrawer.getStorage().getGameTable().getNumOfClouds());
-        notifyObserver(obs -> obs.onCloudChoice(choice));
+        if (statusFlow == CONTINUE_TASK)
+            notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
     }
 
     /**
@@ -477,80 +403,63 @@ public class CLI extends ViewSubject implements View {
      * Notifies the choice to the ClientController.
      */
     private void askCharacterCard() {
+        characterActivated = true;
         int choice = askNumber("Which character card do you want to activate?",false,2);
         notifyObserver(obs -> obs.onCharacterCard(choice));
     }
 
     /**
-     * Asks the player in which isle he wants to move the students after having played the MONK.
-     * Notifies the choice to the ClientController.
+     * it checks if the user inserted one of the three special characters (L/C/A) and sets a variable that changes the execution flow of various instructions
+     * @param userChoice is the input string
+     * @param planning is true when we currently are in the Planning Phase,
+ *                     and it is used in order to prevent the possibility to activate a character card during this phase
+     * @throws ExecutionException when disconnect method has been called by the ClientController
      */
-    private void askIsleMovementMONK() {
-        int choice = askNumber("Which isle do you want to move your student to? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
-        notifyObserver(obs -> obs.onAtomicEffect(choice));
-    }
-
-    /**
-     * Asks the player which student he wants to move from a certain place.
-     * Notifies the choice to the ClientController.
-     */
-    private void askStudentCharacter() {
-        int choice = askNumber("Which student do you want to move from your Entrance?",true,5);
-        notifyObserver(obs -> obs.onAtomicEffect(choice));
-    }
-
-    /**
-     * Asks the player in which isle he wants to calculate the influence after having played the Herald.
-     * Notifies the choice to the ClientController.
-     */
-    private void askIsleInfluenceCount() {
-        int choice = askNumber("Which isle do you want to calculate influence on? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
-        notifyObserver(obs -> obs.onAtomicEffect(choice));
-    }
-
-    /**
-     * Asks the player in which isle he wants to put a deny card after having played the Grandma Herbs.
-     * Notifies the choice to the ClientController.
-     */
-    private void askIsleDenyCard() {
-        int choice = askNumber("Which isle do you want to put a deny card on? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
-        notifyObserver(obs -> obs.onAtomicEffect(choice));
-    }
-
-    /**
-     * Asks the player which student he wants to move from the character card after having played the Monk or the Jester.
-     * Notifies the choice to the ClientController.
-     */
-    private void askMoveStudentFromCard() {
-        int choice = askNumber("Which student do you want to move from the character card?",true,5);
-        notifyObserver(obs -> obs.onColorChoice(choice));
-    }
-
-    /**
-     * Asks the player which student he doesn't want to consider during this turn count of influence after having played the Fungist.
-     * Notifies the choice to the ClientController.
-     */
-    private void askNotConsideredColor() {
-        int choice = askNumber("Which color you don't want to consider for influence calculation in this turn?",true,5);
-        notifyObserver(obs -> obs.onAtomicEffect(choice));
-    }
-
-    /**
-     * Asks the player which student he wants to move from the character card to the dining room after having played the Spoiled Princess.
-     * Notifies the choice to the ClientController.
-     */
-    private void askStudentFromCharacterToDining() {
-        int choice = askNumber(" Which student do you want to move from the character card to your Dining?",true,5);
-        notifyObserver(obs -> obs.onAtomicEffect(choice));
-    }
-
-    /**
-     * Asks the player which color he wants to remove from the dining room after having played the Thief.
-     * Notifies the choice to the ClientController.
-     */
-    private void askRemoveStudentDining() {
-        int choice = askNumber("Which color you want to be removed from Dining Rooms?",true,5);
-        notifyObserver(obs -> obs.onAtomicEffect(choice));
+    private void checkInput(String userChoice, boolean planning) throws ExecutionException {
+        if (expertMode && !characterActivated) {
+            if (userChoice.equalsIgnoreCase("l")) {
+                System.out.println("> You are logging out... are you sure? [y/n]");
+                System.out.println("> ");
+                String answer = readUserInput();
+                if (answer.equalsIgnoreCase("y")) {
+                    notifyObserver(ViewObserver::onLogout);
+                    statusFlow = DELETE_TASK;
+                }
+                else
+                    statusFlow = RESTART_TASK;
+            }
+            else if (userChoice.equalsIgnoreCase("c")) {
+                System.out.println(cliDrawer.drawCharacterCardsEffects());
+                statusFlow = RESTART_TASK;
+            }
+            else if (userChoice.equalsIgnoreCase("a")) {
+                if (planning) {
+                    System.out.println("You are in the Assistant Card Phase. You can't play a character card now!");
+                    statusFlow = RESTART_TASK;
+                }
+                else {
+                    askCharacterCard();
+                    statusFlow = DELETE_TASK;
+                }
+            }
+            else
+                statusFlow = CONTINUE_TASK;
+        }
+        else {
+            if (userChoice.equalsIgnoreCase("l")) {
+                System.out.println("> You are logging out... are you sure? [y/n]");
+                System.out.println("> ");
+                String answer = readUserInput();
+                if (answer.equalsIgnoreCase("y")) {
+                    notifyObserver(ViewObserver::onLogout);
+                    statusFlow = DELETE_TASK;
+                }
+                else
+                    statusFlow = RESTART_TASK;
+            }
+            else
+                statusFlow = CONTINUE_TASK;
+        }
     }
 
     @Override

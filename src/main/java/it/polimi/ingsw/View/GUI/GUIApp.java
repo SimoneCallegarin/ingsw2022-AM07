@@ -35,8 +35,8 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void askMove(boolean expertMode) {
-        guiDrawer.showMoveOptions(expertMode);
+    public void askMove() {
+        guiDrawer.showMoveOptions(getGUIDrawer().getModelStorage().isGameMode());
     }
 
     @Override
@@ -50,12 +50,12 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void askMNMovement(boolean expertMode) {
+    public void askMNMovement() {
         guiDrawer.showMNMovement();
     }
 
     @Override
-    public void askCloud(boolean expertMode) {
+    public void askCloud() {
 
     }
 

@@ -24,4 +24,6 @@ public interface ViewObserver {
 
     void onEndCharacterPhase();
 
+    void onLogout();
+
 }

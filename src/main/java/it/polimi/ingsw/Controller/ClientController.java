@@ -168,6 +168,13 @@ public class ClientController implements ViewObserver, NetworkObserver {
     @Override
     public void onEndCharacterPhase() { client.send(new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE, playerID, -1)); }
 
+    @Override
+    public void onLogout() {
+        client.send(new ServiceMessage(MessageType.LOGOUT));
+        client.disconnect();
+        view.disconnect(new ServiceMessage(MessageType.QUIT, "You logged out. The game ended."));
+    }
+
     /**
      * Updates the view relying on the messageType of the message received from the server.
      * @param message received from the server.
@@ -307,19 +314,19 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         switch (gp.getActionPhases()) {
                             case MOVE_STUDENTS -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askMove(storage.isGameMode()));
+                                    taskQueue.execute(view::askMove);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askMNMovement(storage.isGameMode()));
+                                    taskQueue.execute(view::askMNMovement);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askCloud(storage.isGameMode()));
+                                    taskQueue.execute(view::askCloud);
                                 else
                                     System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
                             }

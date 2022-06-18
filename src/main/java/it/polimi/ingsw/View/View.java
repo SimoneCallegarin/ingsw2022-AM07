@@ -14,15 +14,15 @@ public interface View {
 
      void askAssistantCard(int playerID);
 
-     void askMove(boolean expertMode);
+     void askMove();
 
      void printMessage(ServiceMessage message);
 
      void printChanges();
 
-     void askMNMovement(boolean expertMode);
+     void askMNMovement();
 
-     void askCloud(boolean expertMode);
+     void askCloud();
 
      void askCharacterEffectParameters(CharacterCardsName characterName);
 

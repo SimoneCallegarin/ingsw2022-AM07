@@ -21,7 +21,6 @@ public class ClientListener extends NetworkSubject implements Runnable {
 
     public void stopListener() {
         Thread.currentThread().interrupt();
-        System.out.println("Thread listener interrupted");
     }
 
     @Override
@@ -37,8 +36,9 @@ public class ClientListener extends NetworkSubject implements Runnable {
                 }
                 notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
-                System.out.println("An error occurred...");
+                System.err.println("An error occurred...");
                 cs.disconnect();
+                notifyObserver(new ServiceMessage(MessageType.QUIT, "Connection lost. The game will noe end."));
             }
         }
     }
