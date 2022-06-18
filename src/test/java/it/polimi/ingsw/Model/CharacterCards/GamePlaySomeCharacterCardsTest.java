@@ -150,18 +150,9 @@ class GamePlaySomeCharacterCardsTest {
         assertEquals(1,game.getPlayerByIndex(0).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.BLUE));
 
         game.getPlayerByIndex(1).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
-        game.checkUpdateProfessor(1,RealmColors.RED);
         game.getPlayerByIndex(1).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
         game.checkUpdateProfessor(1,RealmColors.RED);
         assertEquals(1,game.getPlayerByIndex(1).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.RED));
-
-        game.setGamePhase(GamePhases.ACTION_PHASE);
-        game.setCurrentActivePlayer(game.getPlayerByIndex(2).getOrder());
-        game.getPlayerByIndex(2).gainMoney();
-
-        game.playCharacterCard(2,0);
-
-        game.activateAtomicEffect(2,0,0,0);
 
         game.getPlayerByIndex(2).getDashboard().getDiningRoom().addStudent(RealmColors.PINK);
         game.checkUpdateProfessor(2,RealmColors.PINK);
@@ -170,6 +161,14 @@ class GamePlaySomeCharacterCardsTest {
         game.getPlayerByIndex(2).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
         game.checkUpdateProfessor(2,RealmColors.RED);
         assertEquals(1,game.getPlayerByIndex(2).getDashboard().getDiningRoom().getProfessorByColor(RealmColors.PINK));
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(2).getOrder());
+        game.getPlayerByIndex(2).gainMoney();
+
+        game.playCharacterCard(2,0);
+
+        game.activateAtomicEffect(2,0,0,0);
 
         //Students:
         //  simone: 1 YELLOW, 1 GREEN, 1 BLUE
@@ -191,14 +190,19 @@ class GamePlaySomeCharacterCardsTest {
         game.addFirstPlayer("simone", true, 2);
         game.addAnotherPlayer("giacomo");
         game.getGameTable().setCharacterCards(CharacterCardsName.HERALD);
+        game.getPlayerByIndex(1).gainMoney();
+        game.getPlayerByIndex(1).gainMoney();
 
-        //Player 0: 1 YELLOW student, 1 YELLOW professor
+        //Player 0: 1 YELLOW student, 1 YELLOW professor.
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.YELLOW);
+        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
         game.checkUpdateProfessor(0,RealmColors.YELLOW);
-        //Player 1: 1 RED student, 1 RED professor
+        //Player 1: 1 RED student, 1 RED professor.
         game.getGameTable().getIsleManager().getIsle(8).addStudent(RealmColors.RED);
+        game.getPlayerByIndex(1).getDashboard().getDiningRoom().addStudent(RealmColors.RED);
         game.checkUpdateProfessor(1,RealmColors.RED);
 
+        // Removes students on the isle.
         while (game.getGameTable().getIsleManager().getIsle(8).getNumberOfStudents()!=0){
             for(RealmColors c : RealmColors.values()){
                 if(game.getGameTable().getIsleManager().getIsle(8).getStudentsByColor(c)!=0)
@@ -227,11 +231,9 @@ class GamePlaySomeCharacterCardsTest {
 
         game.setGamePhase(GamePhases.ACTION_PHASE);
         game.setCurrentActivePlayer(game.getPlayerByIndex(1).getOrder());
-        game.getPlayerByIndex(1).gainMoney();
-        game.getPlayerByIndex(1).gainMoney();
 
         game.playCharacterCard(1,0);
-        game.activateAtomicEffect(1,0,0,8);
+        game.activateAtomicEffect(1,0,8,0);
 
         assertEquals(TowerColors.BLACK,game.getGameTable().getIsleManager().getIsle(8).getTowersColor());
     }

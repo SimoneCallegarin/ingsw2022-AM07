@@ -871,8 +871,11 @@ public class CLIDrawer {
      * Draws a small legend that explains some things about the game representation.
      */
     private void drawLegend() {
-        drawRectangle(legend,0,4,CLICostants.LEGEND_X,CLICostants.LEGEND_Y);
-        writeLongerString(legend,paintService(CLIColors.B_WHITE,"LEGEND"),0,21);
+        int notEnlarge = 1;
+        if (storage.isGameMode())
+            notEnlarge = 0;
+        drawRectangle(legend,0,4,CLICostants.LEGEND_X-4*notEnlarge,CLICostants.LEGEND_Y);
+        writeLongerString(legend,paintService(CLIColors.B_WHITE,"LEGEND"),0,22);
         writeLongerString(legend,paintService(CLIColors.HB_WHITE,"■")+" -> MOTHER NATURE",1,7);
         writeLongerString(legend,paintService(CLIColors.HB_WHITE,"!")+" -> DENY CARD",2,7);
         writeLongerString(legend,paintService(CLIColors.HB_WHITE,"¶")+" -> PROFESSOR",3,7);
@@ -885,6 +888,19 @@ public class CLIDrawer {
         legend[7][10] = paintService(CLIColors.B_WHITE,"M");
         writeLongerString(legend,"-> DISCARD PILE OF THE PLAYER ",8,13);
         legend[8][38] = " \b";
+        writeLongerString(legend,"PRESS:",11,7);
+        legend[11][38] = " \b";
+        legend[13][7] = paintService(CLIColors.HB_WHITE,"L");
+        writeLongerString(legend,"-> TO LOGOUT",13,9);
+        legend[13][40] = " \b";
+        if (storage.isGameMode()){
+            legend[15][7] = paintService(CLIColors.HB_WHITE,"C");
+            writeLongerString(legend,"-> TO SEE PLAYABLE CHARACTER CARDS ",15,9);
+            legend[15][40] = " \b";
+            legend[17][7] = paintService(CLIColors.HB_WHITE,"A");
+            writeLongerString(legend,"-> TO ACTIVATE A CHARACTER CARD",17,9);
+            legend[17][40] = " \b";
+        }
     }
 
 }

@@ -113,11 +113,11 @@ public class CLICostants {
     /**
      * Vertical length of the box containing the legend.
      */
-    public static final int LEGEND_X = 12;
+    public static final int LEGEND_X = 20;
     /**
      * Horizontal length of the box containing the legend.
      */
-    public static final int LEGEND_Y = 40;
+    public static final int LEGEND_Y = 42;
     /**
      * Vertical length of the box containing the playable character cards descriptions.
      */

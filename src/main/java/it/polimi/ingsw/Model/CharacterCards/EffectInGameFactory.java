@@ -5,22 +5,22 @@ import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Model.Player.Player;
 
 /**
- * this is the factory that permits to activate character cards effect that takes place during the game
+ * Factory that permits to activate character cards effect that takes place during the game.
  */
 public class EffectInGameFactory {
 
     public EffectInGameFactory(){}
 
     /**
-     * this method will permit activating part of the effect that characterise a character card
-     * @param characterCard the character card played
-     * @param game reference to all the objects that compose the game
-     * @param player the player that played the character card
-     * @param value1 it can be the color of the student that has to be moved from a certain student manager
-     *               it can also be to the index of a certain isle
-     *               it will be set to -1 when it isn't required
-     * @param value2 it's the color of the student that has to be moved to a certain student manager
-     *               it will be set to -1 when it isn't required
+     * Permits to activate a part of the effect that characterises a certain character card.
+     * @param characterCard the character card played.
+     * @param game reference to all the objects that compose the game.
+     * @param player the player that played the character card.
+     * @param value1 it can be the color of the student that has to be moved from a certain student manager.
+     *               It can also be to the index of a certain isle.
+     *               It will be set to -1 when it isn't required.
+     * @param value2 it's the color of the student that has to be moved to a certain student manager.
+     *               It will be set to -1 when it isn't required.
      */
     public void getEffect(CharacterCard characterCard, Game game, Player player, int value1, int value2){
 
@@ -37,7 +37,7 @@ public class EffectInGameFactory {
         */
         switch (characterCard.getCharacterCardName()) {
             case MONK -> {
-                studentMovementEffect.effect(characterCard, game.getGameTable().getIsleManager().getIsle(player.selectIsleId(value2)), ColorsForEffects.SELECT, color1, null);
+                studentMovementEffect.effect(characterCard, game.getGameTable().getIsleManager().getIsle(value2), ColorsForEffects.SELECT, color1, null);
                 studentMovementEffect.effect(game.getGameTable().getBag(), characterCard, ColorsForEffects.RANDOM, color1, color2);
                 game.setActionPhase(game.getLastActionPhase());
             }
@@ -120,14 +120,14 @@ public class EffectInGameFactory {
 
     /**
      * Checking if the student is added in third, sixth or ninth position of the dining room.
-     * @param idPlayer ID of the player that placed a student in his dining room.
+     * @param playerID ID of the player that placed a student in his dining room.
      * @param color color of the student placed.
      */
-    private void checkStudentInMoneyPosition(Game game, int idPlayer, RealmColors color) {
-        if (game.getPlayerByIndex(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
-            game.getPlayerByIndex(idPlayer).gainMoney();
+    private void checkStudentInMoneyPosition(Game game, int playerID, RealmColors color) {
+        if (game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
+            game.getPlayerByIndex(playerID).gainMoney();
             game.getGameTable().studentInMoneyPosition();
-            game.notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, game.getPlayerByIndex(idPlayer).getMoney(), game.getGameTable().getGeneralMoneyReserve()));
+            game.notifyObserver(obs -> obs.onMoneyUpdate(playerID, game.getPlayerByIndex(playerID).getMoney(), game.getGameTable().getGeneralMoneyReserve()));
         }
     }
 }
