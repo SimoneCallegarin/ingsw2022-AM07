@@ -643,20 +643,23 @@ public class Game extends ModelSubject {
     public void notifyTurn() {
         if (endGame) {
             if (drawEndGame)
-                notifyObserver(obs->obs.onEndGame("The game ended in a draw.\nThanks for playing!"));
+                notifyObserver(obs->obs.onEndGame(getWinner(), -1));
             else
-                notifyObserver(obs->obs.onEndGame("The game ended.\nThe winner is " + getWinner() + "!\nThanks for playing!"));
+                notifyObserver(obs->obs.onEndGame(getWinner(), winner.getDashboard().getDashboardID()));
         }
         else {
             int currentPlayerIndex = 0;
+            String currentPlayerNickname = null;
             for (Player p : players) {
                 if (p.getOrder().equals(currentActivePlayer)) {
                     currentPlayerIndex = players.indexOf(p);
+                    currentPlayerNickname = p.getNickname();
                     break;
                 }
             }
             int finalCurrentPlayerIndex = currentPlayerIndex;
-            notifyObserver(obs -> obs.onGamePhases(finalCurrentPlayerIndex, gamePhase, actionPhase));
+            String finalCurrentPlayerNickname = currentPlayerNickname;
+            notifyObserver(obs -> obs.onGamePhases(finalCurrentPlayerIndex, finalCurrentPlayerNickname, gamePhase, actionPhase));
         }
     }
 

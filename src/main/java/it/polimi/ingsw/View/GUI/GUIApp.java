@@ -50,6 +50,9 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
+    public void printWinner(String winner, int winnerID) {}
+
+    @Override
     public void askMNMovement() {
         guiDrawer.showMNMovement();
     }

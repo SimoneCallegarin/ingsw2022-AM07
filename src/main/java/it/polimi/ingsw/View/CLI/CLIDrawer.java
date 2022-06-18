@@ -833,9 +833,10 @@ public class CLIDrawer {
 
     /**
      * Prints who's the winner or if a game ended in a draw.
-     * @param winnerID the id of the player who won the game (it's -1 if the game ended in a draw).
+     * @param winner is the name of the winner
+     * @param winnerID is -1 if the game ended in a draw
      */
-    public void printWinner(int winnerID) {
+    public void printWinner(String winner, int winnerID) {
         if(winnerID==-1){
             System.out.println(paintService(CLIColors.HB_WHITE, """
                             ¶¶¶¶¶¶¶¶¶  ¶¶¶   ¶¶¶  ¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶    ¶¶¶¶¶   ¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶    ¶¶¶  ¶¶¶¶¶¶¶¶    ¶¶¶¶¶¶¶¶¶  ¶¶¶¶¶¶¶¶
@@ -863,7 +864,7 @@ public class CLIDrawer {
                                ¶¶¶     ¶¶¶   ¶¶¶  ¶¶¶¶¶¶¶¶¶         ¶¶¶¶¶     ¶¶¶¶¶       ¶¶¶¶  ¶¶¶    ¶¶¶¶¶  ¶¶¶    ¶¶¶¶¶  ¶¶¶¶¶¶¶¶¶  ¶¶¶     ¶¶¶    ¶¶¶¶  ¶¶¶¶¶¶¶¶
                             """)
                     );
-            System.out.println(paintService(CLIColors.HB_WHITE,"-------------------------------------------------------------> " + storage.getDashboard(winnerID).getNickname() + " <-------------------------------------------------------------"));
+            System.out.println(paintService(CLIColors.HB_WHITE,"-------------------------------------------------------------> " + winner + " <-------------------------------------------------------------"));
         }
     }
 

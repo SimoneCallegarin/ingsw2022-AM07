@@ -58,11 +58,12 @@ public class VirtualView implements ModelObserver {
     /**
      * Sends a ServiceMessage to all the players that are playing the same game observed by the VirtualView.
      * It contains the message that has to be shown when a game ends properly
-     * @param message Updates the view with a message of end game
+     * @param winner is the name of the winner
+     * @param winnerID is -1 if the game ended in a draw
      */
     @Override
-    public void onEndGame(String message) {
-        ServiceMessage sm = new ServiceMessage(MessageType.END_GAME, message);
+    public void onEndGame(String winner, int winnerID) {
+        ServiceMessage sm = new ServiceMessage(MessageType.END_GAME, winner, winnerID);
         for(ClientHandler ch : clientHandler){
             ch.send(sm);
         }
@@ -72,12 +73,13 @@ public class VirtualView implements ModelObserver {
      * Sends a GamePhase_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
      * It contains the information about the game phase and who is the active player but also on the winner if there's one.
      * @param activePlayer the player that is now the active one.
+     * @param activePlayerNickname is the nickname of the active player
      * @param gamePhase game phase in which the game is now.
      * @param actionPhase action phase in which the game is now.
      */
     @Override
-    public void onGamePhases(int activePlayer, GamePhases gamePhase, ActionPhases actionPhase) {
-        GamePhase_UpdateMsg gamePhase_updateMsg=new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE,activePlayer, gamePhase, actionPhase);
+    public void onGamePhases(int activePlayer, String activePlayerNickname, GamePhases gamePhase, ActionPhases actionPhase) {
+        GamePhase_UpdateMsg gamePhase_updateMsg=new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE, activePlayer, activePlayerNickname, gamePhase, actionPhase);
         for(ClientHandler ch : clientHandler){
             ch.send(gamePhase_updateMsg);
         }

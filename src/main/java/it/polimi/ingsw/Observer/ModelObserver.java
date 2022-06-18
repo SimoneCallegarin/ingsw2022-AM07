@@ -34,18 +34,20 @@ public interface ModelObserver {
     void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNId, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors,Integer>> emptyClouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors,Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards, ArrayList<String> characterCardsDescription, ArrayList<Squads> squads);
 
     /**
-     *
-     * @param message Updates the view with a message of end game
+     * Updates the view with a message of end game
+     * @param winner is the name of the winner
+     * @param winnerID is -1 if the game ended in a draw
      */
-    void onEndGame(String message);
+    void onEndGame(String winner, int winnerID);
 
     /**
      * Updates the ModelStorage when there's a change of the turn or when the game is ending.
      * @param activePlayer The player that this turn is the active one.
+     * @param activePlayerNickname is the nickname of the active player
      * @param gamePhases The actual game phase of the turn.
      * @param actionPhases The actual sub-phase of the action phase of the turn.
      */
-    void onGamePhases(int activePlayer, GamePhases gamePhases, ActionPhases actionPhases);
+    void onGamePhases(int activePlayer, String activePlayerNickname, GamePhases gamePhases, ActionPhases actionPhases);
 
     /**
      * Updates the ModelStorage when an assistant card is played.

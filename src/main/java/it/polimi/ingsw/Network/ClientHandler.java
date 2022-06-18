@@ -119,13 +119,15 @@ public class ClientHandler implements Runnable {
             if (checkMessageType(preferences,MessageType.GAME_SETUP_INFO))
                 if (checkGamePreferencesValues(preferences)) {
                     if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1) {
+                        int shownID = server.getPlayerInfo(nickname).getPlayerID()+1;
                         System.out.println("Added player: " + nickname + " to a new game.");
-                        send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
+                        send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + shownID + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
                     else {
+                        int shownID = server.getPlayerInfo(nickname).getPlayerID()+1;
                         System.out.println("Added player: " + nickname + " to an already existing game with other " + (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() - 1) + " players.");
                         if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
-                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
+                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + shownID + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }

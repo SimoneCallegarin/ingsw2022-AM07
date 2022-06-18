@@ -136,8 +136,10 @@ public class Server {
         else {
             players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers());
             virtualViews.get(matchID).setClientHandler(clientHandler);
-            if (getMatch(getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == getMatch(getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1)
-                clientHandler.send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + getPlayerInfo(nickname).getPlayerID() + "! Game starting soon...", getPlayerInfo(nickname).getPlayerID()));
+            if (getMatch(getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == getMatch(getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1) {
+                int shownID = getPlayerInfo(nickname).getPlayerID()+1;
+                clientHandler.send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + shownID + "! Game starting soon...", getPlayerInfo(nickname).getPlayerID()));
+            }
             addPlayerToAnExistingLobby(matchID, nickname, preferences);
         }
         return true;

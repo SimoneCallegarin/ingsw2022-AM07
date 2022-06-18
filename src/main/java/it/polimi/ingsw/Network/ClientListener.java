@@ -38,7 +38,7 @@ public class ClientListener extends NetworkSubject implements Runnable {
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
                 System.err.println("An error occurred...");
                 cs.disconnect();
-                notifyObserver(new ServiceMessage(MessageType.QUIT, "Connection lost. The game will noe end."));
+                notifyObserver(new ServiceMessage(MessageType.QUIT, "Connection lost. The game will now end."));
             }
         }
     }

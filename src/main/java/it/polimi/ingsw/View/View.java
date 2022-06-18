@@ -20,6 +20,8 @@ public interface View {
 
      void printChanges();
 
+     void printWinner(String winner, int winnerID);
+
      void askMNMovement();
 
      void askCloud();

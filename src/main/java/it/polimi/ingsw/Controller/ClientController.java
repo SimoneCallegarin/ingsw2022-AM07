@@ -182,8 +182,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
     @Override
     public void update(NetworkMessage message) {
         switch (message.getMessageType()) {
-            case UNAVAILABLE_USERNAME -> view.askUsername();
-            case USERNAME_ACCEPTED -> view.askGamePreferences();
+            case UNAVAILABLE_USERNAME -> taskQueue.execute(view::askUsername);
+            case USERNAME_ACCEPTED -> taskQueue.execute(view::askGamePreferences);
             case MATCH_JOINED -> {
                 ServiceMessage sm = (ServiceMessage) message;
                 playerID = sm.getPlayerID();
@@ -193,7 +193,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 ServiceMessage sm = (ServiceMessage) message;
                 view.printMessage(sm);
             }
-            case QUIT, END_GAME -> {
+            case QUIT -> {
                 ServiceMessage sm = (ServiceMessage) message;
                 view.disconnect(sm);
             }
@@ -202,12 +202,16 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
                 storage.setupStorage(gc);
                 storage.getModelChanges().setPlayerID(playerID);
-                if(GUI){
+                if(GUI)
                     setStorageForGUI();
-                }else{
+                else
                     setStorageForCLI();
-                }
                 System.out.println("Game started!");
+            }
+            case END_GAME -> {
+                ServiceMessage sm = (ServiceMessage) message;
+                view.printWinner(sm.getMessage(), sm.getPlayerID());
+                view.disconnect(sm);
             }
             case FILLCLOUD_UPDATE -> {
                 FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
@@ -308,7 +312,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         if (gp.getActivePlayer() == playerID)
                             taskQueue.execute(() -> view.askAssistantCard(playerID));
                         else
-                            System.out.println("Player " + gp.getActivePlayer() + " is choosing the Assistant Card to play");
+                            view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is choosing the assistant card to play..."));
                     }
                     case ACTION_PHASE -> {
                         switch (gp.getActionPhases()) {
@@ -316,25 +320,25 @@ public class ClientController implements ViewObserver, NetworkObserver {
                                 if (gp.getActivePlayer() == playerID)
                                     taskQueue.execute(view::askMove);
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is moving students..."));
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID)
                                     taskQueue.execute(view::askMNMovement);
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is moving mother nature..."));
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID)
                                     taskQueue.execute(view::askCloud);
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is choosing a cloud..."));
                             }
                             case CHARACTER_CARD_PHASE -> {
                                 if (gp.getActivePlayer() == playerID)
                                     taskQueue.execute(() -> view.askCharacterEffectParameters(lastCharacterUsed));
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is using a character card...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is using a character card..."));
                             }
                         }
                     }
