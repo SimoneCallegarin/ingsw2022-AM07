@@ -56,16 +56,28 @@ public class VirtualView implements ModelObserver {
     }
 
     /**
+     * Sends a ServiceMessage to all the players that are playing the same game observed by the VirtualView.
+     * It contains the message that has to be shown when a game ends properly
+     * @param message Updates the view with a message of end game
+     */
+    @Override
+    public void onEndGame(String message) {
+        ServiceMessage sm = new ServiceMessage(MessageType.END_GAME, message);
+        for(ClientHandler ch : clientHandler){
+            ch.send(sm);
+        }
+    }
+
+    /**
      * Sends a GamePhase_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
      * It contains the information about the game phase and who is the active player but also on the winner if there's one.
      * @param activePlayer the player that is now the active one.
      * @param gamePhase game phase in which the game is now.
      * @param actionPhase action phase in which the game is now.
-     * @param winner if the game is coming to the end then it will contain the ID of the player who won or if there's a draw.
      */
     @Override
-    public void onGamePhases(int activePlayer, GamePhases gamePhase, ActionPhases actionPhase, int winner) {
-        GamePhase_UpdateMsg gamePhase_updateMsg=new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE,activePlayer, gamePhase, actionPhase,winner);
+    public void onGamePhases(int activePlayer, GamePhases gamePhase, ActionPhases actionPhase) {
+        GamePhase_UpdateMsg gamePhase_updateMsg=new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE,activePlayer, gamePhase, actionPhase);
         for(ClientHandler ch : clientHandler){
             ch.send(gamePhase_updateMsg);
         }

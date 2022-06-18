@@ -649,7 +649,13 @@ public class Game extends ModelSubject {
             }
         }
         int finalCurrentPlayerIndex = currentPlayerIndex;
-        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase,-1));
+        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase));
+        if (endGame) {
+            if (drawEndGame)
+                notifyObserver(obs->obs.onEndGame("The game ended in a draw.\nThanks for playing!"));
+            else
+                notifyObserver(obs->obs.onEndGame("The game ended.\nThe winner is " + getWinner() + "!\nThanks for playing!"));
+        }
     }
 
     /**
@@ -784,17 +790,9 @@ public class Game extends ModelSubject {
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                 endGame = true;
                 winner = p;
-                int currentPlayerIndex=0;
-                for(Player player:players)
-                    if(player.getOrder().equals(currentActivePlayer))
-                        currentPlayerIndex=players.indexOf(player);
-                int finalCurrentPlayerIndex = currentPlayerIndex;
-
-                notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex, gamePhase ,actionPhase ,players.indexOf(winner)));
                 return;
             }
         }
-
 
         if ((gameTable.getIsleManager().getIsles().size() == 3) || (lastRound && playerCounter == numberOfPlayers-1)) {
             endGame = true;
