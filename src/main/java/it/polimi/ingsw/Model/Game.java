@@ -641,20 +641,22 @@ public class Game extends ModelSubject {
      * Initialize the parameters that handle the turn order and notifies the view.
      */
     public void notifyTurn() {
-        int currentPlayerIndex=0;
-        for(Player p:players){
-            if(p.getOrder().equals(currentActivePlayer)){
-                currentPlayerIndex=players.indexOf(p);
-                break;
-            }
-        }
-        int finalCurrentPlayerIndex = currentPlayerIndex;
-        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase));
         if (endGame) {
             if (drawEndGame)
                 notifyObserver(obs->obs.onEndGame("The game ended in a draw.\nThanks for playing!"));
             else
                 notifyObserver(obs->obs.onEndGame("The game ended.\nThe winner is " + getWinner() + "!\nThanks for playing!"));
+        }
+        else {
+            int currentPlayerIndex = 0;
+            for (Player p : players) {
+                if (p.getOrder().equals(currentActivePlayer)) {
+                    currentPlayerIndex = players.indexOf(p);
+                    break;
+                }
+            }
+            int finalCurrentPlayerIndex = currentPlayerIndex;
+            notifyObserver(obs -> obs.onGamePhases(finalCurrentPlayerIndex, gamePhase, actionPhase));
         }
     }
 
