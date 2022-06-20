@@ -95,7 +95,7 @@ public class Server {
      * @param loginMessage it contains the nickname that has to be checked and added to the list if valid
      * @return true if the nickname chosen by the player is available, else false
      */
-    public boolean setNickNamesChosen(LoginMessage loginMessage) {
+    public synchronized boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
             chosenNicknames.add(loginMessage.getNickname());
             System.out.println("Updated chosenNicknames ArrayList with: " + loginMessage.getNickname());
@@ -118,7 +118,7 @@ public class Server {
      * @param nickname of the player that wants to play
      * @param preferences of the player, about the number of players to play with and the game mode chosen
      */
-    public boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
+    public synchronized boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
         if(!checkValuesValidity(preferences))
             return false;
         int matchID =0;
@@ -180,7 +180,7 @@ public class Server {
      * @param nickName of the player that wants to play
      * @param clientHandler of the player that wants to play
      */
-    public void setPlayer(String nickName, ClientHandler clientHandler){
+    public synchronized void setPlayer(String nickName, ClientHandler clientHandler){
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
@@ -201,16 +201,16 @@ public class Server {
      * @param matchID the ID of the match he is going to play
      * @return the game controller associated to the matchID given
      */
-    public GameController getMatch(int matchID) { return activeMatches.get(matchID); }
+    public synchronized GameController getMatch(int matchID) { return activeMatches.get(matchID); }
 
     /**
      * Getter method to obtain information associated to a player with a certain nickname.
      * @param nickname the nickname of the  player we want to know the information.
      * @return the information of that player (playerID, matchID and client handler of the player).
      */
-    public PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
+    public synchronized PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
-    public void onDisconnection(String nickname) {
+    public synchronized void onDisconnection(String nickname) {
         System.out.println("Deleting match number " + getPlayerInfo(nickname).getMatchID());
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
         activeMatches.remove(matchToEnd);
@@ -230,7 +230,7 @@ public class Server {
      * Adds a player's nickname that has to be removed from the server.
      * @param nickname the nickname of the player that has to be removed.
      */
-    public void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
+    public synchronized void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
 
     public static void main(String[] args) {
 

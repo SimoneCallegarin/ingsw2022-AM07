@@ -53,7 +53,7 @@ public class ConnectionSocket {
      * Sends messages to the server.
      * @param message that will be sent to the server.
      */
-    public void send(NetworkMessage message) {
+    public synchronized void send(NetworkMessage message) {
         try {
             output.writeObject(message);
             output.reset();

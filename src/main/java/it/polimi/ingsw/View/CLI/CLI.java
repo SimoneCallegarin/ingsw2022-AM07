@@ -191,10 +191,6 @@ public class CLI extends ViewSubject implements View {
             checkInput(choice, true);
             if (statusFlow == CONTINUE_TASK) {
                 int chosenCard = Integer.parseInt(choice);
-                if (chosenCard > cliDrawer.getStorage().getDashboard(playerID).getMaxAssistantCard() || chosenCard < 1) {
-                    System.out.println("You don't have this card, please select another one");
-                    askAssistantCard(playerID);
-                }
                 notifyObserver(obs -> obs.onAssistantCard(chosenCard));
             }
             else if (statusFlow == RESTART_TASK)

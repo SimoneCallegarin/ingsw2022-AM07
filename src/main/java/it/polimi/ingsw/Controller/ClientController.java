@@ -187,7 +187,11 @@ public class ClientController implements ViewObserver, NetworkObserver {
     @Override
     public void update(NetworkMessage message) {
         switch (message.getMessageType()) {
-            case UNAVAILABLE_USERNAME -> taskQueue.execute(view::askUsername);
+            case UNAVAILABLE_USERNAME -> {
+                ServiceMessage sm = (ServiceMessage) message;
+                view.printMessage(sm);
+                taskQueue.execute(view::askUsername);
+            }
             case USERNAME_ACCEPTED -> taskQueue.execute(view::askGamePreferences);
             case MATCH_JOINED -> {
                 ServiceMessage sm = (ServiceMessage) message;
