@@ -190,8 +190,6 @@ public class ClientHandler implements Runnable {
                         }
                         case LOGOUT -> {
                             System.out.println("LOGOUT message received from " + nickname + "!");
-                            System.out.println("CLOSING CONNECTION DUE TO A LOGOUT REQUEST " + "(" + nickname + ")");
-                            disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
                         }
                         default -> {
                             pmm = (PlayerMoveMessage) message;
@@ -271,7 +269,7 @@ public class ClientHandler implements Runnable {
             handleConnection();
         } catch (IOException e) {
             if (connected) {
-                System.out.println("CLOSING CONNECTION DUE TO AN ERROR " + "(" + nickname + ")");
+                System.out.println("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST " + "(" + nickname + ")");
                 disconnect("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST");
             }
         }
