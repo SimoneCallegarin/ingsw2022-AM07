@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.Utils;
 
 public enum HandlerPhases {
     LOGIN_PHASE,

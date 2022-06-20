@@ -5,8 +5,9 @@ import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
-import it.polimi.ingsw.Observer.ViewSubject;
-import it.polimi.ingsw.View.GUI.GuiDrawer;
+import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+import it.polimi.ingsw.View.CLI.Utils.InputReadCall;
+import it.polimi.ingsw.View.GUI.GUIDrawer;
 import it.polimi.ingsw.View.View;
 
 import java.util.concurrent.ExecutionException;
@@ -494,5 +495,5 @@ public class CLI extends ViewSubject implements View {
      * @return null because the CLI doesn't have a GUIDrawer.
      */
     @Override
-    public GuiDrawer getGUIDrawer() { return null; }
+    public GUIDrawer getGUIDrawer() { return null; }
 }

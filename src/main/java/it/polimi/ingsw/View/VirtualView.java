@@ -2,7 +2,7 @@ package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
-import it.polimi.ingsw.Network.ClientHandler;
+import it.polimi.ingsw.Network.ServerSide.ClientHandler;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.ModelObserver;

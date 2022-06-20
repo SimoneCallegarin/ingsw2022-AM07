@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.Controller.ClientController;
-import it.polimi.ingsw.Network.ConnectionSocket;
+import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.View.CLI.CLI;
 import it.polimi.ingsw.View.GUI.GUIApp;
 import it.polimi.ingsw.View.View;
@@ -12,8 +12,6 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
-//import static it.polimi.ingsw.View.CLI.CLI.getString;
 
 public class App {
 
@@ -123,12 +121,6 @@ public class App {
     }
 
     /**
-     * Reads what the user write in the buffer using his keyboard.
-     * @return what the user wrote.
-     */
-    //public String readUserInput(){ return getString(br); }
-
-    /**
      * MAIN of the app that runs CLI or GUI and connects to the server.
      */
     public static void main(String[] args) throws IOException {
@@ -143,18 +135,17 @@ public class App {
 
         if(app.choice==0){
             app.view = new CLI();
-            clientController = new ClientController(app.view, app.connectionSocket, false, app.view.getCLIDrawer());
+            clientController = new ClientController(app.view, app.connectionSocket, app.view.getCLIDrawer());
         }
         else{
             app.view = new GUIApp();
-            clientController = new ClientController(app.view, app.connectionSocket, true, app.view.getGUIDrawer());
+            clientController = new ClientController(app.view, app.connectionSocket, app.view.getGUIDrawer());
         }
 
 
         app.view.addObs(clientController);
-        if(app.choice==1){//if it's a GUI
+        if(app.choice==1)   //if it's a GUI
             app.view.getGUIDrawer().addObserver(clientController);
-        }
         app.connectionSocket.getClientListener().addObserver(clientController);
 
         app.view.ViewStart();

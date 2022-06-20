@@ -10,7 +10,7 @@ import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 import it.polimi.ingsw.Observer.ModelObserver;
-import it.polimi.ingsw.Observer.ModelSubject;
+import it.polimi.ingsw.Observer.Subjects.ModelSubject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

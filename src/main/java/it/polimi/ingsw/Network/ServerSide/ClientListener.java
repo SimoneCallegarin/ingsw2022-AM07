@@ -1,9 +1,10 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.ServerSide;
 
+import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
-import it.polimi.ingsw.Observer.NetworkSubject;
+import it.polimi.ingsw.Observer.Subjects.NetworkSubject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,9 +20,7 @@ public class ClientListener extends NetworkSubject implements Runnable {
         this.input = input;
     }
 
-    public void stopListener() {
-        Thread.currentThread().interrupt();
-    }
+    public void stopListener() { Thread.currentThread().interrupt(); }
 
     @Override
     public void run() {

@@ -1,16 +1,14 @@
-package it.polimi.ingsw.View.CLI;
+package it.polimi.ingsw.View.CLI.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
-
+//!!!!!!!!!!!!!!!!!!
 public class InputReadCall implements Callable<String> {
     private final BufferedReader br;
 
-    public InputReadCall() {
-        br = new BufferedReader(new InputStreamReader(System.in));
-    }
+    public InputReadCall() { br = new BufferedReader(new InputStreamReader(System.in)); }
 
     @Override
     public String call() throws IOException, InterruptedException {

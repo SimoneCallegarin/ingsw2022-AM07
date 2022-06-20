@@ -1,6 +1,8 @@
 package it.polimi.ingsw.View.CLI;
 
 import it.polimi.ingsw.Model.Enumeration.*;
+import it.polimi.ingsw.View.CLI.Utils.CLIColors;
+import it.polimi.ingsw.View.CLI.Utils.CLICostants;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import java.util.ArrayList;
@@ -427,7 +429,7 @@ public class CLIDrawer {
         ║ W T T ║
         ║ E T T ║
         ║ R T T ║
-        ║ S  T  ║
+        ║ S     ║
         ║       ║
         ╚═══════╝
          */
@@ -441,7 +443,7 @@ public class CLIDrawer {
             towerColor= paintTower(TowerColors.BLACK,"B");
         if(storage.getDashboard(playerID).getTowerColor() == TowerColors.GREY)
             towerColor= paintTower(TowerColors.GREY,"G");
-            for(int i=0;i<=storage.getDashboard(playerID).getNumOfTowers();i=i+2){
+            for(int i=0; i<storage.getDashboard(playerID).getNumOfTowers(); i=i+2){
                 gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+9] = towerColor;
                 if(storage.getDashboard(playerID).getNumOfTowers()%2==0 && i==storage.getDashboard(playerID).getNumOfTowers()){
                     gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+9] = " ";
@@ -875,26 +877,30 @@ public class CLIDrawer {
         int notEnlarge = 1;
         if (storage.isGameMode())
             notEnlarge = 0;
-        drawRectangle(legend,0,4,CLICostants.LEGEND_X-4*notEnlarge,CLICostants.LEGEND_Y);
+        drawRectangle(legend,0,4,CLICostants.LEGEND_X-7*notEnlarge,CLICostants.LEGEND_Y);
         writeLongerString(legend,paintService(CLIColors.B_WHITE,"LEGEND"),0,22);
         writeLongerString(legend,paintService(CLIColors.HB_WHITE,"■")+" -> MOTHER NATURE",1,7);
-        writeLongerString(legend,paintService(CLIColors.HB_WHITE,"!")+" -> DENY CARD",2,7);
-        writeLongerString(legend,paintService(CLIColors.HB_WHITE,"¶")+" -> PROFESSOR",3,7);
-        drawRectangle(legend, 4,7,3,5);
-        legend[4][9] = paintService(CLIColors.B_WHITE,"$");
-        writeLongerString(legend,"-> MONEY OWNED BY THE PLAYER ",5,13);
+        writeLongerString(legend,paintService(CLIColors.HB_WHITE,"¶")+" -> PROFESSOR",2,7);
+
+        drawRectangle(legend, 4,7,CLICostants.SMALL_RECTANGLE_X,CLICostants.SMALL_RECTANGLE_Y);
+        legend[4][8] = paintService(CLIColors.B_WHITE,"T");
+        legend[4][10] = paintService(CLIColors.B_WHITE,"M");
+        writeLongerString(legend,"-> DISCARD PILE OF THE PLAYER ",5,13);
         legend[5][38] = " \b";
-        drawRectangle(legend, 7,7,CLICostants.ASSISTANT_CARD_X,CLICostants.ASSISTANT_CARD_Y);
-        legend[7][8] = paintService(CLIColors.B_WHITE,"T");
-        legend[7][10] = paintService(CLIColors.B_WHITE,"M");
-        writeLongerString(legend,"-> DISCARD PILE OF THE PLAYER ",8,13);
-        legend[8][38] = " \b";
-        writeLongerString(legend,"PRESS:",11,7);
-        legend[11][38] = " \b";
-        legend[13][7] = paintService(CLIColors.HB_WHITE,"L");
-        writeLongerString(legend,"-> TO LOGOUT",13,9);
-        legend[13][40] = " \b";
+
+        writeLongerString(legend,"PRESS IN ANY MOMENT:",11-3*notEnlarge,7);
+        legend[11-3*notEnlarge][38] = " \b";
+        legend[13-3*notEnlarge][7] = paintService(CLIColors.HB_WHITE,"L");
+        writeLongerString(legend,"-> TO LOGOUT",13-3*notEnlarge,9);
+        legend[13-3*notEnlarge][40] = " \b";
         if (storage.isGameMode()){
+            writeLongerString(legend,paintService(CLIColors.HB_WHITE,"!")+" -> DENY CARD",3,7);
+
+            drawRectangle(legend, 7,7,CLICostants.SMALL_RECTANGLE_X,CLICostants.SMALL_RECTANGLE_Y);
+            legend[7][9] = paintService(CLIColors.B_WHITE,"$");
+            writeLongerString(legend,"-> MONEY OWNED BY THE PLAYER ",8,13);
+            legend[8][38] = " \b";
+
             legend[15][7] = paintService(CLIColors.HB_WHITE,"C");
             writeLongerString(legend,"-> TO SEE PLAYABLE CHARACTER CARDS ",15,9);
             legend[15][40] = " \b";

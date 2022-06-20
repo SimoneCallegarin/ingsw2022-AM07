@@ -3,7 +3,7 @@ package it.polimi.ingsw.View.GUI;
 import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
-import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
 import it.polimi.ingsw.View.View;
 
@@ -11,10 +11,10 @@ import javax.swing.*;
 
 public class GUIApp extends ViewSubject implements View {
 
-    private final GuiDrawer guiDrawer;
+    private final GUIDrawer guiDrawer;
 
     public GUIApp() {
-        guiDrawer = new GuiDrawer();
+        guiDrawer = new GUIDrawer();
     }
 
 
@@ -86,6 +86,6 @@ public class GUIApp extends ViewSubject implements View {
 
     }
 
-    public GuiDrawer getGUIDrawer() { return guiDrawer; }
+    public GUIDrawer getGUIDrawer() { return guiDrawer; }
 
 }

@@ -10,6 +10,7 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
  * This class represents the Controller module in the MVC pattern.
  */
 public class GameController {
+
     /**
      * This is the model reference.
      */

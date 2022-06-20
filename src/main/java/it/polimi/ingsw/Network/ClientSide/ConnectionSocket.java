@@ -1,6 +1,7 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.ClientSide;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+import it.polimi.ingsw.Network.ServerSide.ClientListener;
 
 import java.io.*;
 import java.net.InetAddress;

@@ -4,7 +4,7 @@ import it.polimi.ingsw.Controller.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
-import it.polimi.ingsw.View.GUI.GuiDrawer;
+import it.polimi.ingsw.View.GUI.GUIDrawer;
 
 public interface View {
 
@@ -32,7 +32,7 @@ public interface View {
 
      CLIDrawer getCLIDrawer();
 
-     GuiDrawer getGUIDrawer();
+     GUIDrawer getGUIDrawer();
 
      void ViewStart();
 

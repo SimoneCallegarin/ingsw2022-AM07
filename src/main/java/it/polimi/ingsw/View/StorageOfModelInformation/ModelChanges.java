@@ -2,66 +2,63 @@ package it.polimi.ingsw.View.StorageOfModelInformation;
 
 import java.util.ArrayList;
 
+//!!!!!!!!!!!!!!!!! ADD DESCRIPTION.
 public class ModelChanges {
 
-    ArrayList<ToUpdate> toUpdate;
     /**
-     * the id of the player who is running the App
+     * List containing all the things that changed.
      */
-    int playerID;
+    private final ArrayList<ToUpdate> toUpdate;
     /**
-     * the id of the player who made the last move
+     * ID of the player who is running the App.
      */
-    int playingID;
-    int isleID;
-    int cloudID;
-    int characterID;
+    private int playerID;
+    /**
+     * ID of the player who made the last move.
+     */
+    private int playingID;
+    /**
+     * ID of the isle that changed.
+     */
+    private int isleID;
+    /**
+     * ID of the cloud that changed.
+     */
+    private int cloudID;
+    /**
+     * ID of the character card that changed.
+     */
+    private int characterID;
 
-    public ModelChanges() {
-        toUpdate=new ArrayList<>();
-    }
+    /**
+     * Constructor of the ModelChanges.
+     */
+    public ModelChanges() { toUpdate = new ArrayList<>(); }
 
-    public ArrayList<ToUpdate> getToUpdate() {
-        return toUpdate;
-    }
+    // GETTERS:
 
-    public void setPlayerID(int playerID) {
-        this.playerID = playerID;
-    }
+    public ArrayList<ToUpdate> getToUpdate() { return toUpdate; }
 
-    public void setPlayingID(int playingID) {
-        this.playingID = playingID;
-    }
+    public int getPlayerID() { return playerID; }
 
-    public void setIsleID(int isleID) {
-        this.isleID = isleID;
-    }
+    public int getPlayingID() { return playingID; }
 
-    public void setCloudID(int cloudID) {
-        this.cloudID = cloudID;
-    }
+    public int getIsleID() { return isleID; }
 
-    public void setCharacterID(int characterID) {
-        this.characterID = characterID;
-    }
+    public int getCloudID() { return cloudID; }
 
-    public int getPlayerID() {
-        return playerID;
-    }
+    public int getCharacterID() { return characterID; }
 
-    public int getPlayingID() {
-        return playingID;
-    }
+    // SETTERS:
 
-    public int getIsleID() {
-        return isleID;
-    }
+    public void setPlayerID(int playerID) { this.playerID = playerID; }
 
-    public int getCloudID() {
-        return cloudID;
-    }
+    public void setPlayingID(int playingID) { this.playingID = playingID; }
 
-    public int getCharacterID() {
-        return characterID;
-    }
+    public void setIsleID(int isleID) { this.isleID = isleID; }
+
+    public void setCloudID(int cloudID) { this.cloudID = cloudID; }
+
+    public void setCharacterID(int characterID) { this.characterID = characterID; }
+
 }

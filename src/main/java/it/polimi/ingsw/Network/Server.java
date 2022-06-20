@@ -9,6 +9,9 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.Network.ServerSide.ClientHandler;
+import it.polimi.ingsw.Network.ServerSide.SocketServer;
+import it.polimi.ingsw.Network.Utils.PlayerInfo;
 import it.polimi.ingsw.View.VirtualView;
 
 import java.util.ArrayList;
@@ -46,7 +49,7 @@ public class Server {
      * HashMap that permits to find the client handler associated to a certain nickname,
      * the matchID of the game he is playing and his playerID in that game.
      */
-    private final HashMap<String,PlayerInfo> players;
+    private final HashMap<String, PlayerInfo> players;
 
     /**
      * constructor of the Server

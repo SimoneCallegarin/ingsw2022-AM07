@@ -1,11 +1,13 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.ServerSide;
 
+import it.polimi.ingsw.Network.Utils.HandlerPhases;
 import it.polimi.ingsw.Network.Messages.*;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
+import it.polimi.ingsw.Network.Server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -50,7 +52,11 @@ public class ClientHandler implements Runnable {
      * True if the ClientHandler is connected to the server, else false.
      */
     private boolean connected;
-
+    /**
+     * True if the client is already playing a game, else false.
+     */
+    private boolean playing;
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private final Object outputLock;
 
     /**
@@ -58,11 +64,12 @@ public class ClientHandler implements Runnable {
      * @param server the server associated to this client handler
      * @param socket the socket of the client that is associated to this client handler
      */
-    public ClientHandler(Server server,Socket socket) {
+    public ClientHandler(Server server, Socket socket) {
         this.server = server;
         this.client = socket;
         this.handlerPhase = HandlerPhases.LOGIN_PHASE;
         this.connected = true;
+        this.playing = false;
         this.outputLock = new Object();
         try {
             this.input = new ObjectInputStream(socket.getInputStream());
@@ -129,6 +136,7 @@ public class ClientHandler implements Runnable {
                         if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
                             send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + shownID + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
+                    playing = true;
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }
         else
@@ -150,7 +158,7 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * handles all player moves and the game development till the game ends.
+     * Handles all player moves and the game development till the game ends.
      */
     private void handleGame(PlayerMoveMessage pmm) {
         if (handlerPhase == HandlerPhases.RUNNING_PHASE) {
@@ -223,7 +231,7 @@ public class ClientHandler implements Runnable {
             }
             Thread.currentThread().interrupt();
             System.out.println("Interrupting client handler thread of player " + nickname);
-            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST"))
+            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST") && playing)
                 server.onDisconnection(nickname);
         }
     }

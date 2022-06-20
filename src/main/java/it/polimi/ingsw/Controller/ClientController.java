@@ -1,13 +1,13 @@
 package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.ConnectionSocket;
+import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
-import it.polimi.ingsw.View.GUI.GuiDrawer;
+import it.polimi.ingsw.View.GUI.GUIDrawer;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import it.polimi.ingsw.View.View;
 
@@ -30,7 +30,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
     /**
      * It handles the graphical part of the GUI.
      */
-    private GuiDrawer guiDrawer;
+    private GUIDrawer guiDrawer;
     /**
      * True if the player is playing with the GUI, else if the player is playing with the CLI it's false.
      */
@@ -57,30 +57,32 @@ public class ClientController implements ViewObserver, NetworkObserver {
     private CharacterCardsName lastCharacterUsed;
 
     /**
-     * ClientController constructor.
+     * ClientController constructor for the CLI.
      * @param view it can be the CLI or the GUI.
      * @param client identifies the client at network layer.
-     * @param GUI true if the player is playing on a GUI, else false.
+     * @param cliDrawer drawer that handles the graphical part pf the CLI.
      */
-    public ClientController(View view, ConnectionSocket client, boolean GUI, CLIDrawer cliDrawer) {
+    public ClientController(View view, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.view = view;
         this.client = client;
-        this.GUI = GUI;
+        this.GUI = false;
         this.cliDrawer = cliDrawer;
         taskQueue = Executors.newSingleThreadExecutor();
     }
 
-    public ClientController(View view, ConnectionSocket client, boolean GUI, GuiDrawer guiDrawer) {
+    /**
+     * ClientController constructor for the GUI.
+     * @param view it can be the CLI or the GUI.
+     * @param client identifies the client at network layer.
+     * @param guiDrawer drawer that handles the graphical part of the GUI.
+     */
+    public ClientController(View view, ConnectionSocket client, GUIDrawer guiDrawer) {
         this.view = view;
         this.client = client;
-        this.GUI = GUI;
+        this.GUI = true;
         this.guiDrawer = guiDrawer;
         taskQueue = Executors.newSingleThreadExecutor();
     }
-
-    public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
-
-    public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
 
     /**
      * Sends the server a message containing the username chosen by the client,
@@ -101,6 +103,16 @@ public class ClientController implements ViewObserver, NetworkObserver {
      */
     @Override
     public void onGamePreferences(int numPlayers, Boolean expertMode) { client.send(new GamePreferencesMessage(numPlayers, expertMode)); }
+
+    /**
+     * Sends the server a service message notifying that the player wants to log out and then disconnects him.
+     */
+    @Override
+    public void onLogout() {
+        client.send(new ServiceMessage(MessageType.LOGOUT));
+        client.disconnect();
+        view.disconnect(new ServiceMessage(MessageType.QUIT, "You logged out. The game ended."));
+    }
 
     // All the following messages contains a messageType,
     // a playerID that refers to the player associated to this ClientController
@@ -163,17 +175,10 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     /**
      * Sends the server a message containing a non-relevant generic value
-     * (this is because it isn't required any other value in order to notify the end of the character card phase)
+     * (this is because it isn't required any other value in order to notify the end of the character card phase).
      */
     @Override
     public void onEndCharacterPhase() { client.send(new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE, playerID, -1)); }
-
-    @Override
-    public void onLogout() {
-        client.send(new ServiceMessage(MessageType.LOGOUT));
-        client.disconnect();
-        view.disconnect(new ServiceMessage(MessageType.QUIT, "You logged out. The game ended."));
-    }
 
     /**
      * Updates the view relying on the messageType of the message received from the server.
@@ -347,5 +352,13 @@ public class ClientController implements ViewObserver, NetworkObserver {
         }
     }
 
+    /**
+     * Sets the storage for the drawer of the CLI.
+     */
+    public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
+    /**
+     * Sets the storage for the drawer of the GUI.
+     */
+    public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
 
 }

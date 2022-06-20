@@ -1,6 +1,6 @@
 package it.polimi.ingsw.View.GUI;
 
-import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class GuiDrawer extends ViewSubject {
+public class GUIDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
 
