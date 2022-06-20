@@ -2,20 +2,29 @@ package it.polimi.ingsw.Model.DashboardObjects;
 
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
+/**
+ * Tower storage of the dashboard of the player.
+ */
 public class TowerStorage {
+
     /**
-     * The maximum amount of towers in the tower storage
+     * Maximum amount of towers in the tower storage.
      */
     private final int maxTowers;
     /**
-     * The amount of towers in the tower storage
+     * Amount of towers in the tower storage.
      */
     private int numOfTowers;
     /**
-     * The color of the towers in the tower storage
+     * Color of the towers in the tower storage.
      */
     private final TowerColors towerColor;
 
+    /**
+     * Tower storage constructor.
+     * @param maxNumberOfTowers Maximum amount of towers in the tower storage.
+     * @param towerColor Color of the towers in the tower storage.
+     */
     public TowerStorage(int maxNumberOfTowers, TowerColors towerColor) {
         this.maxTowers = maxNumberOfTowers;
         this.numOfTowers = maxNumberOfTowers;
@@ -23,7 +32,7 @@ public class TowerStorage {
     }
 
     /**
-     * this method updates the students' hashmap incrementing by 1 the value specified by color
+     * Increment by 1 the towers' quantity.
      */
     public void addTower() {
         if (numOfTowers < maxTowers)
@@ -31,7 +40,7 @@ public class TowerStorage {
     }
 
     /**
-     * this method reduces the number of towers of the TowerStorage
+     * Reduce by 1 the towers' quantity.
      */
     public void removeTower() {
         if (numOfTowers > 0)
@@ -39,18 +48,15 @@ public class TowerStorage {
     }
 
     /**
-     * this method gives the actual number of towers in the tower storage
-     * @return number of towers
+     * Getter method for the actual number of towers in the tower storage.
+     * @return number of towers in the tower storage.
      */
-    public int getNumberOfTowers(){
-        return numOfTowers;
-    }
+    public int getNumberOfTowers(){ return numOfTowers; }
 
     /**
-     * this method gives the color of the towers in the tower storage of a certain dashboard
-     * @return color of the towers
+     * Getter method for the color of the towers.
+     * @return color of the towers in the tower storage
      */
-    public TowerColors getTowerColor() {
-        return towerColor;
-    }
+    public TowerColors getTowerColor() { return towerColor; }
+
 }

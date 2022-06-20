@@ -205,7 +205,7 @@ public class Game extends ModelSubject {
         ArrayList<Squads> squads=new ArrayList<>();
         for(Player p:players){
             towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());
-            entrances.add(p.getDashboard().getEntrance().getStudents());
+            entrances.add(p.getDashboard().getEntrance().getStudentsHashMap());
             nicknames.add(p.getNickname());
             numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
             squads.add(p.getSquad());
@@ -215,11 +215,11 @@ public class Game extends ModelSubject {
 
         // GAME TABLE:
         ArrayList<HashMap<RealmColors,Integer>> emptyClouds=new ArrayList<>();
-        for(Cloud c:gameTable.getClouds()){ emptyClouds.add(c.getStudents()); }
+        for(Cloud c:gameTable.getClouds()){ emptyClouds.add(c.getStudentsHashMap()); }
         int generalReserve=gameTable.getGeneralMoneyReserve();
 
         ArrayList<HashMap<RealmColors,Integer>> studentsOnIsle=new ArrayList<>();
-        for(Isle i:gameTable.getIsleManager().getIsles()){ studentsOnIsle.add(i.getStudents()); }
+        for(Isle i:gameTable.getIsleManager().getIsles()){ studentsOnIsle.add(i.getStudentsHashMap()); }
 
         ArrayList<String> characterNames=new ArrayList<>();
         ArrayList<Integer> characterCost=new ArrayList<>();
@@ -230,7 +230,7 @@ public class Game extends ModelSubject {
             characterNames.add(card.getCharacterCardName().toString());
             characterCost.add(card.getCost());
             denyCards.add(card.getDenyCards());
-            studentsOnCard.add(card.getStudents());
+            studentsOnCard.add(card.getStudentsHashMap());
             characterCardsDescription.add(card.getCharacterCardDescription());
         }
 
@@ -333,7 +333,7 @@ public class Game extends ModelSubject {
                             studentsCounter = 0;
                         }
 
-                        notifyObserver(obs -> obs.onStudentMoving_toIsle(playerID, players.get(playerID).getDashboard().getEntrance().getStudents(), isleID, gameTable.getIsleManager().getIsle(isleID).getStudents()));
+                        notifyObserver(obs -> obs.onStudentMoving_toIsle(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), isleID, gameTable.getIsleManager().getIsle(isleID).getStudentsHashMap()));
                     } else
                         notifyObserver(obs -> obs.onKO(playerID, "Isle " + isleID + " doesn't exist, please select another one"));
                 } else
@@ -375,7 +375,7 @@ public class Game extends ModelSubject {
                             studentsCounter = 0;
                         }
 
-                        notifyObserver(obs -> obs.onStudentMoving_toDining(playerID, players.get(playerID).getDashboard().getEntrance().getStudents(), players.get(playerID).getDashboard().getDiningRoom().getStudents()));
+                        notifyObserver(obs -> obs.onStudentMoving_toDining(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), players.get(playerID).getDashboard().getDiningRoom().getStudentsHashMap()));
                     } else
                         notifyObserver(obs -> obs.onKO(playerID, "Your " + color.toString() + " Dining Room is full! You can't add " + color + " students, please select another color"));
                 } else
@@ -474,7 +474,7 @@ public class Game extends ModelSubject {
         ArrayList<Integer> numTowers = new ArrayList<>();
         int whereMnId = 0;
         for(Isle isle : gameTable.getIsleManager().getIsles()){
-            students.add(isle.getStudents());
+            students.add(isle.getStudentsHashMap());
             numIsles.add(isle.getNumOfIsles());
             towerColors.add(isle.getTowersColor());
             if(isle.getDenyCards()==0)
@@ -515,7 +515,7 @@ public class Game extends ModelSubject {
                     studentsCounter = 0;
                     playerCounter++;
                     actionPhase = ActionPhases.MOVE_STUDENTS;
-                    notifyObserver(obs -> obs.onCloudUpdate(playerID, players.get(playerID).getDashboard().getEntrance().getStudents(), cloudID));
+                    notifyObserver(obs -> obs.onCloudUpdate(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), cloudID));
                     nextPlayer();
                 } else {
                     notifyObserver(obs -> obs.onKO(playerID, "Cloud " + cloudID + " is empty! Please select another one"));
@@ -579,7 +579,7 @@ public class Game extends ModelSubject {
                         RealmColors color = gameTable.getBag().draw();
                         cloud.addStudent(color);
                     }
-                    cloudsList.add(cloud.getStudents());
+                    cloudsList.add(cloud.getStudentsHashMap());
                 }
 
                 notifyObserver(obs->obs.onFillCloud(cloudsList));
@@ -850,7 +850,7 @@ public class Game extends ModelSubject {
                         getPlayerByIndex(playerID).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
                         lastActionPhase = actionPhase;
                         actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
-                        notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents()));
+                        notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap()));
                     }
                     else
                         notifyObserver(obs -> obs.onKO(playerID, "You don't have enough money to activate this card, please select another one"));
@@ -948,7 +948,7 @@ public class Game extends ModelSubject {
     public void notifyEffectUpdate(int characterCardIndex, int playerID, int value1, int value2) {
         CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
         switch (cardName) {
-            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value2, getGameTable().getIsleManager().getIsle(value2).getStudents()));
+            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value2, getGameTable().getIsleManager().getIsle(value2).getStudentsHashMap()));
             case FARMER                     -> {
                 ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
                 for (Player p : players)
@@ -957,23 +957,23 @@ public class Game extends ModelSubject {
             }
             case HERALD -> notifyMNMovement(true);
             case MAGICAL_LETTER_CARRIER     -> notifyObserver(obs->obs.onEffectActivation(playerID, players.get(playerID).getDiscardPile().getTurnOrder(), players.get(playerID).getDiscardPile().getMnMovement()));
-            case GRANDMA_HERBS              -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
+            case GRANDMA_HERBS              -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
             case CENTAUR, KNIGHT, FUNGIST   -> notifyObserver(ModelObserver::onEffectActivation);
-            case JESTER                     -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), playerID, players.get(playerID).getDashboard().getEntrance().getStudents()));
+            case JESTER                     -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudentsHashMap(), playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap()));
             case MINSTREL, THIEF            -> {
                 ArrayList<HashMap<RealmColors, Integer>> studentsInEntrances = new ArrayList<>();
                 ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
                 for (Player p : players) {
-                    studentsInEntrances.add(p.getDashboard().getEntrance().getStudents());
-                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
+                    studentsInEntrances.add(p.getDashboard().getEntrance().getStudentsHashMap());
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudentsHashMap());
                 }
                 notifyObserver(obs -> obs.onEffectActivation(studentsInEntrances, studentsInDinings));
             }
             case SPOILED_PRINCESS           -> {
                 ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
                 for (Player p : players)
-                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
-                notifyObserver(obs -> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), studentsInDinings));
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudentsHashMap());
+                notifyObserver(obs -> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudentsHashMap(), studentsInDinings));
             }
         }
     }

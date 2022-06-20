@@ -1,6 +1,6 @@
 package it.polimi.ingsw.View.CLI;
 
-import it.polimi.ingsw.Controller.ClientController;
+import it.polimi.ingsw.Network.ClientSide.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;

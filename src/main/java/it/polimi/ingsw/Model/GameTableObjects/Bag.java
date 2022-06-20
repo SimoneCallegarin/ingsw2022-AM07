@@ -50,7 +50,7 @@ public class Bag implements StudentManager {
     }
 
     @Override
-    public HashMap<RealmColors, Integer> getStudents() {
+    public HashMap<RealmColors, Integer> getStudentsHashMap() {
         return students;
     }
 

@@ -2,27 +2,33 @@ package it.polimi.ingsw.Model.DashboardObjects;
 
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 
+/**
+ * Dashboard of the player.
+ */
 public class Dashboard {
 
     /**
-     * this is the identification number of the dashboard
+     * Identification number of the dashboard.
      */
     private final int dashboardID;
     /**
-     * this is the entrance of the dashboard
+     * Entrance of the dashboard.
      */
     private final Entrance entrance;
     /**
-     * this is the dining room of the dashboard
+     * Dining room of the dashboard.
      */
     private final DiningRoom diningRoom;
     /**
-     * this is the tower storage of the dashboard
+     * Tower storage of the dashboard.
      */
     private final TowerStorage towerStorage;
 
     /**
-     * Dashboard constructor: here are set the maximum dimension of each depending on the number of players and the game mode
+     * Dashboard constructor:
+     * here are set the maximum values of each variable depending on the number of players and the game mode.
+     * @param numOfPlayers number of players that are playing the game.
+     * @param dashboardID ID of the dashboard.
      */
     public Dashboard(int numOfPlayers, int dashboardID) {
 
@@ -51,26 +57,26 @@ public class Dashboard {
     }
 
     /**
-     * Getter method
-     * @return the dashboard id
+     * Getter method for the ID of the dashboard.
+     * @return the dashboard ID.
      */
     public int getDashboardID() { return dashboardID; }
 
     /**
-     * Getter method
-     * @return the entrance of the dashboard
+     * Getter method for the entrance.
+     * @return the entrance of the dashboard.
      */
     public Entrance getEntrance() { return entrance; }
 
     /**
-     * Getter method
-     * @return the dining room of the dashboard
+     * Getter method for the dining room.
+     * @return the dining room of the dashboard.
      */
     public DiningRoom getDiningRoom() { return diningRoom; }
 
     /**
-     * Getter method
-     * @return the tower storage of the dashboard
+     * Getter method for the tower storage.
+     * @return the tower storage of the dashboard.
      */
     public TowerStorage getTowerStorage() { return towerStorage; }
 

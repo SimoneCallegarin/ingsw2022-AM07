@@ -221,5 +221,5 @@ public class Isle implements StudentManager, DenyCardManager {
      * Getter method to return the students.
      * @return the student HashMap.
      */
-    public HashMap<RealmColors, Integer> getStudents() { return students; }
+    public HashMap<RealmColors, Integer> getStudentsHashMap() { return students; }
 }

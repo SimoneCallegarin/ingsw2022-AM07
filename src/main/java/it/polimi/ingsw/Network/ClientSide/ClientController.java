@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Controller;
+package it.polimi.ingsw.Network.ClientSide;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;

@@ -84,7 +84,6 @@ public class Server {
             return true;
         else{
             System.err.println("Error: Wrong number of players requested (2-4 players only)!");
-            //SEND ERROR!
             return false;
         }
     }
@@ -104,7 +103,6 @@ public class Server {
         else{
             System.err.println("Error: A player with this nickname already exists!");
             System.out.println("\"" + loginMessage.getNickname() + "\"" + " isn't valid: ");
-            //SEND ERROR!
             return false;
         }
     }
@@ -130,7 +128,6 @@ public class Server {
             }
         }
         players.get(nickname).setMatchID(matchID);
-        //players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
         if(matchID==activeMatches.size()) {
             newGame(nickname, preferences);
             players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
@@ -249,6 +246,6 @@ public class Server {
         System.out.println(hostName+" Server started at port " + portNumber + "!");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
-        //executor.shutdown();
+        //executor.shutdown(); !!!!!!!!!!!!!!!!
     }
 }

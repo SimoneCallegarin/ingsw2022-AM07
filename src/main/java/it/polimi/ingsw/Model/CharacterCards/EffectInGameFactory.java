@@ -9,8 +9,6 @@ import it.polimi.ingsw.Model.Player.Player;
  */
 public class EffectInGameFactory {
 
-    public EffectInGameFactory(){}
-
     /**
      * Permits to activate a part of the effect that characterises a certain character card.
      * @param characterCard the character card played.

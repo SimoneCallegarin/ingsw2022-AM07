@@ -1,6 +1,6 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Controller.ClientController;
+import it.polimi.ingsw.Network.ClientSide.ClientController;
 import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.View.CLI.CLI;
 import it.polimi.ingsw.View.GUI.GUIApp;
