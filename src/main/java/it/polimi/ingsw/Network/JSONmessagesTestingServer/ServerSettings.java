@@ -8,8 +8,16 @@ public class ServerSettings {
     public static String hostName = "localhost";
     public static int port = 1234;
 
+    /**
+     * Gets localhost.
+     * @return "localhost".
+     */
     public static String getHostName() { return hostName; }
 
+    /**
+     * Gets the port 1234.
+     * @return 1234.
+     */
     public static int getPort() { return port; }
 
 }

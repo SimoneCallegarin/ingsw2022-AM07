@@ -1,15 +1,15 @@
 package it.polimi.ingsw.Model.Enumeration;
 
 /**
- * enum that specifies the RealmColors used for the towers in the game
+ * Specifies the colors used for the towers in the game.
  */
 public enum TowerColors {
     WHITE, BLACK, GREY, NOCOLOR;
 
     /**
-     * this method associate a tower color to a dashboard id
-     * @param index is the dashboard id
-     * @return the color associated to a dashboard id
+     * Associate a tower color to a dashboard.
+     * @param index is the dashboard ID.
+     * @return the color associated to that dashboard ID.
      */
     public static TowerColors getColor(int index) {
         return switch (index) {

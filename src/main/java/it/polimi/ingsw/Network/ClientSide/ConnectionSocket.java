@@ -7,6 +7,9 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 
+/**
+ * Handles the connection between client and server using a socket and launching threads (Pinger and Listener).
+ */
 public class ConnectionSocket {
 
     /**

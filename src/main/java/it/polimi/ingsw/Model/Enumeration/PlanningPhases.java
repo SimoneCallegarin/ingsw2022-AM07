@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Model.Enumeration;
 
 /**
- * This enumeration divides the planning phase in 2 steps
+ * Divides the planning phase in 2 steps.
  */
 
 public enum PlanningPhases {

@@ -14,7 +14,7 @@ import java.util.List;
 public class Player {
 
     /**
-     * Nickname of the player
+     * Nickname of the player.
      */
     private final String nickname;
     /**
@@ -59,16 +59,18 @@ public class Player {
     private int cardOrder = 0;
 
     /**
-     * Constructor
-     * @param nickname valid nickname chosen by the player
-     * @param squad team chosen by the player
+     * Constructor of the player.
+     * @param nickname valid nickname chosen by the player.
+     * @param numOfPlayers number of players that are going to play the game.
+     * @param dashboardID ID of the dashboard associated to the player.
+     * @param squad team chosen by the player.
      */
-    public Player(String nickname, int numOfPlayers, int idDashboard, Squads squad) {
+    public Player(String nickname, int numOfPlayers, int dashboardID, Squads squad) {
         this.nickname = nickname;
         this.squad = squad;
-        this.dashboard = new Dashboard(numOfPlayers, idDashboard);
+        this.dashboard = new Dashboard(numOfPlayers, dashboardID);
         this.money = 1;
-        this.mage = Mages.getMage(idDashboard);
+        this.mage = Mages.getMage(dashboardID);
         this.discardPile = new AssistantCard(0,0);
         this.mageDeck = new ArrayList<>(10);
         /*
@@ -81,30 +83,12 @@ public class Player {
     }
 
     /**
-     * Getter method for the assistant card with a certain turn order.
-     * @param turnOrder of the assistant card to get.
-     * @return the assistant card with the selected turn order.
-     */
-    public AssistantCard getAssistantCardByTurnOrder(int turnOrder) {
-        AssistantCard assistantCardFound = null;
-        for (AssistantCard ac : mageDeck) {
-            if (ac.getTurnOrder() == turnOrder) {
-                assistantCardFound = ac;
-                break;
-            }
-        }
-        return assistantCardFound;
-    }
-
-    /**
      * Permits the player to play the selected assistant card.
      */
     public void playAssistantCard(AssistantCard assistantCard){
         this.discardPile = assistantCard;
         this.mageDeck.remove(assistantCard);
     }
-
-    public boolean isMageDeckEmpty() { return mageDeck.isEmpty(); }
 
     /**
      * Increase the number of money of the player by 1.
@@ -133,6 +117,28 @@ public class Player {
         else
             return null;
     }
+
+    /**
+     * Getter method for the assistant card with a certain turn order.
+     * @param turnOrder of the assistant card to get.
+     * @return the assistant card with the selected turn order.
+     */
+    public AssistantCard getAssistantCardByTurnOrder(int turnOrder) {
+        AssistantCard assistantCardFound = null;
+        for (AssistantCard ac : mageDeck) {
+            if (ac.getTurnOrder() == turnOrder) {
+                assistantCardFound = ac;
+                break;
+            }
+        }
+        return assistantCardFound;
+    }
+
+    /**
+     * Getter method for the deck.
+     * @return true if the mage deck is empty, else false.
+     */
+    public boolean isMageDeckEmpty() { return mageDeck.isEmpty(); }
 
     /**
      * Getter method for the nickname.

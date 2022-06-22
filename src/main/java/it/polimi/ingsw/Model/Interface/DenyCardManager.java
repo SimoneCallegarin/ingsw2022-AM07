@@ -1,21 +1,23 @@
 package it.polimi.ingsw.Model.Interface;
 
 /**
- * this interface that manages the DenyCards
+ * Interface that manages the DenyCards.
  */
 public interface DenyCardManager {
+
     /**
-     * this method add a deny card to the deny card manager
+     * Adds a deny card to the deny card manager.
      */
     void addDenyCard();
     /**
-     * this method remove a deny card to the deny card manager
+     * Removes a deny card from the deny card manager.
      */
     void removeDenyCard();
 
     /**
-     * this method gives the number of deny cards on the deny card manager
-     * @return the number of deny cards
+     * Getter method for the number of deny cards on the deny card manager.
+     * @return the number of deny cards on the deny card manager.
      */
     int getDenyCards();
+
 }

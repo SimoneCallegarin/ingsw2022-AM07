@@ -21,9 +21,9 @@ class GameTableTest {
      */
     @Test
     void getClouds() {
-        assertEquals(0,gameTableForTest.getCloud(0).getIdCloud());
-        assertEquals(1,gameTableForTest.getCloud(1).getIdCloud());
-        assertEquals(2,gameTableForTest.getCloud(2).getIdCloud());
+        assertEquals(0,gameTableForTest.getCloud(0).getCloudID());
+        assertEquals(1,gameTableForTest.getCloud(1).getCloudID());
+        assertEquals(2,gameTableForTest.getCloud(2).getCloudID());
     }
 
     /**

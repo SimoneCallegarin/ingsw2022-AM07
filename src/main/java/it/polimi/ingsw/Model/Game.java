@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 public class Game extends ModelSubject {
+
     /**
      * The game mode of the game, it is decided by the first player that joins the game.
      */
@@ -238,9 +239,10 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * it is responsible for changing the discard pile of a certain player
-     * @param playerID is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
-     * @param turnOrderPlayed is the turn order of the AssistantCard played
+     * Handles a player that plays an assistant card.
+     * It is responsible for changing the discard pile of a certain player.
+     * @param playerID is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card.
+     * @param turnOrderPlayed is the turn order of the AssistantCard played.
      */
     public void playAssistantCard(int playerID, int turnOrderPlayed) {
         boolean alreadyPlayed = false;
@@ -260,14 +262,12 @@ public class Game extends ModelSubject {
                 if (alreadyPlayed) {
                     alreadyPlayed = false;
                     for (AssistantCard ac : players.get(playerID).getMageDeck()) {
-                        for (Player p : players) {
-                            if (p.getDiscardPile() != null) {
+                        for (Player p : players)
+                            if (p.getDiscardPile() != null)
                                 if (p.getDiscardPile().equals(ac)) {
                                     alreadyPlayed = true;
                                     break;
                                 }
-                            }
-                        }
                         if (!alreadyPlayed) {
                             onlyChoice = false;
                             break;
@@ -316,7 +316,7 @@ public class Game extends ModelSubject {
      * Takes a student from the dashboard of a certain player and puts it on a specified isle.
      * @param playerID ID of the player who moved the student.
      * @param isleID ID of the chosen island.
-     * @param colorIndex is the index of the color of the student that has been moved
+     * @param colorIndex is the index of the color of the student that has been moved.
      */
     public void moveStudentInIsle(int playerID, int isleID, int colorIndex) {
         RealmColors color = RealmColors.getColor(colorIndex);
@@ -327,12 +327,10 @@ public class Game extends ModelSubject {
                         players.get(playerID).getDashboard().getEntrance().removeStudent(color);
                         gameTable.getIsleManager().getIsle(isleID).addStudent(color);
                         studentsCounter++;
-
                         if (studentsCounter == maxMovableStudents) {
                             actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
                             studentsCounter = 0;
                         }
-
                         notifyObserver(obs -> obs.onStudentMoving_toIsle(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), isleID, gameTable.getIsleManager().getIsle(isleID).getStudentsHashMap()));
                     } else
                         notifyObserver(obs -> obs.onKO(playerID, "Isle " + isleID + " doesn't exist, please select another one"));
@@ -369,7 +367,6 @@ public class Game extends ModelSubject {
                         checkStudentInMoneyPosition(playerID,color);
                         checkUpdateProfessor(playerID, color);
                         studentsCounter++;
-
                         if (studentsCounter == maxMovableStudents) {
                             actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
                             studentsCounter = 0;
@@ -503,13 +500,12 @@ public class Game extends ModelSubject {
             if (cloudID >= 0 && cloudID < numberOfPlayers) {
                 if (!gameTable.getCloud(cloudID).isEmpty()) {
                     while (studentsCounter < maxMovableStudents) {
-                        for (RealmColors rc : RealmColors.values()) {
+                        for (RealmColors rc : RealmColors.values())
                             if (gameTable.getCloud(cloudID).getStudentsByColor(rc) >= 1) {
                                 gameTable.getCloud(cloudID).removeStudent(rc);
                                 players.get(playerID).getDashboard().getEntrance().addStudent(rc);
                                 break;
                             }
-                        }
                         studentsCounter++;
                     }
                     studentsCounter = 0;
@@ -559,7 +555,7 @@ public class Game extends ModelSubject {
 
     /**
      * Adds 7 or 9 students taken from the bag to a specific dashboard (depending on the number of players).
-     * @param dashboardID is the id of the dashboard whose entrance we want to fill
+     * @param dashboardID is the ID of the dashboard whose entrance we want to fill.
      */
     private void initializeEntrance(int dashboardID) {
         for (int i = 0; i < players.get(dashboardID).getDashboard().getEntrance().getMaxStudents(); i++) 
@@ -625,10 +621,9 @@ public class Game extends ModelSubject {
                 }
             }
 
-            for (Player p : players) {
+            for (Player p : players)
                 if (p.getOrder() == CurrentOrder.FIRST_PLAYER)
                     firstPlayerIndex = p.getDashboard().getDashboardID();
-            }
             currentActivePlayer = CurrentOrder.FIRST_PLAYER;
             playerCounter = 0;
         }
@@ -650,13 +645,12 @@ public class Game extends ModelSubject {
         else {
             int currentPlayerIndex = 0;
             String currentPlayerNickname = null;
-            for (Player p : players) {
+            for (Player p : players)
                 if (p.getOrder().equals(currentActivePlayer)) {
                     currentPlayerIndex = players.indexOf(p);
                     currentPlayerNickname = p.getNickname();
                     break;
                 }
-            }
             int finalCurrentPlayerIndex = currentPlayerIndex;
             String finalCurrentPlayerNickname = currentPlayerNickname;
             notifyObserver(obs -> obs.onGamePhases(finalCurrentPlayerIndex, finalCurrentPlayerNickname, gamePhase, actionPhase));
@@ -664,7 +658,7 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * It updates an attribute of Game that is used to identify which player has the right to play in a specific moment
+     * It updates an attribute of Game that is used to identify which player has the right to play in a specific moment.
      */
     private void nextPlayer() {
         if (playerCounter == numberOfPlayers) {
@@ -700,13 +694,12 @@ public class Game extends ModelSubject {
             int playerWhoHasProfessorIndex = 0;
             boolean someoneHasProfessor = false;
 
-            for (Player p : players) {
+            for (Player p : players)
                 if (p.getDashboard().getDiningRoom().getProfessorByColor(color) == 1) {
                     playerWhoHasProfessorIndex = p.getDashboard().getDashboardID();
                     someoneHasProfessor = true;
                     break;
                 }
-            }
 
             if (someoneHasProfessor) {
                 if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)-farmerOffset) {
@@ -740,10 +733,9 @@ public class Game extends ModelSubject {
         if (numberOfPlayers == 4) {
             int tempInfluence = 0;
             for (int i = 0; i < 2; i++) {
-                for (Player p : players) {
+                for (Player p : players)
                     if (p.getSquad() == Squads.getSquads(i))
                         tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID());
-                }
                 if (tempInfluence == majorInfluence)
                     draw = true;
                 if (tempInfluence > majorInfluence) {
@@ -791,13 +783,12 @@ public class Game extends ModelSubject {
      * It checks if the game has ended and updates the proper end game variables.
      */
     public void checkEndGame() {
-        for (Player p : players) {
+        for (Player p : players)
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                 endGame = true;
                 winner = p;
                 return;
             }
-        }
 
         if ((gameTable.getIsleManager().getIsles().size() == 3) || (lastRound && playerCounter == numberOfPlayers-1)) {
             endGame = true;
@@ -838,8 +829,8 @@ public class Game extends ModelSubject {
     /**
      * Permits to play a character card during the action phase.
      * It set money and other booleans but doesn't activate the proper effect of the card.
-     * @param playerID the id of the player who plays a certain character card during his action phase
-     * @param characterCardIndex the index of the character card that the player wants to play
+     * @param playerID the id of the player who plays a certain character card during his action phase.
+     * @param characterCardIndex the index of the character card that the player wants to play.
      */
     public void playCharacterCard(int playerID, int characterCardIndex) {
         if (gamePhase == GamePhases.ACTION_PHASE && currentActivePlayer == players.get(playerID).getOrder()){
@@ -866,13 +857,13 @@ public class Game extends ModelSubject {
 
     /**
      * Permits to activate an atomic effect called in the controller for a certain number of times.
-     * @param playerID the id of the player who plays the character card
-     * @param characterCardIndex the index of the character card played
-     * @param value1 the color of the student the player wants to remove from the staring StudentsManager
-     * @param value2 it represents different values based on the played card
-     *              MONK          -> isle index where to move the student
-     *              HERALD        -> isle where calculate the influence now
-     *         When not used -> set to 0
+     * @param playerID the id of the player who plays the character card.
+     * @param characterCardIndex the index of the character card played.
+     * @param value1 it represents different values based on the played card.
+     *               MONK          -> isle index where to move the student.
+     *               HERALD        -> isle where calculate the influence now.
+     *               When not used -> set to 0.
+     * @param value2 the color of the student the player wants to remove from the staring StudentsManager.
      */
     public void activateAtomicEffect(int playerID, int characterCardIndex, int value1, int value2){
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(playerID).getOrder()){
@@ -948,7 +939,7 @@ public class Game extends ModelSubject {
     public void notifyEffectUpdate(int characterCardIndex, int playerID, int value1, int value2) {
         CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
         switch (cardName) {
-            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value2, getGameTable().getIsleManager().getIsle(value2).getStudentsHashMap()));
+            case MONK                       -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value2, getGameTable().getIsleManager().getIsle(value2).getStudentsHashMap()));
             case FARMER                     -> {
                 ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
                 for (Player p : players)
@@ -1010,7 +1001,7 @@ public class Game extends ModelSubject {
     public GamePhases getGamePhase() { return gamePhase; }
 
     /**
-     * Getter method that tells if the game mode is expert or not..
+     * Getter method that tells if the game mode is expert or not.
      * @return true if expert, else false.
      */
     public boolean isGameMode() { return gameMode == GameMode.EXPERT; }

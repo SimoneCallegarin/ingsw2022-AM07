@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This class represents the Isle game object.
+ * Isle of the game table, it contains students and deny cards.
  */
 public class Isle implements StudentManager, DenyCardManager {
 
@@ -56,76 +56,6 @@ public class Isle implements StudentManager, DenyCardManager {
     }
 
     /**
-     * Updates the students' hashmap incrementing by 1 the specified color value.
-     * @param color color of the student that has to be added.
-     */
-    @Override
-    public void addStudent(RealmColors color) {
-        int temp;
-        temp = students.get(color);
-        temp++;
-        students.put(color,temp);
-    }
-
-    /**
-     * Updates the students' hashmap decrementing by 1 the specified color value.
-     * @param color color of the student that has to be removed.
-     */
-    @Override
-    public void removeStudent(RealmColors color) {
-        int temp;
-        temp= students.get(color);
-        temp--;
-        if(temp>=0)
-        students.put(color,temp);
-    }
-
-    /**
-     * Getter method to receive a certain value contained in the students' hashmap.
-     * @param color color of the student we want to get.
-     * @return the number of students of a certain color.
-     */
-    @Override
-    public int getStudentsByColor(RealmColors color) { return students.get(color); }
-
-    /**
-     * Getter method for the number of students on the isle.
-     * @return the number of students actually in the isle.
-     */
-    @Override
-    public int getNumberOfStudents() {
-        int totalNumberOfStudents = 0;
-        for (RealmColors rc : RealmColors.values()){
-            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
-        }
-        return totalNumberOfStudents;
-    }
-
-    /**
-     * Adds a deny card on the isle.
-     */
-    @Override
-    public void addDenyCard() { this.denyCard=true; }
-
-    /**
-     * Remove a deny card from the isle.
-     */
-    @Override
-    public void removeDenyCard() { this.denyCard=false; }
-
-    /**
-     * Gives the number of deny cards on the deny card manager.
-     * @return the number of deny cards.
-     */
-    @Override
-    public int getDenyCards() {
-        int present;
-        if (denyCard) present = 1;
-        else present = 0;
-        return present;
-    }
-
-    /**
      * Calculates the influences of each player on the Isle.
      * @param players players that are playing the game.
      * @return the influences of each player on the Isle.
@@ -159,15 +89,63 @@ public class Isle implements StudentManager, DenyCardManager {
      */
     private int getInfluence(Player player){
         int influence = 0;
-        for(RealmColors c: RealmColors.values()){
+        for(RealmColors c: RealmColors.values())
             if(player.getDashboard().getDiningRoom().getProfessorByColor(c)!=0)
-                    influence += students.get(c);
-        }
+                influence += students.get(c);
         if(player.getDashboard().getTowerStorage().getTowerColor().equals(getTowersColor()))
             influence += numOfIsles;
         if(player.getAlreadyPlayedACardThisTurn() && player.getCharacterCardPlayed() == CharacterCardsName.KNIGHT)
             influence += 2;
         return influence;
+    }
+
+    /**
+     * Updates the students' hashmap incrementing by 1 the specified color value.
+     * @param color color of the student that has to be added.
+     */
+    @Override
+    public void addStudent(RealmColors color) {
+        int temp;
+        temp = students.get(color);
+        temp++;
+        students.put(color,temp);
+    }
+
+    /**
+     * Updates the students' hashmap decrementing by 1 the specified color value.
+     * @param color color of the student that has to be removed.
+     */
+    @Override
+    public void removeStudent(RealmColors color) {
+        int temp;
+        temp= students.get(color);
+        temp--;
+        if(temp>=0)
+        students.put(color,temp);
+    }
+
+    /**
+     * Adds a deny card on the isle.
+     */
+    @Override
+    public void addDenyCard() { this.denyCard=true; }
+
+    /**
+     * Remove a deny card from the isle.
+     */
+    @Override
+    public void removeDenyCard() { this.denyCard=false; }
+
+    /**
+     * Gives the number of deny cards on the deny card manager.
+     * @return the number of deny cards.
+     */
+    @Override
+    public int getDenyCards() {
+        int present;
+        if (denyCard) present = 1;
+        else present = 0;
+        return present;
     }
 
     /**
@@ -195,6 +173,32 @@ public class Isle implements StudentManager, DenyCardManager {
     public TowerColors getTowersColor(){ return tower; }
 
     /**
+     * Getter method to receive a certain value contained in the students' hashmap.
+     * @param color color of the student we want to get.
+     * @return the number of students of a certain color.
+     */
+    @Override
+    public int getStudentsByColor(RealmColors color) { return students.get(color); }
+
+    /**
+     * Getter method for the number of students on the isle.
+     * @return the number of students actually in the isle.
+     */
+    @Override
+    public int getNumberOfStudents() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors rc : RealmColors.values())
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
+        return totalNumberOfStudents;
+    }
+
+    /**
+     * Getter method to return the students.
+     * @return the student HashMap.
+     */
+    public HashMap<RealmColors, Integer> getStudentsHashMap() { return students; }
+
+    /**
      * Permits to update the index of the isle when unified (it is used by the isle manager).
      * @param isleIndex the new index of the isle.
      */
@@ -217,9 +221,4 @@ public class Isle implements StudentManager, DenyCardManager {
      */
     public void setMotherNature(boolean motherNature) { this.motherNature = motherNature; }
 
-    /**
-     * Getter method to return the students.
-     * @return the student HashMap.
-     */
-    public HashMap<RealmColors, Integer> getStudentsHashMap() { return students; }
 }

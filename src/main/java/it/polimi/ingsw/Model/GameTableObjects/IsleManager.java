@@ -163,4 +163,5 @@ public class IsleManager {
      * @param newMNIsleIndex index of the isle where mother nature has been moved.
      */
     public void setIsleWithMotherNatureIndex(int newMNIsleIndex) { isleWithMotherNatureIndex = newMNIsleIndex; }
+
 }
