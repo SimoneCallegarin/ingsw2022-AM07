@@ -350,7 +350,9 @@ public class TableCenterPanel extends JPanel {
 
     public void removeIslesClickable(){
         for(int i=0;i<islesPanels.size();i++){
-            islesPanels.get(i).removeMouseListener(islesPanels.get(i).getMouseListeners()[0]);
+            for(int j=0;j<islesPanels.get(i).getMouseListeners().length;j++){
+                islesPanels.get(i).removeMouseListener(islesPanels.get(i).getMouseListeners()[j]);
+            }
         }
     }
 

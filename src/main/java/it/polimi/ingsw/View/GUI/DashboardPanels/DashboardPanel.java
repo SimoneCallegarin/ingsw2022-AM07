@@ -83,7 +83,6 @@ public class DashboardPanel extends JPanel {
         entranceConstraints.weighty=0.25;
         entranceConstraints.ipady=-50;
         add(entrance,entranceConstraints);
-        entrance.initializeEntrance(storage);
     }
 
 

@@ -34,8 +34,11 @@ public class EntrancePanel extends JPanel{
         this.entranceListeners=new ArrayList<>();
         this.studentButtons=new ArrayList<>();
 
-        for(int i=0;i<7;i++){
-            entranceListeners.add(new EntranceListener(dashboardPanel, viewObservers, tableCenterPanel, this));
+        for(RealmColors color:RealmColors.values()) {
+            for (int i = 0; i < storage.getDashboard(playerID).getEntranceStudents(color); i++) {
+                EntranceListener entranceListener=new EntranceListener(dashboardPanel, viewObservers, tableCenterPanel, this);
+                entranceListeners.add(entranceListener);
+            }
         }
         setLayout(new GridBagLayout());
         c=new GridBagConstraints();
@@ -77,7 +80,8 @@ public class EntrancePanel extends JPanel{
      */
     public void setClickable(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
         for(int i=0;i<studentButtons.size();i++){
-            studentButtons.get(i).addMouseListener(entranceListeners.get(i));
+            StudentButton studentButton=studentButtons.get(i);
+            studentButton.addMouseListener(entranceListeners.get(i));
         }
     }
 
@@ -85,10 +89,10 @@ public class EntrancePanel extends JPanel{
      * this method is used to remove the listener from the buttons
      */
     public void removeClickable(){
-        for(int i=0;i<this.getComponentCount();i++){
-            this.getComponent(i).removeMouseListener(entranceListeners.get(i));
-            EntranceListener.setSetClickable(false);
+        for(int i=0;i<studentButtons.size();i++) {
+            studentButtons.get(i).removeMouseListener(entranceListeners.get(i));
         }
+        EntranceListener.setSetClickable(false);
     }
 
     public void resetEntrance(){
