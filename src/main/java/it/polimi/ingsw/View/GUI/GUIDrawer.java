@@ -303,7 +303,7 @@ public class GUIDrawer extends ViewSubject {
                     SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
                         protected Void doInBackground() {
-                            gameScreenPanel.tableCenterPanel.updateCoins();
+                            gameScreenPanel.tableCenterPanel.updateCoins(modelChanges.getPlayingID());
                             return null;
                         }
                     };

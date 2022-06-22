@@ -81,10 +81,13 @@ public class TableCenterPanel extends JPanel {
      */
     ArrayList<IslePanel> islesPanels;
 
+    ArrayList<JPanel> assistantAndMoneyPanelList;
+
     public TableCenterPanel(ModelStorage storage, String usernamePlaying) {
         this.storage=storage;
         this.usernamePlaying=usernamePlaying;
         this.islesPanels=new ArrayList<>();
+        this.assistantAndMoneyPanelList=new ArrayList<>();
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
@@ -112,12 +115,16 @@ public class TableCenterPanel extends JPanel {
 
         assistantAndMoneyPanel1=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel1.setBackground(Color.CYAN);
+        assistantAndMoneyPanelList.add(assistantAndMoneyPanel1);
         assistantAndMoneyPanel2=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel2.setBackground(Color.CYAN);
+        assistantAndMoneyPanelList.add(assistantAndMoneyPanel2);
         assistantAndMoneyPanel3=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel3.setBackground(Color.CYAN);
+        assistantAndMoneyPanelList.add(assistantAndMoneyPanel3);
         assistantAndMoneyPanel4=new JPanel(new GridBagLayout());
         assistantAndMoneyPanel4.setBackground(Color.CYAN);
+        assistantAndMoneyPanelList.add(assistantAndMoneyPanel4);
         assistantAndMoneyConstraints=new GridBagConstraints();
 
         assistantAndMoneyConstraints.gridy=0;
@@ -290,35 +297,12 @@ public class TableCenterPanel extends JPanel {
         }
         assistantAndMoneyConstraints.weighty=1;
         assistantAndMoneyConstraints.fill=GridBagConstraints.BOTH;
-        switch (playerID) {
-            case 0 ->{
-                assistantAndMoneyPanel1.remove(assistantAndMoneyConstraints.gridy);
-                assistantAndMoneyPanel1.add(new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
-                assistantAndMoneyPanel1.validate();//if you change a component that's already been displayed you need to validate it to display the changes
-
-            }
-            case 1 ->{
-                assistantAndMoneyPanel2.remove(assistantAndMoneyConstraints.gridy);
-                assistantAndMoneyPanel2.add(new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
-                assistantAndMoneyPanel2.validate();
-
-            }
-            case 2 ->{
-                assistantAndMoneyPanel3.remove(assistantAndMoneyConstraints.gridy);
-                assistantAndMoneyPanel3.add(new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
-                assistantAndMoneyPanel3.validate();
-
-            }
-            case 3 ->{
-                assistantAndMoneyPanel4.remove(assistantAndMoneyConstraints.gridy);
-                assistantAndMoneyPanel4.add(new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
-                assistantAndMoneyPanel4.validate();
-
-            }
-        }
+        assistantAndMoneyPanelList.get(playerID).remove(assistantAndMoneyConstraints.gridy);
+        assistantAndMoneyPanelList.get(playerID).add(new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
+        assistantAndMoneyPanelList.get(playerID).validate();//if you change a component that's already been displayed you need to validate it to display the changes
     }
 
-    public void updateCoins(){
+    public void updateCoins(int playerID){
 
     }
 

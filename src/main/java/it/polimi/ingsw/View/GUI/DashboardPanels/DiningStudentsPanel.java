@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
