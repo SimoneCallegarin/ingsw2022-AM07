@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class EntranceListener extends ViewSubject implements MouseListener  {
     /**
-     * this boolean is used to set the dining and the isles clickable only one time and avoid adding multiple listeners to it and sending
+     * this boolean is used to set the dining and the isles clickable only one time and avoid adding multiple listeners to them and sending
      * multiple studentToDining/studentToIsle messages to the server
      */
     static boolean setClickable;
@@ -34,6 +34,10 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
         setClickable =false;
     }
 
+    public static void setSetClickable(boolean setClickable) {
+        EntranceListener.setClickable = setClickable;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         StudentButton buttonPressed=(StudentButton) e.getSource();
@@ -46,7 +50,6 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
             case GREEN -> colorPressed=4;
         }
         int finalColorPressed = colorPressed;
-        System.out.println(finalColorPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
         if(!setClickable) {
             dashboardListened.getDining().setCLickable(observers,tableCenter);//so after at least one student button press the dining room is set clickable

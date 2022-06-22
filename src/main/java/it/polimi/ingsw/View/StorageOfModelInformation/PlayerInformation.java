@@ -65,6 +65,14 @@ public class PlayerInformation {
             return 0;
     }
 
+    public int getNumberOfEntranceStudents(){
+        int total=0;
+        for(RealmColors color:RealmColors.values()){
+            total=total+getEntranceStudents(color);
+        }
+        return total;
+    }
+
     public int getEntranceStudents(RealmColors color) { return entranceStudents.get(color); }
 
     public int getDiningStudents(RealmColors color) { return diningStudents.get(color); }

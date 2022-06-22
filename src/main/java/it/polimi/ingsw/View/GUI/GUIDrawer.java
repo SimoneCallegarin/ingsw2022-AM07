@@ -172,7 +172,7 @@ public class GUIDrawer extends ViewSubject {
 
     public void createGameScreen(){
         //initialize the game screen and add it to the generalPanelManager
-        gameScreenPanel=new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying);
+        gameScreenPanel=new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,getViewObserverList());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
     }
 

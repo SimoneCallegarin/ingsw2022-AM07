@@ -6,6 +6,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,26 +23,25 @@ public class GameScreenPanel extends JPanel {
 
     TableCenterPanel tableCenterPanel;
 
-    DashboardPanel dashboard1;
-    DashboardPanel dashboard2;
-    DashboardPanel dashboard3;
-    DashboardPanel dashboard4;
-
     ArrayList<DashboardPanel> dashboardPanels;
     ArrayList<JPanel> dashboardContainers;
 
+    ArrayList<ViewObserver> viewObservers;
+
+
     /**
-     * Create a new buffered JPanel with the specified layout manager
+     * Create the game screen panel used to contain all the game panels
      *
      * @param layout the LayoutManager to use
      * @param usernamePlaying the username of the current player using the GUI to pass to the tableCenter to highlight which is his dashboard
      */
-    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying) {
+    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying,ArrayList<ViewObserver> viewObservers ) {
         super(layout);
         this.storage=storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
         this.dashboardPanels=new ArrayList<>();
         this.dashboardContainers=new ArrayList<>();
+        this.viewObservers=viewObservers;
         dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel1);
@@ -72,7 +72,7 @@ public class GameScreenPanel extends JPanel {
         add(dashboardContainerPanel2,gamescreenConstraints);
 
         for(int i=0;i<storage.getNumberOfPlayers();i++){
-            DashboardPanel dashboardPanel=new DashboardPanel(storage,i);
+            DashboardPanel dashboardPanel=new DashboardPanel(storage,i,viewObservers,tableCenterPanel);
             dashboardContainers.get(i%2).add(dashboardPanel);//the containers are used to place the panels in the screen
             dashboardPanels.add(dashboardPanel);//this arrayList is used only to store them and access them in a more efficient way
         }

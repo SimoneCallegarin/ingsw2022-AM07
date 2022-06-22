@@ -21,16 +21,25 @@ import java.util.ArrayList;
 public class EntrancePanel extends JPanel{
     GridBagConstraints c;
     int playerID;
+    ArrayList<ViewObserver> viewObservers;
+    TableCenterPanel tableCenterPanel;
+    ArrayList<EntranceListener> entranceListeners;
+    ArrayList<StudentButton> studentButtons;
 
-    public EntrancePanel(ModelStorage storage, int playerID) {
+    public EntrancePanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel,DashboardPanel dashboardPanel) {
         this.playerID=playerID;
+        this.viewObservers=viewObservers;
+        this.tableCenterPanel=tableCenterPanel;
+        this.entranceListeners=new ArrayList<>();
+        this.studentButtons=new ArrayList<>();
+
+        for(int i=0;i<7;i++){
+            entranceListeners.add(new EntranceListener(dashboardPanel, viewObservers, tableCenterPanel, this));
+        }
         setLayout(new GridBagLayout());
         c=new GridBagConstraints();
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
-
-        initializeEntrance(storage);
-
     }
 
     /**
@@ -38,12 +47,15 @@ public class EntrancePanel extends JPanel{
      * @param storage the model storage where the entrance information are memorized
      */
     public void initializeEntrance(ModelStorage storage){
+
         c.gridx=0;
         c.gridy=0;
         c.insets=new Insets(0,9,3,7);
         for(RealmColors color:RealmColors.values()){
             for(int i=0;i<storage.getDashboard(playerID).getEntranceStudents(color);i++){
-                add(new StudentButton(color),c);
+                StudentButton studentButton=new StudentButton(color);
+                add(studentButton,c);
+                studentButtons.add(studentButton);
                 if(c.gridx==4){
                     c.gridy=1;
                     c.gridx=0;//it has to start from the second cell in the second row
@@ -61,8 +73,8 @@ public class EntrancePanel extends JPanel{
      * @param tableCenterPanel the table center panel used by the entrance listener to set the isles clickable after one click
      */
     public void setClickable(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
-        for(int i=0;i<this.getComponentCount();i++){
-            this.getComponent(i).addMouseListener(new EntranceListener((DashboardPanel) this.getParent(),viewObserverList,tableCenterPanel,this));
+        for(int i=0;i<studentButtons.size();i++){
+            studentButtons.get(i).addMouseListener(entranceListeners.get(i));
         }
     }
 
@@ -71,13 +83,14 @@ public class EntrancePanel extends JPanel{
      */
     public void removeClickable(){
         for(int i=0;i<this.getComponentCount();i++){
-            this.getComponent(i).removeMouseListener(this.getComponent(i).getMouseListeners()[0]);
+            this.getComponent(i).removeMouseListener(entranceListeners.get(i));
+            EntranceListener.setSetClickable(false);
         }
     }
 
     public void resetEntrance(){
         this.removeAll();
-
+        studentButtons.clear();
         this.validate();
         this.repaint();
     }
