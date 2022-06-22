@@ -6,12 +6,14 @@ import it.polimi.ingsw.View.GUI.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 import it.polimi.ingsw.View.GUI.MagePanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
@@ -80,7 +82,9 @@ public class TableCenterPanel extends JPanel {
      * this array contains all the panels representing the isles
      */
     ArrayList<IslePanel> islesPanels;
-
+    /**
+     * this array list contains all the panel representing the assistant card, the money, the username and the squad for each player
+     */
     ArrayList<JPanel> assistantAndMoneyPanelList;
 
     public TableCenterPanel(ModelStorage storage, String usernamePlaying) {
@@ -303,7 +307,17 @@ public class TableCenterPanel extends JPanel {
     }
 
     public void updateCoins(int playerID){
-
+        assistantAndMoneyConstraints.gridx=0;
+        if(storage.getNumberOfPlayers()==4){
+            assistantAndMoneyConstraints.gridy=3;
+        }else{
+            assistantAndMoneyConstraints.gridy=2;
+        }
+        assistantAndMoneyConstraints.weighty=0.1;
+        assistantAndMoneyConstraints.fill=GridBagConstraints.BOTH;
+        assistantAndMoneyPanelList.get(playerID).remove(assistantAndMoneyConstraints.gridy);
+        assistantAndMoneyPanelList.get(playerID).add(new JLabel("Coins:"+storage.getDashboard(playerID).getMoney()),assistantAndMoneyConstraints);
+        assistantAndMoneyPanelList.get(playerID).validate();
     }
 
     public void updateIsle(int isleID){
@@ -337,6 +351,19 @@ public class TableCenterPanel extends JPanel {
     public void removeIslesClickable(){
         for(int i=0;i<islesPanels.size();i++){
             islesPanels.get(i).removeMouseListener(islesPanels.get(i).getMouseListeners()[0]);
+        }
+    }
+
+    public void setClickableCharacters(ArrayList<ViewObserver> viewObserverList) {
+        for(int i=0;i<3;i++){
+            charactersContainer.getComponent(i).addMouseListener(new CharacterCardListener(viewObserverList,i,this));
+        }
+    }
+
+    public void removeCharactersClickable() {
+        for(int i=0;i<3;i++){
+            MouseListener mouseListener=charactersContainer.getComponent(i).getMouseListeners()[0];
+            charactersContainer.getComponent(i).removeMouseListener(mouseListener);
         }
     }
 }

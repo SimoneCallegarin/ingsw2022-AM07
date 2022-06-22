@@ -27,6 +27,9 @@ public class GameScreenPanel extends JPanel {
     DashboardPanel dashboard3;
     DashboardPanel dashboard4;
 
+    ArrayList<DashboardPanel> dashboardPanels;
+    ArrayList<JPanel> dashboardContainers;
+
     /**
      * Create a new buffered JPanel with the specified layout manager
      *
@@ -37,10 +40,15 @@ public class GameScreenPanel extends JPanel {
         super(layout);
         this.storage=storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
+        this.dashboardPanels=new ArrayList<>();
+        this.dashboardContainers=new ArrayList<>();
         dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
+        dashboardContainers.add(dashboardContainerPanel1);
         dashboardContainerPanel2=new JPanel(new GridLayout(2,1));
         dashboardContainerPanel2.setBackground(Color.CYAN);
+        dashboardContainers.add(dashboardContainerPanel2);
+
 
 
         GridBagConstraints gamescreenConstraints=new GridBagConstraints();
@@ -63,31 +71,10 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.gridx=2;
         add(dashboardContainerPanel2,gamescreenConstraints);
 
-        switch (storage.getNumberOfPlayers()){
-            case 2->{
-                dashboard1=new DashboardPanel(storage,0);
-                dashboard2=new DashboardPanel(storage,1);
-                dashboardContainerPanel1.add(dashboard1);
-                dashboardContainerPanel2.add(dashboard2);
-            }
-            case 3->{
-                dashboard1=new DashboardPanel(storage,0);
-                dashboard2=new DashboardPanel(storage,1);
-                dashboard3=new DashboardPanel(storage,2);
-                dashboardContainerPanel1.add(dashboard1);
-                dashboardContainerPanel1.add(dashboard3);
-                dashboardContainerPanel2.add(dashboard2);
-            }
-            case 4->{
-                dashboard1=new DashboardPanel(storage,0);
-                dashboard2=new DashboardPanel(storage,1);
-                dashboard3=new DashboardPanel(storage,2);
-                dashboard4=new DashboardPanel(storage,3);
-                dashboardContainerPanel1.add(dashboard1);
-                dashboardContainerPanel1.add(dashboard3);
-                dashboardContainerPanel2.add(dashboard2);
-                dashboardContainerPanel2.add(dashboard4);
-            }
+        for(int i=0;i<storage.getNumberOfPlayers();i++){
+            DashboardPanel dashboardPanel=new DashboardPanel(storage,i);
+            dashboardContainers.get(i%2).add(dashboardPanel);
+            dashboardPanels.add(dashboardPanel);
         }
     }
 
@@ -105,9 +92,6 @@ public class GameScreenPanel extends JPanel {
         }
     }
 
-    public void setClickableCharacters(){
-
-    }
 
     public void updateEntrance(int playerID){
         switch(playerID){

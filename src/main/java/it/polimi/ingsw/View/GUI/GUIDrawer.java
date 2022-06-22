@@ -220,7 +220,7 @@ public class GUIDrawer extends ViewSubject {
                 " by clicking on a student in your entrance and then on the isle/dining room.");
         if(expertMode){
             message.append("\nSince you are playing on Expert Mode you can also click on a character card to activate its effect");
-            gameScreenPanel.setClickableCharacters();
+            gameScreenPanel.tableCenterPanel.setClickableCharacters(getViewObserverList());
         }
         JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
 
