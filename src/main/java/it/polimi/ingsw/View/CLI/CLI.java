@@ -6,12 +6,12 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
-import it.polimi.ingsw.View.CLI.Utils.InputReadCall;
 import it.polimi.ingsw.View.GUI.GUIDrawer;
 import it.polimi.ingsw.View.View;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.concurrent.*;
 //import org.fusesource.jansi.AnsiConsole;
 
 
@@ -28,10 +28,15 @@ public class CLI extends ViewSubject implements View {
      */
     private final CLIDrawer cliDrawer;
 
-    /**
-     * Thread used for reading user input
-     */
-    private Thread inputThread;
+    // Read input utilities
+
+    private final BufferedReader br;
+
+    private final Callable<String> readTask;
+
+    private final ExecutorService taskQueue;
+
+    private Future<String> asyncRead;
 
     /**
      * Constants used for a better readability: they determine if it is necessary to change execution flow or not
@@ -59,24 +64,19 @@ public class CLI extends ViewSubject implements View {
     /**
      * Constructor of the CLI.
      */
-    public CLI() { cliDrawer = new CLIDrawer(); }
+    public CLI() {
+        cliDrawer = new CLIDrawer();
+        br = new BufferedReader(new InputStreamReader(System.in));
+        taskQueue = Executors.newSingleThreadExecutor();
+        readTask = () -> { String input; input = br.readLine(); return input; };
+    }
 
     /**
      * Launches a thread for user input reading.
      */
-    public String readUserInput() throws ExecutionException {
-        FutureTask<String> asyncInput = new FutureTask<>(new InputReadCall());
-        inputThread = new Thread(asyncInput);
-        inputThread.start();
-        String userInput = null;
-        try {
-             userInput = asyncInput.get();
-        }
-        catch (InterruptedException e) {
-            asyncInput.cancel(true);
-            Thread.currentThread().interrupt();
-        }
-        return userInput;
+    public String readUserInput() throws InterruptedException, ExecutionException {
+        asyncRead = taskQueue.submit(readTask);
+        return asyncRead.get();
     }
 
     /**
@@ -125,8 +125,8 @@ public class CLI extends ViewSubject implements View {
                 notifyObserver(obs -> obs.onUsername(username));
             else
                 askUsername();
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
         }
     }
 
@@ -152,8 +152,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             return askNumOfPlayers();
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread...");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
             return 0;
         }
     }
@@ -171,8 +171,8 @@ public class CLI extends ViewSubject implements View {
             modePreference = readUserInput();
             expertMode = modePreference.equalsIgnoreCase("y");
             return expertMode;
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread...");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
             return false;
         }
     }
@@ -198,8 +198,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askAssistantCard(playerID);
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread...");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
         }
     }
 
@@ -236,8 +236,8 @@ public class CLI extends ViewSubject implements View {
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
             askMove();
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread...");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
         }
     }
 
@@ -250,8 +250,8 @@ public class CLI extends ViewSubject implements View {
             int choice = askNumber("Which isle do you want to move Mother Nature to?", false, (cliDrawer.getStorage().getNumberOfIsles() - 1));
             if (statusFlow == CONTINUE_TASK)
                 notifyObserver(obs -> obs.onMNMovement(choice));
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread...");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
         }
     }
 
@@ -264,8 +264,8 @@ public class CLI extends ViewSubject implements View {
             int choice = askNumber("Which cloud do you want to take students from?", false, cliDrawer.getStorage().getGameTable().getNumOfClouds());
             if (statusFlow == CONTINUE_TASK)
                 notifyObserver(obs -> obs.onCloudChoice(choice));
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread...");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
         }
     }
 
@@ -324,8 +324,8 @@ public class CLI extends ViewSubject implements View {
                     notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
                 }
             }
-        } catch (ExecutionException ee) {
-            System.out.println("Closing input read thread...");
+        } catch (InterruptedException | ExecutionException ee) {
+            asyncRead.cancel(true);
         }
     }
 
@@ -333,7 +333,7 @@ public class CLI extends ViewSubject implements View {
      * Asks if the player wants to exchange students.
      * @return true if the player wants to exchange students, else false.
      */
-    private boolean askExchange() throws ExecutionException {
+    private boolean askExchange() throws InterruptedException, ExecutionException {
         String exchange;
         System.out.println("> Do you want to exchange students? [y/n]");
         System.out.println("> ");
@@ -349,7 +349,7 @@ public class CLI extends ViewSubject implements View {
      * @param max maximum value of the choice.
      * @return the choice of the player.
      */
-    private int askNumber(String request, boolean color, int max) throws ExecutionException {
+    private int askNumber(String request, boolean color, int max) throws InterruptedException, ExecutionException {
         try {
             System.out.println("> "+ request);
             if (color) {
@@ -389,7 +389,7 @@ public class CLI extends ViewSubject implements View {
      * Notifies the choice to the ClientController.
      * @param place the place from where thw student will be removed.
      */
-    private void askStudent(String place) throws ExecutionException {
+    private void askStudent(String place) throws InterruptedException, ExecutionException {
         int choice = askNumber("Which student do you want to move from your "+ place + "?",true,5);
         if (statusFlow == CONTINUE_TASK)
             notifyObserver(obs -> obs.onColorChoice(choice));
@@ -399,7 +399,7 @@ public class CLI extends ViewSubject implements View {
      * Asks the player in which isle he wants to move the students.
      * Notifies the choice to the ClientController.
      */
-    private void askIsleMovement() throws ExecutionException {
+    private void askIsleMovement() throws InterruptedException, ExecutionException {
         int choice = askNumber("Which isle do you want to move your student to? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
         if (statusFlow == CONTINUE_TASK)
             notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
@@ -409,7 +409,7 @@ public class CLI extends ViewSubject implements View {
      * Asks the player which character card he wants to play.
      * Notifies the choice to the ClientController.
      */
-    private void askCharacterCard() throws ExecutionException {
+    private void askCharacterCard() throws InterruptedException, ExecutionException {
         characterActivated = true;
         int choice = askNumber("Which character card do you want to activate?",false,2);
         notifyObserver(obs -> obs.onCharacterCard(choice));
@@ -422,7 +422,7 @@ public class CLI extends ViewSubject implements View {
  *                     and it is used in order to prevent the possibility to activate a character card during this phase
      * @throws ExecutionException when disconnect method has been called by the ClientController
      */
-    private void checkInput(String userChoice, boolean planning) throws ExecutionException {
+    private void checkInput(String userChoice, boolean planning) throws InterruptedException, ExecutionException {
         if (expertMode && !characterActivated) {
             if (userChoice.equalsIgnoreCase("l")) {
                 System.out.println("> You are logging out... are you sure? [y/n]");
@@ -471,7 +471,8 @@ public class CLI extends ViewSubject implements View {
 
     @Override
     public void disconnect(ServiceMessage message) {
-        inputThread.interrupt();
+        taskQueue.shutdownNow();
+        asyncRead.cancel(true);
         if (message.getMessageType() != MessageType.END_GAME)
             System.out.println(message.getMessage());
         System.exit(1);
