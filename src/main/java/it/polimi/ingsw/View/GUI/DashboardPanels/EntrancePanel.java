@@ -26,6 +26,7 @@ public class EntrancePanel extends JPanel{
     ArrayList<EntranceListener> entranceListeners;
     ArrayList<StudentButton> studentButtons;
 
+    private StudentButton lastPressedStudent;
     public EntrancePanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel,DashboardPanel dashboardPanel) {
         this.playerID=playerID;
         this.viewObservers=viewObservers;
@@ -40,6 +41,9 @@ public class EntrancePanel extends JPanel{
         c=new GridBagConstraints();
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
+
+        initializeEntrance(storage);
+        lastPressedStudent = null;
     }
 
     /**
@@ -47,7 +51,6 @@ public class EntrancePanel extends JPanel{
      * @param storage the model storage where the entrance information are memorized
      */
     public void initializeEntrance(ModelStorage storage){
-
         c.gridx=0;
         c.gridy=0;
         c.insets=new Insets(0,9,3,7);
@@ -93,6 +96,14 @@ public class EntrancePanel extends JPanel{
         studentButtons.clear();
         this.validate();
         this.repaint();
+    }
+
+    public StudentButton getLastPressedStudent() {
+        return lastPressedStudent;
+    }
+
+    public void setLastPressedStudent(StudentButton lastPressedStudent) {
+        this.lastPressedStudent = lastPressedStudent;
     }
 
 }

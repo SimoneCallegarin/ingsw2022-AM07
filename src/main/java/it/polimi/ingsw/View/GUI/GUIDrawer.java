@@ -5,8 +5,12 @@ import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -191,13 +195,37 @@ public class GUIDrawer extends ViewSubject {
      */
     public int ShowAssistantCardForm(int playerID) {
         AtomicInteger turnOrder = new AtomicInteger();
+        turnOrder.set(0);
         JPanel buttonContainer = new JPanel();
         JButton[] buttons = new JButton[modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size()];
         for (int i = 0; i < modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {
             buttons[i] = (new AssistantCardButton(modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i)));
             //idk what the hell is going on with these variables
-            int finalI = i+1;
+            int finalI = modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i);
+            int finalI1 = i;
             buttons[i].addActionListener(e -> {
+                ClassLoader cl1=this.getClass().getClassLoader();
+                InputStream url1=cl1.getResourceAsStream("GameTable/Assistant_cards/2x/" + finalI + "chk.png");
+                BufferedImage img1= null;
+                try {
+                    if (url1 != null)
+                        img1 = ImageIO.read(url1);
+                }catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                buttons[finalI1].setIcon(new ImageIcon(img1));
+                if (turnOrder.get() != 0) {
+                    ClassLoader cl2=this.getClass().getClassLoader();
+                    InputStream url2=cl2.getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder.get() + ".png");
+                    BufferedImage img2= null;
+                    try {
+                        if (url2 != null)
+                            img2 = ImageIO.read(url2);
+                    }catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    buttons[turnOrder.get()-1].setIcon(new ImageIcon(img2));
+                }
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 turnOrder.set(finalI);
 
