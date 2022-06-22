@@ -261,17 +261,19 @@ public class TableCenterPanel extends JPanel {
             cloudsContainerPanel.setBackground(Color.CYAN);
             isleContainerCenter.add(cloudsContainerPanel,centerConstraints);
 
-            centerConstraints.fill=GridBagConstraints.BOTH;
-            centerConstraints.gridy=2;
-            centerConstraints.weightx=1;
-            centerConstraints.weighty=1;
-            charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(0).getCharacterCardName()));
-            charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(1).getCharacterCardName()));
-            charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(2).getCharacterCardName()));
-            isleContainerCenter.add(charactersContainer,centerConstraints);
+            if(storage.isGameMode()) {
+                centerConstraints.fill = GridBagConstraints.BOTH;
+                centerConstraints.gridy = 2;
+                centerConstraints.weightx = 1;
+                centerConstraints.weighty = 1;
+                charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(0).getCharacterCardName()));
+                charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(1).getCharacterCardName()));
+                charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(2).getCharacterCardName()));
+                isleContainerCenter.add(charactersContainer, centerConstraints);
+            }
 
             centerConstraints.fill=GridBagConstraints.BOTH;
-            centerConstraints.gridy=3;
+            centerConstraints.gridy++;
             centerConstraints.weightx=0.5;
             centerConstraints.weighty=0.5;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);

@@ -177,7 +177,7 @@ public class GuiDrawer extends ViewSubject {
     }
 
     /**
-     * this method uses the general panel manager card layout to switch between the InitialBackground panel and the GameScreen panel
+     * this method uses the general panel manager card layout to switch from the InitialBackground panel to the GameScreen panel
      */
     public void showGameScreen(){
         //switch to the actual game screen
@@ -244,7 +244,6 @@ public class GuiDrawer extends ViewSubject {
 
 
         for(int i=0;i<modelChanges.getToUpdate().size();i++){
-
             switch(modelChanges.getToUpdate().get(i)){
                 case CLOUDS_CHANGED -> {
                     if(gameStart) {
