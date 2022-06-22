@@ -51,20 +51,26 @@ public class DiningStudentsPanel extends JPanel {
 
 
         for(RealmColors color:RealmColors.values()){
-            for(int i=0;i<10;i++){
+            for(int i=0;10-storage.getDashboard(playerID).getDiningStudents(color)>i;i++){
                 JPanel emptyPanel=new JPanel();
+                emptyPanel.setBorder(BorderFactory.createEmptyBorder());
                 emptyPanel.setOpaque(false);
-                emptyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-                if(storage.getDashboard(playerID).getDiningStudents(color)-(i+1)>=0) {
-                    switch (color) {
-                        case YELLOW -> yellowLane.add(new StudentButton(color));
-                        case BLUE -> blueLane.add(new StudentButton(color));
-                        case RED -> redLane.add(new StudentButton(color));
-                        case PINK -> pinkLane.add(new StudentButton(color));
-                        case GREEN -> greenLane.add(new StudentButton(color));
-                    }
+                switch (color) {
+                    case YELLOW -> yellowLane.add(emptyPanel);
+                    case BLUE -> blueLane.add(emptyPanel);
+                    case RED -> redLane.add(emptyPanel);
+                    case PINK -> pinkLane.add(emptyPanel);
+                    case GREEN -> greenLane.add(emptyPanel);
                 }
-
+            }
+            for(int i=0;i<storage.getDashboard(playerID).getDiningStudents(color);i++){
+                switch (color) {
+                    case YELLOW -> yellowLane.add(new StudentButton(color));
+                    case BLUE -> blueLane.add(new StudentButton(color));
+                    case RED -> redLane.add(new StudentButton(color));
+                    case PINK -> pinkLane.add(new StudentButton(color));
+                    case GREEN -> greenLane.add(new StudentButton(color));
+                }
             }
         }
 
