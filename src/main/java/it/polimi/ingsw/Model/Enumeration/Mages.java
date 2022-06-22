@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Model.Enumeration;
 
 /**
- * this enumeration is the list of all the different Assistant Card Deck a player can choose
+ * List of all the different Assistant Card Deck a player can have.
  */
     public enum Mages {
         MYSTICAL_WIZARD,
@@ -10,8 +10,9 @@ package it.polimi.ingsw.Model.Enumeration;
         ANCIENT_SAGE;
 
     /**
-     * @param index associated to a certain mage
-     * @return Mage (retro of the assistants card of a deck)
+     * Associates a mage to the ID of a dashboard.
+     * @param index ID of the dashboard associated to a certain mage.
+     * @return the Mage (retro of the assistants card of a deck).
      */
         public static Mages getMage(int index){
             return switch (index) {

@@ -27,19 +27,6 @@ class Cloud2and4PlayersTest {
     }
 
     /**
-     * we are testing if the number of students of a certain color on the cloud is correctly returned
-     */
-    @Test
-    void getNumberOfStudentsOfColor(){
-        cloudForTest.addStudent(RealmColors.BLUE);
-        cloudForTest.addStudent(RealmColors.BLUE);
-        cloudForTest.addStudent(RealmColors.PINK);
-        assertEquals(2,cloudForTest.getNumberOfStudentsOfColor(RealmColors.BLUE));
-        assertEquals(1,cloudForTest.getNumberOfStudentsOfColor(RealmColors.PINK));
-        assertEquals(0,cloudForTest.getNumberOfStudentsOfColor(RealmColors.YELLOW));
-    }
-
-    /**
      * we are testing if the students are correctly added to the cloud
      */
     @Test
@@ -57,7 +44,7 @@ class Cloud2and4PlayersTest {
         cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.addStudent(RealmColors.YELLOW);
         cloudForTest.removeStudent(RealmColors.YELLOW);
-        assertEquals(1,cloudForTest.getNumberOfStudentsOfColor(RealmColors.YELLOW));
+        assertEquals(1,cloudForTest.getStudentsByColor(RealmColors.YELLOW));
     }
 
     /**

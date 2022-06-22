@@ -2,7 +2,7 @@ package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Model.Enumeration.*;
-import it.polimi.ingsw.Network.ClientHandler;
+import it.polimi.ingsw.Network.ServerSide.ClientHandler;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.ModelObserver;
@@ -18,7 +18,7 @@ public class VirtualView implements ModelObserver {
     /**
      * List of client handler associated to players that are playing the same game (that is observed by the VirtualView).
      */
-    private final ArrayList<ClientHandler> clientHandler=new ArrayList<>();
+    private final ArrayList<ClientHandler> clientHandler = new ArrayList<>();
 
     /**
      * Adds a ClientHandler to the list of players that are playing the same game observed by the VirtualView.
@@ -56,16 +56,30 @@ public class VirtualView implements ModelObserver {
     }
 
     /**
+     * Sends a ServiceMessage to all the players that are playing the same game observed by the VirtualView.
+     * It contains the message that has to be shown when a game ends properly
+     * @param winner is the name of the winner
+     * @param winnerID is -1 if the game ended in a draw
+     */
+    @Override
+    public void onEndGame(String winner, int winnerID) {
+        ServiceMessage sm = new ServiceMessage(MessageType.END_GAME, winner, winnerID);
+        for(ClientHandler ch : clientHandler){
+            ch.send(sm);
+        }
+    }
+
+    /**
      * Sends a GamePhase_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
      * It contains the information about the game phase and who is the active player but also on the winner if there's one.
      * @param activePlayer the player that is now the active one.
+     * @param activePlayerNickname is the nickname of the active player
      * @param gamePhase game phase in which the game is now.
      * @param actionPhase action phase in which the game is now.
-     * @param winner if the game is coming to the end then it will contain the ID of the player who won or if there's a draw.
      */
     @Override
-    public void onGamePhases(int activePlayer, GamePhases gamePhase, ActionPhases actionPhase, int winner) {
-        GamePhase_UpdateMsg gamePhase_updateMsg=new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE,activePlayer, gamePhase, actionPhase,winner);
+    public void onGamePhases(int activePlayer, String activePlayerNickname, GamePhases gamePhase, ActionPhases actionPhase) {
+        GamePhase_UpdateMsg gamePhase_updateMsg=new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE, activePlayer, activePlayerNickname, gamePhase, actionPhase);
         for(ClientHandler ch : clientHandler){
             ch.send(gamePhase_updateMsg);
         }

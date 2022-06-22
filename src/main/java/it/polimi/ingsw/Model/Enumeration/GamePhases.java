@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Model.Enumeration;
 
 /**
- * This enumeration represents the phases of the game
+ * Represents the phases of the game.
  */
 
 public enum GamePhases {

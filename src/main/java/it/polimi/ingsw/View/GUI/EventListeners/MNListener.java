@@ -1,8 +1,7 @@
 package it.polimi.ingsw.View.GUI.EventListeners;
 
-import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Observer.ViewObserver;
-import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.GUI.IslesPanels.IslePanel;
 
 import java.awt.event.MouseEvent;

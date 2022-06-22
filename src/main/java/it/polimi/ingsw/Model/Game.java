@@ -10,47 +10,48 @@ import it.polimi.ingsw.Model.GameTableObjects.Isle;
 import it.polimi.ingsw.Model.Player.AssistantCard;
 import it.polimi.ingsw.Model.Player.Player;
 import it.polimi.ingsw.Observer.ModelObserver;
-import it.polimi.ingsw.Observer.ModelSubject;
+import it.polimi.ingsw.Observer.Subjects.ModelSubject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
 public class Game extends ModelSubject {
+
     /**
-     * The game mode of the game, it is decided by the first player that joins the game
+     * The game mode of the game, it is decided by the first player that joins the game.
      */
     private GameMode gameMode;
     /**
-     * The number of players that are going to play the game, it is decided by the first player that joins the game
+     * The number of players that are going to play the game, it is decided by the first player that joins the game.
      */
     private int numberOfPlayers;
     /**
-     * The number of players that already joined the game
+     * The number of players that already joined the game.
      */
     private int actualNumberOfPlayers = 0;
     /**
-     * The game table where the game is going to be played, it contains many different objects that compose the game itself
+     * The game table where the game is going to be played, it contains many objects that compose the game itself.
      */
     private GameTable gameTable;
     /**
-     * The list of players that are playing the game
+     * The list of players that are playing the game.
      */
     private final ArrayList<Player> players;
     /**
-     * Random index used to say who will be the first player to play in the first turn
+     * Random index used to say who will be the first player to play in the first turn.
      */
     private int firstPlayerIndex;
     /**
-     * The number of students that is possible to move in a turn for each player
+     * The number of students that is possible to move in a turn for each player.
      */
     private int maxMovableStudents;
     /**
-     * Counter used to check how many players already played their turn in a game phase
+     * Counter used to check how many players already played their turn in a game phase.
      */
     private int playerCounter = 0;
     /**
-     * Counter of the students moved
+     * Counter of the students moved.
      */
     private int studentsCounter = 0;
     /**
@@ -59,55 +60,57 @@ public class Game extends ModelSubject {
      */
     private boolean lastRound = false;
     /**
-     * When true it means the game ended, else false
+     * When true it means the game ended, else false.
      */
     private boolean endGame = false;
     /**
-     * When true it means the game ended in a draw, else false
+     * When true it means the game ended in a draw, else false.
      */
     private boolean drawEndGame = false;
     /**
-     * Indicates the player that won the game
+     * Indicates the player that won the game.
      */
     private Player winner;
     /**
-     * Phases in which it's divided the game
+     * Phases in which it's divided the game.
      */
     private GamePhases gamePhase;
     /**
-     * It divides the planning phase in 2 different sub phases, and it indicates that the player turn is in the planning phase
+     * It divides the planning phase in 2 different sub phases, and it indicates that the player turn is in the planning phase.
      */
     private PlanningPhases planningPhase;
     /**
-     * It divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase
+     * It divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase.
      */
     private ActionPhases actionPhase;
-
+//!!!!!!!!!!!!!!!!!!!!!!!
     private ActionPhases lastActionPhase;
     /**
-     * It indicates who is the current active player that is playing his turn
+     * It indicates who is the current active player that is playing his turn.
      */
     private CurrentOrder currentActivePlayer;
     /**
-     * It's the factory that permits to build the effect of each playable character card
+     * It's the factory that permits to build the effect of each playable character card.
      */
     private final EffectInGameFactory effectInGameFactory;
     /**
-     * Saves the color chosen by the player when activating the FUNGIST character card
+     * Saves the color chosen by the player when activating the FUNGIST character card.
      */
     private RealmColors colorForFungist;
     /**
      * Saves the number of students of the chosen color removed from the isle
-     * when checking the influence the turn the FUNGIST has been played
+     * when checking the influence the turn the FUNGIST has been played.
      */
     private int studentsRemovedByFungist=0;
-
+//!!!!!!!!!!!!!!!!!!!!!!
     private int farmerOffset = 0;
-
+    /**
+     * Counts the number of time the atomic effect of a character card has been activated.
+     */
     private int atomicEffectCounter = 0;
 
     /**
-     * Game constructor
+     * Game constructor.
      */
     public Game() {
         this.players = new ArrayList<>(4);
@@ -122,34 +125,20 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * setting the number of player when selected by the first player
-     * @param numberOfPlayers to play with in total
-     */
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-
-        if (numberOfPlayers == 3)
-            maxMovableStudents = 4;
-        else
-            maxMovableStudents = 3;
-    }
-
-    /**
-     * First method that has to be called to properly start the game
-     * adding the first player following his desire about which game mode and with how many players he wants to play
-     * @param nickName selected by the player
-     * @param gameMode selected by the player (expert or base)
-     * @param numberOfPlayers selected by the player (from 2 to 4)
+     * First method that has to be called to properly start the game.
+     * Adds the first player to the game and sets game mode and number of players basing on his choices.
+     * @param nickName chosen by the player.
+     * @param gameMode chosen by the player (true for expert, else base).
+     * @param numberOfPlayers chosen by the player (from 2 to 4).
      */
     public void addFirstPlayer(String nickName, boolean gameMode, int numberOfPlayers){
 
         setNumberOfPlayers(numberOfPlayers);
 
-        if(gameMode){
+        if(gameMode)
             this.gameMode=GameMode.EXPERT;
-        } else {
+        else
             this.gameMode=GameMode.BASE;
-        }
 
         Player newPlayer;
 
@@ -167,33 +156,42 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * first action to do when a player that is not the first one asks to join a match
-     * (after having checked that the number of players is respected)
-     * @param nickname the nickname of the player, must be checked if other players already got the same
+     * Sets the number of player when selected by the first player.
+     * @param numberOfPlayers to play with in total.
+     */
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+        if (numberOfPlayers == 3)
+            maxMovableStudents = 4;
+        else
+            maxMovableStudents = 3;
+    }
+
+    /**
+     * First action to do when a player that is not the first one asks to join a match.
+     * @param nickname the nickname of the player that has to be added.
      */
     public void addAnotherPlayer(String nickname) {
+        Player newPlayer;
+        if (numberOfPlayers == 2 || numberOfPlayers == 3)
+            newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD);
+        else {
+            if (actualNumberOfPlayers == 2)
+                newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1);
+            else
+                newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2);
+        }
+        players.add(newPlayer);
+        initializeEntrance(actualNumberOfPlayers);
+        actualNumberOfPlayers++;
 
-            Player newPlayer;
-            if (numberOfPlayers == 2 || numberOfPlayers == 3)
-                newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD);
-            else {
-                if (actualNumberOfPlayers == 2)
-                    newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1);
-                else
-                    newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2);
-            }
-            players.add(newPlayer);
-            initializeEntrance(actualNumberOfPlayers);
-            actualNumberOfPlayers++;
-
-            if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
-                this.gamePhase = GamePhases.PLANNING_PHASE;
-                firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
-                notifyGameCreationValues();
-                fillClouds();
-                updateOrder(gamePhase);
-            }
-
+        if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go
+            this.gamePhase = GamePhases.PLANNING_PHASE;
+            firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));
+            notifyGameCreationValues();
+            fillClouds();
+            updateOrder(gamePhase);
+        }
     }
 
     /**
@@ -208,7 +206,7 @@ public class Game extends ModelSubject {
         ArrayList<Squads> squads=new ArrayList<>();
         for(Player p:players){
             towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());
-            entrances.add(p.getDashboard().getEntrance().getStudents());
+            entrances.add(p.getDashboard().getEntrance().getStudentsHashMap());
             nicknames.add(p.getNickname());
             numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
             squads.add(p.getSquad());
@@ -218,11 +216,11 @@ public class Game extends ModelSubject {
 
         // GAME TABLE:
         ArrayList<HashMap<RealmColors,Integer>> emptyClouds=new ArrayList<>();
-        for(Cloud c:gameTable.getClouds()){ emptyClouds.add(c.getStudents()); }
+        for(Cloud c:gameTable.getClouds()){ emptyClouds.add(c.getStudentsHashMap()); }
         int generalReserve=gameTable.getGeneralMoneyReserve();
 
         ArrayList<HashMap<RealmColors,Integer>> studentsOnIsle=new ArrayList<>();
-        for(Isle i:gameTable.getIsleManager().getIsles()){ studentsOnIsle.add(i.getStudents()); }
+        for(Isle i:gameTable.getIsleManager().getIsles()){ studentsOnIsle.add(i.getStudentsHashMap()); }
 
         ArrayList<String> characterNames=new ArrayList<>();
         ArrayList<Integer> characterCost=new ArrayList<>();
@@ -233,7 +231,7 @@ public class Game extends ModelSubject {
             characterNames.add(card.getCharacterCardName().toString());
             characterCost.add(card.getCost());
             denyCards.add(card.getDenyCards());
-            studentsOnCard.add(card.getStudents());
+            studentsOnCard.add(card.getStudentsHashMap());
             characterCardsDescription.add(card.getCharacterCardDescription());
         }
 
@@ -241,15 +239,16 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * it is responsible for changing the discard pile of a certain player
-     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card
-     * @param turnOrderPlayed is the turn order of the AssistantCard played
+     * Handles a player that plays an assistant card.
+     * It is responsible for changing the discard pile of a certain player.
+     * @param playerID is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card.
+     * @param turnOrderPlayed is the turn order of the AssistantCard played.
      */
-    public void playAssistantCard(int idPlayer, int turnOrderPlayed) {
+    public void playAssistantCard(int playerID, int turnOrderPlayed) {
         boolean alreadyPlayed = false;
         boolean onlyChoice = true;
-        AssistantCard assistantCardPlayed = players.get(idPlayer).getAssistantCardByTurnOrder(turnOrderPlayed);
-        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()) {
+        AssistantCard assistantCardPlayed = players.get(playerID).getAssistantCardByTurnOrder(turnOrderPlayed);
+        if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE && currentActivePlayer == players.get(playerID).getOrder()) {
             if (assistantCardPlayed != null) {
                 for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn't work)
                     if (p.getDiscardPile() != null) {
@@ -262,15 +261,13 @@ public class Game extends ModelSubject {
 
                 if (alreadyPlayed) {
                     alreadyPlayed = false;
-                    for (AssistantCard ac : players.get(idPlayer).getMageDeck()) {
-                        for (Player p : players) {
-                            if (p.getDiscardPile() != null) {
+                    for (AssistantCard ac : players.get(playerID).getMageDeck()) {
+                        for (Player p : players)
+                            if (p.getDiscardPile() != null)
                                 if (p.getDiscardPile().equals(ac)) {
                                     alreadyPlayed = true;
                                     break;
                                 }
-                            }
-                        }
                         if (!alreadyPlayed) {
                             onlyChoice = false;
                             break;
@@ -281,21 +278,21 @@ public class Game extends ModelSubject {
                 }
 
                 if (!alreadyPlayed || onlyChoice) {
-                    players.get(idPlayer).playAssistantCard(assistantCardPlayed);
-                    players.get(idPlayer).setCardOrder(playerCounter + 1);
+                    players.get(playerID).playAssistantCard(assistantCardPlayed);
+                    players.get(playerID).setCardOrder(playerCounter + 1);
 
-                notifyAssistantsCard(idPlayer);
+                notifyAssistantsCard(playerID);
 
-                    if (players.get(idPlayer).isMageDeckEmpty())
+                    if (players.get(playerID).isMageDeckEmpty())
                         lastRound = true;
                     playerCounter++;
                     nextPlayer();
                 } else {
-                    notifyObserver(obs -> obs.onKO(idPlayer, "You cannot play this card, please select another one"));
+                    notifyObserver(obs -> obs.onKO(playerID, "You cannot play this card, please select another one"));
                     notifyTurn();
                 }
             } else {
-                notifyObserver(obs -> obs.onKO(idPlayer, "You don't have this card, please select another one"));
+                notifyObserver(obs -> obs.onKO(playerID, "You don't have this card, please select another one"));
                 notifyTurn();
             }
         }
@@ -303,130 +300,126 @@ public class Game extends ModelSubject {
 
     /**
      * Initialize the deck of available assistant cards for the player and the assistant card in the discard pile in order to pass it to the view.
-     * @param idPlayer the id of the player it will be passed the deck.
+     * @param playerID the id of the player it will be passed the deck.
      */
-    private void notifyAssistantsCard(int idPlayer) {
+    private void notifyAssistantsCard(int playerID) {
         ArrayList<Integer> turnOrders =new ArrayList<>();
         ArrayList<Integer> movementsMN =new ArrayList<>();
-        for(AssistantCard ac : getPlayerByIndex(idPlayer).getMageDeck()){
+        for(AssistantCard ac : getPlayerByIndex(playerID).getMageDeck()){
             turnOrders.add(ac.getTurnOrder());
             movementsMN.add(ac.getMnMovement());
         }
-        notifyObserver(obs->obs.onAssistantCard(idPlayer,getPlayerByIndex(idPlayer).getDiscardPile().getTurnOrder(),getPlayerByIndex(idPlayer).getDiscardPile().getMnMovement(), turnOrders, movementsMN));
+        notifyObserver(obs->obs.onAssistantCard(playerID,getPlayerByIndex(playerID).getDiscardPile().getTurnOrder(),getPlayerByIndex(playerID).getDiscardPile().getMnMovement(), turnOrders, movementsMN));
     }
 
     /**
-     * it takes a student from the dashboard of a certain player and puts it on a specified island
-     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
-     * @param idIsle is the index of the chosen island
-     * @param colorIndex is the index of the color of the student that has been moved
+     * Takes a student from the dashboard of a certain player and puts it on a specified isle.
+     * @param playerID ID of the player who moved the student.
+     * @param isleID ID of the chosen island.
+     * @param colorIndex is the index of the color of the student that has been moved.
      */
-    public void moveStudentInIsle(int idPlayer, int idIsle, int colorIndex) {
+    public void moveStudentInIsle(int playerID, int isleID, int colorIndex) {
         RealmColors color = RealmColors.getColor(colorIndex);
-        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(playerID).getOrder()) {
             if (colorIndex >= 0 && colorIndex <= 4) {
-                if (players.get(idPlayer).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
-                    if (idIsle >= 0 && idIsle < gameTable.getIsleManager().getIsles().size()) {
-                        players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
-                        gameTable.getIsleManager().getIsle(idIsle).addStudent(color);
+                if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
+                    if (isleID >= 0 && isleID < gameTable.getIsleManager().getIsles().size()) {
+                        players.get(playerID).getDashboard().getEntrance().removeStudent(color);
+                        gameTable.getIsleManager().getIsle(isleID).addStudent(color);
                         studentsCounter++;
-
                         if (studentsCounter == maxMovableStudents) {
                             actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
                             studentsCounter = 0;
                         }
-
-                        notifyObserver(obs -> obs.onStudentMoving_toIsle(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(), idIsle, gameTable.getIsleManager().getIsle(idIsle).getStudents()));
+                        notifyObserver(obs -> obs.onStudentMoving_toIsle(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), isleID, gameTable.getIsleManager().getIsle(isleID).getStudentsHashMap()));
                     } else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "Isle " + idIsle + " doesn't exist, please select another one"));
+                        notifyObserver(obs -> obs.onKO(playerID, "Isle " + isleID + " doesn't exist, please select another one"));
                 } else
-                    notifyObserver(obs -> obs.onKO(idPlayer, "You don't have enough " + color.toString() + " students, please select another color"));
+                    notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + color.toString() + " students, please select another color"));
             } else
-                notifyObserver(obs -> obs.onKO(idPlayer, "This color doesn't exist, please select another one"));
+                notifyObserver(obs -> obs.onKO(playerID, "This color doesn't exist, please select another one"));
         }
 
         notifyTurn();
     }
 
     /**
-     * it takes a student from the dashboard of a certain player and puts it in the dining room
-     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
-     * @param colorIndex is the index of the color of the student that has been moved
+     * Takes a student from the dashboard of a certain player and puts it in his dining room.
+     * @param playerID ID of the player who moved the student.
+     * @param colorIndex color of the student that has been moved. 
      */
-    public void moveStudentInDiningRoom(int idPlayer, int colorIndex) {
+    public void moveStudentInDiningRoom(int playerID, int colorIndex) {
         RealmColors color = RealmColors.getColor(colorIndex);
-        int indexFarmer=0;
-        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(idPlayer).getOrder()) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(playerID).getOrder()) {
             if (colorIndex >= 0 && colorIndex <= 4) {
-                if (players.get(idPlayer).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
-                    if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
-                        players.get(idPlayer).getDashboard().getEntrance().removeStudent(color);
-                        players.get(idPlayer).getDashboard().getDiningRoom().addStudent(color);
+                if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
+                    if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
+                        players.get(playerID).getDashboard().getEntrance().removeStudent(color);
+                        players.get(playerID).getDashboard().getDiningRoom().addStudent(color);
                         // if FARMER character card is played by the player this turn
                         // then each time is checked if the player has an equal number of students of another
                         // player that owe the professor of that color
-                        if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FARMER)
+                        if (gameMode == GameMode.EXPERT && getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(playerID).getCharacterCardPlayed() == CharacterCardsName.FARMER)
                             farmerOffset = 1;
                         else
                             farmerOffset = 0;
                         // checking if the student is added in third, sixth or ninth position of the dining room
-                        checkStudentInMoneyPosition(idPlayer,color);
-                        checkUpdateProfessor(idPlayer, color);
+                        checkStudentInMoneyPosition(playerID,color);
+                        checkUpdateProfessor(playerID, color);
                         studentsCounter++;
-
                         if (studentsCounter == maxMovableStudents) {
                             actionPhase = ActionPhases.MOVE_MOTHER_NATURE;
                             studentsCounter = 0;
                         }
 
-                        notifyObserver(obs -> obs.onStudentMoving_toDining(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(), players.get(idPlayer).getDashboard().getDiningRoom().getStudents()));
+                        notifyObserver(obs -> obs.onStudentMoving_toDining(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), players.get(playerID).getDashboard().getDiningRoom().getStudentsHashMap()));
                     } else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "Your " + color.toString() + " Dining Room is full! You can't add " + color + " students, please select another color"));
+                        notifyObserver(obs -> obs.onKO(playerID, "Your " + color.toString() + " Dining Room is full! You can't add " + color + " students, please select another color"));
                 } else
-                    notifyObserver(obs -> obs.onKO(idPlayer, "You don't have enough " + color.toString() + " students, please select another color"));
+                    notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + color.toString() + " students, please select another color"));
             } else
-                notifyObserver(obs -> obs.onKO(idPlayer, "This color doesn't exist, please select another one"));
+                notifyObserver(obs -> obs.onKO(playerID, "This color doesn't exist, please select another one"));
         }
 
         notifyTurn();
     }
 
     /**
-     * Checking if the student is added in third, sixth or ninth position of the dining room.
-     * @param idPlayer ID of the player that placed a student in his dining room.
+     * Checking if the student is added in third, sixth or ninth position of the dining room (when playing expert mode).
+     * @param playerID ID of the player that placed a student in his dining room.
      * @param color color of the student placed.
      */
-    private void checkStudentInMoneyPosition(int idPlayer, RealmColors color) {
-        if (isGameMode() && players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
-            players.get(idPlayer).gainMoney();
+    private void checkStudentInMoneyPosition(int playerID, RealmColors color) {
+        if (isGameMode() && players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
+            players.get(playerID).gainMoney();
             gameTable.studentInMoneyPosition();
-            notifyObserver(obs -> obs.onMoneyUpdate(idPlayer, players.get(idPlayer).getMoney(), gameTable.getGeneralMoneyReserve()));
+            notifyObserver(obs -> obs.onMoneyUpdate(playerID, players.get(playerID).getMoney(), gameTable.getGeneralMoneyReserve()));
         }
     }
 
     /**
-     * it takes a student from the dashboard of a certain player and puts it on a certain isle
-     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who moved the student
-     * @param idIsle is the index of the isle which we want to move the student on
+     * Moves mother nature on a certain isle.
+     * @param playerID ID of the player who moved the mother nature.
+     * @param isleID ID of the isle where the player wants to move mother nature.
      */
-    public void moveMotherNature(int idPlayer, int idIsle) {
-        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_MOTHER_NATURE && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            if (idIsle >= 0 && idIsle < gameTable.getIsleManager().getIsles().size()) {
-                if (gameTable.getIsleManager().isMNMovementAcceptable(idIsle, players.get(idPlayer).getDiscardPile().getMnMovement())) {
+    public void moveMotherNature(int playerID, int isleID) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_MOTHER_NATURE && currentActivePlayer == players.get(playerID).getOrder()) {
+            if (isleID >= 0 && isleID < gameTable.getIsleManager().getIsles().size()) {
+                if (gameTable.getIsleManager().isMNMovementAcceptable(isleID, players.get(playerID).getDiscardPile().getMnMovement())) {
                     gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);
-                    gameTable.getIsleManager().getIsle(idIsle).setMotherNature(true);
-                    gameTable.getIsleManager().setIsleWithMotherNatureIndex(idIsle);
+                    gameTable.getIsleManager().getIsle(isleID).setMotherNature(true);
+                    gameTable.getIsleManager().setIsleWithMotherNatureIndex(isleID);
                     // if the FUNGIST card is played, then we remove the students of the chosen color from the selected isle
                     // then we proceed to calculate the influence on the isle
-                    if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)
-                        while (gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != 0) {
-                            gameTable.getIsleManager().getIsle(idIsle).removeStudent(colorForFungist);
+                    if (gameMode == GameMode.EXPERT && getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(playerID).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)
+                        while (gameTable.getIsleManager().getIsle(isleID).getStudentsByColor(colorForFungist) != 0) {
+                            gameTable.getIsleManager().getIsle(isleID).removeStudent(colorForFungist);
                             studentsRemovedByFungist += 1;
                         }
-                    if (gameTable.getIsleManager().getIsle(idIsle).getDenyCards() == 0)
-                        checkUpdateInfluence(idIsle);
+                    if (gameTable.getIsleManager().getIsle(isleID).getDenyCards() == 0)
+                        checkUpdateInfluence(isleID);
                     else {
-                        gameTable.getIsleManager().getIsle(idIsle).removeDenyCard();
+                        gameTable.getIsleManager().getIsle(isleID).removeDenyCard();
                         int grandmaIndex = 0;
                         for (int i=0; i<3; i++)
                             if(gameTable.getCharacterCard(i).getCharacterCardName() == CharacterCardsName.GRANDMA_HERBS){
@@ -434,32 +427,32 @@ public class Game extends ModelSubject {
                                 break;
                             }
                         gameTable.getCharacterCard(grandmaIndex).addDenyCard();
-                        //notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
-                        notifyEffectUpdate(grandmaIndex,idPlayer,idIsle,-1);
+                        //notifyObserver(obs -> obs.onDenyCard(playerID, isleID, false));
+                        notifyEffectUpdate(grandmaIndex,playerID,isleID,-1);
                     }
                     // if the FUNGIST card is played, then we add the students of the chosen color
                     // that were removed from the selected isle
-                    if (gameMode == GameMode.EXPERT && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(idPlayer).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)
-                        while (gameTable.getIsleManager().getIsle(idIsle).getStudentsByColor(colorForFungist) != studentsRemovedByFungist)
-                            gameTable.getIsleManager().getIsle(idIsle).addStudent(colorForFungist);
+                    if (gameMode == GameMode.EXPERT && getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() && getPlayerByIndex(playerID).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)
+                        while (gameTable.getIsleManager().getIsle(isleID).getStudentsByColor(colorForFungist) != studentsRemovedByFungist)
+                            gameTable.getIsleManager().getIsle(isleID).addStudent(colorForFungist);
                     studentsRemovedByFungist = 0;
                     checkEndGame();
                     if (!lastRound) {
                         actionPhase = ActionPhases.CHOOSE_CLOUD;
-                        notifyMNMovement();
+                        notifyMNMovement(false);
                         notifyTurn();
                     } else {
                         playerCounter++;
                         actionPhase = ActionPhases.MOVE_STUDENTS;
-                        notifyMNMovement();
+                        notifyMNMovement(false);
                         nextPlayer();
                     }
                 } else {
-                    notifyObserver(obs -> obs.onKO(idPlayer, "You can't go that far! Please select a suitable isle"));
+                    notifyObserver(obs -> obs.onKO(playerID, "You can't go that far! Please select a suitable isle"));
                     notifyTurn();
                 }
             } else {
-                notifyObserver(obs -> obs.onKO(idPlayer, "Isle " + idIsle + " doesn't exist, please select another one"));
+                notifyObserver(obs -> obs.onKO(playerID, "Isle " + isleID + " doesn't exist, please select another one"));
                 notifyTurn();
             }
         }
@@ -467,109 +460,110 @@ public class Game extends ModelSubject {
 
     /**
      * Initialize the parameters needed by the view consequently to the movement of mother nature.
+     * @param isEffect if is true then it will notify that an atomic effect that involves the movement of mother nature has been played,
+     *                 else false when mother nature is moved at the end of the turn.
      */
-    private void notifyMNMovement() {
-        ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
-        ArrayList<Integer> numIsles=new ArrayList<>();
-        ArrayList<TowerColors> towerColors=new ArrayList<>();
-        ArrayList<Boolean> denyCards=new ArrayList<>();
+    private void notifyMNMovement(boolean isEffect) {
+        ArrayList<HashMap<RealmColors,Integer>> students = new ArrayList<>();
+        ArrayList<Integer> numIsles = new ArrayList<>();
+        ArrayList<TowerColors> towerColors = new ArrayList<>();
+        ArrayList<Boolean> denyCards = new ArrayList<>();
         ArrayList<Integer> numTowers = new ArrayList<>();
-        int whereMnId=0;
-        for(Isle isle:gameTable.getIsleManager().getIsles()){
-            students.add(isle.getStudents());
+        int whereMnId = 0;
+        for(Isle isle : gameTable.getIsleManager().getIsles()){
+            students.add(isle.getStudentsHashMap());
             numIsles.add(isle.getNumOfIsles());
             towerColors.add(isle.getTowersColor());
-            if(isle.getDenyCards()==0){
+            if(isle.getDenyCards()==0)
                 denyCards.add(false);
-            }else{
+            else
                 denyCards.add(true);
-            }
-            if(isle.getMotherNature()){
-                whereMnId=isle.getIdIsle();
-            }
+            if(isle.getMotherNature())
+                whereMnId=isle.getIsleIndex();
         }
         for (Player p : players)
             numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
         int finalWhereMnId = whereMnId;
-        notifyObserver(obs->obs.onMNMovement(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
+        if (isEffect)
+            notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(), students, towerColors, finalWhereMnId, denyCards, numIsles, numTowers));
+        else
+            notifyObserver(obs->obs.onMNMovement(gameTable.getIsleManager().getIsles().size(), students, towerColors, finalWhereMnId,denyCards,numIsles, numTowers));
     }
 
     /**
-     * It picks the students present on a certain cloud and puts them in the entrance of the player
-     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player who chose the cloud
-     * @param idCloud is the index of the chosen cloud
+     * It picks the students present on a certain cloud and puts them on the entrance of the player.
+     * @param playerID ID of the player who chose the cloud.
+     * @param cloudID ID of the chosen cloud.
      */
-    public void pickStudentsFromCloud(int idPlayer, int idCloud) {
-        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.CHOOSE_CLOUD && currentActivePlayer == players.get(idPlayer).getOrder()) {
-            if (idCloud >= 0 && idCloud < numberOfPlayers) {
-                if (!gameTable.getCloud(idCloud).isEmpty()) {
+    public void pickStudentsFromCloud(int playerID, int cloudID) {
+        if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.CHOOSE_CLOUD && currentActivePlayer == players.get(playerID).getOrder()) {
+            if (cloudID >= 0 && cloudID < numberOfPlayers) {
+                if (!gameTable.getCloud(cloudID).isEmpty()) {
                     while (studentsCounter < maxMovableStudents) {
-                        for (RealmColors rc : RealmColors.values()) {
-                            if (gameTable.getCloud(idCloud).getStudentsByColor(rc) >= 1) {
-                                gameTable.getCloud(idCloud).removeStudent(rc);
-                                players.get(idPlayer).getDashboard().getEntrance().addStudent(rc);
+                        for (RealmColors rc : RealmColors.values())
+                            if (gameTable.getCloud(cloudID).getStudentsByColor(rc) >= 1) {
+                                gameTable.getCloud(cloudID).removeStudent(rc);
+                                players.get(playerID).getDashboard().getEntrance().addStudent(rc);
                                 break;
                             }
-                        }
                         studentsCounter++;
                     }
                     studentsCounter = 0;
                     playerCounter++;
                     actionPhase = ActionPhases.MOVE_STUDENTS;
-                    notifyObserver(obs -> obs.onCloudUpdate(idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents(), idCloud));
+                    notifyObserver(obs -> obs.onCloudUpdate(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), cloudID));
                     nextPlayer();
                 } else {
-                    notifyObserver(obs -> obs.onKO(idPlayer, "Cloud " + idCloud + " is empty! Please select another one"));
+                    notifyObserver(obs -> obs.onKO(playerID, "Cloud " + cloudID + " is empty! Please select another one"));
                     notifyTurn();
                 }
             } else {
-                notifyObserver(obs -> obs.onKO(idPlayer, "Cloud " + idCloud + " doesn't exist, please select another one"));
+                notifyObserver(obs -> obs.onKO(playerID, "Cloud " + cloudID + " doesn't exist, please select another one"));
                 notifyTurn();
             }
         }
     }
 
+    /**
+     * Getter method for the last round.
+     * @return true if this was the last round, else false.
+     */
     public boolean isLastRound() { return lastRound;}
 
     /**
-     * it returns a boolean that tells if the game is ended or not
-     * @return the "endGame" boolean
+     * Getter method for the end of the game state.
+     * @return if the game ended or not.
      */
-    public boolean isGameEnded() {
-        return endGame;
-    }
+    public boolean isGameEnded() { return endGame; }
 
     /**
-     * it returns a boolean that tells if the game is ended in a draw or not
-     * @return the "drawEndGame" boolean
+     * Getter method for the end of the game in a draw state.
+     * @return if the game ended in a draw or not.
      */
-    public boolean isGameEndedInADraw() {
-        return drawEndGame;
-    }
+    public boolean isGameEndedInADraw() { return drawEndGame; }
 
     /**
-     * it returns the nickname of the player who won (or, if it is a 4 Players match, the squad)
-     * @return the string of the winner
+     * Getter method for the nickname of the player who won (or, if it is a 4 Players match, the squad).
+     * @return the nickname of the winner.
      */
     public String getWinner() {
-        if (numberOfPlayers == 4) {
+        if (numberOfPlayers == 4) 
             return winner.getSquad().toString();
-        } else
+        else
             return winner.getNickname();
     }
 
     /**
-     * depending on the number of players. it adds 7 or 9 students taken from the bag to a specific dashboard
-     * @param idDashboard is the id of the dashboard whose entrance we want to fill
+     * Adds 7 or 9 students taken from the bag to a specific dashboard (depending on the number of players).
+     * @param dashboardID is the ID of the dashboard whose entrance we want to fill.
      */
-    private void initializeEntrance(int idDashboard) {
-        for (int i = 0; i < players.get(idDashboard).getDashboard().getEntrance().getMaxStudents(); i++) {
-            players.get(idDashboard).getDashboard().getEntrance().addStudent(gameTable.getBag().draw());
-        }
+    private void initializeEntrance(int dashboardID) {
+        for (int i = 0; i < players.get(dashboardID).getDashboard().getEntrance().getMaxStudents(); i++) 
+            players.get(dashboardID).getDashboard().getEntrance().addStudent(gameTable.getBag().draw());
     }
 
     /**
-     * it is used during PLANNING_PHASE, it fills clouds automatically
+     * Fills clouds automatically (used during PLANNING_PHASE).
      */
     private void fillClouds() {
         if (gamePhase == GamePhases.PLANNING_PHASE && planningPhase == PlanningPhases.FILL_CLOUDS) {
@@ -581,7 +575,7 @@ public class Game extends ModelSubject {
                         RealmColors color = gameTable.getBag().draw();
                         cloud.addStudent(color);
                     }
-                    cloudsList.add(cloud.getStudents());
+                    cloudsList.add(cloud.getStudentsHashMap());
                 }
 
                 notifyObserver(obs->obs.onFillCloud(cloudsList));
@@ -593,8 +587,8 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * according to the game phase, it updates when a player has the right to play
-     * @param gamePhase is used in order to execute different statements
+     * Updates when a player has the right to play according to the game phase.
+     * @param gamePhase used in order to execute different statements.
      */
     private void updateOrder(GamePhases gamePhase) {
         int i = firstPlayerIndex;
@@ -627,10 +621,9 @@ public class Game extends ModelSubject {
                 }
             }
 
-            for (Player p : players) {
+            for (Player p : players)
                 if (p.getOrder() == CurrentOrder.FIRST_PLAYER)
                     firstPlayerIndex = p.getDashboard().getDashboardID();
-            }
             currentActivePlayer = CurrentOrder.FIRST_PLAYER;
             playerCounter = 0;
         }
@@ -643,19 +636,29 @@ public class Game extends ModelSubject {
      * Initialize the parameters that handle the turn order and notifies the view.
      */
     public void notifyTurn() {
-        int currentPlayerIndex=0;
-        for(Player p:players){
-            if(p.getOrder().equals(currentActivePlayer)){
-                currentPlayerIndex=players.indexOf(p);
-                break;
-            }
+        if (endGame) {
+            if (drawEndGame)
+                notifyObserver(obs->obs.onEndGame(getWinner(), -1));
+            else
+                notifyObserver(obs->obs.onEndGame(getWinner(), winner.getDashboard().getDashboardID()));
         }
-        int finalCurrentPlayerIndex = currentPlayerIndex;
-        notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex,gamePhase,actionPhase,-1));
+        else {
+            int currentPlayerIndex = 0;
+            String currentPlayerNickname = null;
+            for (Player p : players)
+                if (p.getOrder().equals(currentActivePlayer)) {
+                    currentPlayerIndex = players.indexOf(p);
+                    currentPlayerNickname = p.getNickname();
+                    break;
+                }
+            int finalCurrentPlayerIndex = currentPlayerIndex;
+            String finalCurrentPlayerNickname = currentPlayerNickname;
+            notifyObserver(obs -> obs.onGamePhases(finalCurrentPlayerIndex, finalCurrentPlayerNickname, gamePhase, actionPhase));
+        }
     }
 
     /**
-     * it updates an attribute of Game that is used to identify which player has the right to play in a specific moment
+     * It updates an attribute of Game that is used to identify which player has the right to play in a specific moment.
      */
     private void nextPlayer() {
         if (playerCounter == numberOfPlayers) {
@@ -666,9 +669,8 @@ public class Game extends ModelSubject {
             }
             else {
                 gamePhase = GamePhases.PLANNING_PHASE;
-                for (Player p : players) {
+                for (Player p : players)
                     p.setDiscardPileNull();
-                }
                 fillClouds();
                 if(gameMode==GameMode.EXPERT)
                     for(Player p : players)
@@ -683,48 +685,47 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * it is invoked when a student has been added to the dining room of a certain player and updates the professors owned by players, if it is necessary
-     * @param idPlayer is an integer that represents the index of the players ArrayList which corresponds to the player whose dining room has been updated
-     * @param color is the color of the student that has been moved to the dining room, therefore it is the color of the professor we need to check
+     * Invoked when a student has been added to the dining room of a certain player and updates the professors owned by players, if it is necessary.
+     * @param playerID index of the players ArrayList which corresponds to the player whose dining room has been updated.
+     * @param color color of the student that has been moved to the dining room, therefore it is the color of the professor we need to check.
      */
-    public void checkUpdateProfessor(int idPlayer, RealmColors color) {
-        if (players.get(idPlayer).getDashboard().getDiningRoom().getProfessorByColor(color) == 0) {
+    public void checkUpdateProfessor(int playerID, RealmColors color) {
+        if (players.get(playerID).getDashboard().getDiningRoom().getProfessorByColor(color) == 0) {
             int playerWhoHasProfessorIndex = 0;
             boolean someoneHasProfessor = false;
 
-            for (Player p : players) {
+            for (Player p : players)
                 if (p.getDashboard().getDiningRoom().getProfessorByColor(color) == 1) {
                     playerWhoHasProfessorIndex = p.getDashboard().getDashboardID();
                     someoneHasProfessor = true;
                     break;
                 }
-            }
 
             if (someoneHasProfessor) {
-                if (players.get(idPlayer).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)-farmerOffset) {
+                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) > players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)-farmerOffset) {
                     players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);
-                    players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+                    players.get(playerID).getDashboard().getDiningRoom().addProfessor(color);
                 }
             }
             else {
                 gameTable.removeProfessor(color);
-                players.get(idPlayer).getDashboard().getDiningRoom().addProfessor(color);
+                players.get(playerID).getDashboard().getDiningRoom().addProfessor(color);
             }
             //observer parameters initialization
             ArrayList<HashMap<RealmColors,Integer>> professors=new ArrayList<>();
-            for(Player p:players){
+            for(Player p:players)
                 professors.add(p.getDashboard().getDiningRoom().getProfessors());
-            }
             notifyObserver(obs->obs.onProfessorUpdate(professors));
         }
 
     }
 
     /**
-     * it is invoked when mother nature ends on acceptable isle and updates all tower references, if it is necessary (it also calls a method to verify if isles union has to occur)
-     * @param idIsle is the index of the isle which has mother nature on it
+     * Invoked when mother nature ends on acceptable isle and updates all tower references, 
+     * if it is necessary (it also calls a method to verify if isles union has to occur).
+     * @param isleID index of the isle which has mother nature on it.
      */
-    public void checkUpdateInfluence(int idIsle) {
+    public void checkUpdateInfluence(int isleID) {
         int majorInfluence = 0;
         int conquerorIndex = 0;
         boolean draw = false;
@@ -732,10 +733,9 @@ public class Game extends ModelSubject {
         if (numberOfPlayers == 4) {
             int tempInfluence = 0;
             for (int i = 0; i < 2; i++) {
-                for (Player p : players) {
+                for (Player p : players)
                     if (p.getSquad() == Squads.getSquads(i))
-                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID());
-                }
+                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID());
                 if (tempInfluence == majorInfluence)
                     draw = true;
                 if (tempInfluence > majorInfluence) {
@@ -748,10 +748,10 @@ public class Game extends ModelSubject {
         }
         else {
             for (Player p : players) {
-                if (gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID()) == majorInfluence)
+                if (gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID()) == majorInfluence)
                     draw = true;
-                if (gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID()) > majorInfluence) {
-                    majorInfluence = gameTable.getIsleManager().getIsle(idIsle).getInfluences(players).get(p.getDashboard().getDashboardID());
+                if (gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID()) > majorInfluence) {
+                    majorInfluence = gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID());
                     conquerorIndex = p.getDashboard().getDashboardID();
                     draw = false;
                 }
@@ -759,13 +759,13 @@ public class Game extends ModelSubject {
         }
 
         if (!draw) {
-            if (gameTable.getIsleManager().getIsle(idIsle).getTowersColor() != players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor()) {
-                if (gameTable.getIsleManager().getIsle(idIsle).getTowersColor() == TowerColors.NOCOLOR)
+            if (gameTable.getIsleManager().getIsle(isleID).getTowersColor() != players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor()) {
+                if (gameTable.getIsleManager().getIsle(isleID).getTowersColor() == TowerColors.NOCOLOR)
                     players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();
                 else {
                     for (Player p : players) {
-                        if (p.getDashboard().getTowerStorage().getTowerColor() == gameTable.getIsleManager().getIsle(idIsle).getTowersColor()) {
-                            for (int i = 0; i < gameTable.getIsleManager().getIsle(idIsle).getNumOfIsles(); i++) {
+                        if (p.getDashboard().getTowerStorage().getTowerColor() == gameTable.getIsleManager().getIsle(isleID).getTowersColor()) {
+                            for (int i = 0; i < gameTable.getIsleManager().getIsle(isleID).getNumOfIsles(); i++) {
                                 p.getDashboard().getTowerStorage().addTower();
                                 players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();
                             }
@@ -773,8 +773,8 @@ public class Game extends ModelSubject {
                         }
                     }
                 }
-                gameTable.getIsleManager().getIsle(idIsle).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
-                gameTable.getIsleManager().checkUnifyIsle(idIsle);
+                gameTable.getIsleManager().getIsle(isleID).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());
+                gameTable.getIsleManager().checkUnifyIsle(isleID);
             }
         }
     }
@@ -783,23 +783,12 @@ public class Game extends ModelSubject {
      * It checks if the game has ended and updates the proper end game variables.
      */
     public void checkEndGame() {
-        for (Player p : players) {
+        for (Player p : players)
             if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 && p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {
                 endGame = true;
                 winner = p;
-                int currentPlayerIndex=0;
-                for(Player player:players){
-                    if(player.getOrder().equals(currentActivePlayer)){
-                        currentPlayerIndex=players.indexOf(player);
-                    }
-                }
-                int finalCurrentPlayerIndex = currentPlayerIndex;
-
-                notifyObserver(obs->obs.onGamePhases(finalCurrentPlayerIndex, gamePhase ,actionPhase ,players.indexOf(winner)));
                 return;
             }
-        }
-
 
         if ((gameTable.getIsleManager().getIsles().size() == 3) || (lastRound && playerCounter == numberOfPlayers-1)) {
             endGame = true;
@@ -838,276 +827,263 @@ public class Game extends ModelSubject {
     }
 
     /**
-     * this method permits to play a character card during the action phase
-     * it set money and other booleans but doesn't activate the proper effect of the card
-     * @param idPlayer the id of the player who plays a certain character card during his action phase
-     * @param characterCardIndex the index of the character card that the player wants to play
+     * Permits to play a character card during the action phase.
+     * It set money and other booleans but doesn't activate the proper effect of the card.
+     * @param playerID the id of the player who plays a certain character card during his action phase.
+     * @param characterCardIndex the index of the character card that the player wants to play.
      */
-    public void playCharacterCard(int idPlayer, int characterCardIndex) {
-        if (gamePhase == GamePhases.ACTION_PHASE && currentActivePlayer == players.get(idPlayer).getOrder()){
-            if (!players.get(idPlayer).getAlreadyPlayedACardThisTurn()) {
+    public void playCharacterCard(int playerID, int characterCardIndex) {
+        if (gamePhase == GamePhases.ACTION_PHASE && currentActivePlayer == players.get(playerID).getOrder()){
+            if (!players.get(playerID).getAlreadyPlayedACardThisTurn()) {
                 if (characterCardIndex >= 0 && characterCardIndex <= 2) {
-                    if (players.get(idPlayer).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()) {
+                    if (players.get(playerID).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()) {
                         getGameTable().characterCardPlayed(characterCardIndex);
-                        getPlayerByIndex(idPlayer).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+                        getPlayerByIndex(playerID).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
                         lastActionPhase = actionPhase;
                         actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
-                        notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), idPlayer, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(idPlayer).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents()));
+                        notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap()));
                     }
                     else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "You don't have enough money to activate this card, please select another one"));
+                        notifyObserver(obs -> obs.onKO(playerID, "You don't have enough money to activate this card, please select another one"));
                 }
                 else
-                    notifyObserver(obs -> obs.onKO(idPlayer, "Character card " + characterCardIndex + " doesn't exist, please select another one"));
+                    notifyObserver(obs -> obs.onKO(playerID, "Character card " + characterCardIndex + " doesn't exist, please select another one"));
             }
             else
-                notifyObserver(obs -> obs.onKO(idPlayer, "You've already played a character card this turn, you can't play another one"));
+                notifyObserver(obs -> obs.onKO(playerID, "You've already played a character card this turn, you can't play another one"));
             notifyTurn();
         }
     }
 
     /**
-     * this method permits to activate an atomic effect called in the controller for a certain number of times
-     * it is part of the concrete effect of a character card
-     * @param idPlayer the id of the player who plays the character card
-     * @param characterCardIndex the index of the character card played
-     * @param value1 the color of the student the player wants to remove from the staring StudentsManager
-     * @param value2 it represents different values based on the played card
-     *              MONK          -> isle index where to move the student
-     *              HERALD        -> isle where calculate the influence now
-     *         When not used -> set to 0
+     * Permits to activate an atomic effect called in the controller for a certain number of times.
+     * @param playerID the id of the player who plays the character card.
+     * @param characterCardIndex the index of the character card played.
+     * @param value1 it represents different values based on the played card.
+     *               MONK          -> isle index where to move the student.
+     *               HERALD        -> isle where calculate the influence now.
+     *               When not used -> set to 0.
+     * @param value2 the color of the student the player wants to remove from the staring StudentsManager.
      */
-    public void activateAtomicEffect(int idPlayer, int characterCardIndex, int value1, int value2){
-        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(idPlayer).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(idPlayer).getOrder()){
+    public void activateAtomicEffect(int playerID, int characterCardIndex, int value1, int value2){
+        if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(playerID).getOrder()){
             CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
             switch (cardName) {
                 case SPOILED_PRINCESS, THIEF, FUNGIST -> {
                     if (value1 >= 0 && value1 <= 4) {
-                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-                        notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                        notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
                     }
                     else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "You've selected a color that doesn't exist, please select another one"));
+                        notifyObserver(obs -> obs.onKO(playerID, "You've selected a color that doesn't exist, please select another one"));
                     notifyTurn();
                 }
                 case HERALD -> {
                     if (value1 >= 0 && value1 < gameTable.getIsleManager().getIsles().size()) {
-                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-                        notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                        notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
                     }
                     else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "You've selected an isle that doesn't exist, please select another one"));
+                        notifyObserver(obs -> obs.onKO(playerID, "You've selected an isle that doesn't exist, please select another one"));
                     notifyTurn();
                 }
                 case GRANDMA_HERBS -> {
                     if (value1 >= 0 && value1 < gameTable.getIsleManager().getIsles().size()) {
                         if (getGameTable().getCharacterCards().get(characterCardIndex).getDenyCards() > 0) {
-                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-                            notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                            notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
                         }
                     }
                     else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "You've selected an isle that doesn't exist, please select another one"));
+                        notifyObserver(obs -> obs.onKO(playerID, "You've selected an isle that doesn't exist, please select another one"));
                     notifyTurn();
                 }
                 case JESTER, MINSTREL -> {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 <= 4)) {
-                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-                        notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                        notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
                     }
                     else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "You've selected a color that doesn't exist, please try again"));
+                        notifyObserver(obs -> obs.onKO(playerID, "You've selected a color that doesn't exist, please try again"));
                     notifyTurn();
                 }
                 case MONK -> {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 < gameTable.getIsleManager().getIsles().size())) {
                         if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) > 0) {
-                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-                            notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                            notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
                         }
                         else
-                            notifyObserver(obs -> obs.onKO(idPlayer, "There aren't enough " + RealmColors.getColor(value1).toString() + " students on the card, please select another color"));
+                            notifyObserver(obs -> obs.onKO(playerID, "There aren't enough " + RealmColors.getColor(value1).toString() + " students on the card, please select another color"));
                     }
                     else
-                        notifyObserver(obs -> obs.onKO(idPlayer, "You've selected a color or an isle that doesn't exist, please try again"));
+                        notifyObserver(obs -> obs.onKO(playerID, "You've selected a color or an isle that doesn't exist, please try again"));
                     notifyTurn();
                 }
                 default -> {
-                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(idPlayer), value1, value2);
-                    notifyEffectUpdate(characterCardIndex, idPlayer, value1, value2);
+                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
                     notifyTurn();
                 }
-            }
-        }
-    }
-
-    public void notifyEffectUpdate(int characterCardIndex, int idPlayer, int value1, int value2) {
-        CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
-        switch (cardName) {
-            case MONK -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value2, getGameTable().getIsleManager().getIsle(value2).getStudents()));
-            case FARMER -> {
-                ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
-                for (Player p : players) {
-                    professors.add(p.getDashboard().getDiningRoom().getProfessors());
-                }
-                notifyObserver(obs -> obs.onEffectActivation(professors));
-            }
-            case HERALD -> {
-                ArrayList<HashMap<RealmColors,Integer>> students=new ArrayList<>();
-                ArrayList<Integer> numIsles=new ArrayList<>();
-                ArrayList<TowerColors> towerColors=new ArrayList<>();
-                ArrayList<Boolean> denyCards=new ArrayList<>();
-                ArrayList<Integer> numTowers = new ArrayList<>();
-                int whereMnId=0;
-                for(Isle isle:gameTable.getIsleManager().getIsles()){
-                    students.add(isle.getStudents());
-                    numIsles.add(isle.getNumOfIsles());
-                    towerColors.add(isle.getTowersColor());
-                    if(isle.getDenyCards()==0){
-                        denyCards.add(false);
-                    }else{
-                        denyCards.add(true);
-                    }
-                    if(isle.getMotherNature()){
-                        whereMnId=isle.getIdIsle();
-                    }
-                }
-                for (Player p : players)
-                    numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());
-                int finalWhereMnId = whereMnId;
-                notifyObserver(obs->obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(),students,towerColors, finalWhereMnId, denyCards, numIsles, numTowers));
-            }
-            case MAGICAL_LETTER_CARRIER -> notifyObserver(obs->obs.onEffectActivation(idPlayer, players.get(idPlayer).getDiscardPile().getTurnOrder(), players.get(idPlayer).getDiscardPile().getMnMovement()));
-            case GRANDMA_HERBS -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudents(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
-            case CENTAUR, KNIGHT, FUNGIST -> notifyObserver(ModelObserver::onEffectActivation);
-            case JESTER -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), idPlayer, players.get(idPlayer).getDashboard().getEntrance().getStudents()));
-            case MINSTREL, THIEF -> {
-                ArrayList<HashMap<RealmColors, Integer>> studentsInEntrances = new ArrayList<>();
-                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
-                for (Player p : players) {
-                    studentsInEntrances.add(p.getDashboard().getEntrance().getStudents());
-                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
-                }
-                notifyObserver(obs -> obs.onEffectActivation(studentsInEntrances, studentsInDinings));
-            }
-            case SPOILED_PRINCESS -> {
-                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
-                for (Player p : players)
-                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudents());
-                notifyObserver(obs -> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudents(), studentsInDinings));
             }
         }
     }
 
     /**
-     * this method saves a color in the class GAME for then FUNGIST character card when played
-     * @param indexColorFungist the index of the color that has to be saved
+     * Initialize the parameters needed by the view consequently to the activation of the atomic effect of a character card.
+     * @param characterCardIndex index of the character card played.
+     * @param playerID ID of the player that played the character card.
+     * @param value1 value that assumes a different meaning based on the character card played (color, isle index or -1 when not required).
+     * @param value2 value that assumes a different meaning based on the character card played (color or -1 when not required).
+     */
+    public void notifyEffectUpdate(int characterCardIndex, int playerID, int value1, int value2) {
+        CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
+        switch (cardName) {
+            case MONK                       -> notifyObserver(obs-> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value2, getGameTable().getIsleManager().getIsle(value2).getStudentsHashMap()));
+            case FARMER                     -> {
+                ArrayList<HashMap<RealmColors, Integer>> professors = new ArrayList<>();
+                for (Player p : players)
+                    professors.add(p.getDashboard().getDiningRoom().getProfessors());
+                notifyObserver(obs -> obs.onEffectActivation(professors));
+            }
+            case HERALD -> notifyMNMovement(true);
+            case MAGICAL_LETTER_CARRIER     -> notifyObserver(obs->obs.onEffectActivation(playerID, players.get(playerID).getDiscardPile().getTurnOrder(), players.get(playerID).getDiscardPile().getMnMovement()));
+            case GRANDMA_HERBS              -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
+            case CENTAUR, KNIGHT, FUNGIST   -> notifyObserver(ModelObserver::onEffectActivation);
+            case JESTER                     -> notifyObserver(obs->obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudentsHashMap(), playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap()));
+            case MINSTREL, THIEF            -> {
+                ArrayList<HashMap<RealmColors, Integer>> studentsInEntrances = new ArrayList<>();
+                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
+                for (Player p : players) {
+                    studentsInEntrances.add(p.getDashboard().getEntrance().getStudentsHashMap());
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudentsHashMap());
+                }
+                notifyObserver(obs -> obs.onEffectActivation(studentsInEntrances, studentsInDinings));
+            }
+            case SPOILED_PRINCESS           -> {
+                ArrayList<HashMap<RealmColors, Integer>> studentsInDinings = new ArrayList<>();
+                for (Player p : players)
+                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudentsHashMap());
+                notifyObserver(obs -> obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudentsHashMap(), studentsInDinings));
+            }
+        }
+    }
+
+    /**
+     * Saves a color in the class GAME for then FUNGIST character card when played.
+     * @param indexColorFungist the index of the color that has to be saved.
      */
     public void setColorForFungist(int indexColorFungist) { this.colorForFungist = RealmColors.getColor(indexColorFungist); }
 
     /**
-     * getter method that permits to know whats the  in the list of players that has a certain index
-     * @param playerIndex the index of the player that is in the list
-     * @return the player associated with that index
+     * Getter method that permits to know who is the player in the list of players that has a certain index.
+     * @param playerIndex the index of the player that is in the list.
+     * @return the player associated with that index.
      */
     public Player getPlayerByIndex(int playerIndex) { return players.get(playerIndex); }
 
     /**
-     * getter method that permits to pick the current game table
-     * @return the current game table
+     * Getter method that permits to pick the current game table.
+     * @return the current game table.
      */
     public GameTable getGameTable() { return gameTable; }
 
     /**
-     * used for testing purpose only
-     * @param gameP game phase
+     * Used for testing purpose only.
+     * @param gameP game phase.
      */
     public void setGamePhase(GamePhases gameP){ gamePhase = gameP; }
 
     /**
-     * Getter method for the game phase
-     * @return the actual game phase
+     * Getter method for the game phase.
+     * @return the actual game phase.
      */
     public GamePhases getGamePhase() { return gamePhase; }
 
     /**
      * Getter method that tells if the game mode is expert or not.
-     * @return true if expert, else false
+     * @return true if expert, else false.
      */
     public boolean isGameMode() { return gameMode == GameMode.EXPERT; }
 
     /**
-     * Getter method that returns the list of players who are playing the game
-     * @return the list of players who are playing the game
+     * Getter method that returns the list of players who are playing the game.
+     * @return the list of players who are playing the game.
      */
     public ArrayList<Player> getPlayers() { return players; }
 
     /**
-     * Getter method for the index of the first player to play this turn
-     * @return the index of the first player
+     * Getter method for the index of the first player to play this turn.
+     * @return the index of the first player.
      */
     public int getFirstPlayerIndex() { return firstPlayerIndex; }
 
     /**
-     * Getter method for the player counter
-     * @return the count of the players till the invocation
+     * Getter method for the player counter.
+     * @return the count of the players till the invocation.
      */
     public int getPlayerCounter() { return playerCounter; }
 
     /**
-     * Getter method for the number of players of the game
-     * @return the number of players
+     * Getter method for the number of players of the game.
+     * @return the number of players.
      */
     public int getNumberOfPlayers() {return numberOfPlayers;}
 
     /**
-     * It returns the number of players that have been added to the game
-     * @return the number of players that have been added to the game
+     * It returns the number of players that have been added to the game.
+     * @return the number of players that have been added to the game.
      */
     public int getActualNumberOfPlayers() { return actualNumberOfPlayers; }
 
     /**
-     * Getter method for the current active player
-     * @return the current active player
+     * Getter method for the current active player.
+     * @return the current active player.
      */
     public CurrentOrder getCurrentActivePlayer() { return currentActivePlayer; }
 
     /**
-     * Setter method for the current active player
-     * @param currentActivePlayer the player that will become the current active player
+     * Setter method for the current active player.
+     * @param currentActivePlayer the player that will become the current active player.
      */
     public void setCurrentActivePlayer(CurrentOrder currentActivePlayer) { this.currentActivePlayer = currentActivePlayer; }
 
     /**
-     * Getter method for the planning phase
-     * @return in which phase of the planning phase we are
+     * Getter method for the planning phase.
+     * @return in which phase of the planning phase we are.
      */
     public PlanningPhases getPlanningPhase() { return planningPhase; }
 
     /**
-     * Setter method for the planning phase
-     * @param planningPhase indicates in which phase of the planning phase we are
+     * Setter method for the planning phase.
+     * @param planningPhase indicates in which phase of the planning phase we are.
      */
     public void setPlanningPhase(PlanningPhases planningPhase) { this.planningPhase = planningPhase; }
 
     /**
-     * Getter method for the action phase
-     * @return in which phase of the action phase we are
+     * Getter method for the action phase.
+     * @return in which phase of the action phase we are.
      */
     public ActionPhases getActionPhase() { return actionPhase; }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!
     public ActionPhases getLastActionPhase() { return lastActionPhase; }
 
-    public int getAtomicEffectCounter() {return atomicEffectCounter;}
-
-    public void increaseAtomicEffectCounter() {atomicEffectCounter++;}
+    /**
+     * Getter method for the atomic effect counter.
+     * @return the number of times am atomic effect have been activated.
+     */
+    public int getAtomicEffectCounter() { return atomicEffectCounter; }
 
     /**
-     * Setter method for the action phase
-     * @param actionPhase indicates in which phase of the action phase we are
+     * Increases the number of times an atomic effect is activated.
      */
-    public void setActionPhase(ActionPhases actionPhase) {
-        this.actionPhase = actionPhase;
-    }
+    public void increaseAtomicEffectCounter() { atomicEffectCounter++; }
+
+    /**
+     * Setter method for the action phase.
+     * @param actionPhase indicates in which phase of the action phase we are.
+     */
+    public void setActionPhase(ActionPhases actionPhase) { this.actionPhase = actionPhase; }
 
 }

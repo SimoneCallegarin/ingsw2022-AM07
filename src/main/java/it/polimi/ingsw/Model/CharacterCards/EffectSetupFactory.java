@@ -3,18 +3,14 @@ package it.polimi.ingsw.Model.CharacterCards;
 import it.polimi.ingsw.Model.GameTableObjects.GameTable;
 
 /**
- * this is the factory that permits to set up the character cards that need to be set up at the start of the game
+ * The factory that permits to set up the character cards that need to be set up at the start of the game.
  */
 public class EffectSetupFactory {
-
-        public EffectSetupFactory(){}
 
         public void getEffect(GameTable gameTable, CharacterCard characterCard){
 
             StudentMovementEffect studentSetupEffect = new StudentMovementEffect();
             DenyCardMovementEffect denyCardSetupEffect = new DenyCardMovementEffect();
-
-
 
             switch (characterCard.getCharacterCardName()) {
                 case MONK, SPOILED_PRINCESS -> {

@@ -5,29 +5,31 @@ import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
+/**
+ * Dining room of the dashboard of the player, it contains students.
+ */
 public class DiningRoom implements StudentManager {
 
     /**
-     * this is the students container
+     * Students container.
      */
     private final HashMap<RealmColors,Integer> students;
-
     /**
-     * this is the professors container
+     * Professors container.
      */
     private final HashMap<RealmColors,Integer> professors;
     /**
-     * this is a value that defines how the dining room is made
+     * Limit of students in the dining room per color.
      */
     private static final int maxStudentsPerColor = 10;
 
     /**
-     * DiningRoom constructor: hashmaps initialization (every field is set to 0)
+     * DiningRoom constructor:
+     * hashmaps initialization (every field is set to 0).
      */
     public DiningRoom() {
         this.students = new HashMap<>();
         this.professors = new HashMap<>();
-
         for (RealmColors rc : RealmColors.values()) {
             students.put(rc, 0);
             professors.put(rc, 0);
@@ -35,33 +37,8 @@ public class DiningRoom implements StudentManager {
     }
 
     /**
-     * this method when called gives the number of students in the dining room
-     * @return the number of students actually in the dining room
-     */
-    @Override
-    public int getNumberOfStudents() {
-        int totalNumberOfStudents = 0;
-        for (RealmColors rc : RealmColors.values()){
-            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
-        }
-        return totalNumberOfStudents;
-    }
-
-    /**
-     * this method when called gives the number of professors in the dining room
-     * @return the number of professors actually in the dining room
-     */
-    public int getNumberOfProfessors() {
-        int totalNumberOfProfessors = 0;
-        for (RealmColors rc : RealmColors.values()){
-            totalNumberOfProfessors = totalNumberOfProfessors + professors.get(rc);
-        }
-        return totalNumberOfProfessors;
-    }
-
-    /**
-     * this method updates the students' hashmap incrementing by 1 the value specified by color
-     * @param color is the key of the value we want to update in the students' hashmap
+     * Updates the students' hashmap incrementing by 1 the value specified by the color.
+     * @param color is the key of the value we want to update in the students' hashmap.
      */
     @Override
     public void addStudent(RealmColors color) {
@@ -73,8 +50,8 @@ public class DiningRoom implements StudentManager {
     }
 
     /**
-     * this method updates the students' hashmap decrementing by 1 the value specified by color
-     * @param color is the key of the value we want to update in the students' hashmap
+     * Updates the students' hashmap decrementing by 1 the value specified by the color.
+     * @param color is the key of the value we want to update in the students' hashmap.
      */
     @Override
     public void removeStudent(RealmColors color) {
@@ -86,53 +63,68 @@ public class DiningRoom implements StudentManager {
     }
 
     /**
-     * this method adds the professor of a certain color to the dining room of the player who owns it
-     * @param color is the key of the value we want to set to 1 in the professors' hashmap
+     * Adds the professor of a certain color to the dining room of the player who owns it.
+     * @param color is the key of the value we want to set to 1 in the professors' hashmap.
      */
-    public void addProfessor(RealmColors color) {
-        professors.put(color, 1);
-    }
+    public void addProfessor(RealmColors color) { professors.put(color, 1); }
 
     /**
-     * this method removes the professor of a certain color from the dining room of the player who doesn't own it anymore
-     * @param color is the key of the value we want to set to 0 in the professors' hashmap
+     * Removes the professor of a certain color from the dining room of the player who doesn't own it anymore.
+     * @param color is the key of the value we want to set to 0 in the professors' hashmap.
      */
-    public void removeProfessor(RealmColors color) {
-        professors.put(color, 0);
-    }
+    public void removeProfessor(RealmColors color) { professors.put(color, 0); }
 
     /**
-     * a getter method to receive a certain value contained in the students' hashmap
-     * @param color is the key of the value we want to get
-     * @return the value we want
+     * Getter method for the students of a certain color in the dining room.
+     * @param color is the key of the value we want to get.
+     * @return the number of students in the dining room of that color.
      */
     @Override
-    public int getStudentsByColor(RealmColors color) {
-        return students.get(color);
+    public int getStudentsByColor(RealmColors color) { return students.get(color); }
+
+    /**
+     * Getter method for a professor.
+     * @param color is the key of the value we want to get.
+     * @return 1 if the professor of that color is present in the dining room, else 0.
+     */
+    public int getProfessorByColor(RealmColors color) { return professors.get(color); }
+
+    /**
+     * Getter method for the student HashMap.
+     * @return the student HashMap.
+     */
+    @Override
+    public HashMap<RealmColors, Integer> getStudentsHashMap() { return students; }
+
+    /**
+     * Getter method for the professors HashMap.
+     * @return the professor HashMap.
+     */
+    public HashMap<RealmColors, Integer> getProfessors() { return professors; }
+
+    /**
+     * Getter method for the total number of students in the dining room.
+     * @return the number of students actually in the dining room.
+     */
+    @Override
+    public int getNumberOfStudents() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
+        }
+        return totalNumberOfStudents;
     }
 
     /**
-     * a getter method to receive a certain value contained in the professors' hashmap
-     * @param color is the key of the value we want to get
-     * @return the value we want
+     * Getter method for the total number of professors in the dining room.
+     * @return the number of professors actually in the dining room.
      */
-    public int getProfessorByColor(RealmColors color) {
-        return professors.get(color);
+    public int getNumberOfProfessors() {
+        int totalNumberOfProfessors = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfProfessors = totalNumberOfProfessors + professors.get(rc);
+        }
+        return totalNumberOfProfessors;
     }
 
-    /**
-     * getter for returning the student HashMap
-     * @return the student HashMap
-     */
-    public HashMap<RealmColors, Integer> getStudents() {
-        return students;
-    }
-
-    /**
-     * getter for returning the professors HashMap
-     * @return the professor HashMap
-     */
-    public HashMap<RealmColors, Integer> getProfessors() {
-        return professors;
-    }
 }

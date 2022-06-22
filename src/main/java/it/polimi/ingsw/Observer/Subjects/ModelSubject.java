@@ -1,4 +1,6 @@
-package it.polimi.ingsw.Observer;
+package it.polimi.ingsw.Observer.Subjects;
+
+import it.polimi.ingsw.Observer.ModelObserver;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

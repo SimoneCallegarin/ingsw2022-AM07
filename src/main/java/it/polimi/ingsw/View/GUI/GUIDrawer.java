@@ -1,6 +1,6 @@
 package it.polimi.ingsw.View.GUI;
 
-import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class GuiDrawer extends ViewSubject {
+public class GUIDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
 
@@ -242,7 +242,6 @@ public class GuiDrawer extends ViewSubject {
     public void updateGameScreenPanel(){
         boolean gameStart=true;
 
-
         for(int i=0;i<modelChanges.getToUpdate().size();i++){
             switch(modelChanges.getToUpdate().get(i)){
                 case CLOUDS_CHANGED -> {
@@ -250,15 +249,16 @@ public class GuiDrawer extends ViewSubject {
                         createGameScreen();
                         showGameScreen();
                         gameStart=false;
-                    }else{
+                    }
+                    else {
                         //update with cloud update
                     }
 
                 }
                 case DISCARDPILE_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
-                        protected Void doInBackground()  {
+                        protected Void doInBackground() {
                             gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
                             return null;
                         }
@@ -267,9 +267,9 @@ public class GuiDrawer extends ViewSubject {
                 }
                 //gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
                 case ENTRANCE_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
-                        protected Void doInBackground()  {
+                        protected Void doInBackground() {
                             gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
                             return null;
                         }
@@ -278,9 +278,9 @@ public class GuiDrawer extends ViewSubject {
                 }
                 //gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
                 case STUDENTDINING_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
-                        protected Void doInBackground()  {
+                        protected Void doInBackground() {
                             gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
                             return null;
                         }
@@ -289,9 +289,9 @@ public class GuiDrawer extends ViewSubject {
                 }
                 //gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
                 case PROFDINING_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
-                        protected Void doInBackground()  {
+                        protected Void doInBackground() {
                             gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
                             return null;
                         }
@@ -300,9 +300,9 @@ public class GuiDrawer extends ViewSubject {
                 }
                 //gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
                 case COINS_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
-                        protected Void doInBackground()  {
+                        protected Void doInBackground() {
                             gameScreenPanel.tableCenterPanel.updateCoins();
                             return null;
                         }
@@ -311,9 +311,9 @@ public class GuiDrawer extends ViewSubject {
                 }
                 //gameScreenPanel.tableCenterPanel.updateCoins();
                 case TOWERSTORAGE_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
-                        protected Void doInBackground()  {
+                        protected Void doInBackground() {
                             gameScreenPanel.updateTowerStorages(modelChanges.getPlayingID());
                             return null;
                         }
@@ -322,7 +322,7 @@ public class GuiDrawer extends ViewSubject {
                 }
                 //gameScreenPanel.updateTowerStorages(modelChanges.getPlayingID());
                 case ISLE_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
                         protected Void doInBackground() {
                             gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
@@ -331,11 +331,11 @@ public class GuiDrawer extends ViewSubject {
                     };
                     swingWorker.execute();
                 }
-                //gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
+                //gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleIndex());
                 case ISLELAYOUT_CHANGED ->{
-                    SwingWorker<Void,Void> swingWorker=new SwingWorker<Void, Void>() {
+                    SwingWorker<Void,Void> swingWorker= new SwingWorker<>() {
                         @Override
-                        protected Void doInBackground()  {
+                        protected Void doInBackground() {
                             gameScreenPanel.tableCenterPanel.updateIsleLayout();
                             return null;
                         }

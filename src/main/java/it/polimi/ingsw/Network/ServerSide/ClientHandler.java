@@ -1,22 +1,23 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.ServerSide;
 
+import it.polimi.ingsw.Network.Utils.HandlerPhases;
 import it.polimi.ingsw.Network.Messages.*;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
+import it.polimi.ingsw.Network.Server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.*;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.NoSuchElementException;
 
 /**
- * this class is used to manage the connection to the first client which connects to the server to play.
- * It has to get the setup choices by the first player and his moves.
+ * This class is used to manage the connection of a client that connects to the server.
+ * It has to get the setup choices by the first player and his moves, then it will handle the game.
  */
 public class ClientHandler implements Runnable {
 
@@ -51,20 +52,22 @@ public class ClientHandler implements Runnable {
      * True if the ClientHandler is connected to the server, else false.
      */
     private boolean connected;
-
-    private final Object outputLock;
+    /**
+     * True if the client is already playing a game, else false.
+     */
+    private boolean playing;
 
     /**
      * constructor of the client handler
      * @param server the server associated to this client handler
      * @param socket the socket of the client that is associated to this client handler
      */
-    public ClientHandler(Server server,Socket socket) {
+    public ClientHandler(Server server, Socket socket) {
         this.server = server;
         this.client = socket;
         this.handlerPhase = HandlerPhases.LOGIN_PHASE;
         this.connected = true;
-        this.outputLock = new Object();
+        this.playing = false;
         try {
             this.input = new ObjectInputStream(socket.getInputStream());
             this.output = new ObjectOutputStream(socket.getOutputStream());
@@ -77,10 +80,12 @@ public class ClientHandler implements Runnable {
      * Logs in the player and checks if it's using a valid nickname.
      */
     private void logPlayer(LoginMessage loginMessage) {
-        if (handlerPhase == HandlerPhases.LOGIN_PHASE)
-            if(checkMessageType(loginMessage,MessageType.LOGIN))
+        if (handlerPhase == HandlerPhases.LOGIN_PHASE) {
+            if (checkMessageType(loginMessage, MessageType.LOGIN)) {
                 if (checkNicknameValidity(loginMessage))
                     logValidPlayer(loginMessage);
+            }
+        }
         else
             send(new ServiceMessage(MessageType.KO, "Not expecting a login message"));
     }
@@ -92,7 +97,7 @@ public class ClientHandler implements Runnable {
      */
     private boolean checkNicknameValidity(LoginMessage loginMessage) {
         if (!server.setNickNamesChosen(loginMessage)){
-            send(new ServiceMessage(MessageType.UNAVAILABLE_USERNAME, "Already taken nickname"));
+            send(new ServiceMessage(MessageType.UNAVAILABLE_USERNAME, "This nickname has been taken by someone else, please select another one..."));
             return false;
         }
         else
@@ -113,23 +118,27 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * adds the player to a game, using some server methods that permits to find the matchID of the game he will play
+     * Adds the player to a game, using some server methods that permits to find the matchID of the game he will play
      */
     private void addPlayerToGame(GamePreferencesMessage preferences){
-        if (handlerPhase == HandlerPhases.GAME_SETUP_PHASE)
-            if (checkMessageType(preferences,MessageType.GAME_SETUP_INFO))
+        if (handlerPhase == HandlerPhases.GAME_SETUP_PHASE) {
+            if (checkMessageType(preferences, MessageType.GAME_SETUP_INFO)) {
                 if (checkGamePreferencesValues(preferences)) {
-                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == 1) {
+                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers() - 1) {
+                        int shownID = server.getPlayerInfo(nickname).getPlayerID() + 1;
                         System.out.println("Added player: " + nickname + " to a new game.");
-                        send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
-                    }
-                    else {
+                        send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + shownID + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
+                    } else {
+                        int shownID = server.getPlayerInfo(nickname).getPlayerID() + 1;
                         System.out.println("Added player: " + nickname + " to an already existing game with other " + (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() - 1) + " players.");
                         if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() < server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())
-                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + server.getPlayerInfo(nickname).getPlayerID() + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
+                            send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + shownID + " and you joined a match! Waiting for other players...", server.getPlayerInfo(nickname).getPlayerID()));
                     }
+                    playing = true;
                     handlerPhase = HandlerPhases.RUNNING_PHASE;
                 }
+            }
+        }
         else
             send(new ServiceMessage(MessageType.KO, "Not expecting a game preferences message"));
     }
@@ -149,7 +158,7 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * handles all player moves and the game development till the game ends.
+     * Handles all player moves and the game development till the game ends.
      */
     private void handleGame(PlayerMoveMessage pmm) {
         if (handlerPhase == HandlerPhases.RUNNING_PHASE) {
@@ -179,9 +188,7 @@ public class ClientHandler implements Runnable {
                             gpm = (GamePreferencesMessage) message;
                             addPlayerToGame(gpm);
                         }
-                        case LOGOUT -> {
-
-                        }
+                        case LOGOUT -> System.out.println("LOGOUT message received from " + nickname + "!");
                         default -> {
                             pmm = (PlayerMoveMessage) message;
                             System.out.println("PLAYER_MOVE message received from " + nickname + ": " + pmm);
@@ -197,8 +204,7 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * it will remove all data saved in the server, connected to the player associated with this client handler.
-     * @throws IOException when there's an error in the exchanged messages.
+     * Removes all data saved in the server, connected to the player associated with this client handler.
      */
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
@@ -208,18 +214,20 @@ public class ClientHandler implements Runnable {
         client.close();
     }
 
+    /**
+     * Handles the disconnection of a player.
+     * @param error reason why the player left.
+     */
     public void disconnect(String error) {
         if (connected) {
-            System.out.println("TIMEOUT EXPIRED or ERROR " + "(" + nickname + ")");
             try {
                 shutConnection(error);
             } catch (IOException e) {
                 System.err.println("Error in stream closing");
-                e.printStackTrace();
             }
             Thread.currentThread().interrupt();
             System.out.println("Interrupting client handler thread of player " + nickname);
-            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST"))
+            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST") && playing)
                 server.onDisconnection(nickname);
         }
     }
@@ -244,10 +252,8 @@ public class ClientHandler implements Runnable {
 
     public void send(NetworkMessage message) {
         try {
-            synchronized (outputLock) {
-                output.writeObject(message);
-                output.reset();
-            }
+            output.writeObject(message);
+            output.reset();
         } catch (IOException e) {
             System.out.println("Unreachable client");
         }
@@ -259,8 +265,8 @@ public class ClientHandler implements Runnable {
             handleConnection();
         } catch (IOException e) {
             if (connected) {
-                System.out.println("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST " + "(" + nickname + ")");
-                disconnect("CLOSING CONNECTION DUE TO AN ERROR (TIMEOUT) OR A LOGOUT REQUEST");
+                System.out.println("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST " + "(" + nickname + ")");
+                disconnect("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST");
             }
         }
     }

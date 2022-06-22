@@ -1,10 +1,10 @@
 package it.polimi.ingsw.View;
 
-import it.polimi.ingsw.Controller.ClientController;
+import it.polimi.ingsw.Network.ClientSide.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
-import it.polimi.ingsw.View.GUI.GuiDrawer;
+import it.polimi.ingsw.View.GUI.GUIDrawer;
 
 public interface View {
 
@@ -14,15 +14,17 @@ public interface View {
 
      void askAssistantCard(int playerID);
 
-     void askMove(boolean expertMode);
+     void askMove();
 
      void printMessage(ServiceMessage message);
 
      void printChanges();
 
-     void askMNMovement(boolean expertMode);
+     void printWinner(String winner, int winnerID);
 
-     void askCloud(boolean expertMode);
+     void askMNMovement();
+
+     void askCloud();
 
      void askCharacterEffectParameters(CharacterCardsName characterName);
 
@@ -30,7 +32,7 @@ public interface View {
 
      CLIDrawer getCLIDrawer();
 
-     GuiDrawer getGUIDrawer();
+     GUIDrawer getGUIDrawer();
 
      void ViewStart();
 

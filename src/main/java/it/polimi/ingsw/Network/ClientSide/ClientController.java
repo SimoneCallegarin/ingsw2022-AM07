@@ -1,13 +1,13 @@
-package it.polimi.ingsw.Controller;
+package it.polimi.ingsw.Network.ClientSide;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.ConnectionSocket;
+import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
-import it.polimi.ingsw.View.GUI.GuiDrawer;
+import it.polimi.ingsw.View.GUI.GUIDrawer;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import it.polimi.ingsw.View.View;
 
@@ -19,34 +19,34 @@ import java.util.concurrent.Executors;
  */
 public class ClientController implements ViewObserver, NetworkObserver {
 
-    String username;
-    boolean GUI;
     /**
      * The view that the ClientController is observing.
      */
     private final View view;
+    /**
+     * It handles the graphical part of the CLI.
+     */
+    private CLIDrawer cliDrawer;
+    /**
+     * It handles the graphical part of the GUI.
+     */
+    private GUIDrawer guiDrawer;
+    /**
+     * True if the player is playing with the GUI, else if the player is playing with the CLI it's false.
+     */
+    private final boolean GUI;
+    /**
+     * It's light version of the model used to store visible information about the model that are used by the view.
+     */
+    private ModelStorage storage;
     /**
      * Establishes the connection of the client with the server, starts threads for some task (pinger and listener)
      * and initializes other useful variables in order to maintain a working and stable connection with the server.
      * In particular, it starts the ClientListener that is observed by the ClientController.
      */
     private final ConnectionSocket client;
-    /**
-     * It's light version of the model used to store visible information about the model that are used by the view.
-     */
-    private ModelStorage storage;
-    /**
-     * It handles the graphical part of the CLI.
-     */
-    private CLIDrawer cliDrawer;
-
+//!!!!!!!!!!!!!!!!!!!!!!!!!!
     private final ExecutorService taskQueue;
-
-    private GuiDrawer guiDrawer;
-    /**
-     * Saves if the game is played in expert game mode (true) or in base (false).
-     */
-    private boolean expertMode = false;
     /**
      * The ID of the player associated to this ClientController.
      */
@@ -57,41 +57,40 @@ public class ClientController implements ViewObserver, NetworkObserver {
     private CharacterCardsName lastCharacterUsed;
 
     /**
-     * ClientController constructor.
+     * ClientController constructor for the CLI.
      * @param view it can be the CLI or the GUI.
      * @param client identifies the client at network layer.
-     * @param GUI true if the player is playing on a GUI, else false.
+     * @param cliDrawer drawer that handles the graphical part pf the CLI.
      */
-    public ClientController(View view, ConnectionSocket client, boolean GUI, CLIDrawer cliDrawer) {
+    public ClientController(View view, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.view = view;
         this.client = client;
-        this.GUI = GUI;
+        this.GUI = false;
         this.cliDrawer = cliDrawer;
         taskQueue = Executors.newSingleThreadExecutor();
     }
 
-    public ClientController(View view, ConnectionSocket client, boolean GUI, GuiDrawer guiDrawer) {
+    /**
+     * ClientController constructor for the GUI.
+     * @param view it can be the CLI or the GUI.
+     * @param client identifies the client at network layer.
+     * @param guiDrawer drawer that handles the graphical part of the GUI.
+     */
+    public ClientController(View view, ConnectionSocket client, GUIDrawer guiDrawer) {
         this.view = view;
         this.client = client;
-        this.GUI = GUI;
+        this.GUI = true;
         this.guiDrawer = guiDrawer;
         taskQueue = Executors.newSingleThreadExecutor();
     }
 
-    public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
-
-    public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
-
     /**
-     * Sends the server a message containing the username chosen by the client ,
+     * Sends the server a message containing the username chosen by the client,
      * it still has to be checked by the server if it's an available nickname or not.
      * @param username chosen by the player.
      */
     @Override
-    public void onUsername(String username) {
-        this.username = username;
-        client.send(new LoginMessage(username));
-    }
+    public void onUsername(String username) { client.send(new LoginMessage(username)); }
 
     /**
      * Sends the server a message containing the game preferences chosen by the client.
@@ -103,9 +102,16 @@ public class ClientController implements ViewObserver, NetworkObserver {
      * @param expertMode true if the player decides to play in expert mode, else false.
      */
     @Override
-    public void onGamePreferences(int numPlayers, Boolean expertMode) {
-        this.expertMode = expertMode;
-        client.send(new GamePreferencesMessage(numPlayers, expertMode));
+    public void onGamePreferences(int numPlayers, Boolean expertMode) { client.send(new GamePreferencesMessage(numPlayers, expertMode)); }
+
+    /**
+     * Sends the server a service message notifying that the player wants to log out and then disconnects him.
+     */
+    @Override
+    public void onLogout() {
+        client.send(new ServiceMessage(MessageType.LOGOUT));
+        client.disconnect();
+        view.disconnect(new ServiceMessage(MessageType.QUIT, "You logged out. The game ended."));
     }
 
     // All the following messages contains a messageType,
@@ -169,7 +175,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     /**
      * Sends the server a message containing a non-relevant generic value
-     * (this is because it isn't required any other value in order to notify the end of the character card phase)
+     * (this is because it isn't required any other value in order to notify the end of the character card phase).
      */
     @Override
     public void onEndCharacterPhase() { client.send(new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE, playerID, -1)); }
@@ -181,14 +187,18 @@ public class ClientController implements ViewObserver, NetworkObserver {
     @Override
     public void update(NetworkMessage message) {
         switch (message.getMessageType()) {
-            case UNAVAILABLE_USERNAME -> view.askUsername();
-            case USERNAME_ACCEPTED -> view.askGamePreferences();
+            case UNAVAILABLE_USERNAME -> {
+                ServiceMessage sm = (ServiceMessage) message;
+                view.printMessage(sm);
+                taskQueue.execute(view::askUsername);
+            }
+            case USERNAME_ACCEPTED -> taskQueue.execute(view::askGamePreferences);
             case MATCH_JOINED -> {
                 ServiceMessage sm = (ServiceMessage) message;
                 playerID = sm.getPlayerID();
                 view.printMessage(sm);
             }
-            case OK, KO -> {
+            case KO -> {
                 ServiceMessage sm = (ServiceMessage) message;
                 view.printMessage(sm);
             }
@@ -201,12 +211,16 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 this.storage = new ModelStorage(gc.getNumPlayers(), gc.getGameMode());
                 storage.setupStorage(gc);
                 storage.getModelChanges().setPlayerID(playerID);
-                if(GUI){
+                if(GUI)
                     setStorageForGUI();
-                }else{
+                else
                     setStorageForCLI();
-                }
                 System.out.println("Game started!");
+            }
+            case END_GAME -> {
+                ServiceMessage sm = (ServiceMessage) message;
+                view.printWinner(sm.getMessage(), sm.getPlayerID());
+                view.disconnect(sm);
             }
             case FILLCLOUD_UPDATE -> {
                 FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;
@@ -307,33 +321,33 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         if (gp.getActivePlayer() == playerID)
                             taskQueue.execute(() -> view.askAssistantCard(playerID));
                         else
-                            System.out.println("Player " + gp.getActivePlayer() + " is choosing the Assistant Card to play");
+                            view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is choosing the assistant card to play..."));
                     }
                     case ACTION_PHASE -> {
                         switch (gp.getActionPhases()) {
                             case MOVE_STUDENTS -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askMove(expertMode));
+                                    taskQueue.execute(view::askMove);
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is moving students...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is moving students..."));
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askMNMovement(expertMode));
+                                    taskQueue.execute(view::askMNMovement);
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is moving mother nature...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is moving mother nature..."));
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID)
-                                    taskQueue.execute(() -> view.askCloud(expertMode));
+                                    taskQueue.execute(view::askCloud);
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is choosing a cloud...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is choosing a cloud..."));
                             }
                             case CHARACTER_CARD_PHASE -> {
                                 if (gp.getActivePlayer() == playerID)
                                     taskQueue.execute(() -> view.askCharacterEffectParameters(lastCharacterUsed));
                                 else
-                                    System.out.println("Player " + gp.getActivePlayer() + " is using a character card...");
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is using a character card..."));
                             }
                         }
                     }
@@ -342,5 +356,13 @@ public class ClientController implements ViewObserver, NetworkObserver {
         }
     }
 
+    /**
+     * Sets the storage for the drawer of the CLI.
+     */
+    public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
+    /**
+     * Sets the storage for the drawer of the GUI.
+     */
+    public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
 
 }

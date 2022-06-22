@@ -5,53 +5,45 @@ import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
+/**
+ * Cloud of the game table, it contains students.
+ */
 public class Cloud implements StudentManager {
 
     /**
-     * this is the id of the cloud, it is decided in the GameTable according to the number of players
+     * ID of the cloud, it is decided in the GameTable according to the number of players.
      */
-    private final int idCloud;
+    private final int cloudID;
     /**
-     * this is the maximum number of students that can be placed on the cloud
+     * Maximum number of students that can be placed on the cloud.
      */
     private final int maxCloudsStudents;
     /**
-     * this is the students container
+     * Students container.
      */
     private final HashMap<RealmColors,Integer> students;
 
     /**
-     * Cloud constructor
-     * @param idCloud id of the cloud
-     * @param numberOfPlayers the number of players that are going to play the game
+     * Cloud constructor.
+     * @param cloudID ID of the cloud.
+     * @param numberOfPlayers the number of players that are going to play the game.
      */
-    public Cloud(int idCloud, int numberOfPlayers) {
-        this.idCloud = idCloud;
+    public Cloud(int cloudID, int numberOfPlayers) {
+        this.cloudID = cloudID;
         this.students = new HashMap<>();
 
-        for (RealmColors c : RealmColors.values()) {
+        for (RealmColors c : RealmColors.values())
             students.put(c, 0);
-        }
 
        if(numberOfPlayers == 3)
            this.maxCloudsStudents = 4;
        else
            this.maxCloudsStudents = 3;
-
     }
 
     /**
-     * this method when called gives the number of students in the bag of a precise color
-     * @param  colors is the color of the students we want to know the number
-     * @return the number of students actually in the bag of a certain color
-     */
-    public int getNumberOfStudentsOfColor(RealmColors colors) {
-        return students.get(colors);
-    }   // refuso
-
-    /**
-     * this method updates the students' hashmap incrementing by 1 the value specified by color
-     * @param color is the key of the value we want to update in the students' hashmap
+     * Updates the students' hashmap incrementing by 1 the value specified by the color.
+     * @param color is the key of the value we want to update in the students' hashmap.
      */
     @Override
     public void addStudent(RealmColors color) {
@@ -63,8 +55,8 @@ public class Cloud implements StudentManager {
     }
 
     /**
-     * this method updates the students' hashmap decrementing by 1 the value specified by color
-     * @param color is the key of the value we want to update in the students' hashmap
+     * Updates the students' hashmap decrementing by 1 the value specified by the color.
+     * @param color is the key of the value we want to update in the students' hashmap.
      */
     @Override
     public void removeStudent(RealmColors color) {
@@ -76,18 +68,28 @@ public class Cloud implements StudentManager {
     }
 
     /**
-     * a getter method to receive a certain value contained in the students' hashmap
-     * @param color is the key of the value we want to get
-     * @return the value we want
+     * Getter method for the ID of the cloud.
+     * @return the ID of the cloud.
      */
-    @Override
-    public int getStudentsByColor(RealmColors color) {
-        return students.get(color);
-    }
+    public int getCloudID(){ return cloudID; }
 
     /**
-     * this method when called gives the number of students in the cloud
-     * @return the number of students actually in the bag
+     * Getter method that permits knowing if the cloud is actually empty.
+     * @return true if the cloud is empty, else false.
+     */
+    public boolean isEmpty(){ return getNumberOfStudents() == 0; }
+
+    /**
+     * Getter method for the quantity of students of a certain color.
+     * @param color is the key of the value we want to get.
+     * @return the number of students of that color.
+     */
+    @Override
+    public int getStudentsByColor(RealmColors color) { return students.get(color); }
+
+    /**
+     * Getter method for the number of students on the cloud.
+     * @return the number of students actually on the cloud.
      */
     @Override
     public int getNumberOfStudents() {
@@ -98,22 +100,11 @@ public class Cloud implements StudentManager {
         return totalNumberOfStudents;
     }
 
+    /**
+     * Getter method for the students' hashmap.
+     * @return the hashmap of the students on the cloud.
+     */
     @Override
-    public HashMap<RealmColors, Integer> getStudents() {
-        return students;
-    }
-
-    /**
-     * a getter method that gives the id of the cloud
-     * @return the id of the cloud
-     */
-    public int getIdCloud(){ return idCloud; }
-
-    /**
-     * this method permits knowing if the cloud is actually empty
-     */
-    public boolean isEmpty(){
-        return getNumberOfStudents() == 0;
-    }
+    public HashMap<RealmColors, Integer> getStudentsHashMap() { return students; }
 
 }

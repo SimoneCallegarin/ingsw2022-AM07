@@ -1,16 +1,21 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.ClientSide;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+import it.polimi.ingsw.Network.ServerSide.ClientListener;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 
+/**
+ * Handles the connection between client and server using a socket and launching threads (Pinger and Listener).
+ */
 public class ConnectionSocket {
 
     /**
      * Host name of the server that the ConnectionSocket is trying to connect.
      */
-    private final String host;
+    private final InetAddress host;
     /**
      * Port where the server is listening and through where the ConnectionSocket is trying to connect.
      */
@@ -42,7 +47,7 @@ public class ConnectionSocket {
      * @param host of the server that the ConnectionSocket is trying to connect.
      * @param port through where the ConnectionSocket is trying to connect.
      */
-    public ConnectionSocket(String host, int port) {
+    public ConnectionSocket(InetAddress host, int port) {
         this.host = host;
         this.port = port;
     }
@@ -51,7 +56,7 @@ public class ConnectionSocket {
      * Sends messages to the server.
      * @param message that will be sent to the server.
      */
-    public void send(NetworkMessage message) {
+    public synchronized void send(NetworkMessage message) {
         try {
             output.writeObject(message);
             output.reset();

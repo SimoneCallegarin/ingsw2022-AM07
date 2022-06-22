@@ -1,7 +1,7 @@
 package it.polimi.ingsw.View.GUI.EventListeners;
 
 import it.polimi.ingsw.Observer.ViewObserver;
-import it.polimi.ingsw.Observer.ViewSubject;
+import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;

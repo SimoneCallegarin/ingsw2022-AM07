@@ -5,48 +5,35 @@ import it.polimi.ingsw.Model.Interface.StudentManager;
 
 import java.util.HashMap;
 
+/**
+ * Entrance of the dashboard of the player, it contains students.
+ */
 public class Entrance implements StudentManager {
 
     /**
-     * this is the students container
+     * Students container.
      */
     private final HashMap<RealmColors,Integer> students;
     /**
-     * this is a value that defines how many students can be in the entrance at the same time
+     * Defines how many students can be in the entrance at the same time.
      */
     private final int maxStudents;
 
     /**
-     * Entrance constructor: hashmaps initialization (every field is set to 0); maxNumber and maxNumberRemovable attributes initialization
-     * @param maxStudents is used to choose which value has to be assigned to maxStudents
+     * Entrance constructor:
+     * hashmaps initialization (every field is set to 0) and maxNumber attribute initialization.
+     * @param maxStudents is used to choose which value has to be assigned to maxStudents.
      */
     public Entrance(int maxStudents) {
-        this.students = new HashMap<>();
-
-        for (RealmColors rc : RealmColors.values()) {
-            students.put(rc, 0);
-        }
-
         this.maxStudents = maxStudents;
-
+        this.students = new HashMap<>();
+        for (RealmColors rc : RealmColors.values())
+            students.put(rc, 0);
     }
 
     /**
-     * this method when called gives the number of students in the entrance
-     * @return the number of students actually in the entrance
-     */
-    @Override
-    public int getNumberOfStudents() {
-        int totalNumberOfStudents = 0;
-        for (RealmColors rc : RealmColors.values()){
-            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
-        }
-        return totalNumberOfStudents;
-    }
-
-    /**
-     * this method updates the students' hashmap incrementing by 1 the value specified by color
-     * @param color is the key of the value we want to update in the students' hashmap
+     * Updates the students' hashmap incrementing by 1 the value specified by the color.
+     * @param color is the key of the value we want to update in the students' hashmap.
      */
     @Override
     public void addStudent(RealmColors color) {
@@ -58,8 +45,8 @@ public class Entrance implements StudentManager {
     }
 
     /**
-     * this method updates the students' hashmap decrementing by 1 the value specified by color
-     * @param color is the key of the value we want to update in the students' hashmap
+     * Updates the students' hashmap decrementing by 1 the value specified by the color.
+     * @param color is the key of the value we want to update in the students' hashmap.
      */
     @Override
     public void removeStudent(RealmColors color) {
@@ -71,30 +58,43 @@ public class Entrance implements StudentManager {
     }
 
     /**
-     * a getter method to receive a certain value contained in the students' hashmap
-     * @param color is the key of the value we want to get
-     * @return the value we want
+     * Checks if the entrance is filled with students.
+     * @return true if the entrance is filled with students, else false.
      */
-    @Override
-    public int getStudentsByColor(RealmColors color) {
-        return students.get(color);
-    }
+    public boolean isFull() { return getNumberOfStudents() == maxStudents; }
 
     /**
-     * this method checks if the entrance is filled with students
-     * @return is the boolean that says if the entrance is full or not
+     * Getter method for the maximum quantity of students in the entrance.
+     * @return the number of maximum students in the entrance.
      */
-    public boolean isFull() {
-        return getNumberOfStudents() == maxStudents;
-    }
-
     public int getMaxStudents() { return maxStudents; }
 
     /**
-     * getter for returning the student HashMap
-     * @return the student HashMap
+     * Getter method for the students of a certain color in the entrance.
+     * @param color is the key of the value we want to get.
+     * @return the number of students of that color in the entrance.
      */
-    public HashMap<RealmColors, Integer> getStudents() {
-        return students;
+    @Override
+    public int getStudentsByColor(RealmColors color) { return students.get(color); }
+
+    /**
+     * Getter method for the student HashMap.
+     * @return the student HashMap.
+     */
+    @Override
+    public HashMap<RealmColors, Integer> getStudentsHashMap() { return students; }
+
+    /**
+     * Getter method for the number of students in the entrance.
+     * @return the number of students actually in the entrance.
+     */
+    @Override
+    public int getNumberOfStudents() {
+        int totalNumberOfStudents = 0;
+        for (RealmColors rc : RealmColors.values()){
+            totalNumberOfStudents = totalNumberOfStudents + students.get(rc);
+        }
+        return totalNumberOfStudents;
     }
+
 }

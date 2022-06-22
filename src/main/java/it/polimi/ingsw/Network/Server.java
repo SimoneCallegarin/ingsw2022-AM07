@@ -7,9 +7,11 @@ import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
-import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+import it.polimi.ingsw.Network.ServerSide.ClientHandler;
+import it.polimi.ingsw.Network.ServerSide.SocketServer;
+import it.polimi.ingsw.Network.Utils.PlayerInfo;
 import it.polimi.ingsw.View.VirtualView;
 
 import java.util.ArrayList;
@@ -31,6 +33,10 @@ public class Server {
      */
     private final ArrayList<GameController> activeMatches;
     /**
+     * List containing the virtual views initialized
+     */
+    private final ArrayList<VirtualView> virtualViews;
+    /**
      * List that contains the nickname chosen by each player requesting connection with a valid nickname.
      */
     private final ArrayList<String> chosenNicknames;
@@ -43,12 +49,7 @@ public class Server {
      * HashMap that permits to find the client handler associated to a certain nickname,
      * the matchID of the game he is playing and his playerID in that game.
      */
-    private final HashMap<String,PlayerInfo> players;
-    /**
-     * List containing the virtual views initialized
-     */
-    private final ArrayList<VirtualView> virtualViews;
-
+    private final HashMap<String, PlayerInfo> players;
 
     /**
      * constructor of the Server
@@ -83,7 +84,6 @@ public class Server {
             return true;
         else{
             System.err.println("Error: Wrong number of players requested (2-4 players only)!");
-            //SEND ERROR!
             return false;
         }
     }
@@ -94,7 +94,7 @@ public class Server {
      * @param loginMessage it contains the nickname that has to be checked and added to the list if valid
      * @return true if the nickname chosen by the player is available, else false
      */
-    public boolean setNickNamesChosen(LoginMessage loginMessage) {
+    public synchronized boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
             chosenNicknames.add(loginMessage.getNickname());
             System.out.println("Updated chosenNicknames ArrayList with: " + loginMessage.getNickname());
@@ -103,7 +103,6 @@ public class Server {
         else{
             System.err.println("Error: A player with this nickname already exists!");
             System.out.println("\"" + loginMessage.getNickname() + "\"" + " isn't valid: ");
-            //SEND ERROR!
             return false;
         }
     }
@@ -117,7 +116,7 @@ public class Server {
      * @param nickname of the player that wants to play
      * @param preferences of the player, about the number of players to play with and the game mode chosen
      */
-    public boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
+    public synchronized boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
         if(!checkValuesValidity(preferences))
             return false;
         int matchID =0;
@@ -129,7 +128,6 @@ public class Server {
             }
         }
         players.get(nickname).setMatchID(matchID);
-        //players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
         if(matchID==activeMatches.size()) {
             newGame(nickname, preferences);
             players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers()-1);
@@ -138,8 +136,10 @@ public class Server {
         else {
             players.get(nickname).setPlayerID(activeMatches.get(matchID).getActualNumberOfPlayers());
             virtualViews.get(matchID).setClientHandler(clientHandler);
-            if (getMatch(getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == getMatch(getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1)
-                clientHandler.send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + getPlayerInfo(nickname).getPlayerID() + "! Game starting soon...", getPlayerInfo(nickname).getPlayerID()));
+            if (getMatch(getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() == getMatch(getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers()-1) {
+                int shownID = getPlayerInfo(nickname).getPlayerID()+1;
+                clientHandler.send(new ServiceMessage(MessageType.MATCH_JOINED, "You are Player " + shownID + "! Game starting soon...", getPlayerInfo(nickname).getPlayerID()));
+            }
             addPlayerToAnExistingLobby(matchID, nickname, preferences);
         }
         return true;
@@ -177,7 +177,7 @@ public class Server {
      * @param nickName of the player that wants to play
      * @param clientHandler of the player that wants to play
      */
-    public void setPlayer(String nickName, ClientHandler clientHandler){
+    public synchronized void setPlayer(String nickName, ClientHandler clientHandler){
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
@@ -198,22 +198,23 @@ public class Server {
      * @param matchID the ID of the match he is going to play
      * @return the game controller associated to the matchID given
      */
-    public GameController getMatch(int matchID) { return activeMatches.get(matchID); }
+    public synchronized GameController getMatch(int matchID) { return activeMatches.get(matchID); }
 
     /**
      * Getter method to obtain information associated to a player with a certain nickname.
      * @param nickname the nickname of the  player we want to know the information.
      * @return the information of that player (playerID, matchID and client handler of the player).
      */
-    public PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
+    public synchronized PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
-    public void onDisconnection(String nickname) {
+    public synchronized void onDisconnection(String nickname) {
         System.out.println("Deleting match number " + getPlayerInfo(nickname).getMatchID());
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
+        activeMatches.remove(matchToEnd);
+        virtualViews.remove(matchToEnd);
         for (String player : chosenNicknames)
-            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected())
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
-            }
         for (String playerToRemove : playersToRemove) {
             removePlayer(playerToRemove);
             System.out.println("Removed player " + playerToRemove);
@@ -226,7 +227,7 @@ public class Server {
      * Adds a player's nickname that has to be removed from the server.
      * @param nickname the nickname of the player that has to be removed.
      */
-    public void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
+    public synchronized void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
 
     public static void main(String[] args) {
 
@@ -237,14 +238,14 @@ public class Server {
             hostName = args[0];
             portNumber = Integer.parseInt(args[1]);
         }else{
-            hostName = ServerSettings.ReadHostFromJSON();
-            portNumber = ServerSettings.ReadPortFromJSON();
+            hostName = ServerSettings.getHostName();
+            portNumber = ServerSettings.getPort();
         }
 
         Server server = new Server(portNumber);
         System.out.println(hostName+" Server started at port " + portNumber + "!");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
-        //executor.shutdown();
+        //executor.shutdown(); !!!!!!!!!!!!!!!!
     }
 }
