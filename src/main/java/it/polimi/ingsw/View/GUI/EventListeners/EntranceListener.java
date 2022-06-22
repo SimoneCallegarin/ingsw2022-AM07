@@ -37,6 +37,7 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
     @Override
     public void mouseClicked(MouseEvent e) {
         StudentButton buttonPressed=(StudentButton) e.getSource();
+        StudentButton lastPressedButton = entrance.getLastPressedStudent();
         int colorPressed=-1;
         switch (buttonPressed.getColor()){
             case YELLOW -> colorPressed=0;
@@ -46,7 +47,12 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
             case GREEN -> colorPressed=4;
         }
         int finalColorPressed = colorPressed;
+        if (lastPressedButton != null)
+            lastPressedButton.printStudent(lastPressedButton.getColor());
+        buttonPressed.printClick(buttonPressed.getColor());
+
         System.out.println(finalColorPressed);
+        entrance.setLastPressedStudent(buttonPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
         if(!setClickable) {
             dashboardListened.getDining().setCLickable(observers,tableCenter);//so after at least one student button press the dining room is set clickable

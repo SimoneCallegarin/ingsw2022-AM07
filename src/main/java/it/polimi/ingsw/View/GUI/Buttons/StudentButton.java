@@ -21,7 +21,7 @@ public class StudentButton extends JButton {
         printStudent(color);
     }
 
-    private void printStudent(RealmColors color){
+    public void printStudent(RealmColors color){
         InputStream url=null;
         switch(color){
             case YELLOW ->url=cl.getResourceAsStream("Dashboard/Students/Yellow.png");
@@ -29,6 +29,26 @@ public class StudentButton extends JButton {
             case RED -> url=cl.getResourceAsStream("Dashboard/Students/Red.png");
             case PINK -> url=cl.getResourceAsStream("Dashboard/Students/Pink.png");
             case GREEN -> url=cl.getResourceAsStream("Dashboard/Students/Green.png");
+            default -> url=cl.getResourceAsStream("Dashboard/Circles.png");
+        }
+        BufferedImage img=null;
+        try{
+            assert url != null;
+            img= ImageIO.read(url);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        setIcon(new ImageIcon(img));
+    }
+
+    public void printClick(RealmColors color) {
+        InputStream url=null;
+        switch(color){
+            case YELLOW ->url=cl.getResourceAsStream("Dashboard/Students/YellowChk.png");
+            case BLUE -> url=cl.getResourceAsStream("Dashboard/Students/BlueChk.png");
+            case RED -> url=cl.getResourceAsStream("Dashboard/Students/RedChk.png");
+            case PINK -> url=cl.getResourceAsStream("Dashboard/Students/PinkChk.png");
+            case GREEN -> url=cl.getResourceAsStream("Dashboard/Students/GreenChk.png");
             default -> url=cl.getResourceAsStream("Dashboard/Circles.png");
         }
         BufferedImage img=null;

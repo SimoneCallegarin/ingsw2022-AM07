@@ -22,6 +22,8 @@ public class EntrancePanel extends JPanel{
     GridBagConstraints c;
     int playerID;
 
+    private StudentButton lastPressedStudent;
+
     public EntrancePanel(ModelStorage storage, int playerID) {
         this.playerID=playerID;
         setLayout(new GridBagLayout());
@@ -30,7 +32,7 @@ public class EntrancePanel extends JPanel{
         setBorder(BorderFactory.createLineBorder(Color.black) );
 
         initializeEntrance(storage);
-
+        lastPressedStudent = null;
     }
 
     /**
@@ -80,6 +82,14 @@ public class EntrancePanel extends JPanel{
 
         this.validate();
         this.repaint();
+    }
+
+    public StudentButton getLastPressedStudent() {
+        return lastPressedStudent;
+    }
+
+    public void setLastPressedStudent(StudentButton lastPressedStudent) {
+        this.lastPressedStudent = lastPressedStudent;
     }
 
 }
