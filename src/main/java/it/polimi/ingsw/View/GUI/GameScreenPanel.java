@@ -73,8 +73,8 @@ public class GameScreenPanel extends JPanel {
 
         for(int i=0;i<storage.getNumberOfPlayers();i++){
             DashboardPanel dashboardPanel=new DashboardPanel(storage,i);
-            dashboardContainers.get(i%2).add(dashboardPanel);
-            dashboardPanels.add(dashboardPanel);
+            dashboardContainers.get(i%2).add(dashboardPanel);//the containers are used to place the panels in the screen
+            dashboardPanels.add(dashboardPanel);//this arrayList is used only to store them and access them in a more efficient way
         }
     }
 
@@ -84,96 +84,27 @@ public class GameScreenPanel extends JPanel {
      * @param viewObserverList the observer list to pass to the entrance listener
      */
     public void setClickableStudents(int playerID, ArrayList<ViewObserver> viewObserverList) {
-        switch (playerID){
-            case 0-> dashboard1.getEntrance().setClickable(viewObserverList,tableCenterPanel);
-            case 1-> dashboard2.getEntrance().setClickable(viewObserverList,tableCenterPanel);
-            case 2-> dashboard3.getEntrance().setClickable(viewObserverList,tableCenterPanel);
-            case 3-> dashboard4.getEntrance().setClickable(viewObserverList,tableCenterPanel);
-        }
+        dashboardPanels.get(playerID).getEntrance().setClickable(viewObserverList,tableCenterPanel);
     }
 
 
     public void updateEntrance(int playerID){
-        switch(playerID){
-            case 0->{
-                dashboard1.getEntrance().resetEntrance();
-                dashboard1.getEntrance().initializeEntrance(storage);
-            }
-            case 1->{
-                dashboard2.getEntrance().resetEntrance();
-                dashboard2.getEntrance().initializeEntrance(storage);
-            }
-            case 2->{
-                dashboard3.getEntrance().resetEntrance();
-                dashboard3.getEntrance().initializeEntrance(storage);
-            }
-            case 3->{
-                dashboard4.getEntrance().resetEntrance();
-                dashboard4.getEntrance().initializeEntrance(storage);
-            }
-        }
+        dashboardPanels.get(playerID).getEntrance().resetEntrance();
+        dashboardPanels.get(playerID).getEntrance().initializeEntrance(storage);
     }
 
     public void updateStudentDinings(int playerID){
-        switch (playerID){
-            case 0->{
-                dashboard1.getDining().resetStudentDining();
-                dashboard1.getDining().initializeStudentDining(storage);
-            }
-            case 1->{
-                dashboard2.getDining().resetStudentDining();
-                dashboard2.getDining().initializeStudentDining(storage);
-            }
-            case 2->{
-                dashboard3.getDining().resetStudentDining();
-                dashboard3.getDining().initializeStudentDining(storage);
-            }
-            case 3->{
-                dashboard4.getDining().resetStudentDining();
-                dashboard4.getDining().initializeStudentDining(storage);
-            }
-        }
+        dashboardPanels.get(playerID).getDining().resetStudentDining();
+        dashboardPanels.get(playerID).getDining().initializeStudentDining(storage);
     }
 
     public void updateProfessors(int playerID){
-        switch(playerID){
-            case 0->{
-                dashboard1.getDining().resetProfessorDining();
-                dashboard1.getDining().initializeProfessorPanel(storage);
-            }
-            case 1->{
-                dashboard2.getDining().resetProfessorDining();
-                dashboard2.getDining().initializeProfessorPanel(storage);
-            }
-            case 2->{
-                dashboard3.getDining().resetProfessorDining();
-                dashboard3.getDining().initializeProfessorPanel(storage);
-            }
-            case 3->{
-                dashboard4.getDining().resetProfessorDining();
-                dashboard4.getDining().initializeProfessorPanel(storage);
-            }
-        }
+        dashboardPanels.get(playerID).getDining().resetStudentDining();
+        dashboardPanels.get(playerID).getDining().initializeProfessorPanel(storage);
     }
 
     public void updateTowerStorages(int playerID){
-        switch(playerID){
-            case 0->{
-                dashboard1.getTowerStorage().resetTowerStorage();
-                dashboard1.getTowerStorage().initializeTowerStorage(storage);
-            }
-            case 1->{
-                dashboard2.getTowerStorage().resetTowerStorage();
-                dashboard2.getTowerStorage().initializeTowerStorage(storage);
-            }
-            case 2->{
-                dashboard3.getTowerStorage().resetTowerStorage();
-                dashboard3.getTowerStorage().initializeTowerStorage(storage);
-            }
-            case 3->{
-                dashboard4.getTowerStorage().resetTowerStorage();
-                dashboard4.getTowerStorage().initializeTowerStorage(storage);
-            }
-        }
+        dashboardPanels.get(playerID).getTowerStorage().resetTowerStorage();
+        dashboardPanels.get(playerID).getTowerStorage().initializeTowerStorage(storage);
     }
 }
