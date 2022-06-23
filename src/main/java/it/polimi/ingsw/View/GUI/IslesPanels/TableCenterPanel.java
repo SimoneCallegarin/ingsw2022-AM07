@@ -91,7 +91,7 @@ public class TableCenterPanel extends JPanel {
      */
     ArrayList<JPanel> assistantAndMoneyPanelList;
 
-    public TableCenterPanel(ModelStorage storage, String usernamePlaying) {
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers) {
         this.storage=storage;
         this.usernamePlaying=usernamePlaying;
         this.islesPanels=new ArrayList<>();
@@ -270,7 +270,7 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.gridy=1;
             centerConstraints.weighty=1;
             centerConstraints.weightx=1;
-            cloudsContainerPanel=new CloudsContainerPanel(storage);
+            cloudsContainerPanel=new CloudsContainerPanel(storage,viewObservers,this);
             cloudsContainerPanel.setBackground(Color.CYAN);
             isleContainerCenter.add(cloudsContainerPanel,centerConstraints);
 
@@ -358,6 +358,13 @@ public class TableCenterPanel extends JPanel {
 
     }
 
+    public void setCloudsClickable(){
+        cloudsContainerPanel.setCloudsClickable();
+    }
+
+    public void removeCloudsClickable() {
+        cloudsContainerPanel.removeCloudsClickable();
+    }
 
     public void removeIslesClickable(){
         for(int i=0;i<islesPanels.size();i++){
@@ -379,6 +386,7 @@ public class TableCenterPanel extends JPanel {
             charactersContainer.getComponent(i).removeMouseListener(mouseListener);
         }
     }
+
 
 
 }

@@ -67,8 +67,13 @@ public class GUIDrawer extends ViewSubject {
      * the username of the player currently using the GUI
      */
     String usernamePlaying;
-
-
+    /**
+     * boolean variable used to execute only one time the GameScreenPanel creation
+     */
+    boolean gameStart=true;
+    /**
+     * the class containing all the information about the changes occurred in the ModelStorage
+     */
     ModelChanges modelChanges;
 
     /**
@@ -252,7 +257,7 @@ public class GUIDrawer extends ViewSubject {
         }
         JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
 
-        gameScreenPanel.setClickableStudents(modelChanges.getPlayerID(),getViewObserverList());
+        gameScreenPanel.setClickableStudents(modelChanges.getPlayerID());
     }
 
     public void showMNMovement(){
@@ -262,13 +267,19 @@ public class GUIDrawer extends ViewSubject {
         gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
     }
 
+    public void showCloudChoice(){
+        String message="Now choose a cloud to pick students from by clicking on it";
+        JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);
+
+        gameScreenPanel.tableCenterPanel.setCloudsClickable();
+    }
+
 
     /**
      * this method update the gamescreen panel according to the changes occurred in the modelStorage. The GuiDrawer reads the changes arraylist
      * in the modelStorage to correctly know which component to update.
      */
     public void updateGameScreenPanel(){
-        boolean gameStart=true;
 
         for(int i=0;i<modelChanges.getToUpdate().size();i++){
             switch(modelChanges.getToUpdate().get(i)){

@@ -1,26 +1,33 @@
 package it.polimi.ingsw.View.GUI.CloudsPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.EventListeners.CloudListener;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class CloudPanel extends JPanel {
     ClassLoader cl;
     int cloudID;
     ModelStorage storage;
     GridBagConstraints constraints;
+    CloudListener cloudListener;
 
-    public CloudPanel(ModelStorage storage,int cloudID) {
+    public CloudPanel(ModelStorage storage, int cloudID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel) {
         cl=this.getClass().getClassLoader();
         this.storage=storage;
         this.cloudID=cloudID;
+        this.cloudListener=new CloudListener(viewObservers,tableCenterPanel);
         setLayout(new GridBagLayout());
         constraints =new GridBagConstraints();
         setBackground(Color.CYAN);
@@ -55,6 +62,8 @@ public class CloudPanel extends JPanel {
                 constraints.gridx++;
             }
         }
+        this.validate();
+        this.repaint();
     }
 
     public void resetCloud(){
@@ -63,4 +72,15 @@ public class CloudPanel extends JPanel {
         this.repaint();
     }
 
+    public void setClickable() {
+        this.addMouseListener(cloudListener);
+    }
+
+    public void removeClickable(){
+        this.removeMouseListener(cloudListener);
+    }
+
+    public int getCloudID() {
+        return cloudID;
+    }
 }

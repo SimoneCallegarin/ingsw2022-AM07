@@ -59,7 +59,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,viewObservers);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
@@ -81,10 +81,9 @@ public class GameScreenPanel extends JPanel {
     /**
      * this method set the dashboard entrance clickable in order to select a student to move
      * @param playerID the playerID used to identify which dashboard set movable
-     * @param viewObserverList the observer list to pass to the entrance listener
      */
-    public void setClickableStudents(int playerID, ArrayList<ViewObserver> viewObserverList) {
-        dashboardPanels.get(playerID).getEntrance().setClickable(viewObserverList,tableCenterPanel);
+    public void setClickableStudents(int playerID) {
+        dashboardPanels.get(playerID).getEntrance().setClickable();
     }
 
 

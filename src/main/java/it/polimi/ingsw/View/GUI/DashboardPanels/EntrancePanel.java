@@ -75,10 +75,8 @@ public class EntrancePanel extends JPanel{
 
     /**
      * this method is called when the player can move the students in order to listen to clicks on a student
-     * @param viewObserverList the observer list to pass to the entrance listener
-     * @param tableCenterPanel the table center panel used by the entrance listener to set the isles clickable after one click
      */
-    public void setClickable(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
+    public void setClickable(){
         for(int i=0;i<studentButtons.size();i++){
             StudentButton studentButton=studentButtons.get(i);
             studentButton.addMouseListener(entranceListeners.get(i));

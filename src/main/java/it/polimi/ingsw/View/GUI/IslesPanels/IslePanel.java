@@ -30,8 +30,7 @@ public class IslePanel extends JPanel {
     public IslePanel(ModelStorage storage,int isleID) {
         this.storage=storage;
         this.isleID=isleID;
-        Random random=new Random();
-        this.imageID=random.nextInt(3)+1;
+        this.imageID=isleID%3+1;
         setLayout(new GridBagLayout());
         constraints=new GridBagConstraints();
         setOpaque(false);
