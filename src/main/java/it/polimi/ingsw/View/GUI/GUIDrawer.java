@@ -283,17 +283,20 @@ public class GUIDrawer extends ViewSubject {
 
         for(int i=0;i<modelChanges.getToUpdate().size();i++){
             switch(modelChanges.getToUpdate().get(i)){
-                case CLOUDS_CHANGED -> {
+                case FILLCLOUD_CHANGED -> {
                     if(gameStart) {
                         createGameScreen();
                         showGameScreen();
                         gameStart=false;
                     }
                     else {
-                        gameScreenPanel.tableCenterPanel.updateClouds(modelChanges.getCloudID());
+                        gameScreenPanel.tableCenterPanel.updateFillClouds();
                     }
 
                 }
+
+                case CLOUD_CHANGED -> gameScreenPanel.tableCenterPanel.updateCloud(modelChanges.getCloudID());
+
                 case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
 
                 case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(modelChanges.getPlayingID());

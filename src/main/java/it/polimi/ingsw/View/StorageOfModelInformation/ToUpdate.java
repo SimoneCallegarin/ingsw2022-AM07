@@ -4,7 +4,8 @@ package it.polimi.ingsw.View.StorageOfModelInformation;
  * //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 public enum ToUpdate {
-    CLOUDS_CHANGED,
+    CLOUD_CHANGED,
+    FILLCLOUD_CHANGED,
     DISCARDPILE_CHANGED,
     ENTRANCE_CHANGED,
     STUDENTDINING_CHANGED,

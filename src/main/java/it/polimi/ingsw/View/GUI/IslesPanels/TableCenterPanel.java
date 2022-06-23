@@ -326,8 +326,14 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyPanelList.get(playerID).repaint();
     }
 
-    public void updateClouds(int cloudID) {
+    public void updateCloud(int cloudID) {
         cloudsContainerPanel.updateCloudPanels(cloudID);
+    }
+
+    public void updateFillClouds(){
+        for(int i=0;i<storage.getGameTable().getClouds().size();i++){
+            cloudsContainerPanel.updateCloudPanels(i);
+        }
     }
 
     public void updateCoins(int playerID){
