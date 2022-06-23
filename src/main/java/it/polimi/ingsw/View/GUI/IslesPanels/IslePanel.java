@@ -16,18 +16,22 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class IslePanel extends JPanel {
 
     ModelStorage storage;
     GridBagConstraints constraints;
     int isleID;
+    int imageID;
     boolean motherNature=false;
     DenyCardPanel denyCard;
 
     public IslePanel(ModelStorage storage,int isleID) {
         this.storage=storage;
         this.isleID=isleID;
+        Random random=new Random();
+        this.imageID=random.nextInt(3)+1;
         setLayout(new GridBagLayout());
         constraints=new GridBagConstraints();
         setOpaque(false);
@@ -40,7 +44,8 @@ public class IslePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         ClassLoader cl=this.getClass().getClassLoader();
-        InputStream url=cl.getResourceAsStream("GameTable/Isles/island1.png");
+
+        InputStream url=cl.getResourceAsStream("GameTable/Isles/island"+imageID+".png");
         BufferedImage img=null;
         try{
             img= ImageIO.read(url);
