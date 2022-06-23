@@ -25,9 +25,13 @@ public class ConnectionSocket {
      * and that notifies to the ClientController all other messages.
      */
     private ClientListener cListener;
-
+    /**
+     * Thread of the ClientListener.
+     */
     private Thread threadListener;
-
+    /**
+     * Thread of the ClientPingSender.
+     */
     private Thread threadSender;
     /**
      * Input stream.
