@@ -2,19 +2,31 @@ package it.polimi.ingsw.View.GUI;
 
 
 
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Observer.ViewObserver;
+import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
 public class GameScreenPanel extends JPanel {
 
     private final ModelStorage storage;
+
+    ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> checkedStudents;
+    ArrayList<BufferedImage> towers;
 
     JPanel textContainerPanel;
 
@@ -56,6 +68,71 @@ public class GameScreenPanel extends JPanel {
         dashboardContainerPanel2.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel2);
 
+        students = new ArrayList<>();
+        checkedStudents = new ArrayList<>();
+        towers = new ArrayList<>();
+
+        StudentButton sb = new StudentButton();
+        TowerButton tb = new TowerButton();
+        ClassLoader studentClassLoader = sb.getClass().getClassLoader();
+        ClassLoader towerClassLoader = tb.getClass().getClassLoader();
+        InputStream url;
+
+        for (RealmColors rc : RealmColors.values()) {
+            BufferedImage img = null;
+            switch(rc) {
+                case YELLOW -> url = studentClassLoader.getResourceAsStream("Dashboard/Students/Yellow.png");
+                case BLUE -> url = studentClassLoader.getResourceAsStream("Dashboard/Students/Blue.png");
+                case RED -> url = studentClassLoader.getResourceAsStream("Dashboard/Students/Red.png");
+                case PINK -> url = studentClassLoader.getResourceAsStream("Dashboard/Students/Pink.png");
+                case GREEN -> url = studentClassLoader.getResourceAsStream("Dashboard/Students/Green.png");
+                default -> url = studentClassLoader.getResourceAsStream("Dashboard/Circles.png");
+            }
+            try {
+                assert url != null;
+                img = ImageIO.read(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            students.add(img);
+        }
+
+        for (RealmColors rc : RealmColors.values()) {
+            BufferedImage img = null;
+            switch(rc) {
+                case YELLOW ->url=studentClassLoader.getResourceAsStream("Dashboard/Students/YellowChk.png");
+                case BLUE -> url=studentClassLoader.getResourceAsStream("Dashboard/Students/BlueChk.png");
+                case RED -> url=studentClassLoader.getResourceAsStream("Dashboard/Students/RedChk.png");
+                case PINK -> url=studentClassLoader.getResourceAsStream("Dashboard/Students/PinkChk.png");
+                case GREEN -> url=studentClassLoader.getResourceAsStream("Dashboard/Students/GreenChk.png");
+                default -> url=studentClassLoader.getResourceAsStream("Dashboard/Circles.png");
+            }
+            try {
+                assert url != null;
+                img = ImageIO.read(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            checkedStudents.add(img);
+        }
+
+        for (TowerColors tc : TowerColors.values()) {
+            BufferedImage img = null;
+            switch (tc) {
+                case BLACK -> url = towerClassLoader.getResourceAsStream("Dashboard/Tower_storage/black_tower.png");
+                case WHITE -> url = towerClassLoader.getResourceAsStream("Dashboard/Tower_storage/white_tower.png");
+                case GREY -> url = towerClassLoader.getResourceAsStream("Dashboard/Tower_storage/grey_tower.png");
+                default -> url = towerClassLoader.getResourceAsStream("Dashboard/Circles.png");
+            }
+            try {
+                assert url != null;
+                img = ImageIO.read(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            towers.add(img);
+        }
+
         gamescreenConstraints=new GridBagConstraints();
 
         gamescreenConstraints.gridy=0;
@@ -69,7 +146,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,viewObservers);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,viewObservers, students, towers);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
@@ -82,7 +159,7 @@ public class GameScreenPanel extends JPanel {
         add(dashboardContainerPanel2,gamescreenConstraints);
 
         for(int i=0;i<storage.getNumberOfPlayers();i++){
-            DashboardPanel dashboardPanel=new DashboardPanel(storage,i,viewObservers,tableCenterPanel);
+            DashboardPanel dashboardPanel=new DashboardPanel(storage,i,viewObservers,tableCenterPanel, students, checkedStudents, towers);
             dashboardContainers.get(i%2).add(dashboardPanel);//the containers are used to place the panels in the screen
             dashboardPanels.add(dashboardPanel);//this arrayList is used only to store them and access them in a more efficient way
         }

@@ -11,9 +11,13 @@ import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -103,7 +107,12 @@ public class TableCenterPanel extends JPanel {
      */
     ArrayList<AssistantCardPanel> assistantCardPanels;
 
-    public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers) {
+    ClassLoader cl;
+    ArrayList<BufferedImage> isles;
+    ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> towers;
+
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers) {
         this.storage=storage;
         this.usernamePlaying=usernamePlaying;
         this.islesPanels=new ArrayList<>();
@@ -162,6 +171,25 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyContainerSx.add(assistantAndMoneyPanel3);
         assistantAndMoneyContainerDx.add(assistantAndMoneyPanel2);
         assistantAndMoneyContainerDx.add(assistantAndMoneyPanel4);
+
+        isles = new ArrayList<>();
+        this.students = students;
+        this.towers = towers;
+
+        cl = this.getClass().getClassLoader();
+        InputStream url;
+
+        for (int i = 1; i < 4; i++) {
+            BufferedImage img = null;
+            url = cl.getResourceAsStream("GameTable/Isles/island"+i+".png");
+            try {
+                assert url != null;
+                img = ImageIO.read(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            isles.add(img);
+        }
 
         int idxSx=0;
         int idxDx=0;
@@ -248,7 +276,7 @@ public class TableCenterPanel extends JPanel {
 
         //initialize the isles
         for(int i=0;i<12;i++){
-            islesPanels.add(new IslePanel(storage,i));
+            islesPanels.add(new IslePanel(storage,i, isles, students, towers));
         }
 
         c.weighty=0.5;
@@ -294,7 +322,7 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.gridy=1;
             centerConstraints.weighty=1;
             centerConstraints.weightx=1;
-            cloudsContainerPanel=new CloudsContainerPanel(storage,viewObservers,this);
+            cloudsContainerPanel=new CloudsContainerPanel(storage,viewObservers,this, students);
             cloudsContainerPanel.setBackground(Color.CYAN);
             isleContainerCenter.add(cloudsContainerPanel,centerConstraints);
 

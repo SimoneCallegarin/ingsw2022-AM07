@@ -27,7 +27,11 @@ public class IslePanel extends JPanel {
     boolean motherNature=false;
     DenyCardPanel denyCard;
 
-    public IslePanel(ModelStorage storage,int isleID) {
+    ArrayList<BufferedImage> isles;
+    ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> towers;
+
+    public IslePanel(ModelStorage storage,int isleID, ArrayList<BufferedImage> isles, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers) {
         this.storage=storage;
         this.isleID=isleID;
         this.imageID=isleID%3+1;
@@ -35,6 +39,9 @@ public class IslePanel extends JPanel {
         constraints=new GridBagConstraints();
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
+        this.isles = isles;
+        this.students = students;
+        this.towers = towers;
 
         initializeIsle();
     }
@@ -42,14 +49,11 @@ public class IslePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ClassLoader cl=this.getClass().getClassLoader();
-
-        InputStream url=cl.getResourceAsStream("GameTable/Isles/island"+imageID+".png");
-        BufferedImage img=null;
-        try{
-            img= ImageIO.read(url);
-        }catch(IOException e){
-            e.printStackTrace();
+        BufferedImage img = null;
+        switch (isleID) {
+            case 1 -> img = isles.get(0);
+            case 2 -> img = isles.get(1);
+            case 3 -> img = isles.get(2);
         }
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
@@ -75,7 +79,7 @@ public class IslePanel extends JPanel {
         studentConstraints.gridy=0;
         for(RealmColors color:RealmColors.values()) {
             for (int i = 0; i < storage.getGameTable().getIsle(isleID).getStudentsByColor(color); i++) {
-                studentContainer.add(new StudentButton(color),studentConstraints);
+                studentContainer.add(new StudentButton(color, students),studentConstraints);
                 if(studentConstraints.gridx==3){
                     studentConstraints.gridx=-1;
                     studentConstraints.gridy++;
@@ -92,7 +96,7 @@ public class IslePanel extends JPanel {
 
         if(storage.getGameTable().getIsle(isleID).getTowerColor()!= TowerColors.NOCOLOR) {
             for (int i = 0; i < storage.getGameTable().getIsle(isleID).getTowerNumber(); i++) {
-                towerContainer.add(new TowerButton(storage.getGameTable().getIsle(isleID).getTowerColor()),towerConstraints);
+                towerContainer.add(new TowerButton(storage.getGameTable().getIsle(isleID).getTowerColor(), towers),towerConstraints);
                 if(towerConstraints.gridx==3){
                     towerConstraints.gridx=-1;
                     towerConstraints.gridy++;

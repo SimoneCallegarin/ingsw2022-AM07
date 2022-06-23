@@ -6,13 +6,14 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class CloudsContainerPanel extends JPanel {
     ModelStorage storage;
     ArrayList<CloudPanel> cloudPanels;
 
-    public CloudsContainerPanel(ModelStorage storage, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel) {
+    public CloudsContainerPanel(ModelStorage storage, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
         this.storage=storage;
         this.cloudPanels=new ArrayList<>();
         setLayout(new GridBagLayout());
@@ -22,7 +23,7 @@ public class CloudsContainerPanel extends JPanel {
         JPanel cloudContainer=new JPanel(new GridLayout(1,storage.getGameTable().getClouds().size()));
         cloudContainer.setBackground(Color.CYAN);
         for(int i=0;i<storage.getGameTable().getClouds().size();i++){
-            CloudPanel cloudPanel=new CloudPanel(storage,i,viewObservers, tableCenterPanel);
+            CloudPanel cloudPanel=new CloudPanel(storage,i,viewObservers, tableCenterPanel, students);
             cloudContainer.add(cloudPanel);
             cloudPanels.add(cloudPanel);
         }

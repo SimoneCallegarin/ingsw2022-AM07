@@ -23,7 +23,9 @@ public class CloudPanel extends JPanel {
     GridBagConstraints constraints;
     CloudListener cloudListener;
 
-    public CloudPanel(ModelStorage storage, int cloudID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel) {
+    ArrayList<BufferedImage> students;
+
+    public CloudPanel(ModelStorage storage, int cloudID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
         cl=this.getClass().getClassLoader();
         this.storage=storage;
         this.cloudID=cloudID;
@@ -32,6 +34,8 @@ public class CloudPanel extends JPanel {
         constraints =new GridBagConstraints();
         setBackground(Color.CYAN);
         setOpaque(false);
+
+        this.students = students;
         initializeCloud();
     }
 
@@ -54,7 +58,7 @@ public class CloudPanel extends JPanel {
 
         for(RealmColors color:RealmColors.values()){
             for(int i=0;i<storage.getGameTable().getCloud(cloudID).getStudentsByColor(color);i++){
-                add(new StudentButton(color), constraints);
+                add(new StudentButton(color, students), constraints);
                 if(constraints.gridx==3){
                     constraints.gridx=-1;
                     constraints.gridy++;
