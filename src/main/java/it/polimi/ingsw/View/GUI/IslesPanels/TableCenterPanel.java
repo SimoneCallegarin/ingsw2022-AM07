@@ -8,7 +8,7 @@ import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
-import it.polimi.ingsw.View.GUI.MagePanel;
+
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -98,6 +98,10 @@ public class TableCenterPanel extends JPanel {
      * arrayList to store the labels for showing the available coins for each player
      */
     ArrayList<JLabel> coinsLabel;
+    /**
+     * arraylist to store the assistant card panels currently on screen
+     */
+    ArrayList<AssistantCardPanel> assistantCardPanels;
 
     public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers) {
         this.storage=storage;
@@ -105,6 +109,7 @@ public class TableCenterPanel extends JPanel {
         this.islesPanels=new ArrayList<>();
         this.assistantAndMoneyPanelList=new ArrayList<>();
         this.assistantAndMoneyContainers=new ArrayList<>();
+        this.assistantCardPanels=new ArrayList<>();
 
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
@@ -186,7 +191,9 @@ public class TableCenterPanel extends JPanel {
                 }
                 assistantAndMoneyConstraints.weighty=1;
                 assistantAndMoneyConstraints.gridy++;
-                ((JPanel) assistantAndMoneyContainerSx.getComponent(idxSx)).add(new MagePanel(i),assistantAndMoneyConstraints);
+                AssistantCardPanel magePanel=new AssistantCardPanel(i,true);
+                ((JPanel) assistantAndMoneyContainerSx.getComponent(idxSx)).add(magePanel,assistantAndMoneyConstraints);
+                assistantCardPanels.add(magePanel);
                 assistantAndMoneyConstraints.gridy=0;
                 idxSx++;
             }else{
@@ -198,7 +205,9 @@ public class TableCenterPanel extends JPanel {
                 }
                 assistantAndMoneyConstraints.weighty=1;
                 assistantAndMoneyConstraints.gridy++;
-                ((JPanel) assistantAndMoneyContainerDx.getComponent(idxDx)).add(new MagePanel(i),assistantAndMoneyConstraints);
+                AssistantCardPanel magePanel=new AssistantCardPanel(i,true);
+                ((JPanel) assistantAndMoneyContainerDx.getComponent(idxDx)).add(magePanel,assistantAndMoneyConstraints);
+                assistantCardPanels.add(magePanel);
                 assistantAndMoneyConstraints.gridy=0;
                 idxDx++;
             }
@@ -320,8 +329,14 @@ public class TableCenterPanel extends JPanel {
         }
         assistantAndMoneyConstraints.weighty=1;
         assistantAndMoneyConstraints.fill=GridBagConstraints.BOTH;
-        assistantAndMoneyPanelList.get(playerID).remove(assistantAndMoneyConstraints.gridy);
-        assistantAndMoneyPanelList.get(playerID).add(new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
+        //remove assistant/mage panel from the container in the screen and from the data structure
+        assistantAndMoneyPanelList.get(playerID).remove(assistantCardPanels.get(playerID));
+        assistantCardPanels.remove(assistantCardPanels.get(playerID));
+        //create a new AssistantCardPanel according to the storage info and add it to the container and to the data structure
+        AssistantCardPanel assistantCardPanel=new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder(),false);
+        assistantAndMoneyPanelList.get(playerID).add(assistantCardPanel, assistantAndMoneyConstraints);
+        assistantCardPanels.add(playerID,assistantCardPanel);
+
         assistantAndMoneyPanelList.get(playerID).validate();//if you change a component that's already been displayed you need to validate it to display the changes
         assistantAndMoneyPanelList.get(playerID).repaint();
     }
