@@ -71,6 +71,10 @@ public class TableCenterPanel extends JPanel {
      */
     JPanel assistantAndMoneyPanel4;
     /**
+     * the panel containing the clouds panels
+     */
+    CloudsContainerPanel cloudsContainerPanel;
+    /**
      * constraints used to add the assistant card and the labels for money and username (and squad) in the assistantAndMoneyPanels
      */
     GridBagConstraints assistantAndMoneyConstraints;
@@ -224,7 +228,7 @@ public class TableCenterPanel extends JPanel {
         }
 
         c.weighty=0.5;
-        c.weightx=0.5;
+        c.weightx=0.4;
         c.gridx=1;
         add(isleContainerSx,c);
         isleContainerSx.add(islesPanels.get(0));
@@ -234,7 +238,7 @@ public class TableCenterPanel extends JPanel {
 
         c.gridx=3;
         c.weighty=0.5;
-        c.weightx=0.5;
+        c.weightx=0.4;
         add(isleContainerDx,c);
         isleContainerDx.add(islesPanels.get(3));
         isleContainerDx.add(islesPanels.get(4));
@@ -249,8 +253,6 @@ public class TableCenterPanel extends JPanel {
             firstIsleContainer1x2.setBackground(Color.CYAN);
             secondIsleContainer1x2=new JPanel(new GridLayout(1,2));
             secondIsleContainer1x2.setBackground(Color.CYAN);
-            charactersContainer=new JPanel(new GridLayout(1,3));
-            charactersContainer.setBackground(Color.CYAN);
 
             firstIsleContainer1x2.add(islesPanels.get(1));
             firstIsleContainer1x2.add(islesPanels.get(2));
@@ -261,18 +263,20 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.gridx=0;
             centerConstraints.gridy=0;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=0.5;
+            centerConstraints.weighty=0.6;
             isleContainerCenter.add(firstIsleContainer1x2,centerConstraints);
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridy=1;
             centerConstraints.weighty=1;
             centerConstraints.weightx=1;
-            CloudsContainerPanel cloudsContainerPanel=new CloudsContainerPanel(storage);
+            cloudsContainerPanel=new CloudsContainerPanel(storage);
             cloudsContainerPanel.setBackground(Color.CYAN);
             isleContainerCenter.add(cloudsContainerPanel,centerConstraints);
 
             if(storage.isGameMode()) {
+                charactersContainer=new JPanel(new GridLayout(1,3));
+                charactersContainer.setBackground(Color.CYAN);
                 centerConstraints.fill = GridBagConstraints.BOTH;
                 centerConstraints.gridy = 2;
                 centerConstraints.weightx = 1;
@@ -286,7 +290,7 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridy++;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=0.5;
+            centerConstraints.weighty=0.6;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
 
     }
@@ -304,6 +308,10 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyPanelList.get(playerID).remove(assistantAndMoneyConstraints.gridy);
         assistantAndMoneyPanelList.get(playerID).add(new AssistantCardPanel(storage.getDashboard(playerID).getDiscardPileTurnOrder()), assistantAndMoneyConstraints);
         assistantAndMoneyPanelList.get(playerID).validate();//if you change a component that's already been displayed you need to validate it to display the changes
+    }
+
+    public void updateClouds(int cloudID) {
+        cloudsContainerPanel.updateCloudPanels(cloudID);
     }
 
     public void updateCoins(int playerID){
@@ -329,6 +337,9 @@ public class TableCenterPanel extends JPanel {
         for (int i=0;i<islesPanels.size();i++){
             islesPanels.get(i).resetIsle();
             islesPanels.get(i).initializeIsle();
+        }
+        if(islesPanels.size()!=storage.getGameTable().getIsles().size()){
+
         }
     }
 
@@ -368,4 +379,6 @@ public class TableCenterPanel extends JPanel {
             charactersContainer.getComponent(i).removeMouseListener(mouseListener);
         }
     }
+
+
 }
