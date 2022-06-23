@@ -279,7 +279,7 @@ public class GUIDrawer extends ViewSubject {
                         gameStart=false;
                     }
                     else {
-                        //update with cloud update
+                        gameScreenPanel.tableCenterPanel.updateClouds(modelChanges.getCloudID());
                     }
 
                 }

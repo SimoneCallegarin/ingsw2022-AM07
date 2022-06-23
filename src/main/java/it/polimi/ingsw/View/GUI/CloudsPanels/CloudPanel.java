@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View.GUI.CloudsPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
-import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -14,17 +13,19 @@ import java.io.InputStream;
 
 public class CloudPanel extends JPanel {
     ClassLoader cl;
+    int cloudID;
     ModelStorage storage;
     GridBagConstraints constraints;
 
     public CloudPanel(ModelStorage storage,int cloudID) {
         cl=this.getClass().getClassLoader();
         this.storage=storage;
+        this.cloudID=cloudID;
         setLayout(new GridBagLayout());
         constraints =new GridBagConstraints();
         setBackground(Color.CYAN);
         setOpaque(false);
-        InitializeCloud(cloudID);
+        initializeCloud();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CloudPanel extends JPanel {
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
-    private void InitializeCloud(int cloudID){
+    public void initializeCloud(){
         constraints.gridx=0;
         constraints.gridy=0;
 
@@ -54,6 +55,12 @@ public class CloudPanel extends JPanel {
                 constraints.gridx++;
             }
         }
-
     }
+
+    public void resetCloud(){
+        this.removeAll();
+        this.validate();
+        this.repaint();
+    }
+
 }
