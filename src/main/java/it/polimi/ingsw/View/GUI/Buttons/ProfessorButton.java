@@ -7,32 +7,27 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class ProfessorButton extends JButton {
 
-    ClassLoader cl=this.getClass().getClassLoader();
+    ArrayList<BufferedImage> professors;
 
-    public ProfessorButton(RealmColors color) {
+    public ProfessorButton(RealmColors color, ArrayList<BufferedImage> professors) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
+        this.professors = professors;
         printProfessor(color);
     }
 
     private void printProfessor(RealmColors color){
-        InputStream url=null;
-        switch (color){
-            case GREEN ->url=cl.getResourceAsStream("Dashboard/Professors/Green.png");
-            case PINK -> url=cl.getResourceAsStream("Dashboard/Professors/Pink.png");
-            case RED -> url=cl.getResourceAsStream("Dashboard/Professors/Red.png");
-            case BLUE -> url=cl.getResourceAsStream("Dashboard/Professors/Blue.png");
-            case YELLOW -> url=cl.getResourceAsStream("Dashboard/Professors/Yellow.png");
-        }
-        BufferedImage img=null;
-        try{
-            assert url != null;
-            img= ImageIO.read(url);
-        }catch (IOException e){
-            e.printStackTrace();
+        BufferedImage img = null;
+        switch (color) {
+            case YELLOW -> img = professors.get(0);
+            case BLUE -> img = professors.get(1);
+            case RED -> img = professors.get(2);
+            case PINK -> img = professors.get(3);
+            case GREEN -> img = professors.get(4);
         }
         setIcon(new ImageIcon(img));
     }

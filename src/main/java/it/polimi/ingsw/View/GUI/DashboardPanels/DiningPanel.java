@@ -1,12 +1,17 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.EventListeners.DiningListener;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class DiningPanel extends JPanel {
@@ -15,15 +20,44 @@ public class DiningPanel extends JPanel {
     int playerID;
     ProfessorPanel professorPanel;
     DiningStudentsPanel studentsPanel;
+    ClassLoader cl;
+    ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> checkedStudents;
+    ArrayList<BufferedImage> professors;
 
-
-    public DiningPanel(ModelStorage storage, int playerID) {
+    public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
 
+        this.professors=new ArrayList<>();
         this.playerID=playerID;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
+
+        this.students = students;
+        this.checkedStudents = checkedStudents;
+
+        cl = this.getClass().getClassLoader();
+        InputStream url;
+
+        for (RealmColors rc : RealmColors.values()) {
+            BufferedImage img = null;
+            switch(rc) {
+                case YELLOW ->url = cl.getResourceAsStream("Dashboard/Professors/Yellow.png");
+                case BLUE -> url = cl.getResourceAsStream("Dashboard/Professors/Blue.png");
+                case RED -> url = cl.getResourceAsStream("Dashboard/Professors/Red.png");
+                case PINK -> url = cl.getResourceAsStream("Dashboard/Professors/Pink.png");
+                case GREEN -> url = cl.getResourceAsStream("Dashboard/Professors/Green.png");
+                default -> url = cl.getResourceAsStream("Dashboard/Circles.png");
+            }
+            try {
+                assert url != null;
+                img = ImageIO.read(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            professors.add(img);
+        }
 
         initializeProfessorPanel(storage);
         initializeStudentDining(storage);
@@ -35,7 +69,7 @@ public class DiningPanel extends JPanel {
      * @param storage the model storage to retrieve game data from
      */
     public void initializeStudentDining( ModelStorage storage) {
-        studentsPanel=new DiningStudentsPanel(storage,playerID);
+        studentsPanel=new DiningStudentsPanel(storage,playerID, students, checkedStudents);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
         c.fill=GridBagConstraints.BOTH;
@@ -49,7 +83,7 @@ public class DiningPanel extends JPanel {
     }
 
     public void initializeProfessorPanel( ModelStorage storage){
-        professorPanel=new ProfessorPanel(storage,playerID);
+        professorPanel=new ProfessorPanel(storage,playerID, professors);
         professorPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         professorPanel.setOpaque(false);
         c.fill=GridBagConstraints.BOTH;

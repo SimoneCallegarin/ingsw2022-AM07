@@ -8,55 +8,59 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class StudentButton extends JButton {
 
-    ClassLoader cl=this.getClass().getClassLoader();
     RealmColors color;
+    ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> checkedStudents;
 
-    public StudentButton(RealmColors color) {
+    public StudentButton(RealmColors color, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         this.color=color;
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
+        this.students = students;
         printStudent(color);
+        this.checkedStudents = checkedStudents;
+    }
+
+    public StudentButton(RealmColors color, ArrayList<BufferedImage> students) {
+        this.color=color;
+        setBorder(BorderFactory.createEmptyBorder());
+        setContentAreaFilled(false);
+        this.students = students;
+        printStudent(color);
+
+        this.checkedStudents = null;
+    }
+
+    public StudentButton() {
+        this.color=null;
+        this.students = null;
+        this.checkedStudents = null;
     }
 
     public void printStudent(RealmColors color){
-        InputStream url=null;
-        switch(color){
-            case YELLOW ->url=cl.getResourceAsStream("Dashboard/Students/Yellow.png");
-            case BLUE -> url=cl.getResourceAsStream("Dashboard/Students/Blue.png");
-            case RED -> url=cl.getResourceAsStream("Dashboard/Students/Red.png");
-            case PINK -> url=cl.getResourceAsStream("Dashboard/Students/Pink.png");
-            case GREEN -> url=cl.getResourceAsStream("Dashboard/Students/Green.png");
-            default -> url=cl.getResourceAsStream("Dashboard/Circles.png");
-        }
-        BufferedImage img=null;
-        try{
-            assert url != null;
-            img= ImageIO.read(url);
-        }catch (IOException e){
-            e.printStackTrace();
+        BufferedImage img = null;
+        switch (color) {
+            case YELLOW -> img = students.get(0);
+            case BLUE -> img = students.get(1);
+            case RED -> img = students.get(2);
+            case PINK -> img = students.get(3);
+            case GREEN -> img = students.get(4);
         }
         setIcon(new ImageIcon(img));
     }
 
     public void printClick(RealmColors color) {
-        InputStream url=null;
-        switch(color){
-            case YELLOW ->url=cl.getResourceAsStream("Dashboard/Students/YellowChk.png");
-            case BLUE -> url=cl.getResourceAsStream("Dashboard/Students/BlueChk.png");
-            case RED -> url=cl.getResourceAsStream("Dashboard/Students/RedChk.png");
-            case PINK -> url=cl.getResourceAsStream("Dashboard/Students/PinkChk.png");
-            case GREEN -> url=cl.getResourceAsStream("Dashboard/Students/GreenChk.png");
-            default -> url=cl.getResourceAsStream("Dashboard/Circles.png");
-        }
-        BufferedImage img=null;
-        try{
-            assert url != null;
-            img= ImageIO.read(url);
-        }catch (IOException e){
-            e.printStackTrace();
+        BufferedImage img = null;
+        switch (color) {
+            case YELLOW -> img = checkedStudents.get(0);
+            case BLUE -> img = checkedStudents.get(1);
+            case RED -> img = checkedStudents.get(2);
+            case PINK -> img = checkedStudents.get(3);
+            case GREEN -> img = checkedStudents.get(4);
         }
         setIcon(new ImageIcon(img));
     }

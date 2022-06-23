@@ -30,17 +30,15 @@ public class DashboardPanel extends JPanel {
     ClassLoader cl=this.getClass().getClassLoader();
 
 
-
-
-    public DashboardPanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel) {
+    public DashboardPanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents, ArrayList<BufferedImage> towers) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         this.storage=storage;
         this.playerID=playerID;
-        this.towerStorage=new TowerStoragePanel(storage, playerID);
-        this.dining=new DiningPanel(storage,playerID);
-        this.entrance=new EntrancePanel(storage,playerID,viewObservers,tableCenterPanel,this);
+        this.towerStorage=new TowerStoragePanel(storage, playerID, towers);
+        this.dining=new DiningPanel(storage,playerID, students, checkedStudents);
+        this.entrance=new EntrancePanel(storage,playerID,viewObservers,tableCenterPanel,this, students, checkedStudents);
         towerStorageConstraints =new GridBagConstraints();
         diningConstraints= new GridBagConstraints();
         entranceConstraints= new GridBagConstraints();

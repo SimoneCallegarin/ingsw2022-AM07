@@ -264,7 +264,7 @@ public class ModelStorage {
     public void updateCloud(HashMap<RealmColors, Integer> newCloud, int cloudID) {
         GameTableInformation.Cloud updatedCloud = new GameTableInformation.Cloud(newCloud);
         gameTable.setCloud(cloudID,updatedCloud);
-        modelChanges.getToUpdate().add(ToUpdate.CLOUDS_CHANGED);
+        modelChanges.getToUpdate().add(ToUpdate.CLOUD_CHANGED);
         modelChanges.setCloudID(cloudID);
     }
 
@@ -277,7 +277,7 @@ public class ModelStorage {
             GameTableInformation.Cloud newCloud = new GameTableInformation.Cloud(clouds.get(i));
             gameTable.setCloud(i, newCloud);
         }
-        modelChanges.getToUpdate().add(ToUpdate.CLOUDS_CHANGED);
+        modelChanges.getToUpdate().add(ToUpdate.FILLCLOUD_CHANGED);
     }
 
     /**

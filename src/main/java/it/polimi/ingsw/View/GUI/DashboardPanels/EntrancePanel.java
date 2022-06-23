@@ -9,6 +9,7 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -26,8 +27,11 @@ public class EntrancePanel extends JPanel{
     ArrayList<EntranceListener> entranceListeners;
     ArrayList<StudentButton> studentButtons;
 
+    ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> checkedStudents;
+
     private StudentButton lastPressedStudent;
-    public EntrancePanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel,DashboardPanel dashboardPanel) {
+    public EntrancePanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel,DashboardPanel dashboardPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         this.playerID=playerID;
         this.viewObservers=viewObservers;
         this.tableCenterPanel=tableCenterPanel;
@@ -45,6 +49,9 @@ public class EntrancePanel extends JPanel{
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black) );
 
+        this.students = students;
+        this.checkedStudents = checkedStudents;
+
         initializeEntrance(storage);
         lastPressedStudent = null;
     }
@@ -59,7 +66,7 @@ public class EntrancePanel extends JPanel{
         c.insets=new Insets(0,9,3,7);
         for(RealmColors color:RealmColors.values()){
             for(int i=0;i<storage.getDashboard(playerID).getEntranceStudents(color);i++){
-                StudentButton studentButton=new StudentButton(color);
+                StudentButton studentButton=new StudentButton(color, students, checkedStudents);
                 add(studentButton,c);
                 studentButtons.add(studentButton);
                 if(c.gridx==4){
@@ -75,10 +82,8 @@ public class EntrancePanel extends JPanel{
 
     /**
      * this method is called when the player can move the students in order to listen to clicks on a student
-     * @param viewObserverList the observer list to pass to the entrance listener
-     * @param tableCenterPanel the table center panel used by the entrance listener to set the isles clickable after one click
      */
-    public void setClickable(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
+    public void setClickable(){
         for(int i=0;i<studentButtons.size();i++){
             StudentButton studentButton=studentButtons.get(i);
             studentButton.addMouseListener(entranceListeners.get(i));

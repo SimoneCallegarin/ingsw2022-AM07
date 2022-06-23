@@ -62,7 +62,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askCloud() {
-
+        guiDrawer.showCloudChoice();
     }
 
     @Override

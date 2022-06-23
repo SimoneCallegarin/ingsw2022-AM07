@@ -1,26 +1,29 @@
 package it.polimi.ingsw.View.GUI.CloudsPanels;
 
+import it.polimi.ingsw.Observer.ViewObserver;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class CloudsContainerPanel extends JPanel {
     ModelStorage storage;
     ArrayList<CloudPanel> cloudPanels;
 
-    public CloudsContainerPanel(ModelStorage storage) {
+    public CloudsContainerPanel(ModelStorage storage, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
         this.storage=storage;
         this.cloudPanels=new ArrayList<>();
         setLayout(new GridBagLayout());
         GridBagConstraints mainConstraints=new GridBagConstraints();
 
-        //i create the grid for the clouds
+        //Creating the grid for the clouds
         JPanel cloudContainer=new JPanel(new GridLayout(1,storage.getGameTable().getClouds().size()));
         cloudContainer.setBackground(Color.CYAN);
         for(int i=0;i<storage.getGameTable().getClouds().size();i++){
-            CloudPanel cloudPanel=new CloudPanel(storage,i);
+            CloudPanel cloudPanel=new CloudPanel(storage,i,viewObservers, tableCenterPanel, students);
             cloudContainer.add(cloudPanel);
             cloudPanels.add(cloudPanel);
         }
@@ -43,5 +46,17 @@ public class CloudsContainerPanel extends JPanel {
     public void updateCloudPanels(int cloudID){
         cloudPanels.get(cloudID).resetCloud();
         cloudPanels.get(cloudID).initializeCloud();
+    }
+
+    public void setCloudsClickable() {
+        for (CloudPanel cloudPanel : cloudPanels) {
+            cloudPanel.setClickable();
+        }
+    }
+
+    public void removeCloudsClickable(){
+        for (CloudPanel cloudPanel : cloudPanels) {
+            cloudPanel.removeClickable();
+        }
     }
 }
