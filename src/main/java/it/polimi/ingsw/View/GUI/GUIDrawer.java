@@ -8,6 +8,7 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,43 +19,45 @@ public class GUIDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
 
+    JTextField nicknameField;
+    Font italicFont;
+    JLabel nicknameDisplay;
+    JPanel mainMenu;
+
     private final String frameTitle="Eriantys Game";
-
     /**
-     * the frame containing all the GUI
+     * Frame containing the GUI itself.
      */
-    JFrame f=new JFrame(frameTitle);
-
-
+    JFrame f = new JFrame(frameTitle);
     /**
-     * the panel for the user inputs
+     * Panel for the user inputs.
      */
-    JPanel userInputPanel =new JPanel(new CardLayout());
+    JPanel userInputPanel = new JPanel(new CardLayout());
     /**
-     * user preferences layout to change between username insertion and game preferences choice
+     * User preferences layout to change between username insertion and game preferences choice.
      */
-    CardLayout userCl=(CardLayout) userInputPanel.getLayout();
+    CardLayout userCl = (CardLayout) userInputPanel.getLayout();
     /**
-     * the general panel manager switches between the screen where the user will submit his server and game preferences
-     * and the screen where the actual game will take place
+     * General panel manager switches between the screen where the user will submit his server and game preferences
+     * and the screen where the actual game will take place.
      */
     JPanel generalPanelManager=new JPanel(new CardLayout());
     /**
-     * the generalPanelManager layout to show different panels on events happening
+     * GeneralPanelManager layout to show different panels on events happening.
      */
     CardLayout cl=(CardLayout)generalPanelManager.getLayout();
     /**
-     * Text field for username input
+     * Text field for username input.
      */
-    JTextField usernameInputText =new JTextField();
+    JTextField usernameInputText = new JTextField();
     /**
-     * Text field for gamemode input
+     * Text field for game mode input.
      */
-    JTextField gameModeInputText =new JTextField();
+    JTextField gameModeInputText = new JTextField();
     /**
-     * Text field for number of players input
+     * Text field for number of players input.
      */
-    JTextField numberPlayersInput=new JTextField();
+    JTextField numberPlayersInput = new JTextField();
     /**
      * on this button press the player will join a lobby and wait for the game to start
      */
@@ -84,18 +87,17 @@ public class GUIDrawer extends ViewSubject {
         f.setVisible(true);
         final int screenDimensionX = f.getWidth();
         final int screenDimensionY = f.getHeight();
-        //set my initial content pane where I add my user input manager
-        InitialBackgroundPanel initialBackgroundPanel =new InitialBackgroundPanel(new BorderLayout(),screenDimensionX,screenDimensionY
-        );
-        //add it to the general manager
+        //set the initial content pane where it will be added the user input manager.
+        InitialBackgroundPanel initialBackgroundPanel =new InitialBackgroundPanel(new BorderLayout(),screenDimensionX,screenDimensionY);
+        //add it to the general manager.
         generalPanelManager.add(initialBackgroundPanel,"User Input");
 
         initialBackgroundPanel.add(userInputPanel,BorderLayout.CENTER);
 
-        //add my general panel manager as my content pane to switch between user input screen and the actual game
+        //add the general panel manager as the content pane to switch between user input screen and the actual game.
         f.setContentPane(generalPanelManager);
 
-        //setting correct dimensions for text fields
+        //setting correct dimensions for text fields.
         usernameInputText.setMaximumSize(new Dimension(700,25));
         gameModeInputText.setMaximumSize(new Dimension(700,25));
         numberPlayersInput.setMaximumSize(new Dimension(700,25));
@@ -110,30 +112,88 @@ public class GUIDrawer extends ViewSubject {
      * information to the server.
      */
     public void showUsernameForm(){
-        //switch in the initial background panel
-        cl.show(generalPanelManager,"User Input");
-        //initialize the username form
-        JPanel usernameForm=new JPanel();
-        usernameForm.setLayout(new BoxLayout(usernameForm,BoxLayout.PAGE_AXIS));
-        usernameForm.add(new JLabel("Insert username"));
-        usernameForm.add(usernameInputText);
-        JButton submitUsername=new JButton("Submit");
-        submitUsername.addActionListener(e -> {
-           if(usernameInputText.getText().equals("")){
-               JOptionPane.showMessageDialog(userInputPanel,"Invalid input","Error",JOptionPane.ERROR_MESSAGE);
-               return;
-           }
-           usernamePlaying=usernameInputText.getText();
-           notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
-        });
-        usernameForm.add(submitUsername);
-        userInputPanel.add(usernameForm,"Username form");
+
+        mainMenu = new JPanel();
+
+        mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.LINE_AXIS));
+
+        JPanel leftHalf = new JPanel(new GridLayout(3, 1)) {
+            //Don't allow the nickname field to stretch vertically.
+            public Dimension getMaximumSize() {
+                Dimension pref = getPreferredSize();
+                return new Dimension(Integer.MAX_VALUE,pref.height);
+            }
+        };
+
+        JLabel nicknameLabel = new JLabel("Insert username:");
+        nicknameLabel.setHorizontalAlignment(JLabel.LEFT);
+        nicknameField = new JTextField();
+
+        leftHalf.add(nicknameLabel,0);;
+        leftHalf.add(nicknameField,1);
+
+        JPanel buttons = new JPanel(new GridLayout(1, 2));
+        JButton check = new JButton("Check");
+        JButton submit = new JButton("Submit");
+        check.addActionListener(this::updateDisplay);
+        submit.addActionListener(e -> {
+            if(nicknameDisplay.getForeground()!=Color.GREEN)
+                JOptionPane.showMessageDialog(userInputPanel,"Check the nickname first","Error",JOptionPane.ERROR_MESSAGE);
+            else{
+                usernamePlaying = nicknameField.getText();
+                notifyObserver(obs->obs.onUsername(usernamePlaying));
+            }
+        } );
+        buttons.add(check);
+        buttons.add(submit);
+
+        leftHalf.add(buttons,2);
+
+        leftHalf.setLayout(new BoxLayout(leftHalf,BoxLayout.PAGE_AXIS));
+
+        mainMenu.add(leftHalf);
+        mainMenu.add(createNicknameDisplay());
+
+        userInputPanel.add(mainMenu);
     }
 
     /**
-     * this method shows on screen the input form for the game mode and the number of players. It initializes the gamePreferences panel
-     * and adds it to the user input panel. The gamePreferences panel contains a start game button which checks if the inputs are acceptable
-     * and, if that's the case, notifies the ClientController. Once the ClientController is notified this method calls showLoadingScreen.
+     * Displays on screen on the right side of the main menu panel the nickname chosen and checked,
+     * that will be green when valid, else red.
+     * @return the right panel of the main menu.
+     */
+    private JComponent createNicknameDisplay() {
+        JPanel panel = new JPanel(new BorderLayout());
+        nicknameDisplay = new JLabel();
+        nicknameDisplay.setHorizontalAlignment(JLabel.CENTER);
+        italicFont = nicknameDisplay.getFont().deriveFont(Font.ITALIC,16.0f);
+
+        panel.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.LINE_START);
+        panel.add(nicknameDisplay, BorderLayout.CENTER);
+        panel.setPreferredSize(new Dimension(200, 150));
+
+        return panel;
+    }
+
+    /**
+     * Updates the right panel of the main menu when the check button is pressed.
+     * @param e the action event of the check button pressed.
+     */
+    public void updateDisplay(ActionEvent e) {
+        nicknameDisplay.setText(nicknameField.getText());
+        nicknameDisplay.setForeground(Color.GREEN);
+        if (nicknameDisplay.getText().length()<2 || nicknameDisplay.getText().length()>=20)
+            nicknameDisplay.setForeground(Color.RED);
+        nicknameDisplay.setFont(italicFont);
+
+    }
+
+    /**
+     * Shows on screen the input form for the game mode and the number of players.
+     * It initializes the gamePreferences panel and adds it to the user input panel.
+     * The gamePreferences panel contains a start game button which checks if the inputs are acceptable and,
+     * if that's the case, notifies the ClientController.
+     * Once the ClientController is notified this method calls showLoadingScreen.
      */
     public void showGamePreferencesForm(){
         JPanel gamePreferences=new JPanel();
@@ -176,7 +236,7 @@ public class GUIDrawer extends ViewSubject {
 
     public void createGameScreen(){
         //initialize the game screen and add it to the generalPanelManager
-        gameScreenPanel=new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,getViewObserverList());
+        gameScreenPanel = new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,getViewObserverList());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
     }
 

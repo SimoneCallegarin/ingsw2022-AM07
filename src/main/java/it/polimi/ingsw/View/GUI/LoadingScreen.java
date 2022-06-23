@@ -6,9 +6,7 @@ import java.io.InputStream;
 
 public class LoadingScreen extends JPanel {
 
-    public LoadingScreen() {
-        add(new JLabel("Waiting for other players"));
-    }
+    public LoadingScreen() { add(new JLabel("Waiting for other players")); }
 
     @Override
     protected void paintComponent(Graphics g) {

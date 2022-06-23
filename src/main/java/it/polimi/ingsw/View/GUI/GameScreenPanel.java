@@ -93,7 +93,7 @@ public class GameScreenPanel extends JPanel {
     }
 
     /**
-     * this method set the dashboard entrance clickable in order to select a student to move
+     * Sets the dashboard entrance clickable in order to select a student to move.
      * @param playerID the playerID used to identify which dashboard set movable
      * @param viewObserverList the observer list to pass to the entrance listener
      */
