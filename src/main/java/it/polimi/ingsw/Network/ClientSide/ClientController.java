@@ -188,18 +188,18 @@ public class ClientController implements ViewObserver, NetworkObserver {
         switch (message.getMessageType()) {
             case UNAVAILABLE_USERNAME -> {
                 ServiceMessage sm = (ServiceMessage) message;
-                view.printMessage(sm);
+                view.printKO(sm);
                 taskQueue.execute(view::askUsername);
             }
             case USERNAME_ACCEPTED -> taskQueue.execute(view::askGamePreferences);
             case MATCH_JOINED -> {
                 ServiceMessage sm = (ServiceMessage) message;
                 playerID = sm.getPlayerID();
-                view.printMessage(sm);
+                view.printKO(sm);
             }
             case KO -> {
                 ServiceMessage sm = (ServiceMessage) message;
-                view.printMessage(sm);
+                view.printKO(sm);
             }
             case QUIT -> {
                 ServiceMessage sm = (ServiceMessage) message;
@@ -317,34 +317,44 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 GamePhase_UpdateMsg gp = (GamePhase_UpdateMsg) message;
                 switch (gp.getGamePhases()) {
                     case PLANNING_PHASE -> {
-                        if (gp.getActivePlayer() == playerID)
+                        if (gp.getActivePlayer() == playerID) {
+                            view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Play an assistant card"));
                             taskQueue.execute(() -> view.askAssistantCard(playerID));
+                        }
                         else
                             view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is choosing the assistant card to play..."));
                     }
                     case ACTION_PHASE -> {
                         switch (gp.getActionPhases()) {
                             case MOVE_STUDENTS -> {
-                                if (gp.getActivePlayer() == playerID)
+                                if (gp.getActivePlayer() == playerID) {
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Move a student from your entrance"));
                                     taskQueue.execute(view::askMove);
+                                }
                                 else
                                     view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is moving students..."));
                             }
                             case MOVE_MOTHER_NATURE -> {
-                                if (gp.getActivePlayer() == playerID)
+                                if (gp.getActivePlayer() == playerID) {
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Move Mother Nature"));
                                     taskQueue.execute(view::askMNMovement);
+                                }
                                 else
                                     view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is moving mother nature..."));
                             }
                             case CHOOSE_CLOUD -> {
-                                if (gp.getActivePlayer() == playerID)
+                                if (gp.getActivePlayer() == playerID) {
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Pick up students from a cloud"));
                                     taskQueue.execute(view::askCloud);
+                                }
                                 else
                                     view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is choosing a cloud..."));
                             }
                             case CHARACTER_CARD_PHASE -> {
-                                if (gp.getActivePlayer() == playerID)
+                                if (gp.getActivePlayer() == playerID) {
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Activate the effect of the character card"));
                                     taskQueue.execute(() -> view.askCharacterEffectParameters(lastCharacterUsed));
+                                }
                                 else
                                     view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, gp.getActivePlayerNickname() + " is using a character card..."));
                             }

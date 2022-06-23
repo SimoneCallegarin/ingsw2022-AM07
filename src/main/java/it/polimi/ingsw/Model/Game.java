@@ -869,10 +869,23 @@ public class Game extends ModelSubject {
         if (gamePhase == GamePhases.ACTION_PHASE && getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() && currentActivePlayer == players.get(playerID).getOrder()){
             CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
             switch (cardName) {
-                case SPOILED_PRINCESS, THIEF, FUNGIST -> {
+                case THIEF, FUNGIST -> {
                     if (value1 >= 0 && value1 <= 4) {
                         effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
                         notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                    }
+                    else
+                        notifyObserver(obs -> obs.onKO(playerID, "You've selected a color that doesn't exist, please select another one"));
+                    notifyTurn();
+                }
+                case SPOILED_PRINCESS -> {
+                    if (value1 >= 0 && value1 <= 4) {
+                        if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) > 0) {
+                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                            notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                        }
+                        else
+                            notifyObserver(obs -> obs.onKO(playerID, "There aren't enough " + RealmColors.getColor(value1).toString() + " students on the card, please select another color"));
                     }
                     else
                         notifyObserver(obs -> obs.onKO(playerID, "You've selected a color that doesn't exist, please select another one"));
@@ -898,10 +911,35 @@ public class Game extends ModelSubject {
                         notifyObserver(obs -> obs.onKO(playerID, "You've selected an isle that doesn't exist, please select another one"));
                     notifyTurn();
                 }
-                case JESTER, MINSTREL -> {
+                case JESTER -> {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 <= 4)) {
-                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
-                        notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                        if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) > 0) {
+                            if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) > 0) {
+                                effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                                notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                            }
+                            else
+                                notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + RealmColors.getColor(value2).toString() + " students, please select another color"));
+                        }
+                        else
+                            notifyObserver(obs -> obs.onKO(playerID, "There aren't enough " + RealmColors.getColor(value1).toString() + " students on the card, please select another color"));
+                    }
+                    else
+                        notifyObserver(obs -> obs.onKO(playerID, "You've selected a color that doesn't exist, please try again"));
+                    notifyTurn();
+                }
+                case MINSTREL -> {
+                    if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 <= 4)) {
+                        if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1)) > 0) {
+                            if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) > 0) {
+                                effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                                notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                            }
+                            else
+                                notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + RealmColors.getColor(value2).toString() + " students, please select another color"));
+                        }
+                        else
+                            notifyObserver(obs -> obs.onKO(playerID, "There aren't enough " + RealmColors.getColor(value1).toString() + " students in your dining room, please select another color"));
                     }
                     else
                         notifyObserver(obs -> obs.onKO(playerID, "You've selected a color that doesn't exist, please try again"));
