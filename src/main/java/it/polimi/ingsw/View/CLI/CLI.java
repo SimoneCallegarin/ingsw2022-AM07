@@ -100,6 +100,8 @@ public class CLI extends ViewSubject implements View {
      */
     public void printMessage(ServiceMessage message) { System.out.println(message.getMessage()); }
 
+    public void printKO(ServiceMessage message) { printMessage(message); }
+
     /**
      * Each time the player does an action that modifies the game table, then this method will be called,
      * and then it will be printed again the game table with the ultimate changes.
