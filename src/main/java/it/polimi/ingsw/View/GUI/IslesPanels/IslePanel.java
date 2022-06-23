@@ -49,12 +49,7 @@ public class IslePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        BufferedImage img = null;
-        switch (isleID) {
-            case 1 -> img = isles.get(0);
-            case 2 -> img = isles.get(1);
-            case 3 -> img = isles.get(2);
-        }
+        BufferedImage img = isles.get(isleID%3);
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 

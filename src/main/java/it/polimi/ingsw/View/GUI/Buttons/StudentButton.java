@@ -20,8 +20,8 @@ public class StudentButton extends JButton {
         this.color=color;
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        printStudent(color);
         this.students = students;
+        printStudent(color);
         this.checkedStudents = checkedStudents;
     }
 
@@ -29,8 +29,9 @@ public class StudentButton extends JButton {
         this.color=color;
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        printStudent(color);
         this.students = students;
+        printStudent(color);
+
         this.checkedStudents = null;
     }
 

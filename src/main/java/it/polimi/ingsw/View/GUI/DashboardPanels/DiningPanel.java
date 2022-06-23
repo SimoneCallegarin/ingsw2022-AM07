@@ -29,6 +29,7 @@ public class DiningPanel extends JPanel {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
 
+        this.professors=new ArrayList<>();
         this.playerID=playerID;
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
