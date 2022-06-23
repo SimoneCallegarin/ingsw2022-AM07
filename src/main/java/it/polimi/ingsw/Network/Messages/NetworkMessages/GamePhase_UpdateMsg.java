@@ -10,7 +10,9 @@ public class GamePhase_UpdateMsg extends NetworkMessage {
      * The player that this turn is the active one.
      */
     private final int activePlayer;
-
+    /**
+     * Nickname of the active player.
+     */
     private final String activePlayerNickname;
     /**
      * The actual game phase of the turn.
@@ -41,7 +43,10 @@ public class GamePhase_UpdateMsg extends NetworkMessage {
      * @return active player ID.
      */
     public int getActivePlayer() { return activePlayer; }
-
+    /**
+     * Getter method for the nickname of the active player.
+     * @return active player nickname.
+     */
     public String getActivePlayerNickname() { return activePlayerNickname; }
     /**
      * Getter method for the actual game phase of the turn.

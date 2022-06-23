@@ -123,8 +123,6 @@ public interface ModelObserver {
     //SPOILED_PRINCESS
     void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, ArrayList<HashMap<RealmColors,Integer>> studentsInDining);
 
-    void onDenyCard(int playerId,int isleId,boolean denyCard);
-
     void onFillCloud(ArrayList<HashMap<RealmColors,Integer>> clouds);
 
 }

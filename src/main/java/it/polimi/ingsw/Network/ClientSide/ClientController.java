@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Network.ClientSide;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
 import it.polimi.ingsw.Observer.NetworkObserver;
@@ -271,7 +270,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 lastCharacterUsed = cc.getCardName();
                 storage.updateMoney(cc.getPlayerID(), cc.getPlayerMoney());
                 storage.updateGeneralMoneyReserve(cc.getGeneralReserve());
-                storage.updateCharacterCard(cc.getCharacterCardId(), cc.getCardCost(), cc.getStudentsOnCharacter(), cc.getDenyCards());
+                storage.updateCharacterCard(cc.getCharacterCardID(), cc.getCardCost(), cc.getStudentsOnCharacter(), cc.getDenyCards());
                 view.printChanges();
             }
             case EFFECTACTIVATION_UPDATE -> {

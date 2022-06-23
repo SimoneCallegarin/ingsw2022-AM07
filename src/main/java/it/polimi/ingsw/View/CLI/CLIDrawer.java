@@ -443,12 +443,9 @@ public class CLIDrawer {
             towerColor= paintTower(TowerColors.BLACK,"B");
         if(storage.getDashboard(playerID).getTowerColor() == TowerColors.GREY)
             towerColor= paintTower(TowerColors.GREY,"G");
-            for(int i=0; i<storage.getDashboard(playerID).getNumOfTowers(); i=i+2){
-                gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+9] = towerColor;
-                if(storage.getDashboard(playerID).getNumOfTowers()%2==0 && i==storage.getDashboard(playerID).getNumOfTowers()){
-                    gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+9] = " ";
-                    gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+10] = towerColor;
-                }
+            for(int i=0; i<storage.getDashboard(playerID).getNumOfTowers(); i++){
+                if(i%2==0)
+                    gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+9] = towerColor;
                 else
                     gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+11] = towerColor;
             }

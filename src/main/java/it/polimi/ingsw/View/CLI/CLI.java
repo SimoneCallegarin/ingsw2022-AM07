@@ -469,10 +469,14 @@ public class CLI extends ViewSubject implements View {
         }
     }
 
+    /**
+     * Handles the disconnection of the client by shutting down the thread for the input of the keyboard
+     * and by printing why the client has to be disconnected.
+     * @param message containing information about why the player is being disconnected that will be printed.
+     */
     @Override
     public void disconnect(ServiceMessage message) {
         taskQueue.shutdownNow();
-        asyncRead.cancel(true);
         if (message.getMessageType() != MessageType.END_GAME)
             System.out.println(message.getMessage());
         System.exit(1);

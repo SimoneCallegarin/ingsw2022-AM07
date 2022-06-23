@@ -47,7 +47,7 @@ public class App {
         System.out.println("Choose address (leave empty to set \"localhost\"):");
         String choice = br.readLine();
         if(choice.isEmpty())
-            host = InetAddress.getByName("localhost");
+            host = InetAddress.getLocalHost();
         else
             host = InetAddress.getByName(choice);
     }
@@ -110,10 +110,7 @@ public class App {
         } catch (UnknownHostException e) {
             selectAddress();
             establishConnection();
-        } catch (ConnectException e) {
-            selectPort();
-            establishConnection();
-        } catch (IOException e) {
+        } catch (IOException  e) {
             selectAddress();
             selectPort();
             establishConnection();

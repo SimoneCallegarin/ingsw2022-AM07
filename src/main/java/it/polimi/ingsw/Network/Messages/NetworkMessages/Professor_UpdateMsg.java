@@ -6,7 +6,11 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Message sent everytime the professors have to be updated.
+ */
 public class Professor_UpdateMsg extends NetworkMessage{
+
     /**
      * Professors in all the players dashboards.
      */

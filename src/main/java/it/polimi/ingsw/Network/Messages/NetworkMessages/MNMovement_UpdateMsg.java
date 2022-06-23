@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MNMovement_UpdateMsg extends NetworkMessage{
+
     /**
      * number of isles on the board
      */

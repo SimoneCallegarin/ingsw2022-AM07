@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * Message sent everytime a player plays an Assistant Card.
  */
 public class AssistCard_UpdateMsg extends NetworkMessage {
+
     /**
      * ID of the player that played the assistant card.
      */
@@ -30,7 +31,7 @@ public class AssistCard_UpdateMsg extends NetworkMessage {
     private final ArrayList<Integer> movementsMN;
 
     /**
-     *
+     * AssistCard_UpdateMsg constructor.
      * @param messageType It will be ASSISTANTCARD_UPDATE.
      * @param playerID ID of the player that played the assistant card.
      * @param turnOrderPlayed Turn order of the assistant card played that now is in the discard pile.

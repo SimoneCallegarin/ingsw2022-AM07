@@ -12,83 +12,83 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
     /**
      * ID of the player that activate the effect of a character card.
      */
-    int playerID;
+    private int playerID;
     /**
      * number of isles on the board
      */
-    int totalIsles;
+    private int totalIsles;
     /**
      * students on each isle.
      */
-    ArrayList<HashMap<RealmColors,Integer>> students;
+    private ArrayList<HashMap<RealmColors,Integer>> students;
     /**
      * students on each dining room.
      */
-    ArrayList<HashMap<RealmColors,Integer>> studentsInDining;
+    private ArrayList<HashMap<RealmColors,Integer>> studentsInDining;
     /**
      * colors of the towers on each isle.
      */
-    ArrayList<TowerColors> towerColors;
+    private ArrayList<TowerColors> towerColors;
     /**
      * ID of the isle where there's mother nature.
      */
-    int whereMNId;
+    private int whereMNId;
     /**
      * Deny cards presence on each isle (true if there's a deny card, else false).
      */
-    ArrayList<Boolean> denyCards;
+    private ArrayList<Boolean> denyCards;
     /**
      * Students on a certain place.
      */
-    HashMap<RealmColors,Integer> studentsInPlace;
+    private HashMap<RealmColors,Integer> studentsInPlace;
     /**
      * Number of isles per group of isle (if an isle isn't grouped then numberOfIsles will be 1).
      */
-    ArrayList<Integer> numberOfIsles;
+    private ArrayList<Integer> numberOfIsles;
     /**
      * Number of towers per isle.
      */
-    ArrayList<Integer> numberOfTowers;
+    private ArrayList<Integer> numberOfTowers;
     /**
      * Index of the character card played.
      */
-    int characterCardIndex;
+    private int characterCardIndex;
     /**
      * Cost of the character card played.
      */
-    int cardCost;
+    private int cardCost;
     /**
      * Turn order of the assistant card on the discard pile.
      */
-    int turnOrder;
+    private int turnOrder;
     /**
      * Possible mother nature movement of the assistant card on the discard pile.
      */
-    int mnMovement;
+    private int mnMovement;
     /**
      * ID of the chosen isle.
      */
-    int isleID;
+    private int isleID;
     /**
      * Deny cards on the chosen isle.
      */
-    int denyCard;
+    private int denyCard;
     /**
      * First value chosen when playing a character card that requires 2 parameters.
      */
-    int id;
+    private int id;
     /**
      * Number of deny cards on a certain place.
      */
-    int denyCardsOnPlace;
+    private int denyCardsOnPlace;
     /**
      * Professors on each player dining room.
      */
-    ArrayList<HashMap<RealmColors,Integer>> professors;
+    private ArrayList<HashMap<RealmColors,Integer>> professors;
     /**
      * Students on the character card.
      */
-    HashMap<RealmColors,Integer> studentsOnCard;
+    private HashMap<RealmColors,Integer> studentsOnCard;
 
     /**
      * Message used to send an update when activated the MONK / JESTER.

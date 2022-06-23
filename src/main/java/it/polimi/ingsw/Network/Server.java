@@ -229,6 +229,11 @@ public class Server {
      */
     public synchronized void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
 
+
+    /**
+     * Main of the server, launches all the function necessary in order to make the server work.
+     * @param args it can contain the host and the port when there are parameters.
+     */
     public static void main(String[] args) {
 
         String hostName;

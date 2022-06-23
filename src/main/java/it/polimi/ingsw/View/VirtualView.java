@@ -50,9 +50,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onGameCreation(int numPlayers, ArrayList<String> nicknames, GameMode gameMode, int whereMNID, ArrayList<HashMap<RealmColors,Integer>> entrances, ArrayList<HashMap<RealmColors, Integer>> emptyClouds, ArrayList<HashMap<RealmColors,Integer>> isleStudents, ArrayList<HashMap<RealmColors, Integer>> studentsOnCharacter, ArrayList<Integer> numTowers, int money, int generalReserve, ArrayList<TowerColors> towerColors, ArrayList<String> characterNames, ArrayList<Integer> characterCost, ArrayList<Integer> denyCards, ArrayList<String> characterCardsDescription, ArrayList<Squads> squads) {
         GameCreation_UpdateMsg gameCreation_updateMsg=new GameCreation_UpdateMsg(MessageType.START_GAME,numPlayers,gameMode,nicknames,emptyClouds,studentsOnCharacter,entrances,isleStudents,whereMNID,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards,characterCardsDescription,squads);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(gameCreation_updateMsg);
-        }
     }
 
     /**
@@ -64,9 +63,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEndGame(String winner, int winnerID) {
         ServiceMessage sm = new ServiceMessage(MessageType.END_GAME, winner, winnerID);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(sm);
-        }
     }
 
     /**
@@ -80,9 +78,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onGamePhases(int activePlayer, String activePlayerNickname, GamePhases gamePhase, ActionPhases actionPhase) {
         GamePhase_UpdateMsg gamePhase_updateMsg=new GamePhase_UpdateMsg(MessageType.GAMEPHASE_UPDATE, activePlayer, activePlayerNickname, gamePhase, actionPhase);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(gamePhase_updateMsg);
-        }
     }
 
     /**
@@ -96,9 +93,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onAssistantCard(int playerID, int turnOrderPlayed, int movementMNPlayed, ArrayList<Integer> turnOrdersAvailable, ArrayList<Integer> movementsMNAvailable) {
         AssistCard_UpdateMsg assistCard_updateMsg=new AssistCard_UpdateMsg(MessageType.ASSISTANTCARD_UPDATE,playerID,turnOrderPlayed,movementMNPlayed,turnOrdersAvailable,movementsMNAvailable);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(assistCard_updateMsg);
-        }
     }
 
     /**
@@ -111,9 +107,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onStudentMoving_toIsle(int playerID, HashMap<RealmColors, Integer> entrance, int isleID, HashMap<RealmColors, Integer> isleStudents) {
         StudentToIsle_UpdateMsg studentToIsle_updateMsg=new StudentToIsle_UpdateMsg(MessageType.STUDENTTOISLE_UPDATE,playerID,entrance,isleID,isleStudents);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(studentToIsle_updateMsg);
-        }
     }
 
     /**
@@ -125,9 +120,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onStudentMoving_toDining(int playerID, HashMap<RealmColors, Integer> entrance, HashMap<RealmColors, Integer> dining) {
         StudentToDining_UpdateMsg studentToDining_updateMsg=new StudentToDining_UpdateMsg(MessageType.STUDENTTODINING_UPDATE, playerID,entrance,dining);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(studentToDining_updateMsg);
-        }
     }
 
     /**
@@ -137,9 +131,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onProfessorUpdate(ArrayList<HashMap<RealmColors,Integer>> professors) {
         Professor_UpdateMsg professor_updateMsg=new Professor_UpdateMsg(MessageType.PROFESSOR_UPDATE,professors);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(professor_updateMsg);
-        }
     }
 
     /**
@@ -152,9 +145,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onMoneyUpdate(int playerID, int money, int generalMoneyReserve) {
         Money_UpdateMsg playerMoney_updateMsg = new Money_UpdateMsg(MessageType.MONEY_UPDATE, playerID, money, generalMoneyReserve);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(playerMoney_updateMsg);
-        }
     }
 
     /**
@@ -170,9 +162,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onMNMovement(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers) {
         MNMovement_UpdateMsg mnMovement_updateMsg=new MNMovement_UpdateMsg(MessageType.MNMOVEMENT_UPDATE,totalIsles,students,towerColors,whereMNId,denyCards,numberOfIsles, numberOfTowers);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(mnMovement_updateMsg);
-        }
     }
 
     /**
@@ -184,23 +175,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onCloudUpdate(int playerID, HashMap<RealmColors, Integer> entrance, int cloudId) {
         PickFromCloud_UpdateMsg cloud_updateMsg=new PickFromCloud_UpdateMsg(MessageType.CLOUDCHOICE_UPDATE, playerID,entrance,cloudId);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(cloud_updateMsg);
-        }
-    }
-
-    /**
-     * Sends a DenyCard_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
-     * @param playerID ID of the player that moved mother nature on an isle with a deny card on it.
-     * @param isleID ID of the isle where the player moved mother nature, where there's a deny card.
-     * @param denyCard number of deny cards on the isle.
-     */
-    @Override
-    public void onDenyCard(int playerID, int isleID, boolean denyCard) {
-        DenyCard_UpdateMsg denyCard_updateMsg=new DenyCard_UpdateMsg(MessageType.DENYCARD_UPDATE,playerID,isleID,denyCard);
-        for(ClientHandler ch : clientHandler){
-            ch.send(denyCard_updateMsg);
-        }
     }
 
     /**
@@ -210,9 +186,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onFillCloud(ArrayList<HashMap<RealmColors, Integer>> clouds) {
         FillCloud_UpdateMsg fillCloud_updateMsg=new FillCloud_UpdateMsg(MessageType.FILLCLOUD_UPDATE,clouds);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(fillCloud_updateMsg);
-        }
     }
 
     /**
@@ -240,9 +215,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onCharacterCard(int characterCardIndex, CharacterCardsName cardName, int cardCost, int playerID, int generalReserve, int playerMoney, int denyCards, HashMap<RealmColors,Integer> studentsOnCharacter) {
         CharacterCard_UpdateMsg characterCard_updateMsg = new CharacterCard_UpdateMsg(MessageType.CHARACTERCARD_UPDATE, characterCardIndex, cardName, cardCost, playerID, generalReserve, playerMoney,denyCards,studentsOnCharacter);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(characterCard_updateMsg);
-        }
     }
 
     /**
@@ -259,10 +233,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int color, HashMap<RealmColors,Integer> students) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, color, students);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
-        //System.out.println(effectActivation_updateMsg.toString());
     }
 
     /**
@@ -274,10 +246,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEffectActivation(ArrayList<HashMap<RealmColors,Integer>> professors) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, professors);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
-        System.out.println(effectActivation_updateMsg.toString());
     }
 
     /**
@@ -295,9 +265,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEffectActivation(int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNID, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, totalIsles, students, towerColors, whereMNID, denyCards, numberOfIsles, numberOfTowers);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
     }
 
     /**
@@ -311,9 +280,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEffectActivation(int playerID, int turnOrder, int mnMovement) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, playerID, turnOrder, mnMovement);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
     }
 
     /**
@@ -329,9 +297,8 @@ public class VirtualView implements ModelObserver {
     //GRANDMA_HERBS
     public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, isleID, denyCard);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
     }
 
     /**
@@ -342,9 +309,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEffectActivation() {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
     }
 
     /**
@@ -357,9 +323,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEffectActivation(ArrayList<HashMap<RealmColors,Integer>> studentsInEntrance, ArrayList<HashMap<RealmColors,Integer>> studentsInDining) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, studentsInEntrance, studentsInDining);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
     }
 
     /**
@@ -375,9 +340,8 @@ public class VirtualView implements ModelObserver {
     @Override
     public void onEffectActivation(int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, ArrayList<HashMap<RealmColors,Integer>> studentsInDining) {
         EffectActivation_UpdateMsg effectActivation_updateMsg = new EffectActivation_UpdateMsg(MessageType.EFFECTACTIVATION_UPDATE, characterCardIndex, cardCost, denyCardsOnCard, studentsOnCard, studentsInDining);
-        for(ClientHandler ch : clientHandler){
+        for(ClientHandler ch : clientHandler)
             ch.send(effectActivation_updateMsg);
-        }
     }
 
 }
