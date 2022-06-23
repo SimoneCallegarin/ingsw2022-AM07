@@ -58,9 +58,9 @@ public class ClientHandler implements Runnable {
     private boolean playing;
 
     /**
-     * constructor of the client handler
-     * @param server the server associated to this client handler
-     * @param socket the socket of the client that is associated to this client handler
+     * Constructor of the client handler.
+     * @param server the server associated to this client handler.
+     * @param socket the socket of the client that is associated to this client handler.
      */
     public ClientHandler(Server server, Socket socket) {
         this.server = server;
@@ -81,10 +81,9 @@ public class ClientHandler implements Runnable {
      */
     private void logPlayer(LoginMessage loginMessage) {
         if (handlerPhase == HandlerPhases.LOGIN_PHASE) {
-            if (checkMessageType(loginMessage, MessageType.LOGIN)) {
+            if (checkMessageType(loginMessage, MessageType.LOGIN))
                 if (checkNicknameValidity(loginMessage))
                     logValidPlayer(loginMessage);
-            }
         }
         else
             send(new ServiceMessage(MessageType.KO, "Not expecting a login message"));
@@ -174,7 +173,7 @@ public class ClientHandler implements Runnable {
         GamePreferencesMessage gpm;
         PlayerMoveMessage pmm;
         try {
-            while (!Thread.currentThread().isInterrupted()) {
+            while (connected) {
                 NetworkMessage message = (NetworkMessage) input.readObject();
                 if (message != null && message.getMessageType() != MessageType.PING) {
                     switch (message.getMessageType()) {
@@ -204,11 +203,10 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * Removes all data saved in the server, connected to the player associated with this client handler.
+     * Notifies the server to remove all data stored about the player associated with this ClientHandler.
      */
     private void shutConnection(String error) throws IOException {
         send(new ServiceMessage(MessageType.QUIT, error));
-        System.out.println("QUIT message sent to " + nickname);
         server.addPlayerToRemove(nickname);
         connected = false;
         client.close();
@@ -225,12 +223,13 @@ public class ClientHandler implements Runnable {
             } catch (IOException e) {
                 System.err.println("Error in stream closing");
             }
-            Thread.currentThread().interrupt();
             System.out.println("Interrupting client handler thread of player " + nickname);
             if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST") && playing)
                 server.onDisconnection(nickname);
         }
     }
+
+    public void terminateClientHandler() { Thread.currentThread().interrupt(); }
 
     public boolean isConnected() { return connected; }
 

@@ -51,11 +51,6 @@ public class ClientPingSender implements Runnable {
     }
 
     /**
-     * Stops the pinger.
-     */
-    public void stopPinger() { ping.cancel(); }
-
-    /**
      * Activates the pinger scheduling it with the timer.
      */
     @Override

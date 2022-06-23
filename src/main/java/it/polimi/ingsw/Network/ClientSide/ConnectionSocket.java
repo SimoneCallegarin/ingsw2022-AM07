@@ -25,10 +25,10 @@ public class ConnectionSocket {
      * and that notifies to the ClientController all other messages.
      */
     private ClientListener cListener;
-    /**
-     * The Thread client side that handles ping messages exchange with the server.
-     */
-    private ClientPingSender cPingSender;
+
+    private Thread threadListener;
+
+    private Thread threadSender;
     /**
      * Input stream.
      */
@@ -82,14 +82,14 @@ public class ConnectionSocket {
         System.out.println("Connection established.");
         output = new ObjectOutputStream(clientSocket.getOutputStream());
         input = new ObjectInputStream(clientSocket.getInputStream());
-        // ClientPingSender:
-        cPingSender = new ClientPingSender(this);
-        Thread threadSender = new Thread(cPingSender);
-        threadSender.start();
         // ClientListener:
         cListener = new ClientListener(this, input);
-        Thread threadListener = new Thread(cListener);
+        threadListener = new Thread(cListener);
         threadListener.start();
+        // ClientPingSender:
+        ClientPingSender cPingSender = new ClientPingSender(this);
+        threadSender = new Thread(cPingSender);
+        threadSender.start();
     }
 
     /**
@@ -98,8 +98,8 @@ public class ConnectionSocket {
      */
     public void disconnect() {
         System.out.println("Closing connection...");
-        cListener.stopListener();
-        cPingSender.stopPinger();
+        threadListener.interrupt();
+        threadSender.interrupt();
         try {
             input.close();
             output.close();

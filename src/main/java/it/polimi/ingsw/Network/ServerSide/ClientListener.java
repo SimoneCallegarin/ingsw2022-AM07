@@ -20,8 +20,6 @@ public class ClientListener extends NetworkSubject implements Runnable {
         this.input = input;
     }
 
-    public void stopListener() { Thread.currentThread().interrupt(); }
-
     @Override
     public void run() {
         NetworkMessage messageReceived;
