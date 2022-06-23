@@ -28,7 +28,6 @@ public class IsleListener extends ViewSubject implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         notifyObserver(obs->obs.onStudentMovement_toIsle(idListened));
-
         tableCenterPanel.removeIslesClickable();
         entrance.removeClickable();
     }
