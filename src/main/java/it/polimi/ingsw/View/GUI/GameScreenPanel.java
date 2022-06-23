@@ -6,7 +6,6 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
-import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +15,10 @@ import java.util.ArrayList;
 public class GameScreenPanel extends JPanel {
 
     private final ModelStorage storage;
+
+    JPanel textContainerPanel;
+
+    JLabel textLabel;
 
     JPanel dashboardContainerPanel1;
 
@@ -27,6 +30,8 @@ public class GameScreenPanel extends JPanel {
     ArrayList<JPanel> dashboardContainers;
 
     ArrayList<ViewObserver> viewObservers;
+
+    GridBagConstraints gamescreenConstraints;
 
 
     /**
@@ -42,6 +47,8 @@ public class GameScreenPanel extends JPanel {
         this.dashboardPanels=new ArrayList<>();
         this.dashboardContainers=new ArrayList<>();
         this.viewObservers=viewObservers;
+        textContainerPanel = new JPanel(new GridLayout(1,1));
+        //textContainerPanel.setBackground(Color.WHITE);
         dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel1);
@@ -49,13 +56,16 @@ public class GameScreenPanel extends JPanel {
         dashboardContainerPanel2.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel2);
 
+        gamescreenConstraints=new GridBagConstraints();
 
-
-        GridBagConstraints gamescreenConstraints=new GridBagConstraints();
-        //first i divide the gamescreen in 3 columns and 1 row and i made the isleManagerPanel take the most space in the center
         gamescreenConstraints.gridy=0;
-        gamescreenConstraints.weighty=1;
+        gamescreenConstraints.weighty=0.01;
         gamescreenConstraints.weightx=1;
+        gamescreenConstraints.gridx=1;
+        add(textContainerPanel,gamescreenConstraints);
+
+        //first i divide the gamescreen in 3 columns and 1 row and i made the isleManagerPanel take the most space in the center
+        gamescreenConstraints.gridy=1;
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
@@ -76,6 +86,10 @@ public class GameScreenPanel extends JPanel {
             dashboardContainers.get(i%2).add(dashboardPanel);//the containers are used to place the panels in the screen
             dashboardPanels.add(dashboardPanel);//this arrayList is used only to store them and access them in a more efficient way
         }
+
+        textLabel = new JLabel("                                                                                                                                          ");
+        textContainerPanel.add(textLabel);
+        gamescreenConstraints.gridy=0;
     }
 
     /**
@@ -85,6 +99,13 @@ public class GameScreenPanel extends JPanel {
      */
     public void setClickableStudents(int playerID, ArrayList<ViewObserver> viewObserverList) {
         dashboardPanels.get(playerID).getEntrance().setClickable(viewObserverList,tableCenterPanel);
+    }
+
+    public void setMessage(String message) {
+        //textContainerPanel.remove(gamescreenConstraints.gridy);
+        textLabel.setText(message);
+        //textContainerPanel.add(textLabel);
+        //textContainerPanel.validate();
     }
 
 

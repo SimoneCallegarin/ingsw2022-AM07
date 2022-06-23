@@ -18,6 +18,8 @@ public interface View {
 
      void printMessage(ServiceMessage message);
 
+     void printKO(ServiceMessage message);
+
      void printChanges();
 
      void printWinner(String winner, int winnerID);

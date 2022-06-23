@@ -45,6 +45,9 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
+    public void printKO(ServiceMessage message) { guiDrawer.showKOMessage(message.getMessage());}
+
+    @Override
     public void printChanges() {
         guiDrawer.updateGameScreenPanel();
     }

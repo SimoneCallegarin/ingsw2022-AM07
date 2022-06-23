@@ -244,20 +244,20 @@ public class GUIDrawer extends ViewSubject {
      * @param expertMode the game mode boolean used to decide whether to set the character cards clickable
      */
     public void showMoveOptions(boolean expertMode){
-        StringBuilder message=new StringBuilder("Now you can move a student from your entrance to your dining room or to an isle of your preference" +
+        /*StringBuilder message=new StringBuilder("Now you can move a student from your entrance to your dining room or to an isle of your preference" +
                 " by clicking on a student in your entrance and then on the isle/dining room.");
         if(expertMode){
             message.append("\nSince you are playing on Expert Mode you can also click on a character card to activate its effect");
             gameScreenPanel.tableCenterPanel.setClickableCharacters(getViewObserverList());
         }
-        JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.setClickableStudents(modelChanges.getPlayerID(),getViewObserverList());
     }
 
     public void showMNMovement(){
-        String message="Now you can move mother nature by clicking on the island where you want to move her";
-        JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);
+        /*String message="Now you can move mother nature by clicking on the island where you want to move her";
+        JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
     }
@@ -305,8 +305,12 @@ public class GUIDrawer extends ViewSubject {
         modelChanges.getToUpdate().clear();
     }
 
-    public void showServiceMessage(String serviceMessage){
-        JOptionPane.showMessageDialog(f,serviceMessage,"Service information",JOptionPane.PLAIN_MESSAGE);
+    public void showServiceMessage(String message) {
+        gameScreenPanel.setMessage(message);
+    }
+
+    public void showKOMessage(String serviceMessage){
+        JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
     }
 
     public ModelStorage getModelStorage() {
