@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * the panel that paints the dashboard images and contains the panel for the dining, the tower storage and the entrance
+ */
 public class DashboardPanel extends JPanel {
 
     ModelStorage storage;
@@ -29,7 +32,16 @@ public class DashboardPanel extends JPanel {
 
     ClassLoader cl=this.getClass().getClassLoader();
 
-
+    /**
+     * the constructor of DashboardPanel
+     * @param storage the model storage used to retrieve information about the game state
+     * @param playerID the player id used to access the model information
+     * @param viewObservers the list of observer to pass to the listeners
+     * @param tableCenterPanel the table center panel to pass to the listeners in order for them to call removeIsleClickable
+     * @param students array list of buffered images to print students button
+     * @param checkedStudents array list of buffered images to print checked students button
+     * @param towers array list of buffered images to print towers
+     */
     public DashboardPanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents, ArrayList<BufferedImage> towers) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));

@@ -31,6 +31,7 @@ public class DiningStudentsPanel extends JPanel {
         this.students = students;
         this.checkedStudents = checkedStudents;
         InitializeDiningStudents(playerID,storage);
+
     }
 
 

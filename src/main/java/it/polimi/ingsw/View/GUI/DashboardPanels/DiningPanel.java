@@ -61,6 +61,7 @@ public class DiningPanel extends JPanel {
 
         initializeProfessorPanel(storage);
         initializeStudentDining(storage);
+        setPreferredSize(this.getSize());
 
     }
 
