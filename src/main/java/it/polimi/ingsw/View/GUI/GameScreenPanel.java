@@ -177,18 +177,23 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getEntrance().setClickable();
     }
 
+    /**
+     * method to set the message on the label on top of the game screen
+     * @param message the text string to update the label with
+     */
     public void setMessage(String message) {
-        //textContainerPanel.remove(gamescreenConstraints.gridy);
         textLabel.setText(message);
-        //textContainerPanel.add(textLabel);
-        //textContainerPanel.validate();
     }
 
-
+    /**
+     * method used to update the entrance associated with the specified player ID
+     * @param playerID the player ID used to access the dashboard that contains the entrance to update
+     */
     public void updateEntrance(int playerID){
         dashboardPanels.get(playerID).getEntrance().resetEntrance();
         dashboardPanels.get(playerID).getEntrance().initializeEntrance(storage);
     }
+
 
     public void updateStudentDinings(int playerID){
         dashboardPanels.get(playerID).getDining().resetStudentDining();

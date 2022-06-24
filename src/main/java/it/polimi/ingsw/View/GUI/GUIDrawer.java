@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 public class GUIDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
@@ -24,7 +23,6 @@ public class GUIDrawer extends ViewSubject {
      * the frame containing all the GUI
      */
     JFrame f=new JFrame(frameTitle);
-
 
     /**
      * the panel for the user inputs
