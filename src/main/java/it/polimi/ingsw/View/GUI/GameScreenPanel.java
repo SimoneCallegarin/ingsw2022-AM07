@@ -187,6 +187,10 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getEntrance().setClickable();
     }
 
+    public void setClickableCharacters() {
+        tableCenterPanel.setClickableCharacters(viewObservers);
+    }
+
     public void setMessage(String message) {
         //textContainerPanel.remove(gamescreenConstraints.gridy);
         textLabel.setText(message);

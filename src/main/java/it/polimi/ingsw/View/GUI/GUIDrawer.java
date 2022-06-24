@@ -1,5 +1,6 @@
 package it.polimi.ingsw.View.GUI;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
@@ -252,15 +253,12 @@ public class GUIDrawer extends ViewSubject {
      * @param expertMode the game mode boolean used to decide whether to set the character cards clickable
      */
     public void showMoveOptions(boolean expertMode){
-        /*StringBuilder message=new StringBuilder("Now you can move a student from your entrance to your dining room or to an isle of your preference" +
-                " by clicking on a student in your entrance and then on the isle/dining room.");
-        if(expertMode){
-            message.append("\nSince you are playing on Expert Mode you can also click on a character card to activate its effect");
-            gameScreenPanel.tableCenterPanel.setClickableCharacters(getViewObserverList());
-        }
-        JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);*/
+        /*String message="It's your turn!";
+        JOptionPane.showMessageDialog(f,message,"Action Phase",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.setClickableStudents(modelChanges.getPlayerID());
+        if (expertMode)
+            gameScreenPanel.setClickableCharacters();
     }
 
     public void showMNMovement(){
@@ -275,6 +273,33 @@ public class GUIDrawer extends ViewSubject {
         JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.tableCenterPanel.setCloudsClickable();
+    }
+
+    public void showEffectActivationChoice(CharacterCardsName cc) {
+        StringBuilder message = new StringBuilder("You activated the " + cc.toString() + "!");
+        switch (cc) {
+            case FARMER -> {
+                message.append("\nDuring this turn, you take control of any number of Professors even if you have the same number of Students as the player who currently controls them.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+            case MAGICAL_LETTER_CARRIER -> {
+                message.append("\nYou may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+            case CENTAUR -> {
+                message.append("\nWhen resolving a Conquering on an Island, Towers do not count towards influence.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+            case KNIGHT -> {
+                message.append("\nDuring the influence calculation this turn, you count as having 2 more influence.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+
+        }
     }
 
 
