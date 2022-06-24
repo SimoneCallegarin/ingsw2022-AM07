@@ -131,11 +131,13 @@ public class TableCenterPanel extends JPanel {
         //the second and the fourth one will contain two 4x1 grids containing four isles
         //the third one will contain another 3x1 panel with two 1x2 grids on the top and on the bottom, while in the
         //center cell there are the clouds and the character cards
-        isleContainerDx=new JPanel(new GridLayout(4,1));
+        isleContainerDx=new JPanel(new GridBagLayout());
         isleContainerDx.setBackground(Color.CYAN);
+        GridBagConstraints icDxconstraints=new GridBagConstraints();
         isleContainerCenter=new JPanel(new GridBagLayout());
         isleContainerCenter.setBackground(Color.CYAN);
-        isleContainerSx=new JPanel(new GridLayout(4,1));
+        isleContainerSx=new JPanel(new GridBagLayout());
+        GridBagConstraints icSxconstraints=new GridBagConstraints();
         isleContainerSx.setBackground(Color.CYAN);
 
         GridLayout gridLayout=new GridLayout(2,1);//layout for the assistant card and money containers
@@ -283,33 +285,64 @@ public class TableCenterPanel extends JPanel {
         c.weightx=0.4;
         c.gridx=1;
         add(isleContainerSx,c);
-        isleContainerSx.add(islesPanels.get(0));
-        isleContainerSx.add(islesPanels.get(11));
-        isleContainerSx.add(islesPanels.get(10));
-        isleContainerSx.add(islesPanels.get(9));
+        icSxconstraints.gridx=0;
+        icSxconstraints.gridy=0;
+        icSxconstraints.weightx=1;
+        icSxconstraints.weighty=1;
+        icSxconstraints.fill=GridBagConstraints.BOTH;
+        isleContainerSx.add(islesPanels.get(0),icSxconstraints);
+        icSxconstraints.gridy++;
+        isleContainerSx.add(islesPanels.get(11),icSxconstraints);
+        icSxconstraints.gridy++;
+        isleContainerSx.add(islesPanels.get(10),icSxconstraints);
+        icSxconstraints.gridy++;
+        isleContainerSx.add(islesPanels.get(9),icSxconstraints);
 
         c.gridx=3;
         c.weighty=0.5;
         c.weightx=0.4;
         add(isleContainerDx,c);
-        isleContainerDx.add(islesPanels.get(3));
-        isleContainerDx.add(islesPanels.get(4));
-        isleContainerDx.add(islesPanels.get(5));
-        isleContainerDx.add(islesPanels.get(6));
+        icDxconstraints.gridx=0;
+        icDxconstraints.gridy=0;
+        icDxconstraints.weighty=1;
+        icDxconstraints.weightx=1;
+        icDxconstraints.fill=GridBagConstraints.BOTH;
+        isleContainerDx.add(islesPanels.get(3),icDxconstraints);
+        icDxconstraints.gridy++;
+        isleContainerDx.add(islesPanels.get(4),icDxconstraints);
+        icDxconstraints.gridy++;
+        isleContainerDx.add(islesPanels.get(5),icDxconstraints);
+        icDxconstraints.gridy++;
+        isleContainerDx.add(islesPanels.get(6),icDxconstraints);
 
         c.gridx=2;
         c.weighty=1;
         c.weightx=0.5;
         add(isleContainerCenter,c);
-            firstIsleContainer1x2=new JPanel(new GridLayout(1,2));
+            firstIsleContainer1x2=new JPanel(new GridBagLayout());
             firstIsleContainer1x2.setBackground(Color.CYAN);
-            secondIsleContainer1x2=new JPanel(new GridLayout(1,2));
+            GridBagConstraints first1x2constraints=new GridBagConstraints();
+            secondIsleContainer1x2=new JPanel(new GridBagLayout());
             secondIsleContainer1x2.setBackground(Color.CYAN);
+            GridBagConstraints second1x2constraints=new GridBagConstraints();
 
-            firstIsleContainer1x2.add(islesPanels.get(1));
-            firstIsleContainer1x2.add(islesPanels.get(2));
-            secondIsleContainer1x2.add(islesPanels.get(8));
-            secondIsleContainer1x2.add(islesPanels.get(7));
+            first1x2constraints.gridy=0;
+            first1x2constraints.gridx=0;
+            first1x2constraints.weightx=1;
+            first1x2constraints.weighty=1;
+            first1x2constraints.fill=GridBagConstraints.BOTH;
+            firstIsleContainer1x2.add(islesPanels.get(1),first1x2constraints);
+            first1x2constraints.gridx++;
+            firstIsleContainer1x2.add(islesPanels.get(2),first1x2constraints);
+
+            second1x2constraints.gridy=0;
+            second1x2constraints.gridx=0;
+            second1x2constraints.weightx=1;
+            second1x2constraints.weighty=1;
+            second1x2constraints.fill=GridBagConstraints.BOTH;
+            secondIsleContainer1x2.add(islesPanels.get(8),second1x2constraints);
+            second1x2constraints.gridx++;
+            secondIsleContainer1x2.add(islesPanels.get(7),second1x2constraints);
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridx=0;

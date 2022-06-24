@@ -39,6 +39,7 @@ public class IslePanel extends JPanel {
         constraints=new GridBagConstraints();
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
+        setPreferredSize(this.getSize());
         this.isles = isles;
         this.students = students;
         this.towers = towers;
