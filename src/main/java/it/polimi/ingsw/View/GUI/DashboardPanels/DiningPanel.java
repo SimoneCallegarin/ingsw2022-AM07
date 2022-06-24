@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class DiningPanel extends JPanel {
     GridBagConstraints c;
-
+    ModelStorage storage;
     int playerID;
     ProfessorPanel professorPanel;
     DiningStudentsPanel studentsPanel;
@@ -28,6 +28,7 @@ public class DiningPanel extends JPanel {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
 
+        this.storage=storage;
         this.professors=new ArrayList<>();
         this.playerID=playerID;
         setOpaque(false);
@@ -57,17 +58,16 @@ public class DiningPanel extends JPanel {
             professors.add(img);
         }
 
-        initializeProfessorPanel(storage);
-        initializeStudentDining(storage);
+        initializeProfessorPanel();
+        initializeStudentDining();
         setPreferredSize(this.getSize());
 
     }
 
     /**
      * this method initialize the dining room according to the model state
-     * @param storage the model storage to retrieve game data from
      */
-    public void initializeStudentDining( ModelStorage storage) {
+    public void initializeStudentDining() {
         studentsPanel=new DiningStudentsPanel(storage,playerID, students);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
@@ -81,7 +81,7 @@ public class DiningPanel extends JPanel {
         this.repaint();
     }
 
-    public void initializeProfessorPanel( ModelStorage storage){
+    public void initializeProfessorPanel(){
         professorPanel=new ProfessorPanel(storage,playerID, professors);
         professorPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         professorPanel.setOpaque(false);

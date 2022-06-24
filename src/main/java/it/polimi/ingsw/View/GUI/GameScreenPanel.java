@@ -207,12 +207,14 @@ public class GameScreenPanel extends JPanel {
 
     public void updateStudentDinings(int playerID){
         dashboardPanels.get(playerID).getDining().resetStudentDining();
-        dashboardPanels.get(playerID).getDining().initializeStudentDining(storage);
+        dashboardPanels.get(playerID).getDining().initializeStudentDining();
     }
 
-    public void updateProfessors(int playerID){
-        dashboardPanels.get(playerID).getDining().resetStudentDining();
-        dashboardPanels.get(playerID).getDining().initializeProfessorPanel(storage);
+    public void updateProfessors(){
+        for(DashboardPanel dashboardPanel:dashboardPanels) {
+            dashboardPanel.getDining().resetProfessorDining();
+            dashboardPanel.getDining().initializeProfessorPanel();
+        }
     }
 
     public void updateTowerStorages(int playerID){

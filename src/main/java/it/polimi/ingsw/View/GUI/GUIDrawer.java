@@ -293,7 +293,7 @@ public class GUIDrawer extends ViewSubject {
 
                 case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
 
-                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
+                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
 
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins(modelChanges.getPlayingID());
 
