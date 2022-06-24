@@ -25,6 +25,7 @@ public class GameScreenPanel extends JPanel {
     ArrayList<BufferedImage> students;
     ArrayList<BufferedImage> checkedStudents;
     ArrayList<BufferedImage> towers;
+    BufferedImage dashboard;
 
     JPanel textContainerPanel;
 
@@ -74,6 +75,7 @@ public class GameScreenPanel extends JPanel {
         TowerButton tb = new TowerButton();
         ClassLoader studentClassLoader = sb.getClass().getClassLoader();
         ClassLoader towerClassLoader = tb.getClass().getClassLoader();
+        ClassLoader cl = this.getClass().getClassLoader();
         InputStream url;
 
         for (RealmColors rc : RealmColors.values()) {
@@ -131,6 +133,14 @@ public class GameScreenPanel extends JPanel {
             towers.add(img);
         }
 
+        url = cl.getResourceAsStream("Dashboard/Semi_empty.png");
+        try {
+            if (url != null)
+                dashboard = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         gamescreenConstraints=new GridBagConstraints();
 
         gamescreenConstraints.gridy=0;
@@ -157,7 +167,7 @@ public class GameScreenPanel extends JPanel {
         add(dashboardContainerPanel2,gamescreenConstraints);
 
         for(int i=0;i<storage.getNumberOfPlayers();i++){
-            DashboardPanel dashboardPanel=new DashboardPanel(storage,i,viewObservers,tableCenterPanel, students, checkedStudents, towers);
+            DashboardPanel dashboardPanel=new DashboardPanel(storage,i,viewObservers,tableCenterPanel, students, checkedStudents, towers, dashboard);
             dashboardContainers.get(i%2).add(dashboardPanel);//the containers are used to place the panels in the screen
             dashboardPanels.add(dashboardPanel);//this arrayList is used only to store them and access them in a more efficient way
         }

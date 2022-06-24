@@ -45,9 +45,9 @@ public class StudentButton extends JButton {
         BufferedImage img = null;
         switch (color) {
             case YELLOW -> img = students.get(0);
-            case BLUE -> img = students.get(1);
-            case RED -> img = students.get(2);
-            case PINK -> img = students.get(3);
+            case PINK -> img = students.get(1);
+            case BLUE -> img = students.get(2);
+            case RED -> img = students.get(3);
             case GREEN -> img = students.get(4);
         }
         setIcon(new ImageIcon(img));
@@ -57,9 +57,9 @@ public class StudentButton extends JButton {
         BufferedImage img = null;
         switch (color) {
             case YELLOW -> img = checkedStudents.get(0);
-            case BLUE -> img = checkedStudents.get(1);
-            case RED -> img = checkedStudents.get(2);
-            case PINK -> img = checkedStudents.get(3);
+            case PINK -> img = checkedStudents.get(1);
+            case BLUE -> img = checkedStudents.get(2);
+            case RED -> img = checkedStudents.get(3);
             case GREEN -> img = checkedStudents.get(4);
         }
         setIcon(new ImageIcon(img));

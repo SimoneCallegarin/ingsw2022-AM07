@@ -22,10 +22,9 @@ public class DiningPanel extends JPanel {
     DiningStudentsPanel studentsPanel;
     ClassLoader cl;
     ArrayList<BufferedImage> students;
-    ArrayList<BufferedImage> checkedStudents;
     ArrayList<BufferedImage> professors;
 
-    public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
+    public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students) {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
 
@@ -35,7 +34,6 @@ public class DiningPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         this.students = students;
-        this.checkedStudents = checkedStudents;
 
         cl = this.getClass().getClassLoader();
         InputStream url;
@@ -69,7 +67,7 @@ public class DiningPanel extends JPanel {
      * @param storage the model storage to retrieve game data from
      */
     public void initializeStudentDining( ModelStorage storage) {
-        studentsPanel=new DiningStudentsPanel(storage,playerID, students, checkedStudents);
+        studentsPanel=new DiningStudentsPanel(storage,playerID, students);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
         c.fill=GridBagConstraints.BOTH;
