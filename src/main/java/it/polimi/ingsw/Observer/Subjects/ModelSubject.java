@@ -9,17 +9,10 @@ public abstract class ModelSubject {
 
     private final ArrayList<ModelObserver> modelObserverList=new ArrayList<>();
 
-    public void addObserver(ModelObserver modelObserver){
-        modelObserverList.add(modelObserver);
-    }
-
-    public void removeObserver(ModelObserver modelObserver){
-        modelObserverList.remove(modelObserver);
-    }
+    public void addObserver(ModelObserver modelObserver){ modelObserverList.add(modelObserver); }
 
     public void notifyObserver(Consumer<ModelObserver> lambda){
-        for(ModelObserver modelObserver: modelObserverList){
+        for(ModelObserver modelObserver: modelObserverList)
             lambda.accept(modelObserver);
-        }
     }
 }

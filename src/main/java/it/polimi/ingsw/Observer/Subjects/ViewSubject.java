@@ -14,14 +14,10 @@ public abstract class ViewSubject {
 
     public void addAllObservers(ArrayList<ViewObserver> observerList){viewObserverList.addAll(observerList);}
 
-    public void removeObserver(ViewObserver viewObserver){
-        viewObserverList.remove(viewObserver);
-    }
 
     public void notifyObserver(Consumer<ViewObserver> lambda){
-        for (ViewObserver observer : viewObserverList) {
+        for (ViewObserver observer : viewObserverList)
             lambda.accept(observer);
-        }
     }
 
     public ArrayList<ViewObserver> getViewObserverList() { return viewObserverList; }

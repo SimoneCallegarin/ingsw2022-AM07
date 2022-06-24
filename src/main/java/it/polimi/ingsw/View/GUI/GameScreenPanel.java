@@ -1,7 +1,5 @@
 package it.polimi.ingsw.View.GUI;
 
-
-
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Observer.ViewObserver;
@@ -53,7 +51,7 @@ public class GameScreenPanel extends JPanel {
      * @param layout the LayoutManager to use
      * @param usernamePlaying the username of the current player using the GUI to pass to the tableCenter to highlight which is his dashboard
      */
-    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying,ArrayList<ViewObserver> viewObservers ) {
+    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers ) {
         super(layout);
         this.storage=storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
@@ -156,7 +154,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,viewObservers, students, towers);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
@@ -180,7 +178,7 @@ public class GameScreenPanel extends JPanel {
     }
 
     /**
-     * this method set the dashboard entrance clickable in order to select a student to move
+     * Sets the dashboard entrance clickable in order to select a student to move.
      * @param playerID the playerID used to identify which dashboard set movable
      */
     public void setClickableStudents(int playerID) {

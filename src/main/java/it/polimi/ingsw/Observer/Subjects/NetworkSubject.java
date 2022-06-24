@@ -9,17 +9,10 @@ public abstract class NetworkSubject {
 
     private final ArrayList<NetworkObserver> networkObserverList=new ArrayList<>();
 
-    public void addObserver(NetworkObserver networkObserver){
-        networkObserverList.add(networkObserver);
-    }
-
-    public void removeObserver(NetworkObserver networkObserver){
-        networkObserverList.remove(networkObserver);
-    }
+    public void addObserver(NetworkObserver networkObserver){ networkObserverList.add(networkObserver); }
 
     public void notifyObserver(NetworkMessage message){
-        for (NetworkObserver observer : networkObserverList) {
+        for (NetworkObserver observer : networkObserverList)
             observer.update(message);
-        }
     }
 }
