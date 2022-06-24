@@ -27,21 +27,22 @@ public class DashboardPanel extends JPanel {
 
     int playerID;
 
-    ClassLoader cl=this.getClass().getClassLoader();
+    BufferedImage dashboard;
 
 
-    public DashboardPanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents, ArrayList<BufferedImage> towers) {
+    public DashboardPanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents, ArrayList<BufferedImage> towers, BufferedImage dashboard) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         this.storage=storage;
         this.playerID=playerID;
         this.towerStorage=new TowerStoragePanel(storage, playerID, towers);
-        this.dining=new DiningPanel(storage,playerID, students, checkedStudents);
+        this.dining=new DiningPanel(storage,playerID, students);
         this.entrance=new EntrancePanel(storage,playerID,viewObservers,tableCenterPanel,this, students, checkedStudents);
         towerStorageConstraints =new GridBagConstraints();
         diningConstraints= new GridBagConstraints();
         entranceConstraints= new GridBagConstraints();
+        this.dashboard = dashboard;
 
         initializeDashboard();
     }
@@ -49,15 +50,7 @@ public class DashboardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        InputStream url = cl.getResourceAsStream("Dashboard/Semi_empty.png");
-        BufferedImage img= null;
-        try {
-            if (url != null)
-                img = ImageIO.read(url);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(img,0,0,getWidth(),getHeight(),null);
+        g.drawImage(dashboard,0,0,getWidth(),getHeight(),null);
     }
 
     public void initializeDashboard(){

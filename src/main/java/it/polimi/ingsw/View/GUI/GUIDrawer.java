@@ -203,6 +203,7 @@ public class GUIDrawer extends ViewSubject {
         turnOrder.set(0);
         JPanel buttonContainer = new JPanel();
         JButton[] buttons = new JButton[modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size()];
+        AtomicInteger lastPressedButton = new AtomicInteger();
         for (int i = 0; i < modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {
             buttons[i] = (new AssistantCardButton(modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i)));
             //idk what the hell is going on with these variables
@@ -219,7 +220,8 @@ public class GUIDrawer extends ViewSubject {
                     ex.printStackTrace();
                 }
                 buttons[finalI1].setIcon(new ImageIcon(img1));
-                if (turnOrder.get() != 0) {
+
+                if (turnOrder.get() != 0 && turnOrder.get() != finalI) {
                     ClassLoader cl2=this.getClass().getClassLoader();
                     InputStream url2=cl2.getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder.get() + ".png");
                     BufferedImage img2= null;
@@ -229,9 +231,10 @@ public class GUIDrawer extends ViewSubject {
                     }catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    buttons[turnOrder.get()-1].setIcon(new ImageIcon(img2));
+                    buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
                 }
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
+                lastPressedButton.set(finalI1);
                 turnOrder.set(finalI);
 
             });
@@ -239,7 +242,7 @@ public class GUIDrawer extends ViewSubject {
         }
         JScrollPane scrollPane = new JScrollPane(buttonContainer);
         scrollPane.setPreferredSize(new Dimension(600, 400));
-        JOptionPane.showMessageDialog(f, scrollPane, "Play Assistant Card", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(f, scrollPane, "Your deck", JOptionPane.PLAIN_MESSAGE);
         return turnOrder.get();
     }
 
@@ -268,8 +271,8 @@ public class GUIDrawer extends ViewSubject {
     }
 
     public void showCloudChoice(){
-        String message="Now choose a cloud to pick students from by clicking on it";
-        JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);
+        /*String message="Now choose a cloud to pick students from by clicking on it";
+        JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.tableCenterPanel.setCloudsClickable();
     }
