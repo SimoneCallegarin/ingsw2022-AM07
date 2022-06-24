@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -111,10 +112,14 @@ public class GUIDrawer extends ViewSubject {
     }
 
     /**
-     * this method shows on screen the input form for the username. It initializes the usernameForm panel and adds it to the
-     * user input panel. The usernameForm panel contains a submit button which checks if the input is empty (in this case it shows
-     * an error message and makes the user reinsert the input). If the input is acceptable it notifies the clientController who forward the
-     * information to the server.
+     * Shows on screen the input form for the username.
+     * It initializes the usernameForm panel and adds it to the user input panel.
+     * The usernameForm panel contains a check button that checks if the input is valid (between 2 and 20 characters).
+     * Valid nicknames are written on the right side of the panel with green text, otherwise they will be displayed as red.
+     * It also contains a submit button that notifies the ClientController with valid nicknames when pressed.
+     * If the input is acceptable it notifies the ClientController who forward the information to the server.
+     * The server answers the ClientHandler if the nickname has been already taken by another player or not.
+     * In the first case then it will be notified on screen by an error message, otherwise the game will soon begin.
      */
     public void showUsernameForm(){
 
@@ -194,49 +199,79 @@ public class GUIDrawer extends ViewSubject {
     }
 
     /**
-     * Shows on screen the input form for the game mode and the number of players.
+     * Shows on screen the possible choice for the game mode and the number of players.
      * It initializes the gamePreferences panel and adds it to the user input panel.
-     * The gamePreferences panel contains a start game button which checks if the inputs are acceptable and,
-     * if that's the case, notifies the ClientController.
+     * The gamePreferences panel contains a start game button that notifies the ClientController.
      * Once the ClientController is notified this method calls showLoadingScreen.
      */
     public void showGamePreferencesForm(){
-        JPanel gamePreferences=new JPanel();
-        gamePreferences.setLayout(new BoxLayout(gamePreferences,BoxLayout.PAGE_AXIS));
-        userInputPanel.add(gamePreferences,"Game preferences form");
-        gamePreferences.add(new JLabel("Input the number of players[2,3,4]"));
-        gamePreferences.add(numberPlayersInput);
-        gamePreferences.add(new JLabel("Input the gamemode[Base or Expert]"));
-        gamePreferences.add(gameModeInputText);
+        JPanel gamePreferences = new JPanel(new GridLayout(5,3));
+
+        gamePreferences.add(new JLabel("Select number of players:"),0);
+
+        JPanel numberOfPlayers = new JPanel(new GridLayout(1,3));
+        JRadioButton twoPlayers = new JRadioButton("2");
+        twoPlayers.setMnemonic(KeyEvent.VK_2);
+        twoPlayers.setActionCommand("2");
+        twoPlayers.setSelected(true);
+        JRadioButton threePlayers = new JRadioButton("3");
+        threePlayers.setMnemonic(KeyEvent.VK_3);
+        threePlayers.setActionCommand("3");
+        JRadioButton fourPlayers = new JRadioButton("4");
+        fourPlayers.setMnemonic(KeyEvent.VK_4);
+        fourPlayers.setActionCommand("4");
+        numberOfPlayers.add(twoPlayers);
+        numberOfPlayers.add(threePlayers);
+        numberOfPlayers.add(fourPlayers);
+        gamePreferences.add(numberOfPlayers,1);
+
+        gamePreferences.add(new JLabel("Select game mode:"),2);
+
+        JPanel gameMode = new JPanel(new GridLayout(1,2));
+        JRadioButton baseMode = new JRadioButton("Base");
+        baseMode.setMnemonic(KeyEvent.VK_B);
+        baseMode.setActionCommand("Base");
+        baseMode.setSelected(true);
+        JRadioButton expertMode = new JRadioButton("Expert");
+        expertMode.setMnemonic(KeyEvent.VK_B);
+        expertMode.setActionCommand("Expert");
+        expertMode.setSelected(true);
+        gameMode.add(baseMode,0);
+        gameMode.add(expertMode,1);
+        ButtonGroup numOfPlayersButtons = new ButtonGroup();
+        ButtonGroup gameModeButtons = new ButtonGroup();
+        numOfPlayersButtons.add(twoPlayers);
+        numOfPlayersButtons.add(threePlayers);
+        numOfPlayersButtons.add(fourPlayers);
+        gameModeButtons.add(baseMode);
+        gameModeButtons.add(expertMode);
+
+        gamePreferences.add(gameMode,3);
+
         startGame.addActionListener(e -> {
             //add try catch
-            int numPlayers=Integer.parseInt(numberPlayersInput.getText());
-            if (numPlayers!=2 && numPlayers!=3 && numPlayers!=4) {
-                JOptionPane.showMessageDialog(userInputPanel, "Invalid number of players input", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (!gameModeInputText.getText().equals("Expert") && !gameModeInputText.getText().equals("Base")) {
-                JOptionPane.showMessageDialog(userInputPanel, "Invalid gamemode input", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            int numPlayers = Integer.parseInt(numOfPlayersButtons.getSelection().getActionCommand());
+            boolean gameModeChosen;
+            gameModeChosen = gameModeButtons.getSelection().getActionCommand().equals("Expert");
 
-            notifyObserver(obs -> obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()), gameModeInputText.getText().equals("Expert")));
+            notifyObserver(obs -> obs.onGamePreferences(numPlayers,gameModeChosen));
             showLoadingScreen();
         });
-        gamePreferences.add(startGame);
-        //make it show
-        userCl.show(userInputPanel,"Game preferences form");
 
+        gamePreferences.add(startGame,4);
+
+        userInputPanel.add(gamePreferences,"Game preferences form");
+        userCl.show(userInputPanel,"Game preferences form");
     }
 
     /**
      * this method shows a loading screen while waiting for other players to join and loading the game
      */
     public void showLoadingScreen(){
-
         //need to update the loading screen graphics
-        generalPanelManager.add(new LoadingScreen(),"Loading Screen");
+        generalPanelManager.add(new LoadingScreen());
         cl.show(generalPanelManager,"Loading Screen");
+
     }
 
     public void createGameScreen(){
