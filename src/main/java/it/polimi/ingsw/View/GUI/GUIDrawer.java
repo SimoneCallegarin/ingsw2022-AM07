@@ -77,6 +77,8 @@ public class GUIDrawer extends ViewSubject {
      */
     ModelChanges modelChanges;
 
+    private boolean turnStarted = false;
+
     /**
      * this method initialize the first screen when you open the app where you'll be asked the username, the game mode and the
      * number of Players. It uses a frame whose content pane is a General Panel Manager which will switch between the Initial Background panel
@@ -253,26 +255,31 @@ public class GUIDrawer extends ViewSubject {
      * @param expertMode the game mode boolean used to decide whether to set the character cards clickable
      */
     public void showMoveOptions(boolean expertMode){
-        /*String message="It's your turn!";
-        JOptionPane.showMessageDialog(f,message,"Action Phase",JOptionPane.PLAIN_MESSAGE);*/
+        if (!turnStarted) {
+            turnStarted = true;
+            if (expertMode)
+                gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
+            String message = "It's your turn!";
+            JOptionPane.showMessageDialog(f, message, "Action Phase", JOptionPane.PLAIN_MESSAGE);
+        }
 
         gameScreenPanel.setClickableStudents(modelChanges.getPlayerID());
-        if (expertMode)
-            gameScreenPanel.setClickableCharacters();
     }
 
-    public void showMNMovement(){
+    public void showMNMovement(boolean expertMode){
         /*String message="Now you can move mother nature by clicking on the island where you want to move her";
         JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
     }
 
-    public void showCloudChoice(){
+    public void showCloudChoice(boolean expertMode){
         /*String message="Now choose a cloud to pick students from by clicking on it";
         JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.tableCenterPanel.setCloudsClickable();
+
+        turnStarted = false;
     }
 
     public void showEffectActivationChoice(CharacterCardsName cc) {

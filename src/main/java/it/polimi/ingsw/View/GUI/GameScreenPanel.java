@@ -156,7 +156,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,viewObservers, students, towers);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,viewObservers, students, towers, this);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
@@ -187,8 +187,8 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getEntrance().setClickable();
     }
 
-    public void setClickableCharacters() {
-        tableCenterPanel.setClickableCharacters(viewObservers);
+    public void setClickableCharacters(int playerID) {
+        tableCenterPanel.setClickableCharacters(viewObservers, playerID);
     }
 
     public void setMessage(String message) {
@@ -198,6 +198,10 @@ public class GameScreenPanel extends JPanel {
         //textContainerPanel.validate();
     }
 
+    public void removeDashboardClickable(int playerID) {
+        dashboardPanels.get(playerID).getEntrance().removeClickable();
+        dashboardPanels.get(playerID).getDining().removeCLickable();
+    }
 
     public void updateEntrance(int playerID){
         dashboardPanels.get(playerID).getEntrance().resetEntrance();

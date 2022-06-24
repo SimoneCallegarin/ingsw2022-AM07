@@ -9,6 +9,7 @@ import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 
+import it.polimi.ingsw.View.GUI.GameScreenPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
@@ -107,18 +108,23 @@ public class TableCenterPanel extends JPanel {
      */
     ArrayList<AssistantCardPanel> assistantCardPanels;
 
+    ArrayList<CharacterPanel> characterPanels;
+
+    GameScreenPanel gsp;
+
     ClassLoader cl;
     ArrayList<BufferedImage> isles;
     ArrayList<BufferedImage> students;
     ArrayList<BufferedImage> towers;
 
-    public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers) {
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, GameScreenPanel gsp) {
         this.storage=storage;
         this.usernamePlaying=usernamePlaying;
         this.islesPanels=new ArrayList<>();
         this.assistantAndMoneyPanelList=new ArrayList<>();
         this.assistantAndMoneyContainers=new ArrayList<>();
         this.assistantCardPanels=new ArrayList<>();
+        this.gsp = gsp;
 
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
@@ -333,9 +339,11 @@ public class TableCenterPanel extends JPanel {
                 centerConstraints.gridy = 2;
                 centerConstraints.weightx = 1;
                 centerConstraints.weighty = 1;
-                charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(0).getCharacterCardName()));
-                charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(1).getCharacterCardName()));
-                charactersContainer.add(new CharacterPanel(storage.getGameTable().getCharacterCard(2).getCharacterCardName()));
+                for (int i = 0; i < 3; i++)
+                    characterPanels.add(new CharacterPanel(storage.getGameTable().getCharacterCard(i).getCharacterCardName(), i));
+                charactersContainer.add(characterPanels.get(0));
+                charactersContainer.add(characterPanels.get(1));
+                charactersContainer.add(characterPanels.get(2));
                 isleContainerCenter.add(charactersContainer, centerConstraints);
             }
 
@@ -442,16 +450,17 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
-    public void setClickableCharacters(ArrayList<ViewObserver> viewObserverList) {
-        for(int i=0;i<3;i++){
-            charactersContainer.getComponent(i).addMouseListener(new CharacterCardListener(viewObserverList,i,this));
+    public void setClickableCharacters(ArrayList<ViewObserver> viewObserverList, int playerID) {
+        for(CharacterPanel characterPanel : characterPanels){
+            characterPanel.addMouseListener(new CharacterCardListener(viewObserverList,characterPanel.getCharacterIndex(), playerID, this , gsp));
         }
     }
 
     public void removeCharactersClickable() {
-        for(int i=0;i<3;i++){
-            MouseListener mouseListener=charactersContainer.getComponent(i).getMouseListeners()[0];
-            charactersContainer.getComponent(i).removeMouseListener(mouseListener);
+        for(CharacterPanel characterPanel : characterPanels){
+            for (int j = 0; j < characterPanel.getMouseListeners().length; j++) {
+                characterPanel.removeMouseListener(characterPanel.getMouseListeners()[j]);
+            }
         }
     }
 

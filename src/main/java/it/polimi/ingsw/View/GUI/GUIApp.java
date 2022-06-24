@@ -57,12 +57,12 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askMNMovement() {
-        guiDrawer.showMNMovement();
+        guiDrawer.showMNMovement(getGUIDrawer().getModelStorage().isGameMode());
     }
 
     @Override
     public void askCloud() {
-        guiDrawer.showCloudChoice();
+        guiDrawer.showCloudChoice(getGUIDrawer().getModelStorage().isGameMode());
     }
 
     @Override
