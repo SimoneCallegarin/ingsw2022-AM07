@@ -20,16 +20,14 @@ public class DiningStudentsPanel extends JPanel {
     private ArrayList<JPanel> lanes;
 
     ArrayList<BufferedImage> students;
-    ArrayList<BufferedImage> checkedStudents;
 
-    public DiningStudentsPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
+    public DiningStudentsPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students) {
         this.playerID=playerID;
         this.lanes=new ArrayList<>();
         GridLayout gridLayout=new GridLayout(1,5);
         gridLayout.setHgap(-35);
         setLayout(gridLayout);
         this.students = students;
-        this.checkedStudents = checkedStudents;
         InitializeDiningStudents(playerID,storage);
 
     }
@@ -71,11 +69,11 @@ public class DiningStudentsPanel extends JPanel {
             }
             for(int i=0;i<storage.getDashboard(playerID).getDiningStudents(color);i++){
                 switch (color) {
-                    case YELLOW -> yellowLane.add(new StudentButton(color, students, checkedStudents));
-                    case BLUE -> blueLane.add(new StudentButton(color, students, checkedStudents));
-                    case RED -> redLane.add(new StudentButton(color, students, checkedStudents));
-                    case PINK -> pinkLane.add(new StudentButton(color, students, checkedStudents));
-                    case GREEN -> greenLane.add(new StudentButton(color, students, checkedStudents));
+                    case YELLOW -> yellowLane.add(new StudentButton(color, students));
+                    case BLUE -> blueLane.add(new StudentButton(color, students));
+                    case RED -> redLane.add(new StudentButton(color, students));
+                    case PINK -> pinkLane.add(new StudentButton(color, students));
+                    case GREEN -> greenLane.add(new StudentButton(color, students));
                 }
             }
         }

@@ -24,9 +24,9 @@ public class ProfessorButton extends JButton {
         BufferedImage img = null;
         switch (color) {
             case YELLOW -> img = professors.get(0);
-            case BLUE -> img = professors.get(1);
-            case RED -> img = professors.get(2);
-            case PINK -> img = professors.get(3);
+            case PINK -> img = professors.get(1);
+            case BLUE -> img = professors.get(2);
+            case RED -> img = professors.get(3);
             case GREEN -> img = professors.get(4);
         }
         setIcon(new ImageIcon(img));
