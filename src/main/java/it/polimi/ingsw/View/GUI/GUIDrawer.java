@@ -48,21 +48,11 @@ public class GUIDrawer extends ViewSubject {
      */
     CardLayout cl=(CardLayout)generalPanelManager.getLayout();
     /**
-     * Text field for username input.
-     */
-    JTextField usernameInputText = new JTextField();
-    /**
-     * Text field for game mode input.
-     */
-    JTextField gameModeInputText = new JTextField();
-    /**
-     * Text field for number of players input.
-     */
-    JTextField numberPlayersInput = new JTextField();
-    /**
      * on this button press the player will join a lobby and wait for the game to start
      */
     JButton startGame=new JButton("Start game");
+
+    LoadingScreen loadingScreen;
     /**
      * panel where the actual game will take place
      */
@@ -103,10 +93,6 @@ public class GUIDrawer extends ViewSubject {
         //add the general panel manager as the content pane to switch between user input screen and the actual game.
         f.setContentPane(generalPanelManager);
 
-        //setting correct dimensions for text fields.
-        usernameInputText.setMaximumSize(new Dimension(700,25));
-        gameModeInputText.setMaximumSize(new Dimension(700,25));
-        numberPlayersInput.setMaximumSize(new Dimension(700,25));
         //ask the username
         showUsernameForm();
     }
@@ -268,15 +254,16 @@ public class GUIDrawer extends ViewSubject {
      * this method shows a loading screen while waiting for other players to join and loading the game
      */
     public void showLoadingScreen(){
+        loadingScreen = new LoadingScreen(usernamePlaying);
         //need to update the loading screen graphics
-        generalPanelManager.add(new LoadingScreen());
+        generalPanelManager.add(loadingScreen,"Loading Screen");
         cl.show(generalPanelManager,"Loading Screen");
 
     }
 
     public void createGameScreen(){
         //initialize the game screen and add it to the generalPanelManager
-        gameScreenPanel = new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,getViewObserverList());
+        gameScreenPanel = new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,loadingScreen.getNicknameColor(),getViewObserverList());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
     }
 

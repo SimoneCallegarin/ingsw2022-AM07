@@ -86,6 +86,8 @@ public class TableCenterPanel extends JPanel {
      * username of the player using the GUI
      */
     String usernamePlaying;
+
+    Color nicknameColor;
     /**
      * this array contains all the panels representing the isles
      */
@@ -112,13 +114,15 @@ public class TableCenterPanel extends JPanel {
     ArrayList<BufferedImage> students;
     ArrayList<BufferedImage> towers;
 
-    public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers) {
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers) {
         this.storage=storage;
         this.usernamePlaying=usernamePlaying;
         this.islesPanels=new ArrayList<>();
         this.assistantAndMoneyPanelList=new ArrayList<>();
         this.assistantAndMoneyContainers=new ArrayList<>();
         this.assistantCardPanels=new ArrayList<>();
+
+        nicknameColor = nicknameColor;
 
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
@@ -201,6 +205,8 @@ public class TableCenterPanel extends JPanel {
             usernamePanel.setOpaque(false);
 
             JLabel usernameLabel=new JLabel(username);
+            if(storage.getDashboard(i).getNickname().equals(this.usernamePlaying))
+                usernameLabel.setForeground(nicknameColor);
             usernamePanel.add(usernameLabel,BorderLayout.CENTER);
 
             if(storage.getDashboard(i).getNickname().equals(this.usernamePlaying)){
