@@ -29,6 +29,14 @@ public class ModelChanges {
      * ID of the character card that changed.
      */
     private int characterID;
+    /**
+     * boolean used to know if one or more isles unified
+     */
+    private boolean layoutChanged=false;
+    /**
+     * number of isles to remove from the game screen, according to the game rules it can be 1 or 2
+     */
+    private int islesToRemove;
 
     /**
      * Constructor of the ModelChanges.
@@ -49,6 +57,14 @@ public class ModelChanges {
 
     public int getCharacterID() { return characterID; }
 
+    public boolean isLayoutChanged() {
+        return layoutChanged;
+    }
+
+    public int getIslesToRemove() {
+        return islesToRemove;
+    }
+
     // SETTERS:
 
     public void setPlayerID(int playerID) { this.playerID = playerID; }
@@ -61,4 +77,11 @@ public class ModelChanges {
 
     public void setCharacterID(int characterID) { this.characterID = characterID; }
 
+    public void setLayoutChanged(boolean layoutChanged) {
+        this.layoutChanged = layoutChanged;
+    }
+
+    public void setIslesToRemove(int islesToRemove) {
+        this.islesToRemove = islesToRemove;
+    }
 }

@@ -233,8 +233,14 @@ public class ModelStorage {
             GameTableInformation.Isle newIsle = new GameTableInformation.Isle(mnm.getStudents().get(i), mnm.getNumberOfIsles().get(i), mnm.getTowerColors().get(i), isDenyCardPresent, isMNPresent);
             newIsles.add(newIsle);
         }
+        if(newIsles.size()!=gameTable.getIsles().size()){
+            modelChanges.setLayoutChanged(true);
+            int toRemove=gameTable.getIsles().size() - newIsles.size();
+            modelChanges.setIslesToRemove(toRemove);
+        }
         gameTable.setIsles(newIsles);
         modelChanges.getToUpdate().add(ToUpdate.ISLELAYOUT_CHANGED);
+        modelChanges.getToUpdate().add(ToUpdate.TOWERSTORAGE_CHANGED);
         modelChanges.setIsleID(mnm.getWhereMNId());
     }
 

@@ -250,28 +250,17 @@ public class GUIDrawer extends ViewSubject {
      * @param expertMode the game mode boolean used to decide whether to set the character cards clickable
      */
     public void showMoveOptions(boolean expertMode){
-        /*StringBuilder message=new StringBuilder("Now you can move a student from your entrance to your dining room or to an isle of your preference" +
-                " by clicking on a student in your entrance and then on the isle/dining room.");
         if(expertMode){
-            message.append("\nSince you are playing on Expert Mode you can also click on a character card to activate its effect");
             gameScreenPanel.tableCenterPanel.setClickableCharacters(getViewObserverList());
         }
-        JOptionPane.showMessageDialog(f,message,"Choose your move",JOptionPane.PLAIN_MESSAGE);*/
-
         gameScreenPanel.setClickableStudents(modelChanges.getPlayerID());
     }
 
     public void showMNMovement(){
-        /*String message="Now you can move mother nature by clicking on the island where you want to move her";
-        JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);*/
-
         gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
     }
 
     public void showCloudChoice(){
-        /*String message="Now choose a cloud to pick students from by clicking on it";
-        JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
-
         gameScreenPanel.tableCenterPanel.setCloudsClickable();
     }
 
@@ -312,7 +301,18 @@ public class GUIDrawer extends ViewSubject {
 
                 case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
 
-                case ISLELAYOUT_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                case ISLELAYOUT_CHANGED -> {
+                    if(modelChanges.isLayoutChanged()) {
+
+                        for(int j=0;j<modelChanges.getIslesToRemove();j++) {
+                            gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                        }
+                    }
+                    for(int j=0;j<modelStorage.getGameTable().getIsles().size();j++) {
+                        gameScreenPanel.tableCenterPanel.updateIsle(j);
+                    }
+                    modelChanges.setLayoutChanged(false);
+                }
 
                 //missing case character card and cloud changes
             }
