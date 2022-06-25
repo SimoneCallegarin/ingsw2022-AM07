@@ -7,20 +7,62 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Class that compress all the player's information in a light way.
+ */
 public class PlayerInformation {
 
+    /**
+     * Nickname of the player.
+     */
     private final String nickname;
+    /**
+     * Team of the player.
+     */
     private final Squads team;
+    /**
+     * Entrance of the player.
+     */
     private HashMap<RealmColors,Integer> entranceStudents;
+    /**
+     * Dining room students of the player.
+     */
     private HashMap<RealmColors,Integer> diningStudents;
+    /**
+     * Dining room professors of the player.
+     */
     private HashMap<RealmColors,Integer> diningProfessors;
+    /**
+     * An empty hashmap used for this that doesn't have students on it.
+     */
     private final HashMap<RealmColors,Integer> emptyHashMap = new HashMap<>();
+    /**
+     * Number of towers of the player.
+     */
     private int numOfTowers;
-    private TowerColors towerColor;
+    /**
+     * Color of the towers of the player.
+     */
+    private final TowerColors towerColor;
+    /**
+     * Quantity of money of the player.
+     */
     private int money;
+    /**
+     * Turn order of the assistant card on the discard pile of the player.
+     */
     private int discardPileTurnOrder;
+    /**
+     * Mother nature movement of the assistant card on the discard pile of the player.
+     */
     private int discardPileMNMovement;
+    /**
+     * Turn orders' of the assistant cards on the deck of the player.
+     */
     private ArrayList<Integer> assistantCardsTurnOrder;
+    /**
+     * Mother nature movements' of the assistant cards on the deck of the player.
+     */
     private ArrayList<Integer> assistantCardsMNMovement;
 
     /**
@@ -47,6 +89,9 @@ public class PlayerInformation {
             assistantCardsMNMovement.add(i/2+1);
     }
 
+    /**
+     * Fills the empty HashMap with zeroes.
+     */
     private void fillWith0HashMap() {
         for (RealmColors color : RealmColors.values())
             emptyHashMap.put(color,0);
@@ -63,14 +108,6 @@ public class PlayerInformation {
             return 2;
         else
             return 0;
-    }
-
-    public int getNumberOfEntranceStudents(){
-        int total=0;
-        for(RealmColors color:RealmColors.values()){
-            total=total+getEntranceStudents(color);
-        }
-        return total;
     }
 
     public int getEntranceStudents(RealmColors color) { return entranceStudents.get(color); }
@@ -93,9 +130,6 @@ public class PlayerInformation {
 
     public ArrayList<Integer> getAssistantCardsMNMovement() { return assistantCardsMNMovement; }
 
-    public int getMaxAssistantCard() { return assistantCardsTurnOrder.get(assistantCardsTurnOrder.size()-1); }
-
-
     // SETTERS:
 
     public void setEntranceStudents(HashMap<RealmColors,Integer> entranceStudents) { this.entranceStudents = entranceStudents; }
@@ -105,8 +139,6 @@ public class PlayerInformation {
     public void setDiningProfessors(HashMap<RealmColors,Integer> diningProfessors) { this.diningProfessors = diningProfessors; }
 
     public void setNumOfTowers(int numOfTowers) { this.numOfTowers = numOfTowers; }
-
-    public void setTowerColor(TowerColors towerColor) { this.towerColor = towerColor; }
 
     public void setMoney(int money) { this.money = money; }
 

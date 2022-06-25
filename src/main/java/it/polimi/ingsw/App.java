@@ -13,6 +13,9 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * Main Application that starts the game handling the connection and the choice of using a CLI or a GUI.
+ */
 public class App {
 
     /**

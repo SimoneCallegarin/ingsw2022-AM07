@@ -2,6 +2,9 @@ package it.polimi.ingsw.Network.Messages.NetworkMessages;
 
 import it.polimi.ingsw.Network.Messages.MessageType;
 
+/**
+ * Message sent everytime the quantity of money on the general money reserve changes.
+ */
 public class Money_UpdateMsg extends NetworkMessage {
 
     /**
@@ -9,16 +12,16 @@ public class Money_UpdateMsg extends NetworkMessage {
      */
     private final int playerID;
     /**
-     * number of money of the player now.
+     * Number of money of the player now.
      */
     private final int playerMoney;
     /**
-     * general money reserve updated number of money.
+     * General money reserve updated number of money.
      */
     private final int generalMoneyReserve;
 
     /**
-     *
+     * Money_UpdateMsg constructor.
      * @param messageType it will be MONEY_UPDATE.
      * @param playerID ID of the player that got his money changed.
      * @param money number of money of the player now.

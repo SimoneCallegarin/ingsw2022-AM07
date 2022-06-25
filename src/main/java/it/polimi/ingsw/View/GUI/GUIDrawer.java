@@ -125,7 +125,7 @@ public class GUIDrawer extends ViewSubject {
         nicknameLabel.setHorizontalAlignment(JLabel.LEFT);
         nicknameField = new JTextField();
 
-        leftHalf.add(nicknameLabel,0);;
+        leftHalf.add(nicknameLabel,0);
         leftHalf.add(nicknameField,1);
 
         JPanel buttons = new JPanel(new GridLayout(1, 2));
@@ -235,7 +235,6 @@ public class GUIDrawer extends ViewSubject {
         gamePreferences.add(gameMode,3);
 
         startGame.addActionListener(e -> {
-            //add try catch
             int numPlayers = Integer.parseInt(numOfPlayersButtons.getSelection().getActionCommand());
             boolean gameModeChosen;
             gameModeChosen = gameModeButtons.getSelection().getActionCommand().equals("Expert");
@@ -255,14 +254,12 @@ public class GUIDrawer extends ViewSubject {
      */
     public void showLoadingScreen(){
         loadingScreen = new LoadingScreen(usernamePlaying);
-        //need to update the loading screen graphics
         generalPanelManager.add(loadingScreen,"Loading Screen");
         cl.show(generalPanelManager,"Loading Screen");
-
     }
 
     public void createGameScreen(){
-        //initialize the game screen and add it to the generalPanelManager
+        // initialize the game screen and add it to the generalPanelManager
         gameScreenPanel = new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,loadingScreen.getNicknameColor(),getViewObserverList());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
     }
@@ -301,7 +298,9 @@ public class GUIDrawer extends ViewSubject {
                 }catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                buttons[finalI1].setIcon(new ImageIcon(img1));
+
+                if (img1 != null)
+                    buttons[finalI1].setIcon(new ImageIcon(img1));
 
                 if (turnOrder.get() != 0 && turnOrder.get() != finalI) {
                     ClassLoader cl2=this.getClass().getClassLoader();
@@ -313,7 +312,8 @@ public class GUIDrawer extends ViewSubject {
                     }catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
+                    if (img2 != null)
+                        buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
                 }
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 lastPressedButton.set(finalI1);
@@ -404,17 +404,11 @@ public class GUIDrawer extends ViewSubject {
         modelChanges.getToUpdate().clear();
     }
 
-    public void showServiceMessage(String message) {
-        gameScreenPanel.setMessage(message);
-    }
+    public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }
 
-    public void showKOMessage(String serviceMessage){
-        JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
-    }
+    public void showKOMessage(String serviceMessage){ JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE); }
 
-    public ModelStorage getModelStorage() {
-        return modelStorage;
-    }
+    public ModelStorage getModelStorage() { return modelStorage; }
 
     public void setModelStorage(ModelStorage modelStorage) {
         this.modelStorage = modelStorage;

@@ -7,6 +7,9 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Message sent everytime a character card's effect is activated.
+ */
 public class EffectActivation_UpdateMsg extends NetworkMessage {
 
     /**
@@ -14,7 +17,7 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
      */
     private int playerID;
     /**
-     * number of isles on the board
+     * Number of isles on the board.
      */
     private int totalIsles;
     /**

@@ -103,14 +103,14 @@ public class ConnectionSocket {
     public void disconnect() {
         System.out.println("Closing connection...");
         threadListener.interrupt();
-        threadSender.interrupt();
+        while(threadSender.isAlive())
+            threadSender.interrupt();
         try {
             input.close();
             output.close();
             clientSocket.close();
         } catch (IOException e) {
             System.out.println("Error occurred during disconnection");
-            e.printStackTrace();
         }
     }
 

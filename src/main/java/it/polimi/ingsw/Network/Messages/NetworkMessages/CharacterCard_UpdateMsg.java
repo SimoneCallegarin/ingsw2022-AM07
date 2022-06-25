@@ -7,7 +7,7 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import java.util.HashMap;
 
 /**
- * Message sent everytime a player plays a character card
+ * Message sent everytime a player plays a character card.
  */
 public class CharacterCard_UpdateMsg extends NetworkMessage{
 

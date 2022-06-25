@@ -2,7 +2,7 @@ package it.polimi.ingsw.View.CLI;
 
 import it.polimi.ingsw.Model.Enumeration.*;
 import it.polimi.ingsw.View.CLI.Utils.CLIColors;
-import it.polimi.ingsw.View.CLI.Utils.CLICostants;
+import it.polimi.ingsw.View.CLI.Utils.CLIConstants;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import java.util.ArrayList;
@@ -12,23 +12,23 @@ public class CLIDrawer {
     /**
      * Matrix used to draw the title of the game "Eriantys".
      */
-    private final String[][] title = new String[CLICostants.TITLE_X][CLICostants.TITLE_Y];
+    private final String[][] title = new String[CLIConstants.TITLE_X][CLIConstants.TITLE_Y];
     /**
      * Matrix used to draw the game table with all other game elements.
      */
-    private final String[][] gameTable = new String[CLICostants.TABLE_DIMENSION_X][CLICostants.TABLE_DIMENSION_Y];
+    private final String[][] gameTable = new String[CLIConstants.TABLE_DIMENSION_X][CLIConstants.TABLE_DIMENSION_Y];
     /**
      * Matrix used to draw the playable assistant cards.
      */
-    private final String[][] assistantCards = new String[CLICostants.ASSISTANT_CARD_X +4][CLICostants.ASSISTANT_CARD_Y *10+16];
+    private final String[][] assistantCards = new String[CLIConstants.ASSISTANT_CARD_X +4][CLIConstants.ASSISTANT_CARD_Y *10+16];
     /**
      * Matrix used to draw a small legend useful to improve the game experience.
      */
-    private final String[][] legend = new String[CLICostants.LEGEND_X][CLICostants.LEGEND_Y+10];
+    private final String[][] legend = new String[CLIConstants.LEGEND_X][CLIConstants.LEGEND_Y+10];
     /**
      * Matrix used to draw a small description of each playable character card.
      */
-    private final String[][] characterCardsEffects = new String[CLICostants.CHARACTER_CARDS_DESCRIPTION_X][CLICostants.CHARACTER_CARDS_DESCRIPTION_Y];
+    private final String[][] characterCardsEffects = new String[CLIConstants.CHARACTER_CARDS_DESCRIPTION_X][CLIConstants.CHARACTER_CARDS_DESCRIPTION_Y];
     /**
      * Representation of the actual model of the game in a light version, used by the CLI in order to print objects of the game.
      */
@@ -198,9 +198,9 @@ public class CLIDrawer {
 
         StringBuilder toPrint=new StringBuilder();
 
-        initializeRectangle(title,CLICostants.TITLE_X,CLICostants.TITLE_Y);
+        initializeRectangle(title, CLIConstants.TITLE_X, CLIConstants.TITLE_Y);
 
-        drawRectangle(title,0,0,CLICostants.TITLE_X,CLICostants.TITLE_Y);
+        drawRectangle(title,0,0, CLIConstants.TITLE_X, CLIConstants.TITLE_Y);
 
         writeLongerString(title,paintService(CLIColors.HB_YELLOW,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                        ¶¶¶¶¶"),2,15);
         writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                      ¶¶¶¶¶¶¶"),3,11);
@@ -221,8 +221,8 @@ public class CLIDrawer {
         writeLongerString(title,paintService(CLIColors.HB_PINK,"¶¶¶¶¶¶¶"),18,134);
         writeLongerString(title,paintService(CLIColors.HB_BLUE,"¶¶¶¶¶¶"),19,134);
 
-        for(int i=0;i<CLICostants.TITLE_X;i++){
-            for (int j=0;j<CLICostants.TITLE_Y;j++){
+        for(int i = 0; i< CLIConstants.TITLE_X; i++){
+            for (int j = 0; j< CLIConstants.TITLE_Y; j++){
                 toPrint.append(title[i][j]);
             }
             toPrint.append("\n");
@@ -239,13 +239,13 @@ public class CLIDrawer {
     public StringBuilder printGameTable() {
         StringBuilder toPrint=new StringBuilder();
         createGameTable();
-        for(int i=0;i<CLICostants.TABLE_DIMENSION_X;i++){
-            for (int j=0;j<CLICostants.TABLE_DIMENSION_Y+CLICostants.LEGEND_Y+10;j++){
-                if(j<CLICostants.TABLE_DIMENSION_Y)
+        for(int i = 0; i< CLIConstants.TABLE_DIMENSION_X; i++){
+            for (int j = 0; j< CLIConstants.TABLE_DIMENSION_Y+ CLIConstants.LEGEND_Y+10; j++){
+                if(j< CLIConstants.TABLE_DIMENSION_Y)
                     toPrint.append(gameTable[i][j]);
                 else
-                if(i<CLICostants.LEGEND_X)
-                    toPrint.append(legend[i][j-CLICostants.TABLE_DIMENSION_Y]);
+                if(i< CLIConstants.LEGEND_X)
+                    toPrint.append(legend[i][j- CLIConstants.TABLE_DIMENSION_Y]);
             }
             toPrint.append("\n");
         }
@@ -265,10 +265,10 @@ public class CLIDrawer {
         ╚═══════════╝
           28 X 135
          */
-        initializeRectangle(gameTable,CLICostants.TABLE_DIMENSION_X,CLICostants.TABLE_DIMENSION_Y);
-        drawRectangle(gameTable, 0,0, CLICostants.TABLE_DIMENSION_X, CLICostants.TABLE_DIMENSION_Y);
+        initializeRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X, CLIConstants.TABLE_DIMENSION_Y);
+        drawRectangle(gameTable, 0,0, CLIConstants.TABLE_DIMENSION_X, CLIConstants.TABLE_DIMENSION_Y);
 
-        initializeRectangle(legend,CLICostants.LEGEND_X,CLICostants.LEGEND_Y+10);
+        initializeRectangle(legend, CLIConstants.LEGEND_X, CLIConstants.LEGEND_Y+10);
 
         for(int i=0; i<storage.getNumberOfPlayers();i++)
             drawDashboard(i);
@@ -303,9 +303,9 @@ public class CLIDrawer {
         int startingPointX=0;
         int startingPointY=0;
         if(playerID==0){    startingPointX=2;   startingPointY=3;     }
-        if(playerID==1){    startingPointX=2;   startingPointY=CLICostants.TABLE_DIMENSION_Y-26;    }
+        if(playerID==1){    startingPointX=2;   startingPointY= CLIConstants.TABLE_DIMENSION_Y-26;    }
         if(playerID==2){    startingPointX=16;  startingPointY=3;     }
-        if(playerID==3){    startingPointX=16;  startingPointY=CLICostants.TABLE_DIMENSION_Y-26;    }
+        if(playerID==3){    startingPointX=16;  startingPointY= CLIConstants.TABLE_DIMENSION_Y-26;    }
 
         drawNickname(playerID,startingPointX,startingPointY);
         drawEntrance(playerID,startingPointX,startingPointY);
@@ -337,8 +337,8 @@ public class CLIDrawer {
         ╚═════════════════════╝
          */
         // The nickname must be from 2 to 20 characters long!
-        drawRectangle(gameTable, startingPointX-1,startingPointY,CLICostants.NICKNAME_X,CLICostants.NICKNAME_Y);
-        int posNickname = (CLICostants.NICKNAME_Y-storage.getDashboard(playerID).getNickname().length())/2;
+        drawRectangle(gameTable, startingPointX-1,startingPointY, CLIConstants.NICKNAME_X, CLIConstants.NICKNAME_Y);
+        int posNickname = (CLIConstants.NICKNAME_Y-storage.getDashboard(playerID).getNickname().length())/2;
         if(storage.getModelChanges().getPlayerID() == playerID)
             writeLongerString(gameTable,paintService(CLIColors.HB_WHITE,storage.getDashboard(playerID).getNickname()),startingPointX,startingPointY+posNickname);
         else
@@ -365,7 +365,7 @@ public class CLIDrawer {
         ╚═════╝
          */
         verticalStringWriter(startingPointX+2,startingPointY+2,"ENTRANCE");
-        drawRectangle(gameTable, startingPointX+1,startingPointY, CLICostants.DASHBOARD_PARTS_X, CLICostants.ENTRANCE_Y);
+        drawRectangle(gameTable, startingPointX+1,startingPointY, CLIConstants.DASHBOARD_PARTS_X, CLIConstants.ENTRANCE_Y);
         // STUDENTS IN THE ENTRANCE:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
@@ -394,14 +394,14 @@ public class CLIDrawer {
         ╚═══════╝
          */
         verticalStringWriter(startingPointX+2,startingPointY+8,"DINING R");
-        gameTable[startingPointX+9][startingPointY+CLICostants.DINING_AND_TOWERS_Y] = ".";
-        drawRectangle(gameTable, startingPointX+1,startingPointY+6, CLICostants.DASHBOARD_PARTS_X, CLICostants.DINING_AND_TOWERS_Y);
+        gameTable[startingPointX+9][startingPointY+ CLIConstants.DINING_AND_TOWERS_Y] = ".";
+        drawRectangle(gameTable, startingPointX+1,startingPointY+6, CLIConstants.DASHBOARD_PARTS_X, CLIConstants.DINING_AND_TOWERS_Y);
         // STUDENTS IN THE DINING ROOM:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
-            gameTable[startingPointX+4+cont][startingPointY+CLICostants.DINING_AND_TOWERS_Y +1]=paintStudent(color,Integer.valueOf(storage.getDashboard(playerID).getDiningStudents(color)).toString());
+            gameTable[startingPointX+4+cont][startingPointY+ CLIConstants.DINING_AND_TOWERS_Y +1]=paintStudent(color,Integer.valueOf(storage.getDashboard(playerID).getDiningStudents(color)).toString());
             if (storage.getDashboard(playerID).getDiningStudents(color)>=10)
-                gameTable[startingPointX+4][startingPointY+CLICostants.DINING_AND_TOWERS_Y +2] = "";
+                gameTable[startingPointX+4][startingPointY+ CLIConstants.DINING_AND_TOWERS_Y +2] = "";
             cont++;
         }
         // PROFESSORS IN THE DINING ROOM:
@@ -409,7 +409,7 @@ public class CLIDrawer {
         int contP =0;
         for (RealmColors color : RealmColors.values()){
             if(storage.getDashboard(playerID).getDiningProfessors(color)==1)
-                gameTable[startingPointX+4+contP][startingPointY+CLICostants.DINING_AND_TOWERS_Y +3]=paintStudent(color,"¶");
+                gameTable[startingPointX+4+contP][startingPointY+ CLIConstants.DINING_AND_TOWERS_Y +3]=paintStudent(color,"¶");
             contP++;
         }
     }
@@ -434,7 +434,7 @@ public class CLIDrawer {
         ╚═══════╝
          */
         verticalStringWriter(startingPointX+3,startingPointY+16,"TOWERS");
-        drawRectangle(gameTable, startingPointX+1,startingPointY+14,CLICostants.DASHBOARD_PARTS_X,CLICostants.DINING_AND_TOWERS_Y);
+        drawRectangle(gameTable, startingPointX+1,startingPointY+14, CLIConstants.DASHBOARD_PARTS_X, CLIConstants.DINING_AND_TOWERS_Y);
         // TOWERS IN THE TOWER STORAGE:
         String towerColor = " ";
         if(storage.getDashboard(playerID).getTowerColor() == TowerColors.WHITE)
@@ -445,9 +445,9 @@ public class CLIDrawer {
             towerColor= paintTower(TowerColors.GREY,"G");
             for(int i=0; i<storage.getDashboard(playerID).getNumOfTowers(); i++){
                 if(i%2==0)
-                    gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+9] = towerColor;
+                    gameTable[startingPointX+4+i/2][startingPointY+ CLIConstants.DINING_AND_TOWERS_Y+9] = towerColor;
                 else
-                    gameTable[startingPointX+4+i/2][startingPointY+CLICostants.DINING_AND_TOWERS_Y+11] = towerColor;
+                    gameTable[startingPointX+4+i/2][startingPointY+ CLIConstants.DINING_AND_TOWERS_Y+11] = towerColor;
             }
     }
 
@@ -470,7 +470,7 @@ public class CLIDrawer {
         if(playerID==2){    posX=8;     posY=30;    }
         if(playerID==3){    posX=8;     posY=-12;   }
 
-        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,CLICostants.SMALL_RECTANGLE_X,CLICostants.SMALL_RECTANGLE_Y);
+        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY, CLIConstants.SMALL_RECTANGLE_X, CLIConstants.SMALL_RECTANGLE_Y);
         // MONEY:
         gameTable[startingPointX+posX][startingPointY+posY+2] = paintService(CLIColors.B_WHITE,"$");
         gameTable[startingPointX+posX+1][startingPointY+posY+2] = Integer.valueOf(storage.getDashboard(playerID).getMoney()).toString();
@@ -501,7 +501,7 @@ public class CLIDrawer {
             gameTable[startingPointX+posX+1][startingPointY+posY+2] = " \b";
         }
 
-        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY,CLICostants.SMALL_RECTANGLE_X,CLICostants.SMALL_RECTANGLE_Y+bigger);
+        drawRectangle(gameTable, startingPointX+posX,startingPointY+posY, CLIConstants.SMALL_RECTANGLE_X, CLIConstants.SMALL_RECTANGLE_Y+bigger);
 
         // TURN ORDER:
         gameTable[startingPointX+posX][startingPointY+posY+1] = paintService(CLIColors.B_WHITE,"T");
@@ -556,7 +556,7 @@ public class CLIDrawer {
         ╚═══════════╝
          */
         writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"ISLE_"+Integer.valueOf(isleIndex).toString()),startingPointX+1,startingPointY+3);
-        drawRectangle(gameTable, startingPointX,startingPointY,CLICostants.ISLE_X,CLICostants.ISLE_Y);
+        drawRectangle(gameTable, startingPointX,startingPointY, CLIConstants.ISLE_X, CLIConstants.ISLE_Y);
         // STUDENTS IN THE ISLE:
         int cont=0;
         for (RealmColors color : RealmColors.values()){
@@ -646,7 +646,7 @@ public class CLIDrawer {
         ║  s s  ║
         ╚═══n═══╝
          */
-        drawRectangle(gameTable, startingPointX, startingPointY, CLICostants.CLOUD_X, CLICostants.CLOUD_Y);
+        drawRectangle(gameTable, startingPointX, startingPointY, CLIConstants.CLOUD_X, CLIConstants.CLOUD_Y);
         gameTable[startingPointX+3][startingPointY+4] = Integer.valueOf(cloudIndex).toString();
         int cont=0;
         for (RealmColors color : RealmColors.values()){
@@ -679,10 +679,10 @@ public class CLIDrawer {
         int posXBase = 6;
         if(!storage.isGameMode())
             posXBase = 3;
-        drawRectangle(gameTable, CLICostants.TABLE_DIMENSION_X/2-posXBase,CLICostants.TABLE_DIMENSION_Y/2-23,CLICostants.CLOUDS_CONTAINER_X,CLICostants.CLOUDS_CONTAINER_Y);
-        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"),CLICostants.TABLE_DIMENSION_X/2-posXBase,CLICostants.TABLE_DIMENSION_Y/2-4);
+        drawRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X/2-posXBase, CLIConstants.TABLE_DIMENSION_Y/2-23, CLIConstants.CLOUDS_CONTAINER_X, CLIConstants.CLOUDS_CONTAINER_Y);
+        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"), CLIConstants.TABLE_DIMENSION_X/2-posXBase, CLIConstants.TABLE_DIMENSION_Y/2-4);
         for(int i=0; i<storage.getNumberOfPlayers(); i++)
-            drawCloud(15-posXBase,CLICostants.TABLE_DIMENSION_Y/2-21+11*i,i);
+            drawCloud(15-posXBase, CLIConstants.TABLE_DIMENSION_Y/2-21+11*i,i);
     }
 
     /**
@@ -695,11 +695,11 @@ public class CLIDrawer {
         ║ nn$ ║
         ╚═════╝
          */
-        drawRectangle(gameTable, CLICostants.TABLE_DIMENSION_X/2+1,CLICostants.TABLE_DIMENSION_Y/2+14,CLICostants.GEN_MONEY_RES_X,CLICostants.GEN_MONEY_RES_Y);
-        writeLongerString(gameTable,"MONEY║",CLICostants.TABLE_DIMENSION_X/2+2,CLICostants.TABLE_DIMENSION_Y/2+15);
-        gameTable[CLICostants.TABLE_DIMENSION_X/2+2][CLICostants.TABLE_DIMENSION_Y/2+21] = "\b ";
-        writeLongerString(gameTable,Integer.valueOf(storage.getGameTable().getGeneralMoneyReserve()).toString()+"$",CLICostants.TABLE_DIMENSION_X/2+3,CLICostants.TABLE_DIMENSION_Y/2+16);
-        gameTable[CLICostants.TABLE_DIMENSION_X/2+3][CLICostants.TABLE_DIMENSION_Y/2+19] = " \b";
+        drawRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X/2+1, CLIConstants.TABLE_DIMENSION_Y/2+14, CLIConstants.GEN_MONEY_RES_X, CLIConstants.GEN_MONEY_RES_Y);
+        writeLongerString(gameTable,"MONEY║", CLIConstants.TABLE_DIMENSION_X/2+2, CLIConstants.TABLE_DIMENSION_Y/2+15);
+        gameTable[CLIConstants.TABLE_DIMENSION_X/2+2][CLIConstants.TABLE_DIMENSION_Y/2+21] = "\b ";
+        writeLongerString(gameTable,Integer.valueOf(storage.getGameTable().getGeneralMoneyReserve()).toString()+"$", CLIConstants.TABLE_DIMENSION_X/2+3, CLIConstants.TABLE_DIMENSION_Y/2+16);
+        gameTable[CLIConstants.TABLE_DIMENSION_X/2+3][CLIConstants.TABLE_DIMENSION_Y/2+19] = " \b";
     }
 
     /**
@@ -714,28 +714,28 @@ public class CLIDrawer {
         ║ ╚═════╝   ╚═════╝   ╚═════╝ ║
         ╚═════════════════════════════╝
          */
-        drawRectangle(gameTable, CLICostants.TABLE_DIMENSION_X/2,CLICostants.TABLE_DIMENSION_Y/2-21,CLICostants.CHAR_CARDS_CONTAINER_X,CLICostants.CHAR_CARDS_CONTAINER_Y);
-        drawRectangle(gameTable, CLICostants.TABLE_DIMENSION_X/2+1,CLICostants.TABLE_DIMENSION_Y/2+1,CLICostants.CHAR_CARD_X,CLICostants.CHAR_CARD_Y);
-        drawRectangle(gameTable, CLICostants.TABLE_DIMENSION_X/2+1,CLICostants.TABLE_DIMENSION_Y/2-9,CLICostants.CHAR_CARD_X,CLICostants.CHAR_CARD_Y);
-        drawRectangle(gameTable, CLICostants.TABLE_DIMENSION_X/2+1,CLICostants.TABLE_DIMENSION_Y/2-19,CLICostants.CHAR_CARD_X,CLICostants.CHAR_CARD_Y);
-        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CHARACTER CARDS"),CLICostants.TABLE_DIMENSION_X/2,CLICostants.TABLE_DIMENSION_Y/2-13);
+        drawRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X/2, CLIConstants.TABLE_DIMENSION_Y/2-21, CLIConstants.CHAR_CARDS_CONTAINER_X, CLIConstants.CHAR_CARDS_CONTAINER_Y);
+        drawRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X/2+1, CLIConstants.TABLE_DIMENSION_Y/2+1, CLIConstants.CHAR_CARD_X, CLIConstants.CHAR_CARD_Y);
+        drawRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X/2+1, CLIConstants.TABLE_DIMENSION_Y/2-9, CLIConstants.CHAR_CARD_X, CLIConstants.CHAR_CARD_Y);
+        drawRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X/2+1, CLIConstants.TABLE_DIMENSION_Y/2-19, CLIConstants.CHAR_CARD_X, CLIConstants.CHAR_CARD_Y);
+        writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CHARACTER CARDS"), CLIConstants.TABLE_DIMENSION_X/2, CLIConstants.TABLE_DIMENSION_Y/2-13);
 
         int cont=0;
 
         for (int i=0;i<3;i++){
-            gameTable[CLICostants.TABLE_DIMENSION_X/2+2][CLICostants.TABLE_DIMENSION_Y/2-18+10*i] = Integer.valueOf(storage.getGameTable().getCharacterCard(i).getCharacterCardCost()).toString();
-            gameTable[CLICostants.TABLE_DIMENSION_X/2+2][CLICostants.TABLE_DIMENSION_Y/2-17+10*i] = "$";
-            gameTable[CLICostants.TABLE_DIMENSION_X/2+4][CLICostants.TABLE_DIMENSION_Y/2-16+10*i] = Integer.valueOf(i).toString();
+            gameTable[CLIConstants.TABLE_DIMENSION_X/2+2][CLIConstants.TABLE_DIMENSION_Y/2-18+10*i] = Integer.valueOf(storage.getGameTable().getCharacterCard(i).getCharacterCardCost()).toString();
+            gameTable[CLIConstants.TABLE_DIMENSION_X/2+2][CLIConstants.TABLE_DIMENSION_Y/2-17+10*i] = "$";
+            gameTable[CLIConstants.TABLE_DIMENSION_X/2+4][CLIConstants.TABLE_DIMENSION_Y/2-16+10*i] = Integer.valueOf(i).toString();
             if(storage.getGameTable().getCharacterCard(i).getNumberOfStudents()!=0){
                 for (RealmColors color : RealmColors.values()){
-                    gameTable[CLICostants.TABLE_DIMENSION_X/2+3][CLICostants.TABLE_DIMENSION_Y/2-18+10*i+cont]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCharacterCard(i).getStudentsByColor(color)).toString());
+                    gameTable[CLIConstants.TABLE_DIMENSION_X/2+3][CLIConstants.TABLE_DIMENSION_Y/2-18+10*i+cont]=paintStudent(color,Integer.valueOf(storage.getGameTable().getCharacterCard(i).getStudentsByColor(color)).toString());
                     cont++;
                 }
                 cont=0;
             }
             if(storage.getGameTable().getCharacterCard(i).getDenyCardsOnCharacterCard()!=0)
                 for (int j=0;j<storage.getGameTable().getCharacterCard(i).getDenyCardsOnCharacterCard();j++)
-                    gameTable[CLICostants.TABLE_DIMENSION_X/2+3][CLICostants.TABLE_DIMENSION_Y/2-18+10*i+cont+j] = paintTower(TowerColors.WHITE,"!");
+                    gameTable[CLIConstants.TABLE_DIMENSION_X/2+3][CLIConstants.TABLE_DIMENSION_Y/2-18+10*i+cont+j] = paintTower(TowerColors.WHITE,"!");
         }
     }
 
@@ -761,7 +761,7 @@ public class CLIDrawer {
 
         StringBuilder toPrint=new StringBuilder();
 
-        initializeRectangle(characterCardsEffects,CLICostants.CHARACTER_CARDS_DESCRIPTION_X,CLICostants.CHARACTER_CARDS_DESCRIPTION_Y);
+        initializeRectangle(characterCardsEffects, CLIConstants.CHARACTER_CARDS_DESCRIPTION_X, CLIConstants.CHARACTER_CARDS_DESCRIPTION_Y);
 
         int temp=0;
         for (int i=0; i<3; i++){
@@ -770,12 +770,12 @@ public class CLIDrawer {
             temp = numberOfNewlineCharacters(storage.getGameTable().getCharacterCard(i).getDescription()) + temp + 3;
         }
 
-        drawRectangle(characterCardsEffects,0,0,CLICostants.CHARACTER_CARDS_DESCRIPTION_X,CLICostants.CHARACTER_CARDS_DESCRIPTION_Y);
+        drawRectangle(characterCardsEffects,0,0, CLIConstants.CHARACTER_CARDS_DESCRIPTION_X, CLIConstants.CHARACTER_CARDS_DESCRIPTION_Y);
 
         writeLongerString(characterCardsEffects,paintService(CLIColors.B_WHITE,"PLAYABLE CHARACTER CARDS"),0,46);
 
-        for(int i=0;i<CLICostants.CHARACTER_CARDS_DESCRIPTION_X;i++){
-            for (int j=0;j<CLICostants.CHARACTER_CARDS_DESCRIPTION_Y;j++){
+        for(int i = 0; i< CLIConstants.CHARACTER_CARDS_DESCRIPTION_X; i++){
+            for (int j = 0; j< CLIConstants.CHARACTER_CARDS_DESCRIPTION_Y; j++){
                 toPrint.append(characterCardsEffects[i][j]);
             }
             toPrint.append("\n");
@@ -801,28 +801,28 @@ public class CLIDrawer {
 
         StringBuilder toPrint=new StringBuilder();
 
-        initializeRectangle(assistantCards,CLICostants.ASSISTANT_CARDS_CONTAINER_X,CLICostants.ASSISTANT_CARDS_CONTAINER_Y);
+        initializeRectangle(assistantCards, CLIConstants.ASSISTANT_CARDS_CONTAINER_X, CLIConstants.ASSISTANT_CARDS_CONTAINER_Y);
 
-        drawRectangle(assistantCards,0,0,CLICostants.ASSISTANT_CARDS_CONTAINER_X,CLICostants.ASSISTANT_CARDS_CONTAINER_Y);
+        drawRectangle(assistantCards,0,0, CLIConstants.ASSISTANT_CARDS_CONTAINER_X, CLIConstants.ASSISTANT_CARDS_CONTAINER_Y);
         writeLongerString(assistantCards,paintService(CLIColors.B_WHITE,"PLAYABLE ASSISTANT CARDS"),0,20);
 
         int bigger=0;
         for(int i=0;i<storage.getDashboard(playerID).getAssistantCardsTurnOrder().size();i++){
             if(storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i) == 10){
                 bigger=1;
-                assistantCards[3][CLICostants.ASSISTANT_CARD_Y *i+5+i] = " \b";
+                assistantCards[3][CLIConstants.ASSISTANT_CARD_Y *i+5+i] = " \b";
             }
-                drawRectangle(assistantCards, 2,CLICostants.ASSISTANT_CARD_Y *i+i+3,CLICostants.ASSISTANT_CARD_X,CLICostants.ASSISTANT_CARD_Y +bigger);
+                drawRectangle(assistantCards, 2, CLIConstants.ASSISTANT_CARD_Y *i+i+3, CLIConstants.ASSISTANT_CARD_X, CLIConstants.ASSISTANT_CARD_Y +bigger);
                 // TURN ORDER:
-                assistantCards[2][CLICostants.ASSISTANT_CARD_Y *i+4+i] = paintService(CLIColors.B_WHITE,"T");
-                assistantCards[3][CLICostants.ASSISTANT_CARD_Y *i+4+i] = storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i).toString();
+                assistantCards[2][CLIConstants.ASSISTANT_CARD_Y *i+4+i] = paintService(CLIColors.B_WHITE,"T");
+                assistantCards[3][CLIConstants.ASSISTANT_CARD_Y *i+4+i] = storage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i).toString();
                 // MOTHER NATURE MOVEMENT:
-                assistantCards[2][CLICostants.ASSISTANT_CARD_Y *i+6+i+bigger] = paintService(CLIColors.B_WHITE,"M");
-                assistantCards[3][CLICostants.ASSISTANT_CARD_Y *i+6+i+bigger] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
+                assistantCards[2][CLIConstants.ASSISTANT_CARD_Y *i+6+i+bigger] = paintService(CLIColors.B_WHITE,"M");
+                assistantCards[3][CLIConstants.ASSISTANT_CARD_Y *i+6+i+bigger] = storage.getDashboard(playerID).getAssistantCardsMNMovement().get(i).toString();
         }
 
-        for(int i=0;i<CLICostants.ASSISTANT_CARDS_CONTAINER_X;i++){
-            for (int j=0;j<CLICostants.ASSISTANT_CARDS_CONTAINER_Y;j++){
+        for(int i = 0; i< CLIConstants.ASSISTANT_CARDS_CONTAINER_X; i++){
+            for (int j = 0; j< CLIConstants.ASSISTANT_CARDS_CONTAINER_Y; j++){
                 toPrint.append(assistantCards[i][j]);
             }
             toPrint.append("\n");
@@ -874,12 +874,12 @@ public class CLIDrawer {
         int notEnlarge = 1;
         if (storage.isGameMode())
             notEnlarge = 0;
-        drawRectangle(legend,0,4,CLICostants.LEGEND_X-7*notEnlarge,CLICostants.LEGEND_Y);
+        drawRectangle(legend,0,4, CLIConstants.LEGEND_X-7*notEnlarge, CLIConstants.LEGEND_Y);
         writeLongerString(legend,paintService(CLIColors.B_WHITE,"LEGEND"),0,22);
         writeLongerString(legend,paintService(CLIColors.HB_WHITE,"■")+" -> MOTHER NATURE",1,7);
         writeLongerString(legend,paintService(CLIColors.HB_WHITE,"¶")+" -> PROFESSOR",2,7);
 
-        drawRectangle(legend, 4,7,CLICostants.SMALL_RECTANGLE_X,CLICostants.SMALL_RECTANGLE_Y);
+        drawRectangle(legend, 4,7, CLIConstants.SMALL_RECTANGLE_X, CLIConstants.SMALL_RECTANGLE_Y);
         legend[4][8] = paintService(CLIColors.B_WHITE,"T");
         legend[4][10] = paintService(CLIColors.B_WHITE,"M");
         writeLongerString(legend,"-> DISCARD PILE OF THE PLAYER ",5,13);
@@ -893,7 +893,7 @@ public class CLIDrawer {
         if (storage.isGameMode()){
             writeLongerString(legend,paintService(CLIColors.HB_WHITE,"!")+" -> DENY CARD",3,7);
 
-            drawRectangle(legend, 7,7,CLICostants.SMALL_RECTANGLE_X,CLICostants.SMALL_RECTANGLE_Y);
+            drawRectangle(legend, 7,7, CLIConstants.SMALL_RECTANGLE_X, CLIConstants.SMALL_RECTANGLE_Y);
             legend[7][9] = paintService(CLIColors.B_WHITE,"$");
             writeLongerString(legend,"-> MONEY OWNED BY THE PLAYER ",8,13);
             legend[8][38] = " \b";

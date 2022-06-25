@@ -33,7 +33,7 @@ public class Server {
      */
     private final ArrayList<GameController> activeMatches;
     /**
-     * List containing the virtual views initialized
+     * List containing the virtual views initialized.
      */
     private final ArrayList<VirtualView> virtualViews;
     /**
@@ -52,9 +52,9 @@ public class Server {
     private final HashMap<String, PlayerInfo> players;
 
     /**
-     * constructor of the Server
+     * Constructor of the Server.
      * @param portNumber logical endpoints of a network connection
-     *                   used to exchange information between a web server and a web client
+     *                   used to exchange information between a web server and a web client.
      */
     public Server(int portNumber) {
         this.socketServer = new SocketServer(portNumber,this);
@@ -66,18 +66,16 @@ public class Server {
     }
 
     /**
-     * Checks if the nickname has been already chosen by another player
-     * @param loginMessage it contains the nickname that has to be checked
-     * @return true if it's a valid nickname, else false
+     * Checks if the nickname has been already chosen by another player.
+     * @param loginMessage it contains the nickname that has to be checked.
+     * @return true if it's a valid nickname, else false.
      */
-    public boolean checkNickNameValidity(LoginMessage loginMessage){
-        return !chosenNicknames.contains(loginMessage.getNickname());
-    }
+    public boolean checkNickNameValidity(LoginMessage loginMessage){ return !chosenNicknames.contains(loginMessage.getNickname()); }
 
     /**
-     * Checks if the number of players chosen by the player to play with is in range of 2-4
-     * @param preferences it contains the number of players and the game mode chosen by the player
-     * @return true if it's a valid number of players, else false
+     * Checks if the number of players chosen by the player to play with is in range of 2-4.
+     * @param preferences it contains the number of players and the game mode chosen by the player.
+     * @return true if it's a valid number of players, else false.
      */
     public boolean checkValuesValidity(GamePreferencesMessage preferences){
         if(preferences.getNumberOfPlayers() >= 2 && preferences.getNumberOfPlayers() <= 4)
@@ -89,10 +87,10 @@ public class Server {
     }
 
     /**
-     * After checking if it's a valid nickname, adds the nickname to the list of already chosen nickname (nickNamesChosen)
-     * If the nickname results to be already chosen it occurs in an error
-     * @param loginMessage it contains the nickname that has to be checked and added to the list if valid
-     * @return true if the nickname chosen by the player is available, else false
+     * After checking if it's a valid nickname, adds the nickname to the list of already chosen nickname (nickNamesChosen).
+     * If the nickname results to be already chosen it occurs in an error.
+     * @param loginMessage it contains the nickname that has to be checked and added to the list if valid.
+     * @return true if the nickname chosen by the player is available, else false.
      */
     public synchronized boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
@@ -113,8 +111,8 @@ public class Server {
      * for the player that wants to join.
      * When found a game with this characteristics then the player is added to that game, otherwise it will be created
      * a game with the selected characteristics with the player as first player.
-     * @param nickname of the player that wants to play
-     * @param preferences of the player, about the number of players to play with and the game mode chosen
+     * @param nickname of the player that wants to play.
+     * @param preferences of the player, about the number of players to play with and the game mode chosen.
      */
     public synchronized boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
         if(!checkValuesValidity(preferences))
@@ -146,9 +144,9 @@ public class Server {
     }
 
     /**
-     * When called it creates a new game and a game controller and joins the player to the new game
-     * @param nickName of the player that wants to play
-     * @param preferences of the player, about the number of players to play with and the game mode chosen
+     * When called it creates a new game and a game controller and joins the player to the new game.
+     * @param nickName of the player that wants to play.
+     * @param preferences of the player, about the number of players to play with and the game mode chosen.
      */
     public void newGame(String nickName, GamePreferencesMessage preferences){
         Game game = new Game();
@@ -162,10 +160,10 @@ public class Server {
     }
 
     /**
-     * When called it permits the player to join an already existing game
-     * @param matchID the ID of the match he is going to play
-     * @param nickName of the player that wants to play
-     * @param preferences of the player, about the number of players to play with and the game mode chosen
+     * When called it permits the player to join an already existing game.
+     * @param matchID the ID of the match he is going to play.
+     * @param nickName of the player that wants to play.
+     * @param preferences of the player, about the number of players to play with and the game mode chosen.
      */
     public void addPlayerToAnExistingLobby(int matchID, String nickName, GamePreferencesMessage preferences){
         activeMatches.get(matchID).addPlayerToGame(nickName,preferences,false);
@@ -173,9 +171,9 @@ public class Server {
     }
 
     /**
-     * Set a new element of the HashMap that contains the nicknames associated with their client handler
-     * @param nickName of the player that wants to play
-     * @param clientHandler of the player that wants to play
+     * Sets a new element of the HashMap that contains the nicknames associated with their client handler.
+     * @param nickName of the player that wants to play.
+     * @param clientHandler of the player that wants to play.
      */
     public synchronized void setPlayer(String nickName, ClientHandler clientHandler){
         PlayerInfo playerInfo = new PlayerInfo();
@@ -194,9 +192,9 @@ public class Server {
     }
 
     /**
-     * Getter method to obtain the game controller of a certain match
-     * @param matchID the ID of the match he is going to play
-     * @return the game controller associated to the matchID given
+     * Getter method to obtain the game controller of a certain match.
+     * @param matchID the ID of the match he is going to play.
+     * @return the game controller associated to the matchID given.
      */
     public synchronized GameController getMatch(int matchID) { return activeMatches.get(matchID); }
 
@@ -259,6 +257,5 @@ public class Server {
         System.out.println(hostName+" Server started at port " + portNumber + "!");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
-        //executor.shutdown(); !!!!!!!!!!!!!!!!
     }
 }

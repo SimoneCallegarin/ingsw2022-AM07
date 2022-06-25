@@ -7,25 +7,30 @@ import it.polimi.ingsw.Model.GameTableObjects.GameTable;
  */
 public class EffectSetupFactory {
 
-        public void getEffect(GameTable gameTable, CharacterCard characterCard){
+    /**
+     * Prepares a playable character card that needs a setup.
+     * @param gameTable the game table that contains the playable character cards.
+     * @param characterCard the character card that needs the setup.
+     */
+    public void getEffect(GameTable gameTable, CharacterCard characterCard){
 
-            StudentMovementEffect studentSetupEffect = new StudentMovementEffect();
-            DenyCardMovementEffect denyCardSetupEffect = new DenyCardMovementEffect();
+        StudentMovementEffect studentSetupEffect = new StudentMovementEffect();
+        DenyCardMovementEffect denyCardSetupEffect = new DenyCardMovementEffect();
 
-            switch (characterCard.getCharacterCardName()) {
-                case MONK, SPOILED_PRINCESS -> {
-                    for(int i=0; i<4; i++)
-                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, null,null);
-                }
-                case GRANDMA_HERBS -> {
-                    for(int i=0; i<4; i++)
-                        denyCardSetupEffect.effect(gameTable, characterCard);
-                }
-                case JESTER -> {
-                    for(int i=0; i<6; i++)
-                        studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, null, null);
-                }
+        switch (characterCard.getCharacterCardName()) {
+            case MONK, SPOILED_PRINCESS -> {
+                for(int i=0; i<4; i++)
+                    studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, null,null);
+            }
+            case GRANDMA_HERBS -> {
+                for(int i=0; i<4; i++)
+                    denyCardSetupEffect.effect(gameTable, characterCard);
+            }
+            case JESTER -> {
+                for(int i=0; i<6; i++)
+                    studentSetupEffect.effect(gameTable.getBag(), characterCard, ColorsForEffects.RANDOM, null, null);
             }
         }
+    }
 
 }
