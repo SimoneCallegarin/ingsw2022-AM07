@@ -381,7 +381,7 @@ public class GUIDrawer extends ViewSubject {
 
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins(modelChanges.getPlayingID());
 
-                case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages(modelChanges.getPlayingID());
+                case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
 
                 case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
 
