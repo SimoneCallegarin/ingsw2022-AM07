@@ -5,7 +5,13 @@ package it.polimi.ingsw.Network.JSONmessagesTestingServer;
  */
 public class ServerSettings {
 
+    /**
+     * localhost set for the server.
+     */
     public static String hostName = "localhost";
+    /**
+     * Port used by the server.
+     */
     public static int port = 1234;
 
     /**

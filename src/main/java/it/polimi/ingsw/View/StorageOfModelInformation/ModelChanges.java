@@ -2,7 +2,9 @@ package it.polimi.ingsw.View.StorageOfModelInformation;
 
 import java.util.ArrayList;
 
-//!!!!!!!!!!!!!!!!! ADD DESCRIPTION.
+/**
+ * Used to identify what changed in the model after a move.
+ */
 public class ModelChanges {
 
     /**
@@ -32,7 +34,7 @@ public class ModelChanges {
     /**
      * boolean used to know if one or more isles unified
      */
-    private boolean layoutChanged=false;
+    private boolean layoutChanged = false;
     /**
      * number of isles to remove from the game screen, according to the game rules it can be 1 or 2
      */
@@ -57,13 +59,9 @@ public class ModelChanges {
 
     public int getCharacterID() { return characterID; }
 
-    public boolean isLayoutChanged() {
-        return layoutChanged;
-    }
+    public boolean isLayoutChanged() { return layoutChanged; }
 
-    public int getIslesToRemove() {
-        return islesToRemove;
-    }
+    public int getIslesToRemove() { return islesToRemove; }
 
     // SETTERS:
 
@@ -77,11 +75,8 @@ public class ModelChanges {
 
     public void setCharacterID(int characterID) { this.characterID = characterID; }
 
-    public void setLayoutChanged(boolean layoutChanged) {
-        this.layoutChanged = layoutChanged;
-    }
+    public void setLayoutChanged(boolean layoutChanged) { this.layoutChanged = layoutChanged; }
 
-    public void setIslesToRemove(int islesToRemove) {
-        this.islesToRemove = islesToRemove;
-    }
+    public void setIslesToRemove(int islesToRemove) { this.islesToRemove = islesToRemove; }
+
 }

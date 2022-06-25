@@ -1,7 +1,7 @@
 package it.polimi.ingsw.View.StorageOfModelInformation;
 
 /**
- * //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Identifies all possible updates used by the ModelChanges.
  */
 public enum ToUpdate {
     CLOUD_CHANGED,

@@ -46,10 +46,8 @@ public class ClientListener extends NetworkSubject implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 messageReceived = (NetworkMessage) input.readObject();
-                if (messageReceived.getMessageType() == MessageType.QUIT) {
+                if (messageReceived.getMessageType() == MessageType.QUIT)
                     System.err.println("QUIT message received");
-                    cs.disconnect();
-                }
                 notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
                 System.err.println("An error occurred...");

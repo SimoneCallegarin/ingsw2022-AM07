@@ -5,8 +5,17 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 
 import java.util.HashMap;
 
+/**
+ * Message sent everytime a player picks students from a cloud.
+ */
 public class PickFromCloud_UpdateMsg extends NetworkMessage{
+    /**
+     * ID of the player that picks the students from the cloud.
+     */
     private final int playerID;
+    /**
+     * Updated entrance of the player that picks the students from the cloud.
+     */
     private final HashMap<RealmColors,Integer> entrance;
     private final int cloudId;
     private final HashMap<RealmColors,Integer> emptyCloud;
@@ -22,14 +31,14 @@ public class PickFromCloud_UpdateMsg extends NetworkMessage{
         this.emptyCloud = emptyCloud;
     }
 
+    // GETTERS:
+
     public int getPlayerID() { return playerID; }
 
     public HashMap<RealmColors,Integer> getEntrance() { return entrance; }
 
     public int getCloudId() { return cloudId; }
 
-    public HashMap<RealmColors, Integer> getEmptyCloud() {
-        return emptyCloud;
-    }
+    public HashMap<RealmColors, Integer> getEmptyCloud() { return emptyCloud; }
 
 }

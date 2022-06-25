@@ -168,6 +168,10 @@ public class ClientHandler implements Runnable {
             send(new ServiceMessage(MessageType.KO, "Not expecting a game action message"));
     }
 
+    /**
+     * Handles the connection of the player managing the LOGIN, GAME_SETUP_INFO, LOGOUT, and all other PLAYER_MOVE message received.
+     * @throws IOException when a player send wrong messages.
+     */
     private void handleConnection() throws IOException {
         LoginMessage lm;
         GamePreferencesMessage gpm;
@@ -229,8 +233,15 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Method called by the server that stops the client handler when players disconnect.
+     */
     public void terminateClientHandler() { Thread.currentThread().interrupt(); }
 
+    /**
+     * Getter method for the player connection status.
+     * @return true if the player is still connected, else false.
+     */
     public boolean isConnected() { return connected; }
 
     /**
@@ -249,6 +260,10 @@ public class ClientHandler implements Runnable {
             return true;
     }
 
+    /**
+     * Sends messages to the client.
+     * @param message the message that has to be sent to the client.
+     */
     public void send(NetworkMessage message) {
         try {
             output.writeObject(message);
@@ -258,6 +273,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Runs ClientHandler thread that handles the connection to the client.
+     */
     @Override
     public void run() {
         try {

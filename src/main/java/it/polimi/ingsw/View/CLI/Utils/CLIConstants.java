@@ -1,6 +1,9 @@
 package it.polimi.ingsw.View.CLI.Utils;
 
-public class CLICostants {
+/**
+ * Contains constants values used by the CLIDrawer.
+ */
+public class CLIConstants {
 
     /**
      * Vertical length of the title of the game.
@@ -126,5 +129,18 @@ public class CLICostants {
      * Horizontal length of the box containing the playable character cards descriptions.
      */
     public static final int CHARACTER_CARDS_DESCRIPTION_Y = 116;
+
+    /**
+     * Constants used for a better readability: they determine if it is necessary to change execution flow or not
+     */
+    public static final int CONTINUE_TASK = 200;
+    /**
+     * Constants used for a better readability: they determine if it is necessary to change execution flow or not
+     */
+    public static final int RESTART_TASK = 400;
+    /**
+     * Constants used for a better readability: they determine if it is necessary to change execution flow or not
+     */
+    public static final int DELETE_TASK = 401;
 
 }

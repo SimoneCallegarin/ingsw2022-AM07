@@ -6,17 +6,18 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+import it.polimi.ingsw.View.CLI.Utils.CLIConstants;
 import it.polimi.ingsw.View.GUI.GUIDrawer;
 import it.polimi.ingsw.View.View;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.*;
-//import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiConsole;
 
 
 /**
- * this class implements the command line interface to play trough terminal,
+ * This class implements the command line interface to play trough terminal,
  * it's observed by the ClientController which sends messages to the server according to the CLI updates,
  * and it also receives update messages from the virtual view to manage the interactions with the player properly.
  */
@@ -27,39 +28,31 @@ public class CLI extends ViewSubject implements View {
      * Drawer of the CLI, draws the game table and other things.
      */
     private final CLIDrawer cliDrawer;
-
-    // Read input utilities
-//!!!!!!!!!!!!!!!!!!!!!!
-    private final BufferedReader br;
-
-    private final Callable<String> readTask;
-
-    private final ExecutorService taskQueue;
-
-    private Future<String> asyncRead;
-
     /**
-     * Constants used for a better readability: they determine if it is necessary to change execution flow or not
-     */
-    private static final int CONTINUE_TASK = 200;
-    private static final int RESTART_TASK = 400;
-    private static final int DELETE_TASK = 401;
-
-    /**
-     * Integer that contains the value of the current execution flow
+     * Integer that contains the value of the current execution flow.
      */
     private int statusFlow = 200;
-
     /**
-     * Boolean that is true if we are playing in a expert mode game
+     * Boolean that is true if we are playing in an expert mode game.
      */
     private boolean expertMode;
-
     /**
      * Boolean that is true if the askCharacterCard method has been called,
      * it prevents the possibility that a character card could be played while another one is going to be activated
      */
     private boolean characterActivated = false;
+    // Read input utilities:
+    /**
+     * Reads text from a character-input stream, buffering characters so as to provide
+     * for the efficient reading of characters, arrays, and lines.
+     */
+    private final BufferedReader br;
+    //!!!!!!!!!!!!!!!!!!!!!!
+    private final Callable<String> readTask;
+    //!!!!!!!!!!!!!!!!!!!!!!
+    private final ExecutorService taskQueue;
+    //!!!!!!!!!!!!!!!!!!!!!!
+    private Future<String> asyncRead;
 
     /**
      * Constructor of the CLI.
@@ -83,7 +76,7 @@ public class CLI extends ViewSubject implements View {
      * Starts the CLI.
      */
     public void ViewStart(){
-        //AnsiConsole.systemInstall();
+        AnsiConsole.systemInstall();
         System.out.println(cliDrawer.printTitle());
         askUsername();
     }
@@ -100,6 +93,10 @@ public class CLI extends ViewSubject implements View {
      */
     public void printMessage(ServiceMessage message) { System.out.println(message.getMessage()); }
 
+    /**
+     * Prints a KO message on screen.
+     * @param message the KO message that has to be printed.
+     */
     public void printKO(ServiceMessage message) { printMessage(message); }
 
     /**
@@ -109,9 +106,9 @@ public class CLI extends ViewSubject implements View {
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 
     /**
-     * Prints end game message
-     * @param winner is the name of the winner
-     * @param winnerID is -1 if the game ended in a draw
+     * Prints end game message.
+     * @param winner is the name of the winner.
+     * @param winnerID is -1 if the game ended in a draw.
      */
     public void printWinner(String winner, int winnerID) { cliDrawer.printWinner(winner, winnerID); }
 
@@ -191,11 +188,11 @@ public class CLI extends ViewSubject implements View {
             System.out.println("Which Assistant Card you want to play? Insert the turn order of the Assistant Card you want to play (T)");
             String choice = readUserInput();
             checkInput(choice, true);
-            if (statusFlow == CONTINUE_TASK) {
+            if (statusFlow == CLIConstants.CONTINUE_TASK) {
                 int chosenCard = Integer.parseInt(choice);
                 notifyObserver(obs -> obs.onAssistantCard(chosenCard));
             }
-            else if (statusFlow == RESTART_TASK)
+            else if (statusFlow == CLIConstants.RESTART_TASK)
                 askAssistantCard(playerID);
         } catch (NumberFormatException nf) {
             System.out.println("You didn't insert a suitable number! Please, try again...");
@@ -212,7 +209,7 @@ public class CLI extends ViewSubject implements View {
         characterActivated = false;
         try {
             askStudent("Entrance");
-            if (statusFlow == CONTINUE_TASK) {
+            if (statusFlow == CLIConstants.CONTINUE_TASK) {
                 String choice;
                 do {
                     System.out.println("> What do you want to do now?");
@@ -221,8 +218,8 @@ public class CLI extends ViewSubject implements View {
                     System.out.println("> 2 - MOVE SELECTED STUDENT ON AN ISLE");
                     choice = readUserInput();
                     checkInput(choice, expertMode);
-                } while (statusFlow == RESTART_TASK);
-                if (statusFlow == CONTINUE_TASK) {
+                } while (statusFlow == CLIConstants.RESTART_TASK);
+                if (statusFlow == CLIConstants.CONTINUE_TASK) {
                     int chosenOption = Integer.parseInt(choice);
                     switch (chosenOption) {
                         case 0 -> askMove();
@@ -250,7 +247,7 @@ public class CLI extends ViewSubject implements View {
         characterActivated = false;
         try {
             int choice = askNumber("Which isle do you want to move Mother Nature to?", false, (cliDrawer.getStorage().getNumberOfIsles() - 1));
-            if (statusFlow == CONTINUE_TASK)
+            if (statusFlow == CLIConstants.CONTINUE_TASK)
                 notifyObserver(obs -> obs.onMNMovement(choice));
         } catch (InterruptedException | ExecutionException ee) {
             asyncRead.cancel(true);
@@ -264,7 +261,7 @@ public class CLI extends ViewSubject implements View {
         characterActivated = false;
         try {
             int choice = askNumber("Which cloud do you want to take students from?", false, cliDrawer.getStorage().getGameTable().getNumOfClouds());
-            if (statusFlow == CONTINUE_TASK)
+            if (statusFlow == CLIConstants.CONTINUE_TASK)
                 notifyObserver(obs -> obs.onCloudChoice(choice));
         } catch (InterruptedException | ExecutionException ee) {
             asyncRead.cancel(true);
@@ -366,7 +363,7 @@ public class CLI extends ViewSubject implements View {
                 System.out.println("> ");
             String choice = readUserInput();
             checkInput(choice, false);
-            if (statusFlow == CONTINUE_TASK) {
+            if (statusFlow == CLIConstants.CONTINUE_TASK) {
                 int chosenNumber = Integer.parseInt(choice);
                 if (chosenNumber > max || chosenNumber < 0) {
                     System.out.println("You didn't insert a suitable number! Please, try again...");
@@ -374,7 +371,7 @@ public class CLI extends ViewSubject implements View {
                 }
                 return chosenNumber;
             }
-            else if (statusFlow == RESTART_TASK)
+            else if (statusFlow == CLIConstants.RESTART_TASK)
                 return askNumber(request, color, max);
             else
                 return -1;
@@ -393,7 +390,7 @@ public class CLI extends ViewSubject implements View {
      */
     private void askStudent(String place) throws InterruptedException, ExecutionException {
         int choice = askNumber("Which student do you want to move from your "+ place + "?",true,5);
-        if (statusFlow == CONTINUE_TASK)
+        if (statusFlow == CLIConstants.CONTINUE_TASK)
             notifyObserver(obs -> obs.onColorChoice(choice));
     }
 
@@ -403,7 +400,7 @@ public class CLI extends ViewSubject implements View {
      */
     private void askIsleMovement() throws InterruptedException, ExecutionException {
         int choice = askNumber("Which isle do you want to move your student to? (Select between 0 and " + (cliDrawer.getStorage().getNumberOfIsles() - 1) + ")",false,(cliDrawer.getStorage().getNumberOfIsles() - 1));
-        if (statusFlow == CONTINUE_TASK)
+        if (statusFlow == CLIConstants.CONTINUE_TASK)
             notifyObserver(obs -> obs.onStudentMovement_toIsle(choice));
     }
 
@@ -432,27 +429,27 @@ public class CLI extends ViewSubject implements View {
                 String answer = readUserInput();
                 if (answer.equalsIgnoreCase("y")) {
                     notifyObserver(ViewObserver::onLogout);
-                    statusFlow = DELETE_TASK;
+                    statusFlow = CLIConstants.DELETE_TASK;
                 }
                 else
-                    statusFlow = RESTART_TASK;
+                    statusFlow = CLIConstants.RESTART_TASK;
             }
             else if (userChoice.equalsIgnoreCase("c")) {
                 System.out.println(cliDrawer.drawCharacterCardsEffects());
-                statusFlow = RESTART_TASK;
+                statusFlow = CLIConstants.RESTART_TASK;
             }
             else if (userChoice.equalsIgnoreCase("a")) {
                 if (planning) {
                     System.out.println("You are in the Assistant Card Phase. You can't play a character card now!");
-                    statusFlow = RESTART_TASK;
+                    statusFlow = CLIConstants.RESTART_TASK;
                 }
                 else {
                     askCharacterCard();
-                    statusFlow = DELETE_TASK;
+                    statusFlow = CLIConstants.DELETE_TASK;
                 }
             }
             else
-                statusFlow = CONTINUE_TASK;
+                statusFlow = CLIConstants.CONTINUE_TASK;
         }
         else {
             if (userChoice.equalsIgnoreCase("l")) {
@@ -461,13 +458,13 @@ public class CLI extends ViewSubject implements View {
                 String answer = readUserInput();
                 if (answer.equalsIgnoreCase("y")) {
                     notifyObserver(ViewObserver::onLogout);
-                    statusFlow = DELETE_TASK;
+                    statusFlow = CLIConstants.DELETE_TASK;
                 }
                 else
-                    statusFlow = RESTART_TASK;
+                    statusFlow = CLIConstants.RESTART_TASK;
             }
             else
-                statusFlow = CONTINUE_TASK;
+                statusFlow = CLIConstants.CONTINUE_TASK;
         }
     }
 
@@ -484,7 +481,7 @@ public class CLI extends ViewSubject implements View {
         System.exit(1);
     }
 
-    // GETTER:
+    // GETTERS:
 
     /**
      * Getter method for the CLIDrawer.

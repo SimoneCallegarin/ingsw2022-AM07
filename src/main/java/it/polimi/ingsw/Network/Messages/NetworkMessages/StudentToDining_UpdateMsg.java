@@ -5,6 +5,9 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 
 import java.util.HashMap;
 
+/**
+ * Message sent everytime a player moves a student from the entrance to the dining room.
+ */
 public class StudentToDining_UpdateMsg extends NetworkMessage{
     /**
      * ID of the player that moved the student from his entrance to his dining room.

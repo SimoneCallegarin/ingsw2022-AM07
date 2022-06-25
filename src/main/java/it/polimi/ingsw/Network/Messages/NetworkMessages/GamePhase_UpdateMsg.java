@@ -4,6 +4,9 @@ import it.polimi.ingsw.Model.Enumeration.ActionPhases;
 import it.polimi.ingsw.Model.Enumeration.GamePhases;
 import it.polimi.ingsw.Network.Messages.MessageType;
 
+/**
+ * Message sent everytime the game phase changes.
+ */
 public class GamePhase_UpdateMsg extends NetworkMessage {
 
     /**
