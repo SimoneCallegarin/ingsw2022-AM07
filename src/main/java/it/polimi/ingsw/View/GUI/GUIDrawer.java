@@ -71,6 +71,8 @@ public class GUIDrawer extends ViewSubject {
      */
     ModelChanges modelChanges;
 
+    private boolean turnStarted = false;
+
     /**
      * this method initialize the first screen when you open the app where you'll be asked the username, the game mode and the
      * number of Players. It uses a frame whose content pane is a General Panel Manager which will switch between the Initial Background panel
@@ -126,7 +128,7 @@ public class GUIDrawer extends ViewSubject {
         nicknameLabel.setHorizontalAlignment(JLabel.LEFT);
         nicknameField = new JTextField();
 
-        leftHalf.add(nicknameLabel,0);
+        leftHalf.add(nicknameLabel,0);;
         leftHalf.add(nicknameField,1);
 
         JPanel buttons = new JPanel(new GridLayout(1, 2));
@@ -256,12 +258,14 @@ public class GUIDrawer extends ViewSubject {
      */
     public void showLoadingScreen(){
         loadingScreen = new LoadingScreen(usernamePlaying);
+        //need to update the loading screen graphics
         generalPanelManager.add(loadingScreen,"Loading Screen");
         cl.show(generalPanelManager,"Loading Screen");
+
     }
 
     public void createGameScreen(){
-        // initialize the game screen and add it to the generalPanelManager
+        //initialize the game screen and add it to the generalPanelManager
         gameScreenPanel = new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,loadingScreen.getNicknameColor(),getViewObserverList());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
     }
@@ -287,7 +291,6 @@ public class GUIDrawer extends ViewSubject {
         AtomicInteger lastPressedButton = new AtomicInteger();
         for (int i = 0; i < modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {
             buttons[i] = (new AssistantCardButton(modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i)));
-            //idk what the hell is going on with these variables
             int finalI = modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i);
             int finalI1 = i;
             buttons[i].addActionListener(e -> {
@@ -300,9 +303,7 @@ public class GUIDrawer extends ViewSubject {
                 }catch (IOException ex) {
                     ex.printStackTrace();
                 }
-
-                if (img1 != null)
-                    buttons[finalI1].setIcon(new ImageIcon(img1));
+                buttons[finalI1].setIcon(new ImageIcon(img1));
 
                 if (turnOrder.get() != 0 && turnOrder.get() != finalI) {
                     ClassLoader cl2=this.getClass().getClassLoader();
@@ -314,8 +315,7 @@ public class GUIDrawer extends ViewSubject {
                     }catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    if (img2 != null)
-                        buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
+                    buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
                 }
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 lastPressedButton.set(finalI1);
@@ -465,7 +465,9 @@ public class GUIDrawer extends ViewSubject {
         modelChanges.getToUpdate().clear();
     }
 
-    public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }
+    public void showServiceMessage(String message) {
+        gameScreenPanel.setMessage(message);
+    }
 
     public void showKOMessage(String serviceMessage){
         if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
