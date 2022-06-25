@@ -409,6 +409,7 @@ public class GUIDrawer extends ViewSubject {
             case MINSTREL -> {
                 message.append("\nNow you can exchange up to 2 students between your dining and your entrance");
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                gameScreenPanel.setClickableStudentsForEffect(modelChanges.getPlayingID());
             }
         }
     }

@@ -3,6 +3,8 @@ package it.polimi.ingsw.View.GUI.DashboardPanels;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.EventListeners.DiningListener;
+import it.polimi.ingsw.View.GUI.EventListeners.DiningStudentListener;
 import it.polimi.ingsw.View.GUI.EventListeners.EntranceListener;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
@@ -89,6 +91,10 @@ public class EntrancePanel extends JPanel{
             StudentButton studentButton=studentButtons.get(i);
             studentButton.addMouseListener(entranceListeners.get(i));
         }
+    }
+
+    public void setClickableStudentsForEffect(){
+
     }
 
     /**

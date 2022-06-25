@@ -1,7 +1,11 @@
 package it.polimi.ingsw.View.GUI.DashboardPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.EventListeners.DiningListener;
+import it.polimi.ingsw.View.GUI.EventListeners.DiningStudentListener;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -96,9 +100,16 @@ public class DiningStudentsPanel extends JPanel {
         }
     }
 
-    public void setClickableStudentsForEffect(){
+    /**
+     * set students clickable in order for the minstrel effect to activate
+     * @param viewObservers view observer list to pass to the listener constructor
+     * @param tableCenterPanel table center panel to pass to the listener constructor
+     * @param entrancePanel entrance panel to pass to the listener constructor
+     */
+    public void setClickableStudentsForEffect(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, EntrancePanel entrancePanel){
+        DashboardPanel thisDashboard=(DashboardPanel) this.getParent().getParent();
         for(StudentButton studentButton:studentButtons){
-
+            studentButton.addMouseListener(new DiningStudentListener(thisDashboard,viewObservers,tableCenterPanel,entrancePanel));
         }
     }
 

@@ -8,6 +8,8 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -195,8 +197,14 @@ public class GameScreenPanel extends JPanel {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
     }
 
+    /**
+     * Sets the dining and entrance students for the Minstrel effect activation
+     * @param playerID the playerID used to identify which dining and entrance set clickable
+     */
     public void setClickableStudentsForEffect(int playerID){
-        dashboardPanels.get(playerID).getEntrance();
+        DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();
+        EntrancePanel entrancePanel=dashboardPanels.get(playerID).getEntrance();
+        diningStudentsPanel.setClickableStudentsForEffect(viewObservers,tableCenterPanel,entrancePanel);
     }
 
     /**
