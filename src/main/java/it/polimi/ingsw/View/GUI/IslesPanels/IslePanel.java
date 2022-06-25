@@ -6,6 +6,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
+import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
 import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -112,6 +113,10 @@ public class IslePanel extends JPanel {
 
     public void setClickableForMN(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
         this.addMouseListener(new MNListener(viewObserverList,isleID,tableCenterPanel));
+    }
+
+    public void setClickableForEffect(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
+        this.addMouseListener(new EffectListener(viewObserverList,isleID,tableCenterPanel));
     }
 
     public void resetIsle(){

@@ -511,6 +511,13 @@ public class TableCenterPanel extends JPanel {
 
     }
 
+    public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
+        for (IslePanel islesPanel : islesPanels) {
+            islesPanel.setClickableForMN(viewObserverList,this);
+        }
+
+    }
+
     public void setCloudsClickable(){
         cloudsContainerPanel.setCloudsClickable();
     }

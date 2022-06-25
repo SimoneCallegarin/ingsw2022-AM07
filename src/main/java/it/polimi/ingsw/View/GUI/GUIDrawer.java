@@ -387,7 +387,16 @@ public class GUIDrawer extends ViewSubject {
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
                 notifyObserver(obs -> obs.onAtomicEffect(-1));
             }
-
+            case HERALD -> {
+                message.append("Choose an Island and resolve the Island as if Mother Nature had ended her movement there.\nMother Nature will still move and the Island where she ends her movement will also be resolved.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                gameScreenPanel.tableCenterPanel.setIslesClickableForEffect(getViewObserverList());
+            }
+            case GRANDMA_HERBS -> {
+                message.append("Place a NoEntry tile on an Island of your choice.\nThe first time Mother Nature ends her movement there, put the No Entry tile back onto this card\n(DO NOT calculate influence on that Island, or place any Towers).");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                gameScreenPanel.tableCenterPanel.setIslesClickableForEffect(getViewObserverList());
+            }
         }
     }
 
