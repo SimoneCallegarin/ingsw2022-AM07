@@ -2,7 +2,6 @@ package it.polimi.ingsw.View.GUI.IslesPanels;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
-import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
@@ -10,14 +9,10 @@ import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
 import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class IslePanel extends JPanel {
 
@@ -26,8 +21,8 @@ public class IslePanel extends JPanel {
     int isleID;
     int imageID;
     boolean motherNature=false;
-    DenyCardPanel denyCard;
     JPanel clickablePanel;
+    DenyCardPanel denyCardPanel;
 
     ArrayList<BufferedImage> isles;
     ArrayList<BufferedImage> students;
@@ -61,6 +56,7 @@ public class IslePanel extends JPanel {
         studentContainer.setOpaque(false);
         JPanel towerContainer=new JPanel(new GridBagLayout());
         towerContainer.setOpaque(false);
+
         GridBagConstraints studentConstraints=new GridBagConstraints();
         GridBagConstraints towerConstraints=new GridBagConstraints();
 
@@ -71,6 +67,13 @@ public class IslePanel extends JPanel {
             add(new MNButton(),constraints);
             constraints.gridy++;
             motherNature=true;
+        }
+
+        for(int i=0;i<storage.getGameTable().getIsle(isleID).getDenyCardsNumber();i++) {
+            denyCardPanel = new DenyCardPanel();
+            denyCardPanel.setPreferredSize(new Dimension(25, 25));
+            add(denyCardPanel, constraints);
+            constraints.gridy++;
         }
 
         studentConstraints.gridx=0;
@@ -112,35 +115,10 @@ public class IslePanel extends JPanel {
         return isleID;
     }
 
-    /*public void setClickableForMN(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
-        clickablePanel.addMouseListener(new MNListener(viewObserverList,isleID,tableCenterPanel));
-    }
-
-    public void setClickableForEffect(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
-        this.addMouseListener(new EffectListener(viewObserverList,isleID,tableCenterPanel));
-    }*/
-
     public void resetIsle(){
         this.removeAll();
         this.validate();
         this.repaint();
     }
 
-    public void addDenyCard(){
-      denyCard=new DenyCardPanel();
-      constraints.gridy++;
-      constraints.ipady=30;
-      constraints.ipadx=30;
-      add(denyCard,constraints);
-      this.validate();
-    }
-
-    public void removeDenyCard(){
-        remove(denyCard);
-        this.revalidate();
-    }
-
-    public JPanel getClickablePanel() {
-        return clickablePanel;
-    }
 }
