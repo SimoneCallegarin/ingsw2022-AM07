@@ -8,6 +8,8 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
@@ -189,6 +191,10 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getEntrance().setStudentsClickable();
     }
 
+    /**
+     * Sets the character cards clickable in order for the player to activate the effect
+     * @param playerID the player id used by the listener to remove the listener from the player dashboard
+     */
     public void setClickableCharacters(int playerID) {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
     }

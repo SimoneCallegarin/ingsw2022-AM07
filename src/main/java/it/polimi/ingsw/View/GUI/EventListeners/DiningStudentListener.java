@@ -19,7 +19,8 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
     DashboardPanel dashboardListened;
     ArrayList<ViewObserver> observers;
 
-    public DiningStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance) {
+    public DiningStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList,
+                                 TableCenterPanel tableCenter, EntrancePanel entrance) {
         this.entrance = entrance;
         this.dashboardListened = dashboardListened;
         this.tableCenter=tableCenter;
@@ -42,7 +43,7 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
         buttonPressed.printClick(buttonPressed.getColor());
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
 
-            //dashboardListened.getDining().setClickable(observers,tableCenter);
+        //dashboardListened.getDining().setClickable(observers,tableCenter);
 
     }
 
@@ -66,3 +67,4 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
 
     }
 }
+

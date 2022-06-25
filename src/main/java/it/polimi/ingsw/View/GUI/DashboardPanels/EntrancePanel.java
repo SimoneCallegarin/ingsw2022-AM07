@@ -3,6 +3,8 @@ package it.polimi.ingsw.View.GUI.DashboardPanels;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.EventListeners.DiningListener;
+import it.polimi.ingsw.View.GUI.EventListeners.DiningStudentListener;
 import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
 import it.polimi.ingsw.View.GUI.EventListeners.EntranceStudentListener;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
