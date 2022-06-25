@@ -112,13 +112,13 @@ public class IslePanel extends JPanel {
         return isleID;
     }
 
-    public void setClickableForMN(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
+    /*public void setClickableForMN(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
         clickablePanel.addMouseListener(new MNListener(viewObserverList,isleID,tableCenterPanel));
     }
 
     public void setClickableForEffect(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
         this.addMouseListener(new EffectListener(viewObserverList,isleID,tableCenterPanel));
-    }
+    }*/
 
     public void resetIsle(){
         this.removeAll();

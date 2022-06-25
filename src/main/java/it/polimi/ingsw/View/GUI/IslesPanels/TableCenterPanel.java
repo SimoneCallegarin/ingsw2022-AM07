@@ -7,6 +7,7 @@ import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
+import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 
 import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
@@ -21,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.EventListener;
 
 /**
  * the panel use to contain the isles, the clouds and the character cards
@@ -571,8 +573,8 @@ public class TableCenterPanel extends JPanel {
     }
 
     public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
-        for (IslePanel islesPanel : islesPanels) {
-            islesPanel.setClickableForMN(viewObserverList,this);
+        for (int i=0;i<islesPanels.size();i++) {
+            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this));
         }
 
     }

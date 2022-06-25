@@ -23,7 +23,7 @@ public class CloudListener extends ViewSubject implements MouseListener {
         int cloudID=((CloudPanel)e.getSource()).getCloudID();
         notifyObserver(obs->obs.onCloudChoice(cloudID));
         tableCenterPanel.removeCloudsClickable();
-
+        tableCenterPanel.removeCharactersClickable();
     }
 
     @Override
