@@ -124,6 +124,7 @@ public class TableCenterPanel extends JPanel {
         this.assistantAndMoneyPanelList=new ArrayList<>();
         this.assistantAndMoneyContainers=new ArrayList<>();
         this.assistantCardPanels=new ArrayList<>();
+        this.characterPanels = new ArrayList<>();
         this.gsp = gsp;
 
         setBackground(Color.CYAN);

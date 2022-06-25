@@ -359,6 +359,8 @@ public class GUIDrawer extends ViewSubject {
     }
 
     public void showKOMessage(String serviceMessage){
+        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one"))
+            gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
         JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
     }
 

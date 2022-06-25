@@ -108,7 +108,8 @@ public class DiningPanel extends JPanel {
      * this method removes the mouse listeners from the dining in order to avoid any wrong timed click from the player
      */
     public void removeCLickable(){
-        removeMouseListener(this.getMouseListeners()[0]);
+        for (int j = 0; j < this.getMouseListeners().length; j++)
+            this.removeMouseListener(this.getMouseListeners()[j]);
     }
 
     public void resetStudentDining(){
