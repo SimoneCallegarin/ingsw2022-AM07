@@ -1,5 +1,6 @@
 package it.polimi.ingsw.View.GUI;
 
+import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
@@ -69,6 +70,8 @@ public class GUIDrawer extends ViewSubject {
      * the class containing all the information about the changes occurred in the ModelStorage
      */
     ModelChanges modelChanges;
+
+    private boolean turnStarted = false;
 
     /**
      * this method initialize the first screen when you open the app where you'll be asked the username, the game mode and the
@@ -334,18 +337,58 @@ public class GUIDrawer extends ViewSubject {
      * @param expertMode the game mode boolean used to decide whether to set the character cards clickable
      */
     public void showMoveOptions(boolean expertMode){
-        if(expertMode){
-            gameScreenPanel.tableCenterPanel.setClickableCharacters(getViewObserverList());
+        if (!turnStarted) {
+            turnStarted = true;
+            if (expertMode)
+                gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
+            String message = "It's your turn!";
+            JOptionPane.showMessageDialog(f, message, "Action Phase", JOptionPane.PLAIN_MESSAGE);
         }
+
         gameScreenPanel.setClickableStudents(modelChanges.getPlayerID());
     }
 
     public void showMNMovement(){
+        /*String message="Now you can move mother nature by clicking on the island where you want to move her";
+        JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);*/
+
         gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
     }
 
     public void showCloudChoice(){
+        /*String message="Now choose a cloud to pick students from by clicking on it";
+        JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
+
         gameScreenPanel.tableCenterPanel.setCloudsClickable();
+
+        turnStarted = false;
+    }
+
+    public void showEffectActivationChoice(CharacterCardsName cc) {
+        StringBuilder message = new StringBuilder("You activated the " + cc.toString() + "!");
+        switch (cc) {
+            case FARMER -> {
+                message.append("\nDuring this turn, you take control of any number of Professors even if you have the same number of Students as the player who currently controls them.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+            case MAGICAL_LETTER_CARRIER -> {
+                message.append("\nYou may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+            case CENTAUR -> {
+                message.append("\nWhen resolving a Conquering on an Island, Towers do not count towards influence.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+            case KNIGHT -> {
+                message.append("\nDuring the influence calculation this turn, you count as having 2 more influence.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                notifyObserver(obs -> obs.onAtomicEffect(-1));
+            }
+
+        }
     }
 
 
@@ -409,6 +452,8 @@ public class GUIDrawer extends ViewSubject {
     }
 
     public void showKOMessage(String serviceMessage){
+        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one"))
+            gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
         JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
     }
 

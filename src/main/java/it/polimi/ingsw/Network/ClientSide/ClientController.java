@@ -318,7 +318,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 switch (gp.getGamePhases()) {
                     case PLANNING_PHASE -> {
                         if (gp.getActivePlayer() == playerID) {
-                            view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Play an assistant card"));
+                            view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "Play an assistant card"));
                             taskQueue.execute(() -> view.askAssistantCard(playerID));
                         }
                         else
@@ -328,7 +328,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                         switch (gp.getActionPhases()) {
                             case MOVE_STUDENTS -> {
                                 if (gp.getActivePlayer() == playerID) {
-                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Move a student from your entrance"));
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "Move a student from your entrance"));
                                     taskQueue.execute(view::askMove);
                                 }
                                 else
@@ -336,7 +336,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                             }
                             case MOVE_MOTHER_NATURE -> {
                                 if (gp.getActivePlayer() == playerID) {
-                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Move Mother Nature"));
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "Move Mother Nature"));
                                     taskQueue.execute(view::askMNMovement);
                                 }
                                 else
@@ -344,7 +344,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                             }
                             case CHOOSE_CLOUD -> {
                                 if (gp.getActivePlayer() == playerID) {
-                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Pick up students from a cloud"));
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "Pick up students from a cloud"));
                                     taskQueue.execute(view::askCloud);
                                 }
                                 else
@@ -352,7 +352,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
                             }
                             case CHARACTER_CARD_PHASE -> {
                                 if (gp.getActivePlayer() == playerID) {
-                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "It's your turn! Activate the effect of the character card"));
+                                    view.printMessage(new ServiceMessage(MessageType.GAMEPHASE_UPDATE, "Activate the effect of the character card"));
                                     taskQueue.execute(() -> view.askCharacterEffectParameters(lastCharacterUsed));
                                 }
                                 else
