@@ -121,4 +121,7 @@ public class IslePanel extends JPanel {
         this.repaint();
     }
 
+    public BufferedImage getIslesImagesByID(int id) {
+        return isles.get(id);
+    }
 }

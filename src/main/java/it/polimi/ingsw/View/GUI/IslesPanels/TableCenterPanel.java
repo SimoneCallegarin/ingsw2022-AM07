@@ -465,6 +465,17 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.weighty=0.95;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
 
+        //set sizes of isles and clickablepanels
+        int x=0;
+        int y=0;
+        int width;
+        int height;
+        for(int i=0;i<islesPanels.size();i++){
+            width=islesPanels.get(i).getIslesImagesByID(i%3).getWidth() / 5;
+            height=islesPanels.get(i).getIslesImagesByID(i%3).getHeight() / 5;
+            islesPanels.get(i).setBounds(x,y,width,height);
+            clickablePanels.get(i).setBounds(x,y,width,height);
+        }
     }
 
 
