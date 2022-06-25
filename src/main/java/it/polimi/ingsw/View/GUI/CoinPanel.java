@@ -11,7 +11,7 @@ public class CoinPanel extends JPanel {
 
     public CoinPanel() {
         setOpaque(false);
-        setPreferredSize(new Dimension(25,25));
+        setPreferredSize(new Dimension(40,40));
     }
 
     @Override

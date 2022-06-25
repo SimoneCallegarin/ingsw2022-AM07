@@ -459,8 +459,12 @@ public class GUIDrawer extends ViewSubject {
                     }
                     modelChanges.setLayoutChanged(false);
                 }
-
-                //missing case character card and cloud changes
+                case CHARACTERCARD_CHANGED -> {
+                    for(CharacterPanel characterPanel:gameScreenPanel.tableCenterPanel.getCharacterPanels()){
+                        characterPanel.resetCharacter();
+                        characterPanel.initializeCharacter();
+                    }
+                }
             }
         }
         modelChanges.getToUpdate().clear();
