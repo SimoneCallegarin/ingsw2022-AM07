@@ -387,7 +387,26 @@ public class GUIDrawer extends ViewSubject {
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
                 notifyObserver(obs -> obs.onAtomicEffect(-1));
             }
-
+            case HERALD -> {
+                message.append("\nChoose an Island and resolve the Island as if Mother Nature had ended her movement there.\nMother Nature will still move and the Island where she ends her movement will also be resolved.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                gameScreenPanel.tableCenterPanel.setIslesClickableForEffect(getViewObserverList());
+            }
+            case GRANDMA_HERBS -> {
+                message.append("\nPlace a NoEntry tile on an Island of your choice.\nThe first time Mother Nature ends her movement there, put the No Entry tile back onto this card\n(DO NOT calculate influence on that Island, or place any Towers).");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                gameScreenPanel.tableCenterPanel.setIslesClickableForEffect(getViewObserverList());
+            }
+            case FUNGIST -> {
+                message.append("\nChoose a color of Student: during the influence calculation this turn, that color adds no influence.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                showColorForm("Which color you don't want to consider for influence calculation in this turn?");
+            }
+            case THIEF -> {
+                message.append("Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                showColorForm("Which color you want to be removed from Dining Rooms?");
+            }
         }
     }
 
@@ -452,9 +471,65 @@ public class GUIDrawer extends ViewSubject {
     }
 
     public void showKOMessage(String serviceMessage){
-        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one"))
+        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
             gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
         JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void showColorForm(String question) {
+        JPanel colorChoice = new JPanel(new GridLayout(3,5));
+
+        colorChoice.add(new JLabel(question),0);
+
+        JPanel colors = new JPanel(new GridLayout(1,5));
+        JRadioButton yellow = new JRadioButton("Yellow");
+        yellow.setMnemonic(KeyEvent.VK_0);
+        yellow.setActionCommand("0");
+        yellow.setSelected(true);
+        JRadioButton pink = new JRadioButton("Pink");
+        pink.setMnemonic(KeyEvent.VK_1);
+        pink.setActionCommand("1");
+        JRadioButton blue = new JRadioButton("Blue");
+        blue.setMnemonic(KeyEvent.VK_2);
+        blue.setActionCommand("2");
+        JRadioButton red = new JRadioButton("Red");
+        red.setMnemonic(KeyEvent.VK_3);
+        red.setActionCommand("3");
+        JRadioButton green = new JRadioButton("Green");
+        green.setMnemonic(KeyEvent.VK_4);
+        green.setActionCommand("4");
+        colors.add(yellow);
+        colors.add(pink);
+        colors.add(blue);
+        colors.add(red);
+        colors.add(green);
+        colorChoice.add(colors,1);
+
+        ButtonGroup colorButtons = new ButtonGroup();
+        colorButtons.add(yellow);
+        colorButtons.add(pink);
+        colorButtons.add(blue);
+        colorButtons.add(red);
+        colorButtons.add(green);
+
+        JButton choose = new JButton("Ok");
+
+        choose.addActionListener(e -> {
+            //add try catch
+            int chosenColor = Integer.parseInt(colorButtons.getSelection().getActionCommand());
+            notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
+            showGameScreen();
+        });
+
+        colorChoice.add(choose,2);
+
+        //CardLayout userCl = (CardLayout) gameScreenPanel.getLayout();
+
+        generalPanelManager.add(colorChoice,"Color choice form");
+        cl.show(generalPanelManager,"Color choice form");
+
+        //int chosenColor = JOptionPane.showConfirmDialog(f, colorChoice, "Your deck", JOptionPane.DEFAULT_OPTION);
+        //notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
     }
 
     public ModelStorage getModelStorage() {

@@ -514,7 +514,7 @@ public class Game extends ModelSubject {
                     notifyObserver(obs -> obs.onCloudUpdate(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), cloudID));
                     nextPlayer();
                 } else {
-                    notifyObserver(obs -> obs.onKO(playerID, "Cloud " + cloudID + " is empty! Please select another one"));
+                    notifyObserver(obs -> obs.onKO(playerID, "This cloud is empty! Please select another one"));
                     notifyTurn();
                 }
             } else {

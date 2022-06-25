@@ -5,6 +5,8 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
+import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
+import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;

@@ -2,28 +2,27 @@ package it.polimi.ingsw.View.GUI.EventListeners;
 
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.Observer.ViewObserver;
-import it.polimi.ingsw.View.GUI.CloudsPanels.CloudPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class CloudListener extends ViewSubject implements MouseListener {
+public class EffectListener extends ViewSubject implements MouseListener {
 
+    private final int genericValue;
     TableCenterPanel tableCenterPanel;
 
-    public CloudListener(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel) {
-        addAllObservers(viewObservers);
+    public EffectListener(ArrayList<ViewObserver> observerList, int genericValue, TableCenterPanel tableCenterPanel) {
+        addAllObservers(observerList);
+        this.genericValue=genericValue;
         this.tableCenterPanel=tableCenterPanel;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int cloudID=((CloudPanel)e.getSource()).getCloudID();
-        notifyObserver(obs->obs.onCloudChoice(cloudID));
-        tableCenterPanel.removeCloudsClickable();
-        tableCenterPanel.removeCharactersClickable();
+        notifyObserver(obs -> obs.onAtomicEffect(genericValue));
+        tableCenterPanel.removeIslesClickable();
     }
 
     @Override
