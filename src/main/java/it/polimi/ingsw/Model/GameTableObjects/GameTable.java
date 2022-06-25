@@ -83,7 +83,7 @@ public class GameTable implements DenyCardManager {
         this.characterCards = new ArrayList<>(3);
         if (gameMode.equals(GameMode.EXPERT))
             extractAndSetUsableCharacterCards();
-        set3CharacterCards(CharacterCardsName.MAGICAL_LETTER_CARRIER, CharacterCardsName.CENTAUR, CharacterCardsName.KNIGHT);
+        //set3CharacterCards(CharacterCardsName.MAGICAL_LETTER_CARRIER, CharacterCardsName.CENTAUR, CharacterCardsName.KNIGHT);
         this.denyCards = 4;
         this.generalMoneyReserve = 0;
         if(gameMode==GameMode.EXPERT)
@@ -180,10 +180,12 @@ public class GameTable implements DenyCardManager {
             effectSetupFactory.getEffect(this,characterCards.get(0));
     }
 
+
     /**
      * TESTING PURPOSE ONLY:
      * Deletes all the other character cards created and creates 3 new character cards received in input.
      */
+    /*
     public void set3CharacterCards(CharacterCardsName characterCardsName0,CharacterCardsName characterCardsName1,CharacterCardsName characterCardsName2){
         for(int index = 0;index<3;index++){
             switch (getCharacterCard(index).getCharacterCardName()) {
@@ -215,7 +217,7 @@ public class GameTable implements DenyCardManager {
         if(characterCardsName2.equals(CharacterCardsName.MONK)||characterCardsName2.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName2.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName2.equals(CharacterCardsName.JESTER))
             effectSetupFactory.getEffect(this,characterCards.get(2));
     }
-
+    */
     /**
      * Getter method for the clouds.
      * @return number of clouds on the game table.

@@ -16,7 +16,7 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,8 +88,6 @@ public class TableCenterPanel extends JPanel {
      * username of the player using the GUI
      */
     String usernamePlaying;
-
-    Color nicknameColor;
     /**
      * this array contains all the panels representing the isles
      */
@@ -161,7 +159,9 @@ public class TableCenterPanel extends JPanel {
      */
     ArrayList<BufferedImage> towers;
 
-    public TableCenterPanel(ModelStorage storage, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, GameScreenPanel gsp) {
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying, Color nicknameColor,
+                            ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, ArrayList<BufferedImage> checkedStudents,
+                            GameScreenPanel gsp) {
         this.storage=storage;
         this.usernamePlaying=usernamePlaying;
         this.islesPanels=new ArrayList<>();
@@ -171,7 +171,6 @@ public class TableCenterPanel extends JPanel {
         this.characterPanels = new ArrayList<>();
         this.gsp = gsp;
 
-        nicknameColor = nicknameColor;
         this.clickablePanels=new ArrayList<>();
         this.isleLayeredPanels=new ArrayList<>();
 
@@ -450,7 +449,7 @@ public class TableCenterPanel extends JPanel {
                 centerConstraints.weightx = 1;
                 centerConstraints.weighty = 1;
                 for (int i = 0; i < 3; i++)
-                    characterPanels.add(new CharacterPanel(storage.getGameTable().getCharacterCard(i).getCharacterCardName(), i));
+                    characterPanels.add(new CharacterPanel(storage,storage.getGameTable().getCharacterCard(i).getCharacterCardName(), i,students,checkedStudents));
                 charactersContainer.add(characterPanels.get(0));
                 charactersContainer.add(characterPanels.get(1));
                 charactersContainer.add(characterPanels.get(2));
