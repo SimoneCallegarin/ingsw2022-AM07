@@ -25,8 +25,8 @@ public class EffectListener extends ViewSubject implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        StudentButton buttonPressed=(StudentButton) e.getSource();
-        if (buttonPressed != null) {
+        try {
+            StudentButton buttonPressed = (StudentButton) e.getSource();
             switch (buttonPressed.getColor()) {
                 case YELLOW -> genericValue = 0;
                 case PINK -> genericValue = 1;
@@ -34,9 +34,12 @@ public class EffectListener extends ViewSubject implements MouseListener {
                 case RED -> genericValue = 3;
                 case GREEN -> genericValue = 4;
             }
+            notifyObserver(obs -> obs.onAtomicEffect(genericValue));
+            tableCenterPanel.removeCharacterStudentsClickable();
+        } catch (ClassCastException cce) {
+            notifyObserver(obs -> obs.onAtomicEffect(genericValue));
+            tableCenterPanel.removeIslesClickable();
         }
-        notifyObserver(obs -> obs.onAtomicEffect(genericValue));
-        tableCenterPanel.removeIslesClickable();
     }
 
     @Override

@@ -452,7 +452,7 @@ public class TableCenterPanel extends JPanel {
                 centerConstraints.weighty = 1;
                 for (int i = 0; i < 3; i++)
                     characterPanels.add(new CharacterPanel(storage,storage.getGameTable().getCharacterCard(i).getCharacterCardName(),
-                            i,students,checkedStudents));
+                            i,students,checkedStudents, this, viewObservers));
                 charactersContainer.add(characterPanels.get(0));
                 charactersContainer.add(characterPanels.get(1));
                 charactersContainer.add(characterPanels.get(2));
@@ -574,7 +574,7 @@ public class TableCenterPanel extends JPanel {
 
     public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
         for (int i=0;i<islesPanels.size();i++) {
-            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this, gsp.getEntrancePanel()));
+            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this, gsp.getFirstEntrancePanel()));
         }
 
     }
@@ -612,12 +612,15 @@ public class TableCenterPanel extends JPanel {
     public ArrayList<CharacterPanel> getCharacterPanels() {
         return characterPanels;
     }
-    public void setCharacterStudentsClickable(boolean spoiledPrincess) {
 
+    public void setCharacterStudentsClickable(CharacterPanel character, EntrancePanel entrance, DiningPanel dining) {
+        character.setStudentsClickable(entrance, dining);
     }
 
     public void removeCharacterStudentsClickable() {
-
+        for(CharacterPanel characterPanel : characterPanels){
+            characterPanel.removeStudentsClickable();
+        }
     }
 
 }

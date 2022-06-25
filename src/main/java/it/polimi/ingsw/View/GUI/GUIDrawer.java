@@ -409,10 +409,26 @@ public class GUIDrawer extends ViewSubject {
             case SPOILED_PRINCESS -> {
                 message.append("\nTake 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.");
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                CharacterPanel spoiledPrincessPanel = null;
+                for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                    if (character.getCharacterName().equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
+                        spoiledPrincessPanel = character;
+                        break;
+                    }
+                }
+                gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(spoiledPrincessPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
             }
             case MONK -> {
                 message.append("\nTake 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card.");
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                CharacterPanel monkPanel = null;
+                for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                    if (character.getCharacterName().equals(CharacterCardsName.MONK.toString())) {
+                        monkPanel = character;
+                        break;
+                    }
+                }
+                gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(monkPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
             }
         }
     }

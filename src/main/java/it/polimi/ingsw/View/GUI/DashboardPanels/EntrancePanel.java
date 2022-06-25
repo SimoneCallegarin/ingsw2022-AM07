@@ -33,6 +33,7 @@ public class EntrancePanel extends JPanel{
     ArrayList<BufferedImage> checkedStudents;
 
     private StudentButton lastPressedStudent;
+
     public EntrancePanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel,DashboardPanel dashboardPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         this.playerID=playerID;
         this.viewObservers=viewObservers;

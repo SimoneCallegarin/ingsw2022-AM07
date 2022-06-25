@@ -5,6 +5,7 @@ import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 
@@ -16,13 +17,13 @@ public class CharacterStudentListener extends ViewSubject implements MouseListen
 
     EntrancePanel entrance;
     TableCenterPanel tableCenter;
-    DashboardPanel dashboardListened;
+    DiningPanel dining;
     ArrayList<ViewObserver> observers;
-    CharacterCardsName character;
+    String character;
 
-    public CharacterStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance, CharacterCardsName character) {
+    public CharacterStudentListener(DiningPanel dining, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance, String character) {
         this.entrance = entrance;
-        this.dashboardListened = dashboardListened;
+        this.dining = dining;
         this.tableCenter=tableCenter;
         this.character = character;
         observers=viewObserverList;
@@ -45,8 +46,8 @@ public class CharacterStudentListener extends ViewSubject implements MouseListen
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
 
         switch (character) {
-            case MONK -> tableCenter.setIslesClickable(getViewObserverList(),entrance,dashboardListened.getDining());
-            case JESTER -> entrance.setStudentsClickableForEffect();
+            case "MONK" -> tableCenter.setIslesClickableForEffect(getViewObserverList());
+            case "JESTER" -> entrance.setStudentsClickableForEffect();
         }
 
         tableCenter.removeCharacterStudentsClickable();

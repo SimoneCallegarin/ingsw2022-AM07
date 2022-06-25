@@ -8,6 +8,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
@@ -192,9 +193,17 @@ public class GameScreenPanel extends JPanel {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
     }
 
-    public EntrancePanel getEntrancePanel() {
+    public EntrancePanel getFirstEntrancePanel() {
         return dashboardPanels.get(0).getEntrance();
     }
+
+    public EntrancePanel getEntrancePanel(int playerID) { return dashboardPanels.get(playerID).getEntrance(); }
+
+    public DiningPanel getFirstDiningPanel() {
+        return dashboardPanels.get(0).getDining();
+    }
+
+    public DiningPanel getDiningPanel(int playerID) { return dashboardPanels.get(playerID).getDining(); }
 
     /**
      * method to set the message on the label on top of the game screen
