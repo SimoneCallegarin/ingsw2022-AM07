@@ -100,7 +100,7 @@ public class DiningPanel extends JPanel {
      * this method is called by the Color Listener after one student button press
      * @param observers the observers list which are notified by the listener
      */
-    public void setCLickable(ArrayList<ViewObserver> observers, TableCenterPanel tableCenterPanel){
+    public void setClickable(ArrayList<ViewObserver> observers, TableCenterPanel tableCenterPanel){
         EntrancePanel pairedEntrance=((DashboardPanel)this.getParent()).getEntrance();
         addMouseListener(new DiningListener(this,pairedEntrance,observers,tableCenterPanel));
     }
@@ -108,7 +108,7 @@ public class DiningPanel extends JPanel {
     /**
      * this method removes the mouse listeners from the dining in order to avoid any wrong timed click from the player
      */
-    public void removeCLickable(){
+    public void removeClickable(){
         for (int j = 0; j < this.getMouseListeners().length; j++)
             this.removeMouseListener(this.getMouseListeners()[j]);
     }

@@ -184,7 +184,7 @@ public class GameScreenPanel extends JPanel {
      * @param playerID the playerID used to identify which dashboard set movable
      */
     public void setClickableStudents(int playerID) {
-        dashboardPanels.get(playerID).getEntrance().setClickable();
+        dashboardPanels.get(playerID).getEntrance().setStudentsClickable();
     }
 
     public void setClickableCharacters(int playerID) {
@@ -200,8 +200,8 @@ public class GameScreenPanel extends JPanel {
     }
 
     public void removeDashboardClickable(int playerID) {
-        dashboardPanels.get(playerID).getEntrance().removeClickable();
-        dashboardPanels.get(playerID).getDining().removeCLickable();
+        dashboardPanels.get(playerID).getEntrance().removeStudentsClickable();
+        dashboardPanels.get(playerID).getDining().removeClickable();
     }
 
     /**

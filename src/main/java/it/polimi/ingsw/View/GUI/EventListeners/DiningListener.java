@@ -25,8 +25,8 @@ public class DiningListener extends ViewSubject implements MouseListener  {
     @Override
     public void mouseClicked(MouseEvent e) {
         notifyObserver(ViewObserver::onStudentMovement_toDining);
-        dining.removeCLickable();
-        entrance.removeClickable();
+        dining.removeClickable();
+        entrance.removeStudentsClickable();
         tableCenterPanel.removeIslesClickable();
     }
 

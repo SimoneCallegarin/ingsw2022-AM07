@@ -3,7 +3,7 @@ package it.polimi.ingsw.View.GUI.DashboardPanels;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.EventListeners.EntranceListener;
+import it.polimi.ingsw.View.GUI.EventListeners.EntranceStudentListener;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -24,7 +24,7 @@ public class EntrancePanel extends JPanel{
     int playerID;
     ArrayList<ViewObserver> viewObservers;
     TableCenterPanel tableCenterPanel;
-    ArrayList<EntranceListener> entranceListeners;
+    ArrayList<EntranceStudentListener> entranceListeners;
     ArrayList<StudentButton> studentButtons;
 
     ArrayList<BufferedImage> students;
@@ -40,7 +40,7 @@ public class EntrancePanel extends JPanel{
 
         for(RealmColors color:RealmColors.values()) {
             for (int i = 0; i < storage.getDashboard(playerID).getEntranceStudents(color); i++) {
-                EntranceListener entranceListener=new EntranceListener(dashboardPanel, viewObservers, tableCenterPanel, this);
+                EntranceStudentListener entranceListener=new EntranceStudentListener(dashboardPanel, viewObservers, tableCenterPanel, this);
                 entranceListeners.add(entranceListener);
             }
         }
@@ -84,7 +84,7 @@ public class EntrancePanel extends JPanel{
     /**
      * this method is called when the player can move the students in order to listen to clicks on a student
      */
-    public void setClickable(){
+    public void setStudentsClickable(){
         for(int i=0;i<studentButtons.size();i++){
             StudentButton studentButton=studentButtons.get(i);
             studentButton.addMouseListener(entranceListeners.get(i));
@@ -94,11 +94,15 @@ public class EntrancePanel extends JPanel{
     /**
      * this method is used to remove the listener from the buttons
      */
-    public void removeClickable(){
+    public void removeStudentsClickable(){
         for(int i=0;i<studentButtons.size();i++) {
             studentButtons.get(i).removeMouseListener(entranceListeners.get(i));
         }
-        EntranceListener.setSetClickable(false);
+        EntranceStudentListener.setSetClickable(false);
+    }
+
+    public void setClickable() {
+
     }
 
     public void resetEntrance(){
