@@ -574,7 +574,7 @@ public class TableCenterPanel extends JPanel {
 
     public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
         for (int i=0;i<islesPanels.size();i++) {
-            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this));
+            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this, gsp.getEntrancePanel()));
         }
 
     }
@@ -609,6 +609,12 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
+    public void setCharacterStudentsClickable(boolean spoiledPrincess) {
 
+    }
+
+    public void removeCharacterStudentsClickable() {
+
+    }
 
 }

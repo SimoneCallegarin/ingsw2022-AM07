@@ -12,19 +12,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class CharacterStudentListener extends ViewSubject implements MouseListener {
+public class DiningStudentListener extends ViewSubject implements MouseListener {
 
     EntrancePanel entrance;
     TableCenterPanel tableCenter;
     DashboardPanel dashboardListened;
     ArrayList<ViewObserver> observers;
-    CharacterCardsName character;
 
-    public CharacterStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance, CharacterCardsName character) {
+    public DiningStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance) {
         this.entrance = entrance;
         this.dashboardListened = dashboardListened;
         this.tableCenter=tableCenter;
-        this.character = character;
         observers=viewObserverList;
         addAllObservers(viewObserverList);
     }
@@ -44,12 +42,7 @@ public class CharacterStudentListener extends ViewSubject implements MouseListen
         buttonPressed.printClick(buttonPressed.getColor());
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
 
-        switch (character) {
-            case MONK -> tableCenter.setIslesClickable(getViewObserverList(),entrance,dashboardListened.getDining());
-            case JESTER -> entrance.setStudentsClickableForEffect();
-        }
-
-        tableCenter.removeCharacterStudentsClickable();
+            //dashboardListened.getDining().setClickable(observers,tableCenter);
 
     }
 

@@ -8,6 +8,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -189,6 +190,10 @@ public class GameScreenPanel extends JPanel {
 
     public void setClickableCharacters(int playerID) {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
+    }
+
+    public EntrancePanel getEntrancePanel() {
+        return dashboardPanels.get(0).getEntrance();
     }
 
     /**
