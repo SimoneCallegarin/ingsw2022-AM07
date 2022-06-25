@@ -76,21 +76,21 @@ public class Game extends ModelSubject {
      */
     private GamePhases gamePhase;
     /**
-     * It divides the planning phase in 2 different sub phases, and it indicates that the player turn is in the planning phase.
+     * Divides the planning phase in 2 different sub phases, and it indicates that the player turn is in the planning phase.
      */
     private PlanningPhases planningPhase;
     /**
-     * It divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase.
+     * Divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase.
      */
     private ActionPhases actionPhase;
 //!!!!!!!!!!!!!!!!!!!!!!!
     private ActionPhases lastActionPhase;
     /**
-     * It indicates who is the current active player that is playing his turn.
+     * Indicates who is the current active player that is playing his turn.
      */
     private CurrentOrder currentActivePlayer;
     /**
-     * It's the factory that permits to build the effect of each playable character card.
+     * Factory that permits to build the effect of each playable character card.
      */
     private final EffectInGameFactory effectInGameFactory;
     /**

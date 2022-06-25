@@ -10,6 +10,10 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.MNMovement_UpdateMsg;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A reduced version of the model used to contain all useful information about the game in a light way.
+ * Used by the drawers, useful to do information hiding.
+ */
 public class ModelStorage {
 
     /**

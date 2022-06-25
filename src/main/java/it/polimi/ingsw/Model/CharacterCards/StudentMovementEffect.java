@@ -4,6 +4,9 @@ import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.GameTableObjects.Bag;
 import it.polimi.ingsw.Model.Interface.StudentManager;
 
+/**
+ * Handles the movement of students from a StudentsManager to another.
+ */
 public class StudentMovementEffect {
 
     /**
@@ -17,18 +20,18 @@ public class StudentMovementEffect {
      * @param Color2 the color of the student that has to be moved to.
      */
     public void effect(StudentManager from, StudentManager to, ColorsForEffects color, RealmColors Color1, RealmColors Color2) {
-            if(color==ColorsForEffects.RANDOM){
-                Bag bag = (Bag) from;
-                RealmColors colorExtracted = bag.draw();
-                to.addStudent(colorExtracted);
+        if(color==ColorsForEffects.RANDOM){
+            Bag bag = (Bag) from;
+            RealmColors colorExtracted = bag.draw();
+            to.addStudent(colorExtracted);
+        }
+        if(color==ColorsForEffects.SELECT){
+            if(Color2 != null){
+                from.addStudent(Color2);
+                to.removeStudent(Color2);
             }
-            if(color==ColorsForEffects.SELECT){
-                if(Color2 != null){
-                    from.addStudent(Color2);
-                    to.removeStudent(Color2);
-                }
-                from.removeStudent(Color1);
-                to.addStudent(Color1);
-            }
+            from.removeStudent(Color1);
+            to.addStudent(Color1);
+        }
     }
 }

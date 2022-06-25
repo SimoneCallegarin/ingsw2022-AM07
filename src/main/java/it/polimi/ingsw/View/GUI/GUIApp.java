@@ -2,6 +2,7 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Network.ClientSide.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
@@ -14,7 +15,6 @@ public class GUIApp extends ViewSubject implements View {
     private final GUIDrawer guiDrawer;
 
     public GUIApp() { guiDrawer = new GUIDrawer(); }
-
 
     @Override
     public void askUsername() {
@@ -58,21 +58,22 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public CLIDrawer getCLIDrawer() { return null; }
-
-    @Override
     public void addObs(ClientController clientController) { addObserver(clientController); }
 
     @Override
-    public void ViewStart() {
-        SwingUtilities.invokeLater(guiDrawer::screeInitialization);
-    }
+    public void ViewStart() { SwingUtilities.invokeLater(guiDrawer::screeInitialization); }
 
     @Override
     public void disconnect(ServiceMessage message) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (message.getMessageType() != MessageType.END_GAME)
+            System.out.println(message.getMessage());
+        System.exit(1);
     }
 
+    @Override
+    public CLIDrawer getCLIDrawer() { return null; }
+
+    @Override
     public GUIDrawer getGUIDrawer() { return guiDrawer; }
 
 }

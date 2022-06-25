@@ -13,7 +13,7 @@ public class PlayerMoveMessage extends NetworkMessage {
     private final int playerID;
     /**
      * Contains:
-     * - the ids of the places where the player makes the move;
+     * - the IDs of the places where the player makes the move;
      * - the color index chosen by the player;
      * - the assistant card turn order;
      * - the chosen character card index that the player wants to play.

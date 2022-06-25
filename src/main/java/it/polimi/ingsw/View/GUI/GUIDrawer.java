@@ -291,7 +291,6 @@ public class GUIDrawer extends ViewSubject {
         AtomicInteger lastPressedButton = new AtomicInteger();
         for (int i = 0; i < modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {
             buttons[i] = (new AssistantCardButton(modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i)));
-            //idk what the hell is going on with these variables
             int finalI = modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i);
             int finalI1 = i;
             buttons[i].addActionListener(e -> {

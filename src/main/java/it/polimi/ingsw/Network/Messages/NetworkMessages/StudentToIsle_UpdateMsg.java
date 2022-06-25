@@ -5,6 +5,9 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 
 import java.util.HashMap;
 
+/**
+ * Message sent everytime a player moves a student from the entrance to an isle.
+ */
 public class StudentToIsle_UpdateMsg extends NetworkMessage {
 
     /**

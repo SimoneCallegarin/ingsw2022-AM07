@@ -57,9 +57,9 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     /**
      * ClientController constructor for the CLI.
-     * @param view it can be the CLI or the GUI.
+     * @param view it's the CLI.
      * @param client identifies the client at network layer.
-     * @param cliDrawer drawer that handles the graphical part pf the CLI.
+     * @param cliDrawer drawer that handles the graphical part of the CLI.
      */
     public ClientController(View view, ConnectionSocket client, CLIDrawer cliDrawer) {
         this.view = view;
@@ -71,7 +71,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
 
     /**
      * ClientController constructor for the GUI.
-     * @param view it can be the CLI or the GUI.
+     * @param view it's the GUI.
      * @param client identifies the client at network layer.
      * @param guiDrawer drawer that handles the graphical part of the GUI.
      */
@@ -109,8 +109,8 @@ public class ClientController implements ViewObserver, NetworkObserver {
     @Override
     public void onLogout() {
         client.send(new ServiceMessage(MessageType.LOGOUT));
-        client.disconnect();
         view.disconnect(new ServiceMessage(MessageType.QUIT, "You logged out. The game ended."));
+        client.disconnect();
     }
 
     // All the following messages contains a messageType,
