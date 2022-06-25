@@ -187,8 +187,16 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getEntrance().setClickable();
     }
 
+    /**
+     * Sets the character cards clickable in order for the player to activate the effect
+     * @param playerID the player id used by the listener to remove the listener from the player dashboard
+     */
     public void setClickableCharacters(int playerID) {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
+    }
+
+    public void setClickableStudentsForEffect(int playerID){
+        dashboardPanels.get(playerID).getEntrance();
     }
 
     /**

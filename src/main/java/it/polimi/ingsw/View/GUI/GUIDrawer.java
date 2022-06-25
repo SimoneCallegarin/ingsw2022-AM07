@@ -402,9 +402,13 @@ public class GUIDrawer extends ViewSubject {
                 showColorForm("Which color you don't want to consider for influence calculation in this turn?");
             }
             case THIEF -> {
-                message.append("Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
+                message.append("\nChoose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
                 showColorForm("Which color you want to be removed from Dining Rooms?");
+            }
+            case MINSTREL -> {
+                message.append("\nNow you can exchange up to 2 students between your dining and your entrance");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
             }
         }
     }
