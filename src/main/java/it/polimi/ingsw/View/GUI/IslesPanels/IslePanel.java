@@ -27,6 +27,7 @@ public class IslePanel extends JPanel {
     int imageID;
     boolean motherNature=false;
     DenyCardPanel denyCard;
+    JPanel clickablePanel;
 
     ArrayList<BufferedImage> isles;
     ArrayList<BufferedImage> students;
@@ -36,16 +37,16 @@ public class IslePanel extends JPanel {
         this.storage=storage;
         this.isleID=isleID;
         this.imageID=isleID%3+1;
+        this.clickablePanel=new JPanel();
         setLayout(new GridBagLayout());
         constraints=new GridBagConstraints();
         setOpaque(false);
-        setBorder(BorderFactory.createLineBorder(Color.black));
-        setPreferredSize(this.getSize());
+
         this.isles = isles;
         this.students = students;
         this.towers = towers;
-
         initializeIsle();
+        setPreferredSize(this.getSize());
     }
 
     @Override
@@ -112,7 +113,7 @@ public class IslePanel extends JPanel {
     }
 
     public void setClickableForMN(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
-        this.addMouseListener(new MNListener(viewObserverList,isleID,tableCenterPanel));
+        clickablePanel.addMouseListener(new MNListener(viewObserverList,isleID,tableCenterPanel));
     }
 
     public void setClickableForEffect(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
@@ -137,5 +138,9 @@ public class IslePanel extends JPanel {
     public void removeDenyCard(){
         remove(denyCard);
         this.revalidate();
+    }
+
+    public JPanel getClickablePanel() {
+        return clickablePanel;
     }
 }

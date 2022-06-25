@@ -9,6 +9,7 @@ import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 
+import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
 import it.polimi.ingsw.View.GUI.GameScreenPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -117,18 +118,47 @@ public class TableCenterPanel extends JPanel {
      * constraints for the leftmost isle container
      */
     GridBagConstraints icSxConstraints;
-
+    /**
+     * constraints for the first 1x2 isle container (the one on top)
+     */
     GridBagConstraints first1x2constraints;
-
+    /**
+     * constraints for the second 1x2 isle container (the one on bottom)
+     */
     GridBagConstraints second1x2constraints;
-
+    /**
+     * array list of panel added on top of isle. The listeners will be added to this array list element
+     * in order to make the isles clickable on every point of their panel even if they are full of students,towers etc.
+     */
+    ArrayList<JPanel> clickablePanels;
+    /**
+     * array list to store the layered panel added to the isle container. Layered panel are used to permit to add on top of the isle panel
+     * a clickable panel
+     */
+    ArrayList<JLayeredPane> isleLayeredPanels;
+    /**
+     * array list to store the character cards panel
+     */
     ArrayList<CharacterPanel> characterPanels;
-
+    /**
+     * gameScreenPanel reference
+     */
     GameScreenPanel gsp;
-
+    /**
+     * classloader to load images from resource folder
+     */
     ClassLoader cl;
+    /**
+     * array list to store isle images
+     */
     ArrayList<BufferedImage> isles;
+    /**
+     * array list to store students images
+     */
     ArrayList<BufferedImage> students;
+    /**
+     * array list to store towers images
+     */
     ArrayList<BufferedImage> towers;
 
     public TableCenterPanel(ModelStorage storage, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, GameScreenPanel gsp) {
@@ -142,6 +172,8 @@ public class TableCenterPanel extends JPanel {
         this.gsp = gsp;
 
         nicknameColor = nicknameColor;
+        this.clickablePanels=new ArrayList<>();
+        this.isleLayeredPanels=new ArrayList<>();
 
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
@@ -303,7 +335,21 @@ public class TableCenterPanel extends JPanel {
 
         //initialize the isles
         for(int i=0;i<12;i++){
-            islesPanels.add(new IslePanel(storage,i, isles, students, towers));
+            JLayeredPane isleLayeredPane=new JLayeredPane();
+            JPanel clickablePanel=new JPanel();
+            IslePanel islePanel=new IslePanel(storage,i, isles, students, towers);
+
+            clickablePanel.setOpaque(false);
+            clickablePanel.setBackground(Color.YELLOW);
+            clickablePanel.setBounds(0,0,200,200);
+            islePanel.setBounds(0,0,200,200);
+
+            isleLayeredPane.add(clickablePanel,Integer.valueOf(1));
+            isleLayeredPane.add(islePanel,Integer.valueOf(0));
+
+            islesPanels.add(islePanel);
+            clickablePanels.add(clickablePanel);
+            isleLayeredPanels.add(isleLayeredPane);
         }
 
         c.weighty=0.5;
@@ -315,13 +361,17 @@ public class TableCenterPanel extends JPanel {
         icSxConstraints.weightx=1;
         icSxConstraints.weighty=1;
         icSxConstraints.fill=GridBagConstraints.BOTH;
-        isleContainerSx.add(islesPanels.get(0),icSxConstraints);
+        isleContainerSx.add(isleLayeredPanels.get(0),icSxConstraints);
+
         icSxConstraints.gridy++;
-        isleContainerSx.add(islesPanels.get(11),icSxConstraints);
+        isleContainerSx.add(isleLayeredPanels.get(11),icSxConstraints);
+
         icSxConstraints.gridy++;
-        isleContainerSx.add(islesPanels.get(10),icSxConstraints);
+        isleContainerSx.add(isleLayeredPanels.get(10),icSxConstraints);
+
         icSxConstraints.gridy++;
-        isleContainerSx.add(islesPanels.get(9),icSxConstraints);
+        isleContainerSx.add(isleLayeredPanels.get(9),icSxConstraints);
+
 
         c.gridx=3;
         c.weighty=0.5;
@@ -332,13 +382,17 @@ public class TableCenterPanel extends JPanel {
         icDxConstraints.weighty=1;
         icDxConstraints.weightx=1;
         icDxConstraints.fill=GridBagConstraints.BOTH;
-        isleContainerDx.add(islesPanels.get(3),icDxConstraints);
+        isleContainerDx.add(isleLayeredPanels.get(3),icDxConstraints);
+
         icDxConstraints.gridy++;
-        isleContainerDx.add(islesPanels.get(4),icDxConstraints);
+        isleContainerDx.add(isleLayeredPanels.get(4),icDxConstraints);
+
         icDxConstraints.gridy++;
-        isleContainerDx.add(islesPanels.get(5),icDxConstraints);
+        isleContainerDx.add(isleLayeredPanels.get(5),icDxConstraints);
+
         icDxConstraints.gridy++;
-        isleContainerDx.add(islesPanels.get(6),icDxConstraints);
+        isleContainerDx.add(isleLayeredPanels.get(6),icDxConstraints);
+
 
         c.gridx=2;
         c.weighty=1;
@@ -346,34 +400,38 @@ public class TableCenterPanel extends JPanel {
         add(isleContainerCenter,c);
             firstIsleContainer1x2=new JPanel(new GridBagLayout());
             firstIsleContainer1x2.setBackground(Color.CYAN);
-             first1x2constraints=new GridBagConstraints();
+            first1x2constraints=new GridBagConstraints();
             secondIsleContainer1x2=new JPanel(new GridBagLayout());
             secondIsleContainer1x2.setBackground(Color.CYAN);
-             second1x2constraints=new GridBagConstraints();
+            second1x2constraints=new GridBagConstraints();
 
             first1x2constraints.gridy=0;
             first1x2constraints.gridx=0;
             first1x2constraints.weightx=1;
             first1x2constraints.weighty=1;
             first1x2constraints.fill=GridBagConstraints.BOTH;
-            firstIsleContainer1x2.add(islesPanels.get(1),first1x2constraints);
+            firstIsleContainer1x2.add(isleLayeredPanels.get(1),first1x2constraints);
+
             first1x2constraints.gridx++;
-            firstIsleContainer1x2.add(islesPanels.get(2),first1x2constraints);
+            firstIsleContainer1x2.add(isleLayeredPanels.get(2),first1x2constraints);
+
 
             second1x2constraints.gridy=0;
             second1x2constraints.gridx=0;
             second1x2constraints.weightx=1;
             second1x2constraints.weighty=1;
             second1x2constraints.fill=GridBagConstraints.BOTH;
-            secondIsleContainer1x2.add(islesPanels.get(8),second1x2constraints);
+            secondIsleContainer1x2.add(isleLayeredPanels.get(8),second1x2constraints);
+
             second1x2constraints.gridx++;
-            secondIsleContainer1x2.add(islesPanels.get(7),second1x2constraints);
+            secondIsleContainer1x2.add(isleLayeredPanels.get(7),second1x2constraints);
+
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridx=0;
             centerConstraints.gridy=0;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=0.6;
+            centerConstraints.weighty=0.95;
             isleContainerCenter.add(firstIsleContainer1x2,centerConstraints);
 
             centerConstraints.fill=GridBagConstraints.BOTH;
@@ -402,7 +460,7 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridy++;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=0.6;
+            centerConstraints.weighty=0.95;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
 
     }
@@ -462,8 +520,8 @@ public class TableCenterPanel extends JPanel {
     }
 
     public void updateIsleLayout(){
-        int lastIsleID=islesPanels.size()-1;
-        IslePanel lastIsle=islesPanels.get(lastIsleID);
+        int lastIsleID=isleLayeredPanels.size()-1;
+        JLayeredPane lastIsle=isleLayeredPanels.get(lastIsleID);
         JPanel emptyPanel=new JPanel();
         emptyPanel.setOpaque(false);
         emptyPanel.setBackground(Color.CYAN);
@@ -495,20 +553,21 @@ public class TableCenterPanel extends JPanel {
             second1x2constraints.gridx=lastIsleID%2;
             secondIsleContainer1x2.add(emptyPanel,second1x2constraints);
         }
-        islesPanels.remove(lastIsle);
+        isleLayeredPanels.remove(lastIsle);
+        islesPanels.remove(islesPanels.get(lastIsleID));
+        clickablePanels.remove(clickablePanels.get(lastIsleID));
     }
 
     public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, DiningPanel dining){
-        for (IslePanel islesPanel : islesPanels) {
-            islesPanel.addMouseListener(new IsleListener(this, viewObserverList, entrance, islesPanel.getIsleID(), dining));
+        for (int i=0;i<islesPanels.size();i++) {
+            clickablePanels.get(i).addMouseListener(new IsleListener(this, viewObserverList, entrance, i, dining));
         }
     }
 
     public void setMNClickable(ArrayList<ViewObserver> viewObserverList){
-        for (IslePanel islesPanel : islesPanels) {
-            islesPanel.setClickableForMN(viewObserverList,this);
+        for (int i=0;i<islesPanels.size();i++) {
+            clickablePanels.get(i).addMouseListener(new MNListener(viewObserverList,i,this));
         }
-
     }
 
     public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
@@ -527,9 +586,9 @@ public class TableCenterPanel extends JPanel {
     }
 
     public void removeIslesClickable(){
-        for (IslePanel islesPanel : islesPanels) {
-            for (int j = 0; j < islesPanel.getMouseListeners().length; j++) {
-                islesPanel.removeMouseListener(islesPanel.getMouseListeners()[j]);
+        for (JPanel clickablePanel : clickablePanels) {
+            for (int j = 0; j < clickablePanel.getMouseListeners().length; j++) {
+                clickablePanel.removeMouseListener(clickablePanel.getMouseListeners()[j]);
             }
         }
     }
