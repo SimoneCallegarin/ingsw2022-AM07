@@ -87,6 +87,8 @@ public class TableCenterPanel extends JPanel {
      * username of the player using the GUI
      */
     String usernamePlaying;
+
+    Color nicknameColor;
     /**
      * this array contains all the panels representing the isles
      */
@@ -107,6 +109,18 @@ public class TableCenterPanel extends JPanel {
      * arraylist to store the assistant card panels currently on screen
      */
     ArrayList<AssistantCardPanel> assistantCardPanels;
+    /**
+     * constraints for the rightmost isle container
+     */
+    GridBagConstraints icDxConstraints;
+    /**
+     * constraints for the leftmost isle container
+     */
+    GridBagConstraints icSxConstraints;
+
+    GridBagConstraints first1x2constraints;
+
+    GridBagConstraints second1x2constraints;
 
     ArrayList<CharacterPanel> characterPanels;
 
@@ -117,7 +131,7 @@ public class TableCenterPanel extends JPanel {
     ArrayList<BufferedImage> students;
     ArrayList<BufferedImage> towers;
 
-    public TableCenterPanel(ModelStorage storage, String usernamePlaying, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, GameScreenPanel gsp) {
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, GameScreenPanel gsp) {
         this.storage=storage;
         this.usernamePlaying=usernamePlaying;
         this.islesPanels=new ArrayList<>();
@@ -126,6 +140,8 @@ public class TableCenterPanel extends JPanel {
         this.assistantCardPanels=new ArrayList<>();
         this.characterPanels = new ArrayList<>();
         this.gsp = gsp;
+
+        nicknameColor = nicknameColor;
 
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
@@ -138,11 +154,13 @@ public class TableCenterPanel extends JPanel {
         //the second and the fourth one will contain two 4x1 grids containing four isles
         //the third one will contain another 3x1 panel with two 1x2 grids on the top and on the bottom, while in the
         //center cell there are the clouds and the character cards
-        isleContainerDx=new JPanel(new GridLayout(4,1));
+        isleContainerDx=new JPanel(new GridBagLayout());
         isleContainerDx.setBackground(Color.CYAN);
+        icDxConstraints=new GridBagConstraints();
         isleContainerCenter=new JPanel(new GridBagLayout());
         isleContainerCenter.setBackground(Color.CYAN);
-        isleContainerSx=new JPanel(new GridLayout(4,1));
+        isleContainerSx=new JPanel(new GridBagLayout());
+        icSxConstraints=new GridBagConstraints();
         isleContainerSx.setBackground(Color.CYAN);
 
         GridLayout gridLayout=new GridLayout(2,1);//layout for the assistant card and money containers
@@ -208,6 +226,8 @@ public class TableCenterPanel extends JPanel {
             usernamePanel.setOpaque(false);
 
             JLabel usernameLabel=new JLabel(username);
+            if(storage.getDashboard(i).getNickname().equals(this.usernamePlaying))
+                usernameLabel.setForeground(nicknameColor);
             usernamePanel.add(usernameLabel,BorderLayout.CENTER);
 
             if(storage.getDashboard(i).getNickname().equals(this.usernamePlaying)){
@@ -290,33 +310,64 @@ public class TableCenterPanel extends JPanel {
         c.weightx=0.4;
         c.gridx=1;
         add(isleContainerSx,c);
-        isleContainerSx.add(islesPanels.get(0));
-        isleContainerSx.add(islesPanels.get(11));
-        isleContainerSx.add(islesPanels.get(10));
-        isleContainerSx.add(islesPanels.get(9));
+        icSxConstraints.gridx=0;
+        icSxConstraints.gridy=0;
+        icSxConstraints.weightx=1;
+        icSxConstraints.weighty=1;
+        icSxConstraints.fill=GridBagConstraints.BOTH;
+        isleContainerSx.add(islesPanels.get(0),icSxConstraints);
+        icSxConstraints.gridy++;
+        isleContainerSx.add(islesPanels.get(11),icSxConstraints);
+        icSxConstraints.gridy++;
+        isleContainerSx.add(islesPanels.get(10),icSxConstraints);
+        icSxConstraints.gridy++;
+        isleContainerSx.add(islesPanels.get(9),icSxConstraints);
 
         c.gridx=3;
         c.weighty=0.5;
         c.weightx=0.4;
         add(isleContainerDx,c);
-        isleContainerDx.add(islesPanels.get(3));
-        isleContainerDx.add(islesPanels.get(4));
-        isleContainerDx.add(islesPanels.get(5));
-        isleContainerDx.add(islesPanels.get(6));
+        icDxConstraints.gridx=0;
+        icDxConstraints.gridy=0;
+        icDxConstraints.weighty=1;
+        icDxConstraints.weightx=1;
+        icDxConstraints.fill=GridBagConstraints.BOTH;
+        isleContainerDx.add(islesPanels.get(3),icDxConstraints);
+        icDxConstraints.gridy++;
+        isleContainerDx.add(islesPanels.get(4),icDxConstraints);
+        icDxConstraints.gridy++;
+        isleContainerDx.add(islesPanels.get(5),icDxConstraints);
+        icDxConstraints.gridy++;
+        isleContainerDx.add(islesPanels.get(6),icDxConstraints);
 
         c.gridx=2;
         c.weighty=1;
         c.weightx=0.5;
         add(isleContainerCenter,c);
-            firstIsleContainer1x2=new JPanel(new GridLayout(1,2));
+            firstIsleContainer1x2=new JPanel(new GridBagLayout());
             firstIsleContainer1x2.setBackground(Color.CYAN);
-            secondIsleContainer1x2=new JPanel(new GridLayout(1,2));
+             first1x2constraints=new GridBagConstraints();
+            secondIsleContainer1x2=new JPanel(new GridBagLayout());
             secondIsleContainer1x2.setBackground(Color.CYAN);
+             second1x2constraints=new GridBagConstraints();
 
-            firstIsleContainer1x2.add(islesPanels.get(1));
-            firstIsleContainer1x2.add(islesPanels.get(2));
-            secondIsleContainer1x2.add(islesPanels.get(8));
-            secondIsleContainer1x2.add(islesPanels.get(7));
+            first1x2constraints.gridy=0;
+            first1x2constraints.gridx=0;
+            first1x2constraints.weightx=1;
+            first1x2constraints.weighty=1;
+            first1x2constraints.fill=GridBagConstraints.BOTH;
+            firstIsleContainer1x2.add(islesPanels.get(1),first1x2constraints);
+            first1x2constraints.gridx++;
+            firstIsleContainer1x2.add(islesPanels.get(2),first1x2constraints);
+
+            second1x2constraints.gridy=0;
+            second1x2constraints.gridx=0;
+            second1x2constraints.weightx=1;
+            second1x2constraints.weighty=1;
+            second1x2constraints.fill=GridBagConstraints.BOTH;
+            secondIsleContainer1x2.add(islesPanels.get(8),second1x2constraints);
+            second1x2constraints.gridx++;
+            secondIsleContainer1x2.add(islesPanels.get(7),second1x2constraints);
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridx=0;
@@ -411,13 +462,40 @@ public class TableCenterPanel extends JPanel {
     }
 
     public void updateIsleLayout(){
-        for (IslePanel islesPanel : islesPanels) {
-            islesPanel.resetIsle();
-            islesPanel.initializeIsle();
-        }
-        if(islesPanels.size()!=storage.getGameTable().getIsles().size()){
+        int lastIsleID=islesPanels.size()-1;
+        IslePanel lastIsle=islesPanels.get(lastIsleID);
+        JPanel emptyPanel=new JPanel();
+        emptyPanel.setOpaque(false);
+        emptyPanel.setBackground(Color.CYAN);
 
+        if(lastIsleID==0 || (lastIsleID>=9 && lastIsleID<=11)){
+            isleContainerSx.remove(lastIsle);
+            icSxConstraints.gridx=0;
+            if(lastIsleID==11) icSxConstraints.gridy=1;
+            if(lastIsleID==10) icSxConstraints.gridy=2;
+            if(lastIsleID==9) icSxConstraints.gridy=3;
+
+            isleContainerSx.add(emptyPanel,icSxConstraints);
         }
+        if(lastIsleID==1 || lastIsleID==2){
+            firstIsleContainer1x2.remove(lastIsle);
+            first1x2constraints.gridy=0;
+            first1x2constraints.gridx=lastIsleID-1;
+            firstIsleContainer1x2.add(emptyPanel,first1x2constraints);
+        }
+        if(lastIsleID>=3 && lastIsleID<=6){
+            isleContainerDx.remove(lastIsle);
+            icDxConstraints.gridx=0;
+            icDxConstraints.gridy=(lastIsleID+1)%4;
+            isleContainerDx.add(emptyPanel,icDxConstraints);
+        }
+        if(lastIsleID==7 || lastIsleID==8){
+            secondIsleContainer1x2.remove(lastIsle);
+            second1x2constraints.gridy=0;
+            second1x2constraints.gridx=lastIsleID%2;
+            secondIsleContainer1x2.add(emptyPanel,second1x2constraints);
+        }
+        islesPanels.remove(lastIsle);
     }
 
     public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, DiningPanel dining){
@@ -428,9 +506,7 @@ public class TableCenterPanel extends JPanel {
 
     public void setMNClickable(ArrayList<ViewObserver> viewObserverList){
         for (IslePanel islesPanel : islesPanels) {
-            if (!islesPanel.motherNature) {
-                islesPanel.setClickableForMN(viewObserverList);
-            }
+            islesPanel.setClickableForMN(viewObserverList,this);
         }
 
     }

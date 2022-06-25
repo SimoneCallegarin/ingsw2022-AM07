@@ -55,7 +55,6 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
             lastPressedButton.printStudent(lastPressedButton.getColor());
         buttonPressed.printClick(buttonPressed.getColor());
 
-        System.out.println(finalColorPressed);
         entrance.setLastPressedStudent(buttonPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
         if(!setClickable) {

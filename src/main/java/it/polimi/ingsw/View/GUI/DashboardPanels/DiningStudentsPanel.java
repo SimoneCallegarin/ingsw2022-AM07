@@ -29,6 +29,7 @@ public class DiningStudentsPanel extends JPanel {
         setLayout(gridLayout);
         this.students = students;
         InitializeDiningStudents(playerID,storage);
+
     }
 
 

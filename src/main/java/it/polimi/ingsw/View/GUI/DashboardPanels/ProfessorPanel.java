@@ -24,6 +24,7 @@ public class ProfessorPanel extends JPanel {
         setLayout(gridLayout);
         this.professors = professors;
         InitializeProfessors(playerID,storage);
+
     }
 
     private void InitializeProfessors(int playerID,ModelStorage storage) {

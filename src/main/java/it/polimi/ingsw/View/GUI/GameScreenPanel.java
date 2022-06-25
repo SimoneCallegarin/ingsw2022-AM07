@@ -53,7 +53,7 @@ public class GameScreenPanel extends JPanel {
      * @param layout the LayoutManager to use
      * @param usernamePlaying the username of the current player using the GUI to pass to the tableCenter to highlight which is his dashboard
      */
-    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying,ArrayList<ViewObserver> viewObservers ) {
+    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers ) {
         super(layout);
         this.storage=storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
@@ -156,7 +156,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,viewObservers, students, towers, this);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
@@ -180,7 +180,7 @@ public class GameScreenPanel extends JPanel {
     }
 
     /**
-     * this method set the dashboard entrance clickable in order to select a student to move
+     * Sets the dashboard entrance clickable in order to select a student to move.
      * @param playerID the playerID used to identify which dashboard set movable
      */
     public void setClickableStudents(int playerID) {
@@ -191,11 +191,12 @@ public class GameScreenPanel extends JPanel {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
     }
 
+    /**
+     * method to set the message on the label on top of the game screen
+     * @param message the text string to update the label with
+     */
     public void setMessage(String message) {
-        //textContainerPanel.remove(gamescreenConstraints.gridy);
         textLabel.setText(message);
-        //textContainerPanel.add(textLabel);
-        //textContainerPanel.validate();
     }
 
     public void removeDashboardClickable(int playerID) {
@@ -203,19 +204,26 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getDining().removeCLickable();
     }
 
+    /**
+     * method used to update the entrance associated with the specified player ID
+     * @param playerID the player ID used to access the dashboard that contains the entrance to update
+     */
     public void updateEntrance(int playerID){
         dashboardPanels.get(playerID).getEntrance().resetEntrance();
         dashboardPanels.get(playerID).getEntrance().initializeEntrance(storage);
     }
+
 
     public void updateStudentDinings(int playerID){
         dashboardPanels.get(playerID).getDining().resetStudentDining();
         dashboardPanels.get(playerID).getDining().initializeStudentDining(storage);
     }
 
-    public void updateProfessors(int playerID){
-        dashboardPanels.get(playerID).getDining().resetStudentDining();
-        dashboardPanels.get(playerID).getDining().initializeProfessorPanel(storage);
+    public void updateProfessors(){
+        for(DashboardPanel dashboardPanel:dashboardPanels) {
+            dashboardPanel.getDining().resetProfessorDining();
+            dashboardPanel.getDining().initializeProfessorPanel(storage);
+        }
     }
 
     public void updateTowerStorages(int playerID){

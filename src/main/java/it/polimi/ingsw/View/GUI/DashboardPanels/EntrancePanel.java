@@ -53,6 +53,7 @@ public class EntrancePanel extends JPanel{
         this.checkedStudents = checkedStudents;
 
         initializeEntrance(storage);
+
         lastPressedStudent = null;
     }
 

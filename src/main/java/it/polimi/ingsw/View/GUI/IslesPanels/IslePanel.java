@@ -39,6 +39,7 @@ public class IslePanel extends JPanel {
         constraints=new GridBagConstraints();
         setOpaque(false);
         setBorder(BorderFactory.createLineBorder(Color.black));
+        setPreferredSize(this.getSize());
         this.isles = isles;
         this.students = students;
         this.towers = towers;
@@ -109,12 +110,8 @@ public class IslePanel extends JPanel {
         return isleID;
     }
 
-    public void setClickableForMN(ArrayList<ViewObserver> viewObserverList){
-        this.addMouseListener(new MNListener(viewObserverList,isleID,this));
-    }
-
-    public void removeClickableForMN(){
-        this.removeMouseListener(this.getMouseListeners()[0]);
+    public void setClickableForMN(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenterPanel){
+        this.addMouseListener(new MNListener(viewObserverList,isleID,tableCenterPanel));
     }
 
     public void resetIsle(){

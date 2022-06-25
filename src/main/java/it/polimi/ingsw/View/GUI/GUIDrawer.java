@@ -9,6 +9,8 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,47 +21,39 @@ public class GUIDrawer extends ViewSubject {
 
     ModelStorage modelStorage;
 
+    JTextField nicknameField;
+    Font italicFont;
+    JLabel nicknameDisplay;
+    JPanel mainMenu;
+
     private final String frameTitle="Eriantys Game";
-
     /**
-     * the frame containing all the GUI
+     * Frame containing the GUI itself.
      */
-    JFrame f=new JFrame(frameTitle);
-
-
+    JFrame f = new JFrame(frameTitle);
     /**
-     * the panel for the user inputs
+     * Panel for the user inputs.
      */
-    JPanel userInputPanel =new JPanel(new CardLayout());
+    JPanel userInputPanel = new JPanel(new CardLayout());
     /**
-     * user preferences layout to change between username insertion and game preferences choice
+     * User preferences layout to change between username insertion and game preferences choice.
      */
-    CardLayout userCl=(CardLayout) userInputPanel.getLayout();
+    CardLayout userCl = (CardLayout) userInputPanel.getLayout();
     /**
-     * the general panel manager switches between the screen where the user will submit his server and game preferences
-     * and the screen where the actual game will take place
+     * General panel manager switches between the screen where the user will submit his server and game preferences
+     * and the screen where the actual game will take place.
      */
     JPanel generalPanelManager=new JPanel(new CardLayout());
     /**
-     * the generalPanelManager layout to show different panels on events happening
+     * GeneralPanelManager layout to show different panels on events happening.
      */
     CardLayout cl=(CardLayout)generalPanelManager.getLayout();
-    /**
-     * Text field for username input
-     */
-    JTextField usernameInputText =new JTextField();
-    /**
-     * Text field for gamemode input
-     */
-    JTextField gameModeInputText =new JTextField();
-    /**
-     * Text field for number of players input
-     */
-    JTextField numberPlayersInput=new JTextField();
     /**
      * on this button press the player will join a lobby and wait for the game to start
      */
     JButton startGame=new JButton("Start game");
+
+    LoadingScreen loadingScreen;
     /**
      * panel where the actual game will take place
      */
@@ -92,99 +86,187 @@ public class GUIDrawer extends ViewSubject {
         f.setVisible(true);
         final int screenDimensionX = f.getWidth();
         final int screenDimensionY = f.getHeight();
-        //set my initial content pane where I add my user input manager
-        InitialBackgroundPanel initialBackgroundPanel =new InitialBackgroundPanel(new BorderLayout(),screenDimensionX,screenDimensionY
-        );
-        //add it to the general manager
+        //set the initial content pane where it will be added the user input manager.
+        InitialBackgroundPanel initialBackgroundPanel =new InitialBackgroundPanel(new BorderLayout(),screenDimensionX,screenDimensionY);
+        //add it to the general manager.
         generalPanelManager.add(initialBackgroundPanel,"User Input");
 
         initialBackgroundPanel.add(userInputPanel,BorderLayout.CENTER);
 
-        //add my general panel manager as my content pane to switch between user input screen and the actual game
+        //add the general panel manager as the content pane to switch between user input screen and the actual game.
         f.setContentPane(generalPanelManager);
 
-        //setting correct dimensions for text fields
-        usernameInputText.setMaximumSize(new Dimension(700,25));
-        gameModeInputText.setMaximumSize(new Dimension(700,25));
-        numberPlayersInput.setMaximumSize(new Dimension(700,25));
         //ask the username
         showUsernameForm();
     }
 
     /**
-     * this method shows on screen the input form for the username. It initializes the usernameForm panel and adds it to the
-     * user input panel. The usernameForm panel contains a submit button which checks if the input is empty (in this case it shows
-     * an error message and makes the user reinsert the input). If the input is acceptable it notifies the clientController who forward the
-     * information to the server.
+     * Shows on screen the input form for the username.
+     * It initializes the usernameForm panel and adds it to the user input panel.
+     * The usernameForm panel contains a check button that checks if the input is valid (between 2 and 20 characters).
+     * Valid nicknames are written on the right side of the panel with green text, otherwise they will be displayed as red.
+     * It also contains a submit button that notifies the ClientController with valid nicknames when pressed.
+     * If the input is acceptable it notifies the ClientController who forward the information to the server.
+     * The server answers the ClientHandler if the nickname has been already taken by another player or not.
+     * In the first case then it will be notified on screen by an error message, otherwise the game will soon begin.
      */
     public void showUsernameForm(){
-        //switch in the initial background panel
-        cl.show(generalPanelManager,"User Input");
-        //initialize the username form
-        JPanel usernameForm=new JPanel();
-        usernameForm.setLayout(new BoxLayout(usernameForm,BoxLayout.PAGE_AXIS));
-        usernameForm.add(new JLabel("Insert username"));
-        usernameForm.add(usernameInputText);
-        JButton submitUsername=new JButton("Submit");
-        submitUsername.addActionListener(e -> {
-           if(usernameInputText.getText().equals("")){
-               JOptionPane.showMessageDialog(userInputPanel,"Invalid input","Error",JOptionPane.ERROR_MESSAGE);
-               return;
-           }
-           usernamePlaying=usernameInputText.getText();
-           notifyObserver(obs->obs.onUsername(usernameInputText.getText()));
-        });
-        usernameForm.add(submitUsername);
-        userInputPanel.add(usernameForm,"Username form");
+
+        mainMenu = new JPanel();
+
+        mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.LINE_AXIS));
+
+        JPanel leftHalf = new JPanel(new GridLayout(3, 1)) {
+            //Don't allow the nickname field to stretch vertically.
+            public Dimension getMaximumSize() {
+                Dimension pref = getPreferredSize();
+                return new Dimension(Integer.MAX_VALUE,pref.height);
+            }
+        };
+
+        JLabel nicknameLabel = new JLabel("Insert username:");
+        nicknameLabel.setHorizontalAlignment(JLabel.LEFT);
+        nicknameField = new JTextField();
+
+        leftHalf.add(nicknameLabel,0);;
+        leftHalf.add(nicknameField,1);
+
+        JPanel buttons = new JPanel(new GridLayout(1, 2));
+        JButton check = new JButton("Check");
+        JButton submit = new JButton("Submit");
+        check.addActionListener(this::updateDisplay);
+        submit.addActionListener(e -> {
+            if(nicknameDisplay.getForeground()!=Color.GREEN)
+                JOptionPane.showMessageDialog(userInputPanel,"Check the nickname first","Error",JOptionPane.ERROR_MESSAGE);
+            else{
+                usernamePlaying = nicknameField.getText();
+                notifyObserver(obs->obs.onUsername(usernamePlaying));
+            }
+        } );
+        buttons.add(check);
+        buttons.add(submit);
+
+        leftHalf.add(buttons,2);
+
+        leftHalf.setLayout(new BoxLayout(leftHalf,BoxLayout.PAGE_AXIS));
+
+        mainMenu.add(leftHalf);
+        mainMenu.add(createNicknameDisplay());
+
+        userInputPanel.add(mainMenu);
     }
 
     /**
-     * this method shows on screen the input form for the game mode and the number of players. It initializes the gamePreferences panel
-     * and adds it to the user input panel. The gamePreferences panel contains a start game button which checks if the inputs are acceptable
-     * and, if that's the case, notifies the ClientController. Once the ClientController is notified this method calls showLoadingScreen.
+     * Displays on screen on the right side of the main menu panel the nickname chosen and checked,
+     * that will be green when valid, else red.
+     * @return the right panel of the main menu.
+     */
+    private JComponent createNicknameDisplay() {
+        JPanel panel = new JPanel(new BorderLayout());
+        nicknameDisplay = new JLabel();
+        nicknameDisplay.setHorizontalAlignment(JLabel.CENTER);
+        italicFont = nicknameDisplay.getFont().deriveFont(Font.ITALIC,16.0f);
+
+        panel.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.LINE_START);
+        panel.add(nicknameDisplay, BorderLayout.CENTER);
+        panel.setPreferredSize(new Dimension(200, 150));
+
+        return panel;
+    }
+
+    /**
+     * Updates the right panel of the main menu when the check button is pressed.
+     * @param e the action event of the check button pressed.
+     */
+    public void updateDisplay(ActionEvent e) {
+        nicknameDisplay.setText(nicknameField.getText());
+        nicknameDisplay.setForeground(Color.GREEN);
+        if (nicknameDisplay.getText().length()<2 || nicknameDisplay.getText().length()>=20)
+            nicknameDisplay.setForeground(Color.RED);
+        nicknameDisplay.setFont(italicFont);
+
+    }
+
+    /**
+     * Shows on screen the possible choice for the game mode and the number of players.
+     * It initializes the gamePreferences panel and adds it to the user input panel.
+     * The gamePreferences panel contains a start game button that notifies the ClientController.
+     * Once the ClientController is notified this method calls showLoadingScreen.
      */
     public void showGamePreferencesForm(){
-        JPanel gamePreferences=new JPanel();
-        gamePreferences.setLayout(new BoxLayout(gamePreferences,BoxLayout.PAGE_AXIS));
-        userInputPanel.add(gamePreferences,"Game preferences form");
-        gamePreferences.add(new JLabel("Input the number of players[2,3,4]"));
-        gamePreferences.add(numberPlayersInput);
-        gamePreferences.add(new JLabel("Input the gamemode[Base or Expert]"));
-        gamePreferences.add(gameModeInputText);
+        JPanel gamePreferences = new JPanel(new GridLayout(5,3));
+
+        gamePreferences.add(new JLabel("Select number of players:"),0);
+
+        JPanel numberOfPlayers = new JPanel(new GridLayout(1,3));
+        JRadioButton twoPlayers = new JRadioButton("2");
+        twoPlayers.setMnemonic(KeyEvent.VK_2);
+        twoPlayers.setActionCommand("2");
+        twoPlayers.setSelected(true);
+        JRadioButton threePlayers = new JRadioButton("3");
+        threePlayers.setMnemonic(KeyEvent.VK_3);
+        threePlayers.setActionCommand("3");
+        JRadioButton fourPlayers = new JRadioButton("4");
+        fourPlayers.setMnemonic(KeyEvent.VK_4);
+        fourPlayers.setActionCommand("4");
+        numberOfPlayers.add(twoPlayers);
+        numberOfPlayers.add(threePlayers);
+        numberOfPlayers.add(fourPlayers);
+        gamePreferences.add(numberOfPlayers,1);
+
+        gamePreferences.add(new JLabel("Select game mode:"),2);
+
+        JPanel gameMode = new JPanel(new GridLayout(1,2));
+        JRadioButton baseMode = new JRadioButton("Base");
+        baseMode.setMnemonic(KeyEvent.VK_B);
+        baseMode.setActionCommand("Base");
+        baseMode.setSelected(true);
+        JRadioButton expertMode = new JRadioButton("Expert");
+        expertMode.setMnemonic(KeyEvent.VK_B);
+        expertMode.setActionCommand("Expert");
+        expertMode.setSelected(true);
+        gameMode.add(baseMode,0);
+        gameMode.add(expertMode,1);
+        ButtonGroup numOfPlayersButtons = new ButtonGroup();
+        ButtonGroup gameModeButtons = new ButtonGroup();
+        numOfPlayersButtons.add(twoPlayers);
+        numOfPlayersButtons.add(threePlayers);
+        numOfPlayersButtons.add(fourPlayers);
+        gameModeButtons.add(baseMode);
+        gameModeButtons.add(expertMode);
+
+        gamePreferences.add(gameMode,3);
+
         startGame.addActionListener(e -> {
             //add try catch
-            int numPlayers=Integer.parseInt(numberPlayersInput.getText());
-            if (numPlayers!=2 && numPlayers!=3 && numPlayers!=4) {
-                JOptionPane.showMessageDialog(userInputPanel, "Invalid number of players input", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (!gameModeInputText.getText().equals("Expert") && !gameModeInputText.getText().equals("Base")) {
-                JOptionPane.showMessageDialog(userInputPanel, "Invalid gamemode input", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            int numPlayers = Integer.parseInt(numOfPlayersButtons.getSelection().getActionCommand());
+            boolean gameModeChosen;
+            gameModeChosen = gameModeButtons.getSelection().getActionCommand().equals("Expert");
 
-            notifyObserver(obs -> obs.onGamePreferences(Integer.parseInt(numberPlayersInput.getText()), gameModeInputText.getText().equals("Expert")));
+            notifyObserver(obs -> obs.onGamePreferences(numPlayers,gameModeChosen));
             showLoadingScreen();
         });
-        gamePreferences.add(startGame);
-        //make it show
-        userCl.show(userInputPanel,"Game preferences form");
 
+        gamePreferences.add(startGame,4);
+
+        userInputPanel.add(gamePreferences,"Game preferences form");
+        userCl.show(userInputPanel,"Game preferences form");
     }
 
     /**
      * this method shows a loading screen while waiting for other players to join and loading the game
      */
     public void showLoadingScreen(){
-
+        loadingScreen = new LoadingScreen(usernamePlaying);
         //need to update the loading screen graphics
-        generalPanelManager.add(new LoadingScreen(),"Loading Screen");
+        generalPanelManager.add(loadingScreen,"Loading Screen");
         cl.show(generalPanelManager,"Loading Screen");
+
     }
 
     public void createGameScreen(){
         //initialize the game screen and add it to the generalPanelManager
-        gameScreenPanel=new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,getViewObserverList());
+        gameScreenPanel = new GameScreenPanel(new GridBagLayout(),modelStorage,f.getWidth(),f.getHeight(),usernamePlaying,loadingScreen.getNicknameColor(),getViewObserverList());
         generalPanelManager.add(gameScreenPanel,"Game Screen");
     }
 
@@ -266,14 +348,14 @@ public class GUIDrawer extends ViewSubject {
         gameScreenPanel.setClickableStudents(modelChanges.getPlayerID());
     }
 
-    public void showMNMovement(boolean expertMode){
+    public void showMNMovement(){
         /*String message="Now you can move mother nature by clicking on the island where you want to move her";
         JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);*/
 
         gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
     }
 
-    public void showCloudChoice(boolean expertMode){
+    public void showCloudChoice(){
         /*String message="Now choose a cloud to pick students from by clicking on it";
         JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
 
@@ -338,7 +420,7 @@ public class GUIDrawer extends ViewSubject {
 
                 case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
 
-                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors(modelChanges.getPlayingID());
+                case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
 
                 case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins(modelChanges.getPlayingID());
 
@@ -346,7 +428,18 @@ public class GUIDrawer extends ViewSubject {
 
                 case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
 
-                case ISLELAYOUT_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                case ISLELAYOUT_CHANGED -> {
+                    if(modelChanges.isLayoutChanged()) {
+
+                        for(int j=0;j<modelChanges.getIslesToRemove();j++) {
+                            gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                        }
+                    }
+                    for(int j=0;j<modelStorage.getGameTable().getIsles().size();j++) {
+                        gameScreenPanel.tableCenterPanel.updateIsle(j);
+                    }
+                    modelChanges.setLayoutChanged(false);
+                }
 
                 //missing case character card and cloud changes
             }

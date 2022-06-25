@@ -13,57 +13,44 @@ public class GUIApp extends ViewSubject implements View {
 
     private final GUIDrawer guiDrawer;
 
-    public GUIApp() {
-        guiDrawer = new GUIDrawer();
-    }
+    public GUIApp() { guiDrawer = new GUIDrawer(); }
 
 
     @Override
     public void askUsername() {
        guiDrawer.showUsernameForm();
+       guiDrawer.userInputPanel.remove(0);
     }
 
     @Override
-    public void askGamePreferences() {
-        guiDrawer.showGamePreferencesForm();
-    }
+    public void askGamePreferences() { guiDrawer.showGamePreferencesForm(); }
 
     @Override
     public void askAssistantCard(int playerID) {
-        int turnOrder=guiDrawer.ShowAssistantCardForm(playerID);
+        int turnOrder = guiDrawer.ShowAssistantCardForm(playerID);
         notifyObserver(obs->obs.onAssistantCard(turnOrder));
     }
 
     @Override
-    public void askMove() {
-        guiDrawer.showMoveOptions(getGUIDrawer().getModelStorage().isGameMode());
-    }
+    public void askMove() { guiDrawer.showMoveOptions(getGUIDrawer().getModelStorage().isGameMode()); }
 
     @Override
-    public void printMessage(ServiceMessage message) {
-        guiDrawer.showServiceMessage(message.getMessage());
-    }
+    public void printMessage(ServiceMessage message) { guiDrawer.showServiceMessage(message.getMessage()); }
 
     @Override
-    public void printKO(ServiceMessage message) { guiDrawer.showKOMessage(message.getMessage());}
+    public void printKO(ServiceMessage message) { guiDrawer.showKOMessage(message.getMessage()); }
 
     @Override
-    public void printChanges() {
-        guiDrawer.updateGameScreenPanel();
-    }
+    public void printChanges() { guiDrawer.updateGameScreenPanel(); }
 
     @Override
-    public void printWinner(String winner, int winnerID) {}
+    public void printWinner(String winner, int winnerID) { /*!!!!!!!!!!!!!!!*/ }
 
     @Override
-    public void askMNMovement() {
-        guiDrawer.showMNMovement(getGUIDrawer().getModelStorage().isGameMode());
-    }
+    public void askMNMovement() { guiDrawer.showMNMovement(); }
 
     @Override
-    public void askCloud() {
-        guiDrawer.showCloudChoice(getGUIDrawer().getModelStorage().isGameMode());
-    }
+    public void askCloud() { guiDrawer.showCloudChoice(); }
 
     @Override
     public void askCharacterEffectParameters(CharacterCardsName characterName) {
@@ -71,10 +58,7 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public CLIDrawer getCLIDrawer() {
-        //return guiDrawer;
-        return null;
-    }
+    public CLIDrawer getCLIDrawer() { return null; }
 
     @Override
     public void addObs(ClientController clientController) { addObserver(clientController); }
@@ -86,7 +70,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void disconnect(ServiceMessage message) {
-
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     public GUIDrawer getGUIDrawer() { return guiDrawer; }

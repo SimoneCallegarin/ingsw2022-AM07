@@ -15,10 +15,10 @@ public class InitialBackgroundPanel extends JPanel {
     public InitialBackgroundPanel(LayoutManager layout, int screenDimensionX, int screenDimensionY) {
         super(layout);
         //adding borders
-        add(Box.createRigidArea(new Dimension(screenDimensionX/3,screenDimensionY/3)),BorderLayout.WEST);
-        add(Box.createRigidArea(new Dimension(screenDimensionX/3,screenDimensionY/3)),BorderLayout.EAST);
-        add(Box.createRigidArea(new Dimension(screenDimensionX/3,screenDimensionY/3)),BorderLayout.NORTH);
-        add(Box.createRigidArea(new Dimension(screenDimensionX/3,screenDimensionY/3)),BorderLayout.SOUTH);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.WEST);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.EAST);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.NORTH);
+        add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.SOUTH);
     }
 
     @Override

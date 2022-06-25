@@ -207,14 +207,22 @@ public class Server {
      */
     public synchronized PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
+    /**
+     * Handles the disconnection of a client by notifying it all other player of that game and
+     * by removing all the stored data about the match that the player was playing (if there's one).
+     * It also interrupts the ClientHandler of the player that are involved in the disconnection.
+     * @param nickname of the player that disconnected.
+     */
     public synchronized void onDisconnection(String nickname) {
         System.out.println("Deleting match number " + getPlayerInfo(nickname).getMatchID());
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
         activeMatches.remove(matchToEnd);
         virtualViews.remove(matchToEnd);
-        for (String player : chosenNicknames)
+        for (String player : chosenNicknames){
+            players.get(nickname).getClientHandler().terminateClientHandler();
             if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected())
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
+        }
         for (String playerToRemove : playersToRemove) {
             removePlayer(playerToRemove);
             System.out.println("Removed player " + playerToRemove);
