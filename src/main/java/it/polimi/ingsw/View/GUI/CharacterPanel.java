@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * this panel represents a character card on the game table
+ */
 public class CharacterPanel extends JPanel {
     /**
      * the String representing the character name
@@ -56,7 +59,7 @@ public class CharacterPanel extends JPanel {
         this.checkedStudents=checkedStudents;
         setBorder(BorderFactory.createEmptyBorder());
         setLayout(new GridBagLayout());
-
+        setPreferredSize(this.getSize());
         setOpaque(false);
 
         initializeCharacter();
@@ -113,6 +116,13 @@ public class CharacterPanel extends JPanel {
             }
 
         }
+        if(storage.getGameTable().getCharacterCard(characterIndex).used()) {
+            constraints.gridx=0;
+            constraints.gridy++;
+            constraints.gridy++;
+            add(new CoinPanel(),constraints);
+        }
+
     }
 
     public void resetCharacter(){

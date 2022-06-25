@@ -65,7 +65,7 @@ public class ModelStorage {
 
         if(message.getGameMode())
             for(int i=0; i<3; i++){
-                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i),message.getCharacterCardsDescription().get(i));
+                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i),message.getCharacterCardsDescription().get(i),false);
                 characterCards.add(i,characterCard);
             }
         for(int i=0; i<12; i++){
@@ -192,7 +192,7 @@ public class ModelStorage {
      * @param denyCards updated quantity of deny cards on the character card.
      */
     public void updateCharacterCard(int characterCardIndex, int cost, HashMap<RealmColors,Integer> characterCardsStudents, int denyCards) {
-        GameTableInformation.CharacterCard newCharacterCard = new GameTableInformation.CharacterCard(gameTable.getCharacterCard(characterCardIndex).characterCardName(),cost,characterCardsStudents,denyCards,gameTable.getCharacterCard(characterCardIndex).getDescription());
+        GameTableInformation.CharacterCard newCharacterCard = new GameTableInformation.CharacterCard(gameTable.getCharacterCard(characterCardIndex).characterCardName(),cost,characterCardsStudents,denyCards,gameTable.getCharacterCard(characterCardIndex).getDescription(),true);
         gameTable.setCharacterCard(characterCardIndex,newCharacterCard);
         modelChanges.getToUpdate().add(ToUpdate.CHARACTERCARD_CHANGED);
         modelChanges.setCharacterID(characterCardIndex);

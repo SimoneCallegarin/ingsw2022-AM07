@@ -451,7 +451,8 @@ public class TableCenterPanel extends JPanel {
                 centerConstraints.weightx = 1;
                 centerConstraints.weighty = 1;
                 for (int i = 0; i < 3; i++)
-                    characterPanels.add(new CharacterPanel(storage,storage.getGameTable().getCharacterCard(i).getCharacterCardName(), i,students,checkedStudents));
+                    characterPanels.add(new CharacterPanel(storage,storage.getGameTable().getCharacterCard(i).getCharacterCardName(),
+                            i,students,checkedStudents));
                 charactersContainer.add(characterPanels.get(0));
                 charactersContainer.add(characterPanels.get(1));
                 charactersContainer.add(characterPanels.get(2));
@@ -608,6 +609,7 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
-
-
+    public ArrayList<CharacterPanel> getCharacterPanels() {
+        return characterPanels;
+    }
 }

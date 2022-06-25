@@ -15,7 +15,7 @@ public class GameTableInformation {
     public record CharacterCard(String characterCardName, int characterCardCost,
                                 HashMap<RealmColors,Integer> studentsOnCharacterCard,
                                 int denyCardsOnCharacterCard,
-                                String description) {
+                                String description, boolean used) {
 
         public String getCharacterCardName() { return characterCardName; }
 
@@ -34,6 +34,10 @@ public class GameTableInformation {
 
         public String getDescription() { return description; }
 
+        @Override
+        public boolean used() {
+            return used;
+        }
     }
 
     public record Isle(HashMap<RealmColors,Integer> studentsOnIsle, int towerNumber, TowerColors towerColor, int denyCards, boolean motherNatureIsPresent)  {
