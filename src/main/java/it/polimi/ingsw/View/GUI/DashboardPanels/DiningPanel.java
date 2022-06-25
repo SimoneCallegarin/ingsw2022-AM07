@@ -58,8 +58,8 @@ public class DiningPanel extends JPanel {
             professors.add(img);
         }
 
-        initializeProfessorPanel();
-        initializeStudentDining();
+        initializeProfessorPanel(storage);
+        initializeStudentDining(storage);
         setPreferredSize(this.getSize());
 
     }
@@ -67,7 +67,7 @@ public class DiningPanel extends JPanel {
     /**
      * this method initialize the dining room according to the model state
      */
-    public void initializeStudentDining() {
+    public void initializeStudentDining(ModelStorage storage) {
         studentsPanel=new DiningStudentsPanel(storage,playerID, students);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
@@ -81,7 +81,7 @@ public class DiningPanel extends JPanel {
         this.repaint();
     }
 
-    public void initializeProfessorPanel(){
+    public void initializeProfessorPanel(ModelStorage storage){
         professorPanel=new ProfessorPanel(storage,playerID, professors);
         professorPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         professorPanel.setOpaque(false);
@@ -109,7 +109,8 @@ public class DiningPanel extends JPanel {
      * this method removes the mouse listeners from the dining in order to avoid any wrong timed click from the player
      */
     public void removeCLickable(){
-        removeMouseListener(this.getMouseListeners()[0]);
+        for (int j = 0; j < this.getMouseListeners().length; j++)
+            this.removeMouseListener(this.getMouseListeners()[j]);
     }
 
     public void resetStudentDining(){

@@ -54,7 +54,7 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void askCharacterEffectParameters(CharacterCardsName characterName) {
-
+        guiDrawer.showEffectActivationChoice(characterName);
     }
 
     @Override

@@ -14,15 +14,27 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class TowerStoragePanel extends JPanel {
-
+    /**
+     * model storage used to retrieve game state information and draw the tower storage accordingly
+     */
+    ModelStorage storage;
+    /**
+     * constraints used by the layout manager
+     */
     GridBagConstraints c;
+    /**
+     * player ID associated with this tower storage
+     */
     int playerID;
-
+    /**
+     * array list to store towers images
+     */
     ArrayList<BufferedImage> towers;
 
     public TowerStoragePanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> towers) {
         setLayout(new GridBagLayout());
-
+        this.storage=storage;
+        this.storage=storage;
         this.playerID=playerID;
         setOpaque(false);
         c=new GridBagConstraints();
@@ -30,11 +42,11 @@ public class TowerStoragePanel extends JPanel {
 
         this.towers = towers;
 
-        initializeTowerStorage(storage);
+        initializeTowerStorage();
 
     }
 
-    public void initializeTowerStorage(ModelStorage storage){
+    public void initializeTowerStorage(){
         TowerColors color=storage.getDashboard(playerID).getTowerColor();
         c.insets=new Insets(5,5,5,5);
         c.gridy=0;

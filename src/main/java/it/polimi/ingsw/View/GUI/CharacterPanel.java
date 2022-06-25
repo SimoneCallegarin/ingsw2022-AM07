@@ -12,9 +12,11 @@ import java.io.InputStream;
 public class CharacterPanel extends JPanel {
 
     String character;
+    int characterIndex;
 
-    public CharacterPanel(String character) {
+    public CharacterPanel(String character, int characterIndex) {
         this.character=character;
+        this.characterIndex = characterIndex;
         setBorder(BorderFactory.createEmptyBorder());
         setOpaque(false);
     }
@@ -47,5 +49,7 @@ public class CharacterPanel extends JPanel {
         }
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
+
+    public int getCharacterIndex() { return characterIndex; }
 
 }

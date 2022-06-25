@@ -1,5 +1,7 @@
 package it.polimi.ingsw.View.GUI;
 
+
+
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Observer.ViewObserver;
@@ -154,7 +156,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers, this);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
@@ -185,12 +187,21 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getEntrance().setClickable();
     }
 
+    public void setClickableCharacters(int playerID) {
+        tableCenterPanel.setClickableCharacters(viewObservers, playerID);
+    }
+
     /**
      * method to set the message on the label on top of the game screen
      * @param message the text string to update the label with
      */
     public void setMessage(String message) {
         textLabel.setText(message);
+    }
+
+    public void removeDashboardClickable(int playerID) {
+        dashboardPanels.get(playerID).getEntrance().removeClickable();
+        dashboardPanels.get(playerID).getDining().removeCLickable();
     }
 
     /**
@@ -205,18 +216,21 @@ public class GameScreenPanel extends JPanel {
 
     public void updateStudentDinings(int playerID){
         dashboardPanels.get(playerID).getDining().resetStudentDining();
-        dashboardPanels.get(playerID).getDining().initializeStudentDining();
+        dashboardPanels.get(playerID).getDining().initializeStudentDining(storage);
     }
 
     public void updateProfessors(){
         for(DashboardPanel dashboardPanel:dashboardPanels) {
             dashboardPanel.getDining().resetProfessorDining();
-            dashboardPanel.getDining().initializeProfessorPanel();
+            dashboardPanel.getDining().initializeProfessorPanel(storage);
         }
     }
 
-    public void updateTowerStorages(int playerID){
-        dashboardPanels.get(playerID).getTowerStorage().resetTowerStorage();
-        dashboardPanels.get(playerID).getTowerStorage().initializeTowerStorage(storage);
+    public void updateTowerStorages(){
+        for(DashboardPanel dashboardPanel: dashboardPanels){
+            dashboardPanel.getTowerStorage().resetTowerStorage();
+            dashboardPanel.getTowerStorage().initializeTowerStorage();
+        }
+
     }
 }
