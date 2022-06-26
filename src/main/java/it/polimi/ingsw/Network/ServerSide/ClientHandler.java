@@ -209,9 +209,13 @@ public class ClientHandler implements Runnable {
     /**
      * Notifies the server to remove all data stored about the player associated with this ClientHandler.
      */
-    private void shutConnection(String error) throws IOException {
-        send(new ServiceMessage(MessageType.QUIT, error));
-        server.addPlayerToRemove(nickname);
+    private void shutConnection() throws IOException {
+        if(playing)
+            server.addPlayerToRemove(nickname);
+        else {
+            server.removePlayer(nickname);
+            System.out.println("Removed player " + nickname);
+        }
         connected = false;
         client.close();
     }
@@ -223,13 +227,13 @@ public class ClientHandler implements Runnable {
     public void disconnect(String error) {
         if (connected) {
             try {
-                shutConnection(error);
+                shutConnection();
+                System.out.println("Interrupting client handler thread of player " + nickname);
+                if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST") && playing )
+                    server.onDisconnection(nickname);
             } catch (IOException e) {
                 System.err.println("Error in stream closing");
             }
-            System.out.println("Interrupting client handler thread of player " + nickname);
-            if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST") && playing)
-                server.onDisconnection(nickname);
         }
     }
 
@@ -270,6 +274,7 @@ public class ClientHandler implements Runnable {
             output.reset();
         } catch (IOException e) {
             System.out.println("Unreachable client");
+            System.out.println(nickname);
         }
     }
 

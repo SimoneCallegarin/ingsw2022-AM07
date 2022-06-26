@@ -195,9 +195,7 @@ public class GameScreenPanel extends JPanel {
      * method to set the message on the label on top of the game screen
      * @param message the text string to update the label with
      */
-    public void setMessage(String message) {
-        textLabel.setText(message);
-    }
+    public void setMessage(String message) { textLabel.setText(message); }
 
     public void removeDashboardClickable(int playerID) {
         dashboardPanels.get(playerID).getEntrance().removeClickable();

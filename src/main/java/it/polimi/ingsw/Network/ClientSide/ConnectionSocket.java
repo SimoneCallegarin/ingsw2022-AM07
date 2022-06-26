@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Network.ClientSide;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
-import it.polimi.ingsw.Network.ServerSide.ClientListener;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -45,6 +44,11 @@ public class ConnectionSocket {
      * Socket of the client.
      */
     private Socket clientSocket;
+    /**
+     * True when the client is disconnected from the server, else false.
+     * Used to ignore the pinger when arrives a QUIT message from the server.
+     */
+    private boolean disconnected = false;
 
     /**
      * Constructor of ConnectionSocket.
@@ -65,9 +69,10 @@ public class ConnectionSocket {
             output.writeObject(message);
             output.reset();
         } catch (IOException e) {
-            System.err.println("Error in sending message to server");
-            disconnect();
-            System.exit(1);
+            if (!disconnected) {
+                System.err.println("Error occurred while sending a message to the server");
+                disconnect();
+            }
         }
     }
 
@@ -103,8 +108,7 @@ public class ConnectionSocket {
     public void disconnect() {
         System.out.println("Closing connection...");
         threadListener.interrupt();
-        while(threadSender.isAlive())
-            threadSender.interrupt();
+        threadSender.interrupt();
         try {
             input.close();
             output.close();
@@ -115,8 +119,15 @@ public class ConnectionSocket {
     }
 
     /**
+     * Sets disconnected to true when arrives a QUIT message from the server,
+     * in order to ignore the pinger till it stops.
+     */
+    public void disconnectClient() { disconnected = true; }
+
+    /**
      * Getter method for the client listener.
      * @return the client listener associated to this ConnectionSocket.
      */
     public ClientListener getClientListener() { return cListener; }
+
 }

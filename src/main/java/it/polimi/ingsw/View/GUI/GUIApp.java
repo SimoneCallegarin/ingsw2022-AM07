@@ -53,9 +53,7 @@ public class GUIApp extends ViewSubject implements View {
     public void askCloud() { guiDrawer.showCloudChoice(); }
 
     @Override
-    public void askCharacterEffectParameters(CharacterCardsName characterName) {
-        guiDrawer.showEffectActivationChoice(characterName);
-    }
+    public void askCharacterEffectParameters(CharacterCardsName characterName) { guiDrawer.showEffectActivationChoice(characterName); }
 
     @Override
     public void addObs(ClientController clientController) { addObserver(clientController); }
@@ -65,8 +63,8 @@ public class GUIApp extends ViewSubject implements View {
 
     @Override
     public void disconnect(ServiceMessage message) {
-        if (message.getMessageType() != MessageType.END_GAME)
-            System.out.println(message.getMessage());
+        getGUIDrawer().showErrorMessage(message.getMessage());
+        System.out.println(message.getMessage());
         System.exit(1);
     }
 

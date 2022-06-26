@@ -128,7 +128,7 @@ public class GUIDrawer extends ViewSubject {
         nicknameLabel.setHorizontalAlignment(JLabel.LEFT);
         nicknameField = new JTextField();
 
-        leftHalf.add(nicknameLabel,0);;
+        leftHalf.add(nicknameLabel,0);
         leftHalf.add(nicknameField,1);
 
         JPanel buttons = new JPanel(new GridLayout(1, 2));
@@ -184,7 +184,6 @@ public class GUIDrawer extends ViewSubject {
         if (nicknameDisplay.getText().length()<2 || nicknameDisplay.getText().length()>=20)
             nicknameDisplay.setForeground(Color.RED);
         nicknameDisplay.setFont(italicFont);
-
     }
 
     /**
@@ -258,10 +257,8 @@ public class GUIDrawer extends ViewSubject {
      */
     public void showLoadingScreen(){
         loadingScreen = new LoadingScreen(usernamePlaying);
-        //need to update the loading screen graphics
         generalPanelManager.add(loadingScreen,"Loading Screen");
         cl.show(generalPanelManager,"Loading Screen");
-
     }
 
     public void createGameScreen(){
@@ -303,7 +300,8 @@ public class GUIDrawer extends ViewSubject {
                 }catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                buttons[finalI1].setIcon(new ImageIcon(img1));
+                if (img1 != null)
+                    buttons[finalI1].setIcon(new ImageIcon(img1));
 
                 if (turnOrder.get() != 0 && turnOrder.get() != finalI) {
                     ClassLoader cl2=this.getClass().getClassLoader();
@@ -315,7 +313,8 @@ public class GUIDrawer extends ViewSubject {
                     }catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
+                    if (img2 != null)
+                        buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
                 }
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 lastPressedButton.set(finalI1);
@@ -357,9 +356,7 @@ public class GUIDrawer extends ViewSubject {
     public void showCloudChoice(){
         /*String message="Now choose a cloud to pick students from by clicking on it";
         JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
-
         gameScreenPanel.tableCenterPanel.setCloudsClickable();
-
         turnStarted = false;
     }
 
@@ -465,16 +462,6 @@ public class GUIDrawer extends ViewSubject {
         modelChanges.getToUpdate().clear();
     }
 
-    public void showServiceMessage(String message) {
-        gameScreenPanel.setMessage(message);
-    }
-
-    public void showKOMessage(String serviceMessage){
-        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
-            gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
-        JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
-    }
-
     private void showColorForm(String question) {
         JPanel colorChoice = new JPanel(new GridLayout(3,5));
 
@@ -531,12 +518,21 @@ public class GUIDrawer extends ViewSubject {
         //notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
     }
 
-    public ModelStorage getModelStorage() {
-        return modelStorage;
+    public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }
+
+    public void showKOMessage(String serviceMessage){
+        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
+            gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
+        JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
     }
+
+    public void showErrorMessage(String serviceMessage){ JOptionPane.showMessageDialog(f,serviceMessage,"Disconnection occurred",JOptionPane.ERROR_MESSAGE); }
+
+    public ModelStorage getModelStorage() { return modelStorage; }
 
     public void setModelStorage(ModelStorage modelStorage) {
         this.modelStorage = modelStorage;
         modelChanges=modelStorage.getModelChanges();
     }
+
 }
