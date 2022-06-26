@@ -2,7 +2,6 @@ package it.polimi.ingsw.View.GUI.EventListeners;
 
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
-import it.polimi.ingsw.View.GUI.IslesPanels.IslePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 
 import java.awt.event.MouseEvent;
@@ -23,7 +22,7 @@ public class MNListener extends ViewSubject implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         notifyObserver(obs->obs.onMNMovement(isleID));
-        tableCenterPanel.removeIslesClickable();
+        tableCenterPanel.removeClickableIsles();
     }
 
     @Override

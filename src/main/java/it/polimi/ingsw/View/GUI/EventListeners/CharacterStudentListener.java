@@ -1,10 +1,8 @@
 package it.polimi.ingsw.View.GUI.EventListeners;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
@@ -13,17 +11,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Class added to Character student buttons to listen to a mouse click and notify the view observers of the button color selected
+ */
 public class CharacterStudentListener extends ViewSubject implements MouseListener {
 
     EntrancePanel entrance;
     TableCenterPanel tableCenter;
-    DiningPanel dining;
     ArrayList<ViewObserver> observers;
     String character;
 
-    public CharacterStudentListener(DiningPanel dining, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance, String character) {
+    public CharacterStudentListener(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance, String character) {
         this.entrance = entrance;
-        this.dining = dining;
         this.tableCenter=tableCenter;
         this.character = character;
         observers=viewObserverList;
@@ -50,7 +49,7 @@ public class CharacterStudentListener extends ViewSubject implements MouseListen
             case "JESTER" -> entrance.setStudentsClickableForEffect();
         }
 
-        tableCenter.removeCharacterStudentsClickable();
+        tableCenter.removeClickableCharacterStudents();
 
     }
 

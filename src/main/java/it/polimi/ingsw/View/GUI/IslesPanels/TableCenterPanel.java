@@ -4,6 +4,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.AssistantCardPanel;
 import it.polimi.ingsw.View.GUI.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
@@ -465,6 +466,17 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.weighty=0.95;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
 
+        //set sizes of isles and clickablepanels
+        int x=0;
+        int y=0;
+        int width;
+        int height;
+        for(int i=0;i<islesPanels.size();i++){
+            width=islesPanels.get(i).getIslesImagesByID(i%3).getWidth() / 5;
+            height=islesPanels.get(i).getIslesImagesByID(i%3).getHeight() / 5;
+            islesPanels.get(i).setBounds(x,y,width,height);
+            clickablePanels.get(i).setBounds(x,y,width,height);
+        }
     }
 
 
@@ -572,9 +584,13 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
+    /**
+     * Adds a MouseListener to every isle in order to send an ACTIVATE_ATOMIC_EFFECT message to the server when clicked.
+     * @param viewObserverList the list of observers that have to send the message to the server
+     */
     public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
         for (int i=0;i<islesPanels.size();i++) {
-            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this, gsp.getFirstEntrancePanel()));
+            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this));
         }
 
     }
@@ -583,11 +599,11 @@ public class TableCenterPanel extends JPanel {
         cloudsContainerPanel.setCloudsClickable();
     }
 
-    public void removeCloudsClickable() {
+    public void removeClickableClouds() {
         cloudsContainerPanel.removeCloudsClickable();
     }
 
-    public void removeIslesClickable(){
+    public void removeClickableIsles(){
         for (JPanel clickablePanel : clickablePanels) {
             for (int j = 0; j < clickablePanel.getMouseListeners().length; j++) {
                 clickablePanel.removeMouseListener(clickablePanel.getMouseListeners()[j]);
@@ -595,13 +611,21 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
-    public void setClickableCharacters(ArrayList<ViewObserver> viewObserverList, int playerID) {
+    /**
+     * Adds a MouseListener to every Character Card in order to send an PLAY_CHARACTER_CARD message to the server when clicked.
+     * @param viewObserverList the list of observers that have to send the message to the server
+     * @param playerID the ID of the player that clicked on the card
+     */
+    public void setCharactersClickable(ArrayList<ViewObserver> viewObserverList, int playerID) {
         for(CharacterPanel characterPanel : characterPanels){
             characterPanel.addMouseListener(new CharacterCardListener(viewObserverList,characterPanel.getCharacterIndex(), playerID, this , gsp));
         }
     }
 
-    public void removeCharactersClickable() {
+    /**
+     * Removes the MouseListeners of the Character Cards.
+     */
+    public void removeClickableCharacters() {
         for(CharacterPanel characterPanel : characterPanels){
             for (int j = 0; j < characterPanel.getMouseListeners().length; j++) {
                 characterPanel.removeMouseListener(characterPanel.getMouseListeners()[j]);
@@ -613,11 +637,19 @@ public class TableCenterPanel extends JPanel {
         return characterPanels;
     }
 
-    public void setCharacterStudentsClickable(CharacterPanel character, EntrancePanel entrance, DiningPanel dining) {
-        character.setStudentsClickable(entrance, dining);
+    /**
+     * Sets the students on the chosen Character Card clickable.
+     * @param character the panel of the chosen Character Card
+     * @param dashboard the dashboard associated with the one who played the Character Card
+     */
+    public void setCharacterStudentsClickable(CharacterPanel character, DashboardPanel dashboard) {
+        character.setStudentsClickable(dashboard);
     }
 
-    public void removeCharacterStudentsClickable() {
+    /**
+     * Removes the MouseListeners of the students on the Character Cards.
+     */
+    public void removeClickableCharacterStudents() {
         for(CharacterPanel characterPanel : characterPanels){
             characterPanel.removeStudentsClickable();
         }

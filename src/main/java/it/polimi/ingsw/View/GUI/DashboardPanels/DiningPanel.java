@@ -103,8 +103,8 @@ public class DiningPanel extends JPanel {
      * @param observers the observers list which are notified by the listener
      */
     public void setClickable(ArrayList<ViewObserver> observers, TableCenterPanel tableCenterPanel){
-        EntrancePanel pairedEntrance=((DashboardPanel)this.getParent()).getEntrance();
-        addMouseListener(new DiningListener(this,pairedEntrance,observers,tableCenterPanel));
+        DashboardPanel pairedDashboard=((DashboardPanel)this.getParent());
+        addMouseListener(new DiningListener(pairedDashboard,observers,tableCenterPanel));
     }
 
     /**

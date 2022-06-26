@@ -4,6 +4,7 @@ import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
+import it.polimi.ingsw.View.GUI.Buttons.ColorChoiceButton;
 import it.polimi.ingsw.View.GUI.Buttons.ExchangeChoiceButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
@@ -74,6 +75,9 @@ public class GUIDrawer extends ViewSubject {
      */
     ModelChanges modelChanges;
 
+    /**
+     * boolean used to know if it is necessary to let appear a JOptionPanel of start turn or not
+     */
     private boolean turnStarted = false;
 
     /**
@@ -335,7 +339,7 @@ public class GUIDrawer extends ViewSubject {
             buttonContainer.add(buttons[i]);
         }
         JScrollPane scrollPane = new JScrollPane(buttonContainer);
-        scrollPane.setPreferredSize(new Dimension(600, 400));
+        scrollPane.setPreferredSize(new Dimension(1000, 564));
         JOptionPane.showMessageDialog(f, scrollPane, "Your deck", JOptionPane.PLAIN_MESSAGE);
         return turnOrder.get();
     }
@@ -350,30 +354,34 @@ public class GUIDrawer extends ViewSubject {
         if (!turnStarted) {
             turnStarted = true;
             if (expertMode)
-                gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
+                gameScreenPanel.setCharactersClickable(modelChanges.getPlayerID());
             String message = "It's your turn!";
             JOptionPane.showMessageDialog(f, message, "Action Phase", JOptionPane.PLAIN_MESSAGE);
         }
 
-        gameScreenPanel.setClickableStudents(modelChanges.getPlayerID());
+        gameScreenPanel.setEntranceStudentsClickable(modelChanges.getPlayerID());
     }
 
     public void showMNMovement() {
         /*String message="Now you can move mother nature by clicking on the island where you want to move her";
         JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);*/
 
-        gameScreenPanel.tableCenterPanel.setMNClickable(getViewObserverList());
+        gameScreenPanel.getTableCenterPanel().setMNClickable(getViewObserverList());
     }
 
     public void showCloudChoice() {
         /*String message="Now choose a cloud to pick students from by clicking on it";
         JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
 
-        gameScreenPanel.tableCenterPanel.setCloudsClickable();
+        gameScreenPanel.getTableCenterPanel().setCloudsClickable();
 
         turnStarted = false;
     }
 
+    /**
+     * Informs the user about the Character Card he played and activates various listeners according to the Character Card.
+     * @param cc is the name of the Character Card played
+     */
     public void showEffectActivationChoice(CharacterCardsName cc) {
         StringBuilder message = new StringBuilder("You activated the " + cc.toString() + "!");
         switch (cc) {
@@ -399,68 +407,72 @@ public class GUIDrawer extends ViewSubject {
             }
             case HERALD -> {
                 message.append("\nChoose an Island and resolve the Island as if Mother Nature had ended her movement there.\nMother Nature will still move and the Island where she ends her movement will also be resolved.");
-                JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                gameScreenPanel.tableCenterPanel.setIslesClickableForEffect(getViewObserverList());
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                gameScreenPanel.getTableCenterPanel().setIslesClickableForEffect(getViewObserverList());
             }
             case GRANDMA_HERBS -> {
                 message.append("\nPlace a NoEntry tile on an Island of your choice.\nThe first time Mother Nature ends her movement there, put the No Entry tile back onto this card\n(DO NOT calculate influence on that Island, or place any Towers).");
-                JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                gameScreenPanel.tableCenterPanel.setIslesClickableForEffect(getViewObserverList());
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                gameScreenPanel.getTableCenterPanel().setIslesClickableForEffect(getViewObserverList());
             }
             case FUNGIST -> {
                 message.append("\nChoose a color of Student: during the influence calculation this turn, that color adds no influence.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                showColorForm("Which color you don't want to consider for influence calculation in this turn?");
+                //showColorForm("Which color you don't want to consider for influence calculation in this turn?");
+                int chosenColor = showColorForm("Which color you don't want to consider for influence calculation in this turn?");
+                notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
             }
             case THIEF -> {
                 message.append("\nChoose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                showColorForm("Which color you want to be removed from Dining Rooms?");
+                //showColorForm("Which color you want to be removed from Dining Rooms?");
+                int chosenColor = showColorForm("Which color you want to be removed from Dining Rooms?");
+                notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
             }
             case SPOILED_PRINCESS -> {
                 message.append("\nTake 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
                 CharacterPanel spoiledPrincessPanel = null;
-                for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                for (CharacterPanel character : gameScreenPanel.getTableCenterPanel().getCharacterPanels()) {
                     if (character.getCharacterName().equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
                         spoiledPrincessPanel = character;
                         break;
                     }
                 }
-                gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(spoiledPrincessPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
+                gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(spoiledPrincessPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
             }
             case MONK -> {
                 message.append("\nTake 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
                 CharacterPanel monkPanel = null;
-                for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                for (CharacterPanel character : gameScreenPanel.getTableCenterPanel().getCharacterPanels()) {
                     if (character.getCharacterName().equals(CharacterCardsName.MONK.toString())) {
                         monkPanel = character;
                         break;
                     }
                 }
-                gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(monkPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
+                gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(monkPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
             }
             case JESTER -> {
                 message.append("\nYou may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.");
-                JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                if (!showExchangeForm("Do you want to exchange students?"))
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                if (!showExchangeForm())
                     notifyObserver(ViewObserver::onEndCharacterPhase);
                 else {
                     CharacterPanel jesterPanel = null;
-                    for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                    for (CharacterPanel character : gameScreenPanel.getTableCenterPanel().getCharacterPanels()) {
                         if (character.getCharacterName().equals(CharacterCardsName.JESTER.toString())) {
                             jesterPanel = character;
                             break;
                         }
                     }
-                    gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(jesterPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
+                    gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(jesterPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
                 }
             }
             case MINSTREL -> {
                 message.append("\nNow you can exchange up to 2 students between your dining and your entrance");
-                JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                if (!showExchangeForm("Do you want to exchange students?"))
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                if (!showExchangeForm())
                     notifyObserver(ViewObserver::onEndCharacterPhase);
                 else
                     gameScreenPanel.setDiningStudentsClickable(modelChanges.getPlayingID());
@@ -482,16 +494,17 @@ public class GUIDrawer extends ViewSubject {
                     if (gameStart) {
                         createGameScreen();
                         showGameScreen();
-                        gameStart = false;
-                    } else {
-                        gameScreenPanel.tableCenterPanel.updateFillClouds();
+                        gameStart=false;
+                    }
+                    else {
+                        gameScreenPanel.getTableCenterPanel().updateFillClouds();
                     }
 
                 }
 
-                case CLOUD_CHANGED -> gameScreenPanel.tableCenterPanel.updateCloud(modelChanges.getCloudID());
+                case CLOUD_CHANGED -> gameScreenPanel.getTableCenterPanel().updateCloud(modelChanges.getCloudID());
 
-                case DISCARDPILE_CHANGED -> gameScreenPanel.tableCenterPanel.updateAssistCard(modelChanges.getPlayingID());
+                case DISCARDPILE_CHANGED -> gameScreenPanel.getTableCenterPanel().updateAssistCard(modelChanges.getPlayingID());
 
                 case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
 
@@ -499,26 +512,26 @@ public class GUIDrawer extends ViewSubject {
 
                 case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
 
-                case COINS_CHANGED -> gameScreenPanel.tableCenterPanel.updateCoins(modelChanges.getPlayingID());
+                case COINS_CHANGED -> gameScreenPanel.getTableCenterPanel().updateCoins(modelChanges.getPlayingID());
 
                 case TOWERSTORAGE_CHANGED -> gameScreenPanel.updateTowerStorages();
 
-                case ISLE_CHANGED -> gameScreenPanel.tableCenterPanel.updateIsle(modelChanges.getIsleID());
+                case ISLE_CHANGED -> gameScreenPanel.getTableCenterPanel().updateIsle(modelChanges.getIsleID());
 
                 case ISLELAYOUT_CHANGED -> {
                     if (modelChanges.isLayoutChanged()) {
 
-                        for (int j = 0; j < modelChanges.getIslesToRemove(); j++) {
-                            gameScreenPanel.tableCenterPanel.updateIsleLayout();
+                        for(int j=0;j<modelChanges.getIslesToRemove();j++) {
+                            gameScreenPanel.getTableCenterPanel().updateIsleLayout();
                         }
                     }
-                    for (int j = 0; j < modelStorage.getGameTable().getIsles().size(); j++) {
-                        gameScreenPanel.tableCenterPanel.updateIsle(j);
+                    for(int j=0;j<modelStorage.getGameTable().getIsles().size();j++) {
+                        gameScreenPanel.getTableCenterPanel().updateIsle(j);
                     }
                     modelChanges.setLayoutChanged(false);
                 }
                 case CHARACTERCARD_CHANGED -> {
-                    for (CharacterPanel characterPanel : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                    for(CharacterPanel characterPanel:gameScreenPanel.getTableCenterPanel().getCharacterPanels()){
                         characterPanel.resetCharacter();
                         characterPanel.initializeCharacter();
                     }
@@ -528,6 +541,10 @@ public class GUIDrawer extends ViewSubject {
         modelChanges.getToUpdate().clear();
     }
 
+    /**
+     * Prints a message at the top of the screen which informs the user about the phase that is being played.
+     * @param message the text to display
+     */
     public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }
 
     /**
@@ -574,69 +591,89 @@ public class GUIDrawer extends ViewSubject {
         JOptionPane.showOptionDialog(null,"Are you sure you want to log out?", "Logout Request",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,options,options[0]);
     }
 
+    /**
+     * Pops up a JOptionPane which tells the user that he has to repeat the last action.
+     * @param serviceMessage the KO to display
+     */
     public void showKOMessage(String serviceMessage) {
         if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
-            gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
-        JOptionPane.showMessageDialog(f, serviceMessage, "Service message", JOptionPane.PLAIN_MESSAGE);
+            gameScreenPanel.setCharactersClickable(modelChanges.getPlayerID());
+        JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
     }
 
-    private void showColorForm(String question) {
-        JPanel colorChoice = new JPanel(new GridLayout(3, 5));
+    /**
+     * Opens a JOptionPanel to select a color. It is used for FUNGIST and THIEF Character Cards.
+     * @param colorQuestion the question to ask
+     */
+    private int showColorForm(String colorQuestion) {
+        AtomicInteger colorChoice = new AtomicInteger();
+        colorChoice.set(-1);
+        JPanel buttonContainer = new JPanel();
+        JButton[] buttons = new JButton[5];
+        for (int i = 0; i < 5; i++) {
+            buttons[i] = (new ColorChoiceButton(i));
+            int finalI = i;
+            buttons[i].addActionListener(e -> {
+                ClassLoader cl1 = this.getClass().getClassLoader();
+                InputStream url1;
+                switch (finalI) {
+                    case 0 -> url1 = cl1.getResourceAsStream("Dashboard/Students/YellowChk.png");
+                    case 1 -> url1 = cl1.getResourceAsStream("Dashboard/Students/PinkChk.png");
+                    case 2 -> url1 = cl1.getResourceAsStream("Dashboard/Students/BlueChk.png");
+                    case 3 -> url1 = cl1.getResourceAsStream("Dashboard/Students/RedChk.png");
+                    case 4 -> url1 = cl1.getResourceAsStream("Dashboard/Students/GreenChk.png");
+                    default -> url1 = cl1.getResourceAsStream("Dashboard/Circles.png");
+                }
+                BufferedImage img1 = null;
+                try {
+                    if (url1 != null)
+                        img1 = ImageIO.read(url1);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                if (img1 != null) {
+                    buttons[finalI].setIcon(new ImageIcon(img1));
+                }
 
-        colorChoice.add(new JLabel(question), 0);
+                if (colorChoice.get() != -1 && colorChoice.get() != finalI) {
+                    ClassLoader cl2 = this.getClass().getClassLoader();
+                    InputStream url2;
+                    switch (colorChoice.get()) {
+                        case 0 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Yellow.png");
+                        case 1 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Pink.png");
+                        case 2 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Blue.png");
+                        case 3 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Red.png");
+                        case 4 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Green.png");
+                        default -> url2 = cl2.getResourceAsStream("Dashboard/Circles.png");
+                    }
+                    BufferedImage img2 = null;
+                    try {
+                        if (url2 != null)
+                            img2 = ImageIO.read(url2);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    if (img2 != null) {
+                        buttons[colorChoice.get()].setIcon(new ImageIcon(img2));
+                    }
+                }
 
-        JPanel colors = new JPanel(new GridLayout(1, 5));
-        JRadioButton yellow = new JRadioButton("Yellow");
-        yellow.setMnemonic(KeyEvent.VK_0);
-        yellow.setActionCommand("0");
-        yellow.setSelected(true);
-        JRadioButton pink = new JRadioButton("Pink");
-        pink.setMnemonic(KeyEvent.VK_1);
-        pink.setActionCommand("1");
-        JRadioButton blue = new JRadioButton("Blue");
-        blue.setMnemonic(KeyEvent.VK_2);
-        blue.setActionCommand("2");
-        JRadioButton red = new JRadioButton("Red");
-        red.setMnemonic(KeyEvent.VK_3);
-        red.setActionCommand("3");
-        JRadioButton green = new JRadioButton("Green");
-        green.setMnemonic(KeyEvent.VK_4);
-        green.setActionCommand("4");
-        colors.add(yellow);
-        colors.add(pink);
-        colors.add(blue);
-        colors.add(red);
-        colors.add(green);
-        colorChoice.add(colors, 1);
+                colorChoice.set(finalI);
 
-        ButtonGroup colorButtons = new ButtonGroup();
-        colorButtons.add(yellow);
-        colorButtons.add(pink);
-        colorButtons.add(blue);
-        colorButtons.add(red);
-        colorButtons.add(green);
-
-        JButton choose = new JButton("Ok");
-
-        choose.addActionListener(e -> {
-            //add try catch
-            int chosenColor = Integer.parseInt(colorButtons.getSelection().getActionCommand());
-            notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
-            showGameScreen();
-        });
-
-        colorChoice.add(choose, 2);
-
-        //CardLayout userCl = (CardLayout) gameScreenPanel.getLayout();
-
-        generalPanelManager.add(colorChoice, "Color choice form");
-        cl.show(generalPanelManager, "Color choice form");
-
-        //int chosenColor = JOptionPane.showConfirmDialog(f, colorChoice, "Your deck", JOptionPane.DEFAULT_OPTION);
-        //notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
+            });
+            buttonContainer.add(buttons[i]);
+        }
+        JScrollPane scrollPane = new JScrollPane(buttonContainer);
+        scrollPane.setPreferredSize(new Dimension(500, 40));
+        JOptionPane.showMessageDialog(f, scrollPane, colorQuestion, JOptionPane.PLAIN_MESSAGE);
+        return colorChoice.get();
     }
 
-    private boolean showExchangeForm(String exchangeQuestion) {
+    /**
+     * Opens a JOptionPanel to select if continuing to use the effect of JESTER/MINSTREL Character Card or not.
+     * @return the answer of the user
+     */
+    private boolean showExchangeForm() {
         AtomicInteger exchangeChoice = new AtomicInteger();
         exchangeChoice.set(-1);
         JPanel buttonContainer = new JPanel();
@@ -690,7 +727,7 @@ public class GUIDrawer extends ViewSubject {
         }
         JScrollPane scrollPane = new JScrollPane(buttonContainer);
         scrollPane.setPreferredSize(new Dimension(440, 220));
-        JOptionPane.showMessageDialog(f, scrollPane, exchangeQuestion, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(f, scrollPane, "Do you want to exchange students?", JOptionPane.PLAIN_MESSAGE);
         return exchangeChoice.get() == 0;
     }
 
@@ -700,11 +737,12 @@ public class GUIDrawer extends ViewSubject {
      */
     public void showErrorMessage(String serviceMessage) { JOptionPane.showMessageDialog(f, serviceMessage, "Disconnection occurred", JOptionPane.ERROR_MESSAGE); }
 
+    public ModelStorage getModelStorage() {
+        return modelStorage;
+    }
+
     public void setModelStorage(ModelStorage modelStorage) {
         this.modelStorage = modelStorage;
         modelChanges = modelStorage.getModelChanges();
     }
-
-    public ModelStorage getModelStorage() { return modelStorage; }
-
 }

@@ -106,12 +106,11 @@ public class DiningStudentsPanel extends JPanel {
      * set students clickable in order for the minstrel effect to activate
      * @param viewObservers view observer list to pass to the listener constructor
      * @param tableCenterPanel table center panel to pass to the listener constructor
-     * @param entrancePanel entrance panel to pass to the listener constructor
      */
-    public void setClickableStudentsForEffect(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, EntrancePanel entrancePanel){
+    public void setStudentsClickableForEffect(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel){
         DashboardPanel thisDashboard=(DashboardPanel) this.getParent().getParent();
         for(StudentButton studentButton:studentButtons){
-            studentButton.addMouseListener(new DiningStudentListener(thisDashboard,viewObservers,tableCenterPanel,entrancePanel, this));
+            studentButton.addMouseListener(new DiningStudentListener(thisDashboard.getEntrance(),viewObservers,tableCenterPanel, this));
         }
     }
 
