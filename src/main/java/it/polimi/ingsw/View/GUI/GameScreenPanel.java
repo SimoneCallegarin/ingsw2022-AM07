@@ -199,6 +199,12 @@ public class GameScreenPanel extends JPanel {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
     }
 
+    public void setDiningStudentsClickable(int playerID){
+        DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();
+        EntrancePanel entrancePanel=dashboardPanels.get(playerID).getEntrance();
+        diningStudentsPanel.setClickableStudentsForEffect(viewObservers,tableCenterPanel,entrancePanel);
+    }
+
     public EntrancePanel getFirstEntrancePanel() {
         return dashboardPanels.get(0).getEntrance();
     }

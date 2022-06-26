@@ -5,6 +5,7 @@ import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 
@@ -15,13 +16,15 @@ import java.util.ArrayList;
 public class DiningStudentListener extends ViewSubject implements MouseListener {
 
     EntrancePanel entrance;
+    DiningStudentsPanel dsp;
     TableCenterPanel tableCenter;
     DashboardPanel dashboardListened;
     ArrayList<ViewObserver> observers;
 
     public DiningStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList,
-                                 TableCenterPanel tableCenter, EntrancePanel entrance) {
+                                 TableCenterPanel tableCenter, EntrancePanel entrance, DiningStudentsPanel dsp) {
         this.entrance = entrance;
+        this.dsp = dsp;
         this.dashboardListened = dashboardListened;
         this.tableCenter=tableCenter;
         observers=viewObserverList;
@@ -43,7 +46,8 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
         buttonPressed.printClick(buttonPressed.getColor());
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
 
-        //dashboardListened.getDining().setClickable(observers,tableCenter);
+        entrance.setStudentsClickableForEffect();
+        dsp.removeClickableStudents();
 
     }
 

@@ -35,7 +35,7 @@ public class EffectListener extends ViewSubject implements MouseListener {
                 case GREEN -> genericValue = 4;
             }
             notifyObserver(obs -> obs.onAtomicEffect(genericValue));
-            tableCenterPanel.removeCharacterStudentsClickable();
+            entrance.removeStudentsClickableForEffect();
         } catch (ClassCastException cce) {
             notifyObserver(obs -> obs.onAtomicEffect(genericValue));
             tableCenterPanel.removeIslesClickable();

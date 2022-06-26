@@ -22,9 +22,10 @@ public class DiningPanel extends JPanel {
     DiningStudentsPanel studentsPanel;
     ClassLoader cl;
     ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> checkedStudents;
     ArrayList<BufferedImage> professors;
 
-    public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students) {
+    public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
 
@@ -35,6 +36,7 @@ public class DiningPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         this.students = students;
+        this.checkedStudents = checkedStudents;
 
         cl = this.getClass().getClassLoader();
         InputStream url;
@@ -68,7 +70,7 @@ public class DiningPanel extends JPanel {
      * this method initialize the dining room according to the model state
      */
     public void initializeStudentDining(ModelStorage storage) {
-        studentsPanel=new DiningStudentsPanel(storage,playerID, students);
+        studentsPanel=new DiningStudentsPanel(storage,playerID, students, checkedStudents);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
         c.fill=GridBagConstraints.BOTH;

@@ -2,7 +2,9 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
+import it.polimi.ingsw.View.GUI.Buttons.ExchangeChoiceButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -430,6 +432,31 @@ public class GUIDrawer extends ViewSubject {
                 }
                 gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(monkPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
             }
+            case JESTER -> {
+                message.append("\nYou may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                if (!showExchangeForm("Do you want to exchange students?"))
+                    notifyObserver(ViewObserver::onEndCharacterPhase);
+                else {
+                    CharacterPanel jesterPanel = null;
+                    for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                        if (character.getCharacterName().equals(CharacterCardsName.JESTER.toString())) {
+                            jesterPanel  = character;
+                            break;
+                        }
+                    }
+                    gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(jesterPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
+                }
+            }
+            case MINSTREL -> {
+                message.append("\nNow you can exchange up to 2 students between your dining and your entrance");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                if (!showExchangeForm("Do you want to exchange students?"))
+                    notifyObserver(ViewObserver::onEndCharacterPhase);
+                else
+                    gameScreenPanel.setDiningStudentsClickable(modelChanges.getPlayingID());
+
+            }
         }
     }
 
@@ -557,6 +584,62 @@ public class GUIDrawer extends ViewSubject {
 
         //int chosenColor = JOptionPane.showConfirmDialog(f, colorChoice, "Your deck", JOptionPane.DEFAULT_OPTION);
         //notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
+    }
+
+    private boolean showExchangeForm(String exchangeQuestion) {
+        AtomicInteger exchangeChoice = new AtomicInteger();
+        exchangeChoice.set(-1);
+        JPanel buttonContainer = new JPanel();
+        JButton[] buttons = new JButton[2];
+        for (int i = 0; i < 2; i++) {
+            buttons[i] = (new ExchangeChoiceButton(i));
+            int finalI = i;
+            buttons[i].addActionListener(e -> {
+                ClassLoader cl1=this.getClass().getClassLoader();
+                InputStream url1;
+                if (finalI == 0) {
+                    url1 = cl1.getResourceAsStream("Raw/CheckChk.png");
+                }
+                else {
+                    url1 = cl1.getResourceAsStream("Raw/RedCrossChk.png");
+                }
+                BufferedImage img1= null;
+                try {
+                    if (url1 != null)
+                        img1 = ImageIO.read(url1);
+                }catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                buttons[finalI].setIcon(new ImageIcon(img1));
+
+                if (exchangeChoice.get() != -1 && exchangeChoice.get() != finalI) {
+                    ClassLoader cl2=this.getClass().getClassLoader();
+                    InputStream url2;
+                    if (exchangeChoice.get() == 0) {
+                        url2 = cl2.getResourceAsStream("Raw/Check.png");
+                    }
+                    else {
+                        url2 = cl2.getResourceAsStream("Raw/RedCross.png");
+                    }
+                    BufferedImage img2= null;
+                    try {
+                        if (url2 != null)
+                            img2 = ImageIO.read(url2);
+                    }catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    buttons[exchangeChoice.get()].setIcon(new ImageIcon(img2));
+                }
+
+                exchangeChoice.set(finalI);
+
+            });
+            buttonContainer.add(buttons[i]);
+        }
+        JScrollPane scrollPane = new JScrollPane(buttonContainer);
+        scrollPane.setPreferredSize(new Dimension(440, 220));
+        JOptionPane.showMessageDialog(f, scrollPane, exchangeQuestion, JOptionPane.PLAIN_MESSAGE);
+        return exchangeChoice.get() == 0;
     }
 
     public ModelStorage getModelStorage() {
