@@ -18,14 +18,12 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
     EntrancePanel entrance;
     DiningStudentsPanel dsp;
     TableCenterPanel tableCenter;
-    DashboardPanel dashboardListened;
     ArrayList<ViewObserver> observers;
 
-    public DiningStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList,
-                                 TableCenterPanel tableCenter, EntrancePanel entrance, DiningStudentsPanel dsp) {
+    public DiningStudentListener(EntrancePanel entrance, ArrayList<ViewObserver> viewObserverList,
+                                 TableCenterPanel tableCenter, DiningStudentsPanel dsp) {
         this.entrance = entrance;
         this.dsp = dsp;
-        this.dashboardListened = dashboardListened;
         this.tableCenter=tableCenter;
         observers=viewObserverList;
         addAllObservers(viewObserverList);

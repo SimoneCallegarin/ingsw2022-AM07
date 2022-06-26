@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.DashboardObjects.Entrance;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
@@ -61,8 +62,6 @@ public class CharacterPanel extends JPanel {
 
     TableCenterPanel tcp;
     ArrayList<ViewObserver> viewObservers;
-    EntrancePanel entrance;
-    DiningPanel dining;
 
     public CharacterPanel(ModelStorage storage, String character, int characterIndex,
                           ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents,
@@ -148,19 +147,19 @@ public class CharacterPanel extends JPanel {
 
     }
 
-    public void setStudentsClickable(EntrancePanel entrance, DiningPanel dining) {
+    public void setStudentsClickable(DashboardPanel dashboard) {
         if (character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
             for (StudentButton studentButton : studentButtons) {
-                EffectListener el = new EffectListener(viewObservers, -1, tcp, entrance);
+                EffectListener el = new EffectListener(viewObservers, -1, tcp, dashboard.getEntrance());
                 effectListeners.add(el);
-                studentButton.addMouseListener(new EffectListener(viewObservers, -1, tcp, entrance));
+                studentButton.addMouseListener(new EffectListener(viewObservers, -1, tcp, dashboard.getEntrance()));
             }
         }
         else if (character.equals(CharacterCardsName.MONK.toString()) || character.equals(CharacterCardsName.JESTER.toString())) {
             for (StudentButton studentButton : studentButtons) {
-                CharacterStudentListener ccl = new CharacterStudentListener(dining, viewObservers, tcp, entrance, character);
+                CharacterStudentListener ccl = new CharacterStudentListener(viewObservers, tcp, dashboard.getEntrance(), character);
                 characterStudentListeners.add(ccl);
-                studentButton.addMouseListener(new CharacterStudentListener(dining, viewObservers, tcp, entrance, character));
+                studentButton.addMouseListener(new CharacterStudentListener(viewObservers, tcp, dashboard.getEntrance(), character));
             }
         }
     }

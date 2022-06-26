@@ -23,6 +23,13 @@ public class EffectListener extends ViewSubject implements MouseListener {
         this.entrance = entrance;
     }
 
+    public EffectListener(ArrayList<ViewObserver> observerList, int genericValue, TableCenterPanel tableCenterPanel) {
+        addAllObservers(observerList);
+        this.genericValue=genericValue;
+        this.tableCenterPanel=tableCenterPanel;
+        this.entrance = null;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         try {
@@ -38,7 +45,7 @@ public class EffectListener extends ViewSubject implements MouseListener {
             entrance.removeStudentsClickableForEffect();
         } catch (ClassCastException cce) {
             notifyObserver(obs -> obs.onAtomicEffect(genericValue));
-            tableCenterPanel.removeIslesClickable();
+            tableCenterPanel.removeClickableIsles();
         }
     }
 

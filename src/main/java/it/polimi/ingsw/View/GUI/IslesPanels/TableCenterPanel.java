@@ -4,6 +4,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.AssistantCardPanel;
 import it.polimi.ingsw.View.GUI.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
@@ -574,7 +575,7 @@ public class TableCenterPanel extends JPanel {
 
     public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
         for (int i=0;i<islesPanels.size();i++) {
-            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this, gsp.getFirstEntrancePanel()));
+            clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this));
         }
 
     }
@@ -583,11 +584,11 @@ public class TableCenterPanel extends JPanel {
         cloudsContainerPanel.setCloudsClickable();
     }
 
-    public void removeCloudsClickable() {
+    public void removeClickableClouds() {
         cloudsContainerPanel.removeCloudsClickable();
     }
 
-    public void removeIslesClickable(){
+    public void removeClickableIsles(){
         for (JPanel clickablePanel : clickablePanels) {
             for (int j = 0; j < clickablePanel.getMouseListeners().length; j++) {
                 clickablePanel.removeMouseListener(clickablePanel.getMouseListeners()[j]);
@@ -595,13 +596,13 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
-    public void setClickableCharacters(ArrayList<ViewObserver> viewObserverList, int playerID) {
+    public void setCharactersClickable(ArrayList<ViewObserver> viewObserverList, int playerID) {
         for(CharacterPanel characterPanel : characterPanels){
             characterPanel.addMouseListener(new CharacterCardListener(viewObserverList,characterPanel.getCharacterIndex(), playerID, this , gsp));
         }
     }
 
-    public void removeCharactersClickable() {
+    public void removeClickableCharacters() {
         for(CharacterPanel characterPanel : characterPanels){
             for (int j = 0; j < characterPanel.getMouseListeners().length; j++) {
                 characterPanel.removeMouseListener(characterPanel.getMouseListeners()[j]);
@@ -613,11 +614,11 @@ public class TableCenterPanel extends JPanel {
         return characterPanels;
     }
 
-    public void setCharacterStudentsClickable(CharacterPanel character, EntrancePanel entrance, DiningPanel dining) {
-        character.setStudentsClickable(entrance, dining);
+    public void setCharacterStudentsClickable(CharacterPanel character, DashboardPanel dashboard) {
+        character.setStudentsClickable(dashboard);
     }
 
-    public void removeCharacterStudentsClickable() {
+    public void removeClickableCharacterStudents() {
         for(CharacterPanel characterPanel : characterPanels){
             characterPanel.removeStudentsClickable();
         }

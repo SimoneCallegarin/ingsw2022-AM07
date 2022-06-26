@@ -28,10 +28,10 @@ public class CharacterCardListener extends ViewSubject implements MouseListener 
     public void mouseClicked(MouseEvent e) {
         notifyObserver(obs->obs.onCharacterCard(characterID));
 
-        tableCenterPanel.removeCharactersClickable();
-        tableCenterPanel.removeIslesClickable();
-        tableCenterPanel.removeCloudsClickable();
-        gameScreenPanel.removeDashboardClickable(playerID);
+        tableCenterPanel.removeClickableCharacters();
+        tableCenterPanel.removeClickableIsles();
+        tableCenterPanel.removeClickableClouds();
+        gameScreenPanel.removeClickableDashboard(playerID);
     }
 
     @Override

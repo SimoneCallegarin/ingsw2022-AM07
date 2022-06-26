@@ -22,8 +22,8 @@ public class CloudListener extends ViewSubject implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int cloudID=((CloudPanel)e.getSource()).getCloudID();
         notifyObserver(obs->obs.onCloudChoice(cloudID));
-        tableCenterPanel.removeCloudsClickable();
-        tableCenterPanel.removeCharactersClickable();
+        tableCenterPanel.removeClickableClouds();
+        tableCenterPanel.removeClickableCharacters();
     }
 
     @Override

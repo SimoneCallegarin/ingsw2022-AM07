@@ -11,7 +11,6 @@ import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
-import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -41,7 +40,7 @@ public class GameScreenPanel extends JPanel {
 
     JPanel dashboardContainerPanel2;
 
-    TableCenterPanel tableCenterPanel;
+    private final TableCenterPanel tableCenterPanel;
 
     ArrayList<DashboardPanel> dashboardPanels;
     ArrayList<JPanel> dashboardContainers;
@@ -187,7 +186,7 @@ public class GameScreenPanel extends JPanel {
      * Sets the dashboard entrance clickable in order to select a student to move.
      * @param playerID the playerID used to identify which dashboard set movable
      */
-    public void setClickableStudents(int playerID) {
+    public void setEntranceStudentsClickable(int playerID) {
         dashboardPanels.get(playerID).getEntrance().setStudentsClickable();
     }
 
@@ -195,27 +194,18 @@ public class GameScreenPanel extends JPanel {
      * Sets the character cards clickable in order for the player to activate the effect
      * @param playerID the player id used by the listener to remove the listener from the player dashboard
      */
-    public void setClickableCharacters(int playerID) {
-        tableCenterPanel.setClickableCharacters(viewObservers, playerID);
+    public void setCharactersClickable(int playerID) {
+        tableCenterPanel.setCharactersClickable(viewObservers, playerID);
     }
 
     public void setDiningStudentsClickable(int playerID){
         DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();
-        EntrancePanel entrancePanel=dashboardPanels.get(playerID).getEntrance();
-        diningStudentsPanel.setClickableStudentsForEffect(viewObservers,tableCenterPanel,entrancePanel);
+        diningStudentsPanel.setStudentsClickableForEffect(viewObservers,tableCenterPanel);
     }
 
-    public EntrancePanel getFirstEntrancePanel() {
-        return dashboardPanels.get(0).getEntrance();
-    }
+    public DashboardPanel getDashboardPanel(int playerID) { return dashboardPanels.get(playerID); }
 
-    public EntrancePanel getEntrancePanel(int playerID) { return dashboardPanels.get(playerID).getEntrance(); }
-
-    public DiningPanel getFirstDiningPanel() {
-        return dashboardPanels.get(0).getDining();
-    }
-
-    public DiningPanel getDiningPanel(int playerID) { return dashboardPanels.get(playerID).getDining(); }
+    public TableCenterPanel getTableCenterPanel() { return tableCenterPanel; }
 
     /**
      * method to set the message on the label on top of the game screen
@@ -225,7 +215,7 @@ public class GameScreenPanel extends JPanel {
         textLabel.setText(message);
     }
 
-    public void removeDashboardClickable(int playerID) {
+    public void removeClickableDashboard(int playerID) {
         dashboardPanels.get(playerID).getEntrance().removeStudentsClickable();
         dashboardPanels.get(playerID).getDining().removeClickable();
     }
