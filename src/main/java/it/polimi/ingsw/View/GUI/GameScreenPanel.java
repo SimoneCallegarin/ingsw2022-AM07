@@ -198,6 +198,10 @@ public class GameScreenPanel extends JPanel {
         tableCenterPanel.setCharactersClickable(viewObservers, playerID);
     }
 
+    /**
+     * Sets the students of the dining room clickable.
+     * @param playerID the id associated with the dining room
+     */
     public void setDiningStudentsClickable(int playerID){
         DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();
         diningStudentsPanel.setStudentsClickableForEffect(viewObservers,tableCenterPanel);

@@ -11,6 +11,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Class added to Character student buttons to listen to a mouse click and notify the view observers of the button color selected
+ */
 public class CharacterStudentListener extends ViewSubject implements MouseListener {
 
     EntrancePanel entrance;

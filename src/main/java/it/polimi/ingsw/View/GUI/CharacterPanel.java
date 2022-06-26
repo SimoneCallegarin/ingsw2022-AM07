@@ -147,6 +147,10 @@ public class CharacterPanel extends JPanel {
 
     }
 
+    /**
+     * Adds a MouseListener to every student of the Character Card in order to send an ACTIVATE_ATOMIC_EFFECT or a COLOR_VALUE message to the server, depending on the character.
+     * @param dashboard the dashboard associated with the one who played the Character Card
+     */
     public void setStudentsClickable(DashboardPanel dashboard) {
         if (character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
             for (StudentButton studentButton : studentButtons) {
@@ -164,6 +168,9 @@ public class CharacterPanel extends JPanel {
         }
     }
 
+    /**
+     * Removes the MouseListeners of the students on the Character Card.
+     */
     public void removeStudentsClickable() {
         if ((character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) && !effectListeners.isEmpty()) {
             for (int i = 0; i < studentButtons.size(); i++) {

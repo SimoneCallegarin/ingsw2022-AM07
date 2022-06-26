@@ -10,6 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Class added to every component that has to notify the view observers about the chosen generic value of the atomic effect
+ */
 public class EffectListener extends ViewSubject implements MouseListener {
 
     private int genericValue;

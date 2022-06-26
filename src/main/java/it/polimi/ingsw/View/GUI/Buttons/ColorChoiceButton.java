@@ -6,23 +6,23 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Button used to take the exchange students choice made by the user
- */
-public class ExchangeChoiceButton extends JButton  {
+public class ColorChoiceButton extends JButton {
 
-    public ExchangeChoiceButton(int exchange) {
+    public ColorChoiceButton(int color) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        printChoice(exchange);
+        printChoice(color);
     }
 
-    private void printChoice(int exchange) {
+    private void printChoice(int color) {
         ClassLoader cl=this.getClass().getClassLoader();
         InputStream url=null;
-        switch(exchange){
-            case 0->url=cl.getResourceAsStream("Raw/Check.png");
-            case 1->url=cl.getResourceAsStream("Raw/RedCross.png");
+        switch(color){
+            case 0 -> url = cl.getResourceAsStream("Dashboard/Students/Yellow.png");
+            case 1 -> url = cl.getResourceAsStream("Dashboard/Students/Pink.png");
+            case 2 -> url = cl.getResourceAsStream("Dashboard/Students/Blue.png");
+            case 3 -> url = cl.getResourceAsStream("Dashboard/Students/Red.png");
+            case 4 -> url = cl.getResourceAsStream("Dashboard/Students/Green.png");
         }
         BufferedImage img= null;
         try {
