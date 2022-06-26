@@ -52,7 +52,12 @@ public class App {
         if(choice.isEmpty())
             host = InetAddress.getLocalHost();
         else
-            host = InetAddress.getByName(choice);
+            try {
+                host = InetAddress.getByName(choice);
+            } catch ( UnknownHostException e ) {
+                System.out.println("Unknown host, insert a valid host.");
+                selectAddress();
+            }
     }
 
     /**

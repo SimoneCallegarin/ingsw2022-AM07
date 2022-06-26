@@ -18,6 +18,8 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +66,7 @@ public class GameScreenPanel extends JPanel {
         this.dashboardPanels=new ArrayList<>();
         this.dashboardContainers=new ArrayList<>();
         this.viewObservers=viewObservers;
-        textContainerPanel = new JPanel(new GridLayout(1,1));
+        textContainerPanel = new JPanel(new BorderLayout());
         //textContainerPanel.setBackground(Color.WHITE);
         dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
@@ -178,7 +180,8 @@ public class GameScreenPanel extends JPanel {
             dashboardPanels.add(dashboardPanel);//this arrayList is used only to store them and access them in a more efficient way
         }
 
-        textLabel = new JLabel("                                                                                                                                          ");
+        textLabel = new JLabel("");
+        textLabel.setPreferredSize(new Dimension(1000,10));
         textContainerPanel.add(textLabel);
         gamescreenConstraints.gridy=0;
     }

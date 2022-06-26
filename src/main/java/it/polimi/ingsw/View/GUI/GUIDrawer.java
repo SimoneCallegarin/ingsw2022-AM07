@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -179,7 +180,6 @@ public class GUIDrawer extends ViewSubject {
 
     /**
      * Updates the right panel of the main menu when the check button is pressed.
-     *
      * @param e the action event of the check button pressed.
      */
     public void updateDisplay(ActionEvent e) {
@@ -278,6 +278,7 @@ public class GUIDrawer extends ViewSubject {
      * this method uses the general panel manager card layout to switch from the InitialBackground panel to the GameScreen panel
      */
     public void showGameScreen() {
+        addLogoutButton();
         //switch to the actual game screen
         cl.show(generalPanelManager, "Game Screen");
     }
@@ -470,8 +471,8 @@ public class GUIDrawer extends ViewSubject {
 
 
     /**
-     * this method update the gamescreen panel according to the changes occurred in the modelStorage. The GuiDrawer reads the changes arraylist
-     * in the modelStorage to correctly know which component to update.
+     * Updates the game screen panel according to the changes occurred in the modelStorage.
+     * The GuiDrawer reads the changes arraylist in the modelStorage in order to know which component to update.
      */
     public void updateGameScreenPanel() {
 
@@ -527,8 +528,50 @@ public class GUIDrawer extends ViewSubject {
         modelChanges.getToUpdate().clear();
     }
 
-    public void showServiceMessage(String message) {
-        gameScreenPanel.setMessage(message);
+    public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }
+
+    /**
+     * Adds a logout button at the top of the screen.
+     * When pressed it will open a confirmation option pane.
+     */
+    public void addLogoutButton() {
+        JButton logout = new JButton();
+        logout.setText("LOGOUT");
+        logout.setBackground(Color.RED);
+        logout.setPreferredSize(new Dimension(100,25));
+        logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logoutConfirmation();
+            }
+        });
+        gameScreenPanel.textContainerPanel.add(logout,BorderLayout.LINE_END);
+    }
+
+    /**
+     * Asks the player if he is sure to log out.
+     * If the answer is yes then it will notify the ClientController that starts the logout process,
+     * else the player will be able to continue the game.
+     */
+    public void logoutConfirmation() {
+        JButton yes = new JButton();
+        JButton no = new JButton();
+        yes.setText("Yes");
+        no.setText("No");
+        yes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                notifyObserver(ViewObserver::onLogout);
+            }
+        });
+        no.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Object[] options = { yes, "No" };
+        JOptionPane.showOptionDialog(null,"Are you sure you want to log out?", "Logout Request",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,options,options[0]);
     }
 
     public void showKOMessage(String serviceMessage) {
@@ -651,9 +694,11 @@ public class GUIDrawer extends ViewSubject {
         return exchangeChoice.get() == 0;
     }
 
-    public void showErrorMessage(String serviceMessage) {
-        JOptionPane.showMessageDialog(f, serviceMessage, "Disconnection occurred", JOptionPane.ERROR_MESSAGE);
-    }
+    /**
+     * Shows on screen the notification that an error has occurred and that the player will be disconnected.
+     * @param serviceMessage contains the reason why the disconnection occurred.
+     */
+    public void showErrorMessage(String serviceMessage) { JOptionPane.showMessageDialog(f, serviceMessage, "Disconnection occurred", JOptionPane.ERROR_MESSAGE); }
 
     public void setModelStorage(ModelStorage modelStorage) {
         this.modelStorage = modelStorage;
