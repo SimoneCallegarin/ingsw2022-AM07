@@ -21,7 +21,7 @@ public class GameTableInformation {
     public record CharacterCard(String characterCardName, int characterCardCost,
                                 HashMap<RealmColors,Integer> studentsOnCharacterCard,
                                 int denyCardsOnCharacterCard,
-                                String description) {
+                                String description, boolean used) {
 
         // GETTERS:
 
@@ -42,6 +42,10 @@ public class GameTableInformation {
 
         public String getDescription() { return description; }
 
+        @Override
+        public boolean used() {
+            return used;
+        }
     }
 
     /**

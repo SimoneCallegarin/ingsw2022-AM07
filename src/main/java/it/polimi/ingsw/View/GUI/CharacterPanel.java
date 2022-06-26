@@ -1,6 +1,19 @@
 package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+import it.polimi.ingsw.Model.DashboardObjects.Entrance;
+import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Observer.ViewObserver;
+import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
+import it.polimi.ingsw.View.GUI.EventListeners.CharacterStudentListener;
+import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
+import it.polimi.ingsw.View.GUI.EventListeners.EntranceStudentListener;
+import it.polimi.ingsw.View.GUI.IslesPanels.DenyCardPanel;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
+import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -8,17 +21,71 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
+/**
+ * this panel represents a character card on the game table
+ */
 public class CharacterPanel extends JPanel {
-
+    /**
+     * the String representing the character name
+     */
     String character;
+    /**
+     * the index of the character in the game table
+     */
     int characterIndex;
+    /**
+     * constraints for this panel layout
+     */
+    GridBagConstraints constraints;
+    /**
+     * model storage reference used to retrieve information about the character card state (students/deny cards etc. on it)
+     */
+    ModelStorage storage;
+    /**
+     * array list to store the students images
+     */
+    ArrayList<BufferedImage> students;
+    /**
+     * array list to store the checked students images
+     */
+    ArrayList<BufferedImage> checkedStudents;
+    /**
+     * array list to store the student buttons placed on the character card
+     */
+    ArrayList<StudentButton> studentButtons;
 
-    public CharacterPanel(String character, int characterIndex) {
+    ArrayList<EffectListener> effectListeners;
+    ArrayList<CharacterStudentListener> characterStudentListeners;
+
+    TableCenterPanel tcp;
+    ArrayList<ViewObserver> viewObservers;
+    EntrancePanel entrance;
+    DiningPanel dining;
+
+    public CharacterPanel(ModelStorage storage, String character, int characterIndex,
+                          ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents,
+                          TableCenterPanel tcp, ArrayList<ViewObserver> viewObservers) {
+
+        this.studentButtons=new ArrayList<>();
+        this.effectListeners = new ArrayList<>();
+        this.characterStudentListeners = new ArrayList<>();
+        this.tcp = tcp;
+        this.viewObservers = viewObservers;
         this.character=character;
         this.characterIndex = characterIndex;
+        this.constraints=new GridBagConstraints();
+        this.storage=storage;
+        this.students=students;
+        this.checkedStudents=checkedStudents;
+
         setBorder(BorderFactory.createEmptyBorder());
+        setLayout(new GridBagLayout());
+        setPreferredSize(this.getSize());
         setOpaque(false);
+
+        initializeCharacter();
     }
 
     @Override
@@ -50,6 +117,76 @@ public class CharacterPanel extends JPanel {
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
+    public void initializeCharacter(){
+        constraints.gridx=0;
+        constraints.gridy=0;
+        switch (character){
+            case "MONK", "JESTER","SPOILED_PRINCESS" ->{
+                for(RealmColors color: RealmColors.values()){
+                    for(int i=0;i<storage.getGameTable().getCharacterCard(characterIndex).getStudentsByColor(color);i++){
+                        StudentButton studentButton=new StudentButton(color,students,checkedStudents);
+                        add(studentButton,constraints);
+                        studentButtons.add(studentButton);
+                        constraints.gridx++;
+                    }
+                }
+            }
+            case "GRANDMA_HERBS"->{
+                for(int i=0;i<storage.getGameTable().getCharacterCard(characterIndex).getDenyCardsOnCharacterCard();i++){
+                    add(new DenyCardPanel(),constraints);
+                    constraints.gridx++;
+                }
+            }
+
+        }
+        if(storage.getGameTable().getCharacterCard(characterIndex).used()) {
+            constraints.gridx=0;
+            constraints.gridy++;
+            constraints.gridy++;
+            add(new CoinPanel(),constraints);
+        }
+
+    }
+
+    public void setStudentsClickable(EntrancePanel entrance, DiningPanel dining) {
+        if (character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
+            for (StudentButton studentButton : studentButtons) {
+                EffectListener el = new EffectListener(viewObservers, -1, tcp, entrance);
+                effectListeners.add(el);
+                studentButton.addMouseListener(new EffectListener(viewObservers, -1, tcp, entrance));
+            }
+        }
+        else if (character.equals(CharacterCardsName.MONK.toString()) || character.equals(CharacterCardsName.JESTER.toString())) {
+            for (StudentButton studentButton : studentButtons) {
+                CharacterStudentListener ccl = new CharacterStudentListener(dining, viewObservers, tcp, entrance, character);
+                characterStudentListeners.add(ccl);
+                studentButton.addMouseListener(new CharacterStudentListener(dining, viewObservers, tcp, entrance, character));
+            }
+        }
+    }
+
+    public void removeStudentsClickable() {
+        if ((character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) && !effectListeners.isEmpty()) {
+            for (int i = 0; i < studentButtons.size(); i++) {
+                studentButtons.get(i).removeMouseListener(effectListeners.get(i));
+            }
+        }
+        else if ((character.equals(CharacterCardsName.MONK.toString()) || character.equals(CharacterCardsName.JESTER.toString())) && !characterStudentListeners.isEmpty()) {
+            for (int i = 0; i < studentButtons.size(); i++) {
+                studentButtons.get(i).removeMouseListener(characterStudentListeners.get(i));
+            }
+        }
+    }
+
+    public void resetCharacter(){
+        this.removeAll();
+        studentButtons.clear();
+        this.validate();
+        this.repaint();
+    }
+
     public int getCharacterIndex() { return characterIndex; }
+
+    public String getCharacterName() { return character; }
 
 }

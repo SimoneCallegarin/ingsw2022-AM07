@@ -49,7 +49,7 @@ public class DashboardPanel extends JPanel {
         this.storage=storage;
         this.playerID=playerID;
         this.towerStorage=new TowerStoragePanel(storage, playerID, towers);
-        this.dining=new DiningPanel(storage,playerID, students);
+        this.dining=new DiningPanel(storage,playerID, students, checkedStudents);
         this.entrance=new EntrancePanel(storage,playerID,viewObservers,tableCenterPanel,this, students, checkedStudents);
         towerStorageConstraints =new GridBagConstraints();
         diningConstraints= new GridBagConstraints();

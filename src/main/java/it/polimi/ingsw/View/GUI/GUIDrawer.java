@@ -2,7 +2,9 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
+import it.polimi.ingsw.View.GUI.Buttons.ExchangeChoiceButton;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -128,7 +130,7 @@ public class GUIDrawer extends ViewSubject {
         nicknameLabel.setHorizontalAlignment(JLabel.LEFT);
         nicknameField = new JTextField();
 
-        leftHalf.add(nicknameLabel,0);
+        leftHalf.add(nicknameLabel,0);;
         leftHalf.add(nicknameField,1);
 
         JPanel buttons = new JPanel(new GridLayout(1, 2));
@@ -184,6 +186,7 @@ public class GUIDrawer extends ViewSubject {
         if (nicknameDisplay.getText().length()<2 || nicknameDisplay.getText().length()>=20)
             nicknameDisplay.setForeground(Color.RED);
         nicknameDisplay.setFont(italicFont);
+
     }
 
     /**
@@ -257,8 +260,10 @@ public class GUIDrawer extends ViewSubject {
      */
     public void showLoadingScreen(){
         loadingScreen = new LoadingScreen(usernamePlaying);
+        //need to update the loading screen graphics
         generalPanelManager.add(loadingScreen,"Loading Screen");
         cl.show(generalPanelManager,"Loading Screen");
+
     }
 
     public void createGameScreen(){
@@ -300,8 +305,7 @@ public class GUIDrawer extends ViewSubject {
                 }catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                if (img1 != null)
-                    buttons[finalI1].setIcon(new ImageIcon(img1));
+                buttons[finalI1].setIcon(new ImageIcon(img1));
 
                 if (turnOrder.get() != 0 && turnOrder.get() != finalI) {
                     ClassLoader cl2=this.getClass().getClassLoader();
@@ -313,8 +317,7 @@ public class GUIDrawer extends ViewSubject {
                     }catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    if (img2 != null)
-                        buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
+                    buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
                 }
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 lastPressedButton.set(finalI1);
@@ -356,7 +359,9 @@ public class GUIDrawer extends ViewSubject {
     public void showCloudChoice(){
         /*String message="Now choose a cloud to pick students from by clicking on it";
         JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
+
         gameScreenPanel.tableCenterPanel.setCloudsClickable();
+
         turnStarted = false;
     }
 
@@ -399,9 +404,58 @@ public class GUIDrawer extends ViewSubject {
                 showColorForm("Which color you don't want to consider for influence calculation in this turn?");
             }
             case THIEF -> {
-                message.append("Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
+                message.append("\nChoose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
                 showColorForm("Which color you want to be removed from Dining Rooms?");
+            }
+            case SPOILED_PRINCESS -> {
+                message.append("\nTake 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                CharacterPanel spoiledPrincessPanel = null;
+                for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                    if (character.getCharacterName().equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
+                        spoiledPrincessPanel = character;
+                        break;
+                    }
+                }
+                gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(spoiledPrincessPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
+            }
+            case MONK -> {
+                message.append("\nTake 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                CharacterPanel monkPanel = null;
+                for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                    if (character.getCharacterName().equals(CharacterCardsName.MONK.toString())) {
+                        monkPanel = character;
+                        break;
+                    }
+                }
+                gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(monkPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
+            }
+            case JESTER -> {
+                message.append("\nYou may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                if (!showExchangeForm("Do you want to exchange students?"))
+                    notifyObserver(ViewObserver::onEndCharacterPhase);
+                else {
+                    CharacterPanel jesterPanel = null;
+                    for (CharacterPanel character : gameScreenPanel.tableCenterPanel.getCharacterPanels()) {
+                        if (character.getCharacterName().equals(CharacterCardsName.JESTER.toString())) {
+                            jesterPanel  = character;
+                            break;
+                        }
+                    }
+                    gameScreenPanel.tableCenterPanel.setCharacterStudentsClickable(jesterPanel, gameScreenPanel.getEntrancePanel(modelChanges.getPlayerID()), gameScreenPanel.getDiningPanel(modelChanges.getPlayerID()));
+                }
+            }
+            case MINSTREL -> {
+                message.append("\nNow you can exchange up to 2 students between your dining and your entrance");
+                JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
+                if (!showExchangeForm("Do you want to exchange students?"))
+                    notifyObserver(ViewObserver::onEndCharacterPhase);
+                else
+                    gameScreenPanel.setDiningStudentsClickable(modelChanges.getPlayingID());
+
             }
         }
     }
@@ -455,11 +509,25 @@ public class GUIDrawer extends ViewSubject {
                     }
                     modelChanges.setLayoutChanged(false);
                 }
-
-                //missing case character card and cloud changes
+                case CHARACTERCARD_CHANGED -> {
+                    for(CharacterPanel characterPanel:gameScreenPanel.tableCenterPanel.getCharacterPanels()){
+                        characterPanel.resetCharacter();
+                        characterPanel.initializeCharacter();
+                    }
+                }
             }
         }
         modelChanges.getToUpdate().clear();
+    }
+
+    public void showServiceMessage(String message) {
+        gameScreenPanel.setMessage(message);
+    }
+
+    public void showKOMessage(String serviceMessage){
+        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
+            gameScreenPanel.setClickableCharacters(modelChanges.getPlayerID());
+        JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
     }
 
     private void showColorForm(String question) {
@@ -518,6 +586,64 @@ public class GUIDrawer extends ViewSubject {
         //notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
     }
 
+    private boolean showExchangeForm(String exchangeQuestion) {
+        AtomicInteger exchangeChoice = new AtomicInteger();
+        exchangeChoice.set(-1);
+        JPanel buttonContainer = new JPanel();
+        JButton[] buttons = new JButton[2];
+        for (int i = 0; i < 2; i++) {
+            buttons[i] = (new ExchangeChoiceButton(i));
+            int finalI = i;
+            buttons[i].addActionListener(e -> {
+                ClassLoader cl1=this.getClass().getClassLoader();
+                InputStream url1;
+                if (finalI == 0) {
+                    url1 = cl1.getResourceAsStream("Raw/CheckChk.png");
+                }
+                else {
+                    url1 = cl1.getResourceAsStream("Raw/RedCrossChk.png");
+                }
+                BufferedImage img1= null;
+                try {
+                    if (url1 != null)
+                        img1 = ImageIO.read(url1);
+                }catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                buttons[finalI].setIcon(new ImageIcon(img1));
+
+                if (exchangeChoice.get() != -1 && exchangeChoice.get() != finalI) {
+                    ClassLoader cl2=this.getClass().getClassLoader();
+                    InputStream url2;
+                    if (exchangeChoice.get() == 0) {
+                        url2 = cl2.getResourceAsStream("Raw/Check.png");
+                    }
+                    else {
+                        url2 = cl2.getResourceAsStream("Raw/RedCross.png");
+                    }
+                    BufferedImage img2= null;
+                    try {
+                        if (url2 != null)
+                            img2 = ImageIO.read(url2);
+                    }catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    buttons[exchangeChoice.get()].setIcon(new ImageIcon(img2));
+                }
+
+                exchangeChoice.set(finalI);
+
+            });
+            buttonContainer.add(buttons[i]);
+        }
+        JScrollPane scrollPane = new JScrollPane(buttonContainer);
+        scrollPane.setPreferredSize(new Dimension(440, 220));
+        JOptionPane.showMessageDialog(f, scrollPane, exchangeQuestion, JOptionPane.PLAIN_MESSAGE);
+        return exchangeChoice.get() == 0;
+    }
+
+    public ModelStorage getModelStorage() {
+        return modelStorage;
     public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }
 
     public void showKOMessage(String serviceMessage){

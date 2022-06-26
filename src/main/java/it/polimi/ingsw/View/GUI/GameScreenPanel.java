@@ -8,6 +8,10 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -156,7 +160,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers, this);
+        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers,checkedStudents, this);
         add(tableCenterPanel,gamescreenConstraints);
 
         //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
@@ -184,12 +188,34 @@ public class GameScreenPanel extends JPanel {
      * @param playerID the playerID used to identify which dashboard set movable
      */
     public void setClickableStudents(int playerID) {
-        dashboardPanels.get(playerID).getEntrance().setClickable();
+        dashboardPanels.get(playerID).getEntrance().setStudentsClickable();
     }
 
+    /**
+     * Sets the character cards clickable in order for the player to activate the effect
+     * @param playerID the player id used by the listener to remove the listener from the player dashboard
+     */
     public void setClickableCharacters(int playerID) {
         tableCenterPanel.setClickableCharacters(viewObservers, playerID);
     }
+
+    public void setDiningStudentsClickable(int playerID){
+        DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();
+        EntrancePanel entrancePanel=dashboardPanels.get(playerID).getEntrance();
+        diningStudentsPanel.setClickableStudentsForEffect(viewObservers,tableCenterPanel,entrancePanel);
+    }
+
+    public EntrancePanel getFirstEntrancePanel() {
+        return dashboardPanels.get(0).getEntrance();
+    }
+
+    public EntrancePanel getEntrancePanel(int playerID) { return dashboardPanels.get(playerID).getEntrance(); }
+
+    public DiningPanel getFirstDiningPanel() {
+        return dashboardPanels.get(0).getDining();
+    }
+
+    public DiningPanel getDiningPanel(int playerID) { return dashboardPanels.get(playerID).getDining(); }
 
     /**
      * method to set the message on the label on top of the game screen
@@ -198,8 +224,8 @@ public class GameScreenPanel extends JPanel {
     public void setMessage(String message) { textLabel.setText(message); }
 
     public void removeDashboardClickable(int playerID) {
-        dashboardPanels.get(playerID).getEntrance().removeClickable();
-        dashboardPanels.get(playerID).getDining().removeCLickable();
+        dashboardPanels.get(playerID).getEntrance().removeStudentsClickable();
+        dashboardPanels.get(playerID).getDining().removeClickable();
     }
 
     /**
