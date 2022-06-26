@@ -1,11 +1,9 @@
 package it.polimi.ingsw.View.GUI.EventListeners;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
-import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 
@@ -14,20 +12,19 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
- * Class added to dining student buttons to listen to a mouse click and notify the view observers of the button color selected
+ * Class added to Character student buttons to listen to a mouse click and notify the view observers of the button color selected
  */
-public class DiningStudentListener extends ViewSubject implements MouseListener {
+public class CharacterStudentListener extends ViewSubject implements MouseListener {
 
     EntrancePanel entrance;
-    DiningStudentsPanel dsp;
     TableCenterPanel tableCenter;
     ArrayList<ViewObserver> observers;
+    String character;
 
-    public DiningStudentListener(EntrancePanel entrance, ArrayList<ViewObserver> viewObserverList,
-                                 TableCenterPanel tableCenter, DiningStudentsPanel dsp) {
+    public CharacterStudentListener(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance, String character) {
         this.entrance = entrance;
-        this.dsp = dsp;
         this.tableCenter=tableCenter;
+        this.character = character;
         observers=viewObserverList;
         addAllObservers(viewObserverList);
     }
@@ -47,8 +44,12 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
         buttonPressed.printClick(buttonPressed.getColor());
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
 
-        entrance.setStudentsClickableForEffect();
-        dsp.removeClickableStudents();
+        switch (character) {
+            case "MONK" -> tableCenter.setIslesClickableForEffect(getViewObserverList());
+            case "JESTER" -> entrance.setStudentsClickableForEffect();
+        }
+
+        tableCenter.removeClickableCharacterStudents();
 
     }
 
@@ -72,4 +73,3 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
 
     }
 }
-

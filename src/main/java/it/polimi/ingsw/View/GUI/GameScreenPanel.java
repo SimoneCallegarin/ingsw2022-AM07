@@ -10,6 +10,7 @@ import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -39,7 +40,7 @@ public class GameScreenPanel extends JPanel {
 
     JPanel dashboardContainerPanel2;
 
-    TableCenterPanel tableCenterPanel;
+    private final TableCenterPanel tableCenterPanel;
 
     ArrayList<DashboardPanel> dashboardPanels;
     ArrayList<JPanel> dashboardContainers;
@@ -185,39 +186,40 @@ public class GameScreenPanel extends JPanel {
      * Sets the dashboard entrance clickable in order to select a student to move.
      * @param playerID the playerID used to identify which dashboard set movable
      */
-    public void setClickableStudents(int playerID) {
-        dashboardPanels.get(playerID).getEntrance().setClickable();
+    public void setEntranceStudentsClickable(int playerID) {
+        dashboardPanels.get(playerID).getEntrance().setStudentsClickable();
     }
 
     /**
      * Sets the character cards clickable in order for the player to activate the effect
      * @param playerID the player id used by the listener to remove the listener from the player dashboard
      */
-    public void setClickableCharacters(int playerID) {
-        tableCenterPanel.setClickableCharacters(viewObservers, playerID);
+    public void setCharactersClickable(int playerID) {
+        tableCenterPanel.setCharactersClickable(viewObservers, playerID);
     }
 
     /**
-     * Sets the dining and entrance students for the Minstrel effect activation
-     * @param playerID the playerID used to identify which dining and entrance set clickable
+     * Sets the students of the dining room clickable.
+     * @param playerID the id associated with the dining room
      */
-    public void setClickableStudentsForEffect(int playerID){
+    public void setDiningStudentsClickable(int playerID){
         DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();
-        EntrancePanel entrancePanel=dashboardPanels.get(playerID).getEntrance();
-        diningStudentsPanel.setClickableStudentsForEffect(viewObservers,tableCenterPanel,entrancePanel);
+        diningStudentsPanel.setStudentsClickableForEffect(viewObservers,tableCenterPanel);
     }
+
+    public DashboardPanel getDashboardPanel(int playerID) { return dashboardPanels.get(playerID); }
+
+    public TableCenterPanel getTableCenterPanel() { return tableCenterPanel; }
 
     /**
      * method to set the message on the label on top of the game screen
      * @param message the text string to update the label with
      */
-    public void setMessage(String message) {
-        textLabel.setText(message);
-    }
+    public void setMessage(String message) { textLabel.setText(message); }
 
-    public void removeDashboardClickable(int playerID) {
-        dashboardPanels.get(playerID).getEntrance().removeClickable();
-        dashboardPanels.get(playerID).getDining().removeCLickable();
+    public void removeClickableDashboard(int playerID) {
+        dashboardPanels.get(playerID).getEntrance().removeStudentsClickable();
+        dashboardPanels.get(playerID).getDining().removeClickable();
     }
 
     /**

@@ -8,6 +8,7 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 
+import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Network.ServerSide.ClientHandler;
 import it.polimi.ingsw.Network.ServerSide.SocketServer;
@@ -212,14 +213,17 @@ public class Server {
      * @param nickname of the player that disconnected.
      */
     public synchronized void onDisconnection(String nickname) {
-        System.out.println("Deleting match number " + getPlayerInfo(nickname).getMatchID());
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
+        NetworkMessage quit = new ServiceMessage(MessageType.QUIT,nickname + " has left the lobby.\nThe game will now end.");
         activeMatches.remove(matchToEnd);
         virtualViews.remove(matchToEnd);
         for (String player : chosenNicknames){
-            players.get(nickname).getClientHandler().terminateClientHandler();
-            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected())
-                players.get(player).getClientHandler().disconnect(nickname + " has left the lobby. The game will now end.");
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
+                players.get(player).getClientHandler().send(quit);
+                players.get(player).getClientHandler().disconnect(nickname + " has left the lobby.\nThe game will now end.");
+            }
+            if(players.get(player).getMatchID() == matchToEnd)
+                players.get(player).getClientHandler().terminateClientHandler();
         }
         for (String playerToRemove : playersToRemove) {
             removePlayer(playerToRemove);
@@ -234,7 +238,6 @@ public class Server {
      * @param nickname the nickname of the player that has to be removed.
      */
     public synchronized void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
-
 
     /**
      * Main of the server, launches all the function necessary in order to make the server work.

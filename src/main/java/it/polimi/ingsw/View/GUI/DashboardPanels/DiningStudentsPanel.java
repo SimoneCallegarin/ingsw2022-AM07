@@ -21,8 +21,9 @@ public class DiningStudentsPanel extends JPanel {
     private final ArrayList<StudentButton> studentButtons;
 
     ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> checkedStudents;
 
-    public DiningStudentsPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students) {
+    public DiningStudentsPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         this.playerID=playerID;
         this.lanes=new ArrayList<>();
         this.studentButtons=new ArrayList<>();
@@ -30,6 +31,7 @@ public class DiningStudentsPanel extends JPanel {
         gridLayout.setHgap(-35);
         setLayout(gridLayout);
         this.students = students;
+        this.checkedStudents = checkedStudents;
         InitializeDiningStudents(playerID,storage);
 
     }
@@ -70,7 +72,7 @@ public class DiningStudentsPanel extends JPanel {
                 }
             }
             for(int i=0;i<storage.getDashboard(playerID).getDiningStudents(color);i++){
-                StudentButton studentButton=new StudentButton(color,students);
+                StudentButton studentButton=new StudentButton(color,students, checkedStudents);
                 studentButtons.add(studentButton);
                 switch (color) {
                     case YELLOW -> yellowLane.add(studentButton);
@@ -104,12 +106,11 @@ public class DiningStudentsPanel extends JPanel {
      * set students clickable in order for the minstrel effect to activate
      * @param viewObservers view observer list to pass to the listener constructor
      * @param tableCenterPanel table center panel to pass to the listener constructor
-     * @param entrancePanel entrance panel to pass to the listener constructor
      */
-    public void setClickableStudentsForEffect(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, EntrancePanel entrancePanel){
+    public void setStudentsClickableForEffect(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel){
         DashboardPanel thisDashboard=(DashboardPanel) this.getParent().getParent();
         for(StudentButton studentButton:studentButtons){
-            studentButton.addMouseListener(new DiningStudentListener(thisDashboard,viewObservers,tableCenterPanel,entrancePanel));
+            studentButton.addMouseListener(new DiningStudentListener(thisDashboard.getEntrance(),viewObservers,tableCenterPanel, this));
         }
     }
 

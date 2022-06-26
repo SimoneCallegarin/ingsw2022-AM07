@@ -1,6 +1,5 @@
-package it.polimi.ingsw.Network.ServerSide;
+package it.polimi.ingsw.Network.ClientSide;
 
-import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
@@ -11,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.util.NoSuchElementException;
 
 /**
- * ClientListener that handle the input from the client and notifies with it the ClientController.
+ * ClientListener that listens to the messages received and notifies with them the ClientController.
  */
 public class ClientListener extends NetworkSubject implements Runnable {
 
@@ -50,9 +49,8 @@ public class ClientListener extends NetworkSubject implements Runnable {
                     System.err.println("QUIT message received");
                 notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
-                System.err.println("An error occurred...");
-                cs.disconnect();
-                notifyObserver(new ServiceMessage(MessageType.QUIT, "Connection lost. The game will now end."));
+                System.err.println("Connection lost...");
+                notifyObserver(new ServiceMessage(MessageType.QUIT, "The game will now end."));
             }
         }
     }

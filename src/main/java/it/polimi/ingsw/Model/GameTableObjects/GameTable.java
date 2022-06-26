@@ -81,9 +81,10 @@ public class GameTable implements DenyCardManager {
             professors.put(rc, 1);
 
         this.characterCards = new ArrayList<>(3);
-        if (gameMode.equals(GameMode.EXPERT))
+        if (gameMode.equals(GameMode.EXPERT)){
             extractAndSetUsableCharacterCards();
-        set3CharacterCards(CharacterCardsName.MONK, CharacterCardsName.JESTER, CharacterCardsName.MINSTREL);
+            set3CharacterCards(CharacterCardsName.FUNGIST, CharacterCardsName.THIEF, CharacterCardsName.GRANDMA_HERBS);
+        }
         this.denyCards = 4;
         this.generalMoneyReserve = 0;
         if(gameMode==GameMode.EXPERT)

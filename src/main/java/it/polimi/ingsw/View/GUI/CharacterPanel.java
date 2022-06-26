@@ -1,9 +1,19 @@
 package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+import it.polimi.ingsw.Model.DashboardObjects.Entrance;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
+import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
+import it.polimi.ingsw.View.GUI.EventListeners.CharacterStudentListener;
+import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
+import it.polimi.ingsw.View.GUI.EventListeners.EntranceStudentListener;
 import it.polimi.ingsw.View.GUI.IslesPanels.DenyCardPanel;
+import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.imageio.ImageIO;
@@ -47,16 +57,28 @@ public class CharacterPanel extends JPanel {
      */
     ArrayList<StudentButton> studentButtons;
 
+    ArrayList<EffectListener> effectListeners;
+    ArrayList<CharacterStudentListener> characterStudentListeners;
+
+    TableCenterPanel tcp;
+    ArrayList<ViewObserver> viewObservers;
+
     public CharacterPanel(ModelStorage storage, String character, int characterIndex,
-                          ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
+                          ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents,
+                          TableCenterPanel tcp, ArrayList<ViewObserver> viewObservers) {
 
         this.studentButtons=new ArrayList<>();
+        this.effectListeners = new ArrayList<>();
+        this.characterStudentListeners = new ArrayList<>();
+        this.tcp = tcp;
+        this.viewObservers = viewObservers;
         this.character=character;
         this.characterIndex = characterIndex;
         this.constraints=new GridBagConstraints();
         this.storage=storage;
         this.students=students;
         this.checkedStudents=checkedStudents;
+
         setBorder(BorderFactory.createEmptyBorder());
         setLayout(new GridBagLayout());
         setPreferredSize(this.getSize());
@@ -125,6 +147,43 @@ public class CharacterPanel extends JPanel {
 
     }
 
+    /**
+     * Adds a MouseListener to every student of the Character Card in order to send an ACTIVATE_ATOMIC_EFFECT or a COLOR_VALUE message to the server, depending on the character.
+     * @param dashboard the dashboard associated with the one who played the Character Card
+     */
+    public void setStudentsClickable(DashboardPanel dashboard) {
+        if (character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
+            for (StudentButton studentButton : studentButtons) {
+                EffectListener el = new EffectListener(viewObservers, -1, tcp, dashboard.getEntrance());
+                effectListeners.add(el);
+                studentButton.addMouseListener(new EffectListener(viewObservers, -1, tcp, dashboard.getEntrance()));
+            }
+        }
+        else if (character.equals(CharacterCardsName.MONK.toString()) || character.equals(CharacterCardsName.JESTER.toString())) {
+            for (StudentButton studentButton : studentButtons) {
+                CharacterStudentListener ccl = new CharacterStudentListener(viewObservers, tcp, dashboard.getEntrance(), character);
+                characterStudentListeners.add(ccl);
+                studentButton.addMouseListener(new CharacterStudentListener(viewObservers, tcp, dashboard.getEntrance(), character));
+            }
+        }
+    }
+
+    /**
+     * Removes the MouseListeners of the students on the Character Card.
+     */
+    public void removeStudentsClickable() {
+        if ((character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) && !effectListeners.isEmpty()) {
+            for (int i = 0; i < studentButtons.size(); i++) {
+                studentButtons.get(i).removeMouseListener(effectListeners.get(i));
+            }
+        }
+        else if ((character.equals(CharacterCardsName.MONK.toString()) || character.equals(CharacterCardsName.JESTER.toString())) && !characterStudentListeners.isEmpty()) {
+            for (int i = 0; i < studentButtons.size(); i++) {
+                studentButtons.get(i).removeMouseListener(characterStudentListeners.get(i));
+            }
+        }
+    }
+
     public void resetCharacter(){
         this.removeAll();
         studentButtons.clear();
@@ -133,5 +192,7 @@ public class CharacterPanel extends JPanel {
     }
 
     public int getCharacterIndex() { return characterIndex; }
+
+    public String getCharacterName() { return character; }
 
 }

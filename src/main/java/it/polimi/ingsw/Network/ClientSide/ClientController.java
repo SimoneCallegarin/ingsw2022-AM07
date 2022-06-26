@@ -202,8 +202,10 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 view.printKO(sm);
             }
             case QUIT -> {
+                client.disconnectClient();
                 ServiceMessage sm = (ServiceMessage) message;
                 view.disconnect(sm);
+                client.disconnect();
             }
             case START_GAME -> {
                 GameCreation_UpdateMsg gc = (GameCreation_UpdateMsg) message;

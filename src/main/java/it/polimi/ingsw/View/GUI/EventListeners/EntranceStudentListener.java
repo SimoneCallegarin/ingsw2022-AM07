@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * this class is added to student buttons to listen to a mouse click and notify the view observers of the button color selected
  */
-public class EntranceListener extends ViewSubject implements MouseListener  {
+public class EntranceStudentListener extends ViewSubject implements MouseListener  {
     /**
      * this boolean is used to set the dining and the isles clickable only one time and avoid adding multiple listeners to them and sending
      * multiple studentToDining/studentToIsle messages to the server
@@ -25,7 +25,7 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
     DashboardPanel dashboardListened;
     ArrayList<ViewObserver> observers;
 
-    public EntranceListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance) {
+    public EntranceStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance) {
         this.entrance=entrance;
         this.dashboardListened = dashboardListened;
         this.tableCenter=tableCenter;
@@ -35,7 +35,7 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
     }
 
     public static void setSetClickable(boolean setClickable) {
-        EntranceListener.setClickable = setClickable;
+        EntranceStudentListener.setClickable = setClickable;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class EntranceListener extends ViewSubject implements MouseListener  {
         entrance.setLastPressedStudent(buttonPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
         if(!setClickable) {
-            dashboardListened.getDining().setCLickable(observers,tableCenter);//so after at least one student button press the dining room is set clickable
+            dashboardListened.getDining().setClickable(observers,tableCenter);//so after at least one student button press the dining room is set clickable
             tableCenter.setIslesClickable(getViewObserverList(),entrance,dashboardListened.getDining());
             setClickable =true;
         }

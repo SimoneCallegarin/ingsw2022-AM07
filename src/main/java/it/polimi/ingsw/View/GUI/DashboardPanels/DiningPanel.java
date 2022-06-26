@@ -22,9 +22,10 @@ public class DiningPanel extends JPanel {
     DiningStudentsPanel studentsPanel;
     ClassLoader cl;
     ArrayList<BufferedImage> students;
+    ArrayList<BufferedImage> checkedStudents;
     ArrayList<BufferedImage> professors;
 
-    public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students) {
+    public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         setLayout(new GridBagLayout());
         c = new GridBagConstraints();
 
@@ -35,6 +36,7 @@ public class DiningPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         this.students = students;
+        this.checkedStudents = checkedStudents;
 
         cl = this.getClass().getClassLoader();
         InputStream url;
@@ -68,7 +70,7 @@ public class DiningPanel extends JPanel {
      * this method initialize the dining room according to the model state
      */
     public void initializeStudentDining(ModelStorage storage) {
-        studentsPanel=new DiningStudentsPanel(storage,playerID, students);
+        studentsPanel=new DiningStudentsPanel(storage,playerID, students, checkedStudents);
         studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
         c.fill=GridBagConstraints.BOTH;
@@ -100,15 +102,15 @@ public class DiningPanel extends JPanel {
      * this method is called by the Color Listener after one student button press
      * @param observers the observers list which are notified by the listener
      */
-    public void setCLickable(ArrayList<ViewObserver> observers, TableCenterPanel tableCenterPanel){
-        EntrancePanel pairedEntrance=((DashboardPanel)this.getParent()).getEntrance();
-        addMouseListener(new DiningListener(this,pairedEntrance,observers,tableCenterPanel));
+    public void setClickable(ArrayList<ViewObserver> observers, TableCenterPanel tableCenterPanel){
+        DashboardPanel pairedDashboard=((DashboardPanel)this.getParent());
+        addMouseListener(new DiningListener(pairedDashboard,observers,tableCenterPanel));
     }
 
     /**
      * this method removes the mouse listeners from the dining in order to avoid any wrong timed click from the player
      */
-    public void removeCLickable(){
+    public void removeClickable(){
         for (int j = 0; j < this.getMouseListeners().length; j++)
             this.removeMouseListener(this.getMouseListeners()[j]);
     }
