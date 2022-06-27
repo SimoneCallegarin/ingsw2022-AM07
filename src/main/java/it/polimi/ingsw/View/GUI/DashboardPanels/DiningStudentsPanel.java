@@ -13,22 +13,44 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
+/**
+ * Panel representing the dining part where the students are displayed
+ */
 public class DiningStudentsPanel extends JPanel {
-
+    /**
+     * Player id associated with the dashboard
+     */
     int playerID;
+    /**
+     * Array list used to store the panel representing the color lanes in the dining
+     */
     private final ArrayList<JPanel> lanes;
+    /**
+     * Array list used to store the student buttons placed in the lanes
+     */
     private final ArrayList<StudentButton> studentButtons;
-
+    /**
+     * Array list used to store the images of the students
+     */
     ArrayList<BufferedImage> students;
+    /**
+     * Array list used to store the images of the checked students
+     */
     ArrayList<BufferedImage> checkedStudents;
 
+    /**
+     * Constructor of the dining students panel
+     * @param storage ModelStorage reference used to retrieve information about the game state
+     * @param playerID Player id associated with this dashboard
+     * @param students Array list of student images
+     * @param checkedStudents Array list of checked student images
+     */
     public DiningStudentsPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         this.playerID=playerID;
         this.lanes=new ArrayList<>();
         this.studentButtons=new ArrayList<>();
         GridLayout gridLayout=new GridLayout(1,5);
-        gridLayout.setHgap(-35);
+        gridLayout.setHgap(-30);
         setLayout(gridLayout);
         this.students = students;
         this.checkedStudents = checkedStudents;
@@ -36,10 +58,15 @@ public class DiningStudentsPanel extends JPanel {
 
     }
 
-
+    /**
+     * this method initialize this panel with the ModelStorage information about the students placed in the dining game object.
+     * This method is called after the resetStudents method to draw the students present on this dining.
+     * @param playerID the player id associated with this dashboard
+     * @param storage the ModelStorage reference used to retrieve dining state information
+     */
     private void InitializeDiningStudents(int playerID,ModelStorage storage){
         GridLayout gridLayout=new GridLayout(10,1);
-        gridLayout.setVgap(-13);
+        gridLayout.setVgap(-13);//space between the students in one lane
         JPanel greenLane = new JPanel(gridLayout);
         greenLane.setOpaque(false);
         lanes.add(greenLane);
@@ -96,6 +123,10 @@ public class DiningStudentsPanel extends JPanel {
 
     }
 
+    /**
+     * This method removes all the students from the dining in order for the InitializeDiningStudents to draw the students on
+     * an empty panel
+     */
     public void resetStudents() {
         for (JPanel lane : lanes) {
             lane.removeAll();
@@ -113,7 +144,9 @@ public class DiningStudentsPanel extends JPanel {
             studentButton.addMouseListener(new DiningStudentListener(thisDashboard.getEntrance(),viewObservers,tableCenterPanel, this));
         }
     }
-
+    /**
+    * This method remove the mouseListeners from the students button drawn in the dining
+     */
     public void removeClickableStudents(){
         for(StudentButton studentButton:studentButtons){
             for(MouseListener mouseListener:studentButton.getMouseListeners()){

@@ -20,37 +20,73 @@ import java.util.ArrayList;
 
 
 public class GameScreenPanel extends JPanel {
-
+    /**
+     * ModelStorage reference used to retrieve game state information and pass it to the components created in this class
+     */
     private final ModelStorage storage;
-
+    /**
+     * Array list used to store images of the students
+     */
     ArrayList<BufferedImage> students;
+    /**
+     * Array list used to store images of checked students
+     */
     ArrayList<BufferedImage> checkedStudents;
+    /**
+     * Array list used to store images of the towers
+     */
     ArrayList<BufferedImage> towers;
+    /**
+     * Dashboard image
+     */
     BufferedImage dashboard;
-
+    /**
+     * Panel placed on top of the screen used to contain the textLabel and the logout button
+     */
     JPanel textContainerPanel;
-
+    /**
+     * Label used to show the current action occurring in game
+     */
     JLabel textLabel;
-
+    /**
+     * Panel containing the first and third player dashboard
+     */
     JPanel dashboardContainerPanel1;
-
+    /**
+     * Panel containing the first and third player dashboard
+     */
     JPanel dashboardContainerPanel2;
-
+    /**
+     * TableCenterPanel reference
+     */
     private final TableCenterPanel tableCenterPanel;
-
+    /**
+     * Array list used to store the player dashboard panels
+     */
     ArrayList<DashboardPanel> dashboardPanels;
+    /**
+     * Array list used to store the player dashboard container panels
+     */
     ArrayList<JPanel> dashboardContainers;
-
+    /**
+     * Array list of observer attached to the view components
+     */
     ArrayList<ViewObserver> viewObservers;
-
+    /**
+     * Constraints for this component layout manager
+     */
     GridBagConstraints gamescreenConstraints;
 
 
     /**
      * Create the game screen panel used to contain all the game panels
-     *
      * @param layout the LayoutManager to use
      * @param usernamePlaying the username of the current player using the GUI to pass to the tableCenter to highlight which is his dashboard
+     * @param storage ModelStorage reference
+     * @param frameWidth frame width
+     * @param frameHeight frame height
+     * @param nicknameColor color of the user nickname (chosen in the loading screen)
+     * @param viewObservers array list of viewObservers attached to view components
      */
     public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers ) {
         super(layout);
@@ -60,7 +96,7 @@ public class GameScreenPanel extends JPanel {
         this.dashboardContainers = new ArrayList<>();
         this.viewObservers = viewObservers;
         textContainerPanel = new JPanel(new BorderLayout());
-        //textContainerPanel.setBackground(Color.WHITE);
+
         dashboardContainerPanel1 = new JPanel(new GridLayout(2,1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel1);
@@ -150,7 +186,6 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.gridx=1;
         add(textContainerPanel,gamescreenConstraints);
 
-        // First I divide the game screen in 3 columns and 1 row, and I make the isleManagerPanel take the most space in the center.
         gamescreenConstraints.gridy=1;
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
@@ -205,8 +240,17 @@ public class GameScreenPanel extends JPanel {
         diningStudentsPanel.setStudentsClickableForEffect(viewObservers,tableCenterPanel);
     }
 
+    /**
+     * getter for the dashboard panel associated with the player id
+     * @param playerID player id used to retrieve a dashboard from the array list
+     * @return the dashboard panel
+     */
     public DashboardPanel getDashboardPanel(int playerID) { return dashboardPanels.get(playerID); }
 
+    /**
+     * getter for the TableCenterPanel reference
+     * @return the TableCenterPanel reference
+     */
     public TableCenterPanel getTableCenterPanel() { return tableCenterPanel; }
 
     /**
@@ -215,13 +259,17 @@ public class GameScreenPanel extends JPanel {
      */
     public void setMessage(String message) { textLabel.setText(message); }
 
+    /**
+     * Removes the listeners from the dashboard entrance and dining
+     * @param playerID the player id used to identify which dashboard remove the listeners from
+     */
     public void removeClickableDashboard(int playerID) {
         dashboardPanels.get(playerID).getEntrance().removeStudentsClickable();
         dashboardPanels.get(playerID).getDining().removeClickable();
     }
 
     /**
-     * method used to update the entrance associated with the specified player ID
+     * Method used to update the entrance associated with the specified player ID
      * @param playerID the player ID used to access the dashboard that contains the entrance to update
      */
     public void updateEntrance(int playerID){
@@ -229,12 +277,18 @@ public class GameScreenPanel extends JPanel {
         dashboardPanels.get(playerID).getEntrance().initializeEntrance(storage);
     }
 
-
+    /**
+     * Updates the dashboard DiningStudentPanel
+     * @param playerID player id used to identify which dining to update
+     */
     public void updateStudentDinings(int playerID){
         dashboardPanels.get(playerID).getDining().resetStudentDining();
         dashboardPanels.get(playerID).getDining().initializeStudentDining(storage);
     }
 
+    /**
+     * Updates all the dashboard ProfessorPanels
+     */
     public void updateProfessors(){
         for(DashboardPanel dashboardPanel:dashboardPanels) {
             dashboardPanel.getDining().resetProfessorDining();
@@ -242,6 +296,9 @@ public class GameScreenPanel extends JPanel {
         }
     }
 
+    /**
+     * Updates all the TowerStorage panels
+     */
     public void updateTowerStorages(){
         for(DashboardPanel dashboardPanel: dashboardPanels){
             dashboardPanel.getTowerStorage().resetTowerStorage();
