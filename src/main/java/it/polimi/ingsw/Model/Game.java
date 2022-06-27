@@ -389,8 +389,8 @@ public class Game extends ModelSubject {
      * @param playerID ID of the player that placed a student in his dining room.
      * @param color color of the student placed.
      */
-    private void checkStudentInMoneyPosition(int playerID, RealmColors color) {
-        if (isGameMode() && players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
+    public void checkStudentInMoneyPosition(int playerID, RealmColors color) {
+        if (isGameMode() && players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0 && gameTable.getGeneralMoneyReserve()>0) {
             players.get(playerID).gainMoney();
             gameTable.studentInMoneyPosition();
             notifyObserver(obs -> obs.onMoneyUpdate(playerID, players.get(playerID).getMoney(), gameTable.getGeneralMoneyReserve()));

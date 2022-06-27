@@ -88,7 +88,7 @@ public class EffectInGameFactory {
             }
             case MINSTREL -> {
                 studentMovementEffect.effect(player.getDashboard().getDiningRoom(), player.getDashboard().getEntrance(), ColorsForEffects.SELECT, color1, color2);
-                checkStudentInMoneyPosition(game,player.getDashboard().getDashboardID(),color2);
+                game.checkStudentInMoneyPosition(player.getDashboard().getDashboardID(),color2);
                 game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);
                 game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color2);
                 game.increaseAtomicEffectCounter();
@@ -98,7 +98,7 @@ public class EffectInGameFactory {
             case SPOILED_PRINCESS -> {
                 studentMovementEffect.effect(characterCard, player.getDashboard().getDiningRoom(), ColorsForEffects.SELECT, color1, color2);
                 studentMovementEffect.effect(game.getGameTable().getBag(), characterCard, ColorsForEffects.RANDOM, color1, color2);
-                checkStudentInMoneyPosition(game,player.getDashboard().getDashboardID(),color1);
+                game.checkStudentInMoneyPosition(player.getDashboard().getDashboardID(),color1);
                 game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);
                 game.setActionPhase(game.getLastActionPhase());
             }
@@ -112,19 +112,6 @@ public class EffectInGameFactory {
                 game.setActionPhase(game.getLastActionPhase());
             }
             case KNIGHT, CENTAUR -> game.setActionPhase(game.getLastActionPhase());
-        }
-    }
-
-    /**
-     * Checking if the student is added in third, sixth or ninth position of the dining room.
-     * @param playerID ID of the player that placed a student in his dining room.
-     * @param color color of the student placed.
-     */
-    private void checkStudentInMoneyPosition(Game game, int playerID, RealmColors color) {
-        if (game.getPlayerByIndex(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0) {
-            game.getPlayerByIndex(playerID).gainMoney();
-            game.getGameTable().studentInMoneyPosition();
-            game.notifyObserver(obs -> obs.onMoneyUpdate(playerID, game.getPlayerByIndex(playerID).getMoney(), game.getGameTable().getGeneralMoneyReserve()));
         }
     }
 }
