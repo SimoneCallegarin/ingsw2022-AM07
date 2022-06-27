@@ -6,6 +6,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Assistant Card button used in the showAssistantCardForm method in the GuiDrawer to let the user choose the assistant card to play
+ */
 public class AssistantCardButton extends JButton {
 
     public AssistantCardButton(int turnOrder) {

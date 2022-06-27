@@ -162,7 +162,7 @@ public class TableCenterPanel extends JPanel {
      */
     ArrayList<BufferedImage> towers;
 
-    public TableCenterPanel(ModelStorage storage, String usernamePlaying, Color nicknameColor,
+    public TableCenterPanel(int frameWidth,int frameHeight,ModelStorage storage, String usernamePlaying, Color nicknameColor,
                             ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, ArrayList<BufferedImage> checkedStudents,
                             GameScreenPanel gsp) {
         this.storage=storage;
@@ -433,7 +433,7 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.gridx=0;
             centerConstraints.gridy=0;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=0.95;
+            centerConstraints.weighty=0.99;
             isleContainerCenter.add(firstIsleContainer1x2,centerConstraints);
 
             centerConstraints.fill=GridBagConstraints.BOTH;
@@ -458,24 +458,37 @@ public class TableCenterPanel extends JPanel {
                 charactersContainer.add(characterPanels.get(1));
                 charactersContainer.add(characterPanels.get(2));
                 isleContainerCenter.add(charactersContainer, centerConstraints);
+            }else{
+                centerConstraints.fill = GridBagConstraints.BOTH;
+                centerConstraints.gridy = 2;
+                centerConstraints.weightx = 1;
+                centerConstraints.weighty = 1;
+                JPanel emptyPanel=new JPanel();
+                emptyPanel.setOpaque(false);
+                emptyPanel.setBackground(Color.CYAN);
+                isleContainerCenter.add(emptyPanel,centerConstraints);
             }
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridy++;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=0.95;
+            centerConstraints.weighty=1;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
 
+        firstIsleContainer1x2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        secondIsleContainer1x2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        cloudsContainerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         //set sizes of isles and clickablepanels
         int x=0;
         int y=0;
-        int width;
-        int height;
+        int width= (int) Math.round(frameWidth/(7.5));
+        int height= frameHeight/4;
         for(int i=0;i<islesPanels.size();i++){
-            width=islesPanels.get(i).getIslesImagesByID(i%3).getWidth() / 5;
-            height=islesPanels.get(i).getIslesImagesByID(i%3).getHeight() / 5;
+
             islesPanels.get(i).setBounds(x,y,width,height);
             clickablePanels.get(i).setBounds(x,y,width,height);
+            islesPanels.get(i).repaint();
+            clickablePanels.get(i).repaint();
         }
     }
 

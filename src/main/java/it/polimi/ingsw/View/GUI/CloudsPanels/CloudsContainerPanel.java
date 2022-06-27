@@ -17,6 +17,7 @@ public class CloudsContainerPanel extends JPanel {
         this.storage=storage;
         this.cloudPanels=new ArrayList<>();
         setLayout(new GridBagLayout());
+
         GridBagConstraints mainConstraints=new GridBagConstraints();
 
         //Creating the grid for the clouds
@@ -35,12 +36,6 @@ public class CloudsContainerPanel extends JPanel {
         mainConstraints.gridy=0;
         add(cloudContainer,mainConstraints);
 
-        //this will be the space for the character cards
-        mainConstraints.gridy=1;
-        mainConstraints.weighty=0.8;
-        JPanel bluPanel=new JPanel();
-        bluPanel.setBackground(Color.CYAN);
-        add(bluPanel,mainConstraints);
     }
 
     public void updateCloudPanels(int cloudID){

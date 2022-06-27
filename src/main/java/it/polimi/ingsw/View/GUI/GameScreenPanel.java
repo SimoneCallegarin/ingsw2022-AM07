@@ -155,7 +155,8 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
-        tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers,checkedStudents, this);
+
+        tableCenterPanel=new TableCenterPanel(frameWidth,frameHeight,storage,usernamePlaying,nicknameColor,viewObservers, students, towers,checkedStudents, this);
         add(tableCenterPanel,gamescreenConstraints);
 
         // Then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard.

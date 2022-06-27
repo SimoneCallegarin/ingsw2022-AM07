@@ -102,6 +102,7 @@ public class GUIDrawer extends ViewSubject {
         //add the general panel manager as the content pane to switch between user input screen and the actual game.
         f.setContentPane(generalPanelManager);
 
+
         //ask the username
         showUsernameForm();
     }
