@@ -1534,7 +1534,6 @@ class ActionPhaseTest {
 
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
-        game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.BLUE);
         game.getPlayerByIndex(0).getDashboard().getDiningRoom().addStudent(RealmColors.YELLOW);
 
         game.getPlayerByIndex(0).getDashboard().getEntrance().addStudent(RealmColors.BLUE);

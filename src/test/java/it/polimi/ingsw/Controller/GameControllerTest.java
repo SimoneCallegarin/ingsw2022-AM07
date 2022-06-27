@@ -222,6 +222,8 @@ class GameControllerTest {
         game.setGamePhase(GamePhases.PLANNING_PHASE);
         game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+        game.getPlayerByIndex(0).gainMoney();
+        game.getPlayerByIndex(0).gainMoney();
 
         gameController.onMessage(message);
 
@@ -286,6 +288,8 @@ class GameControllerTest {
         game.setGamePhase(GamePhases.PLANNING_PHASE);
         game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
         game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+        game.getPlayerByIndex(0).gainMoney();
+        game.getPlayerByIndex(0).gainMoney();
 
         gameController.onMessage(message);
 

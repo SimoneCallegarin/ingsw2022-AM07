@@ -13,7 +13,7 @@ import it.polimi.ingsw.View.View;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.*;
-//import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiConsole;
 
 
 /**
@@ -76,7 +76,7 @@ public class CLI extends ViewSubject implements View {
      * Starts the CLI.
      */
     public void ViewStart(){
-        //AnsiConsole.systemInstall();
+        AnsiConsole.systemInstall();
         System.out.println(cliDrawer.printTitle());
         askUsername();
     }
