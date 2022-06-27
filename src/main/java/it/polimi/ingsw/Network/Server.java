@@ -218,11 +218,11 @@ public class Server {
         activeMatches.remove(matchToEnd);
         virtualViews.remove(matchToEnd);
         for (String player : chosenNicknames){
-            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()  && players.get(player).getClientHandler().isPlaying()) {
                 players.get(player).getClientHandler().send(quit);
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby.\nThe game will now end.");
             }
-            if(players.get(player).getMatchID() == matchToEnd)
+            if(players.get(player).getMatchID() == matchToEnd && players.get(player).getClientHandler().isPlaying())
                 players.get(player).getClientHandler().terminateClientHandler();
         }
         for (String playerToRemove : playersToRemove) {
