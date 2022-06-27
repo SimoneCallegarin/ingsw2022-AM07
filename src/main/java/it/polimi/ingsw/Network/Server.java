@@ -121,7 +121,7 @@ public class Server {
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
-            if(activeMatches.get(i).isGameMode()==preferences.isExpert() && activeMatches.get(i).getNumberOfPlayers()==preferences.getNumberOfPlayers() && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
+            if(activeMatches.get(i).isExpertMode()==preferences.isExpert() && activeMatches.get(i).getNumberOfPlayers()==preferences.getNumberOfPlayers() && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
                 matchID=i;
                 break;
             }
@@ -218,11 +218,11 @@ public class Server {
         activeMatches.remove(matchToEnd);
         virtualViews.remove(matchToEnd);
         for (String player : chosenNicknames){
-            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()) {
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()  && players.get(player).getClientHandler().isPlaying()) {
                 players.get(player).getClientHandler().send(quit);
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby.\nThe game will now end.");
             }
-            if(players.get(player).getMatchID() == matchToEnd)
+            if(players.get(player).getMatchID() == matchToEnd && players.get(player).getClientHandler().isPlaying())
                 players.get(player).getClientHandler().terminateClientHandler();
         }
         for (String playerToRemove : playersToRemove) {

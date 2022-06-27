@@ -249,6 +249,12 @@ public class ClientHandler implements Runnable {
     public boolean isConnected() { return connected; }
 
     /**
+     * Getter method for the player game status.
+     * @return true if the player is playing a game, else false.
+     */
+    public boolean isPlaying() { return playing; }
+
+    /**
      * Checks if the MessageType of the message received is the MessageType required.
      * @param message the message that has a MessageType that has to be checked.
      * @param messageType the MessageType requested.

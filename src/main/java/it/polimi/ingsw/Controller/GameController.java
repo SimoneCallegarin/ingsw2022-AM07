@@ -118,7 +118,7 @@ public class GameController {
      * Getter method for the of the game.
      * @return the game mode.
      */
-    public boolean isGameMode() { return game.isGameMode(); }
+    public boolean isExpertMode() { return game.isExpertMode(); }
 
     /**
      * Getter method for the number of players of the game.

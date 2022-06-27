@@ -318,12 +318,12 @@ class GameControllerTest {
         assertEquals("calle",game.getPlayerByIndex(0).getNickname());
         assertEquals(2,game.getNumberOfPlayers());
         assertEquals(1,game.getActualNumberOfPlayers());
-        assertFalse(game.isGameMode());
+        assertFalse(game.isExpertMode());
         gameController.addPlayerToGame("jack",gp,false);
         assertEquals("jack",game.getPlayerByIndex(1).getNickname());
         assertEquals(2,game.getNumberOfPlayers());
         assertEquals(2,game.getActualNumberOfPlayers());
-        assertFalse(game.isGameMode());
+        assertFalse(game.isExpertMode());
     }
 
     @Test
@@ -337,7 +337,7 @@ class GameControllerTest {
     void getGameMode() {
         GamePreferencesMessage gp = new GamePreferencesMessage(2,false);
         gameController.addPlayerToGame("calle",gp,true);
-        assertFalse(gameController.isGameMode());
+        assertFalse(gameController.isExpertMode());
     }
 
     @Test

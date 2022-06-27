@@ -307,7 +307,7 @@ public class ModelStorage {
 
     public int getNumberOfPlayers() { return numberOfPlayers; }
 
-    public boolean isGameMode() { return expertMode; }
+    public boolean isExpertMode() { return expertMode; }
 
     public int getNumberOfIsles() { return gameTable.getIsles().size(); }
 

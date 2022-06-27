@@ -32,7 +32,7 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void askMove() { guiDrawer.showMoveOptions(getGUIDrawer().getModelStorage().isGameMode()); }
+    public void askMove() { guiDrawer.showMoveOptions(getGUIDrawer().getModelStorage().isExpertMode()); }
 
     @Override
     public void printMessage(ServiceMessage message) { guiDrawer.showServiceMessage(message.getMessage()); }
