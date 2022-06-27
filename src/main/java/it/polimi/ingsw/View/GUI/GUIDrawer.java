@@ -486,7 +486,6 @@ public class GUIDrawer extends ViewSubject {
      * in the modelStorage to correctly know which component to update.
      */
     public void updateGameScreenPanel() {
-        showWinner("filobuda");
         for (int i = 0; i < modelChanges.getToUpdate().size(); i++) {
             switch (modelChanges.getToUpdate().get(i)) {
                 case FILLCLOUD_CHANGED -> {
