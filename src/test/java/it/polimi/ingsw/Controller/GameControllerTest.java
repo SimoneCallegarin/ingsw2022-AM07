@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Enumeration.PlanningPhases;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Game;
 import it.polimi.ingsw.Network.Messages.MessageType;
+import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import org.junit.jupiter.api.Test;
 
@@ -175,7 +176,7 @@ class GameControllerTest {
      * We are testing if the PLAY_CHARACTERCARD message works properly.
      */
     @Test
-    void onMessage_PLAY_CHARACTERCARD() {
+    void onMessage_PLAY_CHARACTERCARD_0_values() {
         message = new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD,0,5);
 
         game.addFirstPlayer("simone",true,2);
@@ -205,5 +206,140 @@ class GameControllerTest {
         assertEquals(5,game.getPlayerByIndex(0).getDiscardPile().getTurnOrder());
         assertEquals(5,game.getPlayerByIndex(0).getDiscardPile().getMnMovement());
         assertTrue(game.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
+    }
+
+    /**
+     * We are testing if the PLAY_CHARACTERCARD message works properly.
+     */
+    @Test
+    void onMessage_PLAY_CHARACTERCARD_1_value() {
+        message = new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD,0,5);
+
+        game.addFirstPlayer("simone",true,2);
+        game.addAnotherPlayer("giacomo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.FUNGIST);
+
+        game.setGamePhase(GamePhases.PLANNING_PHASE);
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        message = new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD,0,0);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        message = new PlayerMoveMessage(MessageType.ACTIVATE_ATOMIC_EFFECT,0,2);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        assertTrue(game.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
+    }
+
+    /**
+     * We are testing if the PLAY_CHARACTERCARD message works properly.
+     */
+    @Test
+    void onMessage_PLAY_CHARACTERCARD_2_values() {
+        message = new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD,0,5);
+
+        game.addFirstPlayer("simone",true,2);
+        game.addAnotherPlayer("giacomo");
+        game.getGameTable().setCharacterCards(CharacterCardsName.MONK);
+
+        game.setGamePhase(GamePhases.PLANNING_PHASE);
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        message = new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD,0,0);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        message = new PlayerMoveMessage(MessageType.ACTIVATE_ATOMIC_EFFECT,0,2);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        assertTrue(game.getPlayerByIndex(0).getAlreadyPlayedACardThisTurn());
+    }
+
+    @Test
+    void onMessage_GAMEPHASE_UPDATE() {
+        message = new PlayerMoveMessage(MessageType.PLAY_ASSISTANT_CARD, 0, 5);
+
+        game.addFirstPlayer("simone",true,2);
+        game.addAnotherPlayer("giacomo");
+
+        game.setGamePhase(GamePhases.PLANNING_PHASE);
+        game.setPlanningPhase(PlanningPhases.ASSISTANT_CARD_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        assertEquals(ActionPhases.MOVE_STUDENTS,game.getActionPhase());
+
+        message = new PlayerMoveMessage(MessageType.PLAY_CHARACTER_CARD,0,0);
+
+        game.setGamePhase(GamePhases.ACTION_PHASE);
+        game.setCurrentActivePlayer(game.getPlayerByIndex(0).getOrder());
+
+        gameController.onMessage(message);
+
+        assertEquals(ActionPhases.CHARACTER_CARD_PHASE,game.getActionPhase());
+
+        PlayerMoveMessage changePhase = new PlayerMoveMessage(MessageType.GAMEPHASE_UPDATE,0,-1);
+
+        gameController.onMessage(changePhase);
+
+        assertEquals(ActionPhases.MOVE_STUDENTS,game.getActionPhase());
+    }
+
+    @Test
+    void addPlayerToGame() {
+        GamePreferencesMessage gp = new GamePreferencesMessage(2,false);
+        gameController.addPlayerToGame("calle",gp,true);
+        assertEquals("calle",game.getPlayerByIndex(0).getNickname());
+        assertEquals(2,game.getNumberOfPlayers());
+        assertEquals(1,game.getActualNumberOfPlayers());
+        assertFalse(game.isGameMode());
+        gameController.addPlayerToGame("jack",gp,false);
+        assertEquals("jack",game.getPlayerByIndex(1).getNickname());
+        assertEquals(2,game.getNumberOfPlayers());
+        assertEquals(2,game.getActualNumberOfPlayers());
+        assertFalse(game.isGameMode());
+    }
+
+    @Test
+    void getActualNumberOfPlayers() {
+        GamePreferencesMessage gp = new GamePreferencesMessage(2,false);
+        gameController.addPlayerToGame("calle",gp,true);
+        assertEquals(1,gameController.getActualNumberOfPlayers());
+    }
+
+    @Test
+    void getGameMode() {
+        GamePreferencesMessage gp = new GamePreferencesMessage(2,false);
+        gameController.addPlayerToGame("calle",gp,true);
+        assertFalse(gameController.isGameMode());
+    }
+
+    @Test
+    void getNumberOfPlayers() {
+        GamePreferencesMessage gp = new GamePreferencesMessage(2,false);
+        gameController.addPlayerToGame("calle",gp,true);
+        assertEquals(2,gameController.getNumberOfPlayers());
     }
 }
