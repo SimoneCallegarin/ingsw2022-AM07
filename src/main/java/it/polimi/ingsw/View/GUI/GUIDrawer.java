@@ -455,7 +455,7 @@ public class GUIDrawer extends ViewSubject {
             case JESTER -> {
                 message.append("\nYou may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.");
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
-                if (!showExchangeForm())
+                if (showExchangeForm())
                     notifyObserver(ViewObserver::onEndCharacterPhase);
                 else {
                     CharacterPanel jesterPanel = null;
@@ -471,7 +471,7 @@ public class GUIDrawer extends ViewSubject {
             case MINSTREL -> {
                 message.append("\nNow you can exchange up to 2 students between your dining and your entrance");
                 JOptionPane.showMessageDialog(f,message,"Character Card activated",JOptionPane.PLAIN_MESSAGE);
-                if (!showExchangeForm())
+                if (showExchangeForm())
                     notifyObserver(ViewObserver::onEndCharacterPhase);
                 else
                     gameScreenPanel.setDiningStudentsClickable(modelChanges.getPlayingID());
@@ -486,7 +486,7 @@ public class GUIDrawer extends ViewSubject {
      * in the modelStorage to correctly know which component to update.
      */
     public void updateGameScreenPanel() {
-
+        showWinner("filobuda");
         for (int i = 0; i < modelChanges.getToUpdate().size(); i++) {
             switch (modelChanges.getToUpdate().get(i)) {
                 case FILLCLOUD_CHANGED -> {
@@ -685,7 +685,7 @@ public class GUIDrawer extends ViewSubject {
         JScrollPane scrollPane = new JScrollPane(buttonContainer);
         scrollPane.setPreferredSize(new Dimension(440, 220));
         JOptionPane.showMessageDialog(f, scrollPane, "Do you want to exchange students?", JOptionPane.PLAIN_MESSAGE);
-        return exchangeChoice.get() == 0;
+        return exchangeChoice.get() != 0;
     }
 
     public void showErrorMessage(String serviceMessage) {
@@ -699,5 +699,11 @@ public class GUIDrawer extends ViewSubject {
     public void setModelStorage(ModelStorage modelStorage) {
         this.modelStorage = modelStorage;
         modelChanges = modelStorage.getModelChanges();
+    }
+
+    public void showWinner(String winner) {
+        String message=winner+" won the game!";
+        JOptionPane.showMessageDialog(f,message,"Winner",JOptionPane.PLAIN_MESSAGE);
+        f.dispose();
     }
 }

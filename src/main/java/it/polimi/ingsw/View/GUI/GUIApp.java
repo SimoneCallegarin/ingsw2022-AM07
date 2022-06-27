@@ -44,7 +44,9 @@ public class GUIApp extends ViewSubject implements View {
     public void printChanges() { guiDrawer.updateGameScreenPanel(); }
 
     @Override
-    public void printWinner(String winner, int winnerID) { /*!!!!!!!!!!!!!!!*/ }
+    public void printWinner(String winner, int winnerID) { /*!!!!!!!!!!!!!!!*/
+        guiDrawer.showWinner(winner);
+    }
 
     @Override
     public void askMNMovement() { guiDrawer.showMNMovement(); }
