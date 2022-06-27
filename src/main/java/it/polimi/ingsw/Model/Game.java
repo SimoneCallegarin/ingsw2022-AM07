@@ -390,7 +390,7 @@ public class Game extends ModelSubject {
      * @param color color of the student placed.
      */
     public void checkStudentInMoneyPosition(int playerID, RealmColors color) {
-        if (isGameMode() && players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0 && gameTable.getGeneralMoneyReserve()>0) {
+        if (isExpertMode() && players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0 && gameTable.getGeneralMoneyReserve()>0) {
             players.get(playerID).gainMoney();
             gameTable.studentInMoneyPosition();
             notifyObserver(obs -> obs.onMoneyUpdate(playerID, players.get(playerID).getMoney(), gameTable.getGeneralMoneyReserve()));
@@ -1042,7 +1042,7 @@ public class Game extends ModelSubject {
      * Getter method that tells if the game mode is expert or not.
      * @return true if expert, else false.
      */
-    public boolean isGameMode() { return gameMode == GameMode.EXPERT; }
+    public boolean isExpertMode() { return gameMode == GameMode.EXPERT; }
 
     /**
      * Getter method that returns the list of players who are playing the game.

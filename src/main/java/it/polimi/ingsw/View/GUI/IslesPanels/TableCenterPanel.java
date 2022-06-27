@@ -304,7 +304,7 @@ public class TableCenterPanel extends JPanel {
         }
 
         //if the gamemode is expert we need to show also the coins
-        if(storage.isGameMode()) {
+        if(storage.isExpertMode()) {
             idxSx=0;
             idxDx=0;
             this.coinsLabel=new ArrayList<>();
@@ -444,7 +444,7 @@ public class TableCenterPanel extends JPanel {
             cloudsContainerPanel.setBackground(Color.CYAN);
             isleContainerCenter.add(cloudsContainerPanel,centerConstraints);
 
-            if(storage.isGameMode()) {
+            if(storage.isExpertMode()) {
                 charactersContainer=new JPanel(new GridLayout(1,3));
                 charactersContainer.setBackground(Color.CYAN);
                 centerConstraints.fill = GridBagConstraints.BOTH;
