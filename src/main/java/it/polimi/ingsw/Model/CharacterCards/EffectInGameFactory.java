@@ -63,7 +63,6 @@ public class EffectInGameFactory {
                             break;
                         }
                     game.getGameTable().getCharacterCard(grandmaIndex).addDenyCard();
-                    //notifyObserver(obs -> obs.onDenyCard(idPlayer, idIsle, false));
                     game.notifyEffectUpdate(grandmaIndex,player.getDashboard().getDashboardID(),value1,-1);
                 }
                 game.checkEndGame();

@@ -69,8 +69,7 @@ public class Player {
         this.nickname = nickname;
         this.squad = squad;
         this.dashboard = new Dashboard(numOfPlayers, dashboardID);
-        //this.money = 1;
-        this.money = 3;
+        this.money = 1;
         this.mage = Mages.getMage(dashboardID);
         this.discardPile = new AssistantCard(0,0);
         this.mageDeck = new ArrayList<>(10);

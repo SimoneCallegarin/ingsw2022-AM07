@@ -1,7 +1,5 @@
 package it.polimi.ingsw.View.GUI;
 
-
-
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Observer.ViewObserver;
@@ -9,8 +7,6 @@ import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
-import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
-import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -58,17 +54,17 @@ public class GameScreenPanel extends JPanel {
      */
     public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying, Color nicknameColor, ArrayList<ViewObserver> viewObservers ) {
         super(layout);
-        this.storage=storage;
+        this.storage = storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
-        this.dashboardPanels=new ArrayList<>();
-        this.dashboardContainers=new ArrayList<>();
-        this.viewObservers=viewObservers;
-        textContainerPanel = new JPanel(new GridLayout(1,1));
+        this.dashboardPanels = new ArrayList<>();
+        this.dashboardContainers = new ArrayList<>();
+        this.viewObservers = viewObservers;
+        textContainerPanel = new JPanel(new BorderLayout());
         //textContainerPanel.setBackground(Color.WHITE);
-        dashboardContainerPanel1=new JPanel(new GridLayout(2,1));
+        dashboardContainerPanel1 = new JPanel(new GridLayout(2,1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel1);
-        dashboardContainerPanel2=new JPanel(new GridLayout(2,1));
+        dashboardContainerPanel2 = new JPanel(new GridLayout(2,1));
         dashboardContainerPanel2.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel2);
 
@@ -154,7 +150,7 @@ public class GameScreenPanel extends JPanel {
         gamescreenConstraints.gridx=1;
         add(textContainerPanel,gamescreenConstraints);
 
-        //first i divide the gamescreen in 3 columns and 1 row and i made the isleManagerPanel take the most space in the center
+        // First I divide the game screen in 3 columns and 1 row, and I make the isleManagerPanel take the most space in the center.
         gamescreenConstraints.gridy=1;
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
@@ -162,7 +158,7 @@ public class GameScreenPanel extends JPanel {
         tableCenterPanel=new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers,checkedStudents, this);
         add(tableCenterPanel,gamescreenConstraints);
 
-        //then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard
+        // Then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard.
         gamescreenConstraints.weightx=0.05;
         gamescreenConstraints.weighty=0.2;
         gamescreenConstraints.gridx=0;
@@ -173,26 +169,27 @@ public class GameScreenPanel extends JPanel {
 
         for(int i=0;i<storage.getNumberOfPlayers();i++){
             DashboardPanel dashboardPanel=new DashboardPanel(storage,i,viewObservers,tableCenterPanel, students, checkedStudents, towers, dashboard);
-            dashboardContainers.get(i%2).add(dashboardPanel);//the containers are used to place the panels in the screen
-            dashboardPanels.add(dashboardPanel);//this arrayList is used only to store them and access them in a more efficient way
+            dashboardContainers.get(i%2).add(dashboardPanel);   //the containers are used to place the panels in the screen
+            dashboardPanels.add(dashboardPanel);                //this arrayList is used only to store them and access them in a more efficient way
         }
 
-        textLabel = new JLabel("                                                                                                                                          ");
+        textLabel = new JLabel("");
+        textLabel.setPreferredSize(new Dimension(1000,10));
         textContainerPanel.add(textLabel);
         gamescreenConstraints.gridy=0;
     }
 
     /**
      * Sets the dashboard entrance clickable in order to select a student to move.
-     * @param playerID the playerID used to identify which dashboard set movable
+     * @param playerID the playerID used to identify which dashboard set movable.
      */
     public void setEntranceStudentsClickable(int playerID) {
         dashboardPanels.get(playerID).getEntrance().setStudentsClickable();
     }
 
     /**
-     * Sets the character cards clickable in order for the player to activate the effect
-     * @param playerID the player id used by the listener to remove the listener from the player dashboard
+     * Sets the character cards clickable in order for the player to activate the effect.
+     * @param playerID the player id used by the listener to remove the listener from the player dashboard.
      */
     public void setCharactersClickable(int playerID) {
         tableCenterPanel.setCharactersClickable(viewObservers, playerID);
@@ -200,7 +197,7 @@ public class GameScreenPanel extends JPanel {
 
     /**
      * Sets the students of the dining room clickable.
-     * @param playerID the id associated with the dining room
+     * @param playerID ID associated with the dining room.
      */
     public void setDiningStudentsClickable(int playerID){
         DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();

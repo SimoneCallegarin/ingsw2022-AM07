@@ -121,7 +121,7 @@ public class Server {
         int matchID =0;
         for(int i=0; i<activeMatches.size(); i++){
             matchID=i+1;
-            if(activeMatches.get(i).getGameMode()==preferences.isExpert() && activeMatches.get(i).getNumberOfPlayers()==preferences.getNumberOfPlayers() && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
+            if(activeMatches.get(i).isGameMode()==preferences.isExpert() && activeMatches.get(i).getNumberOfPlayers()==preferences.getNumberOfPlayers() && activeMatches.get(i).getActualNumberOfPlayers()!=activeMatches.get(i).getNumberOfPlayers()){
                 matchID=i;
                 break;
             }
