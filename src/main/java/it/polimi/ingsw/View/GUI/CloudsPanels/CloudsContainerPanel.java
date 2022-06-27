@@ -9,10 +9,26 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * Panel containing the cloud panels
+ */
 public class CloudsContainerPanel extends JPanel {
+    /**
+     * ModelStorage reference used to retrieve clouds state information
+     */
     ModelStorage storage;
+    /**
+     * Array list used to store cloud panels
+     */
     ArrayList<CloudPanel> cloudPanels;
 
+    /**
+     * Constructor of CloudContainer
+     * @param storage ModelStorage reference used to retrieve clouds state information
+     * @param viewObservers ViewObservers array list passed to the listeners
+     * @param tableCenterPanel TableCenterPanel passed to the listeners
+     * @param students Array list of student images
+     */
     public CloudsContainerPanel(ModelStorage storage, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
         this.storage=storage;
         this.cloudPanels=new ArrayList<>();
@@ -38,17 +54,27 @@ public class CloudsContainerPanel extends JPanel {
 
     }
 
+    /**
+     * Updates the cloud panel identified by the cloud id
+     * @param cloudID the cloud id used to identify which cloud update
+     */
     public void updateCloudPanels(int cloudID){
         cloudPanels.get(cloudID).resetCloud();
         cloudPanels.get(cloudID).initializeCloud();
     }
 
+    /**
+     * Set the cloud panel clickable
+     */
     public void setCloudsClickable() {
         for (CloudPanel cloudPanel : cloudPanels) {
             cloudPanel.setClickable();
         }
     }
 
+    /**
+     * Removes the mouse listeners from the cloud panel
+     */
     public void removeCloudsClickable(){
         for (CloudPanel cloudPanel : cloudPanels) {
             cloudPanel.removeClickable();

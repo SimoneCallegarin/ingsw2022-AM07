@@ -11,7 +11,12 @@ import java.io.InputStream;
  * the background of the first screen to appear to the user where he will have to submit his preferences
  */
 public class InitialBackgroundPanel extends JPanel {
-
+    /**
+     * Constructor of InitialBackgroundPanel
+     * @param layout layout manager used by this panel
+     * @param screenDimensionX x dimension of the screen
+     * @param screenDimensionY y dimension of the screen
+     */
     public InitialBackgroundPanel(LayoutManager layout, int screenDimensionX, int screenDimensionY) {
         super(layout);
         //adding borders
@@ -22,9 +27,7 @@ public class InitialBackgroundPanel extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) { printBackground(g, getWidth(),getHeight()); }
-
-    private void printBackground(Graphics g, int width, int height) {
+    protected void paintComponent(Graphics g) {
         ClassLoader cl = this.getClass().getClassLoader();
         InputStream url = cl.getResourceAsStream("Background.png");
         BufferedImage img= null;
@@ -34,7 +37,8 @@ public class InitialBackgroundPanel extends JPanel {
         }catch (IOException e) {
             e.printStackTrace();
         }
-        g.drawImage(img, 0, 0, width, height, null);
+        g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
     }
+
 
 }

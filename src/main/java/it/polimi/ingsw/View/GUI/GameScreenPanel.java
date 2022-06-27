@@ -18,7 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-
+/**
+ * Panel in which all the game takes place, it contains all the other panels
+ */
 public class GameScreenPanel extends JPanel {
     /**
      * ModelStorage reference used to retrieve game state information and pass it to the components created in this class

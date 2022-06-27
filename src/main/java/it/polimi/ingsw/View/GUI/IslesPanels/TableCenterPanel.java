@@ -162,6 +162,19 @@ public class TableCenterPanel extends JPanel {
      */
     ArrayList<BufferedImage> towers;
 
+    /**
+     * Constructor of TableCenterPanel
+     * @param frameWidth frame width
+     * @param frameHeight frame height
+     * @param storage ModelStorage reference
+     * @param usernamePlaying username of the player using the GUI
+     * @param nicknameColor color of usernamePlaying
+     * @param viewObservers array list of viewObservers attached to the view components
+     * @param students array list of students images
+     * @param towers array list of towers images
+     * @param checkedStudents array list of checked students
+     * @param gsp gameScreenPanel reference
+     */
     public TableCenterPanel(int frameWidth,int frameHeight,ModelStorage storage, String usernamePlaying, Color nicknameColor,
                             ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, ArrayList<BufferedImage> checkedStudents,
                             GameScreenPanel gsp) {
@@ -492,7 +505,10 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
-
+    /**
+     * Updates the player discard pile with the last assistant card played by that player
+     * @param playerID the player id used to identify which player discard pile update
+     */
     public void updateAssistCard(int playerID){
         assistantAndMoneyConstraints.gridx=0;
         if(storage.getNumberOfPlayers()==4){
@@ -510,20 +526,31 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyPanelList.get(playerID).add(assistantCardPanel, assistantAndMoneyConstraints);
         assistantCardPanels.add(playerID,assistantCardPanel);
 
-        assistantAndMoneyPanelList.get(playerID).validate();//if you change a component that's already been displayed you need to validate it to display the changes
+        assistantAndMoneyPanelList.get(playerID).validate();
         assistantAndMoneyPanelList.get(playerID).repaint();
     }
 
+    /**
+     * Updates cloud panel on player choice
+     * @param cloudID the id of the cloud to update
+     */
     public void updateCloud(int cloudID) {
         cloudsContainerPanel.updateCloudPanels(cloudID);
     }
 
+    /**
+     * Update cloud panels on their filling
+     */
     public void updateFillClouds(){
         for(int i=0;i<storage.getGameTable().getClouds().size();i++){
             cloudsContainerPanel.updateCloudPanels(i);
         }
     }
 
+    /**
+     * Updates the player available coins
+     * @param playerID the player id used to identify which coin reserve update
+     */
     public void updateCoins(int playerID){
         assistantAndMoneyConstraints.gridx=0;
         if(storage.getNumberOfPlayers()==4){
@@ -541,11 +568,19 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyPanelList.get(playerID).repaint();
     }
 
+    /**
+     * Update isle panel
+     * @param isleID isle id used to identify which isle update
+     */
     public void updateIsle(int isleID){
         islesPanels.get(isleID).resetIsle();
         islesPanels.get(isleID).initializeIsle();
     }
 
+    /**
+     * Update isle panels once one or more isle are unified. It eliminates the last isle (starting from the one below the top-left angle)
+     *  and updates the remaining
+     */
     public void updateIsleLayout(){
         int lastIsleID=isleLayeredPanels.size()-1;
         JLayeredPane lastIsle=isleLayeredPanels.get(lastIsleID);
@@ -585,12 +620,21 @@ public class TableCenterPanel extends JPanel {
         clickablePanels.remove(clickablePanels.get(lastIsleID));
     }
 
+    /**
+     * Adds mouse listener to the isle panels in order to register user click on them. This allows the player to move students on them.
+     * @param viewObserverList view observers list passed to the listeners
+     * @param entrance EntrancePanel reference passed to the listeners
+     * @param dining DiningPanel reference passed to the listeners
+     */
     public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, DiningPanel dining){
         for (int i=0;i<islesPanels.size();i++) {
             clickablePanels.get(i).addMouseListener(new IsleListener(this, viewObserverList, entrance, i, dining));
         }
     }
-
+    /**
+     *Adds mouse listener to the isle panels in order to register user click on them. This allows the player to move MN on one of them.
+     * @param viewObserverList the viewObserver list passed to the listeners
+     */
     public void setMNClickable(ArrayList<ViewObserver> viewObserverList){
         for (int i=0;i<islesPanels.size();i++) {
             clickablePanels.get(i).addMouseListener(new MNListener(viewObserverList,i,this));
@@ -608,14 +652,23 @@ public class TableCenterPanel extends JPanel {
 
     }
 
+    /**
+     * Adds mouse listeners to the clouds in order to let the player pick students from one of them
+     */
     public void setCloudsClickable(){
         cloudsContainerPanel.setCloudsClickable();
     }
 
+    /**
+     * Removes mouse listeners from the clouds
+     */
     public void removeClickableClouds() {
         cloudsContainerPanel.removeCloudsClickable();
     }
 
+    /**
+     * Removes mouse listeners from the isles
+     */
     public void removeClickableIsles(){
         for (JPanel clickablePanel : clickablePanels) {
             for (int j = 0; j < clickablePanel.getMouseListeners().length; j++) {
