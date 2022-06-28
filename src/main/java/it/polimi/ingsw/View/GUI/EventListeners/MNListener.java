@@ -8,9 +8,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Mouse Listener attached to the isles in order to register clicks from the user and eventually notify the server of the chosen
+ * Mother nature movement
+ */
 public class MNListener extends ViewSubject implements MouseListener {
-
+    /**
+     * Id of the isle to which this MouseListener is attached
+     */
     int isleID;
+    /**
+     * TableCenterPanel reference
+     */
     TableCenterPanel tableCenterPanel;
 
     public MNListener(ArrayList<ViewObserver> observerList, int isleID, TableCenterPanel tableCenterPanel) {

@@ -7,10 +7,19 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * This panel represents the Assistant card present in the discard pile of the player or the Mage associated
+ * with each player (if the discard pile is empty)
+ */
 public class AssistantCardPanel extends JPanel {
     int index;
     boolean showMage;
 
+    /**
+     * Constructor of AssistantCardPanel
+     * @param index index used to identify which image to load
+     * @param showMage boolean used to draw either the assistant card or the mage
+     */
     public AssistantCardPanel(int index, boolean showMage) {
         this.index = index;
         this.showMage =showMage;
@@ -19,12 +28,19 @@ public class AssistantCardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        BufferedImage img=paintAssistant(g, index);
+        BufferedImage img=paintAssistant(index);
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
 
     }
 
-    private BufferedImage paintAssistant(Graphics g, int index){
+    /**
+     * If showMage attribute is false, this method load and pass the Assistant card image to the override paintComponent method
+     * in order to draw it on the panel. The image is identified by the index of the card. If the showMAge attribute is true, this method load and pass
+     * the Mage image according to the index passed to the constructor and set as attribute.
+     * @param index the card index used to identify which image to load
+     * @return the image loaded
+     */
+    private BufferedImage paintAssistant(int index){
         ClassLoader cl=this.getClass().getClassLoader();
         InputStream url=null;
         if(!showMage) {
@@ -42,10 +58,10 @@ public class AssistantCardPanel extends JPanel {
             }
         }else{
             switch (index){
-                case 0 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/MYSTICAL_WIZARD.png");
-                case 1 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/WEALTHY_KING.png");
-                case 2 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/CLEVER_WITCH.png");
-                case 3 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/ANCIENT_SAGE.png");
+                case 0 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/MYSTICAL_WIZARD.png");
+                case 1 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/WEALTHY_KING.png");
+                case 2 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/CLEVER_WITCH.png");
+                case 3 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/ANCIENT_SAGE.png");
             }
         }
         BufferedImage img= null;

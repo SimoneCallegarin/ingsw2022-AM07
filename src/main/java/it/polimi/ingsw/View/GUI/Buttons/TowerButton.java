@@ -9,10 +9,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * Button representing the tower game object
+ */
 public class TowerButton extends JButton {
-
+    /**
+     * Array list used to retrieve towers images from
+     */
     ArrayList<BufferedImage> towers;
 
+    /**
+     * Constructor of TowerButton
+     * @param color tower color used to decide which image to print
+     * @param towers Array list used to retrieve towers images from
+     */
     public TowerButton(TowerColors color, ArrayList<BufferedImage> towers) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
@@ -20,10 +30,17 @@ public class TowerButton extends JButton {
         printTower(color);
     }
 
+    /**
+     * Constructor of TowerButton
+     */
     public TowerButton() {
         this.towers = null;
     }
 
+    /**
+     * This method retrieve a tower image from the array according to the color parameter and set it as the icon for the button
+     * @param color tower color used to decide which image to print
+     */
     private void printTower(TowerColors color){
         BufferedImage img;
         switch (color) {

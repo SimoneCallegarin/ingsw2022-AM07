@@ -6,6 +6,7 @@ import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
 import it.polimi.ingsw.View.GUI.Buttons.ColorChoiceButton;
 import it.polimi.ingsw.View.GUI.Buttons.ExchangeChoiceButton;
+import it.polimi.ingsw.View.GUI.ExpertPanels.CharacterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
@@ -745,9 +746,14 @@ public class GUIDrawer extends ViewSubject {
         modelChanges = modelStorage.getModelChanges();
     }
 
+    /**
+     * This method shows on screen a dialog window notifying who has won the game
+     * @param winner the String representing the name of the winning player
+     */
     public void showWinner(String winner) {
         String message=winner+" won the game!";
         JOptionPane.showMessageDialog(f,message,"Winner",JOptionPane.PLAIN_MESSAGE);
         f.dispose();
+        System.exit(1);
     }
 }

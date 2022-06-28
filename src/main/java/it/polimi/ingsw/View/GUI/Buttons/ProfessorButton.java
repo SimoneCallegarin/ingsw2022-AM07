@@ -9,10 +9,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * Button representing the professor game object
+ */
 public class ProfessorButton extends JButton {
-
+    /**
+     * Array list used to retrieve professors images
+     */
     ArrayList<BufferedImage> professors;
 
+    /**
+     * Constructo of ProfessorButton
+     * @param color color of the professor to print
+     * @param professors Array list used to retrieve professors images
+     */
     public ProfessorButton(RealmColors color, ArrayList<BufferedImage> professors) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
@@ -20,6 +30,10 @@ public class ProfessorButton extends JButton {
         printProfessor(color);
     }
 
+    /**
+     * This method load and set as icon the professor image depending on which color has been passed to the constructor
+     * @param color color of the professor, used to decide which image to use as icon
+     */
     private void printProfessor(RealmColors color){
         BufferedImage img = null;
         switch (color) {

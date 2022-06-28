@@ -10,13 +10,20 @@ import java.io.InputStream;
  * Assistant Card button used in the showAssistantCardForm method in the GuiDrawer to let the user choose the assistant card to play
  */
 public class AssistantCardButton extends JButton {
-
+    /**
+     * Constructor of AssistantCardButton
+     * @param turnOrder card turn order, used to identify it
+     */
     public AssistantCardButton(int turnOrder) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
         printAssistant(turnOrder);
     }
 
+    /**
+     * This method set the Assistant Card image as the icon for the button. The Assistant card to print is identified by the turn order.
+     * @param turnOrder the card turn order used to identify the card
+     */
     private void printAssistant(int turnOrder){
         ClassLoader cl=this.getClass().getClassLoader();
         InputStream url=null;

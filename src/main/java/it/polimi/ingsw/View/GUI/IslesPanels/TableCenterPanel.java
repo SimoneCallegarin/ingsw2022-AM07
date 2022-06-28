@@ -2,7 +2,7 @@ package it.polimi.ingsw.View.GUI.IslesPanels;
 
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.AssistantCardPanel;
-import it.polimi.ingsw.View.GUI.CharacterPanel;
+import it.polimi.ingsw.View.GUI.ExpertPanels.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
@@ -18,12 +18,10 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.EventListener;
 
 /**
  * the panel use to contain the isles, the clouds and the character cards

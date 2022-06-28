@@ -1,4 +1,4 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.ExpertPanels;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -7,8 +7,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Panel representing a coin, used when placed on a used character card
+ */
 public class CoinPanel extends JPanel {
-
+    /**
+     * Constructor of CoinPanel
+     */
     public CoinPanel() {
         setOpaque(false);
         setPreferredSize(new Dimension(40,40));

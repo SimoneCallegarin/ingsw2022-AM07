@@ -12,7 +12,7 @@ public class ServerSettings {
     /**
      * Port used by the server.
      */
-    public static int port = 2345;
+    public static int port = 1234;
 
     /**
      * Gets localhost.
