@@ -42,10 +42,10 @@ public class AssistantCardPanel extends JPanel {
             }
         }else{
             switch (index){
-                case 0 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/MYSTICAL_WIZARD.png");
-                case 1 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/WEALTHY_KING.png");
-                case 2 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/CLEVER_WITCH.png");
-                case 3 -> url=cl.getResourceAsStream("GameTable/Assistant_Cards/retro/ANCIENT_SAGE.png");
+                case 0 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/MYSTICAL_WIZARD.png");
+                case 1 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/WEALTHY_KING.png");
+                case 2 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/CLEVER_WITCH.png");
+                case 3 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/ANCIENT_SAGE.png");
             }
         }
         BufferedImage img= null;

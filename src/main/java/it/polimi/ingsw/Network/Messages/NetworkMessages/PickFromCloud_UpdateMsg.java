@@ -17,14 +17,27 @@ public class PickFromCloud_UpdateMsg extends NetworkMessage{
      * Updated entrance of the player that picks the students from the cloud.
      */
     private final HashMap<RealmColors,Integer> entrance;
-    private final int cloudId;
+    /**
+     * ID of the cloud where the player picked the students.
+     */
+    private final int cloudID;
+    /**
+     * An empty cloud used to send the cloud after the player picked the students.
+     */
     private final HashMap<RealmColors,Integer> emptyCloud;
 
-    public PickFromCloud_UpdateMsg(MessageType messageType, int playerId, HashMap<RealmColors,Integer> entrance, int cloudId) {
+    /**
+     * PickFromCloud_UpdateMsg update.
+     * @param messageType it will be CLOUDCHOICE_UPDATE.
+     * @param playerID ID of the player that picks the students from the cloud.
+     * @param entrance updated entrance of the player that picks the students from the cloud.
+     * @param cloudID ID of the cloud where the player picked the students.
+     */
+    public PickFromCloud_UpdateMsg(MessageType messageType, int playerID, HashMap<RealmColors,Integer> entrance, int cloudID) {
         super(messageType);
-        this.playerID=playerId;
+        this.playerID= playerID;
         this.entrance = entrance;
-        this.cloudId = cloudId;
+        this.cloudID = cloudID;
         HashMap<RealmColors, Integer> emptyCloud = new HashMap<>();
         for (RealmColors color : RealmColors.values())
             emptyCloud.put(color, 0);
@@ -37,7 +50,7 @@ public class PickFromCloud_UpdateMsg extends NetworkMessage{
 
     public HashMap<RealmColors,Integer> getEntrance() { return entrance; }
 
-    public int getCloudId() { return cloudId; }
+    public int getCloudID() { return cloudID; }
 
     public HashMap<RealmColors, Integer> getEmptyCloud() { return emptyCloud; }
 

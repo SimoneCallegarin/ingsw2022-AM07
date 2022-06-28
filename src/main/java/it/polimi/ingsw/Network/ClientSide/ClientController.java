@@ -264,7 +264,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
             case CLOUDCHOICE_UPDATE -> {
                 PickFromCloud_UpdateMsg pfc = (PickFromCloud_UpdateMsg) message;
                 storage.updateStudentsInEntrance(pfc.getPlayerID(), pfc.getEntrance());
-                storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudId());
+                storage.updateCloud(pfc.getEmptyCloud(), pfc.getCloudID());
                 view.printChanges();
             }
             case CHARACTERCARD_UPDATE -> {

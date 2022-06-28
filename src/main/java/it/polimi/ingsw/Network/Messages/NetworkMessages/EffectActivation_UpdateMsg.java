@@ -177,10 +177,10 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
         super(messageType);
         this.characterCardIndex = characterCardIndex;
         this.cardCost = cardCost;
-        this.denyCardsOnPlace = denyCardsOnCard;
-        this.studentsOnCard = studentsOnCard;
         this.isleID = isleID;
         this.denyCard = denyCard;
+        this.denyCardsOnPlace = denyCardsOnCard;
+        this.studentsOnCard = studentsOnCard;
     }
 
     /**
@@ -188,9 +188,7 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
      * @param messageType is an EFFECTACTIVATION_UPDATE.
      */
     // CENTAUR, KNIGHT, FUNGIST
-    public EffectActivation_UpdateMsg(MessageType messageType) {
-        super(messageType);
-    }
+    public EffectActivation_UpdateMsg(MessageType messageType) { super(messageType); }
 
     /**
      * Message used to send an update when activated the MINSTREL / THIEF.

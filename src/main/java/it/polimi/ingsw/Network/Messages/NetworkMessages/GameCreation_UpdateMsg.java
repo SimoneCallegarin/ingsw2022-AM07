@@ -88,8 +88,8 @@ public class GameCreation_UpdateMsg extends NetworkMessage{
      * Constructor of the GameCreation_UpdateMsg
      * @param messageType it will be START_GAME.
      * @param numPlayers Number of players of the game.
-     * @param gameMode Game mode of the game.
      * @param nicknames Nicknames of each player.
+     * @param gameMode Game mode of the game.
      * @param clouds Students on each cloud.
      * @param studentsOnCharacter Students on each character card.
      * @param entrances Students on each entrance.

@@ -17,7 +17,7 @@ public class StudentToIsle_UpdateMsg extends NetworkMessage {
     /**
      * students on the entrance of the player.
      */
-    private final HashMap<RealmColors, Integer> entrance;
+    private final HashMap<RealmColors,Integer> entrance;
     /**
      * ID of the isle where the player placed the student.
      */
@@ -25,7 +25,7 @@ public class StudentToIsle_UpdateMsg extends NetworkMessage {
     /**
      * students of the isle where the player placed the student.
      */
-    private final HashMap<RealmColors, Integer> isleStudents;
+    private final HashMap<RealmColors,Integer> isleStudents;
 
     /**
      * StudentToIsle_UpdateMsg constructor.

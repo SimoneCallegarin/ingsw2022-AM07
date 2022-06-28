@@ -16,11 +16,11 @@ public class StudentToDining_UpdateMsg extends NetworkMessage{
     /**
      * Students on the player entrance.
      */
-    private final HashMap<RealmColors, Integer> entrance;
+    private final HashMap<RealmColors,Integer> entrance;
     /**
      * Students on the player dining room.
      */
-    private final HashMap<RealmColors, Integer> dining;
+    private final HashMap<RealmColors,Integer> dining;
 
     /**
      * StudentToDining_UpdateMsg constructor.

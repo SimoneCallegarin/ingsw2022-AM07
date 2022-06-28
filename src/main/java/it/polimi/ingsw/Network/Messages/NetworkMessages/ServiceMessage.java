@@ -45,7 +45,7 @@ public class ServiceMessage extends NetworkMessage {
      */
     public ServiceMessage(MessageType messageType) {
         super(messageType);
-        this.message = "null";
+        this.message = "none";
         this.playerID = -1;
     }
 
