@@ -13,7 +13,7 @@ public class MNButton extends JButton {
     /**
      * ClassLoader used to load images from the resource folder
      */
-    ClassLoader cl=this.getClass().getClassLoader();
+    private final ClassLoader cl=this.getClass().getClassLoader();
 
     /**
      * Constructor of MNButton

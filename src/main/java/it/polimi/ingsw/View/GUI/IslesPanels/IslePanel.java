@@ -5,8 +5,6 @@ import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.View.GUI.Buttons.MNButton;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
 import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
-import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
-import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -15,45 +13,33 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * panel representing an isle on the game board
+ * Panel representing an isle on the game board
  */
 public class IslePanel extends JPanel {
     /**
      * ModelStorage reference used to retrieve model information
      */
-    ModelStorage storage;
+    private final ModelStorage storage;
     /**
      * Constraints used to organize the game objects (students,towers,Mother nature, deny card) in the isle panel
      */
-    GridBagConstraints constraints;
+    private final GridBagConstraints constraints;
     /**
      * Id of the isle represented by this panel
      */
-    int isleID;
-    /**
-     * Id of the isle image drawn by this panel
-     */
-    int imageID;
-    /**
-     * Boolean used to know if Mother Nature is present on this isle
-     */
-    boolean motherNature=false;
-    /**
-     * Deny card panel used to draw the deny card if it's present on this isle
-     */
-    DenyCardPanel denyCardPanel;
+    private final int isleID;
     /**
      * Array list used to retrieve the pngs of the isles
      */
-    ArrayList<BufferedImage> isles;
+    private final ArrayList<BufferedImage> isles;
     /**
      * Array list used to retrieve the pngs of the students
      */
-    ArrayList<BufferedImage> students;
+    private final ArrayList<BufferedImage> students;
     /**
      * Array list used to retrieve the pngs of the towers
      */
-    ArrayList<BufferedImage> towers;
+    private final ArrayList<BufferedImage> towers;
 
     /**
      * Isle panel constructor
@@ -66,15 +52,14 @@ public class IslePanel extends JPanel {
     public IslePanel(ModelStorage storage,int isleID, ArrayList<BufferedImage> isles, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers) {
         this.storage=storage;
         this.isleID=isleID;
-        this.imageID=isleID%3+1;
+        this.isles = isles;
+        this.students = students;
+        this.towers = towers;
 
         setLayout(new GridBagLayout());
         constraints=new GridBagConstraints();
         setOpaque(false);
 
-        this.isles = isles;
-        this.students = students;
-        this.towers = towers;
         initializeIsle();
         setPreferredSize(this.getSize());
     }
@@ -109,11 +94,12 @@ public class IslePanel extends JPanel {
         if(storage.getGameTable().getIsle(isleID).motherNatureIsPresent()){
             tower_MN_Deny_Container.add(new MNButton(),tower_MN_Deny_Constraints);
             tower_MN_Deny_Constraints.gridx++;
-            motherNature=true;
         }
 
         for(int i=0;i<storage.getGameTable().getIsle(isleID).getDenyCardsNumber();i++) {
-            denyCardPanel = new DenyCardPanel();
+
+            //Deny card panel used to draw the deny card if it's present on this isle
+            DenyCardPanel denyCardPanel = new DenyCardPanel();
             denyCardPanel.setPreferredSize(new Dimension(25, 25));
             tower_MN_Deny_Container.add(denyCardPanel, tower_MN_Deny_Constraints);
             tower_MN_Deny_Constraints.gridx++;
@@ -210,12 +196,4 @@ public class IslePanel extends JPanel {
         this.repaint();
     }
 
-    /**
-     * Getter of isle images which are used to size the layeredPanel in the tableScreenPanel class
-     * @param id the id of the image
-     * @return the image reference
-     */
-    public BufferedImage getIslesImagesByID(int id) {
-        return isles.get(id);
-    }
 }

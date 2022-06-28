@@ -1,13 +1,12 @@
 package it.polimi.ingsw.View.GUI.EventListeners;
 
-import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
-import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
+
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,18 +16,24 @@ import java.util.ArrayList;
  * Class added to dining student buttons to listen to a mouse click and notify the view observers of the button color selected
  */
 public class DiningStudentListener extends ViewSubject implements MouseListener {
+    /**
+     * EntrancePanel reference used to set the students clickable with the effect listener
+     */
+    private final EntrancePanel entrance;
+    /**
+     * DiningStudentsPanel reference used to remove the listeners from its students
+     */
+    private final DiningStudentsPanel diningStudentsRoom;
 
-    EntrancePanel entrance;
-    DiningStudentsPanel dsp;
-    TableCenterPanel tableCenter;
-    ArrayList<ViewObserver> observers;
-
-    public DiningStudentListener(EntrancePanel entrance, ArrayList<ViewObserver> viewObserverList,
-                                 TableCenterPanel tableCenter, DiningStudentsPanel dsp) {
+    /**
+     * Constructor of DiningStudentsPanel
+     * @param entrance EntrancePanel reference used to set the students clickable with the effect listener
+     * @param viewObserverList Array list of View Observers used to attach to this listener the GUI observers
+     * @param diningStudentsRoom DiningStudentsPanel reference used to remove the listeners from its students
+     */
+    public DiningStudentListener(EntrancePanel entrance, ArrayList<ViewObserver> viewObserverList, DiningStudentsPanel diningStudentsRoom) {
         this.entrance = entrance;
-        this.dsp = dsp;
-        this.tableCenter=tableCenter;
-        observers=viewObserverList;
+        this.diningStudentsRoom = diningStudentsRoom;
         addAllObservers(viewObserverList);
     }
 
@@ -48,7 +53,7 @@ public class DiningStudentListener extends ViewSubject implements MouseListener 
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
 
         entrance.setStudentsClickableForEffect();
-        dsp.removeClickableStudents();
+        diningStudentsRoom.removeClickableStudents();
 
     }
 

@@ -27,138 +27,84 @@ import java.util.ArrayList;
  * the panel use to contain the isles, the clouds and the character cards
  */
 public class TableCenterPanel extends JPanel {
-
-    ModelStorage storage;
     /**
-     * the panel containing the leftmost three isles;
+     * ModelStorage reference used to retrieve game state information from
      */
-    JPanel isleContainerSx;
+    private final ModelStorage storage;
     /**
-     * the panel container the rightmost three isles
+     * The panel containing the leftmost three isles;
      */
-    JPanel isleContainerDx;
+    private final JPanel isleContainerSx;
     /**
-     * the center panel containing two rows of isles and a center row containing the clouds and the character cards
+     * The panel container the rightmost three isles
      */
-    JPanel isleContainerCenter;
+    private final JPanel isleContainerDx;
     /**
-     * the panel containing the discard pile (or the mage) and the coins for the first and third player (displayed on the left)
+     * One of the two isle panel container in the isleContainerCenter
      */
-    JPanel assistantAndMoneyContainerSx;
+    private final JPanel firstIsleContainer1x2;
     /**
-     * the panel containing the discard pile (or the mage) and the coins for the second and the fourth player(displayed on the right)
+     * One of the two isle panel container in the isleContainerCenter
      */
-    JPanel assistantAndMoneyContainerDx;
+    private final JPanel secondIsleContainer1x2;
     /**
-     * one of the two isle panel container in the isleContainerCenter
+     * The panel containing the clouds panels
      */
-    JPanel firstIsleContainer1x2;
+    private final CloudsContainerPanel cloudsContainerPanel;
     /**
-     * one of the two isle panel container in the isleContainerCenter
+     * Constraints used to add the assistant card and the labels for money and username (and squad) in the assistantAndMoneyPanels
      */
-    JPanel secondIsleContainer1x2;
+    private final GridBagConstraints assistantAndMoneyConstraints;
     /**
-     * panel that contains the character cards
+     * This array contains all the panels representing the isles
      */
-    JPanel charactersContainer;
+    private final ArrayList<IslePanel> islesPanels;
     /**
-     * panel containing the discard pile, the coins and the username (and squad) of the first player
+     * This array list stores all the panel representing the assistant card, the money, the username and the squad for each player
      */
-    JPanel assistantAndMoneyPanel1;
+    private final ArrayList<JPanel> assistantAndMoneyPanelList;
     /**
-     * panel containing the discard pile, the coins and the username (and squad) of the second player
+     * ArrayList to store the labels for showing the available coins for each player
      */
-    JPanel assistantAndMoneyPanel2;
+    private ArrayList<JLabel> coinsLabel;
     /**
-     * panel containing the discard pile, the coins and the username (and squad) of the third player
+     * Arraylist to store the assistant card panels currently on screen
      */
-    JPanel assistantAndMoneyPanel3;
+    private final ArrayList<AssistantCardPanel> assistantCardPanels;
     /**
-     * panel containing the discard pile, the coins and the username (and squad) of the fourth player
+     * Constraints for the rightmost isle container
      */
-    JPanel assistantAndMoneyPanel4;
+    private final GridBagConstraints icDxConstraints;
     /**
-     * the panel containing the clouds panels
+     * Constraints for the leftmost isle container
      */
-    CloudsContainerPanel cloudsContainerPanel;
+    private final GridBagConstraints icSxConstraints;
     /**
-     * constraints used to add the assistant card and the labels for money and username (and squad) in the assistantAndMoneyPanels
+     * Constraints for the first 1x2 isle container (the one on top)
      */
-    GridBagConstraints assistantAndMoneyConstraints;
+    private final GridBagConstraints first1x2constraints;
     /**
-     * username of the player using the GUI
+     * Constraints for the second 1x2 isle container (the one on bottom)
      */
-    String usernamePlaying;
+    private final GridBagConstraints second1x2constraints;
     /**
-     * this array contains all the panels representing the isles
-     */
-    ArrayList<IslePanel> islesPanels;
-    /**
-     * this array list stores all the panel representing the assistant card, the money, the username and the squad for each player
-     */
-    ArrayList<JPanel> assistantAndMoneyPanelList;
-    /**
-     * ArrayList storing the containers for the assistantAndMoneyPanels
-     */
-    ArrayList<JPanel> assistantAndMoneyContainers;
-    /**
-     * arrayList to store the labels for showing the available coins for each player
-     */
-    ArrayList<JLabel> coinsLabel;
-    /**
-     * arraylist to store the assistant card panels currently on screen
-     */
-    ArrayList<AssistantCardPanel> assistantCardPanels;
-    /**
-     * constraints for the rightmost isle container
-     */
-    GridBagConstraints icDxConstraints;
-    /**
-     * constraints for the leftmost isle container
-     */
-    GridBagConstraints icSxConstraints;
-    /**
-     * constraints for the first 1x2 isle container (the one on top)
-     */
-    GridBagConstraints first1x2constraints;
-    /**
-     * constraints for the second 1x2 isle container (the one on bottom)
-     */
-    GridBagConstraints second1x2constraints;
-    /**
-     * array list of panel added on top of isle. The listeners will be added to this array list element
+     * Array list of panel added on top of isle. The listeners will be added to this array list element
      * in order to make the isles clickable on every point of their panel even if they are full of students,towers etc.
      */
-    ArrayList<JPanel> clickablePanels;
+    private final ArrayList<JPanel> clickablePanels;
     /**
-     * array list to store the layered panel added to the isle container. Layered panel are used to permit to add on top of the isle panel
+     * Array list to store the layered panel added to the isle container. Layered panel are used to permit to add on top of the isle panel
      * a clickable panel
      */
-    ArrayList<JLayeredPane> isleLayeredPanels;
+    private final ArrayList<JLayeredPane> isleLayeredPanels;
     /**
-     * array list to store the character cards panel
+     * Array list to store the character cards panel
      */
-    ArrayList<CharacterPanel> characterPanels;
+    private final ArrayList<CharacterPanel> characterPanels;
     /**
-     * gameScreenPanel reference
+     * GameScreenPanel reference
      */
-    GameScreenPanel gsp;
-    /**
-     * classloader to load images from resource folder
-     */
-    ClassLoader cl;
-    /**
-     * array list to store isle images
-     */
-    ArrayList<BufferedImage> isles;
-    /**
-     * array list to store students images
-     */
-    ArrayList<BufferedImage> students;
-    /**
-     * array list to store towers images
-     */
-    ArrayList<BufferedImage> towers;
+    private final GameScreenPanel gsp;
 
     /**
      * Constructor of TableCenterPanel
@@ -177,10 +123,12 @@ public class TableCenterPanel extends JPanel {
                             ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, ArrayList<BufferedImage> checkedStudents,
                             GameScreenPanel gsp) {
         this.storage=storage;
-        this.usernamePlaying=usernamePlaying;
+
+        //username of the player using the GUI
         this.islesPanels=new ArrayList<>();
         this.assistantAndMoneyPanelList=new ArrayList<>();
-        this.assistantAndMoneyContainers=new ArrayList<>();
+
+
         this.assistantCardPanels=new ArrayList<>();
         this.characterPanels = new ArrayList<>();
         this.gsp = gsp;
@@ -202,7 +150,9 @@ public class TableCenterPanel extends JPanel {
         isleContainerDx=new JPanel(new GridBagLayout());
         isleContainerDx.setBackground(Color.CYAN);
         icDxConstraints=new GridBagConstraints();
-        isleContainerCenter=new JPanel(new GridBagLayout());
+
+        //The center panel containing two rows of isles and a center row containing the clouds and the character cards
+        JPanel isleContainerCenter = new JPanel(new GridBagLayout());
         isleContainerCenter.setBackground(Color.CYAN);
         isleContainerSx=new JPanel(new GridBagLayout());
         icSxConstraints=new GridBagConstraints();
@@ -210,23 +160,33 @@ public class TableCenterPanel extends JPanel {
 
         GridLayout gridLayout=new GridLayout(2,1);//layout for the assistant card and money containers
         gridLayout.setVgap(220);
-        assistantAndMoneyContainerSx =new JPanel(gridLayout);
-        assistantAndMoneyContainerSx.setBackground(Color.CYAN);
-        assistantAndMoneyContainerDx =new JPanel(gridLayout);
-        assistantAndMoneyContainerDx.setBackground(Color.CYAN);
-        assistantAndMoneyContainers.add(assistantAndMoneyContainerSx);
-        assistantAndMoneyContainers.add(assistantAndMoneyContainerDx);
 
-        assistantAndMoneyPanel1=new JPanel(new GridBagLayout());
+        // The panel containing the discard pile (or the mage) and the coins for the first and third player (displayed on the left)
+        JPanel assistantAndMoneyContainerSx = new JPanel(gridLayout);
+        assistantAndMoneyContainerSx.setBackground(Color.CYAN);
+
+        //The panel containing the discard pile (or the mage) and the coins for the second and the fourth player(displayed on the right)
+        JPanel assistantAndMoneyContainerDx = new JPanel(gridLayout);
+        assistantAndMoneyContainerDx.setBackground(Color.CYAN);
+
+        //Panel containing the discard pile, the coins and the username (and squad) of the first player
+        JPanel assistantAndMoneyPanel1 = new JPanel(new GridBagLayout());
         assistantAndMoneyPanel1.setBackground(Color.CYAN);
         assistantAndMoneyPanelList.add(assistantAndMoneyPanel1);
-        assistantAndMoneyPanel2=new JPanel(new GridBagLayout());
+
+
+        //Panel containing the discard pile, the coins and the username (and squad) of the second player
+        JPanel assistantAndMoneyPanel2 = new JPanel(new GridBagLayout());
         assistantAndMoneyPanel2.setBackground(Color.CYAN);
         assistantAndMoneyPanelList.add(assistantAndMoneyPanel2);
-        assistantAndMoneyPanel3=new JPanel(new GridBagLayout());
+
+        //panel containing the discard pile, the coins and the username (and squad) of the third player
+        JPanel assistantAndMoneyPanel3 = new JPanel(new GridBagLayout());
         assistantAndMoneyPanel3.setBackground(Color.CYAN);
         assistantAndMoneyPanelList.add(assistantAndMoneyPanel3);
-        assistantAndMoneyPanel4=new JPanel(new GridBagLayout());
+
+        //panel containing the discard pile, the coins and the username (and squad) of the fourth player
+        JPanel assistantAndMoneyPanel4 = new JPanel(new GridBagLayout());
         assistantAndMoneyPanel4.setBackground(Color.CYAN);
         assistantAndMoneyPanelList.add(assistantAndMoneyPanel4);
         assistantAndMoneyConstraints=new GridBagConstraints();
@@ -242,11 +202,11 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyContainerDx.add(assistantAndMoneyPanel2);
         assistantAndMoneyContainerDx.add(assistantAndMoneyPanel4);
 
-        isles = new ArrayList<>();
-        this.students = students;
-        this.towers = towers;
+        //array list to store isle images
+        ArrayList<BufferedImage> isles = new ArrayList<>();
 
-        cl = this.getClass().getClassLoader();
+        //classloader to load images from resource folder
+        ClassLoader cl = this.getClass().getClassLoader();
         InputStream url;
 
         for (int i = 1; i < 4; i++) {
@@ -271,11 +231,11 @@ public class TableCenterPanel extends JPanel {
             usernamePanel.setOpaque(false);
 
             JLabel usernameLabel=new JLabel(username);
-            if(storage.getDashboard(i).getNickname().equals(this.usernamePlaying))
+            if(storage.getDashboard(i).getNickname().equals(usernamePlaying))
                 usernameLabel.setForeground(nicknameColor);
             usernamePanel.add(usernameLabel,BorderLayout.CENTER);
 
-            if(storage.getDashboard(i).getNickname().equals(this.usernamePlaying)){
+            if(storage.getDashboard(i).getNickname().equals(usernamePlaying)){
                 usernamePanel.add(new JLabel("(you)"),BorderLayout.PAGE_END);
             }else{
                 usernamePanel.add(new JLabel("     "),BorderLayout.PAGE_END);//to make all the panel occupy the same space
@@ -456,7 +416,8 @@ public class TableCenterPanel extends JPanel {
             isleContainerCenter.add(cloudsContainerPanel,centerConstraints);
 
             if(storage.isExpertMode()) {
-                charactersContainer=new JPanel(new GridLayout(1,3));
+                //panel that contains the character cards
+                JPanel charactersContainer = new JPanel(new GridLayout(1, 3));
                 charactersContainer.setBackground(Color.CYAN);
                 centerConstraints.fill = GridBagConstraints.BOTH;
                 centerConstraints.gridy = 2;

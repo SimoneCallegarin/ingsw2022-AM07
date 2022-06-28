@@ -2,30 +2,27 @@ package it.polimi.ingsw.View.GUI.Buttons;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
- * Button representing a student in the entrance or in the dining room
+ * Button representing a student
  */
 public class StudentButton extends JButton {
     /**
      * Color of the student represented by this button
      */
-    RealmColors color;
+    private final RealmColors color;
     /**
      * Array list used to retrieve the students images
      */
-    ArrayList<BufferedImage> students;
+    private final ArrayList<BufferedImage> students;
     /**
      * Array list used to retrieve the checked students images
      */
-    ArrayList<BufferedImage> checkedStudents;
+    private final ArrayList<BufferedImage> checkedStudents;
 
     /**
      * Constructor of StudentButton

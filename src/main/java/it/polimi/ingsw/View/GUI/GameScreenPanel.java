@@ -27,37 +27,17 @@ public class GameScreenPanel extends JPanel {
      */
     private final ModelStorage storage;
     /**
-     * Array list used to store images of the students
-     */
-    ArrayList<BufferedImage> students;
-    /**
-     * Array list used to store images of checked students
-     */
-    ArrayList<BufferedImage> checkedStudents;
-    /**
-     * Array list used to store images of the towers
-     */
-    ArrayList<BufferedImage> towers;
-    /**
      * Dashboard image
      */
-    BufferedImage dashboard;
+     private BufferedImage dashboard;
     /**
      * Panel placed on top of the screen used to contain the textLabel and the logout button
      */
-    JPanel textContainerPanel;
+    private final JPanel textContainerPanel;
     /**
      * Label used to show the current action occurring in game
      */
-    JLabel textLabel;
-    /**
-     * Panel containing the first and third player dashboard
-     */
-    JPanel dashboardContainerPanel1;
-    /**
-     * Panel containing the first and third player dashboard
-     */
-    JPanel dashboardContainerPanel2;
+    private final JLabel textLabel;
     /**
      * TableCenterPanel reference
      */
@@ -65,19 +45,11 @@ public class GameScreenPanel extends JPanel {
     /**
      * Array list used to store the player dashboard panels
      */
-    ArrayList<DashboardPanel> dashboardPanels;
-    /**
-     * Array list used to store the player dashboard container panels
-     */
-    ArrayList<JPanel> dashboardContainers;
+    private final ArrayList<DashboardPanel> dashboardPanels;
     /**
      * Array list of observer attached to the view components
      */
-    ArrayList<ViewObserver> viewObservers;
-    /**
-     * Constraints for this component layout manager
-     */
-    GridBagConstraints gamescreenConstraints;
+    private final ArrayList<ViewObserver> viewObservers;
 
 
     /**
@@ -95,20 +67,27 @@ public class GameScreenPanel extends JPanel {
         this.storage = storage;
         setPreferredSize(new Dimension(frameWidth,frameHeight));
         this.dashboardPanels = new ArrayList<>();
-        this.dashboardContainers = new ArrayList<>();
         this.viewObservers = viewObservers;
+
+         //Array list used to store the player dashboard container panel
+        ArrayList<JPanel> dashboardContainers = new ArrayList<>();
         textContainerPanel = new JPanel(new BorderLayout());
 
-        dashboardContainerPanel1 = new JPanel(new GridLayout(2,1));
+        //Panel containing the first and third player dashboard
+        JPanel dashboardContainerPanel1 = new JPanel(new GridLayout(2, 1));
         dashboardContainerPanel1.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel1);
-        dashboardContainerPanel2 = new JPanel(new GridLayout(2,1));
+        //Panel containing the second and fourth player dashboard
+        JPanel dashboardContainerPanel2 = new JPanel(new GridLayout(2, 1));
         dashboardContainerPanel2.setBackground(Color.CYAN);
         dashboardContainers.add(dashboardContainerPanel2);
 
-        students = new ArrayList<>();
-        checkedStudents = new ArrayList<>();
-        towers = new ArrayList<>();
+        //Array list used to store images of the students
+        ArrayList<BufferedImage> students = new ArrayList<>();
+        //Array list used to store images of checked students
+        ArrayList<BufferedImage> checkedStudents = new ArrayList<>();
+        //Array list used to store images of the towers
+        ArrayList<BufferedImage> towers = new ArrayList<>();
 
         StudentButton sb = new StudentButton();
         TowerButton tb = new TowerButton();
@@ -180,30 +159,33 @@ public class GameScreenPanel extends JPanel {
             e.printStackTrace();
         }
 
-        gamescreenConstraints=new GridBagConstraints();
+        /**
+         * Constraints for this component layout manager
+         */
+        GridBagConstraints gamescreenConstraints = new GridBagConstraints();
 
         gamescreenConstraints.gridy=0;
         gamescreenConstraints.weighty=0.01;
         gamescreenConstraints.weightx=1;
         gamescreenConstraints.gridx=1;
-        add(textContainerPanel,gamescreenConstraints);
+        add(textContainerPanel, gamescreenConstraints);
 
         gamescreenConstraints.gridy=1;
         gamescreenConstraints.fill=GridBagConstraints.BOTH;
 
         gamescreenConstraints.gridx=1;
 
-        tableCenterPanel=new TableCenterPanel(frameWidth,frameHeight,storage,usernamePlaying,nicknameColor,viewObservers, students, towers,checkedStudents, this);
-        add(tableCenterPanel,gamescreenConstraints);
+        tableCenterPanel=new TableCenterPanel(frameWidth,frameHeight,storage,usernamePlaying,nicknameColor,viewObservers, students, towers, checkedStudents, this);
+        add(tableCenterPanel, gamescreenConstraints);
 
         // Then I add the two dashboard container Panel on the left and on the right, and I set the weights in order to correctly size the dashboard.
         gamescreenConstraints.weightx=0.05;
         gamescreenConstraints.weighty=0.2;
         gamescreenConstraints.gridx=0;
-        add(dashboardContainerPanel1,gamescreenConstraints);
+        add(dashboardContainerPanel1, gamescreenConstraints);
 
         gamescreenConstraints.gridx=2;
-        add(dashboardContainerPanel2,gamescreenConstraints);
+        add(dashboardContainerPanel2, gamescreenConstraints);
 
         for(int i=0;i<storage.getNumberOfPlayers();i++){
             DashboardPanel dashboardPanel=new DashboardPanel(storage,i,viewObservers,tableCenterPanel, students, checkedStudents, towers, dashboard);
@@ -239,7 +221,7 @@ public class GameScreenPanel extends JPanel {
      */
     public void setDiningStudentsClickable(int playerID){
         DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();
-        diningStudentsPanel.setStudentsClickableForEffect(viewObservers,tableCenterPanel);
+        diningStudentsPanel.setStudentsClickableForEffect(viewObservers);
     }
 
     /**
@@ -276,7 +258,7 @@ public class GameScreenPanel extends JPanel {
      */
     public void updateEntrance(int playerID){
         dashboardPanels.get(playerID).getEntrance().resetEntrance();
-        dashboardPanels.get(playerID).getEntrance().initializeEntrance(storage);
+        dashboardPanels.get(playerID).getEntrance().initializeEntrance();
     }
 
     /**
@@ -285,7 +267,7 @@ public class GameScreenPanel extends JPanel {
      */
     public void updateStudentDinings(int playerID){
         dashboardPanels.get(playerID).getDining().resetStudentDining();
-        dashboardPanels.get(playerID).getDining().initializeStudentDining(storage);
+        dashboardPanels.get(playerID).getDining().initializeStudentDining();
     }
 
     /**
@@ -294,7 +276,7 @@ public class GameScreenPanel extends JPanel {
     public void updateProfessors(){
         for(DashboardPanel dashboardPanel:dashboardPanels) {
             dashboardPanel.getDining().resetProfessorDining();
-            dashboardPanel.getDining().initializeProfessorPanel(storage);
+            dashboardPanel.getDining().initializeProfessorPanel();
         }
     }
 
@@ -306,6 +288,9 @@ public class GameScreenPanel extends JPanel {
             dashboardPanel.getTowerStorage().resetTowerStorage();
             dashboardPanel.getTowerStorage().initializeTowerStorage();
         }
+    }
 
+    public JPanel getTextContainerPanel() {
+        return textContainerPanel;
     }
 }

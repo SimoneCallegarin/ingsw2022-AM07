@@ -10,16 +10,24 @@ import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
+/**
+ * GUI main class responsible to start the GUIDrawer and interface with the controller and the server architecture
+ */
 public class GUI extends ViewSubject implements View {
-
+    /**
+     * Gui Drawer reference used to interact with the GUI
+     */
     private final GUIDrawer guiDrawer;
 
+    /**
+     * Constructor of GUI
+     */
     public GUI() { guiDrawer = new GUIDrawer(); }
 
     @Override
     public void askUsername() {
        guiDrawer.showUsernameForm();
-       guiDrawer.userInputPanel.remove(0);
+       guiDrawer.getUserInputPanel().remove(0);
     }
 
     @Override
@@ -44,7 +52,7 @@ public class GUI extends ViewSubject implements View {
     public void printChanges() { guiDrawer.updateGameScreenPanel(); }
 
     @Override
-    public void printWinner(String winner, int winnerID) { /*!!!!!!!!!!!!!!!*/
+    public void printWinner(String winner, int winnerID) {
         guiDrawer.showWinner(winner);
     }
 

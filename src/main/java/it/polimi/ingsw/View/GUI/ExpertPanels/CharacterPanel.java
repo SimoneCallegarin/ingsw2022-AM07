@@ -26,50 +26,50 @@ public class CharacterPanel extends JPanel {
     /**
      * The String representing the character name
      */
-    String character;
+    private final String character;
     /**
      * The index of the character in the game table
      */
-    int characterIndex;
+    private final int characterIndex;
     /**
      * Constraints for this panel layout
      */
-    GridBagConstraints constraints;
+    private final GridBagConstraints constraints;
     /**
      * Model storage reference used to retrieve information about the character card state (students/deny cards etc. on it)
      */
-    ModelStorage storage;
+    private final ModelStorage storage;
     /**
      * Array list to store the students images
      */
-    ArrayList<BufferedImage> students;
+    private final ArrayList<BufferedImage> students;
     /**
      * Array list to store the checked students images
      */
-    ArrayList<BufferedImage> checkedStudents;
+    private final ArrayList<BufferedImage> checkedStudents;
     /**
      * Array list to store the student buttons placed on the character card
      */
-    ArrayList<StudentButton> studentButtons;
+    private final ArrayList<StudentButton> studentButtons;
     /**
      * Array list of EffectListeners to attach to the game objects available on the card
      */
-    ArrayList<EffectListener> effectListeners;
+    private final ArrayList<EffectListener> effectListeners;
     /**
      * Array list of CharacterStudentListener to attach to this character panel
      */
-    ArrayList<CharacterStudentListener> characterStudentListeners;
+    private final ArrayList<CharacterStudentListener> characterStudentListeners;
     /**
      * TableCenterPanel reference passed to the listener
      */
-    TableCenterPanel tcp;
+    private final TableCenterPanel tcp;
     /**
-     * Array list of viewOBservers attached to the view components
+     * Array list of viewObservers attached to the view components
      */
-    ArrayList<ViewObserver> viewObservers;
+    private final ArrayList<ViewObserver> viewObservers;
 
     /**
-     * Constructo fo CharacterPanel
+     * Constructor fo CharacterPanel
      * @param storage Model storage reference used to retrieve information about the character card state (students/deny cards etc. on it)
      * @param character The String representing the character name
      * @param characterIndex The index of the character in the game table

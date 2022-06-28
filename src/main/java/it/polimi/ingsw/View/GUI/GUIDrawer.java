@@ -21,59 +21,76 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * This class is called upon GUI creation and start the GUI construction chain. It's also responsible for showing forms to the user and managing
+ * the update logic
+ */
 public class GUIDrawer extends ViewSubject {
-
-    ModelStorage modelStorage;
-
-    JTextField nicknameField;
-    Font italicFont;
-    JLabel nicknameDisplay;
-    JPanel mainMenu;
-
+    /**
+     * Model Storage reference used to retrieve game state information
+     */
+    private ModelStorage modelStorage;
+    /**
+     * JTextField used to insert nickname choice
+     */
+    private JTextField nicknameField;
+    /**
+     * Font used for the nickname check
+     */
+    private Font italicFont;
+    /**
+     * JLabel used to print the chosen nickname
+     */
+    private JLabel nicknameDisplay;
+    /**
+     * String placed in the frame to identify the application
+     */
     private final String frameTitle = "Eriantys Game";
     /**
      * Frame containing the GUI itself.
      */
-    JFrame f = new JFrame(frameTitle);
+    private JFrame f = new JFrame(frameTitle);
     /**
      * Panel for the user inputs.
      */
-    JPanel userInputPanel = new JPanel(new CardLayout());
+    private final JPanel userInputPanel = new JPanel(new CardLayout());
     /**
      * User preferences layout to change between username insertion and game preferences choice.
      */
-    CardLayout userCl = (CardLayout) userInputPanel.getLayout();
+    private final CardLayout userCl = (CardLayout) userInputPanel.getLayout();
     /**
      * General panel manager switches between the screen where the user will submit his server and game preferences
      * and the screen where the actual game will take place.
      */
-    JPanel generalPanelManager = new JPanel(new CardLayout());
+    private final JPanel generalPanelManager = new JPanel(new CardLayout());
     /**
      * GeneralPanelManager layout to show different panels on events happening.
      */
-    CardLayout cl = (CardLayout) generalPanelManager.getLayout();
+    private final CardLayout cl = (CardLayout) generalPanelManager.getLayout();
     /**
      * on this button press the player will join a lobby and wait for the game to start
      */
-    JButton startGame = new JButton("Start game");
-
-    LoadingScreen loadingScreen;
+    private final JButton startGame = new JButton("Start game");
+    /**
+     * Loading screen shown while waiting for the game to load/other player to join
+     */
+    private LoadingScreen loadingScreen;
     /**
      * panel where the actual game will take place
      */
-    GameScreenPanel gameScreenPanel;
+    private GameScreenPanel gameScreenPanel;
     /**
      * the username of the player currently using the GUI
      */
-    String usernamePlaying;
+    private String usernamePlaying;
     /**
      * boolean variable used to execute only one time the GameScreenPanel creation
      */
-    boolean gameStart = true;
+    private boolean gameStart = true;
     /**
      * the class containing all the information about the changes occurred in the ModelStorage
      */
-    ModelChanges modelChanges;
+    private ModelChanges modelChanges;
 
     /**
      * boolean used to know if it is necessary to let appear a JOptionPanel of start turn or not
@@ -120,7 +137,7 @@ public class GUIDrawer extends ViewSubject {
      */
     public void showUsernameForm() {
 
-        mainMenu = new JPanel();
+        JPanel mainMenu = new JPanel();
 
         mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.LINE_AXIS));
 
@@ -364,16 +381,10 @@ public class GUIDrawer extends ViewSubject {
     }
 
     public void showMNMovement() {
-        /*String message="Now you can move mother nature by clicking on the island where you want to move her";
-        JOptionPane.showMessageDialog(f,message,"Move mother nature",JOptionPane.PLAIN_MESSAGE);*/
-
         gameScreenPanel.getTableCenterPanel().setMNClickable(getViewObserverList());
     }
 
     public void showCloudChoice() {
-        /*String message="Now choose a cloud to pick students from by clicking on it";
-        JOptionPane.showMessageDialog(f,message,"Choose cloud",JOptionPane.PLAIN_MESSAGE);*/
-
         gameScreenPanel.getTableCenterPanel().setCloudsClickable();
 
         turnStarted = false;
@@ -556,13 +567,8 @@ public class GUIDrawer extends ViewSubject {
         logout.setText("LOGOUT");
         logout.setBackground(Color.RED);
         logout.setPreferredSize(new Dimension(100,25));
-        logout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                logoutConfirmation();
-            }
-        });
-        gameScreenPanel.textContainerPanel.add(logout,BorderLayout.LINE_END);
+        logout.addActionListener(e -> logoutConfirmation());
+        gameScreenPanel.getTextContainerPanel().add(logout,BorderLayout.LINE_END);
     }
 
     /**
@@ -575,12 +581,7 @@ public class GUIDrawer extends ViewSubject {
         JButton no = new JButton();
         yes.setText("Yes");
         no.setText("No");
-        yes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                notifyObserver(ViewObserver::onLogout);
-            }
-        });
+        yes.addActionListener(e -> notifyObserver(ViewObserver::onLogout));
         no.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -755,5 +756,9 @@ public class GUIDrawer extends ViewSubject {
         JOptionPane.showMessageDialog(f,message,"Winner",JOptionPane.PLAIN_MESSAGE);
         f.dispose();
         System.exit(1);
+    }
+
+    public JPanel getUserInputPanel() {
+        return userInputPanel;
     }
 }

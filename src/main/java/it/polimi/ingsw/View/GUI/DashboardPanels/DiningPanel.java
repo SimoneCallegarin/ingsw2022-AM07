@@ -14,33 +14,64 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * This panel represents the dining room panel. It consists of two panel, one for the students and one for the professors
+ */
 public class DiningPanel extends JPanel {
-    GridBagConstraints c;
-    ModelStorage storage;
-    int playerID;
-    ProfessorPanel professorPanel;
-    DiningStudentsPanel studentsPanel;
-    ClassLoader cl;
-    ArrayList<BufferedImage> students;
-    ArrayList<BufferedImage> checkedStudents;
-    ArrayList<BufferedImage> professors;
+    /**
+     * GridBagConstraints used by this panel layout manager to correctly place the button
+     */
+    private final GridBagConstraints constraints;
+    /**
+     * ModelStorage reference used to retrieve game state information
+     */
+    private final ModelStorage storage;
+    /**
+     * The player id associated with this dining
+     */
+    private final int playerID;
+    /**
+     * ProfessorPanel contained in this panel
+     */
+    private ProfessorPanel professorPanel;
+    /**
+     * DiningStudentsPanel contained in this panel
+     */
+    private DiningStudentsPanel studentsPanel;
+    /**
+     * Array list used to store the images of the students
+     */
+    private final ArrayList<BufferedImage> students;
+    /**
+     * Array list used to store the images of the checked students
+     */
+    private final ArrayList<BufferedImage> checkedStudents;
+    /**
+     * Array list used to store the images of the professors
+     */
+    private final ArrayList<BufferedImage> professors;
 
+    /**
+     * Constructor of DiningPanel
+     * @param storage ModelStorage reference used to retrieve game state information
+     * @param playerID The player id associated with this dining
+     * @param students Array list used to store the images of the students
+     * @param checkedStudents Array list used to store the images of the checked students
+     */
     public DiningPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
-        setLayout(new GridBagLayout());
-        c = new GridBagConstraints();
-
         this.storage=storage;
         this.professors=new ArrayList<>();
         this.playerID=playerID;
-        setOpaque(false);
-        setBorder(BorderFactory.createLineBorder(Color.black));
-
         this.students = students;
         this.checkedStudents = checkedStudents;
 
-        cl = this.getClass().getClassLoader();
-        InputStream url;
+        setOpaque(false);
+        setBorder(BorderFactory.createLineBorder(Color.black));
+        setLayout(new GridBagLayout());
+        constraints = new GridBagConstraints();
 
+        ClassLoader cl = this.getClass().getClassLoader();
+        InputStream url;
         for (RealmColors rc : RealmColors.values()) {
             BufferedImage img = null;
             switch(rc) {
@@ -60,40 +91,42 @@ public class DiningPanel extends JPanel {
             professors.add(img);
         }
 
-        initializeProfessorPanel(storage);
-        initializeStudentDining(storage);
+        initializeProfessorPanel();
+        initializeStudentDining();
         setPreferredSize(this.getSize());
 
     }
 
     /**
-     * this method initialize the dining room according to the model state
+     * This method creates the DiningStudentsPanel and place it in this panel.
      */
-    public void initializeStudentDining(ModelStorage storage) {
+    public void initializeStudentDining() {
         studentsPanel=new DiningStudentsPanel(storage,playerID, students, checkedStudents);
-        studentsPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         studentsPanel.setOpaque(false);
-        c.fill=GridBagConstraints.BOTH;
-        c.gridy=1;
-        c.weighty=1;
-        c.weightx=1;
-        c.ipady=-25;
-        add(studentsPanel,c);
+        constraints.fill=GridBagConstraints.BOTH;
+        constraints.gridy=1;
+        constraints.weighty=1;
+        constraints.weightx=1;
+        constraints.ipady=-25;
+        add(studentsPanel, constraints);
         this.validate();
         this.repaint();
     }
 
-    public void initializeProfessorPanel(ModelStorage storage){
+    /**
+     * This method creates the ProfessorPanel and place it in this panel
+     */
+    public void initializeProfessorPanel(){
         professorPanel=new ProfessorPanel(storage,playerID, professors);
         professorPanel.setBorder(BorderFactory.createLineBorder(Color.white));
         professorPanel.setOpaque(false);
-        c.fill=GridBagConstraints.BOTH;
-        c.gridx=0;
-        c.gridy=0;
-        c.weighty=0.15;
-        c.weightx=1;
-        c.ipady=-12;
-        add(professorPanel,c);
+        constraints.fill=GridBagConstraints.BOTH;
+        constraints.gridx=0;
+        constraints.gridy=0;
+        constraints.weighty=0.15;
+        constraints.weightx=1;
+        constraints.ipady=-12;
+        add(professorPanel, constraints);
         this.validate();
         this.repaint();
     }
@@ -115,10 +148,16 @@ public class DiningPanel extends JPanel {
             this.removeMouseListener(this.getMouseListeners()[j]);
     }
 
+    /**
+     * This method reset the StudentDiningPanel present in this panel
+     */
     public void resetStudentDining(){
         this.getStudentsPanel().resetStudents();
     }
 
+    /**
+     * This method reset the ProfessorPanel present in this panel
+     */
     public void resetProfessorDining(){this.getProfessorPanel().resetProfessors();}
 
     public ProfessorPanel getProfessorPanel() {

@@ -27,6 +27,7 @@ public class DenyCardPanel extends JPanel {
         InputStream url=cl.getResourceAsStream("GameTable/Isles/deny_island_icon.png");
         BufferedImage img=null;
         try{
+            assert url != null;
             img= ImageIO.read(url);
         }catch(IOException e){
             e.printStackTrace();

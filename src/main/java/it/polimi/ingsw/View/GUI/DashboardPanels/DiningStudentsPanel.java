@@ -3,9 +3,7 @@ package it.polimi.ingsw.View.GUI.DashboardPanels;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Observer.ViewObserver;
 import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.EventListeners.DiningListener;
 import it.polimi.ingsw.View.GUI.EventListeners.DiningStudentListener;
-import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -18,9 +16,9 @@ import java.util.ArrayList;
  */
 public class DiningStudentsPanel extends JPanel {
     /**
-     * Player id associated with the dashboard
+     * ModelStorage reference used to retrieve game state information from
      */
-    int playerID;
+    private final ModelStorage storage;
     /**
      * Array list used to store the panel representing the color lanes in the dining
      */
@@ -32,11 +30,11 @@ public class DiningStudentsPanel extends JPanel {
     /**
      * Array list used to store the images of the students
      */
-    ArrayList<BufferedImage> students;
+    private final ArrayList<BufferedImage> students;
     /**
      * Array list used to store the images of the checked students
      */
-    ArrayList<BufferedImage> checkedStudents;
+    private final ArrayList<BufferedImage> checkedStudents;
 
     /**
      * Constructor of the dining students panel
@@ -46,25 +44,24 @@ public class DiningStudentsPanel extends JPanel {
      * @param checkedStudents Array list of checked student images
      */
     public DiningStudentsPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
-        this.playerID=playerID;
         this.lanes=new ArrayList<>();
         this.studentButtons=new ArrayList<>();
+        this.students = students;
+        this.checkedStudents = checkedStudents;
+        this.storage=storage;
         GridLayout gridLayout=new GridLayout(1,5);
         gridLayout.setHgap(-30);
         setLayout(gridLayout);
-        this.students = students;
-        this.checkedStudents = checkedStudents;
-        InitializeDiningStudents(playerID,storage);
 
+        InitializeDiningStudents(playerID);
     }
 
     /**
      * this method initialize this panel with the ModelStorage information about the students placed in the dining game object.
      * This method is called after the resetStudents method to draw the students present on this dining.
      * @param playerID the player id associated with this dashboard
-     * @param storage the ModelStorage reference used to retrieve dining state information
      */
-    private void InitializeDiningStudents(int playerID,ModelStorage storage){
+    private void InitializeDiningStudents(int playerID){
         GridLayout gridLayout=new GridLayout(10,1);
         gridLayout.setVgap(-13);//space between the students in one lane
         JPanel greenLane = new JPanel(gridLayout);
@@ -82,8 +79,6 @@ public class DiningStudentsPanel extends JPanel {
         JPanel blueLane = new JPanel(gridLayout);
         blueLane.setOpaque(false);
         lanes.add(blueLane);
-
-
 
         for(RealmColors color:RealmColors.values()){
             for(int i=0;10-storage.getDashboard(playerID).getDiningStudents(color)>i;i++){
@@ -117,7 +112,6 @@ public class DiningStudentsPanel extends JPanel {
         add(pinkLane);
         add(blueLane);
 
-
         this.validate();
         this.repaint();
 
@@ -136,12 +130,11 @@ public class DiningStudentsPanel extends JPanel {
     /**
      * set students clickable in order for the minstrel effect to activate
      * @param viewObservers view observer list to pass to the listener constructor
-     * @param tableCenterPanel table center panel to pass to the listener constructor
      */
-    public void setStudentsClickableForEffect(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel){
+    public void setStudentsClickableForEffect(ArrayList<ViewObserver> viewObservers){
         DashboardPanel thisDashboard=(DashboardPanel) this.getParent().getParent();
         for(StudentButton studentButton:studentButtons){
-            studentButton.addMouseListener(new DiningStudentListener(thisDashboard.getEntrance(),viewObservers,tableCenterPanel, this));
+            studentButton.addMouseListener(new DiningStudentListener(thisDashboard.getEntrance(),viewObservers, this));
         }
     }
     /**

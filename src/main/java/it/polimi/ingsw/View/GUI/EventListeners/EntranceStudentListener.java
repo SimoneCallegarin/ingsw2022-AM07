@@ -19,14 +19,27 @@ public class EntranceStudentListener extends ViewSubject implements MouseListene
      * this boolean is used to set the dining and the isles clickable only one time and avoid adding multiple listeners to them and sending
      * multiple studentToDining/studentToIsle messages to the server
      */
-    static boolean setClickable;
-    EntrancePanel entrance;
-    TableCenterPanel tableCenter;
-    DashboardPanel dashboardListened;
-    ArrayList<ViewObserver> observers;
+    private static boolean setClickable;
+    /**
+     * TableCenterPanel reference used to add the listener on the isles
+     */
+    private final TableCenterPanel tableCenter;
+    /**
+     * DashboardPanel reference used to add the listener on the dining room and get the last pressed student
+     */
+    private final DashboardPanel dashboardListened;
+    /**
+     * Array list of viewObserver to attach to this listener
+     */
+    private final ArrayList<ViewObserver> observers;
 
-    public EntranceStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance) {
-        this.entrance=entrance;
+    /**
+     * Constructor of EntranceStudentListener
+     * @param dashboardListened DashboardPanel reference used to add the listener on the dining room
+     * @param viewObserverList Array list of viewObserver to attach to this listener the GUI observers
+     * @param tableCenter TableCenterPanel reference used to add the listener on the isles
+     */
+    public EntranceStudentListener(DashboardPanel dashboardListened, ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter) {
         this.dashboardListened = dashboardListened;
         this.tableCenter=tableCenter;
         observers=viewObserverList;
@@ -41,7 +54,7 @@ public class EntranceStudentListener extends ViewSubject implements MouseListene
     @Override
     public void mouseClicked(MouseEvent e) {
         StudentButton buttonPressed=(StudentButton) e.getSource();
-        StudentButton lastPressedButton = entrance.getLastPressedStudent();
+        StudentButton lastPressedButton = dashboardListened.getEntrance().getLastPressedStudent();
         int colorPressed=-1;
         switch (buttonPressed.getColor()){
             case YELLOW -> colorPressed=0;
@@ -55,11 +68,11 @@ public class EntranceStudentListener extends ViewSubject implements MouseListene
             lastPressedButton.printStudent(lastPressedButton.getColor());
         buttonPressed.printClick(buttonPressed.getColor());
 
-        entrance.setLastPressedStudent(buttonPressed);
+        dashboardListened.getEntrance().setLastPressedStudent(buttonPressed);
         notifyObserver(obs->obs.onColorChoice(finalColorPressed));
         if(!setClickable) {
             dashboardListened.getDining().setClickable(observers,tableCenter);//so after at least one student button press the dining room is set clickable
-            tableCenter.setIslesClickable(getViewObserverList(),entrance,dashboardListened.getDining());
+            tableCenter.setIslesClickable(getViewObserverList(),dashboardListened.getEntrance(),dashboardListened.getDining());
             setClickable =true;
         }
     }

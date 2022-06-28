@@ -2,11 +2,9 @@ package it.polimi.ingsw.View.GUI.Buttons;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +14,7 @@ public class ProfessorButton extends JButton {
     /**
      * Array list used to retrieve professors images
      */
-    ArrayList<BufferedImage> professors;
+    private final ArrayList<BufferedImage> professors;
 
     /**
      * Constructo of ProfessorButton

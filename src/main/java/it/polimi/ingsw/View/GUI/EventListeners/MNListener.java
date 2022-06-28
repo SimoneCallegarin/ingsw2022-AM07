@@ -14,14 +14,20 @@ import java.util.ArrayList;
  */
 public class MNListener extends ViewSubject implements MouseListener {
     /**
-     * Id of the isle to which this MouseListener is attached
+     * Identifier of the isle to which this MouseListener is attached
      */
-    int isleID;
+    private final int isleID;
     /**
-     * TableCenterPanel reference
+     * TableCenterPanel reference used to remove listeners from the isles once a click has been detected
      */
-    TableCenterPanel tableCenterPanel;
+    private final TableCenterPanel tableCenterPanel;
 
+    /**
+     * Constructor of MNListener
+     * @param observerList Array list of ViewObservers to attach to this listener in order to correctly notify the GUI observers
+     * @param isleID Identifier of the isle to which this MouseListener is attached
+     * @param tableCenterPanel TableCenterPanel reference used to remove listeners from the isles once a click has been detected
+     */
     public MNListener(ArrayList<ViewObserver> observerList, int isleID, TableCenterPanel tableCenterPanel) {
         addAllObservers(observerList);
         this.isleID=isleID;

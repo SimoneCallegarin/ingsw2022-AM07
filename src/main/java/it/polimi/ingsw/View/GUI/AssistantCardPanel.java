@@ -12,8 +12,14 @@ import java.io.InputStream;
  * with each player (if the discard pile is empty)
  */
 public class AssistantCardPanel extends JPanel {
-    int index;
-    boolean showMage;
+    /**
+     * index used to identify which image to load
+     */
+    private final int index;
+    /**
+     * boolean used to draw either the assistant card or the mage
+     */
+    private final boolean showMage;
 
     /**
      * Constructor of AssistantCardPanel

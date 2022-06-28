@@ -14,13 +14,9 @@ import java.util.ArrayList;
  */
 public class CloudsContainerPanel extends JPanel {
     /**
-     * ModelStorage reference used to retrieve clouds state information
-     */
-    ModelStorage storage;
-    /**
      * Array list used to store cloud panels
      */
-    ArrayList<CloudPanel> cloudPanels;
+    private final ArrayList<CloudPanel> cloudPanels;
 
     /**
      * Constructor of CloudContainer
@@ -30,12 +26,10 @@ public class CloudsContainerPanel extends JPanel {
      * @param students Array list of student images
      */
     public CloudsContainerPanel(ModelStorage storage, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
-        this.storage=storage;
         this.cloudPanels=new ArrayList<>();
+
         setLayout(new GridBagLayout());
-
         GridBagConstraints mainConstraints=new GridBagConstraints();
-
         //Creating the grid for the clouds
         JPanel cloudContainer=new JPanel(new GridLayout(1,storage.getGameTable().getClouds().size()));
         cloudContainer.setBackground(Color.CYAN);

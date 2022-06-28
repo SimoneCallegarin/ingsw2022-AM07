@@ -14,13 +14,9 @@ import java.util.ArrayList;
  */
 public class ProfessorPanel extends JPanel {
     /**
-     * The player id associated with this dashboard
-     */
-    int playerID;
-    /**
      * Array list used to store professors images
      */
-    ArrayList<BufferedImage> professors;
+    private final ArrayList<BufferedImage> professors;
 
     /**
      * Constructor of professor panel
@@ -29,8 +25,6 @@ public class ProfessorPanel extends JPanel {
      * @param professors the Array list storing the professors images
      */
     public ProfessorPanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> professors) {
-
-        this.playerID=playerID;
         GridLayout gridLayout = new GridLayout(1, 5);
         gridLayout.setHgap(-30);
         setLayout(gridLayout);
