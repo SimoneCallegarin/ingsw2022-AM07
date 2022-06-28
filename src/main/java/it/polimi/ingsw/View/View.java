@@ -14,7 +14,7 @@ public interface View {
      /**
       * Starts the view.
       */
-     void ViewStart();
+     void viewStart();
 
      /**
       * Asks the player to write his nickname.

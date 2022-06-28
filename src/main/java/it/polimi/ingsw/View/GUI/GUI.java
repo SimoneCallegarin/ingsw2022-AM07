@@ -59,7 +59,7 @@ public class GUI extends ViewSubject implements View {
     public void addObs(ClientController clientController) { addObserver(clientController); }
 
     @Override
-    public void ViewStart() { SwingUtilities.invokeLater(guiDrawer::screeInitialization); }
+    public void viewStart() { SwingUtilities.invokeLater(guiDrawer::screeInitialization); }
 
     @Override
     public void disconnect(ServiceMessage message) {

@@ -15,32 +15,32 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
     /**
      * Number of isles on the board.
      */
-    int totalIsles;
+    private final int totalIsles;
     /**
      * Students on the isles.
      */
-    ArrayList<HashMap<RealmColors,Integer>> students;
+    private final ArrayList<HashMap<RealmColors,Integer>> students;
     /**
      * Color of the towers on the isles.
      */
-    ArrayList<TowerColors> towerColors;
+    private final ArrayList<TowerColors> towerColors;
     /**
      * Isle where there's mother nature.
      */
-    int whereMNId;
+    private final int whereMNId;
     /**
      * Deny cards on each isle.
      */
-    ArrayList<Boolean> denyCards;
+    private final ArrayList<Boolean> denyCards;
 
     /**
      * Number of isles per isle.
      */
-    ArrayList<Integer> numberOfIsles;
+    private final ArrayList<Integer> numberOfIsles;
     /**
      * Number of towers per isle.
      */
-    ArrayList<Integer> numberOfTowers;
+    private final ArrayList<Integer> numberOfTowers;
 
     /**
      * MNMovement_UpdateMsg constructor.

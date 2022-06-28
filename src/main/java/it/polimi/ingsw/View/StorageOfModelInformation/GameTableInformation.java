@@ -109,7 +109,7 @@ public class GameTableInformation {
      * @param clouds clouds on the game table.
      * @param generalMoneyReserve general money reserve on the game table.
      */
-    public GameTableInformation(ArrayList<CharacterCard> characterCards, ArrayList<Isle> isles, ArrayList<Cloud> clouds, int generalMoneyReserve) {
+    GameTableInformation(ArrayList<CharacterCard> characterCards, ArrayList<Isle> isles, ArrayList<Cloud> clouds, int generalMoneyReserve) {
         this.characterCards = characterCards;
         this.isles = isles;
         this.clouds = clouds;

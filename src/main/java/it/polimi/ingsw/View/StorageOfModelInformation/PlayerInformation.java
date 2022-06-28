@@ -69,7 +69,7 @@ public class PlayerInformation {
      * Constructor used in the update manager to build an array of the PlayerModelView of each player
      * at the beginning of the game, containing all the information about each player.
      */
-    public PlayerInformation(String nickname, Squads team, HashMap<RealmColors, Integer> entranceStudents, int numOfTowers, TowerColors towerColor, int money) {
+    PlayerInformation(String nickname, Squads team, HashMap<RealmColors, Integer> entranceStudents, int numOfTowers, TowerColors towerColor, int money) {
         fillWith0HashMap();
         this.nickname = nickname;
         this.team = team;

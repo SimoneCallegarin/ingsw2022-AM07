@@ -64,7 +64,7 @@ public class ConnectionSocket {
      * Sends messages to the server.
      * @param message that will be sent to the server.
      */
-    public synchronized void send(NetworkMessage message) {
+    synchronized void send(NetworkMessage message) {
         try {
             output.writeObject(message);
             output.reset();
@@ -105,7 +105,7 @@ public class ConnectionSocket {
      * Handles the client disconnection by stopping all the threads that were associated with the client
      * and closing the streams and the ConnectionSocket itself.
      */
-    public void disconnect() {
+    void disconnect() {
         System.out.println("Closing connection...");
         threadListener.interrupt();
         threadSender.interrupt();
@@ -122,7 +122,7 @@ public class ConnectionSocket {
      * Sets disconnected to true when arrives a QUIT message from the server,
      * in order to ignore the pinger till it stops.
      */
-    public void disconnectClient() { disconnected = true; }
+    void disconnectClient() { disconnected = true; }
 
     /**
      * Getter method for the client listener.

@@ -12,7 +12,7 @@ class DenyCardMovementEffect {
      * @param from the DenyCardsManager where is removed the denyCard.
      * @param to the DenyCardsManager where is added the denyCard.
      */
-    public void effect(DenyCardManager from, DenyCardManager to) {
+    void effect(DenyCardManager from, DenyCardManager to) {
             to.addDenyCard();
             from.removeDenyCard();
     }

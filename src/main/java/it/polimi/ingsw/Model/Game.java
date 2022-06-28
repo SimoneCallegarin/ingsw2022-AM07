@@ -83,7 +83,9 @@ public class Game extends ModelSubject {
      * Divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase.
      */
     private ActionPhases actionPhase;
-//!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Indicates which was the phase of the action phase before entering in the CHARACTER_CARD_PHASE.
+     */
     private ActionPhases lastActionPhase;
     /**
      * Indicates who is the current active player that is playing his turn.
@@ -102,7 +104,9 @@ public class Game extends ModelSubject {
      * when checking the influence the turn the FUNGIST has been played.
      */
     private int studentsRemovedByFungist=0;
-//!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Offset that changes professor conquest rule when a FARMER has been activated.
+     */
     private int farmerOffset = 0;
     /**
      * Counts the number of time the atomic effect of a character card has been activated.
@@ -1104,7 +1108,10 @@ public class Game extends ModelSubject {
      */
     public ActionPhases getActionPhase() { return actionPhase; }
 
-    //!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Getter method for the last phase of the action phase before entering in the CHARACTER_CARD_PHASE.
+     * @return in which phase of the action phase wwe were
+     */
     public ActionPhases getLastActionPhase() { return lastActionPhase; }
 
     /**

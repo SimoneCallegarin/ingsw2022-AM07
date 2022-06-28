@@ -95,7 +95,7 @@ public class GameTable implements DenyCardManager {
     /**
      * Extracts 3 random character cards and build them properly with their cost and effects.
      */
-    public void extractAndSetUsableCharacterCards() {
+    private void extractAndSetUsableCharacterCards() {
         int extraction;
         ArrayList<Integer> extractedNumbers = new ArrayList<>();
         for(int i = 0; i<3; i++) {
@@ -185,7 +185,7 @@ public class GameTable implements DenyCardManager {
      * TESTING PURPOSE ONLY:
      * Deletes all the other character cards created and creates 3 new character cards received in input.
      */
-    public void set3CharacterCards(CharacterCardsName characterCardsName0,CharacterCardsName characterCardsName1,CharacterCardsName characterCardsName2){
+    private void set3CharacterCards(CharacterCardsName characterCardsName0,CharacterCardsName characterCardsName1,CharacterCardsName characterCardsName2){
         for(int index = 0;index<3;index++){
             switch (getCharacterCard(index).getCharacterCardName()) {
                 case MONK, JESTER, SPOILED_PRINCESS -> {

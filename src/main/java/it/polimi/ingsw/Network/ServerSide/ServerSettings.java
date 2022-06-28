@@ -1,29 +1,20 @@
 package it.polimi.ingsw.Network.ServerSide;
 
 /**
- * This type of message is used to set hostname and port.
+ * Class containing default ip address and port of the server
  */
 class ServerSettings {
-
-    /**
-     * localhost set for the server.
-     */
-    public static String hostName = "localhost";
-    /**
-     * Port used by the server.
-     */
-    public static int port = 1234;
 
     /**
      * Gets localhost.
      * @return "localhost".
      */
-    public static String getHostName() { return hostName; }
+    public static String getHostName() { return "localhost"; }
 
     /**
-     * Gets the port 1234.
-     * @return 1234.
+     * Gets default port.
+     * @return default port.
      */
-    public static int getPort() { return port; }
+    public static int getPort() { return 1234; }
 
 }
