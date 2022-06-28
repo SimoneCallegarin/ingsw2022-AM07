@@ -128,14 +128,14 @@ public class Game extends ModelSubject {
      * First method that has to be called to properly start the game.
      * Adds the first player to the game and sets game mode and number of players basing on his choices.
      * @param nickName chosen by the player.
-     * @param gameMode chosen by the player (true for expert, else base).
+     * @param expertMode chosen by the player (true for expert, else base).
      * @param numberOfPlayers chosen by the player (from 2 to 4).
      */
-    public void addFirstPlayer(String nickName, boolean gameMode, int numberOfPlayers){
+    public void addFirstPlayer(String nickName, boolean expertMode, int numberOfPlayers){
 
         setNumberOfPlayers(numberOfPlayers);
 
-        if(gameMode)
+        if(expertMode)
             this.gameMode=GameMode.EXPERT;
         else
             this.gameMode=GameMode.BASE;

@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CoinPanel extends JPanel {
+class CoinPanel extends JPanel {
 
     public CoinPanel() {
         setOpaque(false);

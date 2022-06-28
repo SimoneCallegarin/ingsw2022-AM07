@@ -3,7 +3,7 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.Network.ClientSide.ClientController;
 import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.View.CLI.CLI;
-import it.polimi.ingsw.View.GUI.GUIApp;
+import it.polimi.ingsw.View.GUI.GUI;
 import it.polimi.ingsw.View.View;
 
 import java.io.BufferedReader;
@@ -143,7 +143,7 @@ public class App {
             clientController = new ClientController(app.view, app.connectionSocket, app.view.getCLIDrawer());
         }
         else{
-            app.view = new GUIApp();
+            app.view = new GUI();
             clientController = new ClientController(app.view, app.connectionSocket, app.view.getGUIDrawer());
         }
 

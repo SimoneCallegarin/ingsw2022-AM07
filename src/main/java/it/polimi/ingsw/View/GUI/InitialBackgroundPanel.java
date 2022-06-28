@@ -10,7 +10,7 @@ import java.io.InputStream;
 /**
  * the background of the first screen to appear to the user where he will have to submit his preferences
  */
-public class InitialBackgroundPanel extends JPanel {
+class InitialBackgroundPanel extends JPanel {
 
     public InitialBackgroundPanel(LayoutManager layout, int screenDimensionX, int screenDimensionY) {
         super(layout);

@@ -7,7 +7,6 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
-import it.polimi.ingsw.Network.Server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

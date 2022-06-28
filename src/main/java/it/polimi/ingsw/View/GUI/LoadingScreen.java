@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * Loading screen that correspond to the waiting room where players wait for the game to start.
  */
-public class LoadingScreen extends JPanel {
+class LoadingScreen extends JPanel {
 
     /**
      * Color chooser for the nickname color.

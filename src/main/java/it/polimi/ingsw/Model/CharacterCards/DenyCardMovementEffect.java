@@ -5,7 +5,7 @@ import it.polimi.ingsw.Model.Interface.DenyCardManager;
 /**
  * Handle the movement of the deny card from a DenyCardsManager to another.
  */
-public class DenyCardMovementEffect {
+class DenyCardMovementEffect {
 
     /**
      * Effect that permits to move a denyCard from a DenyCardsManager to another.

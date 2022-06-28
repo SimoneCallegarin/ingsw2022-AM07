@@ -7,7 +7,7 @@ import it.polimi.ingsw.Model.Interface.StudentManager;
 /**
  * Handles the movement of students from a StudentsManager to another.
  */
-public class StudentMovementEffect {
+class StudentMovementEffect {
 
     /**
      * Effect that permits to move students from a StudentsManager to another.

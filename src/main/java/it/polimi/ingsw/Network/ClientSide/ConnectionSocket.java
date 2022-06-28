@@ -92,7 +92,7 @@ public class ConnectionSocket {
         output = new ObjectOutputStream(clientSocket.getOutputStream());
         input = new ObjectInputStream(clientSocket.getInputStream());
         // ClientListener:
-        cListener = new ClientListener(this, input);
+        cListener = new ClientListener(input);
         threadListener = new Thread(cListener);
         threadListener.start();
         // ClientPingSender:

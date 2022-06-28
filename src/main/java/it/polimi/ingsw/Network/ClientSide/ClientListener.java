@@ -15,21 +15,15 @@ import java.util.NoSuchElementException;
 public class ClientListener extends NetworkSubject implements Runnable {
 
     /**
-     * Socket of the client that connects to the server.
-     */
-    private final ConnectionSocket cs;
-    /**
      * Input stream of the client.
      */
     private final ObjectInputStream input;
 
     /**
      * ClientListener constructor.
-     * @param cs Socket of the client that connects to the server.
      * @param input Input stream of the client.
      */
-    public ClientListener(ConnectionSocket cs, ObjectInputStream input) {
-        this.cs = cs;
+    public ClientListener(ObjectInputStream input) {
         this.input = input;
     }
 

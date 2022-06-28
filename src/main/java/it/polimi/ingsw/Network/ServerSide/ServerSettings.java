@@ -1,9 +1,9 @@
-package it.polimi.ingsw.Network.JSONmessagesTestingServer;
+package it.polimi.ingsw.Network.ServerSide;
 
 /**
  * This type of message is used to set hostname and port.
  */
-public class ServerSettings {
+class ServerSettings {
 
     /**
      * localhost set for the server.
