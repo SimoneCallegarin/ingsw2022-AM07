@@ -7,7 +7,7 @@ import it.polimi.ingsw.Model.Interface.StudentManager;
 /**
  * Handles the movement of students from a StudentsManager to another.
  */
-public class StudentMovementEffect {
+class StudentMovementEffect {
 
     /**
      * Effect that permits to move students from a StudentsManager to another.
@@ -19,7 +19,7 @@ public class StudentMovementEffect {
      * @param Color1 the color of the student that has to be moved from.
      * @param Color2 the color of the student that has to be moved to.
      */
-    public void effect(StudentManager from, StudentManager to, ColorsForEffects color, RealmColors Color1, RealmColors Color2) {
+    void effect(StudentManager from, StudentManager to, ColorsForEffects color, RealmColors Color1, RealmColors Color2) {
         if(color==ColorsForEffects.RANDOM){
             Bag bag = (Bag) from;
             RealmColors colorExtracted = bag.draw();

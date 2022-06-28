@@ -45,7 +45,7 @@ public enum CharacterCardsName {
      * @param characterCardName the name of the character card we want to know the cost.
      * @return the cost of that character card.
      */
-    public int getCharacterCardStartingCost(CharacterCardsName characterCardName) {
+    int getCharacterCardStartingCost(CharacterCardsName characterCardName) {
         return switch (characterCardName) {
             case MONK, MAGICAL_LETTER_CARRIER, JESTER, MINSTREL -> 1;
             case FARMER, GRANDMA_HERBS, KNIGHT, SPOILED_PRINCESS -> 2;
@@ -58,7 +58,7 @@ public enum CharacterCardsName {
      * @param characterCardName the name of the character card we want to know the effect.
      * @return the description of the effect of a certain character card.
      */
-    public String getCharacterCardDescription(CharacterCardsName characterCardName) {
+    String getCharacterCardDescription(CharacterCardsName characterCardName) {
         return switch (characterCardName){
             case MONK                   -> "Take 1 Student from this card and place it on an Island of your choice.\nThen, draw a new Student from the Bag and place it on this card.";
             case FARMER                 -> "During this turn, you take control of any number of Professors\neven if you have the same number of Students as the player who currently controls them.";

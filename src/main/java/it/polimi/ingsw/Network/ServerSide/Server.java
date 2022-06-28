@@ -1,8 +1,7 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.ServerSide;
 
 import it.polimi.ingsw.Controller.GameController;
 import it.polimi.ingsw.Model.Game;
-import it.polimi.ingsw.Network.JSONmessagesTestingServer.ServerSettings;
 
 import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
@@ -10,8 +9,6 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 
 import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
-import it.polimi.ingsw.Network.ServerSide.ClientHandler;
-import it.polimi.ingsw.Network.ServerSide.SocketServer;
 import it.polimi.ingsw.Network.Utils.PlayerInfo;
 import it.polimi.ingsw.View.VirtualView;
 
@@ -71,14 +68,14 @@ public class Server {
      * @param loginMessage it contains the nickname that has to be checked.
      * @return true if it's a valid nickname, else false.
      */
-    public boolean checkNickNameValidity(LoginMessage loginMessage){ return !chosenNicknames.contains(loginMessage.getNickname()); }
+    private boolean checkNickNameValidity(LoginMessage loginMessage){ return !chosenNicknames.contains(loginMessage.getNickname()); }
 
     /**
      * Checks if the number of players chosen by the player to play with is in range of 2-4.
      * @param preferences it contains the number of players and the game mode chosen by the player.
      * @return true if it's a valid number of players, else false.
      */
-    public boolean checkValuesValidity(GamePreferencesMessage preferences){
+    private boolean checkValuesValidity(GamePreferencesMessage preferences){
         if(preferences.getNumberOfPlayers() >= 2 && preferences.getNumberOfPlayers() <= 4)
             return true;
         else{
@@ -93,7 +90,7 @@ public class Server {
      * @param loginMessage it contains the nickname that has to be checked and added to the list if valid.
      * @return true if the nickname chosen by the player is available, else false.
      */
-    public synchronized boolean setNickNamesChosen(LoginMessage loginMessage) {
+    synchronized boolean setNickNamesChosen(LoginMessage loginMessage) {
         if(checkNickNameValidity(loginMessage)){
             chosenNicknames.add(loginMessage.getNickname());
             System.out.println("Updated chosenNicknames ArrayList with: " + loginMessage.getNickname());
@@ -115,7 +112,7 @@ public class Server {
      * @param nickname of the player that wants to play.
      * @param preferences of the player, about the number of players to play with and the game mode chosen.
      */
-    public synchronized boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
+    synchronized boolean addPlayerToGame(String nickname, GamePreferencesMessage preferences, ClientHandler clientHandler){
         if(!checkValuesValidity(preferences))
             return false;
         int matchID =0;
@@ -149,7 +146,7 @@ public class Server {
      * @param nickName of the player that wants to play.
      * @param preferences of the player, about the number of players to play with and the game mode chosen.
      */
-    public void newGame(String nickName, GamePreferencesMessage preferences){
+    private void newGame(String nickName, GamePreferencesMessage preferences){
         Game game = new Game();
         GameController gameController = new GameController(game);
         VirtualView virtualView= new VirtualView();
@@ -166,7 +163,7 @@ public class Server {
      * @param nickName of the player that wants to play.
      * @param preferences of the player, about the number of players to play with and the game mode chosen.
      */
-    public void addPlayerToAnExistingLobby(int matchID, String nickName, GamePreferencesMessage preferences){
+    private void addPlayerToAnExistingLobby(int matchID, String nickName, GamePreferencesMessage preferences){
         activeMatches.get(matchID).addPlayerToGame(nickName,preferences,false);
         //SEND ADDED TO AN ALREADY EXISTING GAME!
     }
@@ -176,7 +173,7 @@ public class Server {
      * @param nickName of the player that wants to play.
      * @param clientHandler of the player that wants to play.
      */
-    public synchronized void setPlayer(String nickName, ClientHandler clientHandler){
+    synchronized void setPlayer(String nickName, ClientHandler clientHandler){
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setClientHandler(clientHandler);
         players.put(nickName,playerInfo);
@@ -187,7 +184,7 @@ public class Server {
      * Removes all data associated to a certain player that ended a match.
      * @param nickname the nickname of the player that just ended a match.
      */
-    public void removePlayer(String nickname) {
+    void removePlayer(String nickname) {
         players.remove(nickname);
         chosenNicknames.remove(nickname);
     }
@@ -197,14 +194,14 @@ public class Server {
      * @param matchID the ID of the match he is going to play.
      * @return the game controller associated to the matchID given.
      */
-    public synchronized GameController getMatch(int matchID) { return activeMatches.get(matchID); }
+    synchronized GameController getMatch(int matchID) { return activeMatches.get(matchID); }
 
     /**
      * Getter method to obtain information associated to a player with a certain nickname.
      * @param nickname the nickname of the  player we want to know the information.
      * @return the information of that player (playerID, matchID and client handler of the player).
      */
-    public synchronized PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
+    synchronized PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
     /**
      * Handles the disconnection of a client by notifying it all other player of that game and
@@ -212,7 +209,7 @@ public class Server {
      * It also interrupts the ClientHandler of the player that are involved in the disconnection.
      * @param nickname of the player that disconnected.
      */
-    public synchronized void onDisconnection(String nickname) {
+    synchronized void onDisconnection(String nickname) {
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
         NetworkMessage quit = new ServiceMessage(MessageType.QUIT,nickname + " has left the lobby.\nThe game will now end.");
         activeMatches.remove(matchToEnd);
@@ -237,7 +234,7 @@ public class Server {
      * Adds a player's nickname that has to be removed from the server.
      * @param nickname the nickname of the player that has to be removed.
      */
-    public synchronized void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
+    synchronized void addPlayerToRemove(String nickname) { playersToRemove.add(nickname); }
 
     /**
      * Main of the server, launches all the function necessary in order to make the server work.

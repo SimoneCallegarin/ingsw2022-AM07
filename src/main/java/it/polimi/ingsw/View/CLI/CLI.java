@@ -13,7 +13,7 @@ import it.polimi.ingsw.View.View;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.*;
-//import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiConsole;
 
 
 /**
@@ -47,11 +47,17 @@ public class CLI extends ViewSubject implements View {
      * for the efficient reading of characters, arrays, and lines.
      */
     private final BufferedReader br;
-    //!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Task that permits to read from input stream using a BufferedReader
+     */
     private final Callable<String> readTask;
-    //!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Executor that provides a single thread pool used to submit readTask.
+     */
     private final ExecutorService taskQueue;
-    //!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Used to get the String the user inserted
+     */
     private Future<String> asyncRead;
 
     /**
@@ -75,8 +81,8 @@ public class CLI extends ViewSubject implements View {
     /**
      * Starts the CLI.
      */
-    public void ViewStart(){
-        //AnsiConsole.systemInstall();
+    public void viewStart(){
+        AnsiConsole.systemInstall();
         System.out.println(cliDrawer.printTitle());
         askUsername();
     }

@@ -98,13 +98,13 @@ public class ModelStorage {
      * @param playerID ID of the player that we want to set the dashboard.
      * @param player data of the player.
      */
-    public void setDashboard(int playerID, PlayerInformation player) { this.dashboards.add(playerID,player); }
+    private void setDashboard(int playerID, PlayerInformation player) { this.dashboards.add(playerID,player); }
 
     /**
      * Setter method for the game table.
      * @param gameTable data of the game table.
      */
-    public void setGameTable(GameTableInformation gameTable) { this.gameTable = gameTable; }
+    private void setGameTable(GameTableInformation gameTable) { this.gameTable = gameTable; }
 
     // Update dashboard:
 

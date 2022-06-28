@@ -128,7 +128,7 @@
             <configuration>
               <archive>
                 <manifest>
-                  <mainClass>it.polimi.ingsw.Network.Server</mainClass>
+                  <mainClass>it.polimi.ingsw.Network.ServerSide.Server</mainClass>
                 </manifest>
               </archive>
               <finalName>server</finalName>

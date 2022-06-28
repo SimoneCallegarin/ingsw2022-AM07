@@ -17,7 +17,13 @@ public class PickFromCloud_UpdateMsg extends NetworkMessage{
      * Updated entrance of the player that picks the students from the cloud.
      */
     private final HashMap<RealmColors,Integer> entrance;
+    /**
+     * ID of the chosen cloud
+     */
     private final int cloudId;
+    /**
+     * Updated cloud
+     */
     private final HashMap<RealmColors,Integer> emptyCloud;
 
     public PickFromCloud_UpdateMsg(MessageType messageType, int playerId, HashMap<RealmColors,Integer> entrance, int cloudId) {

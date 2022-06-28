@@ -7,7 +7,6 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
-import it.polimi.ingsw.Network.Server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -224,7 +223,7 @@ public class ClientHandler implements Runnable {
      * Handles the disconnection of a player.
      * @param error reason why the player left.
      */
-    public void disconnect(String error) {
+    void disconnect(String error) {
         if (connected) {
             try {
                 shutConnection();
@@ -240,19 +239,19 @@ public class ClientHandler implements Runnable {
     /**
      * Method called by the server that stops the client handler when players disconnect.
      */
-    public void terminateClientHandler() { Thread.currentThread().interrupt(); }
+    void terminateClientHandler() { Thread.currentThread().interrupt(); }
 
     /**
      * Getter method for the player connection status.
      * @return true if the player is still connected, else false.
      */
-    public boolean isConnected() { return connected; }
+    boolean isConnected() { return connected; }
 
     /**
      * Getter method for the player game status.
      * @return true if the player is playing a game, else false.
      */
-    public boolean isPlaying() { return playing; }
+    boolean isPlaying() { return playing; }
 
     /**
      * Checks if the MessageType of the message received is the MessageType required.

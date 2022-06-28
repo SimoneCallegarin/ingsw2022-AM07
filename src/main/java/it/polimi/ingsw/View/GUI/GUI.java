@@ -10,11 +10,11 @@ import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
-public class GUIApp extends ViewSubject implements View {
+public class GUI extends ViewSubject implements View {
 
     private final GUIDrawer guiDrawer;
 
-    public GUIApp() { guiDrawer = new GUIDrawer(); }
+    public GUI() { guiDrawer = new GUIDrawer(); }
 
     @Override
     public void askUsername() {
@@ -61,7 +61,7 @@ public class GUIApp extends ViewSubject implements View {
     public void addObs(ClientController clientController) { addObserver(clientController); }
 
     @Override
-    public void ViewStart() { SwingUtilities.invokeLater(guiDrawer::screeInitialization); }
+    public void viewStart() { SwingUtilities.invokeLater(guiDrawer::screeInitialization); }
 
     @Override
     public void disconnect(ServiceMessage message) {
