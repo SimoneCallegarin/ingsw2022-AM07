@@ -11,11 +11,25 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * MouseListener attached to the diningStudentsPanel in order to listen for clicks during the standard moving student phase
+ */
 public class DiningListener extends ViewSubject implements MouseListener  {
+    /**
+     * DashboardPanel reference used to remove listener from the entrance and from the dining itself once a click has been detected
+     */
+    private final DashboardPanel dashboard;
+    /**
+     * TDashboardPanel reference used to remove listener from the entrance and from the dining itself once a click has been detected
+     */
+    private final TableCenterPanel tableCenterPanel;
 
-    DashboardPanel dashboard;
-    TableCenterPanel tableCenterPanel;
-
+    /**
+     * Constructor of DiningListener
+     * @param dashboard DashboardPanel reference used to remove listener from the entrance and from the dining itself once a click has been detected
+     * @param observersList Array list of ViewObservers used to attach to this listener the GUI observers
+     * @param tableCenterPanel DashboardPanel reference used to remove listener from the entrance and from the dining itself once a click has been detected
+     */
     public DiningListener(DashboardPanel dashboard, ArrayList<ViewObserver> observersList, TableCenterPanel tableCenterPanel) {
         this.dashboard = dashboard;
         this.tableCenterPanel=tableCenterPanel;

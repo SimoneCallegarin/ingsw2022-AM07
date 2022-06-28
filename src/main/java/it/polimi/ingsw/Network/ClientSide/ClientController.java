@@ -44,7 +44,9 @@ public class ClientController implements ViewObserver, NetworkObserver {
      * In particular, it starts the ClientListener that is observed by the ClientController.
      */
     private final ConnectionSocket client;
-//!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Executor that provides a single thread pool used to invoke view "ask" methods.
+     */
     private final ExecutorService taskQueue;
     /**
      * The ID of the player associated to this ClientController.
@@ -370,10 +372,10 @@ public class ClientController implements ViewObserver, NetworkObserver {
     /**
      * Sets the storage for the drawer of the CLI.
      */
-    public void setStorageForCLI(){ cliDrawer.setStorage(storage); }
+    private void setStorageForCLI(){ cliDrawer.setStorage(storage); }
     /**
      * Sets the storage for the drawer of the GUI.
      */
-    public void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
+    private void setStorageForGUI(){ guiDrawer.setModelStorage(storage); }
 
 }

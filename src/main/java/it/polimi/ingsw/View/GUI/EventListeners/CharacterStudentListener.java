@@ -12,20 +12,33 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
- * Class added to Character student buttons to listen to a mouse click and notify the view observers of the button color selected
+ * MouseListener added to Character student buttons to listen to a mouse click and notify the view observers of the button color selected
  */
 public class CharacterStudentListener extends ViewSubject implements MouseListener {
+    /**
+     * Entrance panel reference used add listener to the entrance if the played character card is "JESTER"
+     */
+    private final EntrancePanel entrance;
+    /**
+     * TableCenterPanel panel reference used add listener to the isles if the played character card is "MONK"
+     */
+    private final TableCenterPanel tableCenter;
+    /**
+     * String representing the name of the character played by the user
+     */
+    private final String character;
 
-    EntrancePanel entrance;
-    TableCenterPanel tableCenter;
-    ArrayList<ViewObserver> observers;
-    String character;
-
+    /**
+     * Constructor of CharacterStudentListener
+     * @param viewObserverList Array list of ViewObservers used to attach to this listener the GUI observers
+     * @param tableCenter TableCenterPanel panel reference used add listener to the isles if the played character card is "MONK"
+     * @param entrance Entrance panel reference used add listener to the entrance if the played character card is "JESTER"
+     * @param character String representing the name of the character played by the user
+     */
     public CharacterStudentListener(ArrayList<ViewObserver> viewObserverList, TableCenterPanel tableCenter, EntrancePanel entrance, String character) {
         this.entrance = entrance;
         this.tableCenter=tableCenter;
         this.character = character;
-        observers=viewObserverList;
         addAllObservers(viewObserverList);
     }
 

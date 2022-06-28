@@ -7,8 +7,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Panel representing the Deny card game object placed on isle or on Grandma herbs character card
+ */
 public class DenyCardPanel extends JPanel {
-
+    /**
+     * Constructor of DenyCardPanel
+     */
     public DenyCardPanel() {
         setOpaque(true);
         setPreferredSize(new Dimension(25,25));
@@ -22,6 +27,7 @@ public class DenyCardPanel extends JPanel {
         InputStream url=cl.getResourceAsStream("GameTable/Isles/deny_island_icon.png");
         BufferedImage img=null;
         try{
+            assert url != null;
             img= ImageIO.read(url);
         }catch(IOException e){
             e.printStackTrace();

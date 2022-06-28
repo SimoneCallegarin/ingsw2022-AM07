@@ -11,13 +11,22 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
- * Class added to every component that has to notify the view observers about the chosen generic value of the atomic effect
+ * MouseListener added to every component that has to notify the view observers about the chosen generic value of the atomic effect
  */
 public class EffectListener extends ViewSubject implements MouseListener {
 
+    /**
+     * The generic value sent with the ACTIVATE_ATOMIC_EFFECT message. It could either be a colorIndex or an isleIndex.
+     */
     private int genericValue;
-    TableCenterPanel tableCenterPanel;
-    EntrancePanel entrance;
+    /**
+     * TableCenterPanel reference used to remove the listener on the isles.
+     */
+    private final TableCenterPanel tableCenterPanel;
+    /**
+     * EntrancePanel reference used to remove the listeners on the entrance.
+     */
+    private final EntrancePanel entrance;
 
     public EffectListener(ArrayList<ViewObserver> observerList, int genericValue, TableCenterPanel tableCenterPanel, EntrancePanel entrance) {
         addAllObservers(observerList);

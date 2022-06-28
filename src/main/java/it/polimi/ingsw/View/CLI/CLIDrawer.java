@@ -273,7 +273,7 @@ public class CLIDrawer {
         for(int i=0; i<storage.getNumberOfPlayers();i++)
             drawDashboard(i);
         drawIsles();
-        if(storage.isGameMode()){
+        if(storage.isExpertMode()){
             drawGeneralMoneyReserve();
             drawCharacterCards();
         }
@@ -318,7 +318,7 @@ public class CLIDrawer {
         gameTable[startingPointX+10][startingPointY+14] = "╩";
         gameTable[startingPointX+1][startingPointY+22] = "╣";
         drawDiscardPile(playerID,startingPointX,startingPointY);
-        if(storage.isGameMode())
+        if(storage.isExpertMode())
             drawPlayerMoney(playerID,startingPointX,startingPointY);
         if(getStorage().getNumberOfPlayers()==4)
             drawTeams(playerID,startingPointX,startingPointY);
@@ -677,7 +677,7 @@ public class CLIDrawer {
         ╚══════════════════════════════════════════════╝
          */
         int posXBase = 6;
-        if(!storage.isGameMode())
+        if(!storage.isExpertMode())
             posXBase = 3;
         drawRectangle(gameTable, CLIConstants.TABLE_DIMENSION_X/2-posXBase, CLIConstants.TABLE_DIMENSION_Y/2-23, CLIConstants.CLOUDS_CONTAINER_X, CLIConstants.CLOUDS_CONTAINER_Y);
         writeLongerString(gameTable,paintService(CLIColors.B_WHITE,"CLOUDS"), CLIConstants.TABLE_DIMENSION_X/2-posXBase, CLIConstants.TABLE_DIMENSION_Y/2-4);
@@ -872,7 +872,7 @@ public class CLIDrawer {
      */
     private void drawLegend() {
         int notEnlarge = 1;
-        if (storage.isGameMode())
+        if (storage.isExpertMode())
             notEnlarge = 0;
         drawRectangle(legend,0,4, CLIConstants.LEGEND_X-7*notEnlarge, CLIConstants.LEGEND_Y);
         writeLongerString(legend,paintService(CLIColors.B_WHITE,"LEGEND"),0,22);
@@ -890,7 +890,7 @@ public class CLIDrawer {
         legend[13-3*notEnlarge][7] = paintService(CLIColors.HB_WHITE,"L");
         writeLongerString(legend,"-> TO LOGOUT",13-3*notEnlarge,9);
         legend[13-3*notEnlarge][40] = " \b";
-        if (storage.isGameMode()){
+        if (storage.isExpertMode()){
             writeLongerString(legend,paintService(CLIColors.HB_WHITE,"!")+" -> DENY CARD",3,7);
 
             drawRectangle(legend, 7,7, CLIConstants.SMALL_RECTANGLE_X, CLIConstants.SMALL_RECTANGLE_Y);

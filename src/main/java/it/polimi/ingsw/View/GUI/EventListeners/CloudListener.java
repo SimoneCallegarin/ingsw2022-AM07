@@ -9,10 +9,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * MouseListener attached to the CloudsPanel when the user has to choose a cloud to pick students from
+ */
 public class CloudListener extends ViewSubject implements MouseListener {
+    /**
+     * TableCenterPanel reference used to remove listeners from the clouds and the character panels once a click is detected
+     */
+    private final TableCenterPanel tableCenterPanel;
 
-    TableCenterPanel tableCenterPanel;
-
+    /**
+     * Constructor of CloudListener
+     * @param viewObservers Array list of ViewObservers used to attach to this listener the GUI observers
+     * @param tableCenterPanel TableCenterPanel reference used to remove listeners from the clouds and the character panels once a click is detected
+     */
     public CloudListener(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel) {
         addAllObservers(viewObservers);
         this.tableCenterPanel=tableCenterPanel;

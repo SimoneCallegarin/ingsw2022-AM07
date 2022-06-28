@@ -83,7 +83,9 @@ public class Game extends ModelSubject {
      * Divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase.
      */
     private ActionPhases actionPhase;
-//!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Indicates which was the phase of the action phase before entering in the CHARACTER_CARD_PHASE.
+     */
     private ActionPhases lastActionPhase;
     /**
      * Indicates who is the current active player that is playing his turn.
@@ -102,7 +104,9 @@ public class Game extends ModelSubject {
      * when checking the influence the turn the FUNGIST has been played.
      */
     private int studentsRemovedByFungist=0;
-//!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Offset that changes professor conquest rule when a FARMER has been activated.
+     */
     private int farmerOffset = 0;
     /**
      * Counts the number of time the atomic effect of a character card has been activated.
@@ -128,14 +132,14 @@ public class Game extends ModelSubject {
      * First method that has to be called to properly start the game.
      * Adds the first player to the game and sets game mode and number of players basing on his choices.
      * @param nickName chosen by the player.
-     * @param gameMode chosen by the player (true for expert, else base).
+     * @param expertMode chosen by the player (true for expert, else base).
      * @param numberOfPlayers chosen by the player (from 2 to 4).
      */
-    public void addFirstPlayer(String nickName, boolean gameMode, int numberOfPlayers){
+    public void addFirstPlayer(String nickName, boolean expertMode, int numberOfPlayers){
 
         setNumberOfPlayers(numberOfPlayers);
 
-        if(gameMode)
+        if(expertMode)
             this.gameMode=GameMode.EXPERT;
         else
             this.gameMode=GameMode.BASE;
@@ -390,7 +394,7 @@ public class Game extends ModelSubject {
      * @param color color of the student placed.
      */
     public void checkStudentInMoneyPosition(int playerID, RealmColors color) {
-        if (isGameMode() && players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0 && gameTable.getGeneralMoneyReserve()>0) {
+        if (isExpertMode() && players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0 && gameTable.getGeneralMoneyReserve()>0) {
             players.get(playerID).gainMoney();
             gameTable.studentInMoneyPosition();
             notifyObserver(obs -> obs.onMoneyUpdate(playerID, players.get(playerID).getMoney(), gameTable.getGeneralMoneyReserve()));
@@ -1042,7 +1046,7 @@ public class Game extends ModelSubject {
      * Getter method that tells if the game mode is expert or not.
      * @return true if expert, else false.
      */
-    public boolean isGameMode() { return gameMode == GameMode.EXPERT; }
+    public boolean isExpertMode() { return gameMode == GameMode.EXPERT; }
 
     /**
      * Getter method that returns the list of players who are playing the game.
@@ -1104,7 +1108,10 @@ public class Game extends ModelSubject {
      */
     public ActionPhases getActionPhase() { return actionPhase; }
 
-    //!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Getter method for the last phase of the action phase before entering in the CHARACTER_CARD_PHASE.
+     * @return in which phase of the action phase wwe were
+     */
     public ActionPhases getLastActionPhase() { return lastActionPhase; }
 
     /**

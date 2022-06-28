@@ -3,13 +3,12 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.Network.ClientSide.ClientController;
 import it.polimi.ingsw.Network.ClientSide.ConnectionSocket;
 import it.polimi.ingsw.View.CLI.CLI;
-import it.polimi.ingsw.View.GUI.GUIApp;
+import it.polimi.ingsw.View.GUI.GUI;
 import it.polimi.ingsw.View.View;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -133,27 +132,26 @@ public class App {
         App app = new App();
 
         app.initializeConnection();
-
         app.askChooseCLIorGUI();
 
         ClientController clientController;
 
-        if(app.choice==0){
+        if(app.choice==0) {
             app.view = new CLI();
             clientController = new ClientController(app.view, app.connectionSocket, app.view.getCLIDrawer());
         }
-        else{
-            app.view = new GUIApp();
+        else {
+            app.view = new GUI();
             clientController = new ClientController(app.view, app.connectionSocket, app.view.getGUIDrawer());
         }
 
-
         app.view.addObs(clientController);
-        if(app.choice==1)   //if it's a GUI
-            app.view.getGUIDrawer().addObserver(clientController);
-        app.connectionSocket.getClientListener().addObserver(clientController);
 
-        app.view.ViewStart();
+        if (app.choice==1)   //if it's a GUI
+            app.view.getGUIDrawer().addObserver(clientController);
+
+        app.connectionSocket.getClientListener().addObserver(clientController);
+        app.view.viewStart();
 
     }
 }

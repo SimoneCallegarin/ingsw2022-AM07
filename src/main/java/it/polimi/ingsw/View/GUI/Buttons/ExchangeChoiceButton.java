@@ -10,13 +10,20 @@ import java.io.InputStream;
  * Button used to take the exchange students choice made by the user
  */
 public class ExchangeChoiceButton extends JButton  {
-
+    /**
+     * Constructor of ExchangeChoiceButton
+     * @param exchange integer used to decide which image to load
+     */
     public ExchangeChoiceButton(int exchange) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
         printChoice(exchange);
     }
 
+    /**
+     * This method loads the image (either a check or a red cross) and set
+     * @param exchange integer used to decide which image to set as icon
+     */
     private void printChoice(int exchange) {
         ClassLoader cl=this.getClass().getClassLoader();
         InputStream url=null;
@@ -31,6 +38,7 @@ public class ExchangeChoiceButton extends JButton  {
         }catch (IOException e) {
             e.printStackTrace();
         }
+        assert img != null;
         setIcon(new ImageIcon(img));
     }
 }

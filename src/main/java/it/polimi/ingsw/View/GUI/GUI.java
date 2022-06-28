@@ -10,16 +10,24 @@ import it.polimi.ingsw.View.View;
 
 import javax.swing.*;
 
-public class GUIApp extends ViewSubject implements View {
-
+/**
+ * GUI main class responsible to start the GUIDrawer and interface with the controller and the server architecture
+ */
+public class GUI extends ViewSubject implements View {
+    /**
+     * Gui Drawer reference used to interact with the GUI
+     */
     private final GUIDrawer guiDrawer;
 
-    public GUIApp() { guiDrawer = new GUIDrawer(); }
+    /**
+     * Constructor of GUI
+     */
+    public GUI() { guiDrawer = new GUIDrawer(); }
 
     @Override
     public void askUsername() {
        guiDrawer.showUsernameForm();
-       guiDrawer.userInputPanel.remove(0);
+       guiDrawer.getUserInputPanel().remove(0);
     }
 
     @Override
@@ -32,7 +40,7 @@ public class GUIApp extends ViewSubject implements View {
     }
 
     @Override
-    public void askMove() { guiDrawer.showMoveOptions(getGUIDrawer().getModelStorage().isGameMode()); }
+    public void askMove() { guiDrawer.showMoveOptions(getGUIDrawer().getModelStorage().isExpertMode()); }
 
     @Override
     public void printMessage(ServiceMessage message) { guiDrawer.showServiceMessage(message.getMessage()); }
@@ -44,7 +52,9 @@ public class GUIApp extends ViewSubject implements View {
     public void printChanges() { guiDrawer.updateGameScreenPanel(); }
 
     @Override
-    public void printWinner(String winner, int winnerID) { /*!!!!!!!!!!!!!!!*/ }
+    public void printWinner(String winner, int winnerID) {
+        guiDrawer.showWinner(winner);
+    }
 
     @Override
     public void askMNMovement() { guiDrawer.showMNMovement(); }
@@ -59,7 +69,7 @@ public class GUIApp extends ViewSubject implements View {
     public void addObs(ClientController clientController) { addObserver(clientController); }
 
     @Override
-    public void ViewStart() { SwingUtilities.invokeLater(guiDrawer::screeInitialization); }
+    public void viewStart() { SwingUtilities.invokeLater(guiDrawer::screeInitialization); }
 
     @Override
     public void disconnect(ServiceMessage message) {

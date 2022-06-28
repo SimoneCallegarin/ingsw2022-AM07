@@ -9,7 +9,7 @@ import java.util.TimerTask;
 /**
  * Handles client side ping messages in order to check if the connection is stable.
  */
-public class ClientPingSender implements Runnable {
+class ClientPingSender implements Runnable {
 
     /**
      * Socket of the client that connects to the server.

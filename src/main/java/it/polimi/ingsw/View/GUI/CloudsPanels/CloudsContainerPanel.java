@@ -9,16 +9,27 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * Panel containing the cloud panels
+ */
 public class CloudsContainerPanel extends JPanel {
-    ModelStorage storage;
-    ArrayList<CloudPanel> cloudPanels;
+    /**
+     * Array list used to store cloud panels
+     */
+    private final ArrayList<CloudPanel> cloudPanels;
 
+    /**
+     * Constructor of CloudContainer
+     * @param storage ModelStorage reference used to retrieve clouds state information
+     * @param viewObservers ViewObservers array list passed to the listeners
+     * @param tableCenterPanel TableCenterPanel passed to the listeners
+     * @param students Array list of student images
+     */
     public CloudsContainerPanel(ModelStorage storage, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
-        this.storage=storage;
         this.cloudPanels=new ArrayList<>();
+
         setLayout(new GridBagLayout());
         GridBagConstraints mainConstraints=new GridBagConstraints();
-
         //Creating the grid for the clouds
         JPanel cloudContainer=new JPanel(new GridLayout(1,storage.getGameTable().getClouds().size()));
         cloudContainer.setBackground(Color.CYAN);
@@ -35,25 +46,29 @@ public class CloudsContainerPanel extends JPanel {
         mainConstraints.gridy=0;
         add(cloudContainer,mainConstraints);
 
-        //this will be the space for the character cards
-        mainConstraints.gridy=1;
-        mainConstraints.weighty=0.8;
-        JPanel bluPanel=new JPanel();
-        bluPanel.setBackground(Color.CYAN);
-        add(bluPanel,mainConstraints);
     }
 
+    /**
+     * Updates the cloud panel identified by the cloud id
+     * @param cloudID the cloud id used to identify which cloud update
+     */
     public void updateCloudPanels(int cloudID){
         cloudPanels.get(cloudID).resetCloud();
         cloudPanels.get(cloudID).initializeCloud();
     }
 
+    /**
+     * Set the cloud panel clickable
+     */
     public void setCloudsClickable() {
         for (CloudPanel cloudPanel : cloudPanels) {
             cloudPanel.setClickable();
         }
     }
 
+    /**
+     * Removes the mouse listeners from the cloud panel
+     */
     public void removeCloudsClickable(){
         for (CloudPanel cloudPanel : cloudPanels) {
             cloudPanel.removeClickable();

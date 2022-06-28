@@ -1,8 +1,5 @@
 package it.polimi.ingsw.Network.ServerSide;
 
-import it.polimi.ingsw.Network.Server;
-import it.polimi.ingsw.Network.ServerSide.ClientHandler;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,7 +10,7 @@ import java.util.concurrent.Executors;
  * Thread run by the server at his initialization in order to accept client requesting connection
  * on the server host and port, using the ServerSocket.
  */
-public class SocketServer implements Runnable{
+class SocketServer implements Runnable{
 
     /**
      * Port where the server is listening.
