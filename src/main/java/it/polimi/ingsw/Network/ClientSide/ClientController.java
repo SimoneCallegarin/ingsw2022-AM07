@@ -221,9 +221,11 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 System.out.println("Game started!");
             }
             case END_GAME -> {
+                client.disconnectClient();
                 ServiceMessage sm = (ServiceMessage) message;
                 view.printWinner(sm.getMessage(), sm.getPlayerID());
                 view.disconnect(sm);
+                client.disconnect();
             }
             case FILLCLOUD_UPDATE -> {
                 FillCloud_UpdateMsg fc = (FillCloud_UpdateMsg) message;

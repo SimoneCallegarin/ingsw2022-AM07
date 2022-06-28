@@ -91,24 +91,28 @@ public class CLI extends ViewSubject implements View {
      * Adds an observer to the view (the CLI itself).
      * @param clientController the observer that observe the view.
      */
+    @Override
     public void addObs(ClientController clientController) { addObserver(clientController); }
 
     /**
      * Prints messages on screen.
      * @param message the message that will be printed.
      */
+    @Override
     public void printMessage(ServiceMessage message) { System.out.println(message.getMessage()); }
 
     /**
      * Prints a KO message on screen.
      * @param message the KO message that has to be printed.
      */
+    @Override
     public void printKO(ServiceMessage message) { printMessage(message); }
 
     /**
      * Each time the player does an action that modifies the game table, then this method will be called,
      * and then it will be printed again the game table with the ultimate changes.
      */
+    @Override
     public void printChanges() { System.out.println(cliDrawer.printGameTable()); }
 
     /**
@@ -116,11 +120,13 @@ public class CLI extends ViewSubject implements View {
      * @param winner is the name of the winner.
      * @param winnerID is -1 if the game ended in a draw.
      */
+    @Override
     public void printWinner(String winner, int winnerID) { cliDrawer.printWinner(winner, winnerID); }
 
     /**
      * Reads the username chosen by the player and notifies it to the view.
      */
+    @Override
     public void askUsername() {
         try {
             System.out.println("> What is your nickname? [NOTE: it must be between 2 and 20 characters long]");
@@ -138,6 +144,7 @@ public class CLI extends ViewSubject implements View {
     /**
      * Notifies the view with the number of players ad the game mode the player decided to play with.
      */
+    @Override
     public void askGamePreferences() { notifyObserver(obs -> obs.onGamePreferences(askNumOfPlayers(), askGameMode())); }
 
     /**
@@ -187,6 +194,7 @@ public class CLI extends ViewSubject implements View {
      * Notifies the choice to the ClientController.
      * @param playerID the id of the player who is playing the assistant card.
      */
+    @Override
     public void askAssistantCard(int playerID) {
         characterActivated = false;
         try {
@@ -211,6 +219,7 @@ public class CLI extends ViewSubject implements View {
     /**
      * Asks the player what does he want to do when the game is at the beginning of the action phase in its first step.
      */
+    @Override
     public void askMove() {
         characterActivated = false;
         try {
@@ -249,6 +258,7 @@ public class CLI extends ViewSubject implements View {
     /**
      * Asks the player what does he want to do when the game is in the action phase in its second step.
      */
+    @Override
     public void askMNMovement() {
         characterActivated = false;
         try {
@@ -263,6 +273,7 @@ public class CLI extends ViewSubject implements View {
     /**
      * Asks the player what does he want to do when the game is in the action phase in its third step.
      */
+    @Override
     public void askCloud() {
         characterActivated = false;
         try {
@@ -278,6 +289,7 @@ public class CLI extends ViewSubject implements View {
      * Asks the player certain parameters for the correct activation of the effect of the character cards.
      * @param characterName the name of the character card played.
      */
+    @Override
     public void askCharacterEffectParameters(CharacterCardsName characterName) {
         try {
             System.out.println("> You activated the " + characterName.toString() + "!");
@@ -424,7 +436,7 @@ public class CLI extends ViewSubject implements View {
      * it checks if the user inserted one of the three special characters (L/C/A) and sets a variable that changes the execution flow of various instructions
      * @param userChoice is the input string
      * @param planning is true when we currently are in the Planning Phase,
- *                     and it is used in order to prevent the possibility to activate a character card during this phase
+     *                 and it is used in order to prevent the possibility to activate a character card during this phase
      * @throws ExecutionException when disconnect method has been called by the ClientController
      */
     private void checkInput(String userChoice, boolean planning) throws InterruptedException, ExecutionException {

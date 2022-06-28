@@ -228,8 +228,8 @@ public class ClientHandler implements Runnable {
             try {
                 shutConnection();
                 System.out.println("Interrupting client handler thread of player " + nickname);
-                if (error.equals("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST") && playing )
-                    server.onDisconnection(nickname);
+                if (error.equals("Closing connection due to an error, a logout request or the end of a game.") && playing )
+                    server.onDisconnectionOrWin(nickname);
             } catch (IOException e) {
                 System.err.println("Error in stream closing");
             }
@@ -292,8 +292,8 @@ public class ClientHandler implements Runnable {
             handleConnection();
         } catch (IOException e) {
             if (connected) {
-                System.out.println("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST " + "(" + nickname + ")");
-                disconnect("CLOSING CONNECTION DUE TO AN ERROR OR A LOGOUT REQUEST");
+                System.out.println("Closing connection due to an error, a logout request or the end of a game. " + "(" + nickname + ")");
+                disconnect("Closing connection due to an error, a logout request or the end of a game.");
             }
         }
     }

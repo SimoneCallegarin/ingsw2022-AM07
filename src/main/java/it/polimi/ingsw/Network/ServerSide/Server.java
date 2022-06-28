@@ -204,30 +204,38 @@ public class Server {
     synchronized PlayerInfo getPlayerInfo(String nickname) { return players.get(nickname); }
 
     /**
-     * Handles the disconnection of a client by notifying it all other player of that game and
+     * Handles the disconnection and the game end of a client by notifying it all other player of that game and
      * by removing all the stored data about the match that the player was playing (if there's one).
-     * It also interrupts the ClientHandler of the player that are involved in the disconnection.
-     * @param nickname of the player that disconnected.
+     * It also interrupts the ClientHandler of the player that are involved in the disconnection or the end of the game.
+     * @param nickname of the player that disconnected or who won the game.
      */
-    synchronized void onDisconnection(String nickname) {
+    synchronized void onDisconnectionOrWin(String nickname) {
         int matchToEnd = getPlayerInfo(nickname).getMatchID();
         NetworkMessage quit = new ServiceMessage(MessageType.QUIT,nickname + " has left the lobby.\nThe game will now end.");
-        activeMatches.remove(matchToEnd);
-        virtualViews.remove(matchToEnd);
+        NetworkMessage gameEnded = new ServiceMessage(MessageType.END_GAME,"Game ended, player "+nickname+" won");
         for (String player : chosenNicknames){
-            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()  && players.get(player).getClientHandler().isPlaying()) {
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()  && players.get(player).getClientHandler().isPlaying() && !activeMatches.get(players.get(player).getMatchID()).isGameEnded()) {
                 players.get(player).getClientHandler().send(quit);
                 players.get(player).getClientHandler().disconnect(nickname + " has left the lobby.\nThe game will now end.");
+            }
+            if(players.get(player).getMatchID() == matchToEnd && !player.equals(nickname) && players.get(player).getClientHandler().isConnected()  && players.get(player).getClientHandler().isPlaying() && activeMatches.get(players.get(player).getMatchID()).isGameEnded()) {
+                players.get(player).getClientHandler().send(gameEnded);
+                players.get(player).getClientHandler().disconnect("Game ended, player "+nickname+" won");
             }
             if(players.get(player).getMatchID() == matchToEnd && players.get(player).getClientHandler().isPlaying())
                 players.get(player).getClientHandler().terminateClientHandler();
         }
+        if (activeMatches.get(players.get(nickname).getMatchID()).isGameEnded())
+            System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " won the game.");
+        else
+            System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
         for (String playerToRemove : playersToRemove) {
             removePlayer(playerToRemove);
-            System.out.println("Removed player " + playerToRemove);
+            System.out.println("Player " + playerToRemove + " was removed");
         }
         playersToRemove.clear();
-        System.out.println("Game number " + matchToEnd + " ended because player " + nickname + " left the game.");
+        activeMatches.remove(matchToEnd);
+        virtualViews.remove(matchToEnd);
     }
 
     /**

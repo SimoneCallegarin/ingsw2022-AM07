@@ -126,4 +126,10 @@ public class GameController {
      */
     public int getNumberOfPlayers() { return game.getNumberOfPlayers(); }
 
+    /**
+     * Getter method for the end of the game.
+     * @return true whether the game has ended, else false.
+     */
+    public boolean isGameEnded() { return game.isGameEnded(); }
+
 }
