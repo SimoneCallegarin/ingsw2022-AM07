@@ -69,6 +69,10 @@ public class GUIDrawer extends ViewSubject {
     private WaitingRoom waitingRoom;
     // Actual game screen:
     /**
+     * panel where the actual game will take place
+     */
+    private GameScreenPanel gameScreenPanel;
+    /**
      * Boolean variable used to execute only one time the GameScreenPanel creation.
      */
     private boolean gameStart = true;
@@ -565,9 +569,7 @@ public class GUIDrawer extends ViewSubject {
                         characterPanel.initializeCharacter();
                     }
                 }
-                case GNRLRESERVE_CHANGED -> {
-                    gameScreenPanel.getTableCenterPanel().updateGeneralReserve();
-                }
+                case GNRLRESERVE_CHANGED -> gameScreenPanel.getTableCenterPanel().updateGeneralReserve();
             }
         }
         modelChanges.getToUpdate().clear();
@@ -603,12 +605,7 @@ public class GUIDrawer extends ViewSubject {
         yes.setText("Yes");
         no.setText("No");
         yes.addActionListener(e -> notifyObserver(ViewObserver::onLogout));
-        no.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        no.addActionListener(e -> {});
         Object[] options = { yes, "No" };
         JOptionPane.showOptionDialog(null,"Are you sure you want to log out?", "Logout Request",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,options,options[0]);
     }
