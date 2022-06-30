@@ -84,6 +84,16 @@ public interface ModelObserver {
     void onMoneyUpdate(int playerID, int money, int generalMoneyReserve);
 
     /**
+     * Updates the ModelStorage when there's a change on an isle regarding deny cards.
+     * @param grandmaIndex the index of GRANDMA_HERBS character card.
+     * @param cardCost the cost of GRANDMA_HERBS character card.
+     * @param denyCardsOnCard number of deny cards on GRANDMA_HERBS character card.
+     * @param isleID ID of the isle where the deny card has been removed.
+     * @param denyCard number of deny cards on the isle.
+     */
+    void onDenyCard(int grandmaIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard);
+
+    /**
      * Updates the ModelStorage when a player moves a student on an isle.
      * @param playerID ID of the player that placed a student on an isle.
      * @param entrance students on the entrance of the player.

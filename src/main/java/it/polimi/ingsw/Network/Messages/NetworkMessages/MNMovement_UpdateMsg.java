@@ -38,7 +38,7 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
      */
     private final ArrayList<Integer> numberOfIsles;
     /**
-     * Number of towers per isle.
+     * Number of towers per player.
      */
     private final ArrayList<Integer> numberOfTowers;
 
@@ -51,7 +51,7 @@ public class MNMovement_UpdateMsg extends NetworkMessage{
      * @param whereMNId isle where there's mother nature.
      * @param denyCards deny cards on each isle.
      * @param numberOfIsles number of isles per isle.
-     * @param numberOfTowers number of towers per isle.
+     * @param numberOfTowers number of towers per player.
      */
     public MNMovement_UpdateMsg(MessageType messageType, int totalIsles, ArrayList<HashMap<RealmColors, Integer>> students, ArrayList<TowerColors> towerColors, int whereMNId, ArrayList<Boolean> denyCards, ArrayList<Integer> numberOfIsles, ArrayList<Integer> numberOfTowers) {
         super(messageType);

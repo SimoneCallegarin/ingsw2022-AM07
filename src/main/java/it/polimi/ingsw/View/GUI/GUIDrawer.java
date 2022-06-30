@@ -445,14 +445,12 @@ public class GUIDrawer extends ViewSubject {
             case FUNGIST -> {
                 message.append("\nChoose a color of Student: during the influence calculation this turn, that color adds no influence.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                //showColorForm("Which color you don't want to consider for influence calculation in this turn?");
                 int chosenColor = showColorForm("Which color you don't want to consider for influence calculation in this turn?");
                 notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
             }
             case THIEF -> {
                 message.append("\nChoose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                //showColorForm("Which color you want to be removed from Dining Rooms?");
                 int chosenColor = showColorForm("Which color you want to be removed from Dining Rooms?");
                 notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
             }
