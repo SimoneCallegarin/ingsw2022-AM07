@@ -253,6 +253,11 @@ public class ClientController implements ViewObserver, NetworkObserver {
                 storage.updateMoney(m.getPlayerID(), m.getPlayerMoney());
                 storage.updateGeneralMoneyReserve(m.getGeneralMoneyReserve());
             }
+            case DENYCARD_UPDATE -> {
+                DenyCard_UpdateMsg dc = (DenyCard_UpdateMsg) message;
+                storage.updateCharacterCard(dc.getGrandmaIndex(), dc.getCardCost(), dc.getStudentsOnCard(), dc.getDenyCardsOnCard());
+                storage.updateDenyOnIsle(dc.getIsleID(), dc.getDenyCard());
+            }
             case STUDENTTOISLE_UPDATE -> {
                 StudentToIsle_UpdateMsg sti = (StudentToIsle_UpdateMsg) message;
                 storage.updateStudentsInEntrance(sti.getPlayerID(), sti.getEntrance());

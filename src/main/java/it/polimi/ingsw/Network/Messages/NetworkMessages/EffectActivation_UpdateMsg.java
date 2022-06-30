@@ -49,7 +49,7 @@ public class EffectActivation_UpdateMsg extends NetworkMessage {
      */
     private ArrayList<Integer> numberOfIsles;
     /**
-     * Number of towers per isle.
+     * Number of towers per player.
      */
     private ArrayList<Integer> numberOfTowers;
     /**

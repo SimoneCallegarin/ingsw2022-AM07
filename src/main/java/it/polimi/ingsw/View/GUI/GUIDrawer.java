@@ -447,14 +447,12 @@ public class GUIDrawer extends ViewSubject {
             case FUNGIST -> {
                 message.append("\nChoose a color of Student: during the influence calculation this turn, that color adds no influence.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                //showColorForm("Which color you don't want to consider for influence calculation in this turn?");
                 int chosenColor = showColorForm("Which color you don't want to consider for influence calculation in this turn?");
                 notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
             }
             case THIEF -> {
                 message.append("\nChoose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.");
                 JOptionPane.showMessageDialog(f, message, "Character Card activated", JOptionPane.PLAIN_MESSAGE);
-                //showColorForm("Which color you want to be removed from Dining Rooms?");
                 int chosenColor = showColorForm("Which color you want to be removed from Dining Rooms?");
                 notifyObserver(obs -> obs.onAtomicEffect(chosenColor));
             }
@@ -617,9 +615,20 @@ public class GUIDrawer extends ViewSubject {
      * @param serviceMessage the KO to display
      */
     public void showKOMessage(String serviceMessage) {
-        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
+        if (reactivateCharacters(serviceMessage))
             gameScreenPanel.setCharactersClickable(modelChanges.getPlayerID());
         JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
+    }
+
+    /**
+     * Checks if it is necessary to set Character Cards clickable again after a KO.
+     * @param serviceMessage the message to check
+     * @return true if the KO message has been received immediately after a listener set Character Cards as non-clickable
+     */
+    private boolean reactivateCharacters(String serviceMessage) {
+        return serviceMessage.equals("You don't have enough money to activate this card, please select another one") ||
+               serviceMessage.equals("This cloud is empty! Please select another one") ||
+               serviceMessage.equals("There's no deny cards left on GRANDMA_HERBS, you can't activate this card");
     }
 
     /**

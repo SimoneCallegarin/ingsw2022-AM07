@@ -357,7 +357,7 @@ public class Game extends ModelSubject {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(playerID).getOrder()) {
             if (colorIndex >= 0 && colorIndex <= 4) {
                 if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
-                    if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
+                    if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) <= 10) {
                         players.get(playerID).getDashboard().getEntrance().removeStudent(color);
                         players.get(playerID).getDashboard().getDiningRoom().addStudent(color);
                         // if FARMER character card is played by the player this turn
@@ -431,8 +431,8 @@ public class Game extends ModelSubject {
                                 break;
                             }
                         gameTable.getCharacterCard(grandmaIndex).addDenyCard();
-                        //notifyObserver(obs -> obs.onDenyCard(playerID, isleID, false));
-                        notifyEffectUpdate(grandmaIndex,playerID,isleID,-1);
+                        int finalGrandmaIndex = grandmaIndex;
+                        notifyObserver(obs->obs.onDenyCard(finalGrandmaIndex, gameTable.getCharacterCard(finalGrandmaIndex).getCost(), gameTable.getCharacterCard(finalGrandmaIndex).getDenyCards(), gameTable.getCharacterCard(finalGrandmaIndex).getStudentsHashMap(), isleID, gameTable.getIsleManager().getIsle(isleID).getDenyCards()));
                     }
                     // if the FUNGIST card is played, then we add the students of the chosen color
                     // that were removed from the selected isle
@@ -838,14 +838,19 @@ public class Game extends ModelSubject {
      */
     public void playCharacterCard(int playerID, int characterCardIndex) {
         if (gamePhase == GamePhases.ACTION_PHASE && currentActivePlayer == players.get(playerID).getOrder()){
+            CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();
             if (!players.get(playerID).getAlreadyPlayedACardThisTurn()) {
                 if (characterCardIndex >= 0 && characterCardIndex <= 2) {
                     if (players.get(playerID).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()) {
-                        getGameTable().characterCardPlayed(characterCardIndex);
-                        getPlayerByIndex(playerID).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
-                        lastActionPhase = actionPhase;
-                        actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
-                        notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap()));
+                        if (cardName != CharacterCardsName.GRANDMA_HERBS || getGameTable().getCharacterCards().get(characterCardIndex).getDenyCards() > 0) {
+                            getGameTable().characterCardPlayed(characterCardIndex);
+                            getPlayerByIndex(playerID).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+                            lastActionPhase = actionPhase;
+                            actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
+                            notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap()));
+                        }
+                        else
+                            notifyObserver(obs -> obs.onKO(playerID, "There's no deny cards left on GRANDMA_HERBS, you can't activate this card"));
                     }
                     else
                         notifyObserver(obs -> obs.onKO(playerID, "You don't have enough money to activate this card, please select another one"));
@@ -906,10 +911,12 @@ public class Game extends ModelSubject {
                 }
                 case GRANDMA_HERBS -> {
                     if (value1 >= 0 && value1 < gameTable.getIsleManager().getIsles().size()) {
-                        if (getGameTable().getCharacterCards().get(characterCardIndex).getDenyCards() > 0) {
+                        if (gameTable.getIsleManager().getIsles().get(value1).getDenyCards() == 0) {
                             effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
                             notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
                         }
+                        else
+                            notifyObserver(obs -> obs.onKO(playerID, "There's already a deny card on this isle, please select another one"));
                     }
                     else
                         notifyObserver(obs -> obs.onKO(playerID, "You've selected an isle that doesn't exist, please select another one"));
@@ -919,8 +926,12 @@ public class Game extends ModelSubject {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 <= 4)) {
                         if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) > 0) {
                             if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) > 0) {
-                                effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
-                                notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2)) <= 10) {
+                                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                }
+                                else
+                                    notifyObserver(obs -> obs.onKO(playerID, "Your " + RealmColors.getColor(value2).toString() + " Dining Room is full! You can't add " + RealmColors.getColor(value2) + " students, please select another color"));
                             }
                             else
                                 notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + RealmColors.getColor(value2).toString() + " students, please select another color"));
@@ -936,8 +947,12 @@ public class Game extends ModelSubject {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 <= 4)) {
                         if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1)) > 0) {
                             if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) > 0) {
-                                effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
-                                notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2)) <= 10) {
+                                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                }
+                                else
+                                    notifyObserver(obs -> obs.onKO(playerID, "Your " + RealmColors.getColor(value2).toString() + " Dining Room is full! You can't add " + RealmColors.getColor(value2) + " students, please select another color"));
                             }
                             else
                                 notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + RealmColors.getColor(value2).toString() + " students, please select another color"));
@@ -1129,6 +1144,9 @@ public class Game extends ModelSubject {
      * Setter method for the action phase.
      * @param actionPhase indicates in which phase of the action phase we are.
      */
-    public void setActionPhase(ActionPhases actionPhase) { this.actionPhase = actionPhase; }
+    public void setActionPhase(ActionPhases actionPhase) {
+        atomicEffectCounter = 0;
+        this.actionPhase = actionPhase;
+    }
 
 }

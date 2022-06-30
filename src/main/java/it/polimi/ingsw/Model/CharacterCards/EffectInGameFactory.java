@@ -63,7 +63,8 @@ public class EffectInGameFactory {
                             break;
                         }
                     game.getGameTable().getCharacterCard(grandmaIndex).addDenyCard();
-                    game.notifyEffectUpdate(grandmaIndex,player.getDashboard().getDashboardID(),value1,-1);
+                    int finalGrandmaIndex = grandmaIndex;
+                    game.notifyObserver(obs->obs.onDenyCard(finalGrandmaIndex, game.getGameTable().getCharacterCard(finalGrandmaIndex).getCost(), game.getGameTable().getCharacterCard(finalGrandmaIndex).getDenyCards(), game.getGameTable().getCharacterCard(finalGrandmaIndex).getStudentsHashMap(), value1, game.getGameTable().getIsleManager().getIsle(value1).getDenyCards()));
                 }
                 game.checkEndGame();
                 game.setActionPhase(game.getLastActionPhase());

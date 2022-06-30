@@ -150,6 +150,21 @@ public class VirtualView implements ModelObserver {
     }
 
     /**
+     * Sends a DenyCard_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
+     * @param grandmaIndex the index of GRANDMA_HERBS character card.
+     * @param cardCost the cost of GRANDMA_HERBS character card.
+     * @param denyCardsOnCard number of deny cards on GRANDMA_HERBS character card.
+     * @param isleID ID of the isle where the deny card has been removed.
+     * @param denyCard number of deny cards on the isle.
+     */
+    @Override
+    public void onDenyCard(int grandmaIndex, int cardCost, int denyCardsOnCard, HashMap<RealmColors,Integer> studentsOnCard, int isleID, int denyCard) {
+        DenyCard_UpdateMsg denyCard_updateMsg = new DenyCard_UpdateMsg(MessageType.DENYCARD_UPDATE, grandmaIndex, cardCost, denyCardsOnCard, studentsOnCard, isleID, denyCard);
+        for(ClientHandler ch : clientHandler)
+            ch.send(denyCard_updateMsg);
+    }
+
+    /**
      * Sends a MNMovement_UpdateMsg to all the players that are playing the same game observed by the VirtualView.
      * @param totalIsles the actual number of isle.
      * @param students students on each isle.
