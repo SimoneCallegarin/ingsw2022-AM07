@@ -13,9 +13,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * Panel representing an isle on the game board
+ * Panel representing an isle on the game board.
  */
 public class IslePanel extends JPanel {
+
     /**
      * ModelStorage reference used to retrieve model information
      */

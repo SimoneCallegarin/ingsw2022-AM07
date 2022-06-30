@@ -2,9 +2,14 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
+import it.polimi.ingsw.View.GUI.Buttons.*;
+import it.polimi.ingsw.View.GUI.CloudsPanels.CloudPanel;
+import it.polimi.ingsw.View.GUI.DashboardPanels.DiningPanel;
+import it.polimi.ingsw.View.GUI.ExpertPanels.CharacterPanel;
+import it.polimi.ingsw.View.GUI.ExpertPanels.CoinPanel;
+import it.polimi.ingsw.View.GUI.IslesPanels.DenyCardPanel;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,14 +20,30 @@ import java.io.InputStream;
 public class ImagesLoader {
 
     /**
+     * Loads the background image.
+     * @return the background image.
+     */
+    protected static BufferedImage backgroundImageLoader() {
+        InputStream url = InitialBackgroundPanel.class.getClassLoader().getResourceAsStream("Background.png");
+        BufferedImage img= null;
+        try {
+            if (url != null)
+                img = ImageIO.read(url);
+        }catch (IOException e) {
+            System.err.println("Failed to load the image at path: " + url);
+        }
+        return img;
+    }
+
+    /**
      * Loads a student image.
      * @param rc color of the student we want the image.
-     * @param studentClassLoader class loader used for the students images.
      * @return the image of the student of the chosen color.
      */
-    public static BufferedImage studentsImagesLoader(RealmColors rc, ClassLoader studentClassLoader) {
+    public static BufferedImage studentsImagesLoader(RealmColors rc) {
         InputStream url;
         BufferedImage img = null;
+        ClassLoader studentClassLoader = StudentButton.class.getClassLoader();
         switch(rc) {
             case YELLOW -> url = studentClassLoader.getResourceAsStream("Dashboard/Students/Yellow.png");
             case BLUE -> url = studentClassLoader.getResourceAsStream("Dashboard/Students/Blue.png");
@@ -35,7 +56,7 @@ public class ImagesLoader {
             assert url != null;
             img = ImageIO.read(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
@@ -43,12 +64,12 @@ public class ImagesLoader {
     /**
      * Loads a checked student image.
      * @param rc color of the student we want the image.
-     * @param studentClassLoader class loader used for the students images.
      * @return the image of the checked student of the chosen color.
      */
-    public static BufferedImage checkedStudentsImagesLoader(RealmColors rc, ClassLoader studentClassLoader) {
+    public static BufferedImage checkedStudentsImagesLoader(RealmColors rc) {
         InputStream url;
         BufferedImage img = null;
+        ClassLoader studentClassLoader = StudentButton.class.getClassLoader();
         switch(rc) {
             case YELLOW -> url=studentClassLoader.getResourceAsStream("Dashboard/Students/YellowChk.png");
             case BLUE -> url=studentClassLoader.getResourceAsStream("Dashboard/Students/BlueChk.png");
@@ -61,7 +82,7 @@ public class ImagesLoader {
             assert url != null;
             img = ImageIO.read(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
@@ -69,12 +90,12 @@ public class ImagesLoader {
     /**
      * Loads a professor image.
      * @param rc the color of the professor.
-     * @param cl the class loader of the professor.
      * @return the image of the professor of the given color.
      */
-    public static BufferedImage professorImageLoader(RealmColors rc, ClassLoader cl) {
+    public static BufferedImage professorImageLoader(RealmColors rc) {
         InputStream url;
         BufferedImage img = null;
+        ClassLoader cl = DiningPanel.class.getClassLoader();
         switch(rc) {
             case YELLOW ->url = cl.getResourceAsStream("Dashboard/Professors/Yellow.png");
             case BLUE -> url = cl.getResourceAsStream("Dashboard/Professors/Blue.png");
@@ -87,7 +108,7 @@ public class ImagesLoader {
             assert url != null;
             img = ImageIO.read(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
@@ -95,12 +116,12 @@ public class ImagesLoader {
     /**
      * Loads a tower image.
      * @param tc color of the tower we want the image.
-     * @param towerClassLoader class loader used for the towers images.
      * @return the image of the tower of the chosen color.
      */
-    public static BufferedImage towersImagesLoader(TowerColors tc, ClassLoader towerClassLoader) {
+    public static BufferedImage towersImagesLoader(TowerColors tc) {
         InputStream url;
         BufferedImage img = null;
+        ClassLoader towerClassLoader = TowerButton.class.getClassLoader();
         switch (tc) {
             case BLACK -> url = towerClassLoader.getResourceAsStream("Dashboard/Tower_storage/black_tower.png");
             case WHITE -> url = towerClassLoader.getResourceAsStream("Dashboard/Tower_storage/white_tower.png");
@@ -111,53 +132,67 @@ public class ImagesLoader {
             assert url != null;
             img = ImageIO.read(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
 
     /**
      * Loads the image of the dashboard.
-     * @param cl class loader used for the dashboard image.
      * @return the image of the dashboard.
      */
-    public static BufferedImage dashboardImageLoader(ClassLoader cl) {
+    public static BufferedImage dashboardImageLoader() {
         InputStream url;
         BufferedImage img = null;
-        url = cl.getResourceAsStream("Dashboard/Semi_empty.png");
+        url = GameScreenPanel.class.getClassLoader().getResourceAsStream("Dashboard/Semi_empty.png");
         try {
             if (url != null)
                 img = ImageIO.read(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
 
     /**
      * Loads the Mother nature image and sets it as the icon for the button.
-     * @param cl the class loader used for mother nature.
+     * @return the image of mother nature.
      */
-    public static BufferedImage motherNatureImageLoader(ClassLoader cl){
+    public static BufferedImage motherNatureImageLoader(){
         InputStream url;
-        url = cl.getResourceAsStream("GameTable/mother_nature.png");
+        url = MNButton.class.getClassLoader().getResourceAsStream("GameTable/mother_nature.png");
         BufferedImage img = null;
         try{
             assert url != null;
             img= ImageIO.read(url);
         }catch (IOException e){
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
 
     /**
-     * Loads the Assistant Card image that is identified by the turn order.
-     * @param turnOrder the card turn order used to identify the card.
-     * @param cl the class loader used for the assistant card.
+     * If showMage attribute is false, this method load and pass the Assistant card image
+     * to the override paintComponent method in order to draw it on the panel.
+     * The image is identified by the index of the card.
+     * If the showMage attribute is true, this method load and pass the Mage image
+     * according to the turnOrder passed to the constructor and set as attribute.
+     * @param turnOrder the card turnOrder used to identify which image to load.
+     * @param showMage when true then load the mage image, else the assistant card one.
+     * @return the image loaded.
      */
-    public static BufferedImage assistantCardImageLoader(int turnOrder, ClassLoader cl){
-        InputStream url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder + ".png");
+    protected static BufferedImage assistantCardAndMageImageLoader(int turnOrder, Boolean showMage) {
+        InputStream url = null;
+        ClassLoader cl = AssistantCardPanel.class.getClassLoader();
+        if(!showMage)
+            url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder + ".png");
+        else
+            switch (turnOrder){
+                case 0 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/MYSTICAL_WIZARD.png");
+                case 1 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/WEALTHY_KING.png");
+                case 2 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/CLEVER_WITCH.png");
+                case 3 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/ANCIENT_SAGE.png");
+            }
         BufferedImage img= null;
         try {
             if (url != null)
@@ -169,12 +204,28 @@ public class ImagesLoader {
     }
 
     /**
+     * Loads the Assistant Card image that is identified by the turn order.
+     * @param turnOrder the card turn order used to identify the card.
+     */
+    public static BufferedImage assistantCardImageLoader(int turnOrder){
+        InputStream url = AssistantCardButton.class.getClassLoader().getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder + ".png");
+        BufferedImage img= null;
+        try {
+            if (url != null)
+                img = ImageIO.read(url);
+        }catch (IOException e) {
+            System.err.println("Failed to load the image at path: " + url);
+        }
+        return img;
+    }
+
+    /**
      * Loads the image (either a check or a red cross).
      * @param exchange integer used to decide which image to set as icon.
-     * @param cl the class loader used for the exchange choice.
      */
-    public static BufferedImage exchangeChoiceImageLoader(int exchange, ClassLoader cl) {
+    public static BufferedImage exchangeChoiceImageLoader(int exchange) {
         InputStream url = null;
+        ClassLoader cl = ExchangeChoiceButton.class.getClassLoader();
         switch(exchange){
             case 0 -> url = cl.getResourceAsStream("Raw/Check.png");
             case 1 -> url = cl.getResourceAsStream("Raw/RedCross.png");
@@ -184,7 +235,7 @@ public class ImagesLoader {
             if (url != null)
                 img = ImageIO.read(url);
         }catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
@@ -192,10 +243,10 @@ public class ImagesLoader {
     /**
      * Loads a student image based on the color integer.
      * @param color the integer associated to which image load and set as icon.
-     * @param cl the class loader used for color choice.
      */
-    public static BufferedImage colorChoiceImageLoader(int color, ClassLoader cl) {
+    public static BufferedImage colorChoiceImageLoader(int color) {
         InputStream url = null;
+        ClassLoader cl = ColorChoiceButton.class.getClassLoader();
         switch(color){
             case 0 -> url = cl.getResourceAsStream("Dashboard/Students/Yellow.png");
             case 1 -> url = cl.getResourceAsStream("Dashboard/Students/Pink.png");
@@ -208,24 +259,88 @@ public class ImagesLoader {
             if (url != null)
                 img = ImageIO.read(url);
         }catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }
 
     /**
      * Loads the cloud image.
-     * @param cl the class loader used for the cloud.
      * @return the cloud image.
      */
-    public static BufferedImage cloudImageLoader(ClassLoader cl) {
-        InputStream url = cl.getResourceAsStream("GameTable/Clouds/cloud_card.png");
+    public static BufferedImage cloudImageLoader() {
+        InputStream url = CloudPanel.class.getClassLoader().getResourceAsStream("GameTable/Clouds/cloud_card.png");
         BufferedImage img= null;
         try {
             if (url != null)
                 img = ImageIO.read(url);
         }catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load the image at path: " + url);
+        }
+        return img;
+    }
+
+    /**
+     * Loads the character card image.
+     * @param character the name of the character card to load.
+     * @return the image of the chosen character card.
+     */
+    public static BufferedImage characterCardImageLoader(String character) {
+        InputStream url;
+        ClassLoader cl = CharacterPanel.class.getClassLoader();
+        switch (character){
+            case "MONK" -> url = cl.getResourceAsStream("Character_cards/MONK.jpg");
+            case "FARMER" -> url = cl.getResourceAsStream("Character_cards/FARMER.jpg");
+            case "HERALD" -> url = cl.getResourceAsStream("Character_cards/HERALD.jpg");
+            case "MAGICAL_LETTER_CARRIER" -> url = cl.getResourceAsStream("Character_cards/MAGICAL_LETTER_CARRIER.jpg");
+            case "GRANDMA_HERBS" -> url = cl.getResourceAsStream("Character_cards/GRANDMA_HERBS.jpg");
+            case "CENTAUR" -> url = cl.getResourceAsStream("Character_cards/CENTAUR.jpg");
+            case "JESTER" -> url = cl.getResourceAsStream("Character_cards/JESTER.jpg");
+            case "KNIGHT" -> url = cl.getResourceAsStream("Character_cards/KNIGHT.jpg");
+            case "FUNGIST" -> url = cl.getResourceAsStream("Character_cards/FUNGIST.jpg");
+            case "MINSTREL" -> url = cl.getResourceAsStream("Character_cards/MINSTREL.jpg");
+            case "SPOILED_PRINCESS" -> url = cl.getResourceAsStream("Character_cards/SPOILED_PRINCESS.jpg");
+            case "THIEF" -> url = cl.getResourceAsStream("Character_cards/THIEF.jpg");
+            default -> throw new IllegalStateException("Unexpected value: " + character);
+        }
+        BufferedImage img=null;
+        try{
+            if (url != null) 
+                img= ImageIO.read(url);
+        }catch(IOException e){
+            System.err.println("Failed to load the image at path: " + url);
+        }
+        return img;
+    }
+
+    /**
+     * Loads the image of the coin.
+     * @return the image of the money.
+     */
+    public static BufferedImage coinImageLoader() {
+        InputStream url = CoinPanel.class.getClassLoader().getResourceAsStream("GameTable/Moneta_base.png");
+        BufferedImage img = null;
+        try{
+            if (url != null)
+                img = ImageIO.read(url);
+        }catch(IOException e){
+            System.err.println("Failed to load the image at path: " + url);
+        }
+        return img;
+    }
+
+    /**
+     * Loads the deny card image.
+     * @return the deny card image.
+     */
+    public static BufferedImage denyCardImageLoader() {
+        InputStream url = DenyCardPanel.class.getClassLoader().getResourceAsStream("GameTable/Isles/deny_island_icon.png");
+        BufferedImage img = null;
+        try{
+            if (url != null)
+                img= ImageIO.read(url);
+        }catch(IOException e){
+            System.err.println("Failed to load the image at path: " + url);
         }
         return img;
     }

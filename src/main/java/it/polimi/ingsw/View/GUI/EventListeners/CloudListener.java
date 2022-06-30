@@ -10,49 +10,46 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
- * MouseListener attached to the CloudsPanel when the user has to choose a cloud to pick students from
+ * MouseListener attached to the CloudsPanel when the user has to choose a cloud to pick students from.
  */
 public class CloudListener extends ViewSubject implements MouseListener {
     /**
-     * TableCenterPanel reference used to remove listeners from the clouds and the character panels once a click is detected
+     * TableCenterPanel reference used to remove listeners from the clouds
+     * and the character panels once a click is detected.
      */
     private final TableCenterPanel tableCenterPanel;
 
     /**
-     * Constructor of CloudListener
-     * @param viewObservers Array list of ViewObservers used to attach to this listener the GUI observers
-     * @param tableCenterPanel TableCenterPanel reference used to remove listeners from the clouds and the character panels once a click is detected
+     * Constructor of CloudListener.
+     * @param viewObservers Array list of ViewObservers used to attach to this listener the GUI observers.
+     * @param tableCenterPanel TableCenterPanel reference used to remove listeners from the clouds
+     *                         and the character panels once a click is detected.
      */
     public CloudListener(ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel) {
         addAllObservers(viewObservers);
         this.tableCenterPanel=tableCenterPanel;
     }
 
+    /**
+     * Handles the event of the mouse when clicked.
+     * @param e the event of the mouse.
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
-        int cloudID=((CloudPanel)e.getSource()).getCloudID();
+        int cloudID = ((CloudPanel)e.getSource()).getCloudID();
         notifyObserver(obs->obs.onCloudChoice(cloudID));
         tableCenterPanel.removeClickableClouds();
         tableCenterPanel.removeClickableCharacters();
     }
 
+    // Not used mouse event:
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e) {}
 
-    }
 }

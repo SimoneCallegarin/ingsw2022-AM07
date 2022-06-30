@@ -34,14 +34,6 @@ public class GUIDrawer extends ViewSubject {
      */
     private ModelStorage modelStorage;
     /**
-     * JTextField used to insert nickname choice.
-     */
-    private JTextField nicknameField;
-    /**
-     * JLabel used to print the chosen nickname.
-     */
-    private JLabel nicknameDisplay;
-    /**
      * String placed in the frame to identify the application
      */
     private final String frameTitle = gameTitle;
@@ -49,68 +41,82 @@ public class GUIDrawer extends ViewSubject {
      * Frame containing the GUI itself.
      */
     private final JFrame f = new JFrame(frameTitle);
+    // Nickname selection:
     /**
      * Panel for the user inputs.
      */
     private final JPanel userInputPanel = new JPanel(new CardLayout());
     /**
+     * JTextField used to insert nickname choice.
+     */
+    private JTextField nicknameField;
+    /**
+     * JLabel used to print the chosen nickname.
+     */
+    private JLabel nicknameDisplay;
+    // User's game preferences selection:
+    /**
      * User preferences layout to change between username insertion and game preferences choice.
      */
     private final CardLayout userCl = (CardLayout) userInputPanel.getLayout();
     /**
-     * General panel manager switches between the screen where the user will submit his server and game preferences
+     * On this button press the player will join a lobby and wait for the game to start.
+     */
+    private final JButton startGame = new JButton("Start game");
+    /**
+     * Loading screen shown while waiting for the game to load/other player to join.
+     */
+    private WaitingRoom waitingRoom;
+    // Actual game screen:
+    /**
+     * Boolean variable used to execute only one time the GameScreenPanel creation.
+     */
+    private boolean gameStart = true;
+    /**
+     * General panel manager switches between the screen where the user will submit his game preferences
      * and the screen where the actual game will take place.
      */
     private final JPanel generalPanelManager = new JPanel(new CardLayout());
+    /**
+     * Panel where the actual game will take place.
+     */
+    private GameScreenPanel gameScreenPanel;
     /**
      * GeneralPanelManager layout to show different panels on events happening.
      */
     private final CardLayout cl = (CardLayout) generalPanelManager.getLayout();
     /**
-     * on this button press the player will join a lobby and wait for the game to start
-     */
-    private final JButton startGame = new JButton("Start game");
-    /**
-     * Loading screen shown while waiting for the game to load/other player to join
-     */
-    private WaitingRoom waitingRoom;
-    /**
-     * panel where the actual game will take place
-     */
-    private GameScreenPanel gameScreenPanel;
-    /**
-     * the username of the player currently using the GUI
+     * The username of the player currently using this GUI.
      */
     private String usernamePlaying;
     /**
-     * boolean variable used to execute only one time the GameScreenPanel creation
-     */
-    private boolean gameStart = true;
-    /**
-     * the class containing all the information about the changes occurred in the ModelStorage
+     * Contains all the information about the changes occurred in the ModelStorage.
      */
     private ModelChanges modelChanges;
-
     /**
-     * boolean used to know if it is necessary to let appear a JOptionPanel of start turn or not
+     * Used to know if it's necessary to let appear a JOptionPanel of start turn or not.
      */
     private boolean turnStarted = false;
 
     /**
-     * this method initialize the first screen when you open the app where you'll be asked the username, the game mode and the
-     * number of Players. It uses a frame whose content pane is a General Panel Manager which will switch between the Initial Background panel
-     * where the user will input his game preferences, and the proper game screen where the actual game will take place.
-     * The InitialBackground class contains a userInputPanel which will switch between the username form and the game preferences form.
+     * Initializes the first screen when you open the app where you'll be asked the username,
+     * the game mode and the number of Players.
+     * It uses a frame whose content pane is a General Panel Manager
+     * which will switch between the Initial Background panel
+     * where the user will input his game preferences,
+     * and the proper game screen where the actual game will take place.
+     * The InitialBackground class contains a userInputPanel which will switch
+     * between the username form and the game preferences form.
      */
     public void screeInitialization() {
         // Screen frame initialization:
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setVisible(true);
-        final int screenDimensionX = f.getWidth();
-        final int screenDimensionY = f.getHeight();
+        setScreenDimensionX(f.getWidth());
+        setScreenDimensionY(f.getHeight());
         // Set the initial content pane where it will be added the user input manager.
-        InitialBackgroundPanel initialBackgroundPanel = new InitialBackgroundPanel(new BorderLayout(), screenDimensionX, screenDimensionY);
+        InitialBackgroundPanel initialBackgroundPanel = new InitialBackgroundPanel(new BorderLayout());
         // Add it to the general manager.
         initialBackgroundPanel.add(userInputPanel, BorderLayout.CENTER);
         generalPanelManager.add(initialBackgroundPanel, "User Input");

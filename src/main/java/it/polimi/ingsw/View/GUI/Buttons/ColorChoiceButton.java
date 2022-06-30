@@ -16,8 +16,7 @@ public class ColorChoiceButton extends JButton {
     public ColorChoiceButton(int color) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        ClassLoader cl = this.getClass().getClassLoader();
-        setIcon(new ImageIcon(colorChoiceImageLoader(color,cl)));
+        setIcon(new ImageIcon(colorChoiceImageLoader(color)));
     }
 
 }

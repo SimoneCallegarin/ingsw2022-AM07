@@ -9,6 +9,11 @@ public class GUIConstants {
 
     public static final String gameTitle = "Eriantys Game";
 
+    public static int screenDimensionX;
+    public static int screenDimensionY;
+    public static void setScreenDimensionX(int screenDimensionX) { GUIConstants.screenDimensionX = screenDimensionX; }
+    public static void setScreenDimensionY(int screenDimensionY) { GUIConstants.screenDimensionY = screenDimensionY; }
+
     public static final int currentActionWidth = 1000;
     public static final int currentActionHeight = 10;
     public static final Dimension currentActionGSP = new Dimension(currentActionWidth,currentActionHeight);
@@ -66,5 +71,23 @@ public class GUIConstants {
     public static final double studentsWeightY = 1;
     public static final int studentsGridY = 1;
     public static final int studentsIpadY = -25;
+
+    // Character card:
+    public static final int characterCardGridX = 0;
+    public static final int characterCardGridY = 0;
+    public static final int characterCardPositionX = 0;
+    public static final int characterCardPositionY = 0;
+
+    // Coin:
+    public static final int coinWidth = 40;
+    public static final int coinHeight = 40;
+    public static final Dimension coinDimension = new Dimension(coinWidth,coinHeight);
+    public static final int coinPositionX = 0;
+    public static final int coinPositionY = 0;
+
+    // Deny card:
+    public static final int denyCardWidth = 25;
+    public static final int denyCardHeight = 25;
+    public static final Dimension denyCardDimension = new Dimension(denyCardWidth,denyCardHeight);
 
 }

@@ -15,8 +15,7 @@ public class MNButton extends JButton {
     public MNButton() {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        ClassLoader cl = this.getClass().getClassLoader();
-        setIcon(new ImageIcon(motherNatureImageLoader(cl)));
+        setIcon(new ImageIcon(motherNatureImageLoader()));
     }
 
 }

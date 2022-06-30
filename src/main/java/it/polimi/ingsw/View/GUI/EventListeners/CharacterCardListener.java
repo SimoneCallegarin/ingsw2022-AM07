@@ -10,33 +10,37 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
- * MouseListener added to the CharacterCardPanels in order for the player to choose one to play
+ * MouseListener added to the CharacterCardPanels in order for the player to choose one to play.
  */
 public class CharacterCardListener extends ViewSubject implements MouseListener {
+
     /**
-     * Identifier of the character card associated with this listener
+     * Identifier of the character card associated with this listener.
      */
     private final int characterID;
     /**
-     * Identifier of the player id currently playing
+     * Identifier of the player id currently playing.
      */
     private final int playerID;
     /**
-     * TableCenterPanel reference used to remove listeners from character cards, clouds and isles once a click is detected
+     * TableCenterPanel reference used to remove listeners from character cards,
+     * clouds and isles once a click is detected.
      */
     private final TableCenterPanel tableCenterPanel;
     /**
-     * GameScreenPanel reference used to remove listeners from the dashboard once a click is detected
+     * GameScreenPanel reference used to remove listeners from the dashboard once a click is detected.
      */
     private final GameScreenPanel gameScreenPanel;
 
     /**
-     * Constructor of CharacterCardListener
-     * @param viewObserverList Array list of ViewObserver used to attach to this listener the GUI observers
-     * @param characterID Identifier of the character card associated with this listener
-     * @param playerID Identifier of the player id currently playing
-     * @param tableCenterPanel TableCenterPanel reference used to remove listeners from character cards, clouds and isles once a valid click is detected
-     * @param gameScreenPanel GameScreenPanel reference used to remove listeners from the dashboard once a click is detected
+     * Constructor of CharacterCardListener.
+     * @param viewObserverList Array list of ViewObserver used to attach to this listener the GUI observers.
+     * @param characterID Identifier of the character card associated with this listener.
+     * @param playerID Identifier of the player id currently playing.
+     * @param tableCenterPanel TableCenterPanel reference used to remove listeners from character cards,
+     *                         clouds and isles once a valid click is detected.
+     * @param gameScreenPanel GameScreenPanel reference used to remove listeners from the dashboard
+     *                        once a click is detected.
      */
     public CharacterCardListener(ArrayList<ViewObserver> viewObserverList, int characterID, int playerID, TableCenterPanel tableCenterPanel, GameScreenPanel gameScreenPanel) {
         this.addAllObservers(viewObserverList);
@@ -46,6 +50,10 @@ public class CharacterCardListener extends ViewSubject implements MouseListener 
         this.gameScreenPanel = gameScreenPanel;
     }
 
+    /**
+     * Handles the event of the mouse when clicked.
+     * @param e the event of the mouse.
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         notifyObserver(obs->obs.onCharacterCard(characterID));
@@ -55,23 +63,14 @@ public class CharacterCardListener extends ViewSubject implements MouseListener 
         gameScreenPanel.removeClickableDashboard(playerID);
     }
 
+    // Not used mouse event:
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e) {}
 
-    }
 }

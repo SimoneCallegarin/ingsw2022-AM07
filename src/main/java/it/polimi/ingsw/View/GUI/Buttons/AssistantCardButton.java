@@ -17,8 +17,7 @@ public class AssistantCardButton extends JButton {
     public AssistantCardButton(int turnOrder) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        ClassLoader cl = this.getClass().getClassLoader();
-        setIcon(new ImageIcon(assistantCardImageLoader(turnOrder,cl)));
+        setIcon(new ImageIcon(assistantCardImageLoader(turnOrder)));
     }
 
 }

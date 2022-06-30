@@ -3,8 +3,6 @@ package it.polimi.ingsw.View.GUI;
 import it.polimi.ingsw.Model.Enumeration.RealmColors;
 import it.polimi.ingsw.Model.Enumeration.TowerColors;
 import it.polimi.ingsw.Observer.ViewObserver;
-import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
-import it.polimi.ingsw.View.GUI.Buttons.TowerButton;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
@@ -69,7 +67,7 @@ public class GameScreenPanel extends JPanel {
 
         // Set the dashboards:
         ArrayList<JPanel> dashboardContainers = prepareDashboardsPanels();
-        BufferedImage dashboardImage = dashboardImageLoader(this.getClass().getClassLoader());
+        BufferedImage dashboardImage = dashboardImageLoader();
 
         ArrayList<BufferedImage> students = prepareStudents();                  // Array list used to store images of the students.
         ArrayList<BufferedImage> checkedStudents = prepareCheckedStudents();    // Array list used to store images of checked students.
@@ -145,7 +143,7 @@ public class GameScreenPanel extends JPanel {
         // Loading Images of the students buttons:
         ArrayList<BufferedImage> students = new ArrayList<>();
         for (RealmColors rc : RealmColors.values())
-            students.add(studentsImagesLoader(rc,StudentButton.class.getClassLoader()));
+            students.add(studentsImagesLoader(rc));
         return students;
     }
 
@@ -157,7 +155,7 @@ public class GameScreenPanel extends JPanel {
         // Loading Images of the students buttons:
         ArrayList<BufferedImage> checkedStudents = new ArrayList<>();
         for (RealmColors rc : RealmColors.values())
-            checkedStudents.add(checkedStudentsImagesLoader(rc,StudentButton.class.getClassLoader()));
+            checkedStudents.add(checkedStudentsImagesLoader(rc));
         return checkedStudents;
     }
 
@@ -170,7 +168,7 @@ public class GameScreenPanel extends JPanel {
         ArrayList<BufferedImage> towers = new ArrayList<>();
         // Loading towers images:
         for (TowerColors tc : TowerColors.values())
-            towers.add(towersImagesLoader(tc,TowerButton.class.getClassLoader()));
+            towers.add(towersImagesLoader(tc));
         return towers;
     }
 

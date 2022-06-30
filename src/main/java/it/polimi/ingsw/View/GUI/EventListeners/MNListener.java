@@ -9,24 +9,27 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
- * Mouse Listener attached to the isles in order to register clicks from the user and eventually notify the server of the chosen
- * Mother nature movement
+ * Mouse Listener attached to the isles in order to register clicks from the user
+ * and eventually notify the server of the chosen mother nature movement.
  */
 public class MNListener extends ViewSubject implements MouseListener {
+
     /**
-     * Identifier of the isle to which this MouseListener is attached
+     * Identifier of the isle to which this MouseListener is attached.
      */
     private final int isleID;
     /**
-     * TableCenterPanel reference used to remove listeners from the isles once a click has been detected
+     * TableCenterPanel reference used to remove listeners from the isles once a click has been detected.
      */
     private final TableCenterPanel tableCenterPanel;
 
     /**
-     * Constructor of MNListener
-     * @param observerList Array list of ViewObservers to attach to this listener in order to correctly notify the GUI observers
-     * @param isleID Identifier of the isle to which this MouseListener is attached
-     * @param tableCenterPanel TableCenterPanel reference used to remove listeners from the isles once a click has been detected
+     * Constructor of MNListener.
+     * @param observerList Array list of ViewObservers to attach to this listener
+     *                     in order to correctly notify the GUI observers.
+     * @param isleID Identifier of the isle to which this MouseListener is attached.
+     * @param tableCenterPanel TableCenterPanel reference used to remove listeners
+     *                         from the isles once a click has been detected.
      */
     public MNListener(ArrayList<ViewObserver> observerList, int isleID, TableCenterPanel tableCenterPanel) {
         addAllObservers(observerList);
@@ -34,29 +37,24 @@ public class MNListener extends ViewSubject implements MouseListener {
         this.tableCenterPanel=tableCenterPanel;
     }
 
+    /**
+     * Handles the event of the mouse when clicked.
+     * @param e the event of the mouse.
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         notifyObserver(obs->obs.onMNMovement(isleID));
         tableCenterPanel.removeClickableIsles();
     }
 
+    // Not used mouse event:
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e) {}
 
-    }
 }

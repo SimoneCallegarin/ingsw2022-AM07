@@ -72,7 +72,7 @@ public class DiningPanel extends JPanel {
         setLayout(new GridBagLayout());
 
         for (RealmColors rc : RealmColors.values())
-            professors.add(professorImageLoader(rc,this.getClass().getClassLoader()));
+            professors.add(professorImageLoader(rc));
 
         initializeProfessorPanel();
         initializeStudentDining();
