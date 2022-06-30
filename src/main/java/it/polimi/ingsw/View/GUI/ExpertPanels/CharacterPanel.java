@@ -164,6 +164,8 @@ public class CharacterPanel extends JPanel {
             constraints.gridy++;
             add(new CoinPanel(),constraints);
         }
+        this.validate();
+        this.repaint();
 
     }
 

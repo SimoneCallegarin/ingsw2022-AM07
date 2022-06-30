@@ -33,7 +33,6 @@ public class GeneralReservePanel extends JPanel {
         this.removeAll();
         JLabel moneyLabel = new JLabel();
         moneyLabel.setOpaque(false);
-        System.out.println(storage.getGameTable().getGeneralMoneyReserve());
         moneyLabel.setText("General reserve:"+storage.getGameTable().getGeneralMoneyReserve());
         moneyLabel.setFont(new Font("Dialog.bold", Font.PLAIN,11));
         add(moneyLabel);
