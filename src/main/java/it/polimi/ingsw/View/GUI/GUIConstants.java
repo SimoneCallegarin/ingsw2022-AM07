@@ -1,6 +1,8 @@
 package it.polimi.ingsw.View.GUI;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Contains the constants used in the GUI.
@@ -33,12 +35,6 @@ public class GUIConstants {
     public static final int nicknameDisplayWidth = 200;
     public static final int nicknameDisplayHeight = 150;
     public static final Dimension nicknameDisplayDimension = new Dimension(nicknameDisplayWidth,nicknameDisplayHeight);
-
-    // Clouds constraints:
-    public static final double cloudsWeightX = 1;
-    public static final int cloudsGridX = 1;
-    public static final double cloudsWeightY = 1;
-    public static final int cloudsGridY = 0;
 
     // Dashboard constraints:
     public static final double dashboardWeightX = 1;

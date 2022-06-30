@@ -11,6 +11,7 @@ import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
 import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
+import it.polimi.ingsw.View.GUI.ExpertPanels.GeneralReservePanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -450,8 +451,8 @@ public class TableCenterPanel extends JPanel {
         //set sizes of islesImages and clickablepanels
         int x=0;
         int y=0;
-        int width= (int) Math.round(GUIConstants.frameX/(7.5));
-        int height= GUIConstants.frameY/4;
+        int width= (int) Math.round(GUIConstants.screenDimensionX/(7.5));
+        int height= GUIConstants.screenDimensionY/4;
         for(int i=0;i<islesPanels.size();i++){
             islesPanels.get(i).setBounds(x,y,width,height);
             clickablePanels.get(i).setBounds(x,y,width,height);

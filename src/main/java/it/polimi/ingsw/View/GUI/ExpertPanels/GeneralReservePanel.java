@@ -1,5 +1,6 @@
-package it.polimi.ingsw.View.GUI;
+package it.polimi.ingsw.View.GUI.ExpertPanels;
 
+import it.polimi.ingsw.View.GUI.ImagesLoader;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
@@ -43,7 +44,7 @@ public class GeneralReservePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        BufferedImage img=ImagesLoader.coinsImageLoader(this.getClass().getClassLoader());
+        BufferedImage img= ImagesLoader.coinImageLoader();
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
