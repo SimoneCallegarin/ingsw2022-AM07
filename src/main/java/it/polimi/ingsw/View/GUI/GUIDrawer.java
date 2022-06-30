@@ -565,6 +565,9 @@ public class GUIDrawer extends ViewSubject {
                         characterPanel.initializeCharacter();
                     }
                 }
+                case GNRLRESERVE_CHANGED -> {
+                    gameScreenPanel.getTableCenterPanel().updateGeneralReserve();
+                }
             }
         }
         modelChanges.getToUpdate().clear();

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.View.GUI.ExpertPanels;
 
+import it.polimi.ingsw.View.GUI.ImagesLoader;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -22,15 +24,7 @@ public class CoinPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ClassLoader cl=this.getClass().getClassLoader();
-        InputStream url=cl.getResourceAsStream("GameTable/Moneta_base.png");
-        BufferedImage img=null;
-        try{
-            assert url!=null;
-            img= ImageIO.read(url);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        BufferedImage img= ImagesLoader.coinsImageLoader(this.getClass().getClassLoader());
         g.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 }

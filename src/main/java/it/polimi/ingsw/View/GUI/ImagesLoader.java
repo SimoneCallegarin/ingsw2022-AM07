@@ -230,4 +230,40 @@ public class ImagesLoader {
         return img;
     }
 
+    /**
+     * Loads the cloud image
+     * @param cl the class loader used for the coin
+     * @return the coin image
+     */
+    public static BufferedImage coinsImageLoader(ClassLoader cl){
+        InputStream url=cl.getResourceAsStream("GameTable/Moneta_base.png");
+        BufferedImage img=null;
+        try{
+            if(url!=null)
+                img=ImageIO.read(url);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return img;
+    }
+
+    /**
+     * Loads the isles images
+     * @param cl the class loader used for the isles
+     * @param i the index used to identify which image to load
+     * @return the isle image
+     */
+    public static BufferedImage isleImageLoader(ClassLoader cl, int i){
+        InputStream url;
+        BufferedImage img = null;
+        url = cl.getResourceAsStream("GameTable/Isles/island"+i+".png");
+        try {
+            assert url != null;
+            img = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return img;
+    }
+
 }
