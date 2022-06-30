@@ -9,48 +9,62 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+
 /**
- * Panel containing the cloud panels
+ * Panel containing the cloud panels.
  */
 public class CloudsContainerPanel extends JPanel {
+
     /**
-     * Array list used to store cloud panels
+     * Array list used to store cloud panels.
      */
     private final ArrayList<CloudPanel> cloudPanels;
+    /**
+     * The constraints applied to the clouds' container panel.
+     */
+    private final GridBagConstraints cloudsContainerPanelConstraints;
 
     /**
-     * Constructor of CloudContainer
-     * @param storage ModelStorage reference used to retrieve clouds state information
-     * @param viewObservers ViewObservers array list passed to the listeners
-     * @param tableCenterPanel TableCenterPanel passed to the listeners
-     * @param students Array list of student images
+     * Constructor of CloudContainer.
+     * @param storage ModelStorage reference used to retrieve clouds state information.
+     * @param viewObservers ViewObservers array list passed to the listeners.
+     * @param tableCenterPanel TableCenterPanel passed to the listeners.
+     * @param students Array list of student images.
      */
     public CloudsContainerPanel(ModelStorage storage, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
-        this.cloudPanels=new ArrayList<>();
+        this.cloudPanels = new ArrayList<>();
 
         setLayout(new GridBagLayout());
-        GridBagConstraints mainConstraints=new GridBagConstraints();
         //Creating the grid for the clouds
-        JPanel cloudContainer=new JPanel(new GridLayout(1,storage.getGameTable().getClouds().size()));
+        JPanel cloudContainer = new JPanel(new GridLayout(1,storage.getGameTable().getClouds().size()));
         cloudContainer.setBackground(Color.CYAN);
-        for(int i=0;i<storage.getGameTable().getClouds().size();i++){
-            CloudPanel cloudPanel=new CloudPanel(storage,i,viewObservers, tableCenterPanel, students);
+        for(int i=0; i<storage.getGameTable().getClouds().size(); i++){
+            CloudPanel cloudPanel = new CloudPanel(storage,i,viewObservers, tableCenterPanel, students);
             cloudContainer.add(cloudPanel);
             cloudPanels.add(cloudPanel);
         }
-
-        mainConstraints.fill=GridBagConstraints.BOTH;
-        mainConstraints.weighty=1;
-        mainConstraints.weightx=1;
-        mainConstraints.gridx=0;
-        mainConstraints.gridy=0;
-        add(cloudContainer,mainConstraints);
-
+        cloudsContainerPanelConstraints = setConstraints();
+        add(cloudContainer,cloudsContainerPanelConstraints);
     }
 
     /**
-     * Updates the cloud panel identified by the cloud id
-     * @param cloudID the cloud id used to identify which cloud update
+     * Sets the constraints for the clouds' container panel.
+     * @return the constraints for the clouds' container panel.
+     */
+    private GridBagConstraints setConstraints() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = cloudsWeightX;
+        constraints.gridx = cloudsGridX;
+        constraints.weighty = cloudsWeightY;
+        constraints.gridy = cloudsGridY;
+        return constraints;
+    }
+
+    /**
+     * Updates the cloud panel identified by the cloud ID.
+     * @param cloudID the cloud ID used to identify which cloud update.
      */
     public void updateCloudPanels(int cloudID){
         cloudPanels.get(cloudID).resetCloud();
@@ -58,20 +72,18 @@ public class CloudsContainerPanel extends JPanel {
     }
 
     /**
-     * Set the cloud panel clickable
+     * Sets the cloud panel clickable.
      */
     public void setCloudsClickable() {
-        for (CloudPanel cloudPanel : cloudPanels) {
+        for (CloudPanel cloudPanel : cloudPanels)
             cloudPanel.setClickable();
-        }
     }
 
     /**
-     * Removes the mouse listeners from the cloud panel
+     * Removes the mouse listeners from the cloud panel.
      */
     public void removeCloudsClickable(){
-        for (CloudPanel cloudPanel : cloudPanels) {
+        for (CloudPanel cloudPanel : cloudPanels)
             cloudPanel.removeClickable();
-        }
     }
 }

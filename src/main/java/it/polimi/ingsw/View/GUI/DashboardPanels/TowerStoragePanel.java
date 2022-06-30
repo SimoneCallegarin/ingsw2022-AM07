@@ -11,46 +11,47 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * Panel representing the tower storage part in the dashboard
+ * Panel representing the tower storage part in the dashboard.
  */
 public class TowerStoragePanel extends JPanel {
+
     /**
-     * Model storage used to retrieve game state information and draw the tower storage accordingly
+     * Model storage used to retrieve game state information and draw the tower storage accordingly.
      */
     private final ModelStorage storage;
     /**
-     * Constraints used by the layout manager
+     * Constraints used by the layout manager.
      */
     private final GridBagConstraints constraints;
     /**
-     * Player ID associated with this tower storage
+     * Player ID associated with this tower storage.
      */
     private final int playerID;
     /**
-     * Array list to store towers images
+     * Array list to store towers images.
      */
     private final ArrayList<BufferedImage> towers;
 
     /**
-     * Constructor of TowerStoragePanel
-     * @param storage Model storage used to retrieve game state information and draw the tower storage accordingly
-     * @param playerID Player ID associated with this tower storage
-     * @param towers Array list to store towers images
+     * Constructor of TowerStoragePanel.
+     * @param storage Model storage used to retrieve game state information and draw the tower storage accordingly.
+     * @param playerID Player ID associated with this tower storage.
+     * @param towers Array list to store towers images.
      */
     public TowerStoragePanel(ModelStorage storage, int playerID, ArrayList<BufferedImage> towers) {
         setLayout(new GridBagLayout());
         this.storage=storage;
         this.playerID=playerID;
-        setOpaque(false);
-        constraints =new GridBagConstraints();
-        setBorder(BorderFactory.createLineBorder(Color.black));
-
         this.towers = towers;
+        this.constraints = new GridBagConstraints();
+        setOpaque(false);
 
         initializeTowerStorage();
-
     }
 
+    /**
+     * Initializes the tower storage panel.
+     */
     public void initializeTowerStorage(){
         TowerColors color=storage.getDashboard(playerID).getTowerColor();
         constraints.insets=new Insets(5,5,5,5);
@@ -70,6 +71,9 @@ public class TowerStoragePanel extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Resets the tower storage panel.
+     */
     public void resetTowerStorage() {
         this.removeAll();
         this.validate();

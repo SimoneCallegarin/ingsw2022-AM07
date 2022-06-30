@@ -7,31 +7,34 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.View.GUI.Buttons.ButtonPrinter.printRealmColorsObjects;
+
 /**
- * Button representing a student
+ * Button representing a student.
  */
 public class StudentButton extends JButton {
+
     /**
-     * Color of the student represented by this button
+     * Color of the student represented by this button.
      */
     private final RealmColors color;
     /**
-     * Array list used to retrieve the students images
+     * Array list used to retrieve the students images.
      */
     private final ArrayList<BufferedImage> students;
     /**
-     * Array list used to retrieve the checked students images
+     * Array list used to retrieve the checked students images.
      */
     private final ArrayList<BufferedImage> checkedStudents;
 
     /**
-     * Constructor of StudentButton
-     * @param color the color of the student to print
-     * @param students array list storing the student images
-     * @param checkedStudents array list storing the checked student images
+     * Constructor of StudentButton (students and checked students).
+     * @param color the color of the student to print.
+     * @param students Array List storing the student images.
+     * @param checkedStudents Array List storing the checked student images.
      */
     public StudentButton(RealmColors color, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
-        this.color=color;
+        this.color = color;
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
         this.students = students;
@@ -40,12 +43,12 @@ public class StudentButton extends JButton {
     }
 
     /**
-     * Constructor of StudentButton
-     * @param color the color of the student to print
-     * @param students array list storing the student images
+     * Constructor of StudentButton (only the students).
+     * @param color the color of the student to print.
+     * @param students Array List storing the student images.
      */
     public StudentButton(RealmColors color, ArrayList<BufferedImage> students) {
-        this.color=color;
+        this.color = color;
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
         this.students = students;
@@ -55,51 +58,22 @@ public class StudentButton extends JButton {
     }
 
     /**
-     * Constructor of StudentButton
+     * Retrieves from the students Array List and set as icon the student image choose
+     * according to the color parameter received.
+     * @param color the color used to decide which image to retrieve and set.
      */
-    public StudentButton() {
-        this.color=null;
-        this.students = null;
-        this.checkedStudents = null;
-    }
+    public void printStudent(RealmColors color){ printRealmColorsObjects(color, students, this); }
 
     /**
-     * This method retrieve from the students array list and set as icon the student image choose according to the color parameter
-     * @param color the color used to decide which image to retrieve and set
+     * Retrieves from the checked students Array List and sets as icon the checked student image choose
+     * according to the color parameter received.
+     * @param color the color used to decide which image to retrieve and set.
      */
-    public void printStudent(RealmColors color){
-        BufferedImage img = null;
-        switch (color) {
-            case YELLOW -> img = students.get(0);
-            case PINK -> img = students.get(1);
-            case BLUE -> img = students.get(2);
-            case RED -> img = students.get(3);
-            case GREEN -> img = students.get(4);
-        }
-        setIcon(new ImageIcon(img));
-    }
+    public void printClick(RealmColors color) { printRealmColorsObjects(color, checkedStudents, this); }
 
     /**
-     * This method retrieve from the checked students array list and set as icon the checked student image choose according to the color parameter
-     * @param color the color used to decide which image to retrieve and set
+     * Getter method for the color attribute.
+     * @return the color attribute.
      */
-    public void printClick(RealmColors color) {
-        BufferedImage img = null;
-        switch (color) {
-            case YELLOW -> img = checkedStudents.get(0);
-            case PINK -> img = checkedStudents.get(1);
-            case BLUE -> img = checkedStudents.get(2);
-            case RED -> img = checkedStudents.get(3);
-            case GREEN -> img = checkedStudents.get(4);
-        }
-        setIcon(new ImageIcon(img));
-    }
-
-    /**
-     * Getter for the color attribute
-     * @return the color attribute
-     */
-    public RealmColors getColor() {
-        return color;
-    }
+    public RealmColors getColor() { return color; }
 }

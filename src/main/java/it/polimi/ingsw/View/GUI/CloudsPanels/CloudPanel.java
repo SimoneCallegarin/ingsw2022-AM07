@@ -15,18 +15,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.View.GUI.ImagesLoader.cloudImageLoader;
+
 /**
  * Panel representing the clouds placed in the game table
  */
 public class CloudPanel extends JPanel {
-    /**
-     * ClassLoader used to load images from the resource folder
-     */
-    private final ClassLoader cl;
+
     /**
      * Cloud identifier associated with this panel
      */
     private final int cloudID;
+    /**
+     * Image used for the cloud.
+     */
+    private final BufferedImage cloudImage;
     /**
      * ModelStorage reference used to retrieve game state information
      */
@@ -53,40 +56,27 @@ public class CloudPanel extends JPanel {
      * @param students ArrayList used to retrieve student images
      */
     public CloudPanel(ModelStorage storage, int cloudID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students) {
-        cl=this.getClass().getClassLoader();
-        this.storage=storage;
-        this.cloudID=cloudID;
-        this.cloudListener=new CloudListener(viewObservers,tableCenterPanel);
+        this.storage = storage;
+        this.cloudID = cloudID;
+        this.students = students;
+        this.cloudListener = new CloudListener(viewObservers,tableCenterPanel);
+        this.cloudImage = cloudImageLoader(this.getClass().getClassLoader());
+        this.constraints = new GridBagConstraints();
+
         setLayout(new GridBagLayout());
-        constraints =new GridBagConstraints();
         setBackground(Color.CYAN);
         setOpaque(false);
 
-        this.students = students;
         initializeCloud();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        InputStream url = cl.getResourceAsStream("GameTable/Clouds/cloud_card.png");
-        BufferedImage img= null;
-        try {
-            if (url != null)
-                img = ImageIO.read(url);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(img,0,0,getWidth(),getHeight(),null);
-    }
-
     /**
-     * This method place student buttons on this panel according to the ModelStorage information.
+     * Places student buttons on this panel according to the ModelStorage information.
      */
     public void initializeCloud(){
         constraints.gridx=0;
         constraints.gridy=0;
-
-        for(RealmColors color:RealmColors.values()){
+        for(RealmColors color:RealmColors.values())
             for(int i=0;i<storage.getGameTable().getCloud(cloudID).getStudentsByColor(color);i++){
                 add(new StudentButton(color, students), constraints);
                 if(constraints.gridx==3){
@@ -95,13 +85,20 @@ public class CloudPanel extends JPanel {
                 }
                 constraints.gridx++;
             }
-        }
         this.validate();
         this.repaint();
     }
 
     /**
-     * This method removes all the component from this panel in order for the initializeCloud method to place them on an empty panel
+     * Paints the clouds.
+     * @param g allows an application to draw onto components that are realized on various devices.
+     */
+    @Override
+    protected void paintComponent(Graphics g) { g.drawImage(cloudImage,0,0,getWidth(),getHeight(),null); }
+
+    /**
+     * Removes all the component from this panel permitting
+     * the initializeCloud method to place them on an empty panel.
      */
     public void resetCloud(){
         this.removeAll();
@@ -110,20 +107,18 @@ public class CloudPanel extends JPanel {
     }
 
     /**
-     * This method add the MouseListener to this panel
+     * Add the MouseListener to this panel.
      */
-    public void setClickable() {
-        this.addMouseListener(cloudListener);
-    }
+    public void setClickable() { this.addMouseListener(cloudListener); }
 
     /**
-     * This method removes the MouseListener from this panel
+     * Removes the MouseListener from this panel.
      */
-    public void removeClickable(){
-        this.removeMouseListener(cloudListener);
-    }
+    public void removeClickable(){ this.removeMouseListener(cloudListener); }
 
-    public int getCloudID() {
-        return cloudID;
-    }
+    /**
+     * Getter method for the cloud ID.
+     * @return the cloud ID associated to the cloud.
+     */
+    public int getCloudID() { return cloudID; }
 }

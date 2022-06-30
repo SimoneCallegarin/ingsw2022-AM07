@@ -18,51 +18,51 @@ import java.util.ArrayList;
  */
 public class EntrancePanel extends JPanel{
     /**
-     * ModelStorage reference used to retrieve game state information
+     * ModelStorage reference used to retrieve game state information.
      */
     private final ModelStorage storage;
     /**
-     * Constraints used in the layout manager to correctly place student buttons
+     * Constraints used in the layout manager to correctly place student buttons.
      */
     private final GridBagConstraints constraints;
     /**
-     * Identifier of the player associated with this entrance
+     * Identifier of the player associated with this entrance.
      */
     private final int playerID;
     /**
-     * Array list used to store the EntranceStudentListener that can be attached to this panel
+     * Array list used to store the EntranceStudentListener that can be attached to this panel.
      */
     private final ArrayList<EntranceStudentListener> entranceStudentListeners;
     /**
-     * Array list used to store the EffectListener that can be attached to this panel
+     * Array list used to store the EffectListener that can be attached to this panel.
      */
     private final ArrayList<EffectListener> effectListeners;
     /**
-     * Array list used to store the student buttons place in this panel
+     * Array list used to store the student buttons place in this panel.
      */
     private final ArrayList<StudentButton> studentButtons;
     /**
-     * Array list used to retrieve student images to print
+     * Array list used to retrieve student images to print.
      */
     private final ArrayList<BufferedImage> students;
     /**
-     * Array list used to retrieve checked student images to print
+     * Array list used to retrieve checked student images to print.
      */
     private final ArrayList<BufferedImage> checkedStudents;
     /**
-     * The last studentButton that has been pressed on this entrance
+     * The last studentButton that has been pressed on this entrance.
      */
     private StudentButton lastPressedStudent;
 
     /**
-     * Constructor of EntrancePanel
-     * @param storage ModelStorage reference used to retrieve game state information
-     * @param playerID Identifier of the player associated with this entrance
-     * @param viewObservers Array list of ViewObservers used to attach to this entrance buttons the GUI observers
-     * @param tableCenterPanel TableCenterPanel reference passed to the Effect and EntranceStudent Listeners
-     * @param dashboardPanel DashboardPanel reference passed to the EntranceStudentListeners
-     * @param students Array list used to retrieve student images to print
-     * @param checkedStudents Array list used to retrieve checked student images to print
+     * Constructor of EntrancePanel.
+     * @param storage ModelStorage reference used to retrieve game state information.
+     * @param playerID Identifier of the player associated with this entrance.
+     * @param viewObservers Array list of ViewObservers used to attach to this entrance buttons the GUI observers.
+     * @param tableCenterPanel TableCenterPanel reference passed to the Effect and EntranceStudent Listeners.
+     * @param dashboardPanel DashboardPanel reference passed to the EntranceStudentListeners.
+     * @param students Array list used to retrieve student images to print.
+     * @param checkedStudents Array list used to retrieve checked student images to print.
      */
     public EntrancePanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel,DashboardPanel dashboardPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents) {
         this.playerID=playerID;
@@ -75,30 +75,28 @@ public class EntrancePanel extends JPanel{
         this.constraints =new GridBagConstraints();
         this.storage=storage;
 
-        for(RealmColors color:RealmColors.values()) {
+        for(RealmColors color:RealmColors.values())
             for (int i = 0; i < storage.getDashboard(playerID).getEntranceStudents(color); i++) {
                 EntranceStudentListener entranceStudentListener=new EntranceStudentListener(dashboardPanel, viewObservers, tableCenterPanel);
                 EffectListener effectListener = new EffectListener(viewObservers, -1, tableCenterPanel, this);
                 entranceStudentListeners.add(entranceStudentListener);
                 effectListeners.add(effectListener);
             }
-        }
+
         setLayout(new GridBagLayout());
         setOpaque(false);
 
         initializeEntrance();
-
-
     }
 
     /**
-     * This method initialize the student buttons in the entrance according to the model information
+     * Initializes the student buttons in the entrance according to the model information.
      */
     public void initializeEntrance(){
         constraints.gridx=0;
         constraints.gridy=0;
         constraints.insets=new Insets(0,9,3,7);
-        for(RealmColors color:RealmColors.values()){
+        for(RealmColors color:RealmColors.values())
             for(int i=0;i<storage.getDashboard(playerID).getEntranceStudents(color);i++){
                 StudentButton studentButton=new StudentButton(color, students, checkedStudents);
                 add(studentButton, constraints);
@@ -109,13 +107,12 @@ public class EntrancePanel extends JPanel{
                 }
                 constraints.gridx++;
             }
-        }
         this.validate();
         this.repaint();
     }
 
     /**
-     * This method is called when the player can move the students in order to listen to clicks on a student
+     * Called when the player can move the students in order to listen to clicks on a student.
      */
     public void setStudentsClickable(){
         for(int i=0;i<studentButtons.size();i++){
@@ -125,7 +122,7 @@ public class EntrancePanel extends JPanel{
     }
 
     /**
-     * This method is used to remove the listener from the buttons
+     * Used to remove the listener from the buttons.
      */
     public void removeStudentsClickable(){
         for(int i=0;i<studentButtons.size();i++) {
@@ -135,7 +132,7 @@ public class EntrancePanel extends JPanel{
     }
 
     /**
-     * This method is used to add to the student buttons present on the entrance the EffectListeners
+     * Used to add to the student buttons present on the entrance the EffectListeners.
      */
     public void setStudentsClickableForEffect() {
         for(int i=0;i<studentButtons.size();i++){
@@ -145,17 +142,16 @@ public class EntrancePanel extends JPanel{
     }
 
     /**
-     * This method is used to remove to the student buttons present on the entrance the EffectListeners
+     * Used to remove to the student buttons present on the entrance the EffectListeners.
      */
     public void removeStudentsClickableForEffect() {
-        for(int i=0;i<studentButtons.size();i++) {
+        for(int i=0;i<studentButtons.size();i++)
             studentButtons.get(i).removeMouseListener(effectListeners.get(i));
-        }
     }
 
     /**
-     * This method removes all the component from this panel and clear the studentButtons array list in order for the initializeEntrance method
-     * to draw on an empty panel
+     * Removes all the component from this panel and clear the studentButtons array list
+     * in order for the initializeEntrance method to draw on an empty panel.
      */
     public void resetEntrance(){
         this.removeAll();
@@ -164,13 +160,16 @@ public class EntrancePanel extends JPanel{
         this.repaint();
     }
 
+    /**
+     * Setter method for the last pressed student.
+     * @param lastPressedStudent the last pressed student by the player.
+     */
+    public void setLastPressedStudent(StudentButton lastPressedStudent) { this.lastPressedStudent = lastPressedStudent; }
 
-    public StudentButton getLastPressedStudent() {
-        return lastPressedStudent;
-    }
-
-    public void setLastPressedStudent(StudentButton lastPressedStudent) {
-        this.lastPressedStudent = lastPressedStudent;
-    }
+    /**
+     * Getter method for the last pressed student.
+     * @return the last pressed student by the player.
+     */
+    public StudentButton getLastPressedStudent() { return lastPressedStudent; }
 
 }

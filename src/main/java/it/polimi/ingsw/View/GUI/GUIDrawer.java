@@ -21,35 +21,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+
 /**
- * This class is called upon GUI creation and start the GUI construction chain. It's also responsible for showing forms to the user and managing
- * the update logic
+ * Class called upon GUI creation that start the GUI construction chain.
+ * It's also responsible for showing forms to the user and managing the update logic.
  */
 public class GUIDrawer extends ViewSubject {
+
     /**
-     * Model Storage reference used to retrieve game state information
+     * Model Storage reference used to retrieve game state information.
      */
     private ModelStorage modelStorage;
     /**
-     * JTextField used to insert nickname choice
+     * JTextField used to insert nickname choice.
      */
     private JTextField nicknameField;
     /**
-     * Font used for the nickname check
-     */
-    private Font italicFont;
-    /**
-     * JLabel used to print the chosen nickname
+     * JLabel used to print the chosen nickname.
      */
     private JLabel nicknameDisplay;
     /**
      * String placed in the frame to identify the application
      */
-    private final String frameTitle = "Eriantys Game";
+    private final String frameTitle = gameTitle;
     /**
      * Frame containing the GUI itself.
      */
-    private JFrame f = new JFrame(frameTitle);
+    private final JFrame f = new JFrame(frameTitle);
     /**
      * Panel for the user inputs.
      */
@@ -74,7 +73,7 @@ public class GUIDrawer extends ViewSubject {
     /**
      * Loading screen shown while waiting for the game to load/other player to join
      */
-    private LoadingScreen loadingScreen;
+    private WaitingRoom waitingRoom;
     /**
      * panel where the actual game will take place
      */
@@ -104,22 +103,20 @@ public class GUIDrawer extends ViewSubject {
      * The InitialBackground class contains a userInputPanel which will switch between the username form and the game preferences form.
      */
     public void screeInitialization() {
-        //screen frame initialization
+        // Screen frame initialization:
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setVisible(true);
         final int screenDimensionX = f.getWidth();
         final int screenDimensionY = f.getHeight();
-        //set the initial content pane where it will be added the user input manager.
+        // Set the initial content pane where it will be added the user input manager.
         InitialBackgroundPanel initialBackgroundPanel = new InitialBackgroundPanel(new BorderLayout(), screenDimensionX, screenDimensionY);
-        //add it to the general manager.
+        // Add it to the general manager.
+        initialBackgroundPanel.add(userInputPanel, BorderLayout.CENTER);
         generalPanelManager.add(initialBackgroundPanel, "User Input");
 
-        initialBackgroundPanel.add(userInputPanel, BorderLayout.CENTER);
-
-        //add the general panel manager as the content pane to switch between user input screen and the actual game.
+        // Add the general panel manager as the content pane to switch between user input screen and the actual game.
         f.setContentPane(generalPanelManager);
-
 
         //ask the username
         showUsernameForm();
@@ -191,11 +188,10 @@ public class GUIDrawer extends ViewSubject {
         JPanel panel = new JPanel(new BorderLayout());
         nicknameDisplay = new JLabel();
         nicknameDisplay.setHorizontalAlignment(JLabel.CENTER);
-        italicFont = nicknameDisplay.getFont().deriveFont(Font.ITALIC, 16.0f);
 
         panel.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.LINE_START);
         panel.add(nicknameDisplay, BorderLayout.CENTER);
-        panel.setPreferredSize(new Dimension(200, 150));
+        panel.setPreferredSize(nicknameDisplayDimension);
 
         return panel;
     }
@@ -209,8 +205,7 @@ public class GUIDrawer extends ViewSubject {
         nicknameDisplay.setForeground(Color.GREEN);
         if (nicknameDisplay.getText().length() < 2 || nicknameDisplay.getText().length() >= 20)
             nicknameDisplay.setForeground(Color.RED);
-        nicknameDisplay.setFont(italicFont);
-
+        nicknameDisplay.setFont(new Font(SansSerif, Font.ITALIC, 24));
     }
 
     /**
@@ -283,16 +278,16 @@ public class GUIDrawer extends ViewSubject {
      * this method shows a loading screen while waiting for other players to join and loading the game
      */
     public void showLoadingScreen() {
-        loadingScreen = new LoadingScreen(usernamePlaying);
+        waitingRoom = new WaitingRoom(usernamePlaying);
         //need to update the loading screen graphics
-        generalPanelManager.add(loadingScreen, "Loading Screen");
+        generalPanelManager.add(waitingRoom, "Loading Screen");
         cl.show(generalPanelManager, "Loading Screen");
 
     }
 
     public void createGameScreen() {
         //initialize the game screen and add it to the generalPanelManager
-        gameScreenPanel = new GameScreenPanel(new GridBagLayout(), modelStorage, f.getWidth(), f.getHeight(), usernamePlaying, loadingScreen.getNicknameColor(), getViewObserverList());
+        gameScreenPanel = new GameScreenPanel(new GridBagLayout(), modelStorage, f.getWidth(), f.getHeight(), usernamePlaying, waitingRoom.getNicknameColor(), getViewObserverList());
         generalPanelManager.add(gameScreenPanel, "Game Screen");
     }
 
@@ -324,30 +319,12 @@ public class GUIDrawer extends ViewSubject {
             buttons[i].addActionListener(e -> {
                 ClassLoader cl1 = this.getClass().getClassLoader();
                 InputStream url1 = cl1.getResourceAsStream("GameTable/Assistant_cards/2x/" + finalI + "chk.png");
-                BufferedImage img1 = null;
-                try {
-                    if (url1 != null)
-                        img1 = ImageIO.read(url1);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                if (img1 != null) {
-                    buttons[finalI1].setIcon(new ImageIcon(img1));
-                }
+                loadImages(buttons, finalI1, url1);
 
                 if (turnOrder.get() != 0 && turnOrder.get() != finalI) {
                     ClassLoader cl2 = this.getClass().getClassLoader();
                     InputStream url2 = cl2.getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder.get() + ".png");
-                    BufferedImage img2 = null;
-                    try {
-                        if (url2 != null)
-                            img2 = ImageIO.read(url2);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    if (img2 != null) {
-                        buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
-                    }
+                    loadImagesOnLastPressedButton(buttons, lastPressedButton, url2);
                 }
                 //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 lastPressedButton.set(finalI1);
@@ -360,6 +337,44 @@ public class GUIDrawer extends ViewSubject {
         scrollPane.setPreferredSize(new Dimension(1000, 564));
         JOptionPane.showMessageDialog(f, scrollPane, "Your deck", JOptionPane.PLAIN_MESSAGE);
         return turnOrder.get();
+    }
+
+    /**
+     * Loads images on the last button that the player pressed.
+     * @param buttons where to put the image.
+     * @param lastPressedButton last button pressed by the player.
+     * @param url path of the image.
+     */
+    private void loadImagesOnLastPressedButton(JButton[] buttons, AtomicInteger lastPressedButton, InputStream url) {
+        BufferedImage img2 = null;
+        try {
+            if (url != null)
+                img2 = ImageIO.read(url);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        if (img2 != null) {
+            buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
+        }
+    }
+
+    /**
+     * Loads images on buttons.
+     * @param buttons where to put the images.
+     * @param finalI1 the index of the image to load.
+     * @param url the path of the image.
+     */
+    private void loadImages(JButton[] buttons, int finalI1, InputStream url) {
+        BufferedImage img1 = null;
+        try {
+            if (url != null)
+                img1 = ImageIO.read(url);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        if (img1 != null) {
+            buttons[finalI1].setIcon(new ImageIcon(img1));
+        }
     }
 
     /**
@@ -451,7 +466,8 @@ public class GUIDrawer extends ViewSubject {
                         break;
                     }
                 }
-                gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(spoiledPrincessPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
+                if (spoiledPrincessPanel != null)
+                    gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(spoiledPrincessPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
             }
             case MONK -> {
                 message.append("\nTake 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card.");
@@ -463,7 +479,9 @@ public class GUIDrawer extends ViewSubject {
                         break;
                     }
                 }
-                gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(monkPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
+                if (monkPanel != null)
+                    gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(monkPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
+
             }
             case JESTER -> {
                 message.append("\nYou may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.");
@@ -478,7 +496,8 @@ public class GUIDrawer extends ViewSubject {
                             break;
                         }
                     }
-                    gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(jesterPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
+                    if (jesterPanel != null)
+                        gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(jesterPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));
                 }
             }
             case MINSTREL -> {
@@ -625,16 +644,7 @@ public class GUIDrawer extends ViewSubject {
                     case 4 -> url1 = cl1.getResourceAsStream("Dashboard/Students/GreenChk.png");
                     default -> url1 = cl1.getResourceAsStream("Dashboard/Circles.png");
                 }
-                BufferedImage img1 = null;
-                try {
-                    if (url1 != null)
-                        img1 = ImageIO.read(url1);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                if (img1 != null) {
-                    buttons[finalI].setIcon(new ImageIcon(img1));
-                }
+                loadImages(buttons, finalI, url1);
 
                 if (colorChoice.get() != -1 && colorChoice.get() != finalI) {
                     ClassLoader cl2 = this.getClass().getClassLoader();
@@ -647,16 +657,7 @@ public class GUIDrawer extends ViewSubject {
                         case 4 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Green.png");
                         default -> url2 = cl2.getResourceAsStream("Dashboard/Circles.png");
                     }
-                    BufferedImage img2 = null;
-                    try {
-                        if (url2 != null)
-                            img2 = ImageIO.read(url2);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    if (img2 != null) {
-                        buttons[colorChoice.get()].setIcon(new ImageIcon(img2));
-                    }
+                    loadImagesOnLastPressedButton(buttons, colorChoice, url2);
                 }
 
                 colorChoice.set(finalI);
@@ -690,16 +691,7 @@ public class GUIDrawer extends ViewSubject {
                 } else {
                     url1 = cl1.getResourceAsStream("Raw/RedCrossChk.png");
                 }
-                BufferedImage img1 = null;
-                try {
-                    if (url1 != null)
-                        img1 = ImageIO.read(url1);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                if (img1 != null) {
-                    buttons[finalI].setIcon(new ImageIcon(img1));
-                }
+                loadImages(buttons, finalI, url1);
 
                 if (exchangeChoice.get() != -1 && exchangeChoice.get() != finalI) {
                     ClassLoader cl2 = this.getClass().getClassLoader();
@@ -709,16 +701,7 @@ public class GUIDrawer extends ViewSubject {
                     } else {
                         url2 = cl2.getResourceAsStream("Raw/RedCross.png");
                     }
-                    BufferedImage img2 = null;
-                    try {
-                        if (url2 != null)
-                            img2 = ImageIO.read(url2);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    if (img2 != null) {
-                        buttons[exchangeChoice.get()].setIcon(new ImageIcon(img2));
-                    }
+                    loadImagesOnLastPressedButton(buttons, exchangeChoice, url2);
                 }
 
                 exchangeChoice.set(finalI);

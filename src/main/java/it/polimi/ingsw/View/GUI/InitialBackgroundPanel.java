@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * the background of the first screen to appear to the user where he will have to submit his preferences
+ * The background of the first screen to appear to the user where he will have to submit his preferences.
  */
 public class InitialBackgroundPanel extends JPanel {
     /**
-     * Constructor of InitialBackgroundPanel
-     * @param layout layout manager used by this panel
-     * @param screenDimensionX x dimension of the screen
-     * @param screenDimensionY y dimension of the screen
+     * Constructor of InitialBackgroundPanel.
+     * @param layout layout manager used by this panel.
+     * @param screenDimensionX x dimension of the screen.
+     * @param screenDimensionY y dimension of the screen.
      */
     public InitialBackgroundPanel(LayoutManager layout, int screenDimensionX, int screenDimensionY) {
         super(layout);
@@ -26,6 +26,10 @@ public class InitialBackgroundPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(screenDimensionX/4,screenDimensionY/4)),BorderLayout.SOUTH);
     }
 
+    /**
+     * Paints the background on screen.
+     * @param g allows an application to draw onto components that are realized on various devices.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         ClassLoader cl = this.getClass().getClassLoader();

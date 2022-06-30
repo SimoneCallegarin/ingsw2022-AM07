@@ -9,61 +9,47 @@ import java.io.InputStream;
 
 /**
  * This panel represents the Assistant card present in the discard pile of the player or the Mage associated
- * with each player (if the discard pile is empty)
+ * with each player (if the discard pile is empty).
  */
 public class AssistantCardPanel extends JPanel {
+
     /**
-     * index used to identify which image to load
+     * TurnOrder used to identify which image to load.
+     * It's also used at the beginning of the game in order to load a mage image
+     * when there isn't an assistant card in the discard pile.
      */
-    private final int index;
+    private final int turnOrder;
     /**
-     * boolean used to draw either the assistant card or the mage
+     * Boolean used to draw either the assistant card or the mage.
      */
     private final boolean showMage;
 
     /**
-     * Constructor of AssistantCardPanel
-     * @param index index used to identify which image to load
-     * @param showMage boolean used to draw either the assistant card or the mage
+     * Constructor of AssistantCardPanel.
+     * @param turnOrder turn order used to identify which image to load.
+     * @param showMage boolean used to draw either the assistant card or the mage.
      */
-    public AssistantCardPanel(int index, boolean showMage) {
-        this.index = index;
+    public AssistantCardPanel(int turnOrder, boolean showMage) {
+        this.turnOrder = turnOrder;
         this.showMage =showMage;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        BufferedImage img=paintAssistant(index);
-        g.drawImage(img,0,0,getWidth(),getHeight(),null);
-
-    }
-
     /**
-     * If showMage attribute is false, this method load and pass the Assistant card image to the override paintComponent method
-     * in order to draw it on the panel. The image is identified by the index of the card. If the showMAge attribute is true, this method load and pass
-     * the Mage image according to the index passed to the constructor and set as attribute.
-     * @param index the card index used to identify which image to load
+     * If showMage attribute is false, this method load and pass the Assistant card image
+     * to the override paintComponent method in order to draw it on the panel.
+     * The image is identified by the index of the card.
+     * If the showMage attribute is true, this method load and pass the Mage image
+     * according to the turnOrder passed to the constructor and set as attribute.
+     * @param turnOrder the card turnOrder used to identify which image to load.
      * @return the image loaded
      */
-    private BufferedImage paintAssistant(int index){
-        ClassLoader cl=this.getClass().getClassLoader();
+    private BufferedImage paintAssistant(int turnOrder){
+        ClassLoader cl = this.getClass().getClassLoader();
         InputStream url=null;
         if(!showMage) {
-            switch (index) {
-                case 1 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/1.png");
-                case 2 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/2.png");
-                case 3 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/3.png");
-                case 4 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/4.png");
-                case 5 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/5.png");
-                case 6 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/6.png");
-                case 7 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/7.png");
-                case 8 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/8.png");
-                case 9 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/9.png");
-                case 10 -> url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/10.png");
-            }
+            url = cl.getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder + ".png");
         }else{
-            switch (index){
+            switch (turnOrder){
                 case 0 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/MYSTICAL_WIZARD.png");
                 case 1 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/WEALTHY_KING.png");
                 case 2 -> url=cl.getResourceAsStream("GameTable/Assistant_cards/retro/CLEVER_WITCH.png");
@@ -78,8 +64,17 @@ public class AssistantCardPanel extends JPanel {
             e.printStackTrace();
         }
         return img;
-
     }
 
+    /**
+     * Draws the assistant card on the discard pile (or the mage when there's none).
+     * @param g allows an application to draw onto components that are realized on various devices.
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        BufferedImage img = paintAssistant(turnOrder);
+        g.drawImage(img,0,0,getWidth(),getHeight(),null);
+    }
 
 }
