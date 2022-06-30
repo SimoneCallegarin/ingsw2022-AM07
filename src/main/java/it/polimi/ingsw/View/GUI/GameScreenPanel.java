@@ -194,11 +194,12 @@ public class GameScreenPanel extends JPanel {
 
     /**
      * Updates the dashboard DiningStudentPanel.
-     * @param playerID player ID used to identify which dining to update.
      */
-    public void updateStudentDinings(int playerID){
-        dashboardPanels.get(playerID).getDining().resetStudentDining();
-        dashboardPanels.get(playerID).getDining().initializeStudentDining();
+    public void updateStudentDinings(){
+        for(DashboardPanel dashboardPanel:dashboardPanels){
+            dashboardPanel.getDining().resetStudentDining();
+            dashboardPanel.getDining().initializeStudentDining();
+        }
     }
 
     /**

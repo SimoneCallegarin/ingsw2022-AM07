@@ -6,7 +6,8 @@ import java.awt.*;
  * Contains the constants used in the GUI.
  */
 public class GUIConstants {
-
+    public static int frameX;
+    public static int frameY;
     public static final String gameTitle = "Eriantys Game";
 
     public static final int currentActionWidth = 1000;
@@ -67,4 +68,11 @@ public class GUIConstants {
     public static final int studentsGridY = 1;
     public static final int studentsIpadY = -25;
 
+    public static void setFrameX(int frameX) {
+        GUIConstants.frameX = frameX;
+    }
+
+    public static void setFrameY(int frameY) {
+        GUIConstants.frameY = frameY;
+    }
 }

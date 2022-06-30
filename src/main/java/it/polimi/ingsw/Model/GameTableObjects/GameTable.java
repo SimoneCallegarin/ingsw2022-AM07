@@ -107,6 +107,7 @@ public class GameTable implements DenyCardManager {
                     effectSetupFactory.getEffect(this,characterCards.get(i));
             }
         }
+        set3CharacterCards(CharacterCardsName.SPOILED_PRINCESS,CharacterCardsName.THIEF,CharacterCardsName.MONK);
     }
 
     /**

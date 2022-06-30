@@ -109,6 +109,8 @@ public class GUIDrawer extends ViewSubject {
         f.setVisible(true);
         final int screenDimensionX = f.getWidth();
         final int screenDimensionY = f.getHeight();
+        GUIConstants.setFrameX(screenDimensionX);
+        GUIConstants.setFrameY(screenDimensionY);
         // Set the initial content pane where it will be added the user input manager.
         InitialBackgroundPanel initialBackgroundPanel = new InitialBackgroundPanel(new BorderLayout(), screenDimensionX, screenDimensionY);
         // Add it to the general manager.
@@ -154,7 +156,7 @@ public class GUIDrawer extends ViewSubject {
         leftHalf.add(nicknameField, 1);
 
         JPanel buttons = new JPanel(new GridLayout(1, 2));
-        JButton check = new JButton("Check");
+        JButton check = new JButton("Check Length");
         JButton submit = new JButton("Submit");
         check.addActionListener(this::updateDisplay);
         submit.addActionListener(e -> {
@@ -203,7 +205,7 @@ public class GUIDrawer extends ViewSubject {
     public void updateDisplay(ActionEvent e) {
         nicknameDisplay.setText(nicknameField.getText());
         nicknameDisplay.setForeground(Color.GREEN);
-        if (nicknameDisplay.getText().length() < 2 || nicknameDisplay.getText().length() >= 20)
+        if (nicknameDisplay.getText().length() < 2 || nicknameDisplay.getText().length() >= 11)
             nicknameDisplay.setForeground(Color.RED);
         nicknameDisplay.setFont(new Font(SansSerif, Font.ITALIC, 24));
     }
@@ -538,7 +540,7 @@ public class GUIDrawer extends ViewSubject {
 
                 case ENTRANCE_CHANGED -> gameScreenPanel.updateEntrance(modelChanges.getPlayingID());
 
-                case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings(modelChanges.getPlayingID());
+                case STUDENTDINING_CHANGED -> gameScreenPanel.updateStudentDinings();
 
                 case PROFDINING_CHANGED -> gameScreenPanel.updateProfessors();
 
