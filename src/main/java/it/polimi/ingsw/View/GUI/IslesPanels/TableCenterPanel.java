@@ -10,17 +10,15 @@ import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
 import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
 import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
-
 import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
 import it.polimi.ingsw.View.GUI.GameScreenPanel;
+import it.polimi.ingsw.View.GUI.GeneralReservePanel;
+import it.polimi.ingsw.View.GUI.ImagesLoader;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -105,6 +103,10 @@ public class TableCenterPanel extends JPanel {
      * GameScreenPanel reference
      */
     private final GameScreenPanel gsp;
+    /**
+     * Panel representing the general money reserve
+     */
+    private final GeneralReservePanel generalReserve;
 
     /**
      * Constructor of TableCenterPanel
@@ -127,14 +129,12 @@ public class TableCenterPanel extends JPanel {
         //username of the player using the GUI
         this.islesPanels=new ArrayList<>();
         this.assistantAndMoneyPanelList=new ArrayList<>();
-
-
         this.assistantCardPanels=new ArrayList<>();
         this.characterPanels = new ArrayList<>();
         this.gsp = gsp;
-
         this.clickablePanels=new ArrayList<>();
         this.isleLayeredPanels=new ArrayList<>();
+        this.generalReserve=new GeneralReservePanel(storage);
 
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
@@ -144,14 +144,14 @@ public class TableCenterPanel extends JPanel {
         GridBagConstraints centerConstraints=new GridBagConstraints();
 
         //I create five columns, the first and the fifth one will contain the discard pile of each player,
-        //the second and the fourth one will contain two 4x1 grids containing four isles
+        //the second and the fourth one will contain two 4x1 grids containing four islesImages
         //the third one will contain another 3x1 panel with two 1x2 grids on the top and on the bottom, while in the
         //center cell there are the clouds and the character cards
         isleContainerDx=new JPanel(new GridBagLayout());
         isleContainerDx.setBackground(Color.CYAN);
         icDxConstraints=new GridBagConstraints();
 
-        //The center panel containing two rows of isles and a center row containing the clouds and the character cards
+        //The center panel containing two rows of islesImages and a center row containing the clouds and the character cards
         JPanel isleContainerCenter = new JPanel(new GridBagLayout());
         isleContainerCenter.setBackground(Color.CYAN);
         isleContainerSx=new JPanel(new GridBagLayout());
@@ -203,22 +203,11 @@ public class TableCenterPanel extends JPanel {
         assistantAndMoneyContainerDx.add(assistantAndMoneyPanel4);
 
         //array list to store isle images
-        ArrayList<BufferedImage> isles = new ArrayList<>();
-
-        //classloader to load images from resource folder
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url;
+        ArrayList<BufferedImage> islesImages = new ArrayList<>();
 
         for (int i = 1; i < 4; i++) {
-            BufferedImage img = null;
-            url = cl.getResourceAsStream("GameTable/Isles/island"+i+".png");
-            try {
-                assert url != null;
-                img = ImageIO.read(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            isles.add(img);
+            BufferedImage img= ImagesLoader.isleImageLoader(this.getClass().getClassLoader(),i);
+            islesImages.add(img);
         }
 
         int idxSx=0;
@@ -306,11 +295,11 @@ public class TableCenterPanel extends JPanel {
         c.gridx=4;
         add(assistantAndMoneyContainerDx,c);
 
-        //initialize the isles
+        //initialize the islesImages
         for(int i=0;i<12;i++){
             JLayeredPane isleLayeredPane=new JLayeredPane();
             JPanel clickablePanel=new JPanel();
-            IslePanel islePanel=new IslePanel(storage,i, isles, students, towers);
+            IslePanel islePanel=new IslePanel(storage,i, islesImages, students, towers);
 
             clickablePanel.setOpaque(false);
             clickablePanel.setBackground(Color.YELLOW);
@@ -395,73 +384,89 @@ public class TableCenterPanel extends JPanel {
             second1x2constraints.weighty=1;
             second1x2constraints.fill=GridBagConstraints.BOTH;
             secondIsleContainer1x2.add(isleLayeredPanels.get(8),second1x2constraints);
-
             second1x2constraints.gridx++;
             secondIsleContainer1x2.add(isleLayeredPanels.get(7),second1x2constraints);
-
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridx=0;
             centerConstraints.gridy=0;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=0.99;
+            centerConstraints.weighty=0.6;
             isleContainerCenter.add(firstIsleContainer1x2,centerConstraints);
 
-            centerConstraints.fill=GridBagConstraints.BOTH;
-            centerConstraints.gridy=1;
-            centerConstraints.weighty=1;
-            centerConstraints.weightx=1;
+            JPanel centerContainer=new JPanel(new GridBagLayout());
+            centerContainer.setBackground(Color.CYAN);
+            GridBagConstraints constraints=new GridBagConstraints();
+
             cloudsContainerPanel=new CloudsContainerPanel(storage,viewObservers,this, students);
             cloudsContainerPanel.setBackground(Color.CYAN);
-            isleContainerCenter.add(cloudsContainerPanel,centerConstraints);
+            constraints.fill=GridBagConstraints.BOTH;
+            constraints.gridx=0;
+            constraints.gridy=0;
+            constraints.weightx=1;
+            constraints.weighty=0.8;
+            centerContainer.add(cloudsContainerPanel,constraints);
 
             if(storage.isExpertMode()) {
+                constraints.gridy++;
+                constraints.weighty=0.3;
+                constraints.weightx=0;
+                constraints.fill=GridBagConstraints.VERTICAL;
+                centerContainer.add(generalReserve,constraints);
                 //panel that contains the character cards
+                constraints.gridy++;
+                constraints.fill=GridBagConstraints.BOTH;
+                constraints.weightx=1;
+                constraints.weighty=1;
                 JPanel charactersContainer = new JPanel(new GridLayout(1, 3));
                 charactersContainer.setBackground(Color.CYAN);
-                centerConstraints.fill = GridBagConstraints.BOTH;
-                centerConstraints.gridy = 2;
-                centerConstraints.weightx = 1;
-                centerConstraints.weighty = 1;
                 for (int i = 0; i < 3; i++)
                     characterPanels.add(new CharacterPanel(storage,storage.getGameTable().getCharacterCard(i).getCharacterCardName(),
                             i,students,checkedStudents, this, viewObservers));
                 charactersContainer.add(characterPanels.get(0));
                 charactersContainer.add(characterPanels.get(1));
                 charactersContainer.add(characterPanels.get(2));
-                isleContainerCenter.add(charactersContainer, centerConstraints);
+                centerContainer.add(charactersContainer,constraints);
             }else{
-                centerConstraints.fill = GridBagConstraints.BOTH;
-                centerConstraints.gridy = 2;
-                centerConstraints.weightx = 1;
-                centerConstraints.weighty = 1;
+                constraints.gridy++;
+                constraints.fill=GridBagConstraints.BOTH;
+                constraints.weightx=1;
+                constraints.weighty=1;
                 JPanel emptyPanel=new JPanel();
                 emptyPanel.setOpaque(false);
                 emptyPanel.setBackground(Color.CYAN);
-                isleContainerCenter.add(emptyPanel,centerConstraints);
+                centerContainer.add(emptyPanel,constraints);
             }
+            centerConstraints.fill=GridBagConstraints.BOTH;
+            centerConstraints.gridy=1;
+            centerConstraints.weighty=1;
+            centerConstraints.weightx=1;
+            isleContainerCenter.add(centerContainer,centerConstraints);
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridy++;
             centerConstraints.weightx=0.5;
-            centerConstraints.weighty=1;
+            centerConstraints.weighty=0.55;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
 
         firstIsleContainer1x2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         secondIsleContainer1x2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         cloudsContainerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        //set sizes of isles and clickablepanels
+        //set sizes of islesImages and clickablepanels
         int x=0;
         int y=0;
         int width= (int) Math.round(frameWidth/(7.5));
         int height= frameHeight/4;
         for(int i=0;i<islesPanels.size();i++){
-
             islesPanels.get(i).setBounds(x,y,width,height);
             clickablePanels.get(i).setBounds(x,y,width,height);
             islesPanels.get(i).repaint();
             clickablePanels.get(i).repaint();
         }
+    }
+
+    public void updateGeneralReserve(){
+        generalReserve.initializeGeneralReserve();
     }
 
     /**

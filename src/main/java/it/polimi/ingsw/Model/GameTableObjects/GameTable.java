@@ -180,42 +180,6 @@ public class GameTable implements DenyCardManager {
     }
 
     /**
-     * TESTING PURPOSE ONLY:
-     * Deletes all the other character cards created and creates 3 new character cards received in input.
-     */
-    private void set3CharacterCards(CharacterCardsName characterCardsName0,CharacterCardsName characterCardsName1,CharacterCardsName characterCardsName2){
-        for(int index = 0;index<3;index++){
-            switch (getCharacterCard(index).getCharacterCardName()) {
-                case MONK, JESTER, SPOILED_PRINCESS -> {
-                    for(RealmColors colors : RealmColors.values()) {
-                        for(int i=getCharacterCard(index).getStudentsByColor(colors); i>0;i--){
-                            getBag().addStudent(colors);
-                            getCharacterCard(index).removeStudent(colors);
-                        }
-                    }
-                }
-                case GRANDMA_HERBS -> {
-                    for(int i=0;i<4;i++) {
-                        addDenyCard();
-                        getCharacterCard(index).removeDenyCard();
-                    }
-                }
-            }
-        }
-
-        characterCards.clear();
-        characterCards.add(new CharacterCard(characterCardsName0));
-        characterCards.add(new CharacterCard(characterCardsName1));
-        characterCards.add(new CharacterCard(characterCardsName2));
-        if(characterCardsName0.equals(CharacterCardsName.MONK)||characterCardsName0.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName0.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName0.equals(CharacterCardsName.JESTER))
-            effectSetupFactory.getEffect(this,characterCards.get(0));
-        if(characterCardsName1.equals(CharacterCardsName.MONK)||characterCardsName1.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName1.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName1.equals(CharacterCardsName.JESTER))
-            effectSetupFactory.getEffect(this,characterCards.get(1));
-        if(characterCardsName2.equals(CharacterCardsName.MONK)||characterCardsName2.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName2.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName2.equals(CharacterCardsName.JESTER))
-            effectSetupFactory.getEffect(this,characterCards.get(2));
-    }
-
-    /**
      * Getter method for the clouds.
      * @return number of clouds on the game table.
      */
