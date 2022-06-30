@@ -1,37 +1,39 @@
 package it.polimi.ingsw.View.GUI.IslesPanels;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+
+import static it.polimi.ingsw.View.GUI.GUIConstants.denyCardDimension;
+import static it.polimi.ingsw.View.GUI.ImagesLoader.denyCardImageLoader;
 
 /**
- * Panel representing the Deny card game object placed on isle or on Grandma herbs character card
+ * Panel representing the Deny card game object placed on isle or on Grandma herbs character card.
  */
 public class DenyCardPanel extends JPanel {
+
+    /**
+     * Deny card image.
+     */
+    private final BufferedImage denyCardImage;
+
     /**
      * Constructor of DenyCardPanel
      */
     public DenyCardPanel() {
+        this.denyCardImage = denyCardImageLoader();
         setOpaque(true);
-        setPreferredSize(new Dimension(25,25));
+        setPreferredSize(denyCardDimension);
         setBackground(Color.CYAN);
     }
 
+    /**
+     * Paints the deny card on screen.
+     * @param g allows an application to draw onto components that are realized on various devices.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ClassLoader cl=this.getClass().getClassLoader();
-        InputStream url=cl.getResourceAsStream("GameTable/Isles/deny_island_icon.png");
-        BufferedImage img=null;
-        try{
-            assert url != null;
-            img= ImageIO.read(url);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        g.drawImage(img,0,0,getWidth(),getHeight(),null);
+        g.drawImage(denyCardImage,0,0,getWidth(),getHeight(),null);
     }
 }

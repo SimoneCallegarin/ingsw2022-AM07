@@ -11,88 +11,96 @@ import it.polimi.ingsw.View.GUI.IslesPanels.DenyCardPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+import static it.polimi.ingsw.View.GUI.ImagesLoader.characterCardImageLoader;
+
 /**
- * This panel represents a character card on the game table
+ * This panel represents a character card on the game table.
  */
 public class CharacterPanel extends JPanel {
+
     /**
-     * The String representing the character name
+     * The String representing the character name.
      */
     private final String character;
     /**
-     * The index of the character in the game table
+     * The index of the character in the game table.
      */
     private final int characterIndex;
     /**
-     * Constraints for this panel layout
+     * The image associated to this character card.
+     */
+    private final BufferedImage characterCardImage;
+    /**
+     * Constraints for this panel layout.
      */
     private final GridBagConstraints constraints;
     /**
-     * Model storage reference used to retrieve information about the character card state (students/deny cards etc. on it)
+     * Model storage reference used to retrieve information about the character card state
+     * (students/deny cards etc. on it).
      */
     private final ModelStorage storage;
     /**
-     * Array list to store the students images
+     * Array list to store the students images.
      */
     private final ArrayList<BufferedImage> students;
     /**
-     * Array list to store the checked students images
+     * Array list to store the checked students images.
      */
     private final ArrayList<BufferedImage> checkedStudents;
     /**
-     * Array list to store the student buttons placed on the character card
+     * Array list to store the student buttons placed on the character card.
      */
     private final ArrayList<StudentButton> studentButtons;
     /**
-     * Array list of EffectListeners to attach to the game objects available on the card
+     * Array list of EffectListeners to attach to the game objects available on the card.
      */
     private final ArrayList<EffectListener> effectListeners;
     /**
-     * Array list of CharacterStudentListener to attach to this character panel
+     * Array list of CharacterStudentListener to attach to this character panel.
      */
     private final ArrayList<CharacterStudentListener> characterStudentListeners;
     /**
-     * TableCenterPanel reference passed to the listener
+     * TableCenterPanel reference passed to the listener.
      */
     private final TableCenterPanel tcp;
     /**
-     * Array list of viewObservers attached to the view components
+     * Array list of viewObservers attached to the view components.
      */
     private final ArrayList<ViewObserver> viewObservers;
 
     /**
-     * Constructor fo CharacterPanel
-     * @param storage Model storage reference used to retrieve information about the character card state (students/deny cards etc. on it)
-     * @param character The String representing the character name
-     * @param characterIndex The index of the character in the game table
-     * @param students Array list to store the students images
-     * @param checkedStudents Array list to store the checked students images
-     * @param tcp TableCenterPanel reference passed to the listener
-     * @param viewObservers Array list of viewObservers attached to the view components
+     * Constructor fo CharacterPanel.
+     * @param storage Model storage reference used to retrieve information about the character card state
+     *                (students/deny cards etc. on it).
+     * @param character The String representing the character name.
+     * @param characterIndex The index of the character in the game table.
+     * @param students Array list to store the students images.
+     * @param checkedStudents Array list to store the checked students images.
+     * @param tcp TableCenterPanel reference passed to the listener.
+     * @param viewObservers Array list of viewObservers attached to the view components.
      */
     public CharacterPanel(ModelStorage storage, String character, int characterIndex,
                           ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents,
                           TableCenterPanel tcp, ArrayList<ViewObserver> viewObservers) {
 
-        this.studentButtons=new ArrayList<>();
+        this.character = character;
+        this.characterIndex = characterIndex;
+        this.characterCardImage = characterCardImageLoader(character);
+        this.checkedStudents = checkedStudents;
+        this.students = students;
+        this.studentButtons = new ArrayList<>();
         this.effectListeners = new ArrayList<>();
         this.characterStudentListeners = new ArrayList<>();
         this.tcp = tcp;
         this.viewObservers = viewObservers;
-        this.character=character;
-        this.characterIndex = characterIndex;
-        this.constraints=new GridBagConstraints();
-        this.storage=storage;
-        this.students=students;
-        this.checkedStudents=checkedStudents;
+        this.constraints = new GridBagConstraints();
+        this.storage = storage;
 
         setBorder(BorderFactory.createEmptyBorder());
         setLayout(new GridBagLayout());
@@ -102,48 +110,31 @@ public class CharacterPanel extends JPanel {
         initializeCharacter();
     }
 
+    /**
+     * Paints the character card on screen.
+     * @param g allows an application to draw onto components that are realized on various devices.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ClassLoader cl=this.getClass().getClassLoader();
-        InputStream url=null;
-        switch (character){
-            case "MONK"->url=cl.getResourceAsStream("Character_cards/MONK.jpg");
-            case "FARMER"->url=cl.getResourceAsStream("Character_cards/FARMER.jpg");
-            case "HERALD"->url=cl.getResourceAsStream("Character_cards/HERALD.jpg");
-            case "MAGICAL_LETTER_CARRIER"->url=cl.getResourceAsStream("Character_cards/MAGICAL_LETTER_CARRIER.jpg");
-            case "GRANDMA_HERBS"->url=cl.getResourceAsStream("Character_cards/GRANDMA_HERBS.jpg");
-            case "CENTAUR"->url=cl.getResourceAsStream("Character_cards/CENTAUR.jpg");
-            case "JESTER"->url=cl.getResourceAsStream("Character_cards/JESTER.jpg");
-            case "KNIGHT"->url=cl.getResourceAsStream("Character_cards/KNIGHT.jpg");
-            case "FUNGIST"->url=cl.getResourceAsStream("Character_cards/FUNGIST.jpg");
-            case "MINSTREL"->url=cl.getResourceAsStream("Character_cards/MINSTREL.jpg");
-            case "SPOILED_PRINCESS"->url=cl.getResourceAsStream("Character_cards/SPOILED_PRINCESS.jpg");
-            case "THIEF"->url=cl.getResourceAsStream("Character_cards/THIEF.jpg");
-        }
-        BufferedImage img=null;
-        try{
-            assert url != null;
-            img= ImageIO.read(url);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        g.drawImage(img,0,0,getWidth(),getHeight(),null);
+        g.drawImage(characterCardImage,characterCardPositionX,characterCardPositionY,getWidth(),getHeight(),null);
     }
 
     /**
-     * This method place game objects panel on this card if they are present. Game objects are present on the card only if the card name is
-     * MONK, JESTER, SPOILED_PRINCESS or GRANDMA_HERBS. This method is called after the resetCharacter method in order to always place the components
-     * on an empty panel
+     * This method place game objects panel on this card if they are present.
+     * Game objects are present on the card only if the card name is
+     * MONK, JESTER, SPOILED_PRINCESS or GRANDMA_HERBS.
+     * This method is called after the resetCharacter method
+     * in order to always place the components on an empty panel.
      */
     public void initializeCharacter(){
-        constraints.gridx=0;
-        constraints.gridy=0;
+        constraints.gridx = characterCardGridX;
+        constraints.gridy = characterCardGridY;
         switch (character){
             case "MONK", "JESTER","SPOILED_PRINCESS" ->{
                 for(RealmColors color: RealmColors.values()){
-                    for(int i=0;i<storage.getGameTable().getCharacterCard(characterIndex).getStudentsByColor(color);i++){
-                        StudentButton studentButton=new StudentButton(color,students,checkedStudents);
+                    for(int i=0; i<storage.getGameTable().getCharacterCard(characterIndex).getStudentsByColor(color); i++){
+                        StudentButton studentButton = new StudentButton(color,students,checkedStudents);
                         add(studentButton,constraints);
                         studentButtons.add(studentButton);
                         constraints.gridx++;
@@ -151,15 +142,14 @@ public class CharacterPanel extends JPanel {
                 }
             }
             case "GRANDMA_HERBS"->{
-                for(int i=0;i<storage.getGameTable().getCharacterCard(characterIndex).getDenyCardsOnCharacterCard();i++){
+                for(int i=0; i<storage.getGameTable().getCharacterCard(characterIndex).getDenyCardsOnCharacterCard();  i++){
                     add(new DenyCardPanel(),constraints);
                     constraints.gridx++;
                 }
             }
-
         }
         if(storage.getGameTable().getCharacterCard(characterIndex).used()) {
-            constraints.gridx=0;
+            constraints.gridx = characterCardGridX;
             constraints.gridy++;
             constraints.gridy++;
             add(new CoinPanel(),constraints);
@@ -170,8 +160,9 @@ public class CharacterPanel extends JPanel {
     }
 
     /**
-     * Adds a MouseListener to every student of the Character Card in order to send an ACTIVATE_ATOMIC_EFFECT or a COLOR_VALUE message to the server, depending on the character.
-     * @param dashboard the dashboard associated with the one who played the Character Card
+     * Adds a MouseListener to every student of the Character Card in order to send
+     * an ACTIVATE_ATOMIC_EFFECT or a COLOR_VALUE message to the server, depending on the character.
+     * @param dashboard the dashboard associated with the one who played the Character Card.
      */
     public void setStudentsClickable(DashboardPanel dashboard) {
         if (character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {
@@ -195,14 +186,12 @@ public class CharacterPanel extends JPanel {
      */
     public void removeStudentsClickable() {
         if ((character.equals(CharacterCardsName.SPOILED_PRINCESS.toString())) && !effectListeners.isEmpty()) {
-            for (int i = 0; i < studentButtons.size(); i++) {
+            for (int i = 0; i < studentButtons.size(); i++)
                 studentButtons.get(i).removeMouseListener(effectListeners.get(i));
-            }
         }
         else if ((character.equals(CharacterCardsName.MONK.toString()) || character.equals(CharacterCardsName.JESTER.toString())) && !characterStudentListeners.isEmpty()) {
-            for (int i = 0; i < studentButtons.size(); i++) {
+            for (int i = 0; i < studentButtons.size(); i++)
                 studentButtons.get(i).removeMouseListener(characterStudentListeners.get(i));
-            }
         }
     }
 
@@ -217,8 +206,16 @@ public class CharacterPanel extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Getter method for the index of the character card.
+     * @return the index of this character card.
+     */
     public int getCharacterIndex() { return characterIndex; }
 
+    /**
+     * Getter method for the character card name.
+     * @return the name of this character card.
+     */
     public String getCharacterName() { return character; }
 
 }

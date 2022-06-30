@@ -7,12 +7,9 @@ import it.polimi.ingsw.View.GUI.EventListeners.CloudListener;
 import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import static it.polimi.ingsw.View.GUI.ImagesLoader.cloudImageLoader;
@@ -60,7 +57,7 @@ public class CloudPanel extends JPanel {
         this.cloudID = cloudID;
         this.students = students;
         this.cloudListener = new CloudListener(viewObservers,tableCenterPanel);
-        this.cloudImage = cloudImageLoader(this.getClass().getClassLoader());
+        this.cloudImage = cloudImageLoader();
         this.constraints = new GridBagConstraints();
 
         setLayout(new GridBagLayout());

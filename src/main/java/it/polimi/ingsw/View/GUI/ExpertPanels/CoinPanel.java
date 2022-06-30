@@ -1,30 +1,34 @@
 package it.polimi.ingsw.View.GUI.ExpertPanels;
 
-import it.polimi.ingsw.View.GUI.ImagesLoader;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+
+import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+import static it.polimi.ingsw.View.GUI.ImagesLoader.coinImageLoader;
 
 /**
  * Panel representing a coin, used when placed on a used character card
  */
 public class CoinPanel extends JPanel {
+
     /**
-     * Constructor of CoinPanel
+     * Image of the coin.
+     */
+    private final BufferedImage coinImage;
+
+    /**
+     * Constructor of CoinPanel.
      */
     public CoinPanel() {
         setOpaque(false);
-        setPreferredSize(new Dimension(40,40));
+        setPreferredSize(coinDimension);
+        coinImage = coinImageLoader();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        BufferedImage img= ImagesLoader.coinsImageLoader(this.getClass().getClassLoader());
-        g.drawImage(img,0,0,getWidth(),getHeight(),null);
+        g.drawImage(coinImage,coinPositionX,coinPositionY,getWidth(),getHeight(),null);
     }
 }

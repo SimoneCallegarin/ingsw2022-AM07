@@ -16,8 +16,7 @@ public class ExchangeChoiceButton extends JButton  {
     public ExchangeChoiceButton(int exchange) {
         setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
-        ClassLoader cl = this.getClass().getClassLoader();
-        setIcon(new ImageIcon(exchangeChoiceImageLoader(exchange,cl)));
+        setIcon(new ImageIcon(exchangeChoiceImageLoader(exchange)));
     }
 
 }
