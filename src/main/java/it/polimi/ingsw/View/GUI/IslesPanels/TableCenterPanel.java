@@ -409,7 +409,7 @@ public class TableCenterPanel extends JPanel {
 
             centerConstraints.fill=GridBagConstraints.BOTH;
             centerConstraints.gridy=1;
-            centerConstraints.weighty=1;
+            centerConstraints.weighty=0.65;
             centerConstraints.weightx=1;
             cloudsContainerPanel=new CloudsContainerPanel(storage,viewObservers,this, students);
             cloudsContainerPanel.setBackground(Color.CYAN);

@@ -552,7 +552,6 @@ public class GUIDrawer extends ViewSubject {
 
                 case ISLELAYOUT_CHANGED -> {
                     if (modelChanges.isLayoutChanged()) {
-
                         for(int j=0;j<modelChanges.getIslesToRemove();j++) {
                             gameScreenPanel.getTableCenterPanel().updateIsleLayout();
                         }
