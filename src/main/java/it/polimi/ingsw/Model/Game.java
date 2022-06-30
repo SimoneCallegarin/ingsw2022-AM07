@@ -357,7 +357,7 @@ public class Game extends ModelSubject {
         if (gamePhase == GamePhases.ACTION_PHASE && actionPhase == ActionPhases.MOVE_STUDENTS && currentActivePlayer == players.get(playerID).getOrder()) {
             if (colorIndex >= 0 && colorIndex <= 4) {
                 if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(color) > 0) {
-                    if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) < 10) {
+                    if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) <= 10) {
                         players.get(playerID).getDashboard().getEntrance().removeStudent(color);
                         players.get(playerID).getDashboard().getDiningRoom().addStudent(color);
                         // if FARMER character card is played by the player this turn
@@ -926,8 +926,12 @@ public class Game extends ModelSubject {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 <= 4)) {
                         if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) > 0) {
                             if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) > 0) {
-                                effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
-                                notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2)) <= 10) {
+                                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                }
+                                else
+                                    notifyObserver(obs -> obs.onKO(playerID, "Your " + RealmColors.getColor(value2).toString() + " Dining Room is full! You can't add " + RealmColors.getColor(value2) + " students, please select another color"));
                             }
                             else
                                 notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + RealmColors.getColor(value2).toString() + " students, please select another color"));
@@ -943,8 +947,12 @@ public class Game extends ModelSubject {
                     if ((value1 >= 0 && value1 <= 4) && (value2 >= 0 && value2 <= 4)) {
                         if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1)) > 0) {
                             if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) > 0) {
-                                effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
-                                notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2)) <= 10) {
+                                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);
+                                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);
+                                }
+                                else
+                                    notifyObserver(obs -> obs.onKO(playerID, "Your " + RealmColors.getColor(value2).toString() + " Dining Room is full! You can't add " + RealmColors.getColor(value2) + " students, please select another color"));
                             }
                             else
                                 notifyObserver(obs -> obs.onKO(playerID, "You don't have enough " + RealmColors.getColor(value2).toString() + " students, please select another color"));
@@ -1136,6 +1144,9 @@ public class Game extends ModelSubject {
      * Setter method for the action phase.
      * @param actionPhase indicates in which phase of the action phase we are.
      */
-    public void setActionPhase(ActionPhases actionPhase) { this.actionPhase = actionPhase; }
+    public void setActionPhase(ActionPhases actionPhase) {
+        atomicEffectCounter = 0;
+        this.actionPhase = actionPhase;
+    }
 
 }

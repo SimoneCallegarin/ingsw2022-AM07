@@ -176,14 +176,14 @@ public class CharacterPanel extends JPanel {
             for (StudentButton studentButton : studentButtons) {
                 EffectListener el = new EffectListener(viewObservers, -1, tcp, dashboard.getEntrance());
                 effectListeners.add(el);
-                studentButton.addMouseListener(new EffectListener(viewObservers, -1, tcp, dashboard.getEntrance()));
+                studentButton.addMouseListener(el);
             }
         }
         else if (character.equals(CharacterCardsName.MONK.toString()) || character.equals(CharacterCardsName.JESTER.toString())) {
             for (StudentButton studentButton : studentButtons) {
                 CharacterStudentListener ccl = new CharacterStudentListener(viewObservers, tcp, dashboard.getEntrance(), character);
                 characterStudentListeners.add(ccl);
-                studentButton.addMouseListener(new CharacterStudentListener(viewObservers, tcp, dashboard.getEntrance(), character));
+                studentButton.addMouseListener(ccl);
             }
         }
     }

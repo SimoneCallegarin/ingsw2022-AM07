@@ -614,9 +614,20 @@ public class GUIDrawer extends ViewSubject {
      * @param serviceMessage the KO to display
      */
     public void showKOMessage(String serviceMessage) {
-        if (serviceMessage.equals("You don't have enough money to activate this card, please select another one") || serviceMessage.equals("This cloud is empty! Please select another one"))
+        if (reactivateCharacters(serviceMessage))
             gameScreenPanel.setCharactersClickable(modelChanges.getPlayerID());
         JOptionPane.showMessageDialog(f,serviceMessage,"Service message",JOptionPane.PLAIN_MESSAGE);
+    }
+
+    /**
+     * Checks if it is necessary to set Character Cards clickable again after a KO.
+     * @param serviceMessage the message to check
+     * @return true if the KO message has been received immediately after a listener set Character Cards as non-clickable
+     */
+    private boolean reactivateCharacters(String serviceMessage) {
+        return serviceMessage.equals("You don't have enough money to activate this card, please select another one") ||
+               serviceMessage.equals("This cloud is empty! Please select another one") ||
+               serviceMessage.equals("There's no deny cards left on GRANDMA_HERBS, you can't activate this card");
     }
 
     /**
