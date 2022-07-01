@@ -82,6 +82,11 @@ java -jar server.jar
 
 Di seguito vi sarà richiesto di inserire la porta su cui mettere in ascolto il server, una volta inserita e confermata la porta il server sarà pronto al funzionamento.
 
+In alternativa:
+```
+java -jar server.jar hostName portNumber
+```
+
 
 ### Note aggiuntive:
 Al fine di rendere l'esperienza di gioco il più godibile possibile sarebbe conveniente eseguire le seguenti operazioni prima di giocare:
