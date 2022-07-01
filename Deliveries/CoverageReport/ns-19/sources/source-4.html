@@ -1,0 +1,257 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > PlayerInformation</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.StorageOfModelInformation</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerInformation (it.polimi.ingsw.View.StorageOfModelInformation)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerInformation</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.StorageOfModelInformation;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.Squads;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.TowerColors;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">8</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;/**
+<i class="no-highlight">11</i>&nbsp; * Class that compress all the player&#39;s information in a light way.
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;public class PlayerInformation {
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Nickname of the player.
+<i class="no-highlight">17</i>&nbsp;     */
+<i class="no-highlight">18</i>&nbsp;    private final String nickname;
+<i class="no-highlight">19</i>&nbsp;    /**
+<i class="no-highlight">20</i>&nbsp;     * Team of the player.
+<i class="no-highlight">21</i>&nbsp;     */
+<i class="no-highlight">22</i>&nbsp;    private final Squads team;
+<i class="no-highlight">23</i>&nbsp;    /**
+<i class="no-highlight">24</i>&nbsp;     * Entrance of the player.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    private HashMap&lt;RealmColors,Integer&gt; entranceStudents;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * Dining room students of the player.
+<i class="no-highlight">29</i>&nbsp;     */
+<i class="no-highlight">30</i>&nbsp;    private HashMap&lt;RealmColors,Integer&gt; diningStudents;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * Dining room professors of the player.
+<i class="no-highlight">33</i>&nbsp;     */
+<i class="no-highlight">34</i>&nbsp;    private HashMap&lt;RealmColors,Integer&gt; diningProfessors;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * An empty hashmap used for this that doesn&#39;t have students on it.
+<i class="no-highlight">37</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">38</i>&nbsp;    private final HashMap&lt;RealmColors,Integer&gt; emptyHashMap = new HashMap&lt;&gt;();</b>
+<i class="no-highlight">39</i>&nbsp;    /**
+<i class="no-highlight">40</i>&nbsp;     * Number of towers of the player.
+<i class="no-highlight">41</i>&nbsp;     */
+<i class="no-highlight">42</i>&nbsp;    private int numOfTowers;
+<i class="no-highlight">43</i>&nbsp;    /**
+<i class="no-highlight">44</i>&nbsp;     * Color of the towers of the player.
+<i class="no-highlight">45</i>&nbsp;     */
+<i class="no-highlight">46</i>&nbsp;    private final TowerColors towerColor;
+<i class="no-highlight">47</i>&nbsp;    /**
+<i class="no-highlight">48</i>&nbsp;     * Quantity of money of the player.
+<i class="no-highlight">49</i>&nbsp;     */
+<i class="no-highlight">50</i>&nbsp;    private int money;
+<i class="no-highlight">51</i>&nbsp;    /**
+<i class="no-highlight">52</i>&nbsp;     * Turn order of the assistant card on the discard pile of the player.
+<i class="no-highlight">53</i>&nbsp;     */
+<i class="no-highlight">54</i>&nbsp;    private int discardPileTurnOrder;
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * Mother nature movement of the assistant card on the discard pile of the player.
+<i class="no-highlight">57</i>&nbsp;     */
+<i class="no-highlight">58</i>&nbsp;    private int discardPileMNMovement;
+<i class="no-highlight">59</i>&nbsp;    /**
+<i class="no-highlight">60</i>&nbsp;     * Turn orders&#39; of the assistant cards on the deck of the player.
+<i class="no-highlight">61</i>&nbsp;     */
+<i class="no-highlight">62</i>&nbsp;    private ArrayList&lt;Integer&gt; assistantCardsTurnOrder;
+<i class="no-highlight">63</i>&nbsp;    /**
+<i class="no-highlight">64</i>&nbsp;     * Mother nature movements&#39; of the assistant cards on the deck of the player.
+<i class="no-highlight">65</i>&nbsp;     */
+<i class="no-highlight">66</i>&nbsp;    private ArrayList&lt;Integer&gt; assistantCardsMNMovement;
+<i class="no-highlight">67</i>&nbsp;
+<i class="no-highlight">68</i>&nbsp;    /**
+<i class="no-highlight">69</i>&nbsp;     * Constructor used in the update manager to build an array of the PlayerModelView of each player
+<i class="no-highlight">70</i>&nbsp;     * at the beginning of the game, containing all the information about each player.
+<i class="no-highlight">71</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">72</i>&nbsp;    PlayerInformation(String nickname, Squads team, HashMap&lt;RealmColors, Integer&gt; entranceStudents, int numOfTowers, TowerColors towerColor, int money) {</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;        fillWith0HashMap();</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;        this.nickname = nickname;</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;        this.team = team;</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;        this.entranceStudents = entranceStudents;</b>
+<b class="nc"><i class="no-highlight">77</i>&nbsp;        this.diningStudents = emptyHashMap;</b>
+<b class="nc"><i class="no-highlight">78</i>&nbsp;        this.diningProfessors = emptyHashMap;</b>
+<b class="nc"><i class="no-highlight">79</i>&nbsp;        this.numOfTowers = numOfTowers;</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;        this.towerColor = towerColor;</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;        this.money = money;</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        this.discardPileTurnOrder = 0;</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        this.discardPileMNMovement = 0;</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;        this.assistantCardsTurnOrder = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">85</i>&nbsp;        for (int i = 0; i &lt; 10; i++)</b>
+<b class="nc"><i class="no-highlight">86</i>&nbsp;            assistantCardsTurnOrder.add(i+1);</b>
+<b class="nc"><i class="no-highlight">87</i>&nbsp;        this.assistantCardsMNMovement = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">88</i>&nbsp;        for (int i = 0; i &lt; 10; i++)</b>
+<b class="nc"><i class="no-highlight">89</i>&nbsp;            assistantCardsMNMovement.add(i/2+1);</b>
+<i class="no-highlight">90</i>&nbsp;    }
+<i class="no-highlight">91</i>&nbsp;
+<i class="no-highlight">92</i>&nbsp;    /**
+<i class="no-highlight">93</i>&nbsp;     * Fills the empty HashMap with zeroes.
+<i class="no-highlight">94</i>&nbsp;     */
+<i class="no-highlight">95</i>&nbsp;    private void fillWith0HashMap() {
+<b class="nc"><i class="no-highlight">96</i>&nbsp;        for (RealmColors color : RealmColors.values())</b>
+<b class="nc"><i class="no-highlight">97</i>&nbsp;            emptyHashMap.put(color,0);</b>
+<i class="no-highlight">98</i>&nbsp;    }
+<i class="no-highlight">99</i>&nbsp;
+<i class="no-highlight">100</i>&nbsp;    // GETTERS:
+<i class="no-highlight">101</i>&nbsp;
+<b class="nc"><i class="no-highlight">102</i>&nbsp;    public String getNickname() { return nickname; }</b>
+<i class="no-highlight">103</i>&nbsp;
+<i class="no-highlight">104</i>&nbsp;    public int getTeam() {
+<b class="nc"><i class="no-highlight">105</i>&nbsp;        if(team==Squads.SQUAD1)</b>
+<b class="nc"><i class="no-highlight">106</i>&nbsp;            return 1;</b>
+<b class="nc"><i class="no-highlight">107</i>&nbsp;        if(team==Squads.SQUAD2)</b>
+<b class="nc"><i class="no-highlight">108</i>&nbsp;            return 2;</b>
+<i class="no-highlight">109</i>&nbsp;        else
+<b class="nc"><i class="no-highlight">110</i>&nbsp;            return 0;</b>
+<i class="no-highlight">111</i>&nbsp;    }
+<i class="no-highlight">112</i>&nbsp;
+<b class="nc"><i class="no-highlight">113</i>&nbsp;    public int getEntranceStudents(RealmColors color) { return entranceStudents.get(color); }</b>
+<i class="no-highlight">114</i>&nbsp;
+<b class="nc"><i class="no-highlight">115</i>&nbsp;    public int getDiningStudents(RealmColors color) { return diningStudents.get(color); }</b>
+<i class="no-highlight">116</i>&nbsp;
+<b class="nc"><i class="no-highlight">117</i>&nbsp;    public int getDiningProfessors(RealmColors color) { return diningProfessors.get(color); }</b>
+<i class="no-highlight">118</i>&nbsp;
+<b class="nc"><i class="no-highlight">119</i>&nbsp;    public int getNumOfTowers() { return numOfTowers; }</b>
+<i class="no-highlight">120</i>&nbsp;
+<b class="nc"><i class="no-highlight">121</i>&nbsp;    public TowerColors getTowerColor() { return towerColor; }</b>
+<i class="no-highlight">122</i>&nbsp;
+<b class="nc"><i class="no-highlight">123</i>&nbsp;    public int getMoney() { return money; }</b>
+<i class="no-highlight">124</i>&nbsp;
+<b class="nc"><i class="no-highlight">125</i>&nbsp;    public int getDiscardPileTurnOrder() { return discardPileTurnOrder; }</b>
+<i class="no-highlight">126</i>&nbsp;
+<b class="nc"><i class="no-highlight">127</i>&nbsp;    public int getDiscardPileMNMovement() { return discardPileMNMovement; }</b>
+<i class="no-highlight">128</i>&nbsp;
+<b class="nc"><i class="no-highlight">129</i>&nbsp;    public ArrayList&lt;Integer&gt; getAssistantCardsTurnOrder() { return assistantCardsTurnOrder; }</b>
+<i class="no-highlight">130</i>&nbsp;
+<b class="nc"><i class="no-highlight">131</i>&nbsp;    public ArrayList&lt;Integer&gt; getAssistantCardsMNMovement() { return assistantCardsMNMovement; }</b>
+<i class="no-highlight">132</i>&nbsp;
+<i class="no-highlight">133</i>&nbsp;    // SETTERS:
+<i class="no-highlight">134</i>&nbsp;
+<b class="nc"><i class="no-highlight">135</i>&nbsp;    public void setEntranceStudents(HashMap&lt;RealmColors,Integer&gt; entranceStudents) { this.entranceStudents = entranceStudents; }</b>
+<i class="no-highlight">136</i>&nbsp;
+<b class="nc"><i class="no-highlight">137</i>&nbsp;    public void setDiningStudents(HashMap&lt;RealmColors,Integer&gt; diningStudents) { this.diningStudents = diningStudents; }</b>
+<i class="no-highlight">138</i>&nbsp;
+<b class="nc"><i class="no-highlight">139</i>&nbsp;    public void setDiningProfessors(HashMap&lt;RealmColors,Integer&gt; diningProfessors) { this.diningProfessors = diningProfessors; }</b>
+<i class="no-highlight">140</i>&nbsp;
+<b class="nc"><i class="no-highlight">141</i>&nbsp;    public void setNumOfTowers(int numOfTowers) { this.numOfTowers = numOfTowers; }</b>
+<i class="no-highlight">142</i>&nbsp;
+<b class="nc"><i class="no-highlight">143</i>&nbsp;    public void setMoney(int money) { this.money = money; }</b>
+<i class="no-highlight">144</i>&nbsp;
+<b class="nc"><i class="no-highlight">145</i>&nbsp;    public void setDiscardPileTurnOrder(int turnOrder) { this.discardPileTurnOrder = turnOrder; }</b>
+<i class="no-highlight">146</i>&nbsp;
+<b class="nc"><i class="no-highlight">147</i>&nbsp;    public void setDiscardPileMNMovement(int mnMovement) { this.discardPileMNMovement = mnMovement; }</b>
+<i class="no-highlight">148</i>&nbsp;
+<b class="nc"><i class="no-highlight">149</i>&nbsp;    public void setAssistantCardsTurnOrder(ArrayList&lt;Integer&gt; assistantCardsTurnOrder) { this.assistantCardsTurnOrder = assistantCardsTurnOrder; }</b>
+<i class="no-highlight">150</i>&nbsp;
+<b class="nc"><i class="no-highlight">151</i>&nbsp;    public void setAssistantCardsMNMovement(ArrayList&lt;Integer&gt; assistantCardsMNMovement) { this.assistantCardsMNMovement = assistantCardsMNMovement; }</b>
+<i class="no-highlight">152</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

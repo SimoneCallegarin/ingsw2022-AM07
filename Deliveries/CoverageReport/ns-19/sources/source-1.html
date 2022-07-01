@@ -1,0 +1,332 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > GameTableInformation</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.StorageOfModelInformation</a>
+</div>
+
+<h1>Coverage Summary for Class: GameTableInformation (it.polimi.ingsw.View.StorageOfModelInformation)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameTableInformation</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameTableInformation$CharacterCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameTableInformation$Cloud</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameTableInformation$Isle</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/47)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.StorageOfModelInformation;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.TowerColors;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">7</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/**
+<i class="no-highlight">10</i>&nbsp; * Class that compress all the game table information in a light way.
+<i class="no-highlight">11</i>&nbsp; */
+<i class="no-highlight">12</i>&nbsp;public class GameTableInformation {
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    // We used records for each component of the game table because each time there&#39;s a move that changes
+<i class="no-highlight">15</i>&nbsp;    // the game table the UpdateHandler will create a new variable record containing all the updated information,
+<i class="no-highlight">16</i>&nbsp;    // and it will place it in the store removing the previous one.
+<i class="no-highlight">17</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;    /**
+<i class="no-highlight">19</i>&nbsp;     * Character card record containing all useful information about a character card.
+<i class="no-highlight">20</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">21</i>&nbsp;    public record CharacterCard(String characterCardName, int characterCardCost,</b>
+<i class="no-highlight">22</i>&nbsp;                                HashMap&lt;RealmColors,Integer&gt; studentsOnCharacterCard,
+<i class="no-highlight">23</i>&nbsp;                                int denyCardsOnCharacterCard,
+<i class="no-highlight">24</i>&nbsp;                                String description, boolean used) {
+<i class="no-highlight">25</i>&nbsp;
+<i class="no-highlight">26</i>&nbsp;        // GETTERS:
+<i class="no-highlight">27</i>&nbsp;
+<b class="nc"><i class="no-highlight">28</i>&nbsp;        public String getCharacterCardName() { return characterCardName; }</b>
+<i class="no-highlight">29</i>&nbsp;
+<b class="nc"><i class="no-highlight">30</i>&nbsp;        public int getCharacterCardCost() { return characterCardCost; }</b>
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;        public int getNumberOfStudents() {
+<b class="nc"><i class="no-highlight">33</i>&nbsp;            int sum=0;</b>
+<b class="nc"><i class="no-highlight">34</i>&nbsp;            for (RealmColors colors : RealmColors.values())</b>
+<b class="nc"><i class="no-highlight">35</i>&nbsp;                sum = sum + studentsOnCharacterCard.get(colors);</b>
+<b class="nc"><i class="no-highlight">36</i>&nbsp;            return sum;</b>
+<i class="no-highlight">37</i>&nbsp;        }
+<i class="no-highlight">38</i>&nbsp;
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        public int getStudentsByColor(RealmColors color) { return studentsOnCharacterCard.get(color); }</b>
+<i class="no-highlight">40</i>&nbsp;
+<b class="nc"><i class="no-highlight">41</i>&nbsp;        public int getDenyCardsOnCharacterCard() { return denyCardsOnCharacterCard; }</b>
+<i class="no-highlight">42</i>&nbsp;
+<b class="nc"><i class="no-highlight">43</i>&nbsp;        public String getDescription() { return description; }</b>
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;        @Override
+<i class="no-highlight">46</i>&nbsp;        public boolean used() {
+<b class="nc"><i class="no-highlight">47</i>&nbsp;            return used;</b>
+<i class="no-highlight">48</i>&nbsp;        }
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    /**
+<i class="no-highlight">52</i>&nbsp;     * Isle record containing all useful information about an isle.
+<i class="no-highlight">53</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">54</i>&nbsp;    public record Isle(HashMap&lt;RealmColors,Integer&gt; studentsOnIsle, int towerNumber, TowerColors towerColor, int denyCards, boolean motherNatureIsPresent)  {</b>
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;        // GETTERS:
+<i class="no-highlight">57</i>&nbsp;
+<b class="nc"><i class="no-highlight">58</i>&nbsp;        public int getStudentsByColor(RealmColors color) { return studentsOnIsle.get(color); }</b>
+<i class="no-highlight">59</i>&nbsp;
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        public int getTowerNumber() { return towerNumber; }</b>
+<i class="no-highlight">61</i>&nbsp;
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        public TowerColors getTowerColor() { return towerColor; }</b>
+<i class="no-highlight">63</i>&nbsp;
+<b class="nc"><i class="no-highlight">64</i>&nbsp;        public int getDenyCardsNumber() { return denyCards; }</b>
+<i class="no-highlight">65</i>&nbsp;
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        public boolean isMotherNaturePresent() { return motherNatureIsPresent; }</b>
+<i class="no-highlight">67</i>&nbsp;
+<i class="no-highlight">68</i>&nbsp;    }
+<i class="no-highlight">69</i>&nbsp;
+<i class="no-highlight">70</i>&nbsp;    /**
+<i class="no-highlight">71</i>&nbsp;     * Cloud record containing all useful information about a cloud.
+<i class="no-highlight">72</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">73</i>&nbsp;    public record Cloud(HashMap&lt;RealmColors, Integer&gt; studentsOnCloud) {</b>
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;        // GETTERS:
+<i class="no-highlight">76</i>&nbsp;
+<b class="nc"><i class="no-highlight">77</i>&nbsp;        public int getStudentsByColor(RealmColors color) { return studentsOnCloud.get(color); }</b>
+<i class="no-highlight">78</i>&nbsp;
+<i class="no-highlight">79</i>&nbsp;        public int getStudentsOnCloud() {
+<b class="nc"><i class="no-highlight">80</i>&nbsp;            int sum=0;</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;            for (RealmColors color : RealmColors.values())</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;                sum = studentsOnCloud.get(color) + sum;</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;            return sum;</b>
+<i class="no-highlight">84</i>&nbsp;        }
+<i class="no-highlight">85</i>&nbsp;
+<i class="no-highlight">86</i>&nbsp;    }
+<i class="no-highlight">87</i>&nbsp;
+<i class="no-highlight">88</i>&nbsp;    /**
+<i class="no-highlight">89</i>&nbsp;     * Playable character cards on the game table.
+<i class="no-highlight">90</i>&nbsp;     */
+<i class="no-highlight">91</i>&nbsp;    private final ArrayList&lt;CharacterCard&gt; characterCards;
+<i class="no-highlight">92</i>&nbsp;    /**
+<i class="no-highlight">93</i>&nbsp;     * Isles on the game table.
+<i class="no-highlight">94</i>&nbsp;     */
+<i class="no-highlight">95</i>&nbsp;    private ArrayList&lt;Isle&gt; isles;
+<i class="no-highlight">96</i>&nbsp;    /**
+<i class="no-highlight">97</i>&nbsp;     * Clouds on the game table.
+<i class="no-highlight">98</i>&nbsp;     */
+<i class="no-highlight">99</i>&nbsp;    private final ArrayList&lt;Cloud&gt; clouds;
+<i class="no-highlight">100</i>&nbsp;    /**
+<i class="no-highlight">101</i>&nbsp;     * General money reserve on the game table.
+<i class="no-highlight">102</i>&nbsp;     */
+<i class="no-highlight">103</i>&nbsp;    private int generalMoneyReserve;
+<i class="no-highlight">104</i>&nbsp;
+<i class="no-highlight">105</i>&nbsp;    /**
+<i class="no-highlight">106</i>&nbsp;     * GameTableInformation constructor.
+<i class="no-highlight">107</i>&nbsp;     * @param characterCards playable character cards on the game table.
+<i class="no-highlight">108</i>&nbsp;     * @param isles isles on the game table.
+<i class="no-highlight">109</i>&nbsp;     * @param clouds clouds on the game table.
+<i class="no-highlight">110</i>&nbsp;     * @param generalMoneyReserve general money reserve on the game table.
+<i class="no-highlight">111</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">112</i>&nbsp;    GameTableInformation(ArrayList&lt;CharacterCard&gt; characterCards, ArrayList&lt;Isle&gt; isles, ArrayList&lt;Cloud&gt; clouds, int generalMoneyReserve) {</b>
+<b class="nc"><i class="no-highlight">113</i>&nbsp;        this.characterCards = characterCards;</b>
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        this.isles = isles;</b>
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        this.clouds = clouds;</b>
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        this.generalMoneyReserve = generalMoneyReserve;</b>
+<i class="no-highlight">117</i>&nbsp;    }
+<i class="no-highlight">118</i>&nbsp;
+<i class="no-highlight">119</i>&nbsp;    // GETTERS:
+<i class="no-highlight">120</i>&nbsp;
+<b class="nc"><i class="no-highlight">121</i>&nbsp;    public CharacterCard getCharacterCard(int characterCardIndex) { return characterCards.get(characterCardIndex); }</b>
+<i class="no-highlight">122</i>&nbsp;
+<b class="nc"><i class="no-highlight">123</i>&nbsp;    public Isle getIsle(int isleID) { return isles.get(isleID); }</b>
+<i class="no-highlight">124</i>&nbsp;
+<b class="nc"><i class="no-highlight">125</i>&nbsp;    public ArrayList&lt;Isle&gt; getIsles() { return isles; }</b>
+<i class="no-highlight">126</i>&nbsp;
+<b class="nc"><i class="no-highlight">127</i>&nbsp;    public Cloud getCloud(int cloudID) { return clouds.get(cloudID); }</b>
+<i class="no-highlight">128</i>&nbsp;
+<b class="nc"><i class="no-highlight">129</i>&nbsp;    public ArrayList&lt;Cloud&gt; getClouds() { return clouds; }</b>
+<i class="no-highlight">130</i>&nbsp;
+<b class="nc"><i class="no-highlight">131</i>&nbsp;    public int getNumOfClouds() { return clouds.size(); }</b>
+<i class="no-highlight">132</i>&nbsp;
+<b class="nc"><i class="no-highlight">133</i>&nbsp;    public int getGeneralMoneyReserve() { return generalMoneyReserve; }</b>
+<i class="no-highlight">134</i>&nbsp;
+<i class="no-highlight">135</i>&nbsp;    // SETTERS:
+<i class="no-highlight">136</i>&nbsp;
+<i class="no-highlight">137</i>&nbsp;    public void setCharacterCard(int characterCardIndex, CharacterCard characterCard) {
+<b class="nc"><i class="no-highlight">138</i>&nbsp;        this.characterCards.remove(characterCardIndex);</b>
+<b class="nc"><i class="no-highlight">139</i>&nbsp;        this.characterCards.add(characterCardIndex,characterCard);</b>
+<i class="no-highlight">140</i>&nbsp;    }
+<i class="no-highlight">141</i>&nbsp;
+<b class="nc"><i class="no-highlight">142</i>&nbsp;    public void setIsles(ArrayList&lt;Isle&gt; isles){ this.isles = isles; }</b>
+<i class="no-highlight">143</i>&nbsp;
+<i class="no-highlight">144</i>&nbsp;    public void setStudentsOnIsle(int isleID, HashMap&lt;RealmColors,Integer&gt; studentsOnIsle) {
+<b class="nc"><i class="no-highlight">145</i>&nbsp;        Isle newIsle = new Isle(studentsOnIsle,isles.get(isleID).towerNumber,isles.get(isleID).towerColor,isles.get(isleID).denyCards,isles.get(isleID).motherNatureIsPresent);</b>
+<b class="nc"><i class="no-highlight">146</i>&nbsp;        isles.remove(isleID);</b>
+<b class="nc"><i class="no-highlight">147</i>&nbsp;        isles.add(isleID,newIsle);</b>
+<i class="no-highlight">148</i>&nbsp;    }
+<i class="no-highlight">149</i>&nbsp;
+<i class="no-highlight">150</i>&nbsp;    public void setDenyOnIsle(int isleID, int denyCard) {
+<b class="nc"><i class="no-highlight">151</i>&nbsp;        Isle newIsle = new Isle(isles.get(isleID).studentsOnIsle,isles.get(isleID).towerNumber,isles.get(isleID).towerColor,denyCard,isles.get(isleID).motherNatureIsPresent);</b>
+<b class="nc"><i class="no-highlight">152</i>&nbsp;        isles.remove(isleID);</b>
+<b class="nc"><i class="no-highlight">153</i>&nbsp;        isles.add(isleID,newIsle);</b>
+<i class="no-highlight">154</i>&nbsp;    }
+<i class="no-highlight">155</i>&nbsp;
+<i class="no-highlight">156</i>&nbsp;    public void setCloud(int cloudID, Cloud cloud) {
+<b class="nc"><i class="no-highlight">157</i>&nbsp;        this.clouds.remove(cloudID);</b>
+<b class="nc"><i class="no-highlight">158</i>&nbsp;        this.clouds.add(cloudID, cloud);</b>
+<i class="no-highlight">159</i>&nbsp;    }
+<i class="no-highlight">160</i>&nbsp;
+<b class="nc"><i class="no-highlight">161</i>&nbsp;    public void setGeneralMoneyReserve(int generalMoneyReserve) { this.generalMoneyReserve = generalMoneyReserve; }</b>
+<i class="no-highlight">162</i>&nbsp;
+<i class="no-highlight">163</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

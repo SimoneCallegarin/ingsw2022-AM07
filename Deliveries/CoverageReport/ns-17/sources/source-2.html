@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > CoinPanel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI.ExpertPanels</a>
+</div>
+
+<h1>Coverage Summary for Class: CoinPanel (it.polimi.ingsw.View.GUI.ExpertPanels)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CoinPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI.ExpertPanels;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import javax.swing.*;
+<i class="no-highlight">4</i>&nbsp;import java.awt.*;
+<i class="no-highlight">5</i>&nbsp;import java.awt.image.BufferedImage;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+<i class="no-highlight">8</i>&nbsp;import static it.polimi.ingsw.View.GUI.ImagesLoader.coinImageLoader;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;/**
+<i class="no-highlight">11</i>&nbsp; * Panel representing a coin, used when placed on a used character card
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;public class CoinPanel extends JPanel {
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Image of the coin.
+<i class="no-highlight">17</i>&nbsp;     */
+<i class="no-highlight">18</i>&nbsp;    private final BufferedImage coinImage;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    /**
+<i class="no-highlight">21</i>&nbsp;     * Constructor of CoinPanel.
+<i class="no-highlight">22</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">23</i>&nbsp;    public CoinPanel() {</b>
+<b class="nc"><i class="no-highlight">24</i>&nbsp;        setOpaque(false);</b>
+<b class="nc"><i class="no-highlight">25</i>&nbsp;        setPreferredSize(coinDimension);</b>
+<b class="nc"><i class="no-highlight">26</i>&nbsp;        coinImage = coinImageLoader();</b>
+<i class="no-highlight">27</i>&nbsp;    }
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    @Override
+<i class="no-highlight">30</i>&nbsp;    protected void paintComponent(Graphics g) {
+<b class="nc"><i class="no-highlight">31</i>&nbsp;        super.paintComponent(g);</b>
+<b class="nc"><i class="no-highlight">32</i>&nbsp;        g.drawImage(coinImage,coinPositionX,coinPositionY,getWidth(),getHeight(),null);</b>
+<i class="no-highlight">33</i>&nbsp;    }
+<i class="no-highlight">34</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

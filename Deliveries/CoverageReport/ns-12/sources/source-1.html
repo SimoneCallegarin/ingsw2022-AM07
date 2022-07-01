@@ -1,0 +1,146 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > AssistantCardPanel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI</a>
+</div>
+
+<h1>Coverage Summary for Class: AssistantCardPanel (it.polimi.ingsw.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AssistantCardPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import javax.swing.*;
+<i class="no-highlight">4</i>&nbsp;import java.awt.*;
+<i class="no-highlight">5</i>&nbsp;import java.awt.image.BufferedImage;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import static it.polimi.ingsw.View.GUI.ImagesLoader.assistantCardAndMageImageLoader;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/**
+<i class="no-highlight">10</i>&nbsp; * This panel represents the Assistant card present in the discard pile of the player
+<i class="no-highlight">11</i>&nbsp; * or the Mage associated with each player (if the discard pile is empty).
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;public class AssistantCardPanel extends JPanel {
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Image associated to the assistant card (or the mage if there&#39;s none).
+<i class="no-highlight">17</i>&nbsp;     */
+<i class="no-highlight">18</i>&nbsp;    private final BufferedImage assistantCardImage;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    /**
+<i class="no-highlight">21</i>&nbsp;     * Constructor of AssistantCardPanel.
+<i class="no-highlight">22</i>&nbsp;     * @param turnOrder turn order used to identify which image to load.
+<i class="no-highlight">23</i>&nbsp;     *                  It&#39;s also used at the beginning of the game in order to load a mage image
+<i class="no-highlight">24</i>&nbsp;     *                  when there isn&#39;t an assistant card in the discard pile.
+<i class="no-highlight">25</i>&nbsp;     * @param showMage boolean used to draw either the assistant card or the mage.
+<i class="no-highlight">26</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">27</i>&nbsp;    public AssistantCardPanel(int turnOrder, boolean showMage) {</b>
+<b class="nc"><i class="no-highlight">28</i>&nbsp;        this.assistantCardImage = assistantCardAndMageImageLoader(turnOrder,showMage);</b>
+<i class="no-highlight">29</i>&nbsp;    }
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * Draws the assistant card on the discard pile (or the mage when there&#39;s none).
+<i class="no-highlight">33</i>&nbsp;     * @param g allows an application to draw onto components that are realized on various devices.
+<i class="no-highlight">34</i>&nbsp;     */
+<i class="no-highlight">35</i>&nbsp;    @Override
+<i class="no-highlight">36</i>&nbsp;    protected void paintComponent(Graphics g) {
+<b class="nc"><i class="no-highlight">37</i>&nbsp;        super.paintComponent(g);</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;        g.drawImage(assistantCardImage,0,0,getWidth(),getHeight(),null);</b>
+<i class="no-highlight">39</i>&nbsp;    }
+<i class="no-highlight">40</i>&nbsp;
+<i class="no-highlight">41</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

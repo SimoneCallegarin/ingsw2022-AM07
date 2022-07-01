@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > AssistantCard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Model.Player</a>
+</div>
+
+<h1>Coverage Summary for Class: AssistantCard (it.polimi.ingsw.Model.Player)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AssistantCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Model.Player;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;/**
+<i class="no-highlight">4</i>&nbsp; * Assistant card that are part of the assistant cards deck of the player.
+<i class="no-highlight">5</i>&nbsp; */
+<i class="no-highlight">6</i>&nbsp;public class AssistantCard {
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;    /**
+<i class="no-highlight">9</i>&nbsp;     * Indicates the value of the turn order of the card.
+<i class="no-highlight">10</i>&nbsp;     */
+<i class="no-highlight">11</i>&nbsp;    private final int turnOrder;
+<i class="no-highlight">12</i>&nbsp;    /**
+<i class="no-highlight">13</i>&nbsp;     * Indicates the value of the mother nature movement of the card.
+<i class="no-highlight">14</i>&nbsp;     */
+<i class="no-highlight">15</i>&nbsp;    private int mnMovement;
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;    /**
+<i class="no-highlight">18</i>&nbsp;     * Assistant card constructor.
+<i class="no-highlight">19</i>&nbsp;     * @param turnOrder turn order of the assistant card initialized.
+<i class="no-highlight">20</i>&nbsp;     * @param mnMovement mother nature of the assistant card initialized.
+<i class="no-highlight">21</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">22</i>&nbsp;    public AssistantCard(int turnOrder, int mnMovement) {</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;        this.turnOrder = turnOrder;</b>
+<b class="fc"><i class="no-highlight">24</i>&nbsp;        this.mnMovement = mnMovement;</b>
+<i class="no-highlight">25</i>&nbsp;    }
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * Getter method that gives the turn order value of the assistant card.
+<i class="no-highlight">29</i>&nbsp;     * @return the turn order of the assistant card.
+<i class="no-highlight">30</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">31</i>&nbsp;    public int getTurnOrder() { return turnOrder; }</b>
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;    /**
+<i class="no-highlight">34</i>&nbsp;     * Getter method that gives the quantity of possible mother nature movements of the assistant card.
+<i class="no-highlight">35</i>&nbsp;     * @return the possible mother nature movements.
+<i class="no-highlight">36</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">37</i>&nbsp;    public int getMnMovement() { return mnMovement; }</b>
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    /**
+<i class="no-highlight">40</i>&nbsp;     * Used by the MAGICAL LETTER CARRIER to increase the possible movement of mother nature by 2.
+<i class="no-highlight">41</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">42</i>&nbsp;    public void increaseMnMovement(){ mnMovement=mnMovement+2; }</b>
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;    /**
+<i class="no-highlight">45</i>&nbsp;     * Permits a comparison between two assistant cards, basing the comparison on their turn order.
+<i class="no-highlight">46</i>&nbsp;     * @param o instanceof AssistantCard.
+<i class="no-highlight">47</i>&nbsp;     * @return true if the cards have the same turn order, else false.
+<i class="no-highlight">48</i>&nbsp;     */
+<i class="no-highlight">49</i>&nbsp;    @Override
+<i class="no-highlight">50</i>&nbsp;    public boolean equals(Object o) {
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        if (!(o instanceof AssistantCard ac)) return false;</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        return (turnOrder == ac.turnOrder);</b>
+<i class="no-highlight">53</i>&nbsp;    }
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

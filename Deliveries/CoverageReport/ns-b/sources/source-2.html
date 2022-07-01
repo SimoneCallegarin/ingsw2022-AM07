@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > CharacterCard_UpdateMsg</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Network.Messages.NetworkMessages</a>
+</div>
+
+<h1>Coverage Summary for Class: CharacterCard_UpdateMsg (it.polimi.ingsw.Network.Messages.NetworkMessages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CharacterCard_UpdateMsg</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Network.Messages.NetworkMessages;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Network.Messages.MessageType;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/**
+<i class="no-highlight">10</i>&nbsp; * Message sent everytime a player plays a character card.
+<i class="no-highlight">11</i>&nbsp; */
+<i class="no-highlight">12</i>&nbsp;public class CharacterCard_UpdateMsg extends NetworkMessage{
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    /**
+<i class="no-highlight">15</i>&nbsp;     * ID of the character card played.
+<i class="no-highlight">16</i>&nbsp;     */
+<i class="no-highlight">17</i>&nbsp;    private final int characterCardID;
+<i class="no-highlight">18</i>&nbsp;    /**
+<i class="no-highlight">19</i>&nbsp;     * Name of the character card played.
+<i class="no-highlight">20</i>&nbsp;     */
+<i class="no-highlight">21</i>&nbsp;    private final CharacterCardsName cardName;
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * Cost of the character card played.
+<i class="no-highlight">24</i>&nbsp;     */
+<i class="no-highlight">25</i>&nbsp;    private final int cardCost;
+<i class="no-highlight">26</i>&nbsp;    /**
+<i class="no-highlight">27</i>&nbsp;     * ID of the player that played the character card.
+<i class="no-highlight">28</i>&nbsp;     */
+<i class="no-highlight">29</i>&nbsp;    private final int playerID;
+<i class="no-highlight">30</i>&nbsp;    /**
+<i class="no-highlight">31</i>&nbsp;     * Quantity of money in the general money reserve.
+<i class="no-highlight">32</i>&nbsp;     */
+<i class="no-highlight">33</i>&nbsp;    private final int generalReserve;
+<i class="no-highlight">34</i>&nbsp;    /**
+<i class="no-highlight">35</i>&nbsp;     * Quantity of money of the player that played the character card.
+<i class="no-highlight">36</i>&nbsp;     */
+<i class="no-highlight">37</i>&nbsp;    private final int playerMoney;
+<i class="no-highlight">38</i>&nbsp;    /**
+<i class="no-highlight">39</i>&nbsp;     * Quantity of deny cards on the character card.
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;    private final int denyCards;
+<i class="no-highlight">42</i>&nbsp;    /**
+<i class="no-highlight">43</i>&nbsp;     * Students on the character card.
+<i class="no-highlight">44</i>&nbsp;     */
+<i class="no-highlight">45</i>&nbsp;    private final HashMap&lt;RealmColors,Integer&gt; studentsOnCharacter;
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;    /**
+<i class="no-highlight">48</i>&nbsp;     * CharacterCard_UpdateMsg constructor.
+<i class="no-highlight">49</i>&nbsp;     * @param messageType it will be CHARACTERCARD_UPDATE.
+<i class="no-highlight">50</i>&nbsp;     * @param characterCardID ID of the character card played.
+<i class="no-highlight">51</i>&nbsp;     * @param cardName Name of the character card played.
+<i class="no-highlight">52</i>&nbsp;     * @param cardCost Cost of the character card played.
+<i class="no-highlight">53</i>&nbsp;     * @param playerID ID of the player that played the character card.
+<i class="no-highlight">54</i>&nbsp;     * @param generalReserve Quantity of money in the general money reserve.
+<i class="no-highlight">55</i>&nbsp;     * @param playerMoney Quantity of money of the player that played the character card.
+<i class="no-highlight">56</i>&nbsp;     * @param denyCards Quantity of deny cards on the character card.
+<i class="no-highlight">57</i>&nbsp;     * @param studentsOnCharacter Students on the character card.
+<i class="no-highlight">58</i>&nbsp;     */
+<i class="no-highlight">59</i>&nbsp;    public CharacterCard_UpdateMsg(MessageType messageType, int characterCardID, CharacterCardsName cardName, int cardCost, int playerID, int generalReserve, int playerMoney, int denyCards, HashMap&lt;RealmColors,Integer&gt; studentsOnCharacter) {
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        this.characterCardID = characterCardID;</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        this.cardName = cardName;</b>
+<b class="nc"><i class="no-highlight">63</i>&nbsp;        this.cardCost = cardCost;</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;        this.playerID = playerID;</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        this.generalReserve = generalReserve;</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        this.playerMoney = playerMoney;</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        this.denyCards = denyCards;</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;        this.studentsOnCharacter = studentsOnCharacter;</b>
+<i class="no-highlight">69</i>&nbsp;    }
+<i class="no-highlight">70</i>&nbsp;
+<i class="no-highlight">71</i>&nbsp;    // GETTERS:
+<i class="no-highlight">72</i>&nbsp;
+<b class="nc"><i class="no-highlight">73</i>&nbsp;    public int getCharacterCardID() { return characterCardID; }</b>
+<i class="no-highlight">74</i>&nbsp;
+<b class="nc"><i class="no-highlight">75</i>&nbsp;    public CharacterCardsName getCardName() { return cardName; }</b>
+<i class="no-highlight">76</i>&nbsp;
+<b class="nc"><i class="no-highlight">77</i>&nbsp;    public int getCardCost() { return cardCost; }</b>
+<i class="no-highlight">78</i>&nbsp;
+<b class="nc"><i class="no-highlight">79</i>&nbsp;    public int getPlayerID() { return playerID; }</b>
+<i class="no-highlight">80</i>&nbsp;
+<b class="nc"><i class="no-highlight">81</i>&nbsp;    public int getGeneralReserve() { return generalReserve; }</b>
+<i class="no-highlight">82</i>&nbsp;
+<b class="nc"><i class="no-highlight">83</i>&nbsp;    public int getPlayerMoney() { return playerMoney; }</b>
+<i class="no-highlight">84</i>&nbsp;
+<b class="nc"><i class="no-highlight">85</i>&nbsp;    public int getDenyCards() { return denyCards; }</b>
+<i class="no-highlight">86</i>&nbsp;
+<b class="nc"><i class="no-highlight">87</i>&nbsp;    public HashMap&lt;RealmColors, Integer&gt; getStudentsOnCharacter() { return studentsOnCharacter; }</b>
+<i class="no-highlight">88</i>&nbsp;
+<i class="no-highlight">89</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

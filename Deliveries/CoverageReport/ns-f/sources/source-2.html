@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > View</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View</a>
+</div>
+
+<h1>Coverage Summary for Class: View (it.polimi.ingsw.View)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">View</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Network.ClientSide.ClientController;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.View.CLI.CLIDrawer;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.View.GUI.GUIDrawer;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/**
+<i class="no-highlight">10</i>&nbsp; * Interface for the CLi and the GUI, offers common method to print on screen game things.
+<i class="no-highlight">11</i>&nbsp; */
+<i class="no-highlight">12</i>&nbsp;public interface View {
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;     /**
+<i class="no-highlight">15</i>&nbsp;      * Starts the view.
+<i class="no-highlight">16</i>&nbsp;      */
+<i class="no-highlight">17</i>&nbsp;     void viewStart();
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;     /**
+<i class="no-highlight">20</i>&nbsp;      * Asks the player to write his nickname.
+<i class="no-highlight">21</i>&nbsp;      */
+<i class="no-highlight">22</i>&nbsp;     void askUsername();
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;     /**
+<i class="no-highlight">25</i>&nbsp;      * Asks the player to select his game preferences.
+<i class="no-highlight">26</i>&nbsp;      */
+<i class="no-highlight">27</i>&nbsp;     void askGamePreferences();
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;     /**
+<i class="no-highlight">30</i>&nbsp;      * Asks the player which assistant card he wants to play.
+<i class="no-highlight">31</i>&nbsp;      * @param playerID ID of the player we want to ask the assistant card to play.
+<i class="no-highlight">32</i>&nbsp;      */
+<i class="no-highlight">33</i>&nbsp;     void askAssistantCard(int playerID);
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;     /**
+<i class="no-highlight">36</i>&nbsp;      * Asks the player where he wants to move mother nature.
+<i class="no-highlight">37</i>&nbsp;      */
+<i class="no-highlight">38</i>&nbsp;     void askMNMovement();
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;     /**
+<i class="no-highlight">41</i>&nbsp;      * Asks the player which cloud he wants to pick the students from.
+<i class="no-highlight">42</i>&nbsp;      */
+<i class="no-highlight">43</i>&nbsp;     void askCloud();
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;     /**
+<i class="no-highlight">46</i>&nbsp;      * Asks the player the values needed for the activation of a character card effect.
+<i class="no-highlight">47</i>&nbsp;      */
+<i class="no-highlight">48</i>&nbsp;     void askCharacterEffectParameters(CharacterCardsName characterName);
+<i class="no-highlight">49</i>&nbsp;
+<i class="no-highlight">50</i>&nbsp;     /**
+<i class="no-highlight">51</i>&nbsp;      * Asks the player what does he want to do when the game is at the beginning of the action phase in its first step.
+<i class="no-highlight">52</i>&nbsp;      */
+<i class="no-highlight">53</i>&nbsp;     void askMove();
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;     /**
+<i class="no-highlight">56</i>&nbsp;      * Prints a message.
+<i class="no-highlight">57</i>&nbsp;      * @param message the message that has to be printed.
+<i class="no-highlight">58</i>&nbsp;      */
+<i class="no-highlight">59</i>&nbsp;     void printMessage(ServiceMessage message);
+<i class="no-highlight">60</i>&nbsp;
+<i class="no-highlight">61</i>&nbsp;     /**
+<i class="no-highlight">62</i>&nbsp;      * Prints a KO message.
+<i class="no-highlight">63</i>&nbsp;      * @param message the KO message that has to be printed.
+<i class="no-highlight">64</i>&nbsp;      */
+<i class="no-highlight">65</i>&nbsp;     void printKO(ServiceMessage message);
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;     /**
+<i class="no-highlight">68</i>&nbsp;      * Prints the changes of the model.
+<i class="no-highlight">69</i>&nbsp;      */
+<i class="no-highlight">70</i>&nbsp;     void printChanges();
+<i class="no-highlight">71</i>&nbsp;
+<i class="no-highlight">72</i>&nbsp;     /**
+<i class="no-highlight">73</i>&nbsp;      * Prints the nickname of who won.
+<i class="no-highlight">74</i>&nbsp;      * @param winner nickname of the winner.
+<i class="no-highlight">75</i>&nbsp;      * @param winnerID ID of the winner.
+<i class="no-highlight">76</i>&nbsp;      */
+<i class="no-highlight">77</i>&nbsp;     void printWinner(String winner, int winnerID);
+<i class="no-highlight">78</i>&nbsp;
+<i class="no-highlight">79</i>&nbsp;     /**
+<i class="no-highlight">80</i>&nbsp;      * Handles the disconnection of a player.
+<i class="no-highlight">81</i>&nbsp;      * @param message message containing disconnection information.
+<i class="no-highlight">82</i>&nbsp;      */
+<i class="no-highlight">83</i>&nbsp;     void disconnect(ServiceMessage message);
+<i class="no-highlight">84</i>&nbsp;
+<i class="no-highlight">85</i>&nbsp;     /**
+<i class="no-highlight">86</i>&nbsp;      * Adds an observer to the view.
+<i class="no-highlight">87</i>&nbsp;      * @param clientController the Observer of the view.
+<i class="no-highlight">88</i>&nbsp;      */
+<i class="no-highlight">89</i>&nbsp;     void addObs(ClientController clientController);
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;     /**
+<i class="no-highlight">92</i>&nbsp;      * Getter method for the CLIDrawer.
+<i class="no-highlight">93</i>&nbsp;      * @return the CLIDrawer.
+<i class="no-highlight">94</i>&nbsp;      */
+<i class="no-highlight">95</i>&nbsp;     CLIDrawer getCLIDrawer();
+<i class="no-highlight">96</i>&nbsp;
+<i class="no-highlight">97</i>&nbsp;     /**
+<i class="no-highlight">98</i>&nbsp;      * Getter method for the GUIDrawer.
+<i class="no-highlight">99</i>&nbsp;      * @return the GUIDrawer.
+<i class="no-highlight">100</i>&nbsp;      */
+<i class="no-highlight">101</i>&nbsp;     GUIDrawer getGUIDrawer();
+<i class="no-highlight">102</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

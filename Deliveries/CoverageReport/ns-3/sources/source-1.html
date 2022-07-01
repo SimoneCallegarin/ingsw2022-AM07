@@ -1,0 +1,1290 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > Game</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Model</a>
+</div>
+
+<h1>Coverage Summary for Class: Game (it.polimi.ingsw.Model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Game</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (48/48)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,1%
+  </span>
+  <span class="absValue">
+    (492/534)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Game$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/49)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,1%
+  </span>
+  <span class="absValue">
+    (493/535)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Model;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.EffectInGameFactory;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.*;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.Model.GameTableObjects.Cloud;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.Model.GameTableObjects.GameTable;
+<i class="no-highlight">9</i>&nbsp;import it.polimi.ingsw.Model.GameTableObjects.Isle;
+<i class="no-highlight">10</i>&nbsp;import it.polimi.ingsw.Model.Player.AssistantCard;
+<i class="no-highlight">11</i>&nbsp;import it.polimi.ingsw.Model.Player.Player;
+<i class="no-highlight">12</i>&nbsp;import it.polimi.ingsw.Observer.ModelObserver;
+<i class="no-highlight">13</i>&nbsp;import it.polimi.ingsw.Observer.Subjects.ModelSubject;
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">16</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">17</i>&nbsp;import java.util.TreeSet;
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;/**
+<i class="no-highlight">20</i>&nbsp; * Model of the MVC pattern, it represents the game itself.
+<i class="no-highlight">21</i>&nbsp; */
+<i class="no-highlight">22</i>&nbsp;public class Game extends ModelSubject {
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;    /**
+<i class="no-highlight">25</i>&nbsp;     * The game mode of the game, it is decided by the first player that joins the game.
+<i class="no-highlight">26</i>&nbsp;     */
+<i class="no-highlight">27</i>&nbsp;    private GameMode gameMode;
+<i class="no-highlight">28</i>&nbsp;    /**
+<i class="no-highlight">29</i>&nbsp;     * The number of players that are going to play the game, it is decided by the first player that joins the game.
+<i class="no-highlight">30</i>&nbsp;     */
+<i class="no-highlight">31</i>&nbsp;    private int numberOfPlayers;
+<i class="no-highlight">32</i>&nbsp;    /**
+<i class="no-highlight">33</i>&nbsp;     * The number of players that already joined the game.
+<i class="no-highlight">34</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">35</i>&nbsp;    private int actualNumberOfPlayers = 0;</b>
+<i class="no-highlight">36</i>&nbsp;    /**
+<i class="no-highlight">37</i>&nbsp;     * The game table where the game is going to be played, it contains many objects that compose the game itself.
+<i class="no-highlight">38</i>&nbsp;     */
+<i class="no-highlight">39</i>&nbsp;    private GameTable gameTable;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * The list of players that are playing the game.
+<i class="no-highlight">42</i>&nbsp;     */
+<i class="no-highlight">43</i>&nbsp;    private final ArrayList&lt;Player&gt; players;
+<i class="no-highlight">44</i>&nbsp;    /**
+<i class="no-highlight">45</i>&nbsp;     * Random index used to say who will be the first player to play in the first turn.
+<i class="no-highlight">46</i>&nbsp;     */
+<i class="no-highlight">47</i>&nbsp;    private int firstPlayerIndex;
+<i class="no-highlight">48</i>&nbsp;    /**
+<i class="no-highlight">49</i>&nbsp;     * The number of students that is possible to move in a turn for each player.
+<i class="no-highlight">50</i>&nbsp;     */
+<i class="no-highlight">51</i>&nbsp;    private int maxMovableStudents;
+<i class="no-highlight">52</i>&nbsp;    /**
+<i class="no-highlight">53</i>&nbsp;     * Counter used to check how many players already played their turn in a game phase.
+<i class="no-highlight">54</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">55</i>&nbsp;    private int playerCounter = 0;</b>
+<i class="no-highlight">56</i>&nbsp;    /**
+<i class="no-highlight">57</i>&nbsp;     * Counter of the students moved.
+<i class="no-highlight">58</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">59</i>&nbsp;    private int studentsCounter = 0;</b>
+<i class="no-highlight">60</i>&nbsp;    /**
+<i class="no-highlight">61</i>&nbsp;     * Boolean value that indicates if it is the last round of a game because a player already played
+<i class="no-highlight">62</i>&nbsp;     * all his assistant cards or if the students in the bag were not enough to end the round for everyone.
+<i class="no-highlight">63</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">64</i>&nbsp;    private boolean lastRound = false;</b>
+<i class="no-highlight">65</i>&nbsp;    /**
+<i class="no-highlight">66</i>&nbsp;     * When true it means the game ended, else false.
+<i class="no-highlight">67</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">68</i>&nbsp;    private boolean endGame = false;</b>
+<i class="no-highlight">69</i>&nbsp;    /**
+<i class="no-highlight">70</i>&nbsp;     * When true it means the game ended in a draw, else false.
+<i class="no-highlight">71</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">72</i>&nbsp;    private boolean drawEndGame = false;</b>
+<i class="no-highlight">73</i>&nbsp;    /**
+<i class="no-highlight">74</i>&nbsp;     * Indicates the player that won the game.
+<i class="no-highlight">75</i>&nbsp;     */
+<i class="no-highlight">76</i>&nbsp;    private Player winner;
+<i class="no-highlight">77</i>&nbsp;    /**
+<i class="no-highlight">78</i>&nbsp;     * Phases in which it&#39;s divided the game.
+<i class="no-highlight">79</i>&nbsp;     */
+<i class="no-highlight">80</i>&nbsp;    private GamePhases gamePhase;
+<i class="no-highlight">81</i>&nbsp;    /**
+<i class="no-highlight">82</i>&nbsp;     * Divides the planning phase in 2 different sub phases, and it indicates that the player turn is in the planning phase.
+<i class="no-highlight">83</i>&nbsp;     */
+<i class="no-highlight">84</i>&nbsp;    private PlanningPhases planningPhase;
+<i class="no-highlight">85</i>&nbsp;    /**
+<i class="no-highlight">86</i>&nbsp;     * Divides the planning phase in 3 different sub phases, and it indicates that the player turn is in the action phase.
+<i class="no-highlight">87</i>&nbsp;     */
+<i class="no-highlight">88</i>&nbsp;    private ActionPhases actionPhase;
+<i class="no-highlight">89</i>&nbsp;    /**
+<i class="no-highlight">90</i>&nbsp;     * Indicates which was the phase of the action phase before entering in the CHARACTER_CARD_PHASE.
+<i class="no-highlight">91</i>&nbsp;     */
+<i class="no-highlight">92</i>&nbsp;    private ActionPhases lastActionPhase;
+<i class="no-highlight">93</i>&nbsp;    /**
+<i class="no-highlight">94</i>&nbsp;     * Indicates who is the current active player that is playing his turn.
+<i class="no-highlight">95</i>&nbsp;     */
+<i class="no-highlight">96</i>&nbsp;    private CurrentOrder currentActivePlayer;
+<i class="no-highlight">97</i>&nbsp;    /**
+<i class="no-highlight">98</i>&nbsp;     * Factory that permits to build the effect of each playable character card.
+<i class="no-highlight">99</i>&nbsp;     */
+<i class="no-highlight">100</i>&nbsp;    private final EffectInGameFactory effectInGameFactory;
+<i class="no-highlight">101</i>&nbsp;    /**
+<i class="no-highlight">102</i>&nbsp;     * Saves the color chosen by the player when activating the FUNGIST character card.
+<i class="no-highlight">103</i>&nbsp;     */
+<i class="no-highlight">104</i>&nbsp;    private RealmColors colorForFungist;
+<i class="no-highlight">105</i>&nbsp;    /**
+<i class="no-highlight">106</i>&nbsp;     * Saves the number of students of the chosen color removed from the isle
+<i class="no-highlight">107</i>&nbsp;     * when checking the influence the turn the FUNGIST has been played.
+<i class="no-highlight">108</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">109</i>&nbsp;    private int studentsRemovedByFungist=0;</b>
+<i class="no-highlight">110</i>&nbsp;    /**
+<i class="no-highlight">111</i>&nbsp;     * Offset that changes professor conquest rule when a FARMER has been activated.
+<i class="no-highlight">112</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">113</i>&nbsp;    private int farmerOffset = 0;</b>
+<i class="no-highlight">114</i>&nbsp;    /**
+<i class="no-highlight">115</i>&nbsp;     * Counts the number of time the atomic effect of a character card has been activated.
+<i class="no-highlight">116</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">117</i>&nbsp;    private int atomicEffectCounter = 0;</b>
+<i class="no-highlight">118</i>&nbsp;
+<i class="no-highlight">119</i>&nbsp;    /**
+<i class="no-highlight">120</i>&nbsp;     * Game constructor.
+<i class="no-highlight">121</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">122</i>&nbsp;    public Game() {</b>
+<b class="fc"><i class="no-highlight">123</i>&nbsp;        this.players = new ArrayList&lt;&gt;(4);</b>
+<b class="fc"><i class="no-highlight">124</i>&nbsp;        this.gameMode = GameMode.BASE;</b>
+<b class="fc"><i class="no-highlight">125</i>&nbsp;        this.numberOfPlayers = 0;</b>
+<i class="no-highlight">126</i>&nbsp;
+<b class="fc"><i class="no-highlight">127</i>&nbsp;        this.gamePhase = GamePhases.SETUP_PHASE;</b>
+<b class="fc"><i class="no-highlight">128</i>&nbsp;        this.planningPhase = PlanningPhases.FILL_CLOUDS;</b>
+<b class="fc"><i class="no-highlight">129</i>&nbsp;        this.actionPhase = ActionPhases.MOVE_STUDENTS;</b>
+<i class="no-highlight">130</i>&nbsp;
+<b class="fc"><i class="no-highlight">131</i>&nbsp;        this.effectInGameFactory = new EffectInGameFactory();</b>
+<i class="no-highlight">132</i>&nbsp;    }
+<i class="no-highlight">133</i>&nbsp;
+<i class="no-highlight">134</i>&nbsp;    /**
+<i class="no-highlight">135</i>&nbsp;     * First method that has to be called to properly start the game.
+<i class="no-highlight">136</i>&nbsp;     * Adds the first player to the game and sets game mode and number of players basing on his choices.
+<i class="no-highlight">137</i>&nbsp;     * @param nickName chosen by the player.
+<i class="no-highlight">138</i>&nbsp;     * @param expertMode chosen by the player (true for expert, else base).
+<i class="no-highlight">139</i>&nbsp;     * @param numberOfPlayers chosen by the player (from 2 to 4).
+<i class="no-highlight">140</i>&nbsp;     */
+<i class="no-highlight">141</i>&nbsp;    public void addFirstPlayer(String nickName, boolean expertMode, int numberOfPlayers){
+<i class="no-highlight">142</i>&nbsp;
+<b class="fc"><i class="no-highlight">143</i>&nbsp;        setNumberOfPlayers(numberOfPlayers);</b>
+<i class="no-highlight">144</i>&nbsp;
+<b class="fc"><i class="no-highlight">145</i>&nbsp;        if(expertMode)</b>
+<b class="fc"><i class="no-highlight">146</i>&nbsp;            this.gameMode=GameMode.EXPERT;</b>
+<i class="no-highlight">147</i>&nbsp;        else
+<b class="fc"><i class="no-highlight">148</i>&nbsp;            this.gameMode=GameMode.BASE;</b>
+<i class="no-highlight">149</i>&nbsp;
+<i class="no-highlight">150</i>&nbsp;        Player newPlayer;
+<i class="no-highlight">151</i>&nbsp;
+<b class="fc"><i class="no-highlight">152</i>&nbsp;        gameTable = new GameTable(numberOfPlayers, this.gameMode);</b>
+<i class="no-highlight">153</i>&nbsp;
+<b class="fc"><i class="no-highlight">154</i>&nbsp;        if (numberOfPlayers==4)</b>
+<b class="fc"><i class="no-highlight">155</i>&nbsp;            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1);</b>
+<i class="no-highlight">156</i>&nbsp;        else
+<b class="fc"><i class="no-highlight">157</i>&nbsp;            newPlayer = new Player(nickName, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD);</b>
+<i class="no-highlight">158</i>&nbsp;
+<b class="fc"><i class="no-highlight">159</i>&nbsp;        players.add(newPlayer);</b>
+<b class="fc"><i class="no-highlight">160</i>&nbsp;        initializeEntrance(actualNumberOfPlayers);</b>
+<b class="fc"><i class="no-highlight">161</i>&nbsp;        actualNumberOfPlayers = 1;</b>
+<i class="no-highlight">162</i>&nbsp;
+<i class="no-highlight">163</i>&nbsp;    }
+<i class="no-highlight">164</i>&nbsp;
+<i class="no-highlight">165</i>&nbsp;    /**
+<i class="no-highlight">166</i>&nbsp;     * Sets the number of player when selected by the first player.
+<i class="no-highlight">167</i>&nbsp;     * @param numberOfPlayers to play with in total.
+<i class="no-highlight">168</i>&nbsp;     */
+<i class="no-highlight">169</i>&nbsp;    public void setNumberOfPlayers(int numberOfPlayers) {
+<b class="fc"><i class="no-highlight">170</i>&nbsp;        this.numberOfPlayers = numberOfPlayers;</b>
+<b class="fc"><i class="no-highlight">171</i>&nbsp;        if (numberOfPlayers == 3)</b>
+<b class="fc"><i class="no-highlight">172</i>&nbsp;            maxMovableStudents = 4;</b>
+<i class="no-highlight">173</i>&nbsp;        else
+<b class="fc"><i class="no-highlight">174</i>&nbsp;            maxMovableStudents = 3;</b>
+<i class="no-highlight">175</i>&nbsp;    }
+<i class="no-highlight">176</i>&nbsp;
+<i class="no-highlight">177</i>&nbsp;    /**
+<i class="no-highlight">178</i>&nbsp;     * First action to do when a player that is not the first one asks to join a match.
+<i class="no-highlight">179</i>&nbsp;     * @param nickname the nickname of the player that has to be added.
+<i class="no-highlight">180</i>&nbsp;     */
+<i class="no-highlight">181</i>&nbsp;    public void addAnotherPlayer(String nickname) {
+<i class="no-highlight">182</i>&nbsp;        Player newPlayer;
+<b class="fc"><i class="no-highlight">183</i>&nbsp;        if (numberOfPlayers == 2 || numberOfPlayers == 3)</b>
+<b class="fc"><i class="no-highlight">184</i>&nbsp;            newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.NO_SQUAD);</b>
+<i class="no-highlight">185</i>&nbsp;        else {
+<b class="fc"><i class="no-highlight">186</i>&nbsp;            if (actualNumberOfPlayers == 2)</b>
+<b class="fc"><i class="no-highlight">187</i>&nbsp;                newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD1);</b>
+<i class="no-highlight">188</i>&nbsp;            else
+<b class="fc"><i class="no-highlight">189</i>&nbsp;                newPlayer = new Player(nickname, numberOfPlayers, actualNumberOfPlayers, Squads.SQUAD2);</b>
+<i class="no-highlight">190</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">191</i>&nbsp;        players.add(newPlayer);</b>
+<b class="fc"><i class="no-highlight">192</i>&nbsp;        initializeEntrance(actualNumberOfPlayers);</b>
+<b class="fc"><i class="no-highlight">193</i>&nbsp;        actualNumberOfPlayers++;</b>
+<i class="no-highlight">194</i>&nbsp;
+<b class="fc"><i class="no-highlight">195</i>&nbsp;        if (actualNumberOfPlayers == numberOfPlayers) {     // we are ready to go</b>
+<b class="fc"><i class="no-highlight">196</i>&nbsp;            this.gamePhase = GamePhases.PLANNING_PHASE;</b>
+<b class="fc"><i class="no-highlight">197</i>&nbsp;            firstPlayerIndex = (int)(Math.random()*(numberOfPlayers));</b>
+<b class="fc"><i class="no-highlight">198</i>&nbsp;            notifyGameCreationValues();</b>
+<b class="fc"><i class="no-highlight">199</i>&nbsp;            fillClouds();</b>
+<b class="fc"><i class="no-highlight">200</i>&nbsp;            updateOrder(gamePhase);</b>
+<i class="no-highlight">201</i>&nbsp;        }
+<i class="no-highlight">202</i>&nbsp;    }
+<i class="no-highlight">203</i>&nbsp;
+<i class="no-highlight">204</i>&nbsp;    /**
+<i class="no-highlight">205</i>&nbsp;     * Initialization of data to notify the virtual view with.
+<i class="no-highlight">206</i>&nbsp;     */
+<i class="no-highlight">207</i>&nbsp;    private void notifyGameCreationValues() {
+<i class="no-highlight">208</i>&nbsp;        // DASHBOARDS:
+<b class="fc"><i class="no-highlight">209</i>&nbsp;        ArrayList&lt;String&gt; nicknames = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">210</i>&nbsp;        ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; entrances = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">211</i>&nbsp;        ArrayList&lt;TowerColors&gt; towerColors = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">212</i>&nbsp;        ArrayList&lt;Integer&gt; numTowers = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">213</i>&nbsp;        ArrayList&lt;Squads&gt; squads=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">214</i>&nbsp;        for(Player p:players){</b>
+<b class="fc"><i class="no-highlight">215</i>&nbsp;            towerColors.add(p.getDashboard().getTowerStorage().getTowerColor());</b>
+<b class="fc"><i class="no-highlight">216</i>&nbsp;            entrances.add(p.getDashboard().getEntrance().getStudentsHashMap());</b>
+<b class="fc"><i class="no-highlight">217</i>&nbsp;            nicknames.add(p.getNickname());</b>
+<b class="fc"><i class="no-highlight">218</i>&nbsp;            numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());</b>
+<b class="fc"><i class="no-highlight">219</i>&nbsp;            squads.add(p.getSquad());</b>
+<b class="fc"><i class="no-highlight">220</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">221</i>&nbsp;        int whereMNId=gameTable.getIsleManager().getIsleWithMotherNatureIndex();</b>
+<b class="fc"><i class="no-highlight">222</i>&nbsp;        int money=players.get(0).getMoney();</b>
+<i class="no-highlight">223</i>&nbsp;
+<i class="no-highlight">224</i>&nbsp;        // GAME TABLE:
+<b class="fc"><i class="no-highlight">225</i>&nbsp;        ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; emptyClouds=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">226</i>&nbsp;        for(Cloud c:gameTable.getClouds()){ emptyClouds.add(c.getStudentsHashMap()); }</b>
+<b class="fc"><i class="no-highlight">227</i>&nbsp;        int generalReserve=gameTable.getGeneralMoneyReserve();</b>
+<i class="no-highlight">228</i>&nbsp;
+<b class="fc"><i class="no-highlight">229</i>&nbsp;        ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; studentsOnIsle=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">230</i>&nbsp;        for(Isle i:gameTable.getIsleManager().getIsles()){ studentsOnIsle.add(i.getStudentsHashMap()); }</b>
+<i class="no-highlight">231</i>&nbsp;
+<b class="fc"><i class="no-highlight">232</i>&nbsp;        ArrayList&lt;String&gt; characterNames=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">233</i>&nbsp;        ArrayList&lt;Integer&gt; characterCost=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">234</i>&nbsp;        ArrayList&lt;Integer&gt; denyCards=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">235</i>&nbsp;        ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; studentsOnCard=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">236</i>&nbsp;        ArrayList&lt;String&gt; characterCardsDescription = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">237</i>&nbsp;        for(CharacterCard card : gameTable.getCharacterCards()){</b>
+<b class="fc"><i class="no-highlight">238</i>&nbsp;            characterNames.add(card.getCharacterCardName().toString());</b>
+<b class="fc"><i class="no-highlight">239</i>&nbsp;            characterCost.add(card.getCost());</b>
+<b class="fc"><i class="no-highlight">240</i>&nbsp;            denyCards.add(card.getDenyCards());</b>
+<b class="fc"><i class="no-highlight">241</i>&nbsp;            studentsOnCard.add(card.getStudentsHashMap());</b>
+<b class="fc"><i class="no-highlight">242</i>&nbsp;            characterCardsDescription.add(card.getCharacterCardDescription());</b>
+<b class="fc"><i class="no-highlight">243</i>&nbsp;        }</b>
+<i class="no-highlight">244</i>&nbsp;
+<b class="fc"><i class="no-highlight">245</i>&nbsp;        notifyObserver(obs-&gt;obs.onGameCreation(numberOfPlayers,nicknames,gameMode,whereMNId,entrances,emptyClouds,studentsOnIsle,studentsOnCard,numTowers,money,generalReserve,towerColors,characterNames,characterCost,denyCards,characterCardsDescription,squads));</b>
+<i class="no-highlight">246</i>&nbsp;    }
+<i class="no-highlight">247</i>&nbsp;
+<i class="no-highlight">248</i>&nbsp;    /**
+<i class="no-highlight">249</i>&nbsp;     * Handles a player that plays an assistant card.
+<i class="no-highlight">250</i>&nbsp;     * It is responsible for changing the discard pile of a certain player.
+<i class="no-highlight">251</i>&nbsp;     * @param playerID is an integer that represents the index of the players ArrayList which corresponds to the player who played the assistant card.
+<i class="no-highlight">252</i>&nbsp;     * @param turnOrderPlayed is the turn order of the AssistantCard played.
+<i class="no-highlight">253</i>&nbsp;     */
+<i class="no-highlight">254</i>&nbsp;    public void playAssistantCard(int playerID, int turnOrderPlayed) {
+<b class="fc"><i class="no-highlight">255</i>&nbsp;        boolean alreadyPlayed = false;</b>
+<b class="fc"><i class="no-highlight">256</i>&nbsp;        boolean onlyChoice = true;</b>
+<b class="fc"><i class="no-highlight">257</i>&nbsp;        AssistantCard assistantCardPlayed = players.get(playerID).getAssistantCardByTurnOrder(turnOrderPlayed);</b>
+<b class="fc"><i class="no-highlight">258</i>&nbsp;        if (gamePhase == GamePhases.PLANNING_PHASE &amp;&amp; planningPhase == PlanningPhases.ASSISTANT_CARD_PHASE &amp;&amp; currentActivePlayer == players.get(playerID).getOrder()) {</b>
+<b class="fc"><i class="no-highlight">259</i>&nbsp;            if (assistantCardPlayed != null) {</b>
+<b class="fc"><i class="no-highlight">260</i>&nbsp;                for (Player p : players) {   // next round incoming... discard piles need to be set null (otherwise it doesn&#39;t work)</b>
+<b class="fc"><i class="no-highlight">261</i>&nbsp;                    if (p.getDiscardPile() != null) {</b>
+<b class="fc"><i class="no-highlight">262</i>&nbsp;                        if (p.getDiscardPile().equals(assistantCardPlayed)) {</b>
+<b class="fc"><i class="no-highlight">263</i>&nbsp;                            alreadyPlayed = true;</b>
+<b class="fc"><i class="no-highlight">264</i>&nbsp;                            break;</b>
+<i class="no-highlight">265</i>&nbsp;                        }
+<i class="no-highlight">266</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">267</i>&nbsp;                }</b>
+<i class="no-highlight">268</i>&nbsp;
+<b class="fc"><i class="no-highlight">269</i>&nbsp;                if (alreadyPlayed) {</b>
+<b class="fc"><i class="no-highlight">270</i>&nbsp;                    alreadyPlayed = false;</b>
+<b class="fc"><i class="no-highlight">271</i>&nbsp;                    for (AssistantCard ac : players.get(playerID).getMageDeck()) {</b>
+<b class="fc"><i class="no-highlight">272</i>&nbsp;                        for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">273</i>&nbsp;                            if (p.getDiscardPile() != null)</b>
+<b class="fc"><i class="no-highlight">274</i>&nbsp;                                if (p.getDiscardPile().equals(ac)) {</b>
+<b class="fc"><i class="no-highlight">275</i>&nbsp;                                    alreadyPlayed = true;</b>
+<b class="fc"><i class="no-highlight">276</i>&nbsp;                                    break;</b>
+<i class="no-highlight">277</i>&nbsp;                                }
+<b class="fc"><i class="no-highlight">278</i>&nbsp;                        if (!alreadyPlayed) {</b>
+<b class="fc"><i class="no-highlight">279</i>&nbsp;                            onlyChoice = false;</b>
+<b class="fc"><i class="no-highlight">280</i>&nbsp;                            break;</b>
+<i class="no-highlight">281</i>&nbsp;                        }
+<b class="fc"><i class="no-highlight">282</i>&nbsp;                        alreadyPlayed = false;</b>
+<b class="fc"><i class="no-highlight">283</i>&nbsp;                    }</b>
+<b class="fc"><i class="no-highlight">284</i>&nbsp;                    alreadyPlayed = true;</b>
+<i class="no-highlight">285</i>&nbsp;                }
+<i class="no-highlight">286</i>&nbsp;
+<b class="fc"><i class="no-highlight">287</i>&nbsp;                if (!alreadyPlayed || onlyChoice) {</b>
+<b class="fc"><i class="no-highlight">288</i>&nbsp;                    players.get(playerID).playAssistantCard(assistantCardPlayed);</b>
+<b class="fc"><i class="no-highlight">289</i>&nbsp;                    players.get(playerID).setCardOrder(playerCounter + 1);</b>
+<i class="no-highlight">290</i>&nbsp;
+<b class="fc"><i class="no-highlight">291</i>&nbsp;                notifyAssistantsCard(playerID);</b>
+<i class="no-highlight">292</i>&nbsp;
+<b class="fc"><i class="no-highlight">293</i>&nbsp;                    if (players.get(playerID).isMageDeckEmpty())</b>
+<b class="fc"><i class="no-highlight">294</i>&nbsp;                        lastRound = true;</b>
+<b class="fc"><i class="no-highlight">295</i>&nbsp;                    playerCounter++;</b>
+<b class="fc"><i class="no-highlight">296</i>&nbsp;                    nextPlayer();</b>
+<i class="no-highlight">297</i>&nbsp;                } else {
+<b class="fc"><i class="no-highlight">298</i>&nbsp;                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You cannot play this card, please select another one&quot;));</b>
+<b class="fc"><i class="no-highlight">299</i>&nbsp;                    notifyTurn();</b>
+<i class="no-highlight">300</i>&nbsp;                }
+<i class="no-highlight">301</i>&nbsp;            } else {
+<b class="nc"><i class="no-highlight">302</i>&nbsp;                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You don&#39;t have this card, please select another one&quot;));</b>
+<b class="nc"><i class="no-highlight">303</i>&nbsp;                notifyTurn();</b>
+<i class="no-highlight">304</i>&nbsp;            }
+<i class="no-highlight">305</i>&nbsp;        }
+<i class="no-highlight">306</i>&nbsp;    }
+<i class="no-highlight">307</i>&nbsp;
+<i class="no-highlight">308</i>&nbsp;    /**
+<i class="no-highlight">309</i>&nbsp;     * Initialize the deck of available assistant cards for the player and the assistant card in the discard pile in order to pass it to the view.
+<i class="no-highlight">310</i>&nbsp;     * @param playerID the id of the player it will be passed the deck.
+<i class="no-highlight">311</i>&nbsp;     */
+<i class="no-highlight">312</i>&nbsp;    private void notifyAssistantsCard(int playerID) {
+<b class="fc"><i class="no-highlight">313</i>&nbsp;        ArrayList&lt;Integer&gt; turnOrders =new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">314</i>&nbsp;        ArrayList&lt;Integer&gt; movementsMN =new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">315</i>&nbsp;        for(AssistantCard ac : getPlayerByIndex(playerID).getMageDeck()){</b>
+<b class="fc"><i class="no-highlight">316</i>&nbsp;            turnOrders.add(ac.getTurnOrder());</b>
+<b class="fc"><i class="no-highlight">317</i>&nbsp;            movementsMN.add(ac.getMnMovement());</b>
+<b class="fc"><i class="no-highlight">318</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">319</i>&nbsp;        notifyObserver(obs-&gt;obs.onAssistantCard(playerID,getPlayerByIndex(playerID).getDiscardPile().getTurnOrder(),getPlayerByIndex(playerID).getDiscardPile().getMnMovement(), turnOrders, movementsMN));</b>
+<i class="no-highlight">320</i>&nbsp;    }
+<i class="no-highlight">321</i>&nbsp;
+<i class="no-highlight">322</i>&nbsp;    /**
+<i class="no-highlight">323</i>&nbsp;     * Takes a student from the dashboard of a certain player and puts it on a specified isle.
+<i class="no-highlight">324</i>&nbsp;     * @param playerID ID of the player who moved the student.
+<i class="no-highlight">325</i>&nbsp;     * @param isleID ID of the chosen island.
+<i class="no-highlight">326</i>&nbsp;     * @param colorIndex is the index of the color of the student that has been moved.
+<i class="no-highlight">327</i>&nbsp;     */
+<i class="no-highlight">328</i>&nbsp;    public void moveStudentInIsle(int playerID, int isleID, int colorIndex) {
+<b class="fc"><i class="no-highlight">329</i>&nbsp;        RealmColors color = RealmColors.getColor(colorIndex);</b>
+<b class="fc"><i class="no-highlight">330</i>&nbsp;        if (gamePhase == GamePhases.ACTION_PHASE &amp;&amp; actionPhase == ActionPhases.MOVE_STUDENTS &amp;&amp; currentActivePlayer == players.get(playerID).getOrder()) {</b>
+<b class="fc"><i class="no-highlight">331</i>&nbsp;            if (colorIndex &gt;= 0 &amp;&amp; colorIndex &lt;= 4) {</b>
+<b class="fc"><i class="no-highlight">332</i>&nbsp;                if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(color) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">333</i>&nbsp;                    if (isleID &gt;= 0 &amp;&amp; isleID &lt; gameTable.getIsleManager().getIsles().size()) {</b>
+<b class="fc"><i class="no-highlight">334</i>&nbsp;                        players.get(playerID).getDashboard().getEntrance().removeStudent(color);</b>
+<b class="fc"><i class="no-highlight">335</i>&nbsp;                        gameTable.getIsleManager().getIsle(isleID).addStudent(color);</b>
+<b class="fc"><i class="no-highlight">336</i>&nbsp;                        studentsCounter++;</b>
+<b class="fc"><i class="no-highlight">337</i>&nbsp;                        if (studentsCounter == maxMovableStudents) {</b>
+<b class="fc"><i class="no-highlight">338</i>&nbsp;                            actionPhase = ActionPhases.MOVE_MOTHER_NATURE;</b>
+<b class="fc"><i class="no-highlight">339</i>&nbsp;                            studentsCounter = 0;</b>
+<i class="no-highlight">340</i>&nbsp;                        }
+<b class="fc"><i class="no-highlight">341</i>&nbsp;                        notifyObserver(obs -&gt; obs.onStudentMoving_toIsle(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), isleID, gameTable.getIsleManager().getIsle(isleID).getStudentsHashMap()));</b>
+<i class="no-highlight">342</i>&nbsp;                    } else
+<b class="nc"><i class="no-highlight">343</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;Isle &quot; + isleID + &quot; doesn&#39;t exist, please select another one&quot;));</b>
+<i class="no-highlight">344</i>&nbsp;                } else
+<b class="nc"><i class="no-highlight">345</i>&nbsp;                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You don&#39;t have enough &quot; + color.toString() + &quot; students, please select another color&quot;));</b>
+<i class="no-highlight">346</i>&nbsp;            } else
+<b class="nc"><i class="no-highlight">347</i>&nbsp;                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;This color doesn&#39;t exist, please select another one&quot;));</b>
+<i class="no-highlight">348</i>&nbsp;        }
+<i class="no-highlight">349</i>&nbsp;
+<b class="fc"><i class="no-highlight">350</i>&nbsp;        notifyTurn();</b>
+<i class="no-highlight">351</i>&nbsp;    }
+<i class="no-highlight">352</i>&nbsp;
+<i class="no-highlight">353</i>&nbsp;    /**
+<i class="no-highlight">354</i>&nbsp;     * Takes a student from the dashboard of a certain player and puts it in his dining room.
+<i class="no-highlight">355</i>&nbsp;     * @param playerID ID of the player who moved the student.
+<i class="no-highlight">356</i>&nbsp;     * @param colorIndex color of the student that has been moved. 
+<i class="no-highlight">357</i>&nbsp;     */
+<i class="no-highlight">358</i>&nbsp;    public void moveStudentInDiningRoom(int playerID, int colorIndex) {
+<b class="fc"><i class="no-highlight">359</i>&nbsp;        RealmColors color = RealmColors.getColor(colorIndex);</b>
+<b class="fc"><i class="no-highlight">360</i>&nbsp;        if (gamePhase == GamePhases.ACTION_PHASE &amp;&amp; actionPhase == ActionPhases.MOVE_STUDENTS &amp;&amp; currentActivePlayer == players.get(playerID).getOrder()) {</b>
+<b class="fc"><i class="no-highlight">361</i>&nbsp;            if (colorIndex &gt;= 0 &amp;&amp; colorIndex &lt;= 4) {</b>
+<b class="fc"><i class="no-highlight">362</i>&nbsp;                if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(color) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">363</i>&nbsp;                    if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) &lt;= 10) {</b>
+<b class="fc"><i class="no-highlight">364</i>&nbsp;                        players.get(playerID).getDashboard().getEntrance().removeStudent(color);</b>
+<b class="fc"><i class="no-highlight">365</i>&nbsp;                        players.get(playerID).getDashboard().getDiningRoom().addStudent(color);</b>
+<i class="no-highlight">366</i>&nbsp;                        // if FARMER character card is played by the player this turn
+<i class="no-highlight">367</i>&nbsp;                        // then each time is checked if the player has an equal number of students of another
+<i class="no-highlight">368</i>&nbsp;                        // player that owe the professor of that color
+<b class="fc"><i class="no-highlight">369</i>&nbsp;                        if (gameMode == GameMode.EXPERT &amp;&amp; getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() &amp;&amp; getPlayerByIndex(playerID).getCharacterCardPlayed() == CharacterCardsName.FARMER)</b>
+<b class="nc"><i class="no-highlight">370</i>&nbsp;                            farmerOffset = 1;</b>
+<i class="no-highlight">371</i>&nbsp;                        else
+<b class="fc"><i class="no-highlight">372</i>&nbsp;                            farmerOffset = 0;</b>
+<i class="no-highlight">373</i>&nbsp;                        // checking if the student is added in third, sixth or ninth position of the dining room
+<b class="fc"><i class="no-highlight">374</i>&nbsp;                        checkStudentInMoneyPosition(playerID,color);</b>
+<b class="fc"><i class="no-highlight">375</i>&nbsp;                        checkUpdateProfessor(playerID, color);</b>
+<b class="fc"><i class="no-highlight">376</i>&nbsp;                        studentsCounter++;</b>
+<b class="fc"><i class="no-highlight">377</i>&nbsp;                        if (studentsCounter == maxMovableStudents) {</b>
+<b class="fc"><i class="no-highlight">378</i>&nbsp;                            actionPhase = ActionPhases.MOVE_MOTHER_NATURE;</b>
+<b class="fc"><i class="no-highlight">379</i>&nbsp;                            studentsCounter = 0;</b>
+<i class="no-highlight">380</i>&nbsp;                        }
+<i class="no-highlight">381</i>&nbsp;
+<b class="fc"><i class="no-highlight">382</i>&nbsp;                        notifyObserver(obs -&gt; obs.onStudentMoving_toDining(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), players.get(playerID).getDashboard().getDiningRoom().getStudentsHashMap()));</b>
+<i class="no-highlight">383</i>&nbsp;                    } else
+<b class="nc"><i class="no-highlight">384</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;Your &quot; + color.toString() + &quot; Dining Room is full! You can&#39;t add &quot; + color + &quot; students, please select another color&quot;));</b>
+<i class="no-highlight">385</i>&nbsp;                } else
+<b class="nc"><i class="no-highlight">386</i>&nbsp;                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You don&#39;t have enough &quot; + color.toString() + &quot; students, please select another color&quot;));</b>
+<i class="no-highlight">387</i>&nbsp;            } else
+<b class="nc"><i class="no-highlight">388</i>&nbsp;                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;This color doesn&#39;t exist, please select another one&quot;));</b>
+<i class="no-highlight">389</i>&nbsp;        }
+<i class="no-highlight">390</i>&nbsp;
+<b class="fc"><i class="no-highlight">391</i>&nbsp;        notifyTurn();</b>
+<i class="no-highlight">392</i>&nbsp;    }
+<i class="no-highlight">393</i>&nbsp;
+<i class="no-highlight">394</i>&nbsp;    /**
+<i class="no-highlight">395</i>&nbsp;     * Checking if the student is added in third, sixth or ninth position of the dining room (when playing expert mode).
+<i class="no-highlight">396</i>&nbsp;     * @param playerID ID of the player that placed a student in his dining room.
+<i class="no-highlight">397</i>&nbsp;     * @param color color of the student placed.
+<i class="no-highlight">398</i>&nbsp;     */
+<i class="no-highlight">399</i>&nbsp;    public void checkStudentInMoneyPosition(int playerID, RealmColors color) {
+<b class="fc"><i class="no-highlight">400</i>&nbsp;        if (isExpertMode() &amp;&amp; players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) % 3 == 0 &amp;&amp; gameTable.getGeneralMoneyReserve()&gt;0) {</b>
+<b class="fc"><i class="no-highlight">401</i>&nbsp;            players.get(playerID).gainMoney();</b>
+<b class="fc"><i class="no-highlight">402</i>&nbsp;            gameTable.studentInMoneyPosition();</b>
+<b class="fc"><i class="no-highlight">403</i>&nbsp;            notifyObserver(obs -&gt; obs.onMoneyUpdate(playerID, players.get(playerID).getMoney(), gameTable.getGeneralMoneyReserve()));</b>
+<i class="no-highlight">404</i>&nbsp;        }
+<i class="no-highlight">405</i>&nbsp;    }
+<i class="no-highlight">406</i>&nbsp;
+<i class="no-highlight">407</i>&nbsp;    /**
+<i class="no-highlight">408</i>&nbsp;     * Moves mother nature on a certain isle.
+<i class="no-highlight">409</i>&nbsp;     * @param playerID ID of the player who moved the mother nature.
+<i class="no-highlight">410</i>&nbsp;     * @param isleID ID of the isle where the player wants to move mother nature.
+<i class="no-highlight">411</i>&nbsp;     */
+<i class="no-highlight">412</i>&nbsp;    public void moveMotherNature(int playerID, int isleID) {
+<b class="fc"><i class="no-highlight">413</i>&nbsp;        if (gamePhase == GamePhases.ACTION_PHASE &amp;&amp; actionPhase == ActionPhases.MOVE_MOTHER_NATURE &amp;&amp; currentActivePlayer == players.get(playerID).getOrder()) {</b>
+<b class="fc"><i class="no-highlight">414</i>&nbsp;            if (isleID &gt;= 0 &amp;&amp; isleID &lt; gameTable.getIsleManager().getIsles().size()) {</b>
+<b class="fc"><i class="no-highlight">415</i>&nbsp;                if (gameTable.getIsleManager().isMNMovementAcceptable(isleID, players.get(playerID).getDiscardPile().getMnMovement())) {</b>
+<b class="fc"><i class="no-highlight">416</i>&nbsp;                    gameTable.getIsleManager().getIsle(gameTable.getIsleManager().getIsleWithMotherNatureIndex()).setMotherNature(false);</b>
+<b class="fc"><i class="no-highlight">417</i>&nbsp;                    gameTable.getIsleManager().getIsle(isleID).setMotherNature(true);</b>
+<b class="fc"><i class="no-highlight">418</i>&nbsp;                    gameTable.getIsleManager().setIsleWithMotherNatureIndex(isleID);</b>
+<i class="no-highlight">419</i>&nbsp;                    // if the FUNGIST card is played, then we remove the students of the chosen color from the selected isle
+<i class="no-highlight">420</i>&nbsp;                    // then we proceed to calculate the influence on the isle
+<b class="fc"><i class="no-highlight">421</i>&nbsp;                    if (gameMode == GameMode.EXPERT &amp;&amp; getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() &amp;&amp; getPlayerByIndex(playerID).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)</b>
+<b class="fc"><i class="no-highlight">422</i>&nbsp;                        while (gameTable.getIsleManager().getIsle(isleID).getStudentsByColor(colorForFungist) != 0) {</b>
+<b class="fc"><i class="no-highlight">423</i>&nbsp;                            gameTable.getIsleManager().getIsle(isleID).removeStudent(colorForFungist);</b>
+<b class="fc"><i class="no-highlight">424</i>&nbsp;                            studentsRemovedByFungist += 1;</b>
+<i class="no-highlight">425</i>&nbsp;                        }
+<b class="fc"><i class="no-highlight">426</i>&nbsp;                    if (gameTable.getIsleManager().getIsle(isleID).getDenyCards() == 0)</b>
+<b class="fc"><i class="no-highlight">427</i>&nbsp;                        checkUpdateInfluence(isleID);</b>
+<i class="no-highlight">428</i>&nbsp;                    else {
+<b class="nc"><i class="no-highlight">429</i>&nbsp;                        gameTable.getIsleManager().getIsle(isleID).removeDenyCard();</b>
+<b class="nc"><i class="no-highlight">430</i>&nbsp;                        int grandmaIndex = 0;</b>
+<b class="nc"><i class="no-highlight">431</i>&nbsp;                        for (int i=0; i&lt;3; i++)</b>
+<b class="nc"><i class="no-highlight">432</i>&nbsp;                            if(gameTable.getCharacterCard(i).getCharacterCardName() == CharacterCardsName.GRANDMA_HERBS){</b>
+<b class="nc"><i class="no-highlight">433</i>&nbsp;                                grandmaIndex = i;</b>
+<b class="nc"><i class="no-highlight">434</i>&nbsp;                                break;</b>
+<i class="no-highlight">435</i>&nbsp;                            }
+<b class="nc"><i class="no-highlight">436</i>&nbsp;                        gameTable.getCharacterCard(grandmaIndex).addDenyCard();</b>
+<b class="nc"><i class="no-highlight">437</i>&nbsp;                        int finalGrandmaIndex = grandmaIndex;</b>
+<b class="nc"><i class="no-highlight">438</i>&nbsp;                        notifyObserver(obs-&gt;obs.onDenyCard(finalGrandmaIndex, gameTable.getCharacterCard(finalGrandmaIndex).getCost(), gameTable.getCharacterCard(finalGrandmaIndex).getDenyCards(), gameTable.getCharacterCard(finalGrandmaIndex).getStudentsHashMap(), isleID, gameTable.getIsleManager().getIsle(isleID).getDenyCards()));</b>
+<i class="no-highlight">439</i>&nbsp;                    }
+<i class="no-highlight">440</i>&nbsp;                    // if the FUNGIST card is played, then we add the students of the chosen color
+<i class="no-highlight">441</i>&nbsp;                    // that were removed from the selected isle
+<b class="fc"><i class="no-highlight">442</i>&nbsp;                    if (gameMode == GameMode.EXPERT &amp;&amp; getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() &amp;&amp; getPlayerByIndex(playerID).getCharacterCardPlayed() == CharacterCardsName.FUNGIST)</b>
+<b class="fc"><i class="no-highlight">443</i>&nbsp;                        while (gameTable.getIsleManager().getIsle(isleID).getStudentsByColor(colorForFungist) != studentsRemovedByFungist)</b>
+<b class="fc"><i class="no-highlight">444</i>&nbsp;                            gameTable.getIsleManager().getIsle(isleID).addStudent(colorForFungist);</b>
+<b class="fc"><i class="no-highlight">445</i>&nbsp;                    studentsRemovedByFungist = 0;</b>
+<b class="fc"><i class="no-highlight">446</i>&nbsp;                    checkEndGame();</b>
+<b class="fc"><i class="no-highlight">447</i>&nbsp;                    if (!lastRound) {</b>
+<b class="fc"><i class="no-highlight">448</i>&nbsp;                        actionPhase = ActionPhases.CHOOSE_CLOUD;</b>
+<b class="fc"><i class="no-highlight">449</i>&nbsp;                        notifyMNMovement(false);</b>
+<b class="fc"><i class="no-highlight">450</i>&nbsp;                        notifyTurn();</b>
+<i class="no-highlight">451</i>&nbsp;                    } else {
+<b class="fc"><i class="no-highlight">452</i>&nbsp;                        playerCounter++;</b>
+<b class="fc"><i class="no-highlight">453</i>&nbsp;                        actionPhase = ActionPhases.MOVE_STUDENTS;</b>
+<b class="fc"><i class="no-highlight">454</i>&nbsp;                        notifyMNMovement(false);</b>
+<b class="fc"><i class="no-highlight">455</i>&nbsp;                        nextPlayer();</b>
+<i class="no-highlight">456</i>&nbsp;                    }
+<i class="no-highlight">457</i>&nbsp;                } else {
+<b class="fc"><i class="no-highlight">458</i>&nbsp;                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You can&#39;t go that far! Please select a suitable isle&quot;));</b>
+<b class="fc"><i class="no-highlight">459</i>&nbsp;                    notifyTurn();</b>
+<i class="no-highlight">460</i>&nbsp;                }
+<i class="no-highlight">461</i>&nbsp;            } else {
+<b class="nc"><i class="no-highlight">462</i>&nbsp;                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;Isle &quot; + isleID + &quot; doesn&#39;t exist, please select another one&quot;));</b>
+<b class="nc"><i class="no-highlight">463</i>&nbsp;                notifyTurn();</b>
+<i class="no-highlight">464</i>&nbsp;            }
+<i class="no-highlight">465</i>&nbsp;        }
+<i class="no-highlight">466</i>&nbsp;    }
+<i class="no-highlight">467</i>&nbsp;
+<i class="no-highlight">468</i>&nbsp;    /**
+<i class="no-highlight">469</i>&nbsp;     * Initialize the parameters needed by the view consequently to the movement of mother nature.
+<i class="no-highlight">470</i>&nbsp;     * @param isEffect if is true then it will notify that an atomic effect that involves the movement of mother nature has been played,
+<i class="no-highlight">471</i>&nbsp;     *                 else false when mother nature is moved at the end of the turn.
+<i class="no-highlight">472</i>&nbsp;     */
+<i class="no-highlight">473</i>&nbsp;    private void notifyMNMovement(boolean isEffect) {
+<b class="fc"><i class="no-highlight">474</i>&nbsp;        ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; students = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">475</i>&nbsp;        ArrayList&lt;Integer&gt; numIsles = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">476</i>&nbsp;        ArrayList&lt;TowerColors&gt; towerColors = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">477</i>&nbsp;        ArrayList&lt;Boolean&gt; denyCards = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">478</i>&nbsp;        ArrayList&lt;Integer&gt; numTowers = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">479</i>&nbsp;        int whereMnId = 0;</b>
+<b class="fc"><i class="no-highlight">480</i>&nbsp;        for(Isle isle : gameTable.getIsleManager().getIsles()){</b>
+<b class="fc"><i class="no-highlight">481</i>&nbsp;            students.add(isle.getStudentsHashMap());</b>
+<b class="fc"><i class="no-highlight">482</i>&nbsp;            numIsles.add(isle.getNumOfIsles());</b>
+<b class="fc"><i class="no-highlight">483</i>&nbsp;            towerColors.add(isle.getTowersColor());</b>
+<b class="fc"><i class="no-highlight">484</i>&nbsp;            if(isle.getDenyCards()==0)</b>
+<b class="fc"><i class="no-highlight">485</i>&nbsp;                denyCards.add(false);</b>
+<i class="no-highlight">486</i>&nbsp;            else
+<b class="fc"><i class="no-highlight">487</i>&nbsp;                denyCards.add(true);</b>
+<b class="fc"><i class="no-highlight">488</i>&nbsp;            if(isle.getMotherNature())</b>
+<b class="fc"><i class="no-highlight">489</i>&nbsp;                whereMnId=isle.getIsleIndex();</b>
+<b class="fc"><i class="no-highlight">490</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">491</i>&nbsp;        for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">492</i>&nbsp;            numTowers.add(p.getDashboard().getTowerStorage().getNumberOfTowers());</b>
+<b class="fc"><i class="no-highlight">493</i>&nbsp;        int finalWhereMnId = whereMnId;</b>
+<b class="fc"><i class="no-highlight">494</i>&nbsp;        if (isEffect)</b>
+<b class="fc"><i class="no-highlight">495</i>&nbsp;            notifyObserver(obs-&gt;obs.onEffectActivation(gameTable.getIsleManager().getIsles().size(), students, towerColors, finalWhereMnId, denyCards, numIsles, numTowers));</b>
+<i class="no-highlight">496</i>&nbsp;        else
+<b class="fc"><i class="no-highlight">497</i>&nbsp;            notifyObserver(obs-&gt;obs.onMNMovement(gameTable.getIsleManager().getIsles().size(), students, towerColors, finalWhereMnId,denyCards,numIsles, numTowers));</b>
+<i class="no-highlight">498</i>&nbsp;    }
+<i class="no-highlight">499</i>&nbsp;
+<i class="no-highlight">500</i>&nbsp;    /**
+<i class="no-highlight">501</i>&nbsp;     * It picks the students present on a certain cloud and puts them on the entrance of the player.
+<i class="no-highlight">502</i>&nbsp;     * @param playerID ID of the player who chose the cloud.
+<i class="no-highlight">503</i>&nbsp;     * @param cloudID ID of the chosen cloud.
+<i class="no-highlight">504</i>&nbsp;     */
+<i class="no-highlight">505</i>&nbsp;    public void pickStudentsFromCloud(int playerID, int cloudID) {
+<b class="fc"><i class="no-highlight">506</i>&nbsp;        if (gamePhase == GamePhases.ACTION_PHASE &amp;&amp; actionPhase == ActionPhases.CHOOSE_CLOUD &amp;&amp; currentActivePlayer == players.get(playerID).getOrder()) {</b>
+<b class="fc"><i class="no-highlight">507</i>&nbsp;            if (cloudID &gt;= 0 &amp;&amp; cloudID &lt; numberOfPlayers) {</b>
+<b class="fc"><i class="no-highlight">508</i>&nbsp;                if (!gameTable.getCloud(cloudID).isEmpty()) {</b>
+<b class="fc"><i class="no-highlight">509</i>&nbsp;                    while (studentsCounter &lt; maxMovableStudents) {</b>
+<b class="fc"><i class="no-highlight">510</i>&nbsp;                        for (RealmColors rc : RealmColors.values())</b>
+<b class="fc"><i class="no-highlight">511</i>&nbsp;                            if (gameTable.getCloud(cloudID).getStudentsByColor(rc) &gt;= 1) {</b>
+<b class="fc"><i class="no-highlight">512</i>&nbsp;                                gameTable.getCloud(cloudID).removeStudent(rc);</b>
+<b class="fc"><i class="no-highlight">513</i>&nbsp;                                players.get(playerID).getDashboard().getEntrance().addStudent(rc);</b>
+<b class="fc"><i class="no-highlight">514</i>&nbsp;                                break;</b>
+<i class="no-highlight">515</i>&nbsp;                            }
+<b class="fc"><i class="no-highlight">516</i>&nbsp;                        studentsCounter++;</b>
+<i class="no-highlight">517</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">518</i>&nbsp;                    studentsCounter = 0;</b>
+<b class="fc"><i class="no-highlight">519</i>&nbsp;                    playerCounter++;</b>
+<b class="fc"><i class="no-highlight">520</i>&nbsp;                    actionPhase = ActionPhases.MOVE_STUDENTS;</b>
+<b class="fc"><i class="no-highlight">521</i>&nbsp;                    notifyObserver(obs -&gt; obs.onCloudUpdate(playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap(), cloudID));</b>
+<b class="fc"><i class="no-highlight">522</i>&nbsp;                    nextPlayer();</b>
+<i class="no-highlight">523</i>&nbsp;                } else {
+<b class="fc"><i class="no-highlight">524</i>&nbsp;                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;This cloud is empty! Please select another one&quot;));</b>
+<b class="fc"><i class="no-highlight">525</i>&nbsp;                    notifyTurn();</b>
+<i class="no-highlight">526</i>&nbsp;                }
+<i class="no-highlight">527</i>&nbsp;            } else {
+<b class="nc"><i class="no-highlight">528</i>&nbsp;                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;Cloud &quot; + cloudID + &quot; doesn&#39;t exist, please select another one&quot;));</b>
+<b class="nc"><i class="no-highlight">529</i>&nbsp;                notifyTurn();</b>
+<i class="no-highlight">530</i>&nbsp;            }
+<i class="no-highlight">531</i>&nbsp;        }
+<i class="no-highlight">532</i>&nbsp;    }
+<i class="no-highlight">533</i>&nbsp;
+<i class="no-highlight">534</i>&nbsp;    /**
+<i class="no-highlight">535</i>&nbsp;     * Getter method for the last round.
+<i class="no-highlight">536</i>&nbsp;     * @return true if this was the last round, else false.
+<i class="no-highlight">537</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">538</i>&nbsp;    public boolean isLastRound() { return lastRound;}</b>
+<i class="no-highlight">539</i>&nbsp;
+<i class="no-highlight">540</i>&nbsp;    /**
+<i class="no-highlight">541</i>&nbsp;     * Getter method for the end of the game state.
+<i class="no-highlight">542</i>&nbsp;     * @return if the game ended or not.
+<i class="no-highlight">543</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">544</i>&nbsp;    public boolean isGameEnded() { return endGame; }</b>
+<i class="no-highlight">545</i>&nbsp;
+<i class="no-highlight">546</i>&nbsp;    /**
+<i class="no-highlight">547</i>&nbsp;     * Getter method for the end of the game in a draw state.
+<i class="no-highlight">548</i>&nbsp;     * @return if the game ended in a draw or not.
+<i class="no-highlight">549</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">550</i>&nbsp;    public boolean isGameEndedInADraw() { return drawEndGame; }</b>
+<i class="no-highlight">551</i>&nbsp;
+<i class="no-highlight">552</i>&nbsp;    /**
+<i class="no-highlight">553</i>&nbsp;     * Getter method for the nickname of the player who won (or, if it is a 4 Players match, the squad).
+<i class="no-highlight">554</i>&nbsp;     * @return the nickname of the winner.
+<i class="no-highlight">555</i>&nbsp;     */
+<i class="no-highlight">556</i>&nbsp;    public String getWinner() {
+<b class="fc"><i class="no-highlight">557</i>&nbsp;        if (numberOfPlayers == 4) </b>
+<b class="fc"><i class="no-highlight">558</i>&nbsp;            return winner.getSquad().toString();</b>
+<i class="no-highlight">559</i>&nbsp;        else
+<b class="fc"><i class="no-highlight">560</i>&nbsp;            return winner.getNickname();</b>
+<i class="no-highlight">561</i>&nbsp;    }
+<i class="no-highlight">562</i>&nbsp;
+<i class="no-highlight">563</i>&nbsp;    /**
+<i class="no-highlight">564</i>&nbsp;     * Adds 7 or 9 students taken from the bag to a specific dashboard (depending on the number of players).
+<i class="no-highlight">565</i>&nbsp;     * @param dashboardID is the ID of the dashboard whose entrance we want to fill.
+<i class="no-highlight">566</i>&nbsp;     */
+<i class="no-highlight">567</i>&nbsp;    private void initializeEntrance(int dashboardID) {
+<b class="fc"><i class="no-highlight">568</i>&nbsp;        for (int i = 0; i &lt; players.get(dashboardID).getDashboard().getEntrance().getMaxStudents(); i++) </b>
+<b class="fc"><i class="no-highlight">569</i>&nbsp;            players.get(dashboardID).getDashboard().getEntrance().addStudent(gameTable.getBag().draw());</b>
+<i class="no-highlight">570</i>&nbsp;    }
+<i class="no-highlight">571</i>&nbsp;
+<i class="no-highlight">572</i>&nbsp;    /**
+<i class="no-highlight">573</i>&nbsp;     * Fills clouds automatically (used during PLANNING_PHASE).
+<i class="no-highlight">574</i>&nbsp;     */
+<i class="no-highlight">575</i>&nbsp;    private void fillClouds() {
+<b class="fc"><i class="no-highlight">576</i>&nbsp;        if (gamePhase == GamePhases.PLANNING_PHASE &amp;&amp; planningPhase == PlanningPhases.FILL_CLOUDS) {</b>
+<b class="fc"><i class="no-highlight">577</i>&nbsp;            if (getGameTable().getBag().getNumberOfStudents() &gt;= numberOfPlayers*maxMovableStudents) {</b>
+<b class="fc"><i class="no-highlight">578</i>&nbsp;                ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; cloudsList=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">579</i>&nbsp;                for (int i = 0; i &lt; numberOfPlayers; i++) {</b>
+<b class="fc"><i class="no-highlight">580</i>&nbsp;                    Cloud cloud = gameTable.getCloud(i);</b>
+<b class="fc"><i class="no-highlight">581</i>&nbsp;                    for (int j = 0; j &lt; maxMovableStudents; j++) {</b>
+<b class="fc"><i class="no-highlight">582</i>&nbsp;                        RealmColors color = gameTable.getBag().draw();</b>
+<b class="fc"><i class="no-highlight">583</i>&nbsp;                        cloud.addStudent(color);</b>
+<i class="no-highlight">584</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">585</i>&nbsp;                    cloudsList.add(cloud.getStudentsHashMap());</b>
+<i class="no-highlight">586</i>&nbsp;                }
+<i class="no-highlight">587</i>&nbsp;
+<b class="fc"><i class="no-highlight">588</i>&nbsp;                notifyObserver(obs-&gt;obs.onFillCloud(cloudsList));</b>
+<b class="fc"><i class="no-highlight">589</i>&nbsp;            }</b>
+<i class="no-highlight">590</i>&nbsp;            else
+<b class="fc"><i class="no-highlight">591</i>&nbsp;                lastRound = true;</b>
+<b class="fc"><i class="no-highlight">592</i>&nbsp;            planningPhase = PlanningPhases.ASSISTANT_CARD_PHASE;</b>
+<i class="no-highlight">593</i>&nbsp;        }
+<i class="no-highlight">594</i>&nbsp;    }
+<i class="no-highlight">595</i>&nbsp;
+<i class="no-highlight">596</i>&nbsp;    /**
+<i class="no-highlight">597</i>&nbsp;     * Updates when a player has the right to play according to the game phase.
+<i class="no-highlight">598</i>&nbsp;     * @param gamePhase used in order to execute different statements.
+<i class="no-highlight">599</i>&nbsp;     */
+<i class="no-highlight">600</i>&nbsp;    private void updateOrder(GamePhases gamePhase) {
+<b class="fc"><i class="no-highlight">601</i>&nbsp;        int i = firstPlayerIndex;</b>
+<b class="fc"><i class="no-highlight">602</i>&nbsp;        if (gamePhase == GamePhases.PLANNING_PHASE) {</b>
+<b class="fc"><i class="no-highlight">603</i>&nbsp;            for (playerCounter = 0; playerCounter &lt; numberOfPlayers; playerCounter++) {</b>
+<b class="fc"><i class="no-highlight">604</i>&nbsp;                players.get(i).setOrder(CurrentOrder.getCurrentOrder(playerCounter));</b>
+<b class="fc"><i class="no-highlight">605</i>&nbsp;                i++;</b>
+<b class="fc"><i class="no-highlight">606</i>&nbsp;                if (i == numberOfPlayers)</b>
+<b class="fc"><i class="no-highlight">607</i>&nbsp;                    i = 0;</b>
+<i class="no-highlight">608</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">609</i>&nbsp;            currentActivePlayer = CurrentOrder.FIRST_PLAYER;</b>
+<b class="fc"><i class="no-highlight">610</i>&nbsp;            playerCounter = 0;</b>
+<i class="no-highlight">611</i>&nbsp;        }
+<i class="no-highlight">612</i>&nbsp;
+<b class="fc"><i class="no-highlight">613</i>&nbsp;        if (gamePhase == GamePhases.ACTION_PHASE) {</b>
+<b class="fc"><i class="no-highlight">614</i>&nbsp;            TreeSet&lt;Integer&gt; turnOrderTree = new TreeSet&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">615</i>&nbsp;            int lowestTurnOrder = 0;</b>
+<i class="no-highlight">616</i>&nbsp;
+<b class="fc"><i class="no-highlight">617</i>&nbsp;            for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">618</i>&nbsp;                turnOrderTree.add(Integer.valueOf(Integer.valueOf(p.getDiscardPile().getTurnOrder()).toString()+Integer.valueOf(p.getCardOrder()).toString()));</b>
+<i class="no-highlight">619</i>&nbsp;
+<b class="fc"><i class="no-highlight">620</i>&nbsp;            for (playerCounter = 0; playerCounter &lt; numberOfPlayers; playerCounter++) {</b>
+<b class="fc"><i class="no-highlight">621</i>&nbsp;                if (!turnOrderTree.isEmpty())</b>
+<b class="fc"><i class="no-highlight">622</i>&nbsp;                    lowestTurnOrder = turnOrderTree.pollFirst();</b>
+<b class="fc"><i class="no-highlight">623</i>&nbsp;                for (Player p : players) {</b>
+<b class="fc"><i class="no-highlight">624</i>&nbsp;                    if (Integer.parseInt(Integer.valueOf(p.getDiscardPile().getTurnOrder()).toString()+Integer.valueOf(p.getCardOrder()).toString()) == lowestTurnOrder) {</b>
+<b class="fc"><i class="no-highlight">625</i>&nbsp;                        p.setOrder(CurrentOrder.getCurrentOrder(playerCounter));</b>
+<b class="fc"><i class="no-highlight">626</i>&nbsp;                        break;</b>
+<i class="no-highlight">627</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">628</i>&nbsp;                }</b>
+<i class="no-highlight">629</i>&nbsp;            }
+<i class="no-highlight">630</i>&nbsp;
+<b class="fc"><i class="no-highlight">631</i>&nbsp;            for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">632</i>&nbsp;                if (p.getOrder() == CurrentOrder.FIRST_PLAYER)</b>
+<b class="fc"><i class="no-highlight">633</i>&nbsp;                    firstPlayerIndex = p.getDashboard().getDashboardID();</b>
+<b class="fc"><i class="no-highlight">634</i>&nbsp;            currentActivePlayer = CurrentOrder.FIRST_PLAYER;</b>
+<b class="fc"><i class="no-highlight">635</i>&nbsp;            playerCounter = 0;</b>
+<i class="no-highlight">636</i>&nbsp;        }
+<i class="no-highlight">637</i>&nbsp;
+<b class="fc"><i class="no-highlight">638</i>&nbsp;        notifyTurn();</b>
+<i class="no-highlight">639</i>&nbsp;
+<i class="no-highlight">640</i>&nbsp;    }
+<i class="no-highlight">641</i>&nbsp;
+<i class="no-highlight">642</i>&nbsp;    /**
+<i class="no-highlight">643</i>&nbsp;     * Initialize the parameters that handle the turn order and notifies the view.
+<i class="no-highlight">644</i>&nbsp;     */
+<i class="no-highlight">645</i>&nbsp;    public void notifyTurn() {
+<b class="fc"><i class="no-highlight">646</i>&nbsp;        if (endGame) {</b>
+<b class="fc"><i class="no-highlight">647</i>&nbsp;            if (drawEndGame)</b>
+<b class="fc"><i class="no-highlight">648</i>&nbsp;                notifyObserver(obs-&gt;obs.onEndGame(getWinner(), -1));</b>
+<i class="no-highlight">649</i>&nbsp;            else
+<b class="fc"><i class="no-highlight">650</i>&nbsp;                notifyObserver(obs-&gt;obs.onEndGame(getWinner(), winner.getDashboard().getDashboardID()));</b>
+<i class="no-highlight">651</i>&nbsp;        }
+<i class="no-highlight">652</i>&nbsp;        else {
+<b class="fc"><i class="no-highlight">653</i>&nbsp;            int currentPlayerIndex = 0;</b>
+<b class="fc"><i class="no-highlight">654</i>&nbsp;            String currentPlayerNickname = null;</b>
+<b class="fc"><i class="no-highlight">655</i>&nbsp;            for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">656</i>&nbsp;                if (p.getOrder().equals(currentActivePlayer)) {</b>
+<b class="fc"><i class="no-highlight">657</i>&nbsp;                    currentPlayerIndex = players.indexOf(p);</b>
+<b class="fc"><i class="no-highlight">658</i>&nbsp;                    currentPlayerNickname = p.getNickname();</b>
+<b class="fc"><i class="no-highlight">659</i>&nbsp;                    break;</b>
+<i class="no-highlight">660</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">661</i>&nbsp;            int finalCurrentPlayerIndex = currentPlayerIndex;</b>
+<b class="fc"><i class="no-highlight">662</i>&nbsp;            String finalCurrentPlayerNickname = currentPlayerNickname;</b>
+<b class="fc"><i class="no-highlight">663</i>&nbsp;            notifyObserver(obs -&gt; obs.onGamePhases(finalCurrentPlayerIndex, finalCurrentPlayerNickname, gamePhase, actionPhase));</b>
+<i class="no-highlight">664</i>&nbsp;        }
+<i class="no-highlight">665</i>&nbsp;    }
+<i class="no-highlight">666</i>&nbsp;
+<i class="no-highlight">667</i>&nbsp;    /**
+<i class="no-highlight">668</i>&nbsp;     * It updates an attribute of Game that is used to identify which player has the right to play in a specific moment.
+<i class="no-highlight">669</i>&nbsp;     */
+<i class="no-highlight">670</i>&nbsp;    private void nextPlayer() {
+<b class="fc"><i class="no-highlight">671</i>&nbsp;        if (playerCounter == numberOfPlayers) {</b>
+<b class="fc"><i class="no-highlight">672</i>&nbsp;            playerCounter = 0;</b>
+<b class="fc"><i class="no-highlight">673</i>&nbsp;            if (gamePhase == GamePhases.PLANNING_PHASE) {</b>
+<b class="fc"><i class="no-highlight">674</i>&nbsp;                gamePhase = GamePhases.ACTION_PHASE;</b>
+<b class="fc"><i class="no-highlight">675</i>&nbsp;                planningPhase = PlanningPhases.FILL_CLOUDS;</b>
+<i class="no-highlight">676</i>&nbsp;            }
+<i class="no-highlight">677</i>&nbsp;            else {
+<b class="fc"><i class="no-highlight">678</i>&nbsp;                gamePhase = GamePhases.PLANNING_PHASE;</b>
+<b class="fc"><i class="no-highlight">679</i>&nbsp;                for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">680</i>&nbsp;                    p.setDiscardPileNull();</b>
+<b class="fc"><i class="no-highlight">681</i>&nbsp;                fillClouds();</b>
+<b class="fc"><i class="no-highlight">682</i>&nbsp;                if(gameMode==GameMode.EXPERT)</b>
+<b class="nc"><i class="no-highlight">683</i>&nbsp;                    for(Player p : players)</b>
+<b class="nc"><i class="no-highlight">684</i>&nbsp;                        p.setNotAlreadyPlayedACardThisTurn();</b>
+<i class="no-highlight">685</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">686</i>&nbsp;            updateOrder(gamePhase);</b>
+<i class="no-highlight">687</i>&nbsp;        }
+<i class="no-highlight">688</i>&nbsp;        else {
+<b class="fc"><i class="no-highlight">689</i>&nbsp;            currentActivePlayer = CurrentOrder.getCurrentOrder(playerCounter);</b>
+<b class="fc"><i class="no-highlight">690</i>&nbsp;            notifyTurn();</b>
+<i class="no-highlight">691</i>&nbsp;        }
+<i class="no-highlight">692</i>&nbsp;    }
+<i class="no-highlight">693</i>&nbsp;
+<i class="no-highlight">694</i>&nbsp;    /**
+<i class="no-highlight">695</i>&nbsp;     * Invoked when a student has been added to the dining room of a certain player and updates the professors owned by players, if it is necessary.
+<i class="no-highlight">696</i>&nbsp;     * @param playerID index of the players ArrayList which corresponds to the player whose dining room has been updated.
+<i class="no-highlight">697</i>&nbsp;     * @param color color of the student that has been moved to the dining room, therefore it is the color of the professor we need to check.
+<i class="no-highlight">698</i>&nbsp;     */
+<i class="no-highlight">699</i>&nbsp;    public void checkUpdateProfessor(int playerID, RealmColors color) {
+<b class="fc"><i class="no-highlight">700</i>&nbsp;        if (players.get(playerID).getDashboard().getDiningRoom().getProfessorByColor(color) == 0) {</b>
+<b class="fc"><i class="no-highlight">701</i>&nbsp;            int playerWhoHasProfessorIndex = 0;</b>
+<b class="fc"><i class="no-highlight">702</i>&nbsp;            boolean someoneHasProfessor = false;</b>
+<i class="no-highlight">703</i>&nbsp;
+<b class="fc"><i class="no-highlight">704</i>&nbsp;            for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">705</i>&nbsp;                if (p.getDashboard().getDiningRoom().getProfessorByColor(color) == 1) {</b>
+<b class="fc"><i class="no-highlight">706</i>&nbsp;                    playerWhoHasProfessorIndex = p.getDashboard().getDashboardID();</b>
+<b class="fc"><i class="no-highlight">707</i>&nbsp;                    someoneHasProfessor = true;</b>
+<b class="fc"><i class="no-highlight">708</i>&nbsp;                    break;</b>
+<i class="no-highlight">709</i>&nbsp;                }
+<i class="no-highlight">710</i>&nbsp;
+<b class="fc"><i class="no-highlight">711</i>&nbsp;            if (someoneHasProfessor) {</b>
+<b class="fc"><i class="no-highlight">712</i>&nbsp;                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(color) &gt; players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().getStudentsByColor(color)-farmerOffset) {</b>
+<b class="fc"><i class="no-highlight">713</i>&nbsp;                    players.get(playerWhoHasProfessorIndex).getDashboard().getDiningRoom().removeProfessor(color);</b>
+<b class="fc"><i class="no-highlight">714</i>&nbsp;                    players.get(playerID).getDashboard().getDiningRoom().addProfessor(color);</b>
+<i class="no-highlight">715</i>&nbsp;                }
+<i class="no-highlight">716</i>&nbsp;            }
+<i class="no-highlight">717</i>&nbsp;            else {
+<b class="fc"><i class="no-highlight">718</i>&nbsp;                gameTable.removeProfessor(color);</b>
+<b class="fc"><i class="no-highlight">719</i>&nbsp;                players.get(playerID).getDashboard().getDiningRoom().addProfessor(color);</b>
+<i class="no-highlight">720</i>&nbsp;            }
+<i class="no-highlight">721</i>&nbsp;            //observer parameters initialization
+<b class="fc"><i class="no-highlight">722</i>&nbsp;            ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; professors=new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">723</i>&nbsp;            for(Player p:players)</b>
+<b class="fc"><i class="no-highlight">724</i>&nbsp;                professors.add(p.getDashboard().getDiningRoom().getProfessors());</b>
+<b class="fc"><i class="no-highlight">725</i>&nbsp;            notifyObserver(obs-&gt;obs.onProfessorUpdate(professors));</b>
+<i class="no-highlight">726</i>&nbsp;        }
+<i class="no-highlight">727</i>&nbsp;
+<i class="no-highlight">728</i>&nbsp;    }
+<i class="no-highlight">729</i>&nbsp;
+<i class="no-highlight">730</i>&nbsp;    /**
+<i class="no-highlight">731</i>&nbsp;     * Invoked when mother nature ends on acceptable isle and updates all tower references, 
+<i class="no-highlight">732</i>&nbsp;     * if it is necessary (it also calls a method to verify if isles union has to occur).
+<i class="no-highlight">733</i>&nbsp;     * @param isleID index of the isle which has mother nature on it.
+<i class="no-highlight">734</i>&nbsp;     */
+<i class="no-highlight">735</i>&nbsp;    public void checkUpdateInfluence(int isleID) {
+<b class="fc"><i class="no-highlight">736</i>&nbsp;        int majorInfluence = 0;</b>
+<b class="fc"><i class="no-highlight">737</i>&nbsp;        int conquerorIndex = 0;</b>
+<b class="fc"><i class="no-highlight">738</i>&nbsp;        boolean draw = false;</b>
+<i class="no-highlight">739</i>&nbsp;
+<b class="fc"><i class="no-highlight">740</i>&nbsp;        if (numberOfPlayers == 4) {</b>
+<b class="fc"><i class="no-highlight">741</i>&nbsp;            int tempInfluence = 0;</b>
+<b class="fc"><i class="no-highlight">742</i>&nbsp;            for (int i = 0; i &lt; 2; i++) {</b>
+<b class="fc"><i class="no-highlight">743</i>&nbsp;                for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">744</i>&nbsp;                    if (p.getSquad() == Squads.getSquads(i))</b>
+<b class="fc"><i class="no-highlight">745</i>&nbsp;                        tempInfluence = tempInfluence + gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID());</b>
+<b class="fc"><i class="no-highlight">746</i>&nbsp;                if (tempInfluence == majorInfluence)</b>
+<b class="fc"><i class="no-highlight">747</i>&nbsp;                    draw = true;</b>
+<b class="fc"><i class="no-highlight">748</i>&nbsp;                if (tempInfluence &gt; majorInfluence) {</b>
+<b class="fc"><i class="no-highlight">749</i>&nbsp;                    majorInfluence = tempInfluence;</b>
+<b class="fc"><i class="no-highlight">750</i>&nbsp;                    conquerorIndex = i;</b>
+<b class="fc"><i class="no-highlight">751</i>&nbsp;                    draw = false;</b>
+<i class="no-highlight">752</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">753</i>&nbsp;                tempInfluence = 0;</b>
+<i class="no-highlight">754</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">755</i>&nbsp;        }</b>
+<i class="no-highlight">756</i>&nbsp;        else {
+<b class="fc"><i class="no-highlight">757</i>&nbsp;            for (Player p : players) {</b>
+<b class="fc"><i class="no-highlight">758</i>&nbsp;                if (gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID()) == majorInfluence)</b>
+<b class="fc"><i class="no-highlight">759</i>&nbsp;                    draw = true;</b>
+<b class="fc"><i class="no-highlight">760</i>&nbsp;                if (gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID()) &gt; majorInfluence) {</b>
+<b class="fc"><i class="no-highlight">761</i>&nbsp;                    majorInfluence = gameTable.getIsleManager().getIsle(isleID).getInfluences(players).get(p.getDashboard().getDashboardID());</b>
+<b class="fc"><i class="no-highlight">762</i>&nbsp;                    conquerorIndex = p.getDashboard().getDashboardID();</b>
+<b class="fc"><i class="no-highlight">763</i>&nbsp;                    draw = false;</b>
+<i class="no-highlight">764</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">765</i>&nbsp;            }</b>
+<i class="no-highlight">766</i>&nbsp;        }
+<i class="no-highlight">767</i>&nbsp;
+<b class="fc"><i class="no-highlight">768</i>&nbsp;        if (!draw) {</b>
+<b class="fc"><i class="no-highlight">769</i>&nbsp;            if (gameTable.getIsleManager().getIsle(isleID).getTowersColor() != players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor()) {</b>
+<b class="fc"><i class="no-highlight">770</i>&nbsp;                if (gameTable.getIsleManager().getIsle(isleID).getTowersColor() == TowerColors.NOCOLOR)</b>
+<b class="fc"><i class="no-highlight">771</i>&nbsp;                    players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();</b>
+<i class="no-highlight">772</i>&nbsp;                else {
+<b class="fc"><i class="no-highlight">773</i>&nbsp;                    for (Player p : players) {</b>
+<b class="fc"><i class="no-highlight">774</i>&nbsp;                        if (p.getDashboard().getTowerStorage().getTowerColor() == gameTable.getIsleManager().getIsle(isleID).getTowersColor()) {</b>
+<b class="fc"><i class="no-highlight">775</i>&nbsp;                            for (int i = 0; i &lt; gameTable.getIsleManager().getIsle(isleID).getNumOfIsles(); i++) {</b>
+<b class="fc"><i class="no-highlight">776</i>&nbsp;                                p.getDashboard().getTowerStorage().addTower();</b>
+<b class="fc"><i class="no-highlight">777</i>&nbsp;                                players.get(conquerorIndex).getDashboard().getTowerStorage().removeTower();</b>
+<i class="no-highlight">778</i>&nbsp;                            }
+<b class="fc"><i class="no-highlight">779</i>&nbsp;                            break;</b>
+<i class="no-highlight">780</i>&nbsp;                        }
+<b class="fc"><i class="no-highlight">781</i>&nbsp;                    }</b>
+<i class="no-highlight">782</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">783</i>&nbsp;                gameTable.getIsleManager().getIsle(isleID).setTower(players.get(conquerorIndex).getDashboard().getTowerStorage().getTowerColor());</b>
+<b class="fc"><i class="no-highlight">784</i>&nbsp;                gameTable.getIsleManager().checkUnifyIsle(isleID);</b>
+<i class="no-highlight">785</i>&nbsp;            }
+<i class="no-highlight">786</i>&nbsp;        }
+<i class="no-highlight">787</i>&nbsp;    }
+<i class="no-highlight">788</i>&nbsp;
+<i class="no-highlight">789</i>&nbsp;    /**
+<i class="no-highlight">790</i>&nbsp;     * It checks if the game has ended and updates the proper end game variables.
+<i class="no-highlight">791</i>&nbsp;     */
+<i class="no-highlight">792</i>&nbsp;    public void checkEndGame() {
+<b class="fc"><i class="no-highlight">793</i>&nbsp;        for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">794</i>&nbsp;            if (p.getDashboard().getTowerStorage().getNumberOfTowers() == 0 &amp;&amp; p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR) {</b>
+<b class="fc"><i class="no-highlight">795</i>&nbsp;                endGame = true;</b>
+<b class="fc"><i class="no-highlight">796</i>&nbsp;                winner = p;</b>
+<i class="no-highlight">797</i>&nbsp;                return;
+<i class="no-highlight">798</i>&nbsp;            }
+<i class="no-highlight">799</i>&nbsp;
+<b class="fc"><i class="no-highlight">800</i>&nbsp;        if ((gameTable.getIsleManager().getIsles().size() == 3) || (lastRound &amp;&amp; playerCounter == numberOfPlayers-1)) {</b>
+<b class="fc"><i class="no-highlight">801</i>&nbsp;            endGame = true;</b>
+<i class="no-highlight">802</i>&nbsp;
+<b class="fc"><i class="no-highlight">803</i>&nbsp;            int minorNumOfTowersInStorage = 8;</b>
+<b class="fc"><i class="no-highlight">804</i>&nbsp;            int winnerIndex = 0;</b>
+<b class="fc"><i class="no-highlight">805</i>&nbsp;            boolean draw = false;</b>
+<i class="no-highlight">806</i>&nbsp;
+<b class="fc"><i class="no-highlight">807</i>&nbsp;            for (Player p : players) {</b>
+<b class="fc"><i class="no-highlight">808</i>&nbsp;                if (p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage &amp;&amp; p.getDashboard().getTowerStorage().getTowerColor() != TowerColors.NOCOLOR)</b>
+<b class="fc"><i class="no-highlight">809</i>&nbsp;                    draw = true;</b>
+<b class="fc"><i class="no-highlight">810</i>&nbsp;                if (p.getDashboard().getTowerStorage().getNumberOfTowers() &lt; minorNumOfTowersInStorage) {</b>
+<b class="fc"><i class="no-highlight">811</i>&nbsp;                    minorNumOfTowersInStorage = p.getDashboard().getTowerStorage().getNumberOfTowers();</b>
+<b class="fc"><i class="no-highlight">812</i>&nbsp;                    winnerIndex = p.getDashboard().getDashboardID();</b>
+<b class="fc"><i class="no-highlight">813</i>&nbsp;                    draw = false;</b>
+<i class="no-highlight">814</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">815</i>&nbsp;            }</b>
+<i class="no-highlight">816</i>&nbsp;
+<b class="fc"><i class="no-highlight">817</i>&nbsp;            if (draw) {</b>
+<b class="fc"><i class="no-highlight">818</i>&nbsp;                int majorProfessors = 0;</b>
+<i class="no-highlight">819</i>&nbsp;
+<b class="fc"><i class="no-highlight">820</i>&nbsp;                for (Player p : players) {</b>
+<b class="fc"><i class="no-highlight">821</i>&nbsp;                    if (p.getDashboard().getDiningRoom().getNumberOfProfessors() == majorProfessors &amp;&amp; p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage)</b>
+<b class="fc"><i class="no-highlight">822</i>&nbsp;                        drawEndGame = true;</b>
+<b class="fc"><i class="no-highlight">823</i>&nbsp;                    if (p.getDashboard().getDiningRoom().getNumberOfProfessors() &gt; majorProfessors &amp;&amp; p.getDashboard().getTowerStorage().getNumberOfTowers() == minorNumOfTowersInStorage) {</b>
+<b class="fc"><i class="no-highlight">824</i>&nbsp;                        majorProfessors = p.getDashboard().getDiningRoom().getNumberOfProfessors();</b>
+<b class="fc"><i class="no-highlight">825</i>&nbsp;                        winnerIndex = p.getDashboard().getDashboardID();</b>
+<b class="fc"><i class="no-highlight">826</i>&nbsp;                        drawEndGame = false;</b>
+<i class="no-highlight">827</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">828</i>&nbsp;                }</b>
+<i class="no-highlight">829</i>&nbsp;            }
+<i class="no-highlight">830</i>&nbsp;
+<b class="fc"><i class="no-highlight">831</i>&nbsp;            winner = players.get(winnerIndex);</b>
+<i class="no-highlight">832</i>&nbsp;        }
+<i class="no-highlight">833</i>&nbsp;
+<i class="no-highlight">834</i>&nbsp;    }
+<i class="no-highlight">835</i>&nbsp;
+<i class="no-highlight">836</i>&nbsp;    /**
+<i class="no-highlight">837</i>&nbsp;     * Permits to play a character card during the action phase.
+<i class="no-highlight">838</i>&nbsp;     * It set money and other booleans but doesn&#39;t activate the proper effect of the card.
+<i class="no-highlight">839</i>&nbsp;     * @param playerID the id of the player who plays a certain character card during his action phase.
+<i class="no-highlight">840</i>&nbsp;     * @param characterCardIndex the index of the character card that the player wants to play.
+<i class="no-highlight">841</i>&nbsp;     */
+<i class="no-highlight">842</i>&nbsp;    public void playCharacterCard(int playerID, int characterCardIndex) {
+<b class="fc"><i class="no-highlight">843</i>&nbsp;        if (gamePhase == GamePhases.ACTION_PHASE &amp;&amp; currentActivePlayer == players.get(playerID).getOrder()){</b>
+<b class="fc"><i class="no-highlight">844</i>&nbsp;            CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();</b>
+<b class="fc"><i class="no-highlight">845</i>&nbsp;            if (!players.get(playerID).getAlreadyPlayedACardThisTurn()) {</b>
+<b class="fc"><i class="no-highlight">846</i>&nbsp;                if (characterCardIndex &gt;= 0 &amp;&amp; characterCardIndex &lt;= 2) {</b>
+<b class="fc"><i class="no-highlight">847</i>&nbsp;                    if (players.get(playerID).getMoney() &gt;= gameTable.getCharacterCard(characterCardIndex).getCost()) {</b>
+<b class="fc"><i class="no-highlight">848</i>&nbsp;                        if (cardName != CharacterCardsName.GRANDMA_HERBS || getGameTable().getCharacterCards().get(characterCardIndex).getDenyCards() &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">849</i>&nbsp;                            if (cardName != CharacterCardsName.MINSTREL || players.get(playerID).getDashboard().getDiningRoom().getNumberOfStudents() &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">850</i>&nbsp;                                getGameTable().characterCardPlayed(characterCardIndex);</b>
+<b class="fc"><i class="no-highlight">851</i>&nbsp;                                getPlayerByIndex(playerID).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));</b>
+<b class="fc"><i class="no-highlight">852</i>&nbsp;                                lastActionPhase = actionPhase;</b>
+<b class="fc"><i class="no-highlight">853</i>&nbsp;                                actionPhase = ActionPhases.CHARACTER_CARD_PHASE;</b>
+<b class="fc"><i class="no-highlight">854</i>&nbsp;                                notifyObserver(obs -&gt; obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap()));</b>
+<i class="no-highlight">855</i>&nbsp;                            }
+<i class="no-highlight">856</i>&nbsp;                            else
+<b class="nc"><i class="no-highlight">857</i>&nbsp;                                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You don&#39;t have students in your dining room, you can&#39;t activate this card&quot;));</b>
+<i class="no-highlight">858</i>&nbsp;                        }
+<i class="no-highlight">859</i>&nbsp;                        else
+<b class="nc"><i class="no-highlight">860</i>&nbsp;                            notifyObserver(obs -&gt; obs.onKO(playerID, &quot;There&#39;s no deny cards left on GRANDMA_HERBS, you can&#39;t activate this card&quot;));</b>
+<i class="no-highlight">861</i>&nbsp;                    }
+<i class="no-highlight">862</i>&nbsp;                    else
+<b class="fc"><i class="no-highlight">863</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You don&#39;t have enough money to activate this card, please select another one&quot;));</b>
+<i class="no-highlight">864</i>&nbsp;                }
+<i class="no-highlight">865</i>&nbsp;                else
+<b class="nc"><i class="no-highlight">866</i>&nbsp;                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;Character card &quot; + characterCardIndex + &quot; doesn&#39;t exist, please select another one&quot;));</b>
+<i class="no-highlight">867</i>&nbsp;            }
+<i class="no-highlight">868</i>&nbsp;            else
+<b class="nc"><i class="no-highlight">869</i>&nbsp;                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve already played a character card this turn, you can&#39;t play another one&quot;));</b>
+<b class="fc"><i class="no-highlight">870</i>&nbsp;            notifyTurn();</b>
+<i class="no-highlight">871</i>&nbsp;        }
+<i class="no-highlight">872</i>&nbsp;    }
+<i class="no-highlight">873</i>&nbsp;
+<i class="no-highlight">874</i>&nbsp;    /**
+<i class="no-highlight">875</i>&nbsp;     * Permits to activate an atomic effect called in the controller for a certain number of times.
+<i class="no-highlight">876</i>&nbsp;     * @param playerID the id of the player who plays the character card.
+<i class="no-highlight">877</i>&nbsp;     * @param characterCardIndex the index of the character card played.
+<i class="no-highlight">878</i>&nbsp;     * @param value1 it represents different values based on the played card.
+<i class="no-highlight">879</i>&nbsp;     *               MONK          -&gt; isle index where to move the student.
+<i class="no-highlight">880</i>&nbsp;     *               HERALD        -&gt; isle where calculate the influence now.
+<i class="no-highlight">881</i>&nbsp;     *               When not used -&gt; set to 0.
+<i class="no-highlight">882</i>&nbsp;     * @param value2 the color of the student the player wants to remove from the staring StudentsManager.
+<i class="no-highlight">883</i>&nbsp;     */
+<i class="no-highlight">884</i>&nbsp;    public void activateAtomicEffect(int playerID, int characterCardIndex, int value1, int value2){
+<b class="fc"><i class="no-highlight">885</i>&nbsp;        if (gamePhase == GamePhases.ACTION_PHASE &amp;&amp; getPlayerByIndex(playerID).getAlreadyPlayedACardThisTurn() &amp;&amp; currentActivePlayer == players.get(playerID).getOrder()){</b>
+<b class="fc"><i class="no-highlight">886</i>&nbsp;            CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();</b>
+<b class="fc"><i class="no-highlight">887</i>&nbsp;            switch (cardName) {</b>
+<i class="no-highlight">888</i>&nbsp;                case THIEF, FUNGIST -&gt; {
+<b class="fc"><i class="no-highlight">889</i>&nbsp;                    if (value1 &gt;= 0 &amp;&amp; value1 &lt;= 4) {</b>
+<b class="fc"><i class="no-highlight">890</i>&nbsp;                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">891</i>&nbsp;                        notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<i class="no-highlight">892</i>&nbsp;                    }
+<i class="no-highlight">893</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">894</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve selected a color that doesn&#39;t exist, please select another one&quot;));</b>
+<b class="fc"><i class="no-highlight">895</i>&nbsp;                    notifyTurn();</b>
+<b class="fc"><i class="no-highlight">896</i>&nbsp;                }</b>
+<i class="no-highlight">897</i>&nbsp;                case SPOILED_PRINCESS -&gt; {
+<b class="fc"><i class="no-highlight">898</i>&nbsp;                    if (value1 &gt;= 0 &amp;&amp; value1 &lt;= 4) {</b>
+<b class="fc"><i class="no-highlight">899</i>&nbsp;                        if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">900</i>&nbsp;                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">901</i>&nbsp;                            notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<i class="no-highlight">902</i>&nbsp;                        }
+<i class="no-highlight">903</i>&nbsp;                        else
+<b class="nc"><i class="no-highlight">904</i>&nbsp;                            notifyObserver(obs -&gt; obs.onKO(playerID, &quot;There aren&#39;t enough &quot; + RealmColors.getColor(value1).toString() + &quot; students on the card, please select another color&quot;));</b>
+<i class="no-highlight">905</i>&nbsp;                    }
+<i class="no-highlight">906</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">907</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve selected a color that doesn&#39;t exist, please select another one&quot;));</b>
+<b class="fc"><i class="no-highlight">908</i>&nbsp;                    notifyTurn();</b>
+<b class="fc"><i class="no-highlight">909</i>&nbsp;                }</b>
+<i class="no-highlight">910</i>&nbsp;                case HERALD -&gt; {
+<b class="fc"><i class="no-highlight">911</i>&nbsp;                    if (value1 &gt;= 0 &amp;&amp; value1 &lt; gameTable.getIsleManager().getIsles().size()) {</b>
+<b class="fc"><i class="no-highlight">912</i>&nbsp;                        effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">913</i>&nbsp;                        notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<i class="no-highlight">914</i>&nbsp;                    }
+<i class="no-highlight">915</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">916</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve selected an isle that doesn&#39;t exist, please select another one&quot;));</b>
+<b class="fc"><i class="no-highlight">917</i>&nbsp;                    notifyTurn();</b>
+<b class="fc"><i class="no-highlight">918</i>&nbsp;                }</b>
+<i class="no-highlight">919</i>&nbsp;                case GRANDMA_HERBS -&gt; {
+<b class="fc"><i class="no-highlight">920</i>&nbsp;                    if (value1 &gt;= 0 &amp;&amp; value1 &lt; gameTable.getIsleManager().getIsles().size()) {</b>
+<b class="fc"><i class="no-highlight">921</i>&nbsp;                        if (gameTable.getIsleManager().getIsles().get(value1).getDenyCards() == 0) {</b>
+<b class="fc"><i class="no-highlight">922</i>&nbsp;                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">923</i>&nbsp;                            notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<i class="no-highlight">924</i>&nbsp;                        }
+<i class="no-highlight">925</i>&nbsp;                        else
+<b class="nc"><i class="no-highlight">926</i>&nbsp;                            notifyObserver(obs -&gt; obs.onKO(playerID, &quot;There&#39;s already a deny card on this isle, please select another one&quot;));</b>
+<i class="no-highlight">927</i>&nbsp;                    }
+<i class="no-highlight">928</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">929</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve selected an isle that doesn&#39;t exist, please select another one&quot;));</b>
+<b class="fc"><i class="no-highlight">930</i>&nbsp;                    notifyTurn();</b>
+<b class="fc"><i class="no-highlight">931</i>&nbsp;                }</b>
+<i class="no-highlight">932</i>&nbsp;                case JESTER -&gt; {
+<b class="fc"><i class="no-highlight">933</i>&nbsp;                    if ((value1 &gt;= 0 &amp;&amp; value1 &lt;= 4) &amp;&amp; (value2 &gt;= 0 &amp;&amp; value2 &lt;= 4)) {</b>
+<b class="fc"><i class="no-highlight">934</i>&nbsp;                        if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">935</i>&nbsp;                            if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">936</i>&nbsp;                                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2)) &lt;= 10) {</b>
+<b class="fc"><i class="no-highlight">937</i>&nbsp;                                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">938</i>&nbsp;                                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<i class="no-highlight">939</i>&nbsp;                                }
+<i class="no-highlight">940</i>&nbsp;                                else
+<b class="nc"><i class="no-highlight">941</i>&nbsp;                                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;Your &quot; + RealmColors.getColor(value2).toString() + &quot; Dining Room is full! You can&#39;t add &quot; + RealmColors.getColor(value2) + &quot; students, please select another color&quot;));</b>
+<i class="no-highlight">942</i>&nbsp;                            }
+<i class="no-highlight">943</i>&nbsp;                            else
+<b class="nc"><i class="no-highlight">944</i>&nbsp;                                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You don&#39;t have enough &quot; + RealmColors.getColor(value2).toString() + &quot; students, please select another color&quot;));</b>
+<i class="no-highlight">945</i>&nbsp;                        }
+<i class="no-highlight">946</i>&nbsp;                        else
+<b class="nc"><i class="no-highlight">947</i>&nbsp;                            notifyObserver(obs -&gt; obs.onKO(playerID, &quot;There aren&#39;t enough &quot; + RealmColors.getColor(value1).toString() + &quot; students on the card, please select another color&quot;));</b>
+<i class="no-highlight">948</i>&nbsp;                    }
+<i class="no-highlight">949</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">950</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve selected a color that doesn&#39;t exist, please try again&quot;));</b>
+<b class="fc"><i class="no-highlight">951</i>&nbsp;                    notifyTurn();</b>
+<b class="fc"><i class="no-highlight">952</i>&nbsp;                }</b>
+<i class="no-highlight">953</i>&nbsp;                case MINSTREL -&gt; {
+<b class="fc"><i class="no-highlight">954</i>&nbsp;                    if ((value1 &gt;= 0 &amp;&amp; value1 &lt;= 4) &amp;&amp; (value2 &gt;= 0 &amp;&amp; value2 &lt;= 4)) {</b>
+<b class="fc"><i class="no-highlight">955</i>&nbsp;                        if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value1)) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">956</i>&nbsp;                            if (players.get(playerID).getDashboard().getEntrance().getStudentsByColor(RealmColors.getColor(value2)) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">957</i>&nbsp;                                if (players.get(playerID).getDashboard().getDiningRoom().getStudentsByColor(RealmColors.getColor(value2)) &lt;= 10) {</b>
+<b class="fc"><i class="no-highlight">958</i>&nbsp;                                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">959</i>&nbsp;                                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<i class="no-highlight">960</i>&nbsp;                                }
+<i class="no-highlight">961</i>&nbsp;                                else
+<b class="nc"><i class="no-highlight">962</i>&nbsp;                                    notifyObserver(obs -&gt; obs.onKO(playerID, &quot;Your &quot; + RealmColors.getColor(value2).toString() + &quot; Dining Room is full! You can&#39;t add &quot; + RealmColors.getColor(value2) + &quot; students, please select another color&quot;));</b>
+<i class="no-highlight">963</i>&nbsp;                            }
+<i class="no-highlight">964</i>&nbsp;                            else
+<b class="fc"><i class="no-highlight">965</i>&nbsp;                                notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You don&#39;t have enough &quot; + RealmColors.getColor(value2).toString() + &quot; students, please select another color&quot;));</b>
+<i class="no-highlight">966</i>&nbsp;                        }
+<i class="no-highlight">967</i>&nbsp;                        else
+<b class="nc"><i class="no-highlight">968</i>&nbsp;                            notifyObserver(obs -&gt; obs.onKO(playerID, &quot;There aren&#39;t enough &quot; + RealmColors.getColor(value1).toString() + &quot; students in your dining room, please select another color&quot;));</b>
+<i class="no-highlight">969</i>&nbsp;                    }
+<i class="no-highlight">970</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">971</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve selected a color that doesn&#39;t exist, please try again&quot;));</b>
+<b class="fc"><i class="no-highlight">972</i>&nbsp;                    notifyTurn();</b>
+<b class="fc"><i class="no-highlight">973</i>&nbsp;                }</b>
+<i class="no-highlight">974</i>&nbsp;                case MONK -&gt; {
+<b class="fc"><i class="no-highlight">975</i>&nbsp;                    if ((value1 &gt;= 0 &amp;&amp; value1 &lt;= 4) &amp;&amp; (value2 &gt;= 0 &amp;&amp; value2 &lt; gameTable.getIsleManager().getIsles().size())) {</b>
+<b class="fc"><i class="no-highlight">976</i>&nbsp;                        if (getGameTable().getCharacterCards().get(characterCardIndex).getStudentsByColor(RealmColors.getColor(value1)) &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">977</i>&nbsp;                            effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">978</i>&nbsp;                            notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<i class="no-highlight">979</i>&nbsp;                        }
+<i class="no-highlight">980</i>&nbsp;                        else
+<b class="fc"><i class="no-highlight">981</i>&nbsp;                            notifyObserver(obs -&gt; obs.onKO(playerID, &quot;There aren&#39;t enough &quot; + RealmColors.getColor(value1).toString() + &quot; students on the card, please select another color&quot;));</b>
+<i class="no-highlight">982</i>&nbsp;                    }
+<i class="no-highlight">983</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">984</i>&nbsp;                        notifyObserver(obs -&gt; obs.onKO(playerID, &quot;You&#39;ve selected a color or an isle that doesn&#39;t exist, please try again&quot;));</b>
+<b class="fc"><i class="no-highlight">985</i>&nbsp;                    notifyTurn();</b>
+<b class="fc"><i class="no-highlight">986</i>&nbsp;                }</b>
+<i class="no-highlight">987</i>&nbsp;                default -&gt; {
+<b class="fc"><i class="no-highlight">988</i>&nbsp;                    effectInGameFactory.getEffect(getGameTable().getCharacterCard(characterCardIndex), this, getPlayerByIndex(playerID), value1, value2);</b>
+<b class="fc"><i class="no-highlight">989</i>&nbsp;                    notifyEffectUpdate(characterCardIndex, playerID, value1, value2);</b>
+<b class="fc"><i class="no-highlight">990</i>&nbsp;                    notifyTurn();</b>
+<i class="no-highlight">991</i>&nbsp;                }
+<i class="no-highlight">992</i>&nbsp;            }
+<i class="no-highlight">993</i>&nbsp;        }
+<i class="no-highlight">994</i>&nbsp;    }
+<i class="no-highlight">995</i>&nbsp;
+<i class="no-highlight">996</i>&nbsp;    /**
+<i class="no-highlight">997</i>&nbsp;     * Initialize the parameters needed by the view consequently to the activation of the atomic effect of a character card.
+<i class="no-highlight">998</i>&nbsp;     * @param characterCardIndex index of the character card played.
+<i class="no-highlight">999</i>&nbsp;     * @param playerID ID of the player that played the character card.
+<i class="no-highlight">1000</i>&nbsp;     * @param value1 value that assumes a different meaning based on the character card played (color, isle index or -1 when not required).
+<i class="no-highlight">1001</i>&nbsp;     * @param value2 value that assumes a different meaning based on the character card played (color or -1 when not required).
+<i class="no-highlight">1002</i>&nbsp;     */
+<i class="no-highlight">1003</i>&nbsp;    public void notifyEffectUpdate(int characterCardIndex, int playerID, int value1, int value2) {
+<b class="fc"><i class="no-highlight">1004</i>&nbsp;        CharacterCardsName cardName = getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName();</b>
+<b class="fc"><i class="no-highlight">1005</i>&nbsp;        switch (cardName) {</b>
+<b class="fc"><i class="no-highlight">1006</i>&nbsp;            case MONK                       -&gt; notifyObserver(obs-&gt; obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value2, getGameTable().getIsleManager().getIsle(value2).getStudentsHashMap()));</b>
+<i class="no-highlight">1007</i>&nbsp;            case FARMER                     -&gt; {
+<b class="fc"><i class="no-highlight">1008</i>&nbsp;                ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; professors = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">1009</i>&nbsp;                for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">1010</i>&nbsp;                    professors.add(p.getDashboard().getDiningRoom().getProfessors());</b>
+<b class="fc"><i class="no-highlight">1011</i>&nbsp;                notifyObserver(obs -&gt; obs.onEffectActivation(professors));</b>
+<b class="fc"><i class="no-highlight">1012</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">1013</i>&nbsp;            case HERALD -&gt; notifyMNMovement(true);</b>
+<b class="fc"><i class="no-highlight">1014</i>&nbsp;            case MAGICAL_LETTER_CARRIER     -&gt; notifyObserver(obs-&gt;obs.onEffectActivation(playerID, players.get(playerID).getDiscardPile().getTurnOrder(), players.get(playerID).getDiscardPile().getMnMovement()));</b>
+<b class="fc"><i class="no-highlight">1015</i>&nbsp;            case GRANDMA_HERBS              -&gt; notifyObserver(obs-&gt;obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap(), value1, getGameTable().getIsleManager().getIsle(value1).getDenyCards()));</b>
+<b class="fc"><i class="no-highlight">1016</i>&nbsp;            case CENTAUR, KNIGHT, FUNGIST   -&gt; notifyObserver(ModelObserver::onEffectActivation);</b>
+<b class="fc"><i class="no-highlight">1017</i>&nbsp;            case JESTER                     -&gt; notifyObserver(obs-&gt;obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudentsHashMap(), playerID, players.get(playerID).getDashboard().getEntrance().getStudentsHashMap()));</b>
+<i class="no-highlight">1018</i>&nbsp;            case MINSTREL, THIEF            -&gt; {
+<b class="fc"><i class="no-highlight">1019</i>&nbsp;                ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; studentsInEntrances = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">1020</i>&nbsp;                ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; studentsInDinings = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">1021</i>&nbsp;                for (Player p : players) {</b>
+<b class="fc"><i class="no-highlight">1022</i>&nbsp;                    studentsInEntrances.add(p.getDashboard().getEntrance().getStudentsHashMap());</b>
+<b class="fc"><i class="no-highlight">1023</i>&nbsp;                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudentsHashMap());</b>
+<b class="fc"><i class="no-highlight">1024</i>&nbsp;                }</b>
+<b class="fc"><i class="no-highlight">1025</i>&nbsp;                notifyObserver(obs -&gt; obs.onEffectActivation(studentsInEntrances, studentsInDinings));</b>
+<b class="fc"><i class="no-highlight">1026</i>&nbsp;            }</b>
+<i class="no-highlight">1027</i>&nbsp;            case SPOILED_PRINCESS           -&gt; {
+<b class="fc"><i class="no-highlight">1028</i>&nbsp;                ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; studentsInDinings = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">1029</i>&nbsp;                for (Player p : players)</b>
+<b class="fc"><i class="no-highlight">1030</i>&nbsp;                    studentsInDinings.add(p.getDashboard().getDiningRoom().getStudentsHashMap());</b>
+<b class="fc"><i class="no-highlight">1031</i>&nbsp;                notifyObserver(obs -&gt; obs.onEffectActivation(characterCardIndex, getGameTable().getCharacterCard(characterCardIndex).getCost(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), gameTable.getCharacterCard(characterCardIndex).getStudentsHashMap(), studentsInDinings));</b>
+<i class="no-highlight">1032</i>&nbsp;            }
+<i class="no-highlight">1033</i>&nbsp;        }
+<i class="no-highlight">1034</i>&nbsp;    }
+<i class="no-highlight">1035</i>&nbsp;
+<i class="no-highlight">1036</i>&nbsp;    /**
+<i class="no-highlight">1037</i>&nbsp;     * Saves a color in the class GAME for then FUNGIST character card when played.
+<i class="no-highlight">1038</i>&nbsp;     * @param indexColorFungist the index of the color that has to be saved.
+<i class="no-highlight">1039</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1040</i>&nbsp;    public void setColorForFungist(int indexColorFungist) { this.colorForFungist = RealmColors.getColor(indexColorFungist); }</b>
+<i class="no-highlight">1041</i>&nbsp;
+<i class="no-highlight">1042</i>&nbsp;    /**
+<i class="no-highlight">1043</i>&nbsp;     * Getter method that permits to know who is the player in the list of players that has a certain index.
+<i class="no-highlight">1044</i>&nbsp;     * @param playerIndex the index of the player that is in the list.
+<i class="no-highlight">1045</i>&nbsp;     * @return the player associated with that index.
+<i class="no-highlight">1046</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1047</i>&nbsp;    public Player getPlayerByIndex(int playerIndex) { return players.get(playerIndex); }</b>
+<i class="no-highlight">1048</i>&nbsp;
+<i class="no-highlight">1049</i>&nbsp;    /**
+<i class="no-highlight">1050</i>&nbsp;     * Getter method that permits to pick the current game table.
+<i class="no-highlight">1051</i>&nbsp;     * @return the current game table.
+<i class="no-highlight">1052</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1053</i>&nbsp;    public GameTable getGameTable() { return gameTable; }</b>
+<i class="no-highlight">1054</i>&nbsp;
+<i class="no-highlight">1055</i>&nbsp;    /**
+<i class="no-highlight">1056</i>&nbsp;     * Used for testing purpose only.
+<i class="no-highlight">1057</i>&nbsp;     * @param gameP game phase.
+<i class="no-highlight">1058</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1059</i>&nbsp;    public void setGamePhase(GamePhases gameP){ gamePhase = gameP; }</b>
+<i class="no-highlight">1060</i>&nbsp;
+<i class="no-highlight">1061</i>&nbsp;    /**
+<i class="no-highlight">1062</i>&nbsp;     * Getter method for the game phase.
+<i class="no-highlight">1063</i>&nbsp;     * @return the actual game phase.
+<i class="no-highlight">1064</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1065</i>&nbsp;    public GamePhases getGamePhase() { return gamePhase; }</b>
+<i class="no-highlight">1066</i>&nbsp;
+<i class="no-highlight">1067</i>&nbsp;    /**
+<i class="no-highlight">1068</i>&nbsp;     * Getter method that tells if the game mode is expert or not.
+<i class="no-highlight">1069</i>&nbsp;     * @return true if expert, else false.
+<i class="no-highlight">1070</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1071</i>&nbsp;    public boolean isExpertMode() { return gameMode == GameMode.EXPERT; }</b>
+<i class="no-highlight">1072</i>&nbsp;
+<i class="no-highlight">1073</i>&nbsp;    /**
+<i class="no-highlight">1074</i>&nbsp;     * Getter method that returns the list of players who are playing the game.
+<i class="no-highlight">1075</i>&nbsp;     * @return the list of players who are playing the game.
+<i class="no-highlight">1076</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1077</i>&nbsp;    public ArrayList&lt;Player&gt; getPlayers() { return players; }</b>
+<i class="no-highlight">1078</i>&nbsp;
+<i class="no-highlight">1079</i>&nbsp;    /**
+<i class="no-highlight">1080</i>&nbsp;     * Getter method for the index of the first player to play this turn.
+<i class="no-highlight">1081</i>&nbsp;     * @return the index of the first player.
+<i class="no-highlight">1082</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1083</i>&nbsp;    public int getFirstPlayerIndex() { return firstPlayerIndex; }</b>
+<i class="no-highlight">1084</i>&nbsp;
+<i class="no-highlight">1085</i>&nbsp;    /**
+<i class="no-highlight">1086</i>&nbsp;     * Getter method for the player counter.
+<i class="no-highlight">1087</i>&nbsp;     * @return the count of the players till the invocation.
+<i class="no-highlight">1088</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1089</i>&nbsp;    public int getPlayerCounter() { return playerCounter; }</b>
+<i class="no-highlight">1090</i>&nbsp;
+<i class="no-highlight">1091</i>&nbsp;    /**
+<i class="no-highlight">1092</i>&nbsp;     * Getter method for the number of players of the game.
+<i class="no-highlight">1093</i>&nbsp;     * @return the number of players.
+<i class="no-highlight">1094</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1095</i>&nbsp;    public int getNumberOfPlayers() {return numberOfPlayers;}</b>
+<i class="no-highlight">1096</i>&nbsp;
+<i class="no-highlight">1097</i>&nbsp;    /**
+<i class="no-highlight">1098</i>&nbsp;     * It returns the number of players that have been added to the game.
+<i class="no-highlight">1099</i>&nbsp;     * @return the number of players that have been added to the game.
+<i class="no-highlight">1100</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1101</i>&nbsp;    public int getActualNumberOfPlayers() { return actualNumberOfPlayers; }</b>
+<i class="no-highlight">1102</i>&nbsp;
+<i class="no-highlight">1103</i>&nbsp;    /**
+<i class="no-highlight">1104</i>&nbsp;     * Getter method for the current active player.
+<i class="no-highlight">1105</i>&nbsp;     * @return the current active player.
+<i class="no-highlight">1106</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1107</i>&nbsp;    public CurrentOrder getCurrentActivePlayer() { return currentActivePlayer; }</b>
+<i class="no-highlight">1108</i>&nbsp;
+<i class="no-highlight">1109</i>&nbsp;    /**
+<i class="no-highlight">1110</i>&nbsp;     * Setter method for the current active player.
+<i class="no-highlight">1111</i>&nbsp;     * @param currentActivePlayer the player that will become the current active player.
+<i class="no-highlight">1112</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1113</i>&nbsp;    public void setCurrentActivePlayer(CurrentOrder currentActivePlayer) { this.currentActivePlayer = currentActivePlayer; }</b>
+<i class="no-highlight">1114</i>&nbsp;
+<i class="no-highlight">1115</i>&nbsp;    /**
+<i class="no-highlight">1116</i>&nbsp;     * Getter method for the planning phase.
+<i class="no-highlight">1117</i>&nbsp;     * @return in which phase of the planning phase we are.
+<i class="no-highlight">1118</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1119</i>&nbsp;    public PlanningPhases getPlanningPhase() { return planningPhase; }</b>
+<i class="no-highlight">1120</i>&nbsp;
+<i class="no-highlight">1121</i>&nbsp;    /**
+<i class="no-highlight">1122</i>&nbsp;     * Setter method for the planning phase.
+<i class="no-highlight">1123</i>&nbsp;     * @param planningPhase indicates in which phase of the planning phase we are.
+<i class="no-highlight">1124</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1125</i>&nbsp;    public void setPlanningPhase(PlanningPhases planningPhase) { this.planningPhase = planningPhase; }</b>
+<i class="no-highlight">1126</i>&nbsp;
+<i class="no-highlight">1127</i>&nbsp;    /**
+<i class="no-highlight">1128</i>&nbsp;     * Getter method for the action phase.
+<i class="no-highlight">1129</i>&nbsp;     * @return in which phase of the action phase we are.
+<i class="no-highlight">1130</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1131</i>&nbsp;    public ActionPhases getActionPhase() { return actionPhase; }</b>
+<i class="no-highlight">1132</i>&nbsp;
+<i class="no-highlight">1133</i>&nbsp;    /**
+<i class="no-highlight">1134</i>&nbsp;     * Getter method for the last phase of the action phase before entering in the CHARACTER_CARD_PHASE.
+<i class="no-highlight">1135</i>&nbsp;     * @return in which phase of the action phase wwe were
+<i class="no-highlight">1136</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1137</i>&nbsp;    public ActionPhases getLastActionPhase() { return lastActionPhase; }</b>
+<i class="no-highlight">1138</i>&nbsp;
+<i class="no-highlight">1139</i>&nbsp;    /**
+<i class="no-highlight">1140</i>&nbsp;     * Getter method for the atomic effect counter.
+<i class="no-highlight">1141</i>&nbsp;     * @return the number of times am atomic effect have been activated.
+<i class="no-highlight">1142</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1143</i>&nbsp;    public int getAtomicEffectCounter() { return atomicEffectCounter; }</b>
+<i class="no-highlight">1144</i>&nbsp;
+<i class="no-highlight">1145</i>&nbsp;    /**
+<i class="no-highlight">1146</i>&nbsp;     * Increases the number of times an atomic effect is activated.
+<i class="no-highlight">1147</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">1148</i>&nbsp;    public void increaseAtomicEffectCounter() { atomicEffectCounter++; }</b>
+<i class="no-highlight">1149</i>&nbsp;
+<i class="no-highlight">1150</i>&nbsp;    /**
+<i class="no-highlight">1151</i>&nbsp;     * Setter method for the action phase.
+<i class="no-highlight">1152</i>&nbsp;     * @param actionPhase indicates in which phase of the action phase we are.
+<i class="no-highlight">1153</i>&nbsp;     */
+<i class="no-highlight">1154</i>&nbsp;    public void setActionPhase(ActionPhases actionPhase) {
+<b class="fc"><i class="no-highlight">1155</i>&nbsp;        atomicEffectCounter = 0;</b>
+<b class="fc"><i class="no-highlight">1156</i>&nbsp;        this.actionPhase = actionPhase;</b>
+<i class="no-highlight">1157</i>&nbsp;    }
+<i class="no-highlight">1158</i>&nbsp;
+<i class="no-highlight">1159</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

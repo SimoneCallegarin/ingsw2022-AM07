@@ -1,0 +1,431 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > ClientHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Network.ServerSide</a>
+</div>
+
+<h1>Coverage Summary for Class: ClientHandler (it.polimi.ingsw.Network.ServerSide)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/103)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ClientHandler$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/104)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Network.ServerSide;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Network.Utils.HandlerPhases;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Network.Messages.*;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.NetworkMessage;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.PlayerMoveMessage;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.GamePreferencesMessage;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.LoginMessage;
+<i class="no-highlight">9</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.*;
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;import java.io.IOException;
+<i class="no-highlight">12</i>&nbsp;import java.io.ObjectOutputStream;
+<i class="no-highlight">13</i>&nbsp;import java.io.*;
+<i class="no-highlight">14</i>&nbsp;import java.net.Socket;
+<i class="no-highlight">15</i>&nbsp;import java.util.NoSuchElementException;
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;/**
+<i class="no-highlight">18</i>&nbsp; * This class is used to manage the connection of a client that connects to the server.
+<i class="no-highlight">19</i>&nbsp; * It has to get the setup choices by the first player and his moves, then it will handle the game.
+<i class="no-highlight">20</i>&nbsp; */
+<i class="no-highlight">21</i>&nbsp;public class ClientHandler implements Runnable {
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;    /**
+<i class="no-highlight">24</i>&nbsp;     * The server that the ClientHandler has to connect with his client.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    private final Server server;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * The client that has to be connected to the server through the ClientHandler.
+<i class="no-highlight">29</i>&nbsp;     */
+<i class="no-highlight">30</i>&nbsp;    private final Socket client;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * The nickname of the player associated to this client handler.
+<i class="no-highlight">33</i>&nbsp;     */
+<i class="no-highlight">34</i>&nbsp;    private String nickname;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * Specify in which phase the ClientHandler is:
+<i class="no-highlight">37</i>&nbsp;     *  - LOGIN_PHASE -&gt; when the client is choosing his nickname;
+<i class="no-highlight">38</i>&nbsp;     *  - GAME_SETUP_PHASE -&gt; when the player is choosing his game preferences;
+<i class="no-highlight">39</i>&nbsp;     *  - RUNNING_PHASE -&gt; when the game already started.
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;    private HandlerPhases handlerPhase;
+<i class="no-highlight">42</i>&nbsp;    /**
+<i class="no-highlight">43</i>&nbsp;     * Input stream.
+<i class="no-highlight">44</i>&nbsp;     */
+<i class="no-highlight">45</i>&nbsp;    private ObjectInputStream input;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Output stream.
+<i class="no-highlight">48</i>&nbsp;     */
+<i class="no-highlight">49</i>&nbsp;    private ObjectOutputStream output;
+<i class="no-highlight">50</i>&nbsp;    /**
+<i class="no-highlight">51</i>&nbsp;     * True if the ClientHandler is connected to the server, else false.
+<i class="no-highlight">52</i>&nbsp;     */
+<i class="no-highlight">53</i>&nbsp;    private boolean connected;
+<i class="no-highlight">54</i>&nbsp;    /**
+<i class="no-highlight">55</i>&nbsp;     * True if the client is already playing a game, else false.
+<i class="no-highlight">56</i>&nbsp;     */
+<i class="no-highlight">57</i>&nbsp;    private boolean playing;
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;    /**
+<i class="no-highlight">60</i>&nbsp;     * Constructor of the client handler.
+<i class="no-highlight">61</i>&nbsp;     * @param server the server associated to this client handler.
+<i class="no-highlight">62</i>&nbsp;     * @param socket the socket of the client that is associated to this client handler.
+<i class="no-highlight">63</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">64</i>&nbsp;    public ClientHandler(Server server, Socket socket) {</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        this.server = server;</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        this.client = socket;</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        this.handlerPhase = HandlerPhases.LOGIN_PHASE;</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;        this.connected = true;</b>
+<b class="nc"><i class="no-highlight">69</i>&nbsp;        this.playing = false;</b>
+<i class="no-highlight">70</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            this.input = new ObjectInputStream(socket.getInputStream());</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;            this.output = new ObjectOutputStream(socket.getOutputStream());</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;            System.out.println(&quot;Server wasn&#39;t able to get input or output stream&quot;);</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;        }</b>
+<i class="no-highlight">76</i>&nbsp;    }
+<i class="no-highlight">77</i>&nbsp;
+<i class="no-highlight">78</i>&nbsp;    /**
+<i class="no-highlight">79</i>&nbsp;     * Logs in the player and checks if it&#39;s using a valid nickname.
+<i class="no-highlight">80</i>&nbsp;     */
+<i class="no-highlight">81</i>&nbsp;    private void logPlayer(LoginMessage loginMessage) {
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        if (handlerPhase == HandlerPhases.LOGIN_PHASE) {</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;            if (checkMessageType(loginMessage, MessageType.LOGIN))</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;                if (checkNicknameValidity(loginMessage))</b>
+<b class="nc"><i class="no-highlight">85</i>&nbsp;                    logValidPlayer(loginMessage);</b>
+<i class="no-highlight">86</i>&nbsp;        }
+<i class="no-highlight">87</i>&nbsp;        else
+<b class="nc"><i class="no-highlight">88</i>&nbsp;            send(new ServiceMessage(MessageType.KO, &quot;Not expecting a login message&quot;));</b>
+<i class="no-highlight">89</i>&nbsp;    }
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;    /**
+<i class="no-highlight">92</i>&nbsp;     * Checks if the nickname chosen by the player is available.
+<i class="no-highlight">93</i>&nbsp;     * @param loginMessage the login message sent by the player.
+<i class="no-highlight">94</i>&nbsp;     * @return true if the nickname is available, else false.
+<i class="no-highlight">95</i>&nbsp;     */
+<i class="no-highlight">96</i>&nbsp;    private boolean checkNicknameValidity(LoginMessage loginMessage) {
+<b class="nc"><i class="no-highlight">97</i>&nbsp;        if (!server.setNickNamesChosen(loginMessage)){</b>
+<b class="nc"><i class="no-highlight">98</i>&nbsp;            send(new ServiceMessage(MessageType.UNAVAILABLE_USERNAME, &quot;This nickname has been taken by someone else, please select another one...&quot;));</b>
+<b class="nc"><i class="no-highlight">99</i>&nbsp;            return false;</b>
+<i class="no-highlight">100</i>&nbsp;        }
+<i class="no-highlight">101</i>&nbsp;        else
+<b class="nc"><i class="no-highlight">102</i>&nbsp;            return true;</b>
+<i class="no-highlight">103</i>&nbsp;    }
+<i class="no-highlight">104</i>&nbsp;
+<i class="no-highlight">105</i>&nbsp;    /**
+<i class="no-highlight">106</i>&nbsp;     * Add the nickname chosen by the player to the list of already taken nickname in the server
+<i class="no-highlight">107</i>&nbsp;     * and also store it in this ClientHandler.
+<i class="no-highlight">108</i>&nbsp;     * @param loginMessage the login message sent by the player.
+<i class="no-highlight">109</i>&nbsp;     */
+<i class="no-highlight">110</i>&nbsp;    private void logValidPlayer(LoginMessage loginMessage) {
+<b class="nc"><i class="no-highlight">111</i>&nbsp;        server.setPlayer(loginMessage.getNickname(), this);</b>
+<b class="nc"><i class="no-highlight">112</i>&nbsp;        nickname = loginMessage.getNickname();</b>
+<b class="nc"><i class="no-highlight">113</i>&nbsp;        System.out.println(&quot;Nickname selected: &quot; + &quot;\&quot;&quot; + nickname + &quot;\&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        send(new ServiceMessage(MessageType.USERNAME_ACCEPTED));</b>
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        handlerPhase = HandlerPhases.GAME_SETUP_PHASE;</b>
+<i class="no-highlight">116</i>&nbsp;    }
+<i class="no-highlight">117</i>&nbsp;
+<i class="no-highlight">118</i>&nbsp;    /**
+<i class="no-highlight">119</i>&nbsp;     * Adds the player to a game, using some server methods that permits to find the matchID of the game he will play
+<i class="no-highlight">120</i>&nbsp;     */
+<i class="no-highlight">121</i>&nbsp;    private void addPlayerToGame(GamePreferencesMessage preferences){
+<b class="nc"><i class="no-highlight">122</i>&nbsp;        if (handlerPhase == HandlerPhases.GAME_SETUP_PHASE) {</b>
+<b class="nc"><i class="no-highlight">123</i>&nbsp;            if (checkMessageType(preferences, MessageType.GAME_SETUP_INFO)) {</b>
+<b class="nc"><i class="no-highlight">124</i>&nbsp;                if (checkGamePreferencesValues(preferences)) {</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;                    if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() &lt; server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers() - 1) {</b>
+<b class="nc"><i class="no-highlight">126</i>&nbsp;                        int shownID = server.getPlayerInfo(nickname).getPlayerID() + 1;</b>
+<b class="nc"><i class="no-highlight">127</i>&nbsp;                        System.out.println(&quot;Added player: &quot; + nickname + &quot; to a new game.&quot;);</b>
+<b class="nc"><i class="no-highlight">128</i>&nbsp;                        send(new ServiceMessage(MessageType.MATCH_JOINED, &quot;You are Player &quot; + shownID + &quot; and you joined a match! Waiting for other players...&quot;, server.getPlayerInfo(nickname).getPlayerID()));</b>
+<b class="nc"><i class="no-highlight">129</i>&nbsp;                    } else {</b>
+<b class="nc"><i class="no-highlight">130</i>&nbsp;                        int shownID = server.getPlayerInfo(nickname).getPlayerID() + 1;</b>
+<b class="nc"><i class="no-highlight">131</i>&nbsp;                        System.out.println(&quot;Added player: &quot; + nickname + &quot; to an already existing game with other &quot; + (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() - 1) + &quot; players.&quot;);</b>
+<b class="nc"><i class="no-highlight">132</i>&nbsp;                        if (server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getActualNumberOfPlayers() &lt; server.getMatch(server.getPlayerInfo(nickname).getMatchID()).getNumberOfPlayers())</b>
+<b class="nc"><i class="no-highlight">133</i>&nbsp;                            send(new ServiceMessage(MessageType.MATCH_JOINED, &quot;You are Player &quot; + shownID + &quot; and you joined a match! Waiting for other players...&quot;, server.getPlayerInfo(nickname).getPlayerID()));</b>
+<i class="no-highlight">134</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">135</i>&nbsp;                    playing = true;</b>
+<b class="nc"><i class="no-highlight">136</i>&nbsp;                    handlerPhase = HandlerPhases.RUNNING_PHASE;</b>
+<i class="no-highlight">137</i>&nbsp;                }
+<i class="no-highlight">138</i>&nbsp;            }
+<i class="no-highlight">139</i>&nbsp;        }
+<i class="no-highlight">140</i>&nbsp;        else
+<b class="nc"><i class="no-highlight">141</i>&nbsp;            send(new ServiceMessage(MessageType.KO, &quot;Not expecting a game preferences message&quot;));</b>
+<i class="no-highlight">142</i>&nbsp;    }
+<i class="no-highlight">143</i>&nbsp;
+<i class="no-highlight">144</i>&nbsp;    /**
+<i class="no-highlight">145</i>&nbsp;     * Checks if the game preferences of the player are valid.
+<i class="no-highlight">146</i>&nbsp;     * @param preferences the game preferences of the player.
+<i class="no-highlight">147</i>&nbsp;     * @return true if valid, else false.
+<i class="no-highlight">148</i>&nbsp;     */
+<i class="no-highlight">149</i>&nbsp;    private boolean checkGamePreferencesValues(GamePreferencesMessage preferences) {
+<b class="nc"><i class="no-highlight">150</i>&nbsp;        if (!server.addPlayerToGame(nickname, preferences, this)) {</b>
+<b class="nc"><i class="no-highlight">151</i>&nbsp;            send(new ServiceMessage(MessageType.KO, &quot;Incorrect field&quot;));</b>
+<b class="nc"><i class="no-highlight">152</i>&nbsp;            return false;</b>
+<i class="no-highlight">153</i>&nbsp;        }
+<i class="no-highlight">154</i>&nbsp;        else
+<b class="nc"><i class="no-highlight">155</i>&nbsp;            return true;</b>
+<i class="no-highlight">156</i>&nbsp;    }
+<i class="no-highlight">157</i>&nbsp;
+<i class="no-highlight">158</i>&nbsp;    /**
+<i class="no-highlight">159</i>&nbsp;     * Handles all player moves and the game development till the game ends.
+<i class="no-highlight">160</i>&nbsp;     */
+<i class="no-highlight">161</i>&nbsp;    private void handleGame(PlayerMoveMessage pmm) {
+<b class="nc"><i class="no-highlight">162</i>&nbsp;        if (handlerPhase == HandlerPhases.RUNNING_PHASE) {</b>
+<b class="nc"><i class="no-highlight">163</i>&nbsp;            send(new ServiceMessage(MessageType.OK, &quot;Message correctly received by server&quot;));</b>
+<b class="nc"><i class="no-highlight">164</i>&nbsp;            server.getMatch(server.getPlayerInfo(nickname).getMatchID()).onMessage(pmm);</b>
+<i class="no-highlight">165</i>&nbsp;        }
+<i class="no-highlight">166</i>&nbsp;        else
+<b class="nc"><i class="no-highlight">167</i>&nbsp;            send(new ServiceMessage(MessageType.KO, &quot;Not expecting a game action message&quot;));</b>
+<i class="no-highlight">168</i>&nbsp;    }
+<i class="no-highlight">169</i>&nbsp;
+<i class="no-highlight">170</i>&nbsp;    /**
+<i class="no-highlight">171</i>&nbsp;     * Handles the connection of the player managing the LOGIN, GAME_SETUP_INFO, LOGOUT, and all other PLAYER_MOVE message received.
+<i class="no-highlight">172</i>&nbsp;     * @throws IOException when a player send wrong messages.
+<i class="no-highlight">173</i>&nbsp;     */
+<i class="no-highlight">174</i>&nbsp;    private void handleConnection() throws IOException {
+<i class="no-highlight">175</i>&nbsp;        LoginMessage lm;
+<i class="no-highlight">176</i>&nbsp;        GamePreferencesMessage gpm;
+<i class="no-highlight">177</i>&nbsp;        PlayerMoveMessage pmm;
+<i class="no-highlight">178</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">179</i>&nbsp;            while (connected) {</b>
+<b class="nc"><i class="no-highlight">180</i>&nbsp;                NetworkMessage message = (NetworkMessage) input.readObject();</b>
+<b class="nc"><i class="no-highlight">181</i>&nbsp;                if (message != null &amp;&amp; message.getMessageType() != MessageType.PING) {</b>
+<b class="nc"><i class="no-highlight">182</i>&nbsp;                    switch (message.getMessageType()) {</b>
+<i class="no-highlight">183</i>&nbsp;                        case LOGIN -&gt; {
+<b class="nc"><i class="no-highlight">184</i>&nbsp;                            System.out.println(&quot;LOGIN message received!&quot;);</b>
+<b class="nc"><i class="no-highlight">185</i>&nbsp;                            lm = (LoginMessage) message;</b>
+<b class="nc"><i class="no-highlight">186</i>&nbsp;                            logPlayer(lm);</b>
+<b class="nc"><i class="no-highlight">187</i>&nbsp;                        }</b>
+<i class="no-highlight">188</i>&nbsp;                        case GAME_SETUP_INFO -&gt; {
+<b class="nc"><i class="no-highlight">189</i>&nbsp;                            System.out.println(&quot;GAME_SETUP_INFO message received from &quot; + nickname + &quot;!&quot;);</b>
+<b class="nc"><i class="no-highlight">190</i>&nbsp;                            gpm = (GamePreferencesMessage) message;</b>
+<b class="nc"><i class="no-highlight">191</i>&nbsp;                            addPlayerToGame(gpm);</b>
+<b class="nc"><i class="no-highlight">192</i>&nbsp;                        }</b>
+<b class="nc"><i class="no-highlight">193</i>&nbsp;                        case LOGOUT -&gt; System.out.println(&quot;LOGOUT message received from &quot; + nickname + &quot;!&quot;);</b>
+<i class="no-highlight">194</i>&nbsp;                        default -&gt; {
+<b class="nc"><i class="no-highlight">195</i>&nbsp;                            pmm = (PlayerMoveMessage) message;</b>
+<b class="nc"><i class="no-highlight">196</i>&nbsp;                            System.out.println(&quot;PLAYER_MOVE message received from &quot; + nickname + &quot;: &quot; + pmm);</b>
+<b class="nc"><i class="no-highlight">197</i>&nbsp;                            handleGame(pmm);</b>
+<i class="no-highlight">198</i>&nbsp;                        }
+<i class="no-highlight">199</i>&nbsp;                    }
+<i class="no-highlight">200</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">201</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">202</i>&nbsp;        } catch (NoSuchElementException | ClassNotFoundException e) {</b>
+<b class="nc"><i class="no-highlight">203</i>&nbsp;            System.out.println(&quot;NoSuchElementException thrown by: &quot; + nickname);</b>
+<b class="nc"><i class="no-highlight">204</i>&nbsp;            disconnect(&quot;NoSuchElementException thrown&quot;);</b>
+<b class="nc"><i class="no-highlight">205</i>&nbsp;        }</b>
+<i class="no-highlight">206</i>&nbsp;    }
+<i class="no-highlight">207</i>&nbsp;
+<i class="no-highlight">208</i>&nbsp;    /**
+<i class="no-highlight">209</i>&nbsp;     * Notifies the server to remove all data stored about the player associated with this ClientHandler.
+<i class="no-highlight">210</i>&nbsp;     */
+<i class="no-highlight">211</i>&nbsp;    private void shutConnection() throws IOException {
+<b class="nc"><i class="no-highlight">212</i>&nbsp;        if(playing)</b>
+<b class="nc"><i class="no-highlight">213</i>&nbsp;            server.addPlayerToRemove(nickname);</b>
+<i class="no-highlight">214</i>&nbsp;        else {
+<b class="nc"><i class="no-highlight">215</i>&nbsp;            server.removePlayer(nickname);</b>
+<b class="nc"><i class="no-highlight">216</i>&nbsp;            System.out.println(&quot;Removed player &quot; + nickname);</b>
+<i class="no-highlight">217</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">218</i>&nbsp;        connected = false;</b>
+<b class="nc"><i class="no-highlight">219</i>&nbsp;        client.close();</b>
+<i class="no-highlight">220</i>&nbsp;    }
+<i class="no-highlight">221</i>&nbsp;
+<i class="no-highlight">222</i>&nbsp;    /**
+<i class="no-highlight">223</i>&nbsp;     * Handles the disconnection of a player.
+<i class="no-highlight">224</i>&nbsp;     * @param error reason why the player left.
+<i class="no-highlight">225</i>&nbsp;     */
+<i class="no-highlight">226</i>&nbsp;    void disconnect(String error) {
+<b class="nc"><i class="no-highlight">227</i>&nbsp;        if (connected) {</b>
+<i class="no-highlight">228</i>&nbsp;            try {
+<b class="nc"><i class="no-highlight">229</i>&nbsp;                shutConnection();</b>
+<b class="nc"><i class="no-highlight">230</i>&nbsp;                System.out.println(&quot;Interrupting client handler thread of player &quot; + nickname);</b>
+<b class="nc"><i class="no-highlight">231</i>&nbsp;                if (error.equals(&quot;Closing connection due to an error, a logout request or the end of a game.&quot;) &amp;&amp; playing )</b>
+<b class="nc"><i class="no-highlight">232</i>&nbsp;                    server.onDisconnectionOrWin(nickname);</b>
+<b class="nc"><i class="no-highlight">233</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">234</i>&nbsp;                System.err.println(&quot;Error in stream closing&quot;);</b>
+<b class="nc"><i class="no-highlight">235</i>&nbsp;            }</b>
+<i class="no-highlight">236</i>&nbsp;        }
+<i class="no-highlight">237</i>&nbsp;    }
+<i class="no-highlight">238</i>&nbsp;
+<i class="no-highlight">239</i>&nbsp;    /**
+<i class="no-highlight">240</i>&nbsp;     * Method called by the server that stops the client handler when players disconnect.
+<i class="no-highlight">241</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">242</i>&nbsp;    void terminateClientHandler() { Thread.currentThread().interrupt(); }</b>
+<i class="no-highlight">243</i>&nbsp;
+<i class="no-highlight">244</i>&nbsp;    /**
+<i class="no-highlight">245</i>&nbsp;     * Getter method for the player connection status.
+<i class="no-highlight">246</i>&nbsp;     * @return true if the player is still connected, else false.
+<i class="no-highlight">247</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">248</i>&nbsp;    boolean isConnected() { return connected; }</b>
+<i class="no-highlight">249</i>&nbsp;
+<i class="no-highlight">250</i>&nbsp;    /**
+<i class="no-highlight">251</i>&nbsp;     * Getter method for the player game status.
+<i class="no-highlight">252</i>&nbsp;     * @return true if the player is playing a game, else false.
+<i class="no-highlight">253</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">254</i>&nbsp;    boolean isPlaying() { return playing; }</b>
+<i class="no-highlight">255</i>&nbsp;
+<i class="no-highlight">256</i>&nbsp;    /**
+<i class="no-highlight">257</i>&nbsp;     * Checks if the MessageType of the message received is the MessageType required.
+<i class="no-highlight">258</i>&nbsp;     * @param message the message that has a MessageType that has to be checked.
+<i class="no-highlight">259</i>&nbsp;     * @param messageType the MessageType requested.
+<i class="no-highlight">260</i>&nbsp;     * @return true if the MessageType of the message and the required one matches, else false.
+<i class="no-highlight">261</i>&nbsp;     */
+<i class="no-highlight">262</i>&nbsp;    private boolean checkMessageType(NetworkMessage message, MessageType messageType) {
+<b class="nc"><i class="no-highlight">263</i>&nbsp;        if (message.getMessageType() != messageType) {</b>
+<b class="nc"><i class="no-highlight">264</i>&nbsp;            send(new ServiceMessage(MessageType.KO, &quot;Wrong message&quot;));</b>
+<b class="nc"><i class="no-highlight">265</i>&nbsp;            System.out.println(&quot;Error on received message, waiting for correction...&quot;);</b>
+<b class="nc"><i class="no-highlight">266</i>&nbsp;            return false;</b>
+<i class="no-highlight">267</i>&nbsp;        }
+<i class="no-highlight">268</i>&nbsp;        else
+<b class="nc"><i class="no-highlight">269</i>&nbsp;            return true;</b>
+<i class="no-highlight">270</i>&nbsp;    }
+<i class="no-highlight">271</i>&nbsp;
+<i class="no-highlight">272</i>&nbsp;    /**
+<i class="no-highlight">273</i>&nbsp;     * Sends messages to the client.
+<i class="no-highlight">274</i>&nbsp;     * @param message the message that has to be sent to the client.
+<i class="no-highlight">275</i>&nbsp;     */
+<i class="no-highlight">276</i>&nbsp;    public void send(NetworkMessage message) {
+<i class="no-highlight">277</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">278</i>&nbsp;            output.writeObject(message);</b>
+<b class="nc"><i class="no-highlight">279</i>&nbsp;            output.reset();</b>
+<b class="nc"><i class="no-highlight">280</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">281</i>&nbsp;            System.out.println(&quot;Unreachable client&quot;);</b>
+<b class="nc"><i class="no-highlight">282</i>&nbsp;            System.out.println(nickname);</b>
+<b class="nc"><i class="no-highlight">283</i>&nbsp;        }</b>
+<i class="no-highlight">284</i>&nbsp;    }
+<i class="no-highlight">285</i>&nbsp;
+<i class="no-highlight">286</i>&nbsp;    /**
+<i class="no-highlight">287</i>&nbsp;     * Runs ClientHandler thread that handles the connection to the client.
+<i class="no-highlight">288</i>&nbsp;     */
+<i class="no-highlight">289</i>&nbsp;    @Override
+<i class="no-highlight">290</i>&nbsp;    public void run() {
+<i class="no-highlight">291</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">292</i>&nbsp;            handleConnection();</b>
+<b class="nc"><i class="no-highlight">293</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">294</i>&nbsp;            if (connected) {</b>
+<b class="nc"><i class="no-highlight">295</i>&nbsp;                System.out.println(&quot;Closing connection due to an error, a logout request or the end of a game. &quot; + &quot;(&quot; + nickname + &quot;)&quot;);</b>
+<b class="nc"><i class="no-highlight">296</i>&nbsp;                disconnect(&quot;Closing connection due to an error, a logout request or the end of a game.&quot;);</b>
+<i class="no-highlight">297</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">298</i>&nbsp;        }</b>
+<i class="no-highlight">299</i>&nbsp;    }
+<i class="no-highlight">300</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > EntranceStudentListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI.EventListeners</a>
+</div>
+
+<h1>Coverage Summary for Class: EntranceStudentListener (it.polimi.ingsw.View.GUI.EventListeners)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EntranceStudentListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI.EventListeners;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Observer.ViewObserver;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;import java.awt.event.MouseEvent;
+<i class="no-highlight">10</i>&nbsp;import java.awt.event.MouseListener;
+<i class="no-highlight">11</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;import static it.polimi.ingsw.View.GUI.EventListeners.MouseClickedEvents.studentButtonPressed;
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;/**
+<i class="no-highlight">16</i>&nbsp; * Added to the entrance student buttons to listen to a mouse click
+<i class="no-highlight">17</i>&nbsp; * and notify the view observers of the button color selected.
+<i class="no-highlight">18</i>&nbsp; */
+<i class="no-highlight">19</i>&nbsp;public class EntranceStudentListener extends ViewSubject implements MouseListener  {
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;    /**
+<i class="no-highlight">22</i>&nbsp;     * Used to set the dining and the isles clickable only one time
+<i class="no-highlight">23</i>&nbsp;     * and avoid adding multiple listeners to them and sending
+<i class="no-highlight">24</i>&nbsp;     * multiple studentToDining/studentToIsle messages to the server.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    private static boolean setClickable;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * TableCenterPanel reference used to add the listener on the isles.
+<i class="no-highlight">29</i>&nbsp;     */
+<i class="no-highlight">30</i>&nbsp;    private final TableCenterPanel tableCenter;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * DashboardPanel reference used to add the listener on the dining room and get the last pressed student.
+<i class="no-highlight">33</i>&nbsp;     */
+<i class="no-highlight">34</i>&nbsp;    private final DashboardPanel dashboardListened;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * Array List of viewObserver to attach to this listener.
+<i class="no-highlight">37</i>&nbsp;     */
+<i class="no-highlight">38</i>&nbsp;    private final ArrayList&lt;ViewObserver&gt; observers;
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * Constructor of EntranceStudentListener.
+<i class="no-highlight">42</i>&nbsp;     * @param dashboardListened DashboardPanel reference used to add the listener on the dining room.
+<i class="no-highlight">43</i>&nbsp;     * @param viewObserverList Array list of viewObserver to attach to this listener the GUI observers.
+<i class="no-highlight">44</i>&nbsp;     * @param tableCenter TableCenterPanel reference used to add the listener on the isles.
+<i class="no-highlight">45</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">46</i>&nbsp;    public EntranceStudentListener(DashboardPanel dashboardListened, ArrayList&lt;ViewObserver&gt; viewObserverList, TableCenterPanel tableCenter) {</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        this.dashboardListened = dashboardListened;</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        this.tableCenter = tableCenter;</b>
+<b class="nc"><i class="no-highlight">49</i>&nbsp;        observers = viewObserverList;</b>
+<b class="nc"><i class="no-highlight">50</i>&nbsp;        addAllObservers(viewObserverList);</b>
+<b class="nc"><i class="no-highlight">51</i>&nbsp;        setClickable = false;</b>
+<i class="no-highlight">52</i>&nbsp;    }
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;    /**
+<i class="no-highlight">55</i>&nbsp;     * Sets clickable to true or false.
+<i class="no-highlight">56</i>&nbsp;     * @param setClickable the value to set clickable to.
+<i class="no-highlight">57</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">58</i>&nbsp;    public static void setSetClickable(boolean setClickable) { EntranceStudentListener.setClickable = setClickable; }</b>
+<i class="no-highlight">59</i>&nbsp;
+<i class="no-highlight">60</i>&nbsp;    /**
+<i class="no-highlight">61</i>&nbsp;     * Handles the event of the mouse when clicked.
+<i class="no-highlight">62</i>&nbsp;     * @param e the event of the mouse.
+<i class="no-highlight">63</i>&nbsp;     */
+<i class="no-highlight">64</i>&nbsp;    @Override
+<i class="no-highlight">65</i>&nbsp;    public void mouseClicked(MouseEvent e) {
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        StudentButton buttonPressed = (StudentButton) e.getSource();</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        StudentButton lastPressedButton = dashboardListened.getEntrance().getLastPressedStudent();</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;        if (lastPressedButton != null)</b>
+<b class="nc"><i class="no-highlight">69</i>&nbsp;            lastPressedButton.printStudent(lastPressedButton.getColor());</b>
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        buttonPressed.printClick(buttonPressed.getColor());</b>
+<i class="no-highlight">71</i>&nbsp;
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        dashboardListened.getEntrance().setLastPressedStudent(buttonPressed);</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;        notifyObserver(obs-&gt;obs.onColorChoice(studentButtonPressed(buttonPressed)));</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;        if(!setClickable) {</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;            dashboardListened.getDining().setClickable(observers,tableCenter);  //so after at least one student button press the dining room is set clickable</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;            tableCenter.setIslesClickable(getViewObserverList(),dashboardListened.getEntrance(),dashboardListened.getDining());</b>
+<b class="nc"><i class="no-highlight">77</i>&nbsp;            setClickable = true;</b>
+<i class="no-highlight">78</i>&nbsp;        }
+<i class="no-highlight">79</i>&nbsp;    }
+<i class="no-highlight">80</i>&nbsp;
+<i class="no-highlight">81</i>&nbsp;    // Not used mouse event:
+<i class="no-highlight">82</i>&nbsp;    @Override
+<i class="no-highlight">83</i>&nbsp;    public void mousePressed(MouseEvent e) {}
+<i class="no-highlight">84</i>&nbsp;    @Override
+<i class="no-highlight">85</i>&nbsp;    public void mouseReleased(MouseEvent e) {}
+<i class="no-highlight">86</i>&nbsp;    @Override
+<i class="no-highlight">87</i>&nbsp;    public void mouseEntered(MouseEvent e) {}
+<i class="no-highlight">88</i>&nbsp;    @Override
+<i class="no-highlight">89</i>&nbsp;    public void mouseExited(MouseEvent e) {}
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

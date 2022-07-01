@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > CLIColors</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.CLI.Utils</a>
+</div>
+
+<h1>Coverage Summary for Class: CLIColors (it.polimi.ingsw.View.CLI.Utils)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CLIColors</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/25)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CLIColors$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.CLI.Utils;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.TowerColors;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;/**
+<i class="no-highlight">7</i>&nbsp; * Colors used by the CLI.
+<i class="no-highlight">8</i>&nbsp; */
+<b class="nc"><i class="no-highlight">9</i>&nbsp;public enum CLIColors {</b>
+<i class="no-highlight">10</i>&nbsp;    // Reset and Clear:
+<b class="nc"><i class="no-highlight">11</i>&nbsp;    RESET(&quot;\033[0m&quot;),</b>
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;    // Other colors:
+<b class="nc"><i class="no-highlight">14</i>&nbsp;    HB_WHITE(&quot;\033[1;97m&quot;),</b>
+<b class="nc"><i class="no-highlight">15</i>&nbsp;    B_WHITE(&quot;\033[1;87m&quot;),</b>
+<b class="nc"><i class="no-highlight">16</i>&nbsp;    HB_BLACK(&quot;\033[1;90m&quot;),</b>
+<b class="nc"><i class="no-highlight">17</i>&nbsp;    HB_GREY(&quot;\033[1;37m&quot;),</b>
+<i class="no-highlight">18</i>&nbsp;
+<b class="nc"><i class="no-highlight">19</i>&nbsp;    HB_YELLOW(&quot;\033[1;93m&quot;),</b>
+<b class="nc"><i class="no-highlight">20</i>&nbsp;    HB_PINK(&quot;\033[1;95m&quot;),</b>
+<b class="nc"><i class="no-highlight">21</i>&nbsp;    HB_BLUE(&quot;\033[1;94m&quot;),</b>
+<b class="nc"><i class="no-highlight">22</i>&nbsp;    HB_RED(&quot;\033[1;91m&quot;),</b>
+<b class="nc"><i class="no-highlight">23</i>&nbsp;    HB_GREEN(&quot;\033[1;92m&quot;);</b>
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;    /**
+<i class="no-highlight">26</i>&nbsp;     * String that identifies the chosen color.
+<i class="no-highlight">27</i>&nbsp;     */
+<i class="no-highlight">28</i>&nbsp;    private final String code;
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;    /**
+<i class="no-highlight">31</i>&nbsp;     * CLIColors constructor.
+<i class="no-highlight">32</i>&nbsp;     * @param code string that identifies the chosen color.
+<i class="no-highlight">33</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">34</i>&nbsp;    CLIColors(String code) { this.code = code; }</b>
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;    @Override
+<b class="nc"><i class="no-highlight">37</i>&nbsp;    public String toString() { return code; }</b>
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    /**
+<i class="no-highlight">40</i>&nbsp;     * Coverts students&#39; color in usable colors for the CLI.
+<i class="no-highlight">41</i>&nbsp;     * @param color student&#39;s color that has to be converted.
+<i class="no-highlight">42</i>&nbsp;     * @return the usable color for the CLI associated to the student&#39;s color passed.
+<i class="no-highlight">43</i>&nbsp;     */
+<i class="no-highlight">44</i>&nbsp;    public static CLIColors realmColorsConverter(RealmColors color) {
+<b class="nc"><i class="no-highlight">45</i>&nbsp;        switch(color){</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;            case YELLOW -&gt; { return CLIColors.HB_YELLOW; }</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;            case BLUE   -&gt; { return CLIColors.HB_BLUE; }</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;            case RED    -&gt; { return CLIColors.HB_RED; }</b>
+<b class="nc"><i class="no-highlight">49</i>&nbsp;            case PINK   -&gt; { return CLIColors.HB_PINK; }</b>
+<b class="nc"><i class="no-highlight">50</i>&nbsp;            case GREEN  -&gt; { return CLIColors.HB_GREEN; }</b>
+<b class="nc"><i class="no-highlight">51</i>&nbsp;            default     -&gt; { return CLIColors.RESET; }</b>
+<i class="no-highlight">52</i>&nbsp;        }
+<i class="no-highlight">53</i>&nbsp;    }
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * Coverts towers&#39; color in usable colors for the CLI.
+<i class="no-highlight">57</i>&nbsp;     * @param color tower&#39;s color that has to be converted.
+<i class="no-highlight">58</i>&nbsp;     * @return the usable color for the CLI associated to the tower&#39;s color passed.
+<i class="no-highlight">59</i>&nbsp;     */
+<i class="no-highlight">60</i>&nbsp;    public static CLIColors towerColorsConverter(TowerColors color) {
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        switch(color){</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;            case WHITE -&gt; { return CLIColors.HB_WHITE; }</b>
+<b class="nc"><i class="no-highlight">63</i>&nbsp;            case BLACK -&gt; { return CLIColors.HB_BLACK; }</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;            case GREY  -&gt; { return CLIColors.HB_GREY; }</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;            default    -&gt; { return CLIColors.RESET; }</b>
+<i class="no-highlight">66</i>&nbsp;        }
+<i class="no-highlight">67</i>&nbsp;    }
+<i class="no-highlight">68</i>&nbsp;
+<i class="no-highlight">69</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

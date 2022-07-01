@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > WaitingRoom</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI</a>
+</div>
+
+<h1>Coverage Summary for Class: WaitingRoom (it.polimi.ingsw.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WaitingRoom</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import javax.swing.*;
+<i class="no-highlight">4</i>&nbsp;import javax.swing.event.ChangeEvent;
+<i class="no-highlight">5</i>&nbsp;import java.awt.*;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/**
+<i class="no-highlight">10</i>&nbsp; * Loading screen that correspond to the waiting room where players wait for the game to start.
+<i class="no-highlight">11</i>&nbsp; */
+<i class="no-highlight">12</i>&nbsp;class WaitingRoom extends JPanel {
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    /**
+<i class="no-highlight">15</i>&nbsp;     * Color chooser for the nickname color.
+<i class="no-highlight">16</i>&nbsp;     */
+<i class="no-highlight">17</i>&nbsp;    private final JColorChooser colorChooser;
+<i class="no-highlight">18</i>&nbsp;    /**
+<i class="no-highlight">19</i>&nbsp;     * Label containing the nickname previously selected by the player.
+<i class="no-highlight">20</i>&nbsp;     */
+<i class="no-highlight">21</i>&nbsp;    private final JLabel nickname;
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * Color selected by the player for his nickname.
+<i class="no-highlight">24</i>&nbsp;     */
+<i class="no-highlight">25</i>&nbsp;    private Color selectedColor;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * LoadingScreen constructor.
+<i class="no-highlight">29</i>&nbsp;     * @param yourNickname the nickname of the player that is playing on this GUI
+<i class="no-highlight">30</i>&nbsp;     */
+<i class="no-highlight">31</i>&nbsp;    public WaitingRoom(String yourNickname) {
+<b class="nc"><i class="no-highlight">32</i>&nbsp;        super(new BorderLayout());</b>
+<i class="no-highlight">33</i>&nbsp;
+<b class="nc"><i class="no-highlight">34</i>&nbsp;        JLabel waitingRoom = waitingRoomBanner();</b>
+<b class="nc"><i class="no-highlight">35</i>&nbsp;        nickname = waitingRoomNickname(yourNickname);</b>
+<b class="nc"><i class="no-highlight">36</i>&nbsp;        colorChooser = waitingRoomColorChooser();</b>
+<i class="no-highlight">37</i>&nbsp;
+<b class="nc"><i class="no-highlight">38</i>&nbsp;        add(waitingRoom, BorderLayout.CENTER);</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        add(colorChooser, BorderLayout.PAGE_END);</b>
+<i class="no-highlight">40</i>&nbsp;    }
+<i class="no-highlight">41</i>&nbsp;
+<i class="no-highlight">42</i>&nbsp;    /**
+<i class="no-highlight">43</i>&nbsp;     * Creates the banner containing the waiting room message.
+<i class="no-highlight">44</i>&nbsp;     * @return the label of the waiting room message.
+<i class="no-highlight">45</i>&nbsp;     */
+<i class="no-highlight">46</i>&nbsp;    private JLabel waitingRoomBanner() {
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        JLabel waitingRoom = new JLabel(&quot;Welcome in the waiting room, the game will start soon...&quot;, JLabel.CENTER);</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        waitingRoom.setForeground(Color.BLACK);</b>
+<b class="nc"><i class="no-highlight">49</i>&nbsp;        waitingRoom.setOpaque(true);</b>
+<b class="nc"><i class="no-highlight">50</i>&nbsp;        waitingRoom.setFont(waitingRoomFont);</b>
+<b class="nc"><i class="no-highlight">51</i>&nbsp;        waitingRoom.setPreferredSize(waitingRoomDimension);</b>
+<b class="nc"><i class="no-highlight">52</i>&nbsp;        return waitingRoom;</b>
+<i class="no-highlight">53</i>&nbsp;    }
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * Creates the label for the nickname used in the waiting room.
+<i class="no-highlight">57</i>&nbsp;     * @param yourNickname the nickname that was chosen by the player.
+<i class="no-highlight">58</i>&nbsp;     * @return the label containing the nickname chosen by the player but colored.
+<i class="no-highlight">59</i>&nbsp;     */
+<i class="no-highlight">60</i>&nbsp;    private JLabel waitingRoomNickname(String yourNickname) {
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        JLabel nickname = new JLabel(yourNickname,JLabel.CENTER);</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        nickname.setForeground(Color.BLACK);</b>
+<b class="nc"><i class="no-highlight">63</i>&nbsp;        nickname.setBackground(Color.CYAN);</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;        nickname.setOpaque(true);</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        nickname.setFont(waitingRoomNicknameFont);</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        nickname.setPreferredSize(waitingRoomNicknameDimension);</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        return nickname;</b>
+<i class="no-highlight">68</i>&nbsp;    }
+<i class="no-highlight">69</i>&nbsp;
+<i class="no-highlight">70</i>&nbsp;    /**
+<i class="no-highlight">71</i>&nbsp;     * Creates the color chooser used in the waiting room to permit a player that is waiting to join a match
+<i class="no-highlight">72</i>&nbsp;     * to choose a color for his nickname that will be displayed in game.
+<i class="no-highlight">73</i>&nbsp;     * @return the color chooser.
+<i class="no-highlight">74</i>&nbsp;     */
+<i class="no-highlight">75</i>&nbsp;    private JColorChooser waitingRoomColorChooser() {
+<b class="nc"><i class="no-highlight">76</i>&nbsp;        JColorChooser colorChooser = new JColorChooser(nickname.getForeground());</b>
+<b class="nc"><i class="no-highlight">77</i>&nbsp;        JPanel previewPanel = new JPanel(new BorderLayout());</b>
+<b class="nc"><i class="no-highlight">78</i>&nbsp;        previewPanel.add(nickname, BorderLayout.CENTER);</b>
+<b class="nc"><i class="no-highlight">79</i>&nbsp;        colorChooser.getSelectionModel().addChangeListener(this::stateChanged);</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;        colorChooser.setPreviewPanel(previewPanel);</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;        colorChooser.setBorder(BorderFactory.createTitledBorder(&quot;Choose Text Color for your nickname&quot;));</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        return colorChooser;</b>
+<i class="no-highlight">83</i>&nbsp;    }
+<i class="no-highlight">84</i>&nbsp;
+<i class="no-highlight">85</i>&nbsp;    /**
+<i class="no-highlight">86</i>&nbsp;     * Permits to change the color of the nickname with the color chosen in the ColorChooser.
+<i class="no-highlight">87</i>&nbsp;     * @param e the event happening (color selection).
+<i class="no-highlight">88</i>&nbsp;     */
+<i class="no-highlight">89</i>&nbsp;    public void stateChanged(ChangeEvent e) {
+<b class="nc"><i class="no-highlight">90</i>&nbsp;        Color newColor = colorChooser.getColor();</b>
+<b class="nc"><i class="no-highlight">91</i>&nbsp;        nickname.setForeground(newColor);</b>
+<b class="nc"><i class="no-highlight">92</i>&nbsp;        selectedColor = newColor;</b>
+<i class="no-highlight">93</i>&nbsp;    }
+<i class="no-highlight">94</i>&nbsp;
+<i class="no-highlight">95</i>&nbsp;    /**
+<i class="no-highlight">96</i>&nbsp;     * Getter method for the color of the nickname.
+<i class="no-highlight">97</i>&nbsp;     * @return the color of the nickname chosen.
+<i class="no-highlight">98</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">99</i>&nbsp;    public Color getNicknameColor() { return selectedColor;}</b>
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

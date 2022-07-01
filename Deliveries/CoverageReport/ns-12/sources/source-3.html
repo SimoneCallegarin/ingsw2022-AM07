@@ -1,0 +1,216 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > GUIConstants</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI</a>
+</div>
+
+<h1>Coverage Summary for Class: GUIConstants (it.polimi.ingsw.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUIConstants</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import java.awt.*;
+<i class="no-highlight">4</i>&nbsp;
+<i class="no-highlight">5</i>&nbsp;/**
+<i class="no-highlight">6</i>&nbsp; * Contains the constants used in the GUI.
+<i class="no-highlight">7</i>&nbsp; */
+<b class="nc"><i class="no-highlight">8</i>&nbsp;public class GUIConstants {</b>
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;    public static final String gameTitle = &quot;Eriantys Game&quot;;
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;    public static int screenDimensionX;
+<i class="no-highlight">13</i>&nbsp;    public static int screenDimensionY;
+<b class="nc"><i class="no-highlight">14</i>&nbsp;    public static void setScreenDimensionX(int screenDimensionX) { GUIConstants.screenDimensionX = screenDimensionX; }</b>
+<b class="nc"><i class="no-highlight">15</i>&nbsp;    public static void setScreenDimensionY(int screenDimensionY) { GUIConstants.screenDimensionY = screenDimensionY; }</b>
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;    // Waiting Room Constants:
+<i class="no-highlight">18</i>&nbsp;    public static final int waitingRoomFontSize = 24;
+<i class="no-highlight">19</i>&nbsp;    public static final int waitingRoomWidth = 100;
+<i class="no-highlight">20</i>&nbsp;    public static final int waitingRoomHeight = 65;
+<i class="no-highlight">21</i>&nbsp;    public static final int waitingRoomNicknameWidth = 420;
+<b class="nc"><i class="no-highlight">22</i>&nbsp;    public static final Dimension waitingRoomDimension = new Dimension(waitingRoomWidth, waitingRoomHeight);</b>
+<b class="nc"><i class="no-highlight">23</i>&nbsp;    public static final Dimension waitingRoomNicknameDimension = new Dimension(waitingRoomNicknameWidth, waitingRoomHeight);</b>
+<i class="no-highlight">24</i>&nbsp;    public static final String SansSerif = &quot;SansSerif&quot;;
+<b class="nc"><i class="no-highlight">25</i>&nbsp;    public static final Font waitingRoomFont = new Font(SansSerif, Font.BOLD, waitingRoomFontSize);</b>
+<b class="nc"><i class="no-highlight">26</i>&nbsp;    public static final Font waitingRoomNicknameFont = new Font(SansSerif, Font.BOLD, waitingRoomFontSize);</b>
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;    // Nickname dimension:
+<i class="no-highlight">29</i>&nbsp;    public static final int nicknameDisplayWidth = 200;
+<i class="no-highlight">30</i>&nbsp;    public static final int nicknameDisplayHeight = 150;
+<b class="nc"><i class="no-highlight">31</i>&nbsp;    public static final Dimension nicknameDisplayDimension = new Dimension(nicknameDisplayWidth,nicknameDisplayHeight);</b>
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;    // Current action placed on top of the screen.
+<i class="no-highlight">34</i>&nbsp;    public static final int currentActionWidth = 1000;
+<i class="no-highlight">35</i>&nbsp;    public static final int currentActionHeight = 10;
+<b class="nc"><i class="no-highlight">36</i>&nbsp;    public static final Dimension currentActionGSP = new Dimension(currentActionWidth,currentActionHeight);</b>
+<i class="no-highlight">37</i>&nbsp;
+<i class="no-highlight">38</i>&nbsp;    // Assistant cards:
+<i class="no-highlight">39</i>&nbsp;    public static final int assistantCardsWidth = 1000;
+<i class="no-highlight">40</i>&nbsp;    public static final int assistantCardsHeight = 564;
+<b class="nc"><i class="no-highlight">41</i>&nbsp;    public static final Dimension assistantCardsDimension = new Dimension(assistantCardsWidth, assistantCardsHeight);</b>
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    // Isles:
+<i class="no-highlight">44</i>&nbsp;    public static final int isleWidth = 25;
+<i class="no-highlight">45</i>&nbsp;    public static final int isleHeight = 25;
+<b class="nc"><i class="no-highlight">46</i>&nbsp;    public static final Dimension isleDimension = new Dimension(isleWidth,isleHeight);</b>
+<i class="no-highlight">47</i>&nbsp;    public static final int isleImageX = 200;
+<i class="no-highlight">48</i>&nbsp;    public static final int isleImageY = 200;
+<i class="no-highlight">49</i>&nbsp;
+<i class="no-highlight">50</i>&nbsp;    // Clouds constraints:
+<i class="no-highlight">51</i>&nbsp;    public static final double cloudsWeightX = 1;
+<i class="no-highlight">52</i>&nbsp;    public static final int cloudsGridX = 1;
+<i class="no-highlight">53</i>&nbsp;    public static final double cloudsWeightY = 1;
+<i class="no-highlight">54</i>&nbsp;    public static final int cloudsGridY = 0;
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;    // Dashboard constraints:
+<i class="no-highlight">57</i>&nbsp;    public static final double dashboardWeightX = 1;
+<i class="no-highlight">58</i>&nbsp;    public static final int dashboardGridX = 0;
+<i class="no-highlight">59</i>&nbsp;    // Tower storage constraints:
+<i class="no-highlight">60</i>&nbsp;    public static final double towerStorageWeightY = 0.35;
+<i class="no-highlight">61</i>&nbsp;    public static final int towerStorageGridY = 0;
+<i class="no-highlight">62</i>&nbsp;    public static final int towerStorageIpadY = -90;
+<i class="no-highlight">63</i>&nbsp;    // Dining room constraints:
+<i class="no-highlight">64</i>&nbsp;    public static final double diningRoomWeightY = 1;
+<i class="no-highlight">65</i>&nbsp;    public static final int diningRoomGridY = 1;
+<i class="no-highlight">66</i>&nbsp;    public static final int diningRoomIpadY = 0;
+<i class="no-highlight">67</i>&nbsp;    // Entrance constraints:
+<i class="no-highlight">68</i>&nbsp;    public static final double entranceWeightY = 0.25;
+<i class="no-highlight">69</i>&nbsp;    public static final int entranceGridY = 2;
+<i class="no-highlight">70</i>&nbsp;    public static final int entranceIpadY = -50;
+<i class="no-highlight">71</i>&nbsp;
+<i class="no-highlight">72</i>&nbsp;    // Professor constraints:
+<i class="no-highlight">73</i>&nbsp;    public static final int professorEmptyPanelWidth = 25;
+<i class="no-highlight">74</i>&nbsp;    public static final int professorEmptyPanelHeight = 25;
+<b class="nc"><i class="no-highlight">75</i>&nbsp;    public static final Dimension professorDimension = new Dimension(professorEmptyPanelWidth,professorEmptyPanelHeight);</b>
+<i class="no-highlight">76</i>&nbsp;    public static final int professorGridRows = 1;
+<i class="no-highlight">77</i>&nbsp;    public static final int professorGridColumns = 5;
+<i class="no-highlight">78</i>&nbsp;    public static final int professorHgap = -30;
+<i class="no-highlight">79</i>&nbsp;    public static final double diningRoomWeightX = 1;
+<i class="no-highlight">80</i>&nbsp;    public static final int diningRoomGridX = 0;
+<i class="no-highlight">81</i>&nbsp;    public static final double professorWeightY = 0.15;
+<i class="no-highlight">82</i>&nbsp;    public static final int professorGridY = 0;
+<i class="no-highlight">83</i>&nbsp;    public static final int professorIpadY = -12;
+<i class="no-highlight">84</i>&nbsp;    public static final double studentsWeightY = 1;
+<i class="no-highlight">85</i>&nbsp;    public static final int studentsGridY = 1;
+<i class="no-highlight">86</i>&nbsp;    public static final int studentsIpadY = -25;
+<i class="no-highlight">87</i>&nbsp;
+<i class="no-highlight">88</i>&nbsp;    // Character card:
+<i class="no-highlight">89</i>&nbsp;    public static final int characterCardGridX = 0;
+<i class="no-highlight">90</i>&nbsp;    public static final int characterCardGridY = 0;
+<i class="no-highlight">91</i>&nbsp;    public static final int characterCardPositionX = 0;
+<i class="no-highlight">92</i>&nbsp;    public static final int characterCardPositionY = 0;
+<i class="no-highlight">93</i>&nbsp;
+<i class="no-highlight">94</i>&nbsp;    // Coin:
+<i class="no-highlight">95</i>&nbsp;    public static final int coinWidth = 40;
+<i class="no-highlight">96</i>&nbsp;    public static final int coinHeight = 40;
+<b class="nc"><i class="no-highlight">97</i>&nbsp;    public static final Dimension coinDimension = new Dimension(coinWidth,coinHeight);</b>
+<i class="no-highlight">98</i>&nbsp;    public static final int coinPositionX = 0;
+<i class="no-highlight">99</i>&nbsp;    public static final int coinPositionY = 0;
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;    // Deny card:
+<i class="no-highlight">102</i>&nbsp;    public static final int denyCardWidth = 25;
+<i class="no-highlight">103</i>&nbsp;    public static final int denyCardHeight = 25;
+<b class="nc"><i class="no-highlight">104</i>&nbsp;    public static final Dimension denyCardDimension = new Dimension(denyCardWidth,denyCardHeight);</b>
+<i class="no-highlight">105</i>&nbsp;
+<i class="no-highlight">106</i>&nbsp;    // Logout button:
+<i class="no-highlight">107</i>&nbsp;    public static final int logoutButtonWidth = 100;
+<i class="no-highlight">108</i>&nbsp;    public static final int logoutButtonHeight = 25;
+<b class="nc"><i class="no-highlight">109</i>&nbsp;    public static final Dimension logoutButtonDimension = new Dimension(logoutButtonWidth,logoutButtonHeight);</b>
+<i class="no-highlight">110</i>&nbsp;
+<i class="no-highlight">111</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

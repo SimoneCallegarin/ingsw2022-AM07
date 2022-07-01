@@ -1,0 +1,249 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > EffectInGameFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Model.CharacterCards</a>
+</div>
+
+<h1>Coverage Summary for Class: EffectInGameFactory (it.polimi.ingsw.Model.CharacterCards)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EffectInGameFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85,1%
+  </span>
+  <span class="absValue">
+    (57/67)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">EffectInGameFactory$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85,3%
+  </span>
+  <span class="absValue">
+    (58/68)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Model.CharacterCards;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Game;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Model.Player.Player;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;/**
+<i class="no-highlight">8</i>&nbsp; * Factory that permits to activate character cards effect that takes place during the game.
+<i class="no-highlight">9</i>&nbsp; */
+<b class="fc"><i class="no-highlight">10</i>&nbsp;public class EffectInGameFactory {</b>
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;    /**
+<i class="no-highlight">13</i>&nbsp;     * Permits to activate a part of the effect that characterises a certain character card.
+<i class="no-highlight">14</i>&nbsp;     * @param characterCard the character card played.
+<i class="no-highlight">15</i>&nbsp;     * @param game reference to all the objects that compose the game.
+<i class="no-highlight">16</i>&nbsp;     * @param player the player that played the character card.
+<i class="no-highlight">17</i>&nbsp;     * @param value1 it can be the color of the student that has to be moved from a certain student manager.
+<i class="no-highlight">18</i>&nbsp;     *               It can also be to the index of a certain isle.
+<i class="no-highlight">19</i>&nbsp;     *               It will be set to -1 when it isn&#39;t required.
+<i class="no-highlight">20</i>&nbsp;     * @param value2 it&#39;s the color of the student that has to be moved to a certain student manager.
+<i class="no-highlight">21</i>&nbsp;     *               It will be set to -1 when it isn&#39;t required.
+<i class="no-highlight">22</i>&nbsp;     */
+<i class="no-highlight">23</i>&nbsp;    public void getEffect(CharacterCard characterCard, Game game, Player player, int value1, int value2){
+<i class="no-highlight">24</i>&nbsp;
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        StudentMovementEffect studentMovementEffect = new StudentMovementEffect();</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;        DenyCardMovementEffect denyCardMovementEffect = new DenyCardMovementEffect();</b>
+<i class="no-highlight">27</i>&nbsp;
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        RealmColors color1 = RealmColors.getColor(value1);</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        RealmColors color2 = RealmColors.getColor(value2);</b>
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;        /*
+<i class="no-highlight">32</i>&nbsp;         KNIGHT and CENTAUR character cards are directly managed by the class ISLE,
+<i class="no-highlight">33</i>&nbsp;         in the method that get changed by their activation
+<i class="no-highlight">34</i>&nbsp;         ISLE -&gt; getInfluence();
+<i class="no-highlight">35</i>&nbsp;        */
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        switch (characterCard.getCharacterCardName()) {</b>
+<i class="no-highlight">37</i>&nbsp;            case MONK -&gt; {
+<b class="fc"><i class="no-highlight">38</i>&nbsp;                studentMovementEffect.effect(characterCard, game.getGameTable().getIsleManager().getIsle(value2), ColorsForEffects.SELECT, color1, null);</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;                studentMovementEffect.effect(game.getGameTable().getBag(), characterCard, ColorsForEffects.RANDOM, color1, color2);</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;            }</b>
+<i class="no-highlight">42</i>&nbsp;            case FARMER -&gt; {
+<b class="fc"><i class="no-highlight">43</i>&nbsp;                for (Player p : game.getPlayers()) {</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;                    for (RealmColors c : RealmColors.values()) {</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;                        if (p.getDashboard().getDiningRoom().getProfessorByColor(c) == 1)</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;                            if (player.getDashboard().getDiningRoom().getStudentsByColor(c) == p.getDashboard().getDiningRoom().getStudentsByColor(c)) {</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;                                p.getDashboard().getDiningRoom().removeProfessor(c);</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;                                player.getDashboard().getDiningRoom().addProfessor(c);</b>
+<i class="no-highlight">49</i>&nbsp;                            }
+<i class="no-highlight">50</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">51</i>&nbsp;                }</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;            }</b>
+<i class="no-highlight">54</i>&nbsp;            case HERALD -&gt; {
+<b class="fc"><i class="no-highlight">55</i>&nbsp;                if (game.getGameTable().getIsleManager().getIsle(value1).getDenyCards() == 0)</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;                    game.checkUpdateInfluence(value1);</b>
+<i class="no-highlight">57</i>&nbsp;                else {
+<b class="nc"><i class="no-highlight">58</i>&nbsp;                    game.getGameTable().getIsleManager().getIsle(value1).removeDenyCard();</b>
+<b class="nc"><i class="no-highlight">59</i>&nbsp;                    int grandmaIndex = 0;</b>
+<b class="nc"><i class="no-highlight">60</i>&nbsp;                    for (int i=0; i&lt;3; i++)</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;                        if(game.getGameTable().getCharacterCard(i).getCharacterCardName() == CharacterCardsName.GRANDMA_HERBS){</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;                            grandmaIndex = i;</b>
+<b class="nc"><i class="no-highlight">63</i>&nbsp;                            break;</b>
+<i class="no-highlight">64</i>&nbsp;                        }
+<b class="nc"><i class="no-highlight">65</i>&nbsp;                    game.getGameTable().getCharacterCard(grandmaIndex).addDenyCard();</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;                    int finalGrandmaIndex = grandmaIndex;</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;                    game.notifyObserver(obs-&gt;obs.onDenyCard(finalGrandmaIndex, game.getGameTable().getCharacterCard(finalGrandmaIndex).getCost(), game.getGameTable().getCharacterCard(finalGrandmaIndex).getDenyCards(), game.getGameTable().getCharacterCard(finalGrandmaIndex).getStudentsHashMap(), value1, game.getGameTable().getIsleManager().getIsle(value1).getDenyCards()));</b>
+<i class="no-highlight">68</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">69</i>&nbsp;                game.checkEndGame();</b>
+<b class="fc"><i class="no-highlight">70</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;            }</b>
+<i class="no-highlight">72</i>&nbsp;            case MAGICAL_LETTER_CARRIER -&gt; {
+<b class="fc"><i class="no-highlight">73</i>&nbsp;                player.getDiscardPile().increaseMnMovement();</b>
+<b class="fc"><i class="no-highlight">74</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">75</i>&nbsp;            }</b>
+<i class="no-highlight">76</i>&nbsp;            case GRANDMA_HERBS -&gt; {
+<b class="fc"><i class="no-highlight">77</i>&nbsp;                denyCardMovementEffect.effect(characterCard, game.getGameTable().getIsleManager().getIsle(value1));</b>
+<b class="fc"><i class="no-highlight">78</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;            }</b>
+<i class="no-highlight">80</i>&nbsp;            case JESTER -&gt; {
+<b class="fc"><i class="no-highlight">81</i>&nbsp;                studentMovementEffect.effect(characterCard, player.getDashboard().getEntrance(), ColorsForEffects.SELECT, color1, color2);</b>
+<b class="fc"><i class="no-highlight">82</i>&nbsp;                game.increaseAtomicEffectCounter();</b>
+<b class="fc"><i class="no-highlight">83</i>&nbsp;                if (game.getAtomicEffectCounter() == 3)</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;                    game.setActionPhase(game.getLastActionPhase());</b>
+<i class="no-highlight">85</i>&nbsp;            }
+<i class="no-highlight">86</i>&nbsp;            case FUNGIST -&gt; {
+<b class="fc"><i class="no-highlight">87</i>&nbsp;                game.setColorForFungist(value1);</b>
+<b class="fc"><i class="no-highlight">88</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">89</i>&nbsp;            }</b>
+<i class="no-highlight">90</i>&nbsp;            case MINSTREL -&gt; {
+<b class="fc"><i class="no-highlight">91</i>&nbsp;                studentMovementEffect.effect(player.getDashboard().getDiningRoom(), player.getDashboard().getEntrance(), ColorsForEffects.SELECT, color1, color2);</b>
+<b class="fc"><i class="no-highlight">92</i>&nbsp;                game.checkStudentInMoneyPosition(player.getDashboard().getDashboardID(),color2);</b>
+<b class="fc"><i class="no-highlight">93</i>&nbsp;                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);</b>
+<b class="fc"><i class="no-highlight">94</i>&nbsp;                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color2);</b>
+<b class="fc"><i class="no-highlight">95</i>&nbsp;                game.increaseAtomicEffectCounter();</b>
+<b class="fc"><i class="no-highlight">96</i>&nbsp;                if (game.getAtomicEffectCounter() == 2)</b>
+<b class="fc"><i class="no-highlight">97</i>&nbsp;                    game.setActionPhase(game.getLastActionPhase());</b>
+<i class="no-highlight">98</i>&nbsp;            }
+<i class="no-highlight">99</i>&nbsp;            case SPOILED_PRINCESS -&gt; {
+<b class="fc"><i class="no-highlight">100</i>&nbsp;                studentMovementEffect.effect(characterCard, player.getDashboard().getDiningRoom(), ColorsForEffects.SELECT, color1, color2);</b>
+<b class="fc"><i class="no-highlight">101</i>&nbsp;                studentMovementEffect.effect(game.getGameTable().getBag(), characterCard, ColorsForEffects.RANDOM, color1, color2);</b>
+<b class="fc"><i class="no-highlight">102</i>&nbsp;                game.checkStudentInMoneyPosition(player.getDashboard().getDashboardID(),color1);</b>
+<b class="fc"><i class="no-highlight">103</i>&nbsp;                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);</b>
+<b class="fc"><i class="no-highlight">104</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">105</i>&nbsp;            }</b>
+<i class="no-highlight">106</i>&nbsp;            case THIEF -&gt; {
+<b class="fc"><i class="no-highlight">107</i>&nbsp;                for (Player p : game.getPlayers())</b>
+<b class="fc"><i class="no-highlight">108</i>&nbsp;                    for (int j = 0; j &lt; 3; j++) {</b>
+<b class="fc"><i class="no-highlight">109</i>&nbsp;                        if (p.getDashboard().getDiningRoom().getStudentsByColor(color1) &gt; 0)</b>
+<b class="fc"><i class="no-highlight">110</i>&nbsp;                            studentMovementEffect.effect(p.getDashboard().getDiningRoom(), game.getGameTable().getBag(), ColorsForEffects.SELECT, color1, color2);</b>
+<i class="no-highlight">111</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">112</i>&nbsp;                game.checkUpdateProfessor(player.getDashboard().getDashboardID(), color1);</b>
+<b class="fc"><i class="no-highlight">113</i>&nbsp;                game.setActionPhase(game.getLastActionPhase());</b>
+<b class="fc"><i class="no-highlight">114</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">115</i>&nbsp;            case KNIGHT, CENTAUR -&gt; game.setActionPhase(game.getLastActionPhase());</b>
+<i class="no-highlight">116</i>&nbsp;        }
+<i class="no-highlight">117</i>&nbsp;    }
+<i class="no-highlight">118</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

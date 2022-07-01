@@ -1,0 +1,373 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > GameScreenPanel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI</a>
+</div>
+
+<h1>Coverage Summary for Class: GameScreenPanel (it.polimi.ingsw.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameScreenPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/76)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.TowerColors;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Observer.ViewObserver;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
+<i class="no-highlight">9</i>&nbsp;import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;import javax.swing.*;
+<i class="no-highlight">12</i>&nbsp;import java.awt.*;
+<i class="no-highlight">13</i>&nbsp;import java.awt.image.BufferedImage;
+<i class="no-highlight">14</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;import static it.polimi.ingsw.View.GUI.GUIConstants.currentActionGSP;
+<i class="no-highlight">17</i>&nbsp;import static it.polimi.ingsw.View.GUI.ImagesLoader.*;
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;/**
+<i class="no-highlight">20</i>&nbsp; * Panel in which all the game takes place, it contains all the other panels.
+<i class="no-highlight">21</i>&nbsp; */
+<i class="no-highlight">22</i>&nbsp;public class GameScreenPanel extends JPanel {
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;    /**
+<i class="no-highlight">25</i>&nbsp;     * Panel placed on top of the screen used to contain the textLabel and the logout button.
+<i class="no-highlight">26</i>&nbsp;     */
+<i class="no-highlight">27</i>&nbsp;    private final JPanel textContainerPanel;
+<i class="no-highlight">28</i>&nbsp;    /**
+<i class="no-highlight">29</i>&nbsp;     * Label used to show the current action occurring in game.
+<i class="no-highlight">30</i>&nbsp;     */
+<i class="no-highlight">31</i>&nbsp;    private final JLabel currentAction;
+<i class="no-highlight">32</i>&nbsp;    /**
+<i class="no-highlight">33</i>&nbsp;     * TableCenterPanel reference.
+<i class="no-highlight">34</i>&nbsp;     */
+<i class="no-highlight">35</i>&nbsp;    private final TableCenterPanel tableCenterPanel;
+<i class="no-highlight">36</i>&nbsp;    /**
+<i class="no-highlight">37</i>&nbsp;     * Array list used to store the player dashboard panels.
+<i class="no-highlight">38</i>&nbsp;     */
+<i class="no-highlight">39</i>&nbsp;    private final ArrayList&lt;DashboardPanel&gt; dashboardPanels;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * Array list of observer attached to the view components.
+<i class="no-highlight">42</i>&nbsp;     */
+<i class="no-highlight">43</i>&nbsp;    private final ArrayList&lt;ViewObserver&gt; viewObservers;
+<i class="no-highlight">44</i>&nbsp;    /**
+<i class="no-highlight">45</i>&nbsp;     * GridBagConstraints used in the game screen panel.
+<i class="no-highlight">46</i>&nbsp;     */
+<i class="no-highlight">47</i>&nbsp;    private final GridBagConstraints gameScreenConstraints;
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;    /**
+<i class="no-highlight">50</i>&nbsp;     * Create the game screen panel used to contain all the game panels.
+<i class="no-highlight">51</i>&nbsp;     * @param layout the LayoutManager to use.
+<i class="no-highlight">52</i>&nbsp;     * @param usernamePlaying the username of the current player using the GUI to pass to the tableCenter to highlight which is his dashboard.
+<i class="no-highlight">53</i>&nbsp;     * @param storage ModelStorage reference.
+<i class="no-highlight">54</i>&nbsp;     * @param frameWidth frame width.
+<i class="no-highlight">55</i>&nbsp;     * @param frameHeight frame height.
+<i class="no-highlight">56</i>&nbsp;     * @param nicknameColor color of the user nickname (chosen in the loading screen).
+<i class="no-highlight">57</i>&nbsp;     * @param viewObservers array list of viewObservers attached to view components.
+<i class="no-highlight">58</i>&nbsp;     */
+<i class="no-highlight">59</i>&nbsp;    public GameScreenPanel(LayoutManager layout, ModelStorage storage, int frameWidth, int frameHeight, String usernamePlaying, Color nicknameColor, ArrayList&lt;ViewObserver&gt; viewObservers) {
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        super(layout);</b>
+<i class="no-highlight">61</i>&nbsp;
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        this.textContainerPanel = new JPanel(new BorderLayout());</b>
+<b class="nc"><i class="no-highlight">63</i>&nbsp;        this.dashboardPanels = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;        this.viewObservers = viewObservers;</b>
+<i class="no-highlight">65</i>&nbsp;
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        setPreferredSize(new Dimension(frameWidth,frameHeight));</b>
+<i class="no-highlight">67</i>&nbsp;
+<i class="no-highlight">68</i>&nbsp;        // Set the dashboards:
+<b class="nc"><i class="no-highlight">69</i>&nbsp;        ArrayList&lt;JPanel&gt; dashboardContainers = prepareDashboardsPanels();</b>
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        BufferedImage dashboardImage = dashboardImageLoader();</b>
+<i class="no-highlight">71</i>&nbsp;
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        ArrayList&lt;BufferedImage&gt; students = prepareStudents();                  // Array list used to store images of the students.</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;        ArrayList&lt;BufferedImage&gt; checkedStudents = prepareCheckedStudents();    // Array list used to store images of checked students.</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;        ArrayList&lt;BufferedImage&gt; towers = prepareTowers();                      // Array list used to store images of the towers.</b>
+<i class="no-highlight">75</i>&nbsp;
+<b class="nc"><i class="no-highlight">76</i>&nbsp;        gameScreenConstraints = new GridBagConstraints();</b>
+<i class="no-highlight">77</i>&nbsp;
+<i class="no-highlight">78</i>&nbsp;        // Set game screen constraints for the textContainerPanel.
+<b class="nc"><i class="no-highlight">79</i>&nbsp;        setConstraints(1,1,0.01,0);</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;        add(textContainerPanel,gameScreenConstraints);</b>
+<i class="no-highlight">81</i>&nbsp;        // Set game screen constraints for the tableCenterPanel.
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        setConstraints(1,1,0.01,1);</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        gameScreenConstraints.fill = GridBagConstraints.BOTH;</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;        tableCenterPanel = new TableCenterPanel(storage,usernamePlaying,nicknameColor,viewObservers, students, towers, checkedStudents, this);</b>
+<b class="nc"><i class="no-highlight">85</i>&nbsp;        add(tableCenterPanel,gameScreenConstraints);</b>
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;        // Add the two dashboard container Panel and set the weights in order to correctly size them.
+<i class="no-highlight">88</i>&nbsp;        // First two dashboards (first and third):
+<b class="nc"><i class="no-highlight">89</i>&nbsp;        setConstraints(0.05,0,0.2,1);</b>
+<b class="nc"><i class="no-highlight">90</i>&nbsp;        add(dashboardContainers.get(0), gameScreenConstraints);</b>
+<i class="no-highlight">91</i>&nbsp;        // Second two dashboards (second and fourth):
+<b class="nc"><i class="no-highlight">92</i>&nbsp;        setConstraints(0.05,2,0.2,1);</b>
+<b class="nc"><i class="no-highlight">93</i>&nbsp;        add(dashboardContainers.get(1), gameScreenConstraints);</b>
+<i class="no-highlight">94</i>&nbsp;
+<b class="nc"><i class="no-highlight">95</i>&nbsp;        for(int i=0; i&lt;storage.getNumberOfPlayers(); i++){</b>
+<b class="nc"><i class="no-highlight">96</i>&nbsp;            DashboardPanel dashboardPanel = new DashboardPanel(storage,i,viewObservers,tableCenterPanel,students,checkedStudents,towers,dashboardImage);</b>
+<b class="nc"><i class="no-highlight">97</i>&nbsp;            dashboardContainers.get(i%2).add(dashboardPanel);   // the containers are used to place the panels in the screen.</b>
+<b class="nc"><i class="no-highlight">98</i>&nbsp;            dashboardPanels.add(dashboardPanel);                // this arrayList is used only to store them and access them in a more efficient way.</b>
+<i class="no-highlight">99</i>&nbsp;        }
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;        // Set the textLabel:
+<b class="nc"><i class="no-highlight">102</i>&nbsp;        currentAction = new JLabel(&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">103</i>&nbsp;        currentAction.setPreferredSize(currentActionGSP);</b>
+<b class="nc"><i class="no-highlight">104</i>&nbsp;        textContainerPanel.add(currentAction);</b>
+<i class="no-highlight">105</i>&nbsp;    }
+<i class="no-highlight">106</i>&nbsp;
+<i class="no-highlight">107</i>&nbsp;    /**
+<i class="no-highlight">108</i>&nbsp;     * Sets the GridBagConstraints.
+<i class="no-highlight">109</i>&nbsp;     * @param weightX weightx of the GridBagConstraints.
+<i class="no-highlight">110</i>&nbsp;     * @param gridX gridx of the GridBagConstraints.
+<i class="no-highlight">111</i>&nbsp;     * @param weightY weighty of the GridBagConstraints.
+<i class="no-highlight">112</i>&nbsp;     * @param gridY gridy of the GridBagConstraints.
+<i class="no-highlight">113</i>&nbsp;     */
+<i class="no-highlight">114</i>&nbsp;    private void setConstraints( double weightX, int gridX, double weightY, int gridY) {
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        gameScreenConstraints.weightx = weightX;</b>
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        gameScreenConstraints.gridx = gridX;</b>
+<b class="nc"><i class="no-highlight">117</i>&nbsp;        gameScreenConstraints.weighty = weightY;</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        gameScreenConstraints.gridy = gridY;</b>
+<i class="no-highlight">119</i>&nbsp;    }
+<i class="no-highlight">120</i>&nbsp;
+<i class="no-highlight">121</i>&nbsp;    /**
+<i class="no-highlight">122</i>&nbsp;     * Prepares dashboards panels.
+<i class="no-highlight">123</i>&nbsp;     * @return the Array list used to store the player dashboard container panel..
+<i class="no-highlight">124</i>&nbsp;     */
+<i class="no-highlight">125</i>&nbsp;    private ArrayList&lt;JPanel&gt; prepareDashboardsPanels() {
+<b class="nc"><i class="no-highlight">126</i>&nbsp;        ArrayList&lt;JPanel&gt; dashboardContainers = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">127</i>&nbsp;        // Panel containing the first and third player dashboard.
+<b class="nc"><i class="no-highlight">128</i>&nbsp;        JPanel dashboardContainerPanel1 = new JPanel(new GridLayout(2, 1));</b>
+<b class="nc"><i class="no-highlight">129</i>&nbsp;        dashboardContainerPanel1.setBackground(Color.CYAN);</b>
+<b class="nc"><i class="no-highlight">130</i>&nbsp;        dashboardContainers.add(dashboardContainerPanel1);</b>
+<i class="no-highlight">131</i>&nbsp;        // Panel containing the second and fourth player dashboard
+<b class="nc"><i class="no-highlight">132</i>&nbsp;        JPanel dashboardContainerPanel2 = new JPanel(new GridLayout(2, 1));</b>
+<b class="nc"><i class="no-highlight">133</i>&nbsp;        dashboardContainerPanel2.setBackground(Color.CYAN);</b>
+<b class="nc"><i class="no-highlight">134</i>&nbsp;        dashboardContainers.add(dashboardContainerPanel2);</b>
+<b class="nc"><i class="no-highlight">135</i>&nbsp;        return dashboardContainers;</b>
+<i class="no-highlight">136</i>&nbsp;    }
+<i class="no-highlight">137</i>&nbsp;
+<i class="no-highlight">138</i>&nbsp;    /**
+<i class="no-highlight">139</i>&nbsp;     * Prepares the students.
+<i class="no-highlight">140</i>&nbsp;     * @return the Array list used to store images of the students.
+<i class="no-highlight">141</i>&nbsp;     */
+<i class="no-highlight">142</i>&nbsp;    private ArrayList&lt;BufferedImage&gt; prepareStudents() {
+<i class="no-highlight">143</i>&nbsp;        // Loading Images of the students buttons:
+<b class="nc"><i class="no-highlight">144</i>&nbsp;        ArrayList&lt;BufferedImage&gt; students = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">145</i>&nbsp;        for (RealmColors rc : RealmColors.values())</b>
+<b class="nc"><i class="no-highlight">146</i>&nbsp;            students.add(studentsImagesLoader(rc));</b>
+<b class="nc"><i class="no-highlight">147</i>&nbsp;        return students;</b>
+<i class="no-highlight">148</i>&nbsp;    }
+<i class="no-highlight">149</i>&nbsp;
+<i class="no-highlight">150</i>&nbsp;    /**
+<i class="no-highlight">151</i>&nbsp;     * Prepares the checked students.
+<i class="no-highlight">152</i>&nbsp;     * @return the Array list used to store images of the checked students.
+<i class="no-highlight">153</i>&nbsp;     */
+<i class="no-highlight">154</i>&nbsp;    private ArrayList&lt;BufferedImage&gt; prepareCheckedStudents() {
+<i class="no-highlight">155</i>&nbsp;        // Loading Images of the students buttons:
+<b class="nc"><i class="no-highlight">156</i>&nbsp;        ArrayList&lt;BufferedImage&gt; checkedStudents = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">157</i>&nbsp;        for (RealmColors rc : RealmColors.values())</b>
+<b class="nc"><i class="no-highlight">158</i>&nbsp;            checkedStudents.add(checkedStudentsImagesLoader(rc));</b>
+<b class="nc"><i class="no-highlight">159</i>&nbsp;        return checkedStudents;</b>
+<i class="no-highlight">160</i>&nbsp;    }
+<i class="no-highlight">161</i>&nbsp;
+<i class="no-highlight">162</i>&nbsp;    /**
+<i class="no-highlight">163</i>&nbsp;     * Prepares the towers.
+<i class="no-highlight">164</i>&nbsp;     * @return the Array list used to store images of the towers.
+<i class="no-highlight">165</i>&nbsp;     */
+<i class="no-highlight">166</i>&nbsp;    private ArrayList&lt;BufferedImage&gt; prepareTowers() {
+<i class="no-highlight">167</i>&nbsp;        // Loading Images on the towers buttons:
+<b class="nc"><i class="no-highlight">168</i>&nbsp;        ArrayList&lt;BufferedImage&gt; towers = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">169</i>&nbsp;        // Loading towers images:
+<b class="nc"><i class="no-highlight">170</i>&nbsp;        for (TowerColors tc : TowerColors.values())</b>
+<b class="nc"><i class="no-highlight">171</i>&nbsp;            towers.add(towersImagesLoader(tc));</b>
+<b class="nc"><i class="no-highlight">172</i>&nbsp;        return towers;</b>
+<i class="no-highlight">173</i>&nbsp;    }
+<i class="no-highlight">174</i>&nbsp;
+<i class="no-highlight">175</i>&nbsp;    /**
+<i class="no-highlight">176</i>&nbsp;     * Removes the listeners from the dashboard entrance and dining room.
+<i class="no-highlight">177</i>&nbsp;     * @param playerID the player ID used to identify which dashboard remove the listeners from.
+<i class="no-highlight">178</i>&nbsp;     */
+<i class="no-highlight">179</i>&nbsp;    public void removeClickableDashboard(int playerID) {
+<b class="nc"><i class="no-highlight">180</i>&nbsp;        dashboardPanels.get(playerID).getEntrance().removeStudentsClickable();</b>
+<b class="nc"><i class="no-highlight">181</i>&nbsp;        dashboardPanels.get(playerID).getDining().removeClickable();</b>
+<i class="no-highlight">182</i>&nbsp;    }
+<i class="no-highlight">183</i>&nbsp;
+<i class="no-highlight">184</i>&nbsp;    /**
+<i class="no-highlight">185</i>&nbsp;     * Updates the entrance associated with the specified player ID.
+<i class="no-highlight">186</i>&nbsp;     * @param playerID the player ID used to access the dashboard that contains the entrance to update.
+<i class="no-highlight">187</i>&nbsp;     */
+<i class="no-highlight">188</i>&nbsp;    public void updateEntrance(int playerID){
+<b class="nc"><i class="no-highlight">189</i>&nbsp;        dashboardPanels.get(playerID).getEntrance().resetEntrance();</b>
+<b class="nc"><i class="no-highlight">190</i>&nbsp;        dashboardPanels.get(playerID).getEntrance().initializeEntrance();</b>
+<i class="no-highlight">191</i>&nbsp;    }
+<i class="no-highlight">192</i>&nbsp;
+<i class="no-highlight">193</i>&nbsp;    /**
+<i class="no-highlight">194</i>&nbsp;     * Updates the dashboard DiningStudentPanel.
+<i class="no-highlight">195</i>&nbsp;     */
+<i class="no-highlight">196</i>&nbsp;    public void updateStudentDinings(){
+<b class="nc"><i class="no-highlight">197</i>&nbsp;        for(DashboardPanel dashboardPanel:dashboardPanels){</b>
+<b class="nc"><i class="no-highlight">198</i>&nbsp;            dashboardPanel.getDining().resetStudentDining();</b>
+<b class="nc"><i class="no-highlight">199</i>&nbsp;            dashboardPanel.getDining().initializeStudentDining();</b>
+<b class="nc"><i class="no-highlight">200</i>&nbsp;        }</b>
+<i class="no-highlight">201</i>&nbsp;    }
+<i class="no-highlight">202</i>&nbsp;
+<i class="no-highlight">203</i>&nbsp;    /**
+<i class="no-highlight">204</i>&nbsp;     * Updates all the dashboard ProfessorPanels.
+<i class="no-highlight">205</i>&nbsp;     */
+<i class="no-highlight">206</i>&nbsp;    public void updateProfessors(){
+<b class="nc"><i class="no-highlight">207</i>&nbsp;        for(DashboardPanel dashboardPanel:dashboardPanels) {</b>
+<b class="nc"><i class="no-highlight">208</i>&nbsp;            dashboardPanel.getDining().resetProfessorDining();</b>
+<b class="nc"><i class="no-highlight">209</i>&nbsp;            dashboardPanel.getDining().initializeProfessorPanel();</b>
+<b class="nc"><i class="no-highlight">210</i>&nbsp;        }</b>
+<i class="no-highlight">211</i>&nbsp;    }
+<i class="no-highlight">212</i>&nbsp;
+<i class="no-highlight">213</i>&nbsp;    /**
+<i class="no-highlight">214</i>&nbsp;     * Updates all the TowerStorage panels.
+<i class="no-highlight">215</i>&nbsp;     */
+<i class="no-highlight">216</i>&nbsp;    public void updateTowerStorages(){
+<b class="nc"><i class="no-highlight">217</i>&nbsp;        for(DashboardPanel dashboardPanel: dashboardPanels){</b>
+<b class="nc"><i class="no-highlight">218</i>&nbsp;            dashboardPanel.getTowerStorage().resetTowerStorage();</b>
+<b class="nc"><i class="no-highlight">219</i>&nbsp;            dashboardPanel.getTowerStorage().initializeTowerStorage();</b>
+<b class="nc"><i class="no-highlight">220</i>&nbsp;        }</b>
+<i class="no-highlight">221</i>&nbsp;    }
+<i class="no-highlight">222</i>&nbsp;
+<i class="no-highlight">223</i>&nbsp;    /**
+<i class="no-highlight">224</i>&nbsp;     * Sets the dashboard entrance clickable in order to select a student to move.
+<i class="no-highlight">225</i>&nbsp;     * @param playerID the playerID used to identify which dashboard set movable.
+<i class="no-highlight">226</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">227</i>&nbsp;    public void setEntranceStudentsClickable(int playerID) { dashboardPanels.get(playerID).getEntrance().setStudentsClickable(); }</b>
+<i class="no-highlight">228</i>&nbsp;
+<i class="no-highlight">229</i>&nbsp;    /**
+<i class="no-highlight">230</i>&nbsp;     * Sets the character cards clickable in order for the player to activate the effect.
+<i class="no-highlight">231</i>&nbsp;     * @param playerID the player id used by the listener to remove the listener from the player dashboard.
+<i class="no-highlight">232</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">233</i>&nbsp;    public void setCharactersClickable(int playerID) { tableCenterPanel.setCharactersClickable(viewObservers, playerID); }</b>
+<i class="no-highlight">234</i>&nbsp;
+<i class="no-highlight">235</i>&nbsp;    /**
+<i class="no-highlight">236</i>&nbsp;     * Sets the students of the dining room clickable.
+<i class="no-highlight">237</i>&nbsp;     * @param playerID player ID associated to the dining room.
+<i class="no-highlight">238</i>&nbsp;     */
+<i class="no-highlight">239</i>&nbsp;    public void setDiningStudentsClickable(int playerID){
+<b class="nc"><i class="no-highlight">240</i>&nbsp;        DiningStudentsPanel diningStudentsPanel=dashboardPanels.get(playerID).getDining().getStudentsPanel();</b>
+<b class="nc"><i class="no-highlight">241</i>&nbsp;        diningStudentsPanel.setStudentsClickableForEffect(viewObservers);</b>
+<i class="no-highlight">242</i>&nbsp;    }
+<i class="no-highlight">243</i>&nbsp;
+<i class="no-highlight">244</i>&nbsp;    /**
+<i class="no-highlight">245</i>&nbsp;     * Setter method for the message on the label on top of the game screen.
+<i class="no-highlight">246</i>&nbsp;     * @param message the text string to update the label with.
+<i class="no-highlight">247</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">248</i>&nbsp;    public void setMessage(String message) { currentAction.setText(message); }</b>
+<i class="no-highlight">249</i>&nbsp;
+<i class="no-highlight">250</i>&nbsp;    /**
+<i class="no-highlight">251</i>&nbsp;     * Getter method for the dashboard panel associated to the player ID.
+<i class="no-highlight">252</i>&nbsp;     * @param playerID player ID used to retrieve a dashboard from the array list.
+<i class="no-highlight">253</i>&nbsp;     * @return the dashboard panel associated with that player ID.
+<i class="no-highlight">254</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">255</i>&nbsp;    public DashboardPanel getDashboardPanel(int playerID) { return dashboardPanels.get(playerID); }</b>
+<i class="no-highlight">256</i>&nbsp;
+<i class="no-highlight">257</i>&nbsp;    /**
+<i class="no-highlight">258</i>&nbsp;     * Getter method for the TableCenterPanel reference.
+<i class="no-highlight">259</i>&nbsp;     * @return the TableCenterPanel reference.
+<i class="no-highlight">260</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">261</i>&nbsp;    public TableCenterPanel getTableCenterPanel() { return tableCenterPanel; }</b>
+<i class="no-highlight">262</i>&nbsp;
+<i class="no-highlight">263</i>&nbsp;    /**
+<i class="no-highlight">264</i>&nbsp;     * Getter method for the panel placed on top of the screen that contains the textLabel and the logout button.
+<i class="no-highlight">265</i>&nbsp;     * @return the panel placed on top of the screen that contains the textLabel and the logout button.
+<i class="no-highlight">266</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">267</i>&nbsp;    public JPanel getTextContainerPanel() { return textContainerPanel; }</b>
+<i class="no-highlight">268</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

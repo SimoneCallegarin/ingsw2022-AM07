@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > DiningStudentListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI.EventListeners</a>
+</div>
+
+<h1>Coverage Summary for Class: DiningStudentListener (it.polimi.ingsw.View.GUI.EventListeners)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DiningStudentListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI.EventListeners;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Observer.ViewObserver;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.View.GUI.DashboardPanels.DiningStudentsPanel;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;import java.awt.event.MouseEvent;
+<i class="no-highlight">12</i>&nbsp;import java.awt.event.MouseListener;
+<i class="no-highlight">13</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;import static it.polimi.ingsw.View.GUI.EventListeners.MouseClickedEvents.studentButtonPressed;
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;/**
+<i class="no-highlight">18</i>&nbsp; * Class added to dining student buttons to listen to a mouse click
+<i class="no-highlight">19</i>&nbsp; * and notify the view observers of the button color selected.
+<i class="no-highlight">20</i>&nbsp; */
+<i class="no-highlight">21</i>&nbsp;public class DiningStudentListener extends ViewSubject implements MouseListener {
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;    /**
+<i class="no-highlight">24</i>&nbsp;     * EntrancePanel reference used to set the students clickable with the effect listener.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    private final EntrancePanel entrance;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * DiningStudentsPanel reference used to remove the listeners from its students.
+<i class="no-highlight">29</i>&nbsp;     */
+<i class="no-highlight">30</i>&nbsp;    private final DiningStudentsPanel diningStudentsRoom;
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;    /**
+<i class="no-highlight">33</i>&nbsp;     * Constructor of DiningStudentsPanel.
+<i class="no-highlight">34</i>&nbsp;     * @param entrance EntrancePanel reference used to set the students clickable with the effect listener.
+<i class="no-highlight">35</i>&nbsp;     * @param viewObserverList Array list of View Observers used to attach to this listener the GUI observers.
+<i class="no-highlight">36</i>&nbsp;     * @param diningStudentsRoom DiningStudentsPanel reference used to remove the listeners from its students.
+<i class="no-highlight">37</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">38</i>&nbsp;    public DiningStudentListener(EntrancePanel entrance, ArrayList&lt;ViewObserver&gt; viewObserverList, DiningStudentsPanel diningStudentsRoom) {</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        this.entrance = entrance;</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;        this.diningStudentsRoom = diningStudentsRoom;</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;        addAllObservers(viewObserverList);</b>
+<i class="no-highlight">42</i>&nbsp;    }
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;    /**
+<i class="no-highlight">45</i>&nbsp;     * Handles the event of the mouse when clicked.
+<i class="no-highlight">46</i>&nbsp;     * @param e the event of the mouse.
+<i class="no-highlight">47</i>&nbsp;     */
+<i class="no-highlight">48</i>&nbsp;    @Override
+<i class="no-highlight">49</i>&nbsp;    public void mouseClicked(MouseEvent e) {
+<b class="nc"><i class="no-highlight">50</i>&nbsp;        StudentButton buttonPressed=(StudentButton) e.getSource();</b>
+<b class="nc"><i class="no-highlight">51</i>&nbsp;        buttonPressed.printClick(buttonPressed.getColor());</b>
+<b class="nc"><i class="no-highlight">52</i>&nbsp;        notifyObserver(obs-&gt;obs.onColorChoice(studentButtonPressed(buttonPressed)));</b>
+<b class="nc"><i class="no-highlight">53</i>&nbsp;        entrance.setStudentsClickableForEffect();</b>
+<b class="nc"><i class="no-highlight">54</i>&nbsp;        diningStudentsRoom.removeClickableStudents();</b>
+<i class="no-highlight">55</i>&nbsp;    }
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;    // Not used mouse event:
+<i class="no-highlight">58</i>&nbsp;    @Override
+<i class="no-highlight">59</i>&nbsp;    public void mousePressed(MouseEvent e) {}
+<i class="no-highlight">60</i>&nbsp;    @Override
+<i class="no-highlight">61</i>&nbsp;    public void mouseReleased(MouseEvent e) {}
+<i class="no-highlight">62</i>&nbsp;    @Override
+<i class="no-highlight">63</i>&nbsp;    public void mouseEntered(MouseEvent e) {}
+<i class="no-highlight">64</i>&nbsp;    @Override
+<i class="no-highlight">65</i>&nbsp;    public void mouseExited(MouseEvent e) {}
+<i class="no-highlight">66</i>&nbsp;}
+<i class="no-highlight">67</i>&nbsp;
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

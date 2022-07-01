@@ -1,0 +1,371 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > GameTable</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Model.GameTableObjects</a>
+</div>
+
+<h1>Coverage Summary for Class: GameTable (it.polimi.ingsw.Model.GameTableObjects)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameTable</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (65/65)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameTable$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (66/66)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Model.GameTableObjects;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.CharacterCard;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.EffectSetupFactory;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.GameMode;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.Model.Interface.DenyCardManager;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">12</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;/**
+<i class="no-highlight">15</i>&nbsp; * Game table that contains all the objects of the game, that doesn&#39;t belong to a player.
+<i class="no-highlight">16</i>&nbsp; */
+<i class="no-highlight">17</i>&nbsp;public class GameTable implements DenyCardManager {
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;    /**
+<i class="no-highlight">20</i>&nbsp;     * List that contains all the clouds used in the game.
+<i class="no-highlight">21</i>&nbsp;     * Its dimension is equal to the number of players.
+<i class="no-highlight">22</i>&nbsp;     */
+<i class="no-highlight">23</i>&nbsp;    private final ArrayList&lt;Cloud&gt; clouds;
+<i class="no-highlight">24</i>&nbsp;    /**
+<i class="no-highlight">25</i>&nbsp;     * Isle manager that will manage the isles.
+<i class="no-highlight">26</i>&nbsp;     */
+<i class="no-highlight">27</i>&nbsp;    private final IsleManager isleManager;
+<i class="no-highlight">28</i>&nbsp;    /**
+<i class="no-highlight">29</i>&nbsp;     * Bag that will be filled with 130 students (26 per color).
+<i class="no-highlight">30</i>&nbsp;     */
+<i class="no-highlight">31</i>&nbsp;    private final Bag bag;
+<i class="no-highlight">32</i>&nbsp;    /**
+<i class="no-highlight">33</i>&nbsp;     * Professors on the game table that haven&#39;t been taken by any player yet.
+<i class="no-highlight">34</i>&nbsp;     */
+<i class="no-highlight">35</i>&nbsp;    private final HashMap&lt;RealmColors,Integer&gt; professors;
+<i class="no-highlight">36</i>&nbsp;    /**
+<i class="no-highlight">37</i>&nbsp;     * List of playable character cards (3 for an expert game mode, 0 for the base one).
+<i class="no-highlight">38</i>&nbsp;     */
+<i class="no-highlight">39</i>&nbsp;    private final ArrayList&lt;CharacterCard&gt; characterCards;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * 4 deny cards that at the beginning of the game are on the game table.
+<i class="no-highlight">42</i>&nbsp;     * When the GRANDMA_HERBS is one of the playable character cards
+<i class="no-highlight">43</i>&nbsp;     * then it will be filled with the deny cards that were on the game table.
+<i class="no-highlight">44</i>&nbsp;     */
+<i class="no-highlight">45</i>&nbsp;    private int denyCards;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Factory that permits to set up the playable character cards that need to be set up.
+<i class="no-highlight">48</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">49</i>&nbsp;    private final EffectSetupFactory effectSetupFactory = new EffectSetupFactory();</b>
+<i class="no-highlight">50</i>&nbsp;    /**
+<i class="no-highlight">51</i>&nbsp;     * General money reserve that is filled with 20 money.
+<i class="no-highlight">52</i>&nbsp;     * It is updated when a player plays a character card
+<i class="no-highlight">53</i>&nbsp;     * or when he fills a space on the dining room that gives one money.
+<i class="no-highlight">54</i>&nbsp;     */
+<i class="no-highlight">55</i>&nbsp;    private int generalMoneyReserve;
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;    /**
+<i class="no-highlight">58</i>&nbsp;     * GameTable constructor.
+<i class="no-highlight">59</i>&nbsp;     * @param numberOfPlayers that are going to play the game, chosen by the first player that joins the match.
+<i class="no-highlight">60</i>&nbsp;     * @param gameMode of the game, chosen by the first player that joins the match.
+<i class="no-highlight">61</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">62</i>&nbsp;    public GameTable(int numberOfPlayers, GameMode gameMode) {</b>
+<b class="fc"><i class="no-highlight">63</i>&nbsp;        this.isleManager = new IsleManager();</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;        this.bag = new Bag();</b>
+<i class="no-highlight">65</i>&nbsp;
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        bag.fillSetupBag();</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;        for (int i = 0; i &lt; 12; i++)</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;            if (isleManager.getIsle(i) != isleManager.getIsle(isleManager.getIsleWithMotherNatureIndex()) &amp;&amp; isleManager.getIsle(i) != isleManager.getIsle(isleManager.getIsleOppositeToMotherNatureIndex()))</b>
+<b class="fc"><i class="no-highlight">69</i>&nbsp;                isleManager.getIsle(i).addStudent(bag.draw());</b>
+<i class="no-highlight">70</i>&nbsp;
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        bag.fillBag();</b>
+<i class="no-highlight">72</i>&nbsp;
+<b class="fc"><i class="no-highlight">73</i>&nbsp;        this.clouds = new ArrayList&lt;&gt;(4);</b>
+<b class="fc"><i class="no-highlight">74</i>&nbsp;        for (int i = 0; i &lt; numberOfPlayers; i++) {</b>
+<b class="fc"><i class="no-highlight">75</i>&nbsp;            Cloud cloud = new Cloud(i, numberOfPlayers);</b>
+<b class="fc"><i class="no-highlight">76</i>&nbsp;            clouds.add(cloud);</b>
+<i class="no-highlight">77</i>&nbsp;        }
+<i class="no-highlight">78</i>&nbsp;
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        this.professors = new HashMap&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        for (RealmColors rc : RealmColors.values())</b>
+<b class="fc"><i class="no-highlight">81</i>&nbsp;            professors.put(rc, 1);</b>
+<i class="no-highlight">82</i>&nbsp;
+<b class="fc"><i class="no-highlight">83</i>&nbsp;        this.characterCards = new ArrayList&lt;&gt;(3);</b>
+<b class="fc"><i class="no-highlight">84</i>&nbsp;        if (gameMode.equals(GameMode.EXPERT))</b>
+<b class="fc"><i class="no-highlight">85</i>&nbsp;            extractAndSetUsableCharacterCards();</b>
+<b class="fc"><i class="no-highlight">86</i>&nbsp;        this.denyCards = 4;</b>
+<b class="fc"><i class="no-highlight">87</i>&nbsp;        this.generalMoneyReserve = 0;</b>
+<b class="fc"><i class="no-highlight">88</i>&nbsp;        if(gameMode==GameMode.EXPERT)</b>
+<b class="fc"><i class="no-highlight">89</i>&nbsp;            generalMoneyReserve = 20-numberOfPlayers;</b>
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;    }
+<i class="no-highlight">92</i>&nbsp;
+<i class="no-highlight">93</i>&nbsp;    /**
+<i class="no-highlight">94</i>&nbsp;     * Extracts 3 random character cards and build them properly with their cost and effects.
+<i class="no-highlight">95</i>&nbsp;     */
+<i class="no-highlight">96</i>&nbsp;    private void extractAndSetUsableCharacterCards() {
+<i class="no-highlight">97</i>&nbsp;        int extraction;
+<b class="fc"><i class="no-highlight">98</i>&nbsp;        ArrayList&lt;Integer&gt; extractedNumbers = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">99</i>&nbsp;        for(int i = 0; i&lt;3; i++) {</b>
+<b class="fc"><i class="no-highlight">100</i>&nbsp;            extraction = (int) (Math.random() * 12);</b>
+<b class="fc"><i class="no-highlight">101</i>&nbsp;            if (extractedNumbers.contains(extraction))</b>
+<b class="fc"><i class="no-highlight">102</i>&nbsp;                i--;</b>
+<i class="no-highlight">103</i>&nbsp;            else {
+<b class="fc"><i class="no-highlight">104</i>&nbsp;                characterCards.add(new CharacterCard(CharacterCardsName.getCharacterCardName(extraction)));</b>
+<b class="fc"><i class="no-highlight">105</i>&nbsp;                extractedNumbers.add(extraction);</b>
+<b class="fc"><i class="no-highlight">106</i>&nbsp;                if(extraction==0||extraction==4||extraction==6||extraction==10)</b>
+<b class="fc"><i class="no-highlight">107</i>&nbsp;                    effectSetupFactory.getEffect(this,characterCards.get(i));</b>
+<i class="no-highlight">108</i>&nbsp;            }
+<i class="no-highlight">109</i>&nbsp;        }
+<i class="no-highlight">110</i>&nbsp;    }
+<i class="no-highlight">111</i>&nbsp;
+<i class="no-highlight">112</i>&nbsp;    /**
+<i class="no-highlight">113</i>&nbsp;     * Removes the professor from the game table.
+<i class="no-highlight">114</i>&nbsp;     * @param color color of the professors that has to be removed.
+<i class="no-highlight">115</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">116</i>&nbsp;    public void removeProfessor(RealmColors color) { professors.put(color, 0); }</b>
+<i class="no-highlight">117</i>&nbsp;
+<i class="no-highlight">118</i>&nbsp;    /**
+<i class="no-highlight">119</i>&nbsp;     * Updates the number of money when a character card is played.
+<i class="no-highlight">120</i>&nbsp;     * @param index the index of the character card played.
+<i class="no-highlight">121</i>&nbsp;     */
+<i class="no-highlight">122</i>&nbsp;    public void characterCardPlayed(int index) {
+<b class="fc"><i class="no-highlight">123</i>&nbsp;        if(getCharacterCard(index).isUsed())</b>
+<b class="fc"><i class="no-highlight">124</i>&nbsp;            generalMoneyReserve += getCharacterCard(index).getCost();</b>
+<i class="no-highlight">125</i>&nbsp;        else
+<b class="fc"><i class="no-highlight">126</i>&nbsp;            generalMoneyReserve += getCharacterCard(index).getCost()-1;</b>
+<i class="no-highlight">127</i>&nbsp;    }
+<i class="no-highlight">128</i>&nbsp;
+<i class="no-highlight">129</i>&nbsp;    /**
+<i class="no-highlight">130</i>&nbsp;     * This method is called when a player places a student in the 3°, 6° or 9° position and gains one money.
+<i class="no-highlight">131</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">132</i>&nbsp;    public void studentInMoneyPosition() { generalMoneyReserve -= 1; }</b>
+<i class="no-highlight">133</i>&nbsp;
+<i class="no-highlight">134</i>&nbsp;    /**
+<i class="no-highlight">135</i>&nbsp;     * Adds a deny card to the deny card manager, anyway it isn&#39;t really used in the game.
+<i class="no-highlight">136</i>&nbsp;     */
+<i class="no-highlight">137</i>&nbsp;    @Override
+<b class="fc"><i class="no-highlight">138</i>&nbsp;    public void addDenyCard() { denyCards += 1; }</b>
+<i class="no-highlight">139</i>&nbsp;
+<i class="no-highlight">140</i>&nbsp;    /**
+<i class="no-highlight">141</i>&nbsp;     * Removes a deny card from the deny card manager.
+<i class="no-highlight">142</i>&nbsp;     */
+<i class="no-highlight">143</i>&nbsp;    @Override
+<b class="fc"><i class="no-highlight">144</i>&nbsp;    public void removeDenyCard(){ denyCards -= 1; }</b>
+<i class="no-highlight">145</i>&nbsp;
+<i class="no-highlight">146</i>&nbsp;    /**
+<i class="no-highlight">147</i>&nbsp;     * Getter method for the number of deny cards on the deny card manager.
+<i class="no-highlight">148</i>&nbsp;     * @return the number of deny cards.
+<i class="no-highlight">149</i>&nbsp;     */
+<i class="no-highlight">150</i>&nbsp;    @Override
+<b class="fc"><i class="no-highlight">151</i>&nbsp;    public int getDenyCards() { return denyCards; }</b>
+<i class="no-highlight">152</i>&nbsp;
+<i class="no-highlight">153</i>&nbsp;    /**
+<i class="no-highlight">154</i>&nbsp;     * TESTING PURPOSE ONLY.
+<i class="no-highlight">155</i>&nbsp;     * Deletes all the other character cards created and creates a new character card received in input.
+<i class="no-highlight">156</i>&nbsp;     * @param characterCardsName the name of the character card we want to add
+<i class="no-highlight">157</i>&nbsp;     */
+<i class="no-highlight">158</i>&nbsp;    public void setCharacterCards(CharacterCardsName characterCardsName){
+<b class="fc"><i class="no-highlight">159</i>&nbsp;        for(int index = 0;index&lt;3;index++){</b>
+<b class="fc"><i class="no-highlight">160</i>&nbsp;            switch (getCharacterCard(index).getCharacterCardName()) {</b>
+<i class="no-highlight">161</i>&nbsp;                case MONK, JESTER, SPOILED_PRINCESS -&gt; {
+<b class="fc"><i class="no-highlight">162</i>&nbsp;                    for(RealmColors colors : RealmColors.values()) {</b>
+<b class="fc"><i class="no-highlight">163</i>&nbsp;                        for(int i=getCharacterCard(index).getStudentsByColor(colors); i&gt;0;i--){</b>
+<b class="fc"><i class="no-highlight">164</i>&nbsp;                            getBag().addStudent(colors);</b>
+<b class="fc"><i class="no-highlight">165</i>&nbsp;                            getCharacterCard(index).removeStudent(colors);</b>
+<i class="no-highlight">166</i>&nbsp;                        }
+<i class="no-highlight">167</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">168</i>&nbsp;                }</b>
+<i class="no-highlight">169</i>&nbsp;                case GRANDMA_HERBS -&gt; {
+<b class="fc"><i class="no-highlight">170</i>&nbsp;                    for(int i=0;i&lt;4;i++) {</b>
+<b class="fc"><i class="no-highlight">171</i>&nbsp;                        addDenyCard();</b>
+<b class="fc"><i class="no-highlight">172</i>&nbsp;                        getCharacterCard(index).removeDenyCard();</b>
+<i class="no-highlight">173</i>&nbsp;                    }
+<i class="no-highlight">174</i>&nbsp;                }
+<i class="no-highlight">175</i>&nbsp;            }
+<i class="no-highlight">176</i>&nbsp;        }
+<i class="no-highlight">177</i>&nbsp;
+<b class="fc"><i class="no-highlight">178</i>&nbsp;        characterCards.clear();</b>
+<b class="fc"><i class="no-highlight">179</i>&nbsp;        characterCards.add(new CharacterCard(characterCardsName));</b>
+<b class="fc"><i class="no-highlight">180</i>&nbsp;        if(characterCardsName.equals(CharacterCardsName.MONK)||characterCardsName.equals(CharacterCardsName.SPOILED_PRINCESS)||characterCardsName.equals(CharacterCardsName.GRANDMA_HERBS)||characterCardsName.equals(CharacterCardsName.JESTER))</b>
+<b class="fc"><i class="no-highlight">181</i>&nbsp;            effectSetupFactory.getEffect(this,characterCards.get(0));</b>
+<i class="no-highlight">182</i>&nbsp;    }
+<i class="no-highlight">183</i>&nbsp;
+<i class="no-highlight">184</i>&nbsp;    /**
+<i class="no-highlight">185</i>&nbsp;     * Getter method for the clouds.
+<i class="no-highlight">186</i>&nbsp;     * @return number of clouds on the game table.
+<i class="no-highlight">187</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">188</i>&nbsp;    public ArrayList&lt;Cloud&gt; getClouds() { return clouds; }</b>
+<i class="no-highlight">189</i>&nbsp;
+<i class="no-highlight">190</i>&nbsp;    /**
+<i class="no-highlight">191</i>&nbsp;     * Getter method to return the general money reserve value.
+<i class="no-highlight">192</i>&nbsp;     * @return the number of money still available on the game table.
+<i class="no-highlight">193</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">194</i>&nbsp;    public int getGeneralMoneyReserve() { return generalMoneyReserve; }</b>
+<i class="no-highlight">195</i>&nbsp;
+<i class="no-highlight">196</i>&nbsp;    /**
+<i class="no-highlight">197</i>&nbsp;     * Getter method that gives the cloud of a certain given ID.
+<i class="no-highlight">198</i>&nbsp;     * @param cloudID the ID of the cloud we want to return.
+<i class="no-highlight">199</i>&nbsp;     * @return the cloud associated to that ID.
+<i class="no-highlight">200</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">201</i>&nbsp;    public Cloud getCloud(int cloudID) { return clouds.get(cloudID); }</b>
+<i class="no-highlight">202</i>&nbsp;
+<i class="no-highlight">203</i>&nbsp;    /**
+<i class="no-highlight">204</i>&nbsp;     * Getter method that gives the current isle manager for the game table.
+<i class="no-highlight">205</i>&nbsp;     * @return the current isle manager.
+<i class="no-highlight">206</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">207</i>&nbsp;    public IsleManager getIsleManager() { return isleManager; }</b>
+<i class="no-highlight">208</i>&nbsp;
+<i class="no-highlight">209</i>&nbsp;    /**
+<i class="no-highlight">210</i>&nbsp;     * Getter method that gives the current bag for the game table.
+<i class="no-highlight">211</i>&nbsp;     * @return the current bag.
+<i class="no-highlight">212</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">213</i>&nbsp;    public Bag getBag() { return bag; }</b>
+<i class="no-highlight">214</i>&nbsp;
+<i class="no-highlight">215</i>&nbsp;    /**
+<i class="no-highlight">216</i>&nbsp;     * Getter method for the character cards playable.
+<i class="no-highlight">217</i>&nbsp;     * @return a list of playable character cards.
+<i class="no-highlight">218</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">219</i>&nbsp;    public ArrayList&lt;CharacterCard&gt; getCharacterCards() { return characterCards; }</b>
+<i class="no-highlight">220</i>&nbsp;
+<i class="no-highlight">221</i>&nbsp;    /**
+<i class="no-highlight">222</i>&nbsp;     * Getter method that gives one of the playable character cards in the list.
+<i class="no-highlight">223</i>&nbsp;     * @param index of the character card we want.
+<i class="no-highlight">224</i>&nbsp;     * @return the playable character card with that index.
+<i class="no-highlight">225</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">226</i>&nbsp;    public CharacterCard getCharacterCard(int index) { return characterCards.get(index); }</b>
+<i class="no-highlight">227</i>&nbsp;
+<i class="no-highlight">228</i>&nbsp;    /**
+<i class="no-highlight">229</i>&nbsp;     * TESTING PURPOSE ONLY.
+<i class="no-highlight">230</i>&nbsp;     * Getter method for the number of professors.
+<i class="no-highlight">231</i>&nbsp;     * @return the number of professors on the game table.
+<i class="no-highlight">232</i>&nbsp;     */
+<i class="no-highlight">233</i>&nbsp;    public int getNumberOfProfessors() {
+<b class="fc"><i class="no-highlight">234</i>&nbsp;        int totalNumberOfProfessors = 0;</b>
+<b class="fc"><i class="no-highlight">235</i>&nbsp;        for (RealmColors rc : RealmColors.values())</b>
+<b class="fc"><i class="no-highlight">236</i>&nbsp;            totalNumberOfProfessors = totalNumberOfProfessors + professors.get(rc);</b>
+<b class="fc"><i class="no-highlight">237</i>&nbsp;        return totalNumberOfProfessors;</b>
+<i class="no-highlight">238</i>&nbsp;    }
+<i class="no-highlight">239</i>&nbsp;
+<i class="no-highlight">240</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

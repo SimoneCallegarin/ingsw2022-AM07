@@ -1,0 +1,456 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > EffectActivation_UpdateMsg</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Network.Messages.NetworkMessages</a>
+</div>
+
+<h1>Coverage Summary for Class: EffectActivation_UpdateMsg (it.polimi.ingsw.Network.Messages.NetworkMessages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EffectActivation_UpdateMsg</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/59)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Network.Messages.NetworkMessages;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.TowerColors;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Network.Messages.MessageType;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">8</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;/**
+<i class="no-highlight">11</i>&nbsp; * Message sent everytime a character card&#39;s effect is activated.
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;public class EffectActivation_UpdateMsg extends NetworkMessage {
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * ID of the player that activate the effect of a character card.
+<i class="no-highlight">17</i>&nbsp;     */
+<i class="no-highlight">18</i>&nbsp;    private int playerID;
+<i class="no-highlight">19</i>&nbsp;    /**
+<i class="no-highlight">20</i>&nbsp;     * Number of isles on the board.
+<i class="no-highlight">21</i>&nbsp;     */
+<i class="no-highlight">22</i>&nbsp;    private int totalIsles;
+<i class="no-highlight">23</i>&nbsp;    /**
+<i class="no-highlight">24</i>&nbsp;     * students on each isle.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    private ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; students;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * students on each dining room.
+<i class="no-highlight">29</i>&nbsp;     */
+<i class="no-highlight">30</i>&nbsp;    private ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; studentsInDining;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * colors of the towers on each isle.
+<i class="no-highlight">33</i>&nbsp;     */
+<i class="no-highlight">34</i>&nbsp;    private ArrayList&lt;TowerColors&gt; towerColors;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * ID of the isle where there&#39;s mother nature.
+<i class="no-highlight">37</i>&nbsp;     */
+<i class="no-highlight">38</i>&nbsp;    private int whereMNId;
+<i class="no-highlight">39</i>&nbsp;    /**
+<i class="no-highlight">40</i>&nbsp;     * Deny cards presence on each isle (true if there&#39;s a deny card, else false).
+<i class="no-highlight">41</i>&nbsp;     */
+<i class="no-highlight">42</i>&nbsp;    private ArrayList&lt;Boolean&gt; denyCards;
+<i class="no-highlight">43</i>&nbsp;    /**
+<i class="no-highlight">44</i>&nbsp;     * Students on a certain place.
+<i class="no-highlight">45</i>&nbsp;     */
+<i class="no-highlight">46</i>&nbsp;    private HashMap&lt;RealmColors,Integer&gt; studentsInPlace;
+<i class="no-highlight">47</i>&nbsp;    /**
+<i class="no-highlight">48</i>&nbsp;     * Number of isles per group of isle (if an isle isn&#39;t grouped then numberOfIsles will be 1).
+<i class="no-highlight">49</i>&nbsp;     */
+<i class="no-highlight">50</i>&nbsp;    private ArrayList&lt;Integer&gt; numberOfIsles;
+<i class="no-highlight">51</i>&nbsp;    /**
+<i class="no-highlight">52</i>&nbsp;     * Number of towers per player.
+<i class="no-highlight">53</i>&nbsp;     */
+<i class="no-highlight">54</i>&nbsp;    private ArrayList&lt;Integer&gt; numberOfTowers;
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * Index of the character card played.
+<i class="no-highlight">57</i>&nbsp;     */
+<i class="no-highlight">58</i>&nbsp;    private int characterCardIndex;
+<i class="no-highlight">59</i>&nbsp;    /**
+<i class="no-highlight">60</i>&nbsp;     * Cost of the character card played.
+<i class="no-highlight">61</i>&nbsp;     */
+<i class="no-highlight">62</i>&nbsp;    private int cardCost;
+<i class="no-highlight">63</i>&nbsp;    /**
+<i class="no-highlight">64</i>&nbsp;     * Turn order of the assistant card on the discard pile.
+<i class="no-highlight">65</i>&nbsp;     */
+<i class="no-highlight">66</i>&nbsp;    private int turnOrder;
+<i class="no-highlight">67</i>&nbsp;    /**
+<i class="no-highlight">68</i>&nbsp;     * Possible mother nature movement of the assistant card on the discard pile.
+<i class="no-highlight">69</i>&nbsp;     */
+<i class="no-highlight">70</i>&nbsp;    private int mnMovement;
+<i class="no-highlight">71</i>&nbsp;    /**
+<i class="no-highlight">72</i>&nbsp;     * ID of the chosen isle.
+<i class="no-highlight">73</i>&nbsp;     */
+<i class="no-highlight">74</i>&nbsp;    private int isleID;
+<i class="no-highlight">75</i>&nbsp;    /**
+<i class="no-highlight">76</i>&nbsp;     * Deny cards on the chosen isle.
+<i class="no-highlight">77</i>&nbsp;     */
+<i class="no-highlight">78</i>&nbsp;    private int denyCard;
+<i class="no-highlight">79</i>&nbsp;    /**
+<i class="no-highlight">80</i>&nbsp;     * First value chosen when playing a character card that requires 2 parameters.
+<i class="no-highlight">81</i>&nbsp;     */
+<i class="no-highlight">82</i>&nbsp;    private int id;
+<i class="no-highlight">83</i>&nbsp;    /**
+<i class="no-highlight">84</i>&nbsp;     * Number of deny cards on a certain place.
+<i class="no-highlight">85</i>&nbsp;     */
+<i class="no-highlight">86</i>&nbsp;    private int denyCardsOnPlace;
+<i class="no-highlight">87</i>&nbsp;    /**
+<i class="no-highlight">88</i>&nbsp;     * Professors on each player dining room.
+<i class="no-highlight">89</i>&nbsp;     */
+<i class="no-highlight">90</i>&nbsp;    private ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; professors;
+<i class="no-highlight">91</i>&nbsp;    /**
+<i class="no-highlight">92</i>&nbsp;     * Students on the character card.
+<i class="no-highlight">93</i>&nbsp;     */
+<i class="no-highlight">94</i>&nbsp;    private HashMap&lt;RealmColors,Integer&gt; studentsOnCard;
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;    /**
+<i class="no-highlight">97</i>&nbsp;     * Message used to send an update when activated the MONK / JESTER.
+<i class="no-highlight">98</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">99</i>&nbsp;     * @param characterCardIndex index of the character card played.
+<i class="no-highlight">100</i>&nbsp;     * @param cardCost cost of the character card played.
+<i class="no-highlight">101</i>&nbsp;     * @param denyCardsOnCard deny cards on the character card played.
+<i class="no-highlight">102</i>&nbsp;     * @param studentsOnCard students on the character card played.
+<i class="no-highlight">103</i>&nbsp;     * @param id color of the first student chosen.
+<i class="no-highlight">104</i>&nbsp;     * @param students students on the chosen isle (MONK) / player entrance (JESTER).
+<i class="no-highlight">105</i>&nbsp;     */
+<i class="no-highlight">106</i>&nbsp;    // MONK, JESTER
+<i class="no-highlight">107</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap&lt;RealmColors,Integer&gt; studentsOnCard, int id, HashMap&lt;RealmColors,Integer&gt; students) {
+<b class="nc"><i class="no-highlight">108</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">109</i>&nbsp;        this.characterCardIndex = characterCardIndex;</b>
+<b class="nc"><i class="no-highlight">110</i>&nbsp;        this.cardCost = cardCost;</b>
+<b class="nc"><i class="no-highlight">111</i>&nbsp;        this.denyCardsOnPlace = denyCardsOnCard;</b>
+<b class="nc"><i class="no-highlight">112</i>&nbsp;        this.studentsOnCard = studentsOnCard;</b>
+<b class="nc"><i class="no-highlight">113</i>&nbsp;        this.id = id;</b>
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        this.studentsInPlace = students;</b>
+<i class="no-highlight">115</i>&nbsp;    }
+<i class="no-highlight">116</i>&nbsp;
+<i class="no-highlight">117</i>&nbsp;    /**
+<i class="no-highlight">118</i>&nbsp;     * Message used to send an update when activated the FARMER.
+<i class="no-highlight">119</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">120</i>&nbsp;     * @param professors on each player dining room.
+<i class="no-highlight">121</i>&nbsp;     */
+<i class="no-highlight">122</i>&nbsp;    // FARMER
+<i class="no-highlight">123</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType, ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; professors) {
+<b class="nc"><i class="no-highlight">124</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;        this.professors = professors;</b>
+<i class="no-highlight">126</i>&nbsp;    }
+<i class="no-highlight">127</i>&nbsp;
+<i class="no-highlight">128</i>&nbsp;    /**
+<i class="no-highlight">129</i>&nbsp;     * Message used to send an update when activated the HERALD.
+<i class="no-highlight">130</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">131</i>&nbsp;     * @param totalIsles the actual number of isles.
+<i class="no-highlight">132</i>&nbsp;     * @param students students on each isle.
+<i class="no-highlight">133</i>&nbsp;     * @param towerColors colors of the towers on each isle.
+<i class="no-highlight">134</i>&nbsp;     * @param whereMNID isle where there&#39;s mother nature.
+<i class="no-highlight">135</i>&nbsp;     * @param denyCards number of deny cards on each isle.
+<i class="no-highlight">136</i>&nbsp;     * @param numberOfIsles indicates for each group of isles how many isles are in it (unified isles there are 2 or more isles).
+<i class="no-highlight">137</i>&nbsp;     * @param numberOfTowers number of towers in the player tower storage.
+<i class="no-highlight">138</i>&nbsp;     */
+<i class="no-highlight">139</i>&nbsp;    // HERALD
+<i class="no-highlight">140</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType, int totalIsles, ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; students, ArrayList&lt;TowerColors&gt; towerColors, int whereMNID, ArrayList&lt;Boolean&gt; denyCards, ArrayList&lt;Integer&gt; numberOfIsles, ArrayList&lt;Integer&gt; numberOfTowers) {
+<b class="nc"><i class="no-highlight">141</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">142</i>&nbsp;        this.totalIsles = totalIsles;</b>
+<b class="nc"><i class="no-highlight">143</i>&nbsp;        this.students = students;</b>
+<b class="nc"><i class="no-highlight">144</i>&nbsp;        this.towerColors = towerColors;</b>
+<b class="nc"><i class="no-highlight">145</i>&nbsp;        this.whereMNId = whereMNID;</b>
+<b class="nc"><i class="no-highlight">146</i>&nbsp;        this.denyCards = denyCards;</b>
+<b class="nc"><i class="no-highlight">147</i>&nbsp;        this.numberOfIsles = numberOfIsles;</b>
+<b class="nc"><i class="no-highlight">148</i>&nbsp;        this.numberOfTowers = numberOfTowers;</b>
+<i class="no-highlight">149</i>&nbsp;    }
+<i class="no-highlight">150</i>&nbsp;
+<i class="no-highlight">151</i>&nbsp;    /**
+<i class="no-highlight">152</i>&nbsp;     * Message used to send an update when activated the MAGICAL_LETTER_CARRIER.
+<i class="no-highlight">153</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">154</i>&nbsp;     * @param playerID ID of the player that played the character card.
+<i class="no-highlight">155</i>&nbsp;     * @param turnOrder turn order of the assistant card in the discard pile.
+<i class="no-highlight">156</i>&nbsp;     * @param mnMovement possible mother nature movement of the assistant card in the discard pile.
+<i class="no-highlight">157</i>&nbsp;     */
+<i class="no-highlight">158</i>&nbsp;    // MAGICAL_LETTER_CARRIER
+<i class="no-highlight">159</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType, int playerID, int turnOrder, int mnMovement) {
+<b class="nc"><i class="no-highlight">160</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">161</i>&nbsp;        this.playerID = playerID;</b>
+<b class="nc"><i class="no-highlight">162</i>&nbsp;        this.turnOrder = turnOrder;</b>
+<b class="nc"><i class="no-highlight">163</i>&nbsp;        this.mnMovement = mnMovement;</b>
+<i class="no-highlight">164</i>&nbsp;    }
+<i class="no-highlight">165</i>&nbsp;
+<i class="no-highlight">166</i>&nbsp;    /**
+<i class="no-highlight">167</i>&nbsp;     * Message used to send an update when activated the GRANDMA_HERBS.
+<i class="no-highlight">168</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">169</i>&nbsp;     * @param characterCardIndex the index of the character card played.
+<i class="no-highlight">170</i>&nbsp;     * @param cardCost the cost of the character card played.
+<i class="no-highlight">171</i>&nbsp;     * @param denyCardsOnCard number of deny cards on the character card played.
+<i class="no-highlight">172</i>&nbsp;     * @param isleID ID of the isle chosen by the player in which it will be put a deny card.
+<i class="no-highlight">173</i>&nbsp;     * @param denyCard number of deny cards on the isle chosen.
+<i class="no-highlight">174</i>&nbsp;     */
+<i class="no-highlight">175</i>&nbsp;    // GRANDMA_HERBS
+<i class="no-highlight">176</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap&lt;RealmColors,Integer&gt; studentsOnCard, int isleID, int denyCard) {
+<b class="nc"><i class="no-highlight">177</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">178</i>&nbsp;        this.characterCardIndex = characterCardIndex;</b>
+<b class="nc"><i class="no-highlight">179</i>&nbsp;        this.cardCost = cardCost;</b>
+<b class="nc"><i class="no-highlight">180</i>&nbsp;        this.isleID = isleID;</b>
+<b class="nc"><i class="no-highlight">181</i>&nbsp;        this.denyCard = denyCard;</b>
+<b class="nc"><i class="no-highlight">182</i>&nbsp;        this.denyCardsOnPlace = denyCardsOnCard;</b>
+<b class="nc"><i class="no-highlight">183</i>&nbsp;        this.studentsOnCard = studentsOnCard;</b>
+<i class="no-highlight">184</i>&nbsp;    }
+<i class="no-highlight">185</i>&nbsp;
+<i class="no-highlight">186</i>&nbsp;    /**
+<i class="no-highlight">187</i>&nbsp;     * Message used to send an update when activated the CENTAUR / KNIGHT / FUNGIST.
+<i class="no-highlight">188</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">189</i>&nbsp;     */
+<i class="no-highlight">190</i>&nbsp;    // CENTAUR, KNIGHT, FUNGIST
+<b class="nc"><i class="no-highlight">191</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType) { super(messageType); }</b>
+<i class="no-highlight">192</i>&nbsp;
+<i class="no-highlight">193</i>&nbsp;    /**
+<i class="no-highlight">194</i>&nbsp;     * Message used to send an update when activated the MINSTREL / THIEF.
+<i class="no-highlight">195</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">196</i>&nbsp;     * @param studentsInEntrance students on the entrance of each player.
+<i class="no-highlight">197</i>&nbsp;     * @param studentsInDining students on the dining room of each player.
+<i class="no-highlight">198</i>&nbsp;     */
+<i class="no-highlight">199</i>&nbsp;    // MINSTREL, THIEF
+<i class="no-highlight">200</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType, ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; studentsInEntrance, ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; studentsInDining) {
+<b class="nc"><i class="no-highlight">201</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">202</i>&nbsp;        this.students = studentsInEntrance;</b>
+<b class="nc"><i class="no-highlight">203</i>&nbsp;        this.studentsInDining = studentsInDining;</b>
+<i class="no-highlight">204</i>&nbsp;    }
+<i class="no-highlight">205</i>&nbsp;
+<i class="no-highlight">206</i>&nbsp;    /**
+<i class="no-highlight">207</i>&nbsp;     * Message used to send an update when activated the SPOILED_PRINCESS.
+<i class="no-highlight">208</i>&nbsp;     * @param messageType is an EFFECTACTIVATION_UPDATE.
+<i class="no-highlight">209</i>&nbsp;     * @param characterCardIndex index of the character card played.
+<i class="no-highlight">210</i>&nbsp;     * @param cardCost the cost of the character card played.
+<i class="no-highlight">211</i>&nbsp;     * @param denyCardsOnCard number of deny cards on the character card.
+<i class="no-highlight">212</i>&nbsp;     * @param studentsOnCard students on the character card.
+<i class="no-highlight">213</i>&nbsp;     * @param studentsInDining students on the dining room of each player.
+<i class="no-highlight">214</i>&nbsp;     */
+<i class="no-highlight">215</i>&nbsp;    // SPOILED_PRINCESS
+<i class="no-highlight">216</i>&nbsp;    public EffectActivation_UpdateMsg(MessageType messageType, int characterCardIndex, int cardCost, int denyCardsOnCard, HashMap&lt;RealmColors,Integer&gt; studentsOnCard, ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; studentsInDining) {
+<b class="nc"><i class="no-highlight">217</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">218</i>&nbsp;        this.characterCardIndex = characterCardIndex;</b>
+<b class="nc"><i class="no-highlight">219</i>&nbsp;        this.cardCost = cardCost;</b>
+<b class="nc"><i class="no-highlight">220</i>&nbsp;        this.denyCardsOnPlace = denyCardsOnCard;</b>
+<b class="nc"><i class="no-highlight">221</i>&nbsp;        this.studentsOnCard = studentsOnCard;</b>
+<b class="nc"><i class="no-highlight">222</i>&nbsp;        this.studentsInDining = studentsInDining;</b>
+<i class="no-highlight">223</i>&nbsp;    }
+<i class="no-highlight">224</i>&nbsp;
+<i class="no-highlight">225</i>&nbsp;    /**
+<i class="no-highlight">226</i>&nbsp;     * Getter method for the player ID.
+<i class="no-highlight">227</i>&nbsp;     * @return the playerID
+<i class="no-highlight">228</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">229</i>&nbsp;    public int getPlayerID() { return playerID; }</b>
+<i class="no-highlight">230</i>&nbsp;
+<i class="no-highlight">231</i>&nbsp;    /**
+<i class="no-highlight">232</i>&nbsp;     * Getter method for the totalIsles.
+<i class="no-highlight">233</i>&nbsp;     * @return the totalIsles.
+<i class="no-highlight">234</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">235</i>&nbsp;    public int getTotalIsles() { return totalIsles; }</b>
+<i class="no-highlight">236</i>&nbsp;
+<i class="no-highlight">237</i>&nbsp;    /**
+<i class="no-highlight">238</i>&nbsp;     * Getter method for the students.
+<i class="no-highlight">239</i>&nbsp;     * @return the students.
+<i class="no-highlight">240</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">241</i>&nbsp;    public ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; getStudents() { return students; }</b>
+<i class="no-highlight">242</i>&nbsp;
+<i class="no-highlight">243</i>&nbsp;    /**
+<i class="no-highlight">244</i>&nbsp;     * Getter method for the studentsInDining.
+<i class="no-highlight">245</i>&nbsp;     * @return the studentsInDining.
+<i class="no-highlight">246</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">247</i>&nbsp;    public ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; getStudentsInDining() { return studentsInDining; }</b>
+<i class="no-highlight">248</i>&nbsp;
+<i class="no-highlight">249</i>&nbsp;    /**
+<i class="no-highlight">250</i>&nbsp;     * Getter method for the towerColors.
+<i class="no-highlight">251</i>&nbsp;     * @return the towerColors.
+<i class="no-highlight">252</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">253</i>&nbsp;    public ArrayList&lt;TowerColors&gt; getTowerColors() { return towerColors; }</b>
+<i class="no-highlight">254</i>&nbsp;
+<i class="no-highlight">255</i>&nbsp;    /**
+<i class="no-highlight">256</i>&nbsp;     * Getter method for the whereMNId.
+<i class="no-highlight">257</i>&nbsp;     * @return the whereMNId.
+<i class="no-highlight">258</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">259</i>&nbsp;    public int getWhereMNId() { return whereMNId; }</b>
+<i class="no-highlight">260</i>&nbsp;
+<i class="no-highlight">261</i>&nbsp;    /**
+<i class="no-highlight">262</i>&nbsp;     * Getter method for the denyCards.
+<i class="no-highlight">263</i>&nbsp;     * @return the denyCards.
+<i class="no-highlight">264</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">265</i>&nbsp;    public ArrayList&lt;Boolean&gt; getDenyCards() { return denyCards; }</b>
+<i class="no-highlight">266</i>&nbsp;
+<i class="no-highlight">267</i>&nbsp;    /**
+<i class="no-highlight">268</i>&nbsp;     * Getter method for the studentsInPlace.
+<i class="no-highlight">269</i>&nbsp;     * @return the studentsInPlace.
+<i class="no-highlight">270</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">271</i>&nbsp;    public HashMap&lt;RealmColors, Integer&gt; getStudentsInPlace() { return studentsInPlace; }</b>
+<i class="no-highlight">272</i>&nbsp;
+<i class="no-highlight">273</i>&nbsp;    /**
+<i class="no-highlight">274</i>&nbsp;     * Getter method for the denyCard.
+<i class="no-highlight">275</i>&nbsp;     * @return the denyCard.
+<i class="no-highlight">276</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">277</i>&nbsp;    public int getDenyCard() { return denyCard; }</b>
+<i class="no-highlight">278</i>&nbsp;
+<i class="no-highlight">279</i>&nbsp;    /**
+<i class="no-highlight">280</i>&nbsp;     * Getter method for the numberOfIsles.
+<i class="no-highlight">281</i>&nbsp;     * @return the numberOfIsles.
+<i class="no-highlight">282</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">283</i>&nbsp;    public ArrayList&lt;Integer&gt; getNumberOfIsles() { return numberOfIsles; }</b>
+<i class="no-highlight">284</i>&nbsp;
+<i class="no-highlight">285</i>&nbsp;    /**
+<i class="no-highlight">286</i>&nbsp;     * Getter method for the numberOfTowers.
+<i class="no-highlight">287</i>&nbsp;     * @return the numberOfTowers.
+<i class="no-highlight">288</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">289</i>&nbsp;    public ArrayList&lt;Integer&gt; getNumberOfTowers() { return numberOfTowers; }</b>
+<i class="no-highlight">290</i>&nbsp;
+<i class="no-highlight">291</i>&nbsp;    /**
+<i class="no-highlight">292</i>&nbsp;     * Getter method for the characterCardIndex.
+<i class="no-highlight">293</i>&nbsp;     * @return the characterCardIndex.
+<i class="no-highlight">294</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">295</i>&nbsp;    public int getCharacterCardIndex() { return characterCardIndex; }</b>
+<i class="no-highlight">296</i>&nbsp;
+<i class="no-highlight">297</i>&nbsp;    /**
+<i class="no-highlight">298</i>&nbsp;     * Getter method for the cardCost.
+<i class="no-highlight">299</i>&nbsp;     * @return the cardCost.
+<i class="no-highlight">300</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">301</i>&nbsp;    public int getCardCost() { return cardCost; }</b>
+<i class="no-highlight">302</i>&nbsp;
+<i class="no-highlight">303</i>&nbsp;    /**
+<i class="no-highlight">304</i>&nbsp;     * Getter method for the turnOrder.
+<i class="no-highlight">305</i>&nbsp;     * @return the turnOrder.
+<i class="no-highlight">306</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">307</i>&nbsp;    public int getTurnOrder() { return turnOrder; }</b>
+<i class="no-highlight">308</i>&nbsp;
+<i class="no-highlight">309</i>&nbsp;    /**
+<i class="no-highlight">310</i>&nbsp;     * Getter method for the mnMovement.
+<i class="no-highlight">311</i>&nbsp;     * @return the mnMovement.
+<i class="no-highlight">312</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">313</i>&nbsp;    public int getMnMovement() { return mnMovement; }</b>
+<i class="no-highlight">314</i>&nbsp;
+<i class="no-highlight">315</i>&nbsp;    /**
+<i class="no-highlight">316</i>&nbsp;     * Getter method for the isleID.
+<i class="no-highlight">317</i>&nbsp;     * @return the isleID.
+<i class="no-highlight">318</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">319</i>&nbsp;    public int getIsleID() { return isleID; }</b>
+<i class="no-highlight">320</i>&nbsp;
+<i class="no-highlight">321</i>&nbsp;    /**
+<i class="no-highlight">322</i>&nbsp;     * Getter method for the denyCardsOnPlace.
+<i class="no-highlight">323</i>&nbsp;     * @return the denyCardsOnPlace.
+<i class="no-highlight">324</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">325</i>&nbsp;    public int getDenyCardsOnPlace() { return denyCardsOnPlace; }</b>
+<i class="no-highlight">326</i>&nbsp;
+<i class="no-highlight">327</i>&nbsp;    /**
+<i class="no-highlight">328</i>&nbsp;     * Getter method for the professors.
+<i class="no-highlight">329</i>&nbsp;     * @return the professors.
+<i class="no-highlight">330</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">331</i>&nbsp;    public ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; getProfessors() { return professors; }</b>
+<i class="no-highlight">332</i>&nbsp;
+<i class="no-highlight">333</i>&nbsp;    /**
+<i class="no-highlight">334</i>&nbsp;     * Getter method for the studentsOnCard.
+<i class="no-highlight">335</i>&nbsp;     * @return the studentsOnCard.
+<i class="no-highlight">336</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">337</i>&nbsp;    public HashMap&lt;RealmColors, Integer&gt; getStudentsOnCard() { return studentsOnCard; }</b>
+<i class="no-highlight">338</i>&nbsp;
+<i class="no-highlight">339</i>&nbsp;    /**
+<i class="no-highlight">340</i>&nbsp;     * Getter method for the firstColor.
+<i class="no-highlight">341</i>&nbsp;     * @return the firstColor.
+<i class="no-highlight">342</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">343</i>&nbsp;    public int getId() { return id; }</b>
+<i class="no-highlight">344</i>&nbsp;
+<i class="no-highlight">345</i>&nbsp;    @Override
+<i class="no-highlight">346</i>&nbsp;    public String toString() {
+<b class="nc"><i class="no-highlight">347</i>&nbsp;        return &quot;EffectActivationMessage: {&quot; +</b>
+<i class="no-highlight">348</i>&nbsp;                &quot;professors: &quot; + professors + &quot;}&quot;;
+<i class="no-highlight">349</i>&nbsp;    }
+<i class="no-highlight">350</i>&nbsp;
+<i class="no-highlight">351</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

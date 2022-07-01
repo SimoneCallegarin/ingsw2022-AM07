@@ -1,0 +1,420 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > ModelStorage</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.StorageOfModelInformation</a>
+</div>
+
+<h1>Coverage Summary for Class: ModelStorage (it.polimi.ingsw.View.StorageOfModelInformation)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ModelStorage</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/103)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.StorageOfModelInformation;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.TowerColors;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.EffectActivation_UpdateMsg;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.GameCreation_UpdateMsg;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.Network.Messages.NetworkMessages.MNMovement_UpdateMsg;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">11</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;/**
+<i class="no-highlight">14</i>&nbsp; * A reduced version of the model used to contain all useful information about the game in a light way.
+<i class="no-highlight">15</i>&nbsp; * Used by the drawers, useful to do information hiding.
+<i class="no-highlight">16</i>&nbsp; */
+<i class="no-highlight">17</i>&nbsp;public class ModelStorage {
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;    /**
+<i class="no-highlight">20</i>&nbsp;     * Number of players that are playing the game.
+<i class="no-highlight">21</i>&nbsp;     */
+<i class="no-highlight">22</i>&nbsp;    private final int numberOfPlayers;
+<i class="no-highlight">23</i>&nbsp;    /**
+<i class="no-highlight">24</i>&nbsp;     * Game mode of the game.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    private final boolean expertMode;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * List containing all the data about each player (that is practically their dashboards).
+<i class="no-highlight">29</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">30</i>&nbsp;    private final ArrayList&lt;PlayerInformation&gt; dashboards = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * Data of the objects that are on the game table.
+<i class="no-highlight">33</i>&nbsp;     */
+<i class="no-highlight">34</i>&nbsp;    private GameTableInformation gameTable;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * Contains data about the things that changed in the model.
+<i class="no-highlight">37</i>&nbsp;     */
+<i class="no-highlight">38</i>&nbsp;    private final ModelChanges modelChanges;
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * ModelStorage constructor.
+<i class="no-highlight">42</i>&nbsp;     * @param numberOfPlayers number of player that are playing the game we want to store the data.
+<i class="no-highlight">43</i>&nbsp;     * @param expertMode game mode of the game we want to store the data.
+<i class="no-highlight">44</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">45</i>&nbsp;    public ModelStorage(int numberOfPlayers, boolean expertMode) {</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;        this.numberOfPlayers = numberOfPlayers;</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        this.expertMode = expertMode;</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        modelChanges=new ModelChanges();</b>
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    /**
+<i class="no-highlight">52</i>&nbsp;     * Sets up the storage for the first time when a game starts.
+<i class="no-highlight">53</i>&nbsp;     * @param message a GameCreation_UpdateMsg that contains all the useful data about the game
+<i class="no-highlight">54</i>&nbsp;     *                (dashboards and game table with all their objects).
+<i class="no-highlight">55</i>&nbsp;     */
+<i class="no-highlight">56</i>&nbsp;    public void setupStorage (GameCreation_UpdateMsg message) {
+<i class="no-highlight">57</i>&nbsp;
+<i class="no-highlight">58</i>&nbsp;        // DASHBOARDS:
+<b class="nc"><i class="no-highlight">59</i>&nbsp;        ArrayList&lt;PlayerInformation&gt; dashboards = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        for(int i=0; i&lt;message.getNumPlayers(); i++){</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;            PlayerInformation dashboard = new PlayerInformation(message.getNicknames().get(i),message.getSquads().get(i),message.getEntrances().get(i),message.getNumTowers().get(i),message.getTowerColors().get(i), message.getMoney());</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;            dashboards.add(i,dashboard);</b>
+<i class="no-highlight">63</i>&nbsp;        }
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;        // GAME TABLE:
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        ArrayList&lt;GameTableInformation.CharacterCard&gt; characterCards = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        ArrayList&lt;GameTableInformation.Isle&gt; isles = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;        ArrayList&lt;GameTableInformation.Cloud&gt; clouds = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">69</i>&nbsp;
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        if(message.getGameMode())</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            for(int i=0; i&lt;3; i++){</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;                GameTableInformation.CharacterCard characterCard = new GameTableInformation.CharacterCard(message.getCharacterNames().get(i),message.getCharacterCost().get(i),message.getStudentsOnCharacter().get(i),message.getDenyCards().get(i),message.getCharacterCardsDescription().get(i),false);</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;                characterCards.add(i,characterCard);</b>
+<i class="no-highlight">74</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">75</i>&nbsp;        for(int i=0; i&lt;12; i++){</b>
+<i class="no-highlight">76</i>&nbsp;            GameTableInformation.Isle isle;
+<b class="nc"><i class="no-highlight">77</i>&nbsp;            if(i== message.getWhereMNId())</b>
+<b class="nc"><i class="no-highlight">78</i>&nbsp;                isle = new GameTableInformation.Isle(message.getIsleStudents().get(i),0, TowerColors.NOCOLOR,0,true);</b>
+<i class="no-highlight">79</i>&nbsp;            else
+<b class="nc"><i class="no-highlight">80</i>&nbsp;                isle = new GameTableInformation.Isle(message.getIsleStudents().get(i),0,TowerColors.NOCOLOR,0,false);</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;            isles.add(i,isle);</b>
+<i class="no-highlight">82</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        for(int i=0; i&lt;message.getNumPlayers(); i++){</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;            GameTableInformation.Cloud cloud = new GameTableInformation.Cloud(message.getClouds().get(i));</b>
+<b class="nc"><i class="no-highlight">85</i>&nbsp;            clouds.add(i,cloud);</b>
+<i class="no-highlight">86</i>&nbsp;        }
+<i class="no-highlight">87</i>&nbsp;
+<b class="nc"><i class="no-highlight">88</i>&nbsp;        GameTableInformation gameTable = new GameTableInformation(characterCards,isles,clouds,message.getGeneralReserve());</b>
+<i class="no-highlight">89</i>&nbsp;
+<b class="nc"><i class="no-highlight">90</i>&nbsp;        for(int i=0;i&lt;numberOfPlayers;i++)</b>
+<b class="nc"><i class="no-highlight">91</i>&nbsp;            setDashboard(i,dashboards.get(i));</b>
+<b class="nc"><i class="no-highlight">92</i>&nbsp;        setGameTable(gameTable);</b>
+<i class="no-highlight">93</i>&nbsp;
+<i class="no-highlight">94</i>&nbsp;    }
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;    /**
+<i class="no-highlight">97</i>&nbsp;     * Setter method for the dashboard.
+<i class="no-highlight">98</i>&nbsp;     * @param playerID ID of the player that we want to set the dashboard.
+<i class="no-highlight">99</i>&nbsp;     * @param player data of the player.
+<i class="no-highlight">100</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">101</i>&nbsp;    private void setDashboard(int playerID, PlayerInformation player) { this.dashboards.add(playerID,player); }</b>
+<i class="no-highlight">102</i>&nbsp;
+<i class="no-highlight">103</i>&nbsp;    /**
+<i class="no-highlight">104</i>&nbsp;     * Setter method for the game table.
+<i class="no-highlight">105</i>&nbsp;     * @param gameTable data of the game table.
+<i class="no-highlight">106</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">107</i>&nbsp;    private void setGameTable(GameTableInformation gameTable) { this.gameTable = gameTable; }</b>
+<i class="no-highlight">108</i>&nbsp;
+<i class="no-highlight">109</i>&nbsp;    // Update dashboard:
+<i class="no-highlight">110</i>&nbsp;
+<i class="no-highlight">111</i>&nbsp;    /**
+<i class="no-highlight">112</i>&nbsp;     * Updates the students on the entrance of the player.
+<i class="no-highlight">113</i>&nbsp;     * @param playerID ID of the player that will have his entrance updated.
+<i class="no-highlight">114</i>&nbsp;     * @param students updated students on the entrance of the player.
+<i class="no-highlight">115</i>&nbsp;     */
+<i class="no-highlight">116</i>&nbsp;    public void updateStudentsInEntrance(int playerID, HashMap&lt;RealmColors,Integer&gt; students){
+<b class="nc"><i class="no-highlight">117</i>&nbsp;        dashboards.get(playerID).setEntranceStudents(students);</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.ENTRANCE_CHANGED);</b>
+<b class="nc"><i class="no-highlight">119</i>&nbsp;        modelChanges.setPlayingID(playerID);</b>
+<i class="no-highlight">120</i>&nbsp;    }
+<i class="no-highlight">121</i>&nbsp;
+<i class="no-highlight">122</i>&nbsp;    /**
+<i class="no-highlight">123</i>&nbsp;     * Updates the students on the dining room of the player.
+<i class="no-highlight">124</i>&nbsp;     * @param playerID ID of the player that will have his dining room updated.
+<i class="no-highlight">125</i>&nbsp;     * @param students updated students on the dining room of the player.
+<i class="no-highlight">126</i>&nbsp;     */
+<i class="no-highlight">127</i>&nbsp;    public void updateStudentsInDining(int playerID, HashMap&lt;RealmColors,Integer&gt; students){
+<b class="nc"><i class="no-highlight">128</i>&nbsp;        dashboards.get(playerID).setDiningStudents(students);</b>
+<b class="nc"><i class="no-highlight">129</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.STUDENTDINING_CHANGED);</b>
+<b class="nc"><i class="no-highlight">130</i>&nbsp;        modelChanges.setPlayingID(playerID);</b>
+<i class="no-highlight">131</i>&nbsp;    }
+<i class="no-highlight">132</i>&nbsp;
+<i class="no-highlight">133</i>&nbsp;    /**
+<i class="no-highlight">134</i>&nbsp;     * Updates the professors of each dashboard.
+<i class="no-highlight">135</i>&nbsp;     * @param professors updated professors for each dashboard.
+<i class="no-highlight">136</i>&nbsp;     */
+<i class="no-highlight">137</i>&nbsp;    public void updateProfessorsInDining(ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; professors){
+<b class="nc"><i class="no-highlight">138</i>&nbsp;        for (int i = 0; i &lt; numberOfPlayers; i++)</b>
+<b class="nc"><i class="no-highlight">139</i>&nbsp;            dashboards.get(i).setDiningProfessors(professors.get(i));</b>
+<b class="nc"><i class="no-highlight">140</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.PROFDINING_CHANGED);</b>
+<i class="no-highlight">141</i>&nbsp;    }
+<i class="no-highlight">142</i>&nbsp;
+<i class="no-highlight">143</i>&nbsp;    /**
+<i class="no-highlight">144</i>&nbsp;     * Updates the number of towers in each tower storage.
+<i class="no-highlight">145</i>&nbsp;     * @param numTowers updated number of towers in the tower storage.
+<i class="no-highlight">146</i>&nbsp;     */
+<i class="no-highlight">147</i>&nbsp;    public void updateNumberOfTowers(ArrayList&lt;Integer&gt; numTowers) {
+<b class="nc"><i class="no-highlight">148</i>&nbsp;        for (int i = 0; i &lt; numberOfPlayers; i++)</b>
+<b class="nc"><i class="no-highlight">149</i>&nbsp;            dashboards.get(i).setNumOfTowers(numTowers.get(i));</b>
+<b class="nc"><i class="no-highlight">150</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.TOWERSTORAGE_CHANGED);</b>
+<i class="no-highlight">151</i>&nbsp;    }
+<i class="no-highlight">152</i>&nbsp;
+<i class="no-highlight">153</i>&nbsp;    /**
+<i class="no-highlight">154</i>&nbsp;     * Updates the money of a player.
+<i class="no-highlight">155</i>&nbsp;     * @param playerID ID of the player that will have his money changed.
+<i class="no-highlight">156</i>&nbsp;     * @param money updated quantity of money.
+<i class="no-highlight">157</i>&nbsp;     */
+<i class="no-highlight">158</i>&nbsp;    public void updateMoney(int playerID, int money){
+<b class="nc"><i class="no-highlight">159</i>&nbsp;        dashboards.get(playerID).setMoney(money);</b>
+<b class="nc"><i class="no-highlight">160</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.COINS_CHANGED);</b>
+<b class="nc"><i class="no-highlight">161</i>&nbsp;        modelChanges.setPlayingID(playerID);</b>
+<i class="no-highlight">162</i>&nbsp;    }
+<i class="no-highlight">163</i>&nbsp;
+<i class="no-highlight">164</i>&nbsp;    /**
+<i class="no-highlight">165</i>&nbsp;     * Updates the discard pile of a player.
+<i class="no-highlight">166</i>&nbsp;     * @param playerID ID of the player that will have his discard pile changed.
+<i class="no-highlight">167</i>&nbsp;     * @param turnOrder turn order of the updated assistant card on the discard pile.
+<i class="no-highlight">168</i>&nbsp;     * @param mnMovement mother nature movement of the updated assistant card on the discard pile.
+<i class="no-highlight">169</i>&nbsp;     */
+<i class="no-highlight">170</i>&nbsp;    public void updateDiscardPile(int playerID, int turnOrder, int mnMovement){
+<b class="nc"><i class="no-highlight">171</i>&nbsp;        dashboards.get(playerID).setDiscardPileTurnOrder(turnOrder);</b>
+<b class="nc"><i class="no-highlight">172</i>&nbsp;        dashboards.get(playerID).setDiscardPileMNMovement(mnMovement);</b>
+<b class="nc"><i class="no-highlight">173</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.DISCARDPILE_CHANGED);</b>
+<b class="nc"><i class="no-highlight">174</i>&nbsp;        modelChanges.setPlayingID(playerID);</b>
+<i class="no-highlight">175</i>&nbsp;    }
+<i class="no-highlight">176</i>&nbsp;
+<i class="no-highlight">177</i>&nbsp;    /**
+<i class="no-highlight">178</i>&nbsp;     * Updates the deck of assistant cards of a player.
+<i class="no-highlight">179</i>&nbsp;     * @param playerID ID of the player that will have his deck of assistant cards changed.
+<i class="no-highlight">180</i>&nbsp;     * @param assistantCardsTurnOrder turn orders of the updated deck of assistant cards.
+<i class="no-highlight">181</i>&nbsp;     * @param assistantCardsMNMovement mother nature movements of the updated deck of assistant cards.
+<i class="no-highlight">182</i>&nbsp;     */
+<i class="no-highlight">183</i>&nbsp;    public void updateAssistantsCard(int playerID, ArrayList&lt;Integer&gt; assistantCardsTurnOrder, ArrayList&lt;Integer&gt; assistantCardsMNMovement) {
+<b class="nc"><i class="no-highlight">184</i>&nbsp;        dashboards.get(playerID).setAssistantCardsTurnOrder(assistantCardsTurnOrder);</b>
+<b class="nc"><i class="no-highlight">185</i>&nbsp;        dashboards.get(playerID).setAssistantCardsMNMovement(assistantCardsMNMovement);</b>
+<i class="no-highlight">186</i>&nbsp;
+<i class="no-highlight">187</i>&nbsp;    }
+<i class="no-highlight">188</i>&nbsp;
+<i class="no-highlight">189</i>&nbsp;    // Update game table:
+<i class="no-highlight">190</i>&nbsp;
+<i class="no-highlight">191</i>&nbsp;    /**
+<i class="no-highlight">192</i>&nbsp;     * Updates a character card.
+<i class="no-highlight">193</i>&nbsp;     * @param characterCardIndex index of the character card.
+<i class="no-highlight">194</i>&nbsp;     * @param cost updated cost of the character card.
+<i class="no-highlight">195</i>&nbsp;     * @param characterCardsStudents updated students on the character card.
+<i class="no-highlight">196</i>&nbsp;     * @param denyCards updated quantity of deny cards on the character card.
+<i class="no-highlight">197</i>&nbsp;     */
+<i class="no-highlight">198</i>&nbsp;    public void updateCharacterCard(int characterCardIndex, int cost, HashMap&lt;RealmColors,Integer&gt; characterCardsStudents, int denyCards) {
+<b class="nc"><i class="no-highlight">199</i>&nbsp;        GameTableInformation.CharacterCard newCharacterCard = new GameTableInformation.CharacterCard(gameTable.getCharacterCard(characterCardIndex).characterCardName(),cost,characterCardsStudents,denyCards,gameTable.getCharacterCard(characterCardIndex).getDescription(),true);</b>
+<b class="nc"><i class="no-highlight">200</i>&nbsp;        gameTable.setCharacterCard(characterCardIndex,newCharacterCard);</b>
+<b class="nc"><i class="no-highlight">201</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.CHARACTERCARD_CHANGED);</b>
+<b class="nc"><i class="no-highlight">202</i>&nbsp;        modelChanges.setCharacterID(characterCardIndex);</b>
+<i class="no-highlight">203</i>&nbsp;    }
+<i class="no-highlight">204</i>&nbsp;
+<i class="no-highlight">205</i>&nbsp;    /**
+<i class="no-highlight">206</i>&nbsp;     * Updates the students on a certain isle.
+<i class="no-highlight">207</i>&nbsp;     * @param isleID ID of the isle that has to be updated.
+<i class="no-highlight">208</i>&nbsp;     * @param newStudentsOnIsle updated students on the isle.
+<i class="no-highlight">209</i>&nbsp;     */
+<i class="no-highlight">210</i>&nbsp;    public void updateStudentsOnIsle(int isleID, HashMap&lt;RealmColors,Integer&gt; newStudentsOnIsle) {
+<b class="nc"><i class="no-highlight">211</i>&nbsp;        gameTable.setStudentsOnIsle(isleID,newStudentsOnIsle);</b>
+<b class="nc"><i class="no-highlight">212</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.ISLE_CHANGED);</b>
+<b class="nc"><i class="no-highlight">213</i>&nbsp;        modelChanges.setIsleID(isleID);</b>
+<i class="no-highlight">214</i>&nbsp;    }
+<i class="no-highlight">215</i>&nbsp;
+<i class="no-highlight">216</i>&nbsp;    /**
+<i class="no-highlight">217</i>&nbsp;     * Updates the quantity of deny cards on a certain isle.
+<i class="no-highlight">218</i>&nbsp;     * @param isleID ID of the isle that has to be updated.
+<i class="no-highlight">219</i>&nbsp;     * @param denyCard updated quantity of deny cards on the isle.
+<i class="no-highlight">220</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">221</i>&nbsp;    public void updateDenyOnIsle(int isleID, int denyCard) { gameTable.setDenyOnIsle(isleID,denyCard);</b>
+<b class="nc"><i class="no-highlight">222</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.ISLE_CHANGED);</b>
+<b class="nc"><i class="no-highlight">223</i>&nbsp;        modelChanges.setIsleID(isleID);</b>
+<i class="no-highlight">224</i>&nbsp;    }
+<i class="no-highlight">225</i>&nbsp;
+<i class="no-highlight">226</i>&nbsp;    /**
+<i class="no-highlight">227</i>&nbsp;     * Updates all the isles after mother nature has been moved.
+<i class="no-highlight">228</i>&nbsp;     * @param mnm message containing the information about the movement of mother nature and the current state of the isles.
+<i class="no-highlight">229</i>&nbsp;     */
+<i class="no-highlight">230</i>&nbsp;    public void updateIsles(MNMovement_UpdateMsg mnm) {
+<b class="nc"><i class="no-highlight">231</i>&nbsp;        ArrayList&lt;GameTableInformation.Isle&gt; newIsles = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">232</i>&nbsp;        for (int i = 0; i &lt; mnm.getTotalIsles(); i++) {</b>
+<b class="nc"><i class="no-highlight">233</i>&nbsp;            boolean isMNPresent = mnm.getWhereMNId() == i;</b>
+<b class="nc"><i class="no-highlight">234</i>&nbsp;            int isDenyCardPresent = 0;</b>
+<b class="nc"><i class="no-highlight">235</i>&nbsp;            if (mnm.getDenyCards().get(i))</b>
+<b class="nc"><i class="no-highlight">236</i>&nbsp;                isDenyCardPresent = 1;</b>
+<b class="nc"><i class="no-highlight">237</i>&nbsp;            GameTableInformation.Isle newIsle = new GameTableInformation.Isle(mnm.getStudents().get(i), mnm.getNumberOfIsles().get(i), mnm.getTowerColors().get(i), isDenyCardPresent, isMNPresent);</b>
+<b class="nc"><i class="no-highlight">238</i>&nbsp;            newIsles.add(newIsle);</b>
+<i class="no-highlight">239</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">240</i>&nbsp;        if(newIsles.size()!=gameTable.getIsles().size()){</b>
+<b class="nc"><i class="no-highlight">241</i>&nbsp;            modelChanges.setLayoutChanged(true);</b>
+<b class="nc"><i class="no-highlight">242</i>&nbsp;            int toRemove=gameTable.getIsles().size() - newIsles.size();</b>
+<b class="nc"><i class="no-highlight">243</i>&nbsp;            modelChanges.setIslesToRemove(toRemove);</b>
+<i class="no-highlight">244</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">245</i>&nbsp;        gameTable.setIsles(newIsles);</b>
+<b class="nc"><i class="no-highlight">246</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.ISLELAYOUT_CHANGED);</b>
+<b class="nc"><i class="no-highlight">247</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.TOWERSTORAGE_CHANGED);</b>
+<b class="nc"><i class="no-highlight">248</i>&nbsp;        modelChanges.setIsleID(mnm.getWhereMNId());</b>
+<i class="no-highlight">249</i>&nbsp;    }
+<i class="no-highlight">250</i>&nbsp;
+<i class="no-highlight">251</i>&nbsp;    /**
+<i class="no-highlight">252</i>&nbsp;     * Updates all the isles after mother nature has been moved.
+<i class="no-highlight">253</i>&nbsp;     * @param ea message containing the information about the activation of a character card that altered the state of the isles and their current state.
+<i class="no-highlight">254</i>&nbsp;     */
+<i class="no-highlight">255</i>&nbsp;    public void updateIsles(EffectActivation_UpdateMsg ea) {
+<b class="nc"><i class="no-highlight">256</i>&nbsp;        ArrayList&lt;GameTableInformation.Isle&gt; newIsles = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">257</i>&nbsp;        for (int i = 0; i &lt; ea.getTotalIsles(); i++) {</b>
+<b class="nc"><i class="no-highlight">258</i>&nbsp;            boolean isMNPresent = ea.getWhereMNId() == i;</b>
+<b class="nc"><i class="no-highlight">259</i>&nbsp;            int isDenyCardPresent = 0;</b>
+<b class="nc"><i class="no-highlight">260</i>&nbsp;            if (ea.getDenyCards().get(i))</b>
+<b class="nc"><i class="no-highlight">261</i>&nbsp;                isDenyCardPresent = 1;</b>
+<b class="nc"><i class="no-highlight">262</i>&nbsp;            GameTableInformation.Isle newIsle = new GameTableInformation.Isle(ea.getStudents().get(i), ea.getNumberOfIsles().get(i), ea.getTowerColors().get(i), isDenyCardPresent, isMNPresent);</b>
+<b class="nc"><i class="no-highlight">263</i>&nbsp;            newIsles.add(newIsle);</b>
+<i class="no-highlight">264</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">265</i>&nbsp;        gameTable.setIsles(newIsles);</b>
+<b class="nc"><i class="no-highlight">266</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.ISLELAYOUT_CHANGED);</b>
+<i class="no-highlight">267</i>&nbsp;    }
+<i class="no-highlight">268</i>&nbsp;
+<i class="no-highlight">269</i>&nbsp;    /**
+<i class="no-highlight">270</i>&nbsp;     * Updates a certain cloud.
+<i class="no-highlight">271</i>&nbsp;     * @param newCloud updated cloud with new students.
+<i class="no-highlight">272</i>&nbsp;     * @param cloudID ID of the updated cloud.
+<i class="no-highlight">273</i>&nbsp;     */
+<i class="no-highlight">274</i>&nbsp;    public void updateCloud(HashMap&lt;RealmColors, Integer&gt; newCloud, int cloudID) {
+<b class="nc"><i class="no-highlight">275</i>&nbsp;        GameTableInformation.Cloud updatedCloud = new GameTableInformation.Cloud(newCloud);</b>
+<b class="nc"><i class="no-highlight">276</i>&nbsp;        gameTable.setCloud(cloudID,updatedCloud);</b>
+<b class="nc"><i class="no-highlight">277</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.CLOUD_CHANGED);</b>
+<b class="nc"><i class="no-highlight">278</i>&nbsp;        modelChanges.setCloudID(cloudID);</b>
+<i class="no-highlight">279</i>&nbsp;    }
+<i class="no-highlight">280</i>&nbsp;
+<i class="no-highlight">281</i>&nbsp;    /**
+<i class="no-highlight">282</i>&nbsp;     * Updates all the clouds.
+<i class="no-highlight">283</i>&nbsp;     * @param clouds list of the clouds with the updated students.
+<i class="no-highlight">284</i>&nbsp;     */
+<i class="no-highlight">285</i>&nbsp;    public void updateFillClouds(ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; clouds) {
+<b class="nc"><i class="no-highlight">286</i>&nbsp;        for (int i = 0; i &lt; numberOfPlayers; i++) {</b>
+<b class="nc"><i class="no-highlight">287</i>&nbsp;            GameTableInformation.Cloud newCloud = new GameTableInformation.Cloud(clouds.get(i));</b>
+<b class="nc"><i class="no-highlight">288</i>&nbsp;            gameTable.setCloud(i, newCloud);</b>
+<i class="no-highlight">289</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">290</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.FILLCLOUD_CHANGED);</b>
+<i class="no-highlight">291</i>&nbsp;    }
+<i class="no-highlight">292</i>&nbsp;
+<i class="no-highlight">293</i>&nbsp;    /**
+<i class="no-highlight">294</i>&nbsp;     * Updates the general money reserve.
+<i class="no-highlight">295</i>&nbsp;     * @param generalMoneyReserveNewValue updated quantity of money on the general money reserve.
+<i class="no-highlight">296</i>&nbsp;     */
+<i class="no-highlight">297</i>&nbsp;    public void updateGeneralMoneyReserve(int generalMoneyReserveNewValue) {
+<b class="nc"><i class="no-highlight">298</i>&nbsp;        gameTable.setGeneralMoneyReserve(generalMoneyReserveNewValue);</b>
+<b class="nc"><i class="no-highlight">299</i>&nbsp;        modelChanges.getToUpdate().add(ToUpdate.GNRLRESERVE_CHANGED);</b>
+<i class="no-highlight">300</i>&nbsp;    }
+<i class="no-highlight">301</i>&nbsp;
+<i class="no-highlight">302</i>&nbsp;    // GETTERS:
+<i class="no-highlight">303</i>&nbsp;
+<b class="nc"><i class="no-highlight">304</i>&nbsp;    public PlayerInformation getDashboard(int playerID) { return dashboards.get(playerID); }</b>
+<i class="no-highlight">305</i>&nbsp;
+<b class="nc"><i class="no-highlight">306</i>&nbsp;    public GameTableInformation getGameTable() { return gameTable; }</b>
+<i class="no-highlight">307</i>&nbsp;
+<b class="nc"><i class="no-highlight">308</i>&nbsp;    public int getNumberOfPlayers() { return numberOfPlayers; }</b>
+<i class="no-highlight">309</i>&nbsp;
+<b class="nc"><i class="no-highlight">310</i>&nbsp;    public boolean isExpertMode() { return expertMode; }</b>
+<i class="no-highlight">311</i>&nbsp;
+<b class="nc"><i class="no-highlight">312</i>&nbsp;    public int getNumberOfIsles() { return gameTable.getIsles().size(); }</b>
+<i class="no-highlight">313</i>&nbsp;
+<b class="nc"><i class="no-highlight">314</i>&nbsp;    public ModelChanges getModelChanges() { return modelChanges; }</b>
+<i class="no-highlight">315</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

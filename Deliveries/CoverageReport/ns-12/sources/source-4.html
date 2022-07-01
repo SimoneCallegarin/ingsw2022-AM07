@@ -1,0 +1,843 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > GUIDrawer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI</a>
+</div>
+
+<h1>Coverage Summary for Class: GUIDrawer (it.polimi.ingsw.View.GUI)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUIDrawer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/314)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GUIDrawer$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GUIDrawer$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/319)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Observer.ViewObserver;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.View.GUI.Buttons.AssistantCardButton;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.View.GUI.Buttons.ColorChoiceButton;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.View.GUI.Buttons.ExchangeChoiceButton;
+<i class="no-highlight">9</i>&nbsp;import it.polimi.ingsw.View.GUI.ExpertPanels.CharacterPanel;
+<i class="no-highlight">10</i>&nbsp;import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
+<i class="no-highlight">11</i>&nbsp;import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;import javax.swing.*;
+<i class="no-highlight">14</i>&nbsp;import java.awt.*;
+<i class="no-highlight">15</i>&nbsp;import java.awt.event.ActionEvent;
+<i class="no-highlight">16</i>&nbsp;import java.awt.event.KeyEvent;
+<i class="no-highlight">17</i>&nbsp;import java.io.InputStream;
+<i class="no-highlight">18</i>&nbsp;import java.util.concurrent.atomic.AtomicInteger;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+<i class="no-highlight">21</i>&nbsp;import static it.polimi.ingsw.View.GUI.ImagesLoader.*;
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;/**
+<i class="no-highlight">24</i>&nbsp; * Class called upon GUI creation that start the GUI construction chain.
+<i class="no-highlight">25</i>&nbsp; * It&#39;s also responsible for showing forms to the user and managing the update logic.
+<i class="no-highlight">26</i>&nbsp; */
+<b class="nc"><i class="no-highlight">27</i>&nbsp;public class GUIDrawer extends ViewSubject {</b>
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /**
+<i class="no-highlight">30</i>&nbsp;     * Model Storage reference used to retrieve game state information.
+<i class="no-highlight">31</i>&nbsp;     */
+<i class="no-highlight">32</i>&nbsp;    private ModelStorage modelStorage;
+<i class="no-highlight">33</i>&nbsp;    /**
+<i class="no-highlight">34</i>&nbsp;     * Contains all the information about the changes occurred in the ModelStorage.
+<i class="no-highlight">35</i>&nbsp;     */
+<i class="no-highlight">36</i>&nbsp;    private ModelChanges modelChanges;
+<i class="no-highlight">37</i>&nbsp;    /**
+<i class="no-highlight">38</i>&nbsp;     * String placed in the frame to identify the application
+<i class="no-highlight">39</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">40</i>&nbsp;    private final String frameTitle = gameTitle;</b>
+<i class="no-highlight">41</i>&nbsp;    /**
+<i class="no-highlight">42</i>&nbsp;     * Frame containing the GUI itself.
+<i class="no-highlight">43</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">44</i>&nbsp;    private final JFrame f = new JFrame(frameTitle);</b>
+<i class="no-highlight">45</i>&nbsp;    // Nickname selection:
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Panel for the user inputs.
+<i class="no-highlight">48</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">49</i>&nbsp;    private final JPanel userInputPanel = new JPanel(new CardLayout());</b>
+<i class="no-highlight">50</i>&nbsp;    /**
+<i class="no-highlight">51</i>&nbsp;     * JTextField used to insert nickname choice.
+<i class="no-highlight">52</i>&nbsp;     */
+<i class="no-highlight">53</i>&nbsp;    private JTextField nicknameField;
+<i class="no-highlight">54</i>&nbsp;    /**
+<i class="no-highlight">55</i>&nbsp;     * JLabel used to print the chosen nickname.
+<i class="no-highlight">56</i>&nbsp;     */
+<i class="no-highlight">57</i>&nbsp;    private JLabel nicknameDisplay;
+<i class="no-highlight">58</i>&nbsp;    // User&#39;s game preferences selection:
+<i class="no-highlight">59</i>&nbsp;    /**
+<i class="no-highlight">60</i>&nbsp;     * User preferences layout to change between username insertion and game preferences choice.
+<i class="no-highlight">61</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">62</i>&nbsp;    private final CardLayout userCl = (CardLayout) userInputPanel.getLayout();</b>
+<i class="no-highlight">63</i>&nbsp;    /**
+<i class="no-highlight">64</i>&nbsp;     * On this button press the player will join a lobby and wait for the game to start.
+<i class="no-highlight">65</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">66</i>&nbsp;    private final JButton startGame = new JButton(&quot;Start game&quot;);</b>
+<i class="no-highlight">67</i>&nbsp;    /**
+<i class="no-highlight">68</i>&nbsp;     * Loading screen shown while waiting for the game to load/other player to join.
+<i class="no-highlight">69</i>&nbsp;     */
+<i class="no-highlight">70</i>&nbsp;    private WaitingRoom waitingRoom;
+<i class="no-highlight">71</i>&nbsp;    // Actual game screen:
+<i class="no-highlight">72</i>&nbsp;    /**
+<i class="no-highlight">73</i>&nbsp;     * panel where the actual game will take place
+<i class="no-highlight">74</i>&nbsp;     */
+<i class="no-highlight">75</i>&nbsp;    private GameScreenPanel gameScreenPanel;
+<i class="no-highlight">76</i>&nbsp;    /**
+<i class="no-highlight">77</i>&nbsp;     * Boolean variable used to execute only one time the GameScreenPanel creation.
+<i class="no-highlight">78</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">79</i>&nbsp;    private boolean gameStart = true;</b>
+<i class="no-highlight">80</i>&nbsp;    /**
+<i class="no-highlight">81</i>&nbsp;     * General panel manager switches between the screen where the user will submit his game preferences
+<i class="no-highlight">82</i>&nbsp;     * and the screen where the actual game will take place.
+<i class="no-highlight">83</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">84</i>&nbsp;    private final JPanel generalPanelManager = new JPanel(new CardLayout());</b>
+<i class="no-highlight">85</i>&nbsp;    /**
+<i class="no-highlight">86</i>&nbsp;     * GeneralPanelManager layout to show different panels on events happening.
+<i class="no-highlight">87</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">88</i>&nbsp;    private final CardLayout cl = (CardLayout) generalPanelManager.getLayout();</b>
+<i class="no-highlight">89</i>&nbsp;    /**
+<i class="no-highlight">90</i>&nbsp;     * The username of the player currently using this GUI.
+<i class="no-highlight">91</i>&nbsp;     */
+<i class="no-highlight">92</i>&nbsp;    private String usernamePlaying;
+<i class="no-highlight">93</i>&nbsp;    /**
+<i class="no-highlight">94</i>&nbsp;     * Used to know if it&#39;s necessary to let appear a JOptionPanel of start turn or not.
+<i class="no-highlight">95</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">96</i>&nbsp;    private boolean turnStarted = false;</b>
+<i class="no-highlight">97</i>&nbsp;
+<i class="no-highlight">98</i>&nbsp;    /**
+<i class="no-highlight">99</i>&nbsp;     * Initializes the first screen when you open the app where you&#39;ll be asked the username,
+<i class="no-highlight">100</i>&nbsp;     * the game mode and the number of Players.
+<i class="no-highlight">101</i>&nbsp;     * It uses a frame whose content pane is a General Panel Manager
+<i class="no-highlight">102</i>&nbsp;     * which will switch between the Initial Background panel
+<i class="no-highlight">103</i>&nbsp;     * where the user will input his game preferences,
+<i class="no-highlight">104</i>&nbsp;     * and the proper game screen where the actual game will take place.
+<i class="no-highlight">105</i>&nbsp;     * The InitialBackground class contains a userInputPanel which will switch
+<i class="no-highlight">106</i>&nbsp;     * between the username form and the game preferences form.
+<i class="no-highlight">107</i>&nbsp;     */
+<i class="no-highlight">108</i>&nbsp;    public void screeInitialization() {
+<i class="no-highlight">109</i>&nbsp;        // Screen frame initialization:
+<b class="nc"><i class="no-highlight">110</i>&nbsp;        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
+<b class="nc"><i class="no-highlight">111</i>&nbsp;        f.setExtendedState(JFrame.MAXIMIZED_BOTH);</b>
+<b class="nc"><i class="no-highlight">112</i>&nbsp;        f.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">113</i>&nbsp;        setScreenDimensionX(f.getWidth());</b>
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        setScreenDimensionY(f.getHeight());</b>
+<i class="no-highlight">115</i>&nbsp;        // Set the initial content pane where it will be added the user input manager.
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        InitialBackgroundPanel initialBackgroundPanel = new InitialBackgroundPanel(new BorderLayout());</b>
+<i class="no-highlight">117</i>&nbsp;        // Add it to the general manager.
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        initialBackgroundPanel.add(userInputPanel, BorderLayout.CENTER);</b>
+<b class="nc"><i class="no-highlight">119</i>&nbsp;        generalPanelManager.add(initialBackgroundPanel, &quot;User Input&quot;);</b>
+<i class="no-highlight">120</i>&nbsp;
+<i class="no-highlight">121</i>&nbsp;        // Add the general panel manager as the content pane to switch between user input screen and the actual game.
+<b class="nc"><i class="no-highlight">122</i>&nbsp;        f.setContentPane(generalPanelManager);</b>
+<i class="no-highlight">123</i>&nbsp;
+<i class="no-highlight">124</i>&nbsp;        //ask the username
+<b class="nc"><i class="no-highlight">125</i>&nbsp;        showUsernameForm();</b>
+<i class="no-highlight">126</i>&nbsp;    }
+<i class="no-highlight">127</i>&nbsp;
+<i class="no-highlight">128</i>&nbsp;    /**
+<i class="no-highlight">129</i>&nbsp;     * Shows on screen the input form for the username.
+<i class="no-highlight">130</i>&nbsp;     * It initializes the usernameForm panel and adds it to the user input panel.
+<i class="no-highlight">131</i>&nbsp;     * The usernameForm panel contains a check button that checks if the input is valid (between 2 and 20 characters).
+<i class="no-highlight">132</i>&nbsp;     * Valid nicknames are written on the right side of the panel with green text, otherwise they will be displayed as red.
+<i class="no-highlight">133</i>&nbsp;     * It also contains a submit button that notifies the ClientController with valid nicknames when pressed.
+<i class="no-highlight">134</i>&nbsp;     * If the input is acceptable it notifies the ClientController who forward the information to the server.
+<i class="no-highlight">135</i>&nbsp;     * The server answers the ClientHandler if the nickname has been already taken by another player or not.
+<i class="no-highlight">136</i>&nbsp;     * In the first case then it will be notified on screen by an error message, otherwise the game will soon begin.
+<i class="no-highlight">137</i>&nbsp;     */
+<i class="no-highlight">138</i>&nbsp;    public void showUsernameForm() {
+<b class="nc"><i class="no-highlight">139</i>&nbsp;        JPanel mainMenu = new JPanel();</b>
+<b class="nc"><i class="no-highlight">140</i>&nbsp;        mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.LINE_AXIS));</b>
+<i class="no-highlight">141</i>&nbsp;
+<b class="nc"><i class="no-highlight">142</i>&nbsp;        JPanel leftHalf = new JPanel(new GridLayout(3, 1)) {</b>
+<i class="no-highlight">143</i>&nbsp;            // Don&#39;t allow the nickname field to stretch vertically.
+<i class="no-highlight">144</i>&nbsp;            public Dimension getMaximumSize() {
+<b class="nc"><i class="no-highlight">145</i>&nbsp;                Dimension pref = getPreferredSize();</b>
+<b class="nc"><i class="no-highlight">146</i>&nbsp;                return new Dimension(Integer.MAX_VALUE, pref.height);</b>
+<i class="no-highlight">147</i>&nbsp;            }
+<i class="no-highlight">148</i>&nbsp;        };
+<i class="no-highlight">149</i>&nbsp;
+<b class="nc"><i class="no-highlight">150</i>&nbsp;        JLabel nicknameLabel = new JLabel(&quot;Insert username:&quot;);</b>
+<b class="nc"><i class="no-highlight">151</i>&nbsp;        nicknameLabel.setHorizontalAlignment(JLabel.LEFT);</b>
+<b class="nc"><i class="no-highlight">152</i>&nbsp;        nicknameField = new JTextField();</b>
+<i class="no-highlight">153</i>&nbsp;
+<b class="nc"><i class="no-highlight">154</i>&nbsp;        leftHalf.add(nicknameLabel, 0);</b>
+<b class="nc"><i class="no-highlight">155</i>&nbsp;        leftHalf.add(nicknameField, 1);</b>
+<i class="no-highlight">156</i>&nbsp;
+<b class="nc"><i class="no-highlight">157</i>&nbsp;        JPanel buttons = new JPanel(new GridLayout(1, 2));</b>
+<b class="nc"><i class="no-highlight">158</i>&nbsp;        JButton check = new JButton(&quot;Check Length&quot;);</b>
+<b class="nc"><i class="no-highlight">159</i>&nbsp;        JButton submit = new JButton(&quot;Submit&quot;);</b>
+<b class="nc"><i class="no-highlight">160</i>&nbsp;        check.addActionListener(this::updateDisplay);</b>
+<b class="nc"><i class="no-highlight">161</i>&nbsp;        submit.addActionListener(e -&gt; {</b>
+<b class="nc"><i class="no-highlight">162</i>&nbsp;            if (nicknameDisplay.getForeground() != Color.GREEN)</b>
+<b class="nc"><i class="no-highlight">163</i>&nbsp;                JOptionPane.showMessageDialog(userInputPanel, &quot;Check the nickname first&quot;, &quot;Error&quot;, JOptionPane.ERROR_MESSAGE);</b>
+<i class="no-highlight">164</i>&nbsp;            else {
+<b class="nc"><i class="no-highlight">165</i>&nbsp;                usernamePlaying = nicknameField.getText();</b>
+<b class="nc"><i class="no-highlight">166</i>&nbsp;                notifyObserver(obs -&gt; obs.onUsername(usernamePlaying));</b>
+<i class="no-highlight">167</i>&nbsp;            }
+<i class="no-highlight">168</i>&nbsp;        });
+<b class="nc"><i class="no-highlight">169</i>&nbsp;        buttons.add(check);</b>
+<b class="nc"><i class="no-highlight">170</i>&nbsp;        buttons.add(submit);</b>
+<i class="no-highlight">171</i>&nbsp;
+<b class="nc"><i class="no-highlight">172</i>&nbsp;        leftHalf.add(buttons, 2);</b>
+<b class="nc"><i class="no-highlight">173</i>&nbsp;        leftHalf.setLayout(new BoxLayout(leftHalf, BoxLayout.PAGE_AXIS));</b>
+<i class="no-highlight">174</i>&nbsp;
+<b class="nc"><i class="no-highlight">175</i>&nbsp;        mainMenu.add(leftHalf);</b>
+<b class="nc"><i class="no-highlight">176</i>&nbsp;        mainMenu.add(createNicknameDisplay());</b>
+<i class="no-highlight">177</i>&nbsp;
+<b class="nc"><i class="no-highlight">178</i>&nbsp;        userInputPanel.add(mainMenu);</b>
+<i class="no-highlight">179</i>&nbsp;    }
+<i class="no-highlight">180</i>&nbsp;
+<i class="no-highlight">181</i>&nbsp;    /**
+<i class="no-highlight">182</i>&nbsp;     * Displays on screen on the right side of the main menu panel the nickname chosen and checked,
+<i class="no-highlight">183</i>&nbsp;     * that will be green when valid, else red.
+<i class="no-highlight">184</i>&nbsp;     * @return the right panel of the main menu.
+<i class="no-highlight">185</i>&nbsp;     */
+<i class="no-highlight">186</i>&nbsp;    private JComponent createNicknameDisplay() {
+<b class="nc"><i class="no-highlight">187</i>&nbsp;        JPanel nicknameRightSide = new JPanel(new BorderLayout());</b>
+<b class="nc"><i class="no-highlight">188</i>&nbsp;        nicknameDisplay = new JLabel();</b>
+<b class="nc"><i class="no-highlight">189</i>&nbsp;        nicknameDisplay.setHorizontalAlignment(JLabel.CENTER);</b>
+<i class="no-highlight">190</i>&nbsp;
+<b class="nc"><i class="no-highlight">191</i>&nbsp;        nicknameRightSide.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.LINE_START);</b>
+<b class="nc"><i class="no-highlight">192</i>&nbsp;        nicknameRightSide.add(nicknameDisplay, BorderLayout.CENTER);</b>
+<b class="nc"><i class="no-highlight">193</i>&nbsp;        nicknameRightSide.setPreferredSize(nicknameDisplayDimension);</b>
+<i class="no-highlight">194</i>&nbsp;
+<b class="nc"><i class="no-highlight">195</i>&nbsp;        return nicknameRightSide;</b>
+<i class="no-highlight">196</i>&nbsp;    }
+<i class="no-highlight">197</i>&nbsp;
+<i class="no-highlight">198</i>&nbsp;    /**
+<i class="no-highlight">199</i>&nbsp;     * Updates the right panel of the main menu when the check button is pressed.
+<i class="no-highlight">200</i>&nbsp;     * @param e the action event of the check button pressed.
+<i class="no-highlight">201</i>&nbsp;     */
+<i class="no-highlight">202</i>&nbsp;    public void updateDisplay(ActionEvent e) {
+<b class="nc"><i class="no-highlight">203</i>&nbsp;        nicknameDisplay.setText(nicknameField.getText());</b>
+<b class="nc"><i class="no-highlight">204</i>&nbsp;        nicknameDisplay.setForeground(Color.GREEN);</b>
+<b class="nc"><i class="no-highlight">205</i>&nbsp;        if (nicknameDisplay.getText().length() &lt; 2 || nicknameDisplay.getText().length() &gt;= 11)</b>
+<b class="nc"><i class="no-highlight">206</i>&nbsp;            nicknameDisplay.setForeground(Color.RED);</b>
+<b class="nc"><i class="no-highlight">207</i>&nbsp;        nicknameDisplay.setFont(new Font(SansSerif, Font.ITALIC, 24));</b>
+<i class="no-highlight">208</i>&nbsp;    }
+<i class="no-highlight">209</i>&nbsp;
+<i class="no-highlight">210</i>&nbsp;    /**
+<i class="no-highlight">211</i>&nbsp;     * Shows on screen the possible choice for the game mode and the number of players.
+<i class="no-highlight">212</i>&nbsp;     * It initializes the gamePreferences panel and adds it to the user input panel.
+<i class="no-highlight">213</i>&nbsp;     * The gamePreferences panel contains a start game button that notifies the ClientController.
+<i class="no-highlight">214</i>&nbsp;     * Once the ClientController is notified this method calls showLoadingScreen.
+<i class="no-highlight">215</i>&nbsp;     */
+<i class="no-highlight">216</i>&nbsp;    public void showGamePreferencesForm() {
+<b class="nc"><i class="no-highlight">217</i>&nbsp;        JPanel gamePreferences = new JPanel(new GridLayout(5, 3));</b>
+<i class="no-highlight">218</i>&nbsp;
+<b class="nc"><i class="no-highlight">219</i>&nbsp;        gamePreferences.add(new JLabel(&quot;Select number of players:&quot;));</b>
+<b class="nc"><i class="no-highlight">220</i>&nbsp;        JPanel numberOfPlayers = new JPanel(new GridLayout(1, 3));</b>
+<b class="nc"><i class="no-highlight">221</i>&nbsp;        JRadioButton twoPlayers = createChoiceButton(&quot;2&quot;,KeyEvent.VK_2,&quot;2&quot;);</b>
+<b class="nc"><i class="no-highlight">222</i>&nbsp;        JRadioButton threePlayers = createChoiceButton(&quot;3&quot;,KeyEvent.VK_3,&quot;3&quot;);</b>
+<b class="nc"><i class="no-highlight">223</i>&nbsp;        JRadioButton fourPlayers = createChoiceButton(&quot;4&quot;,KeyEvent.VK_4,&quot;4&quot;);</b>
+<b class="nc"><i class="no-highlight">224</i>&nbsp;        ButtonGroup numOfPlayersButtons = new ButtonGroup();</b>
+<b class="nc"><i class="no-highlight">225</i>&nbsp;        numOfPlayersButtons.add(twoPlayers);</b>
+<b class="nc"><i class="no-highlight">226</i>&nbsp;        numOfPlayersButtons.add(threePlayers);</b>
+<b class="nc"><i class="no-highlight">227</i>&nbsp;        numOfPlayersButtons.add(fourPlayers);</b>
+<b class="nc"><i class="no-highlight">228</i>&nbsp;        numberOfPlayers.add(twoPlayers);</b>
+<b class="nc"><i class="no-highlight">229</i>&nbsp;        numberOfPlayers.add(threePlayers);</b>
+<b class="nc"><i class="no-highlight">230</i>&nbsp;        numberOfPlayers.add(fourPlayers);</b>
+<b class="nc"><i class="no-highlight">231</i>&nbsp;        gamePreferences.add(numberOfPlayers);</b>
+<i class="no-highlight">232</i>&nbsp;
+<b class="nc"><i class="no-highlight">233</i>&nbsp;        gamePreferences.add(new JLabel(&quot;Select game mode:&quot;));</b>
+<b class="nc"><i class="no-highlight">234</i>&nbsp;        JPanel gameMode = new JPanel(new GridLayout(1, 2));</b>
+<b class="nc"><i class="no-highlight">235</i>&nbsp;        JRadioButton baseMode = createChoiceButton(&quot;Base&quot;,KeyEvent.VK_B,&quot;Base&quot;);</b>
+<b class="nc"><i class="no-highlight">236</i>&nbsp;        JRadioButton expertMode = createChoiceButton(&quot;Expert&quot;,KeyEvent.VK_E,&quot;Expert&quot;);</b>
+<b class="nc"><i class="no-highlight">237</i>&nbsp;        ButtonGroup gameModeButtons = new ButtonGroup();</b>
+<b class="nc"><i class="no-highlight">238</i>&nbsp;        gameModeButtons.add(baseMode);</b>
+<b class="nc"><i class="no-highlight">239</i>&nbsp;        gameModeButtons.add(expertMode);</b>
+<b class="nc"><i class="no-highlight">240</i>&nbsp;        gameMode.add(baseMode);</b>
+<b class="nc"><i class="no-highlight">241</i>&nbsp;        gameMode.add(expertMode);</b>
+<b class="nc"><i class="no-highlight">242</i>&nbsp;        gamePreferences.add(gameMode);</b>
+<i class="no-highlight">243</i>&nbsp;
+<b class="nc"><i class="no-highlight">244</i>&nbsp;        startGame.addActionListener(e -&gt; {</b>
+<b class="nc"><i class="no-highlight">245</i>&nbsp;            int numPlayers = Integer.parseInt(numOfPlayersButtons.getSelection().getActionCommand());</b>
+<i class="no-highlight">246</i>&nbsp;            boolean gameModeChosen;
+<b class="nc"><i class="no-highlight">247</i>&nbsp;            gameModeChosen = gameModeButtons.getSelection().getActionCommand().equals(&quot;Expert&quot;);</b>
+<i class="no-highlight">248</i>&nbsp;
+<b class="nc"><i class="no-highlight">249</i>&nbsp;            notifyObserver(obs -&gt; obs.onGamePreferences(numPlayers, gameModeChosen));</b>
+<b class="nc"><i class="no-highlight">250</i>&nbsp;            showWaitingRoom();</b>
+<i class="no-highlight">251</i>&nbsp;        });
+<i class="no-highlight">252</i>&nbsp;
+<b class="nc"><i class="no-highlight">253</i>&nbsp;        gamePreferences.add(startGame);</b>
+<i class="no-highlight">254</i>&nbsp;
+<b class="nc"><i class="no-highlight">255</i>&nbsp;        userInputPanel.add(gamePreferences, &quot;Game preferences form&quot;);</b>
+<b class="nc"><i class="no-highlight">256</i>&nbsp;        userCl.show(userInputPanel, &quot;Game preferences form&quot;);</b>
+<i class="no-highlight">257</i>&nbsp;    }
+<i class="no-highlight">258</i>&nbsp;
+<i class="no-highlight">259</i>&nbsp;    /**
+<i class="no-highlight">260</i>&nbsp;     * Creates the button used in the game preferences selection.
+<i class="no-highlight">261</i>&nbsp;     * @param text text of the button.
+<i class="no-highlight">262</i>&nbsp;     * @param key KeyEvent associated to the buttons.
+<i class="no-highlight">263</i>&nbsp;     * @param actionCommand action command of the buttons.
+<i class="no-highlight">264</i>&nbsp;     * @return the button with the desired attributes.
+<i class="no-highlight">265</i>&nbsp;     */
+<i class="no-highlight">266</i>&nbsp;    private JRadioButton createChoiceButton(String text, int key, String actionCommand) {
+<b class="nc"><i class="no-highlight">267</i>&nbsp;        JRadioButton choiceButton = new JRadioButton(text);</b>
+<b class="nc"><i class="no-highlight">268</i>&nbsp;        choiceButton.setMnemonic(key);</b>
+<b class="nc"><i class="no-highlight">269</i>&nbsp;        choiceButton.setActionCommand(actionCommand);</b>
+<b class="nc"><i class="no-highlight">270</i>&nbsp;        if(text.equals(&quot;2&quot;) || text.equals(&quot;Base&quot;))</b>
+<b class="nc"><i class="no-highlight">271</i>&nbsp;            choiceButton.setSelected(true);</b>
+<b class="nc"><i class="no-highlight">272</i>&nbsp;        return choiceButton;</b>
+<i class="no-highlight">273</i>&nbsp;    }
+<i class="no-highlight">274</i>&nbsp;
+<i class="no-highlight">275</i>&nbsp;    /**
+<i class="no-highlight">276</i>&nbsp;     * Shows a waiting room on screen while waiting for other players to join and start the game.
+<i class="no-highlight">277</i>&nbsp;     */
+<i class="no-highlight">278</i>&nbsp;    public void showWaitingRoom() {
+<b class="nc"><i class="no-highlight">279</i>&nbsp;        waitingRoom = new WaitingRoom(usernamePlaying);</b>
+<i class="no-highlight">280</i>&nbsp;        //need to update the waiting room graphics
+<b class="nc"><i class="no-highlight">281</i>&nbsp;        generalPanelManager.add(waitingRoom, &quot;Waiting room&quot;);</b>
+<b class="nc"><i class="no-highlight">282</i>&nbsp;        cl.show(generalPanelManager, &quot;Waiting room&quot;);</b>
+<i class="no-highlight">283</i>&nbsp;
+<i class="no-highlight">284</i>&nbsp;    }
+<i class="no-highlight">285</i>&nbsp;
+<i class="no-highlight">286</i>&nbsp;    /**
+<i class="no-highlight">287</i>&nbsp;     * Initializes the game screen and add it to the generalPanelManager.
+<i class="no-highlight">288</i>&nbsp;     */
+<i class="no-highlight">289</i>&nbsp;    public void createGameScreen() {
+<b class="nc"><i class="no-highlight">290</i>&nbsp;        gameScreenPanel = new GameScreenPanel(new GridBagLayout(), modelStorage, screenDimensionX, screenDimensionY, usernamePlaying, waitingRoom.getNicknameColor(), getViewObserverList());</b>
+<b class="nc"><i class="no-highlight">291</i>&nbsp;        generalPanelManager.add(gameScreenPanel, &quot;Game Screen&quot;);</b>
+<i class="no-highlight">292</i>&nbsp;    }
+<i class="no-highlight">293</i>&nbsp;
+<i class="no-highlight">294</i>&nbsp;    /**
+<i class="no-highlight">295</i>&nbsp;     * Uses the general panel manager card layout to switch from the InitialBackground panel to the GameScreen panel.
+<i class="no-highlight">296</i>&nbsp;     */
+<i class="no-highlight">297</i>&nbsp;    public void showGameScreen() {
+<b class="nc"><i class="no-highlight">298</i>&nbsp;        addLogoutButton();</b>
+<i class="no-highlight">299</i>&nbsp;        // Switch to the actual game screen
+<b class="nc"><i class="no-highlight">300</i>&nbsp;        cl.show(generalPanelManager, &quot;Game Screen&quot;);</b>
+<i class="no-highlight">301</i>&nbsp;    }
+<i class="no-highlight">302</i>&nbsp;
+<i class="no-highlight">303</i>&nbsp;    /**
+<i class="no-highlight">304</i>&nbsp;     * Opens a JOptionPane to select the assistant card.
+<i class="no-highlight">305</i>&nbsp;     * Each assistant card displayed is a button which on press updates the relative player discard pile.
+<i class="no-highlight">306</i>&nbsp;     * @param playerID the playerID used to decide which character card display and which discard pile update.
+<i class="no-highlight">307</i>&nbsp;     */
+<i class="no-highlight">308</i>&nbsp;    public int ShowAssistantCardsForm(int playerID) {
+<b class="nc"><i class="no-highlight">309</i>&nbsp;        AtomicInteger turnOrder = new AtomicInteger();</b>
+<b class="nc"><i class="no-highlight">310</i>&nbsp;        turnOrder.set(0);</b>
+<b class="nc"><i class="no-highlight">311</i>&nbsp;        JPanel buttonContainer = assistantCardsButtons(playerID,turnOrder);</b>
+<b class="nc"><i class="no-highlight">312</i>&nbsp;        JScrollPane scrollPane = new JScrollPane(buttonContainer);</b>
+<b class="nc"><i class="no-highlight">313</i>&nbsp;        scrollPane.setPreferredSize(assistantCardsDimension);</b>
+<b class="nc"><i class="no-highlight">314</i>&nbsp;        JOptionPane.showMessageDialog(f, scrollPane, &quot;Your deck&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">315</i>&nbsp;        return turnOrder.get();</b>
+<i class="no-highlight">316</i>&nbsp;    }
+<i class="no-highlight">317</i>&nbsp;
+<i class="no-highlight">318</i>&nbsp;    /**
+<i class="no-highlight">319</i>&nbsp;     * Associates to each assistant card displayed a button that permits to update
+<i class="no-highlight">320</i>&nbsp;     * the relative player discard pile when pressed.
+<i class="no-highlight">321</i>&nbsp;     * @param playerID the playerID used to decide which character card display and which discard pile update.
+<i class="no-highlight">322</i>&nbsp;     * @param turnOrder turn order of the assistant card.
+<i class="no-highlight">323</i>&nbsp;     * @return the assistant cards in form of buttons.
+<i class="no-highlight">324</i>&nbsp;     */
+<i class="no-highlight">325</i>&nbsp;    private JPanel assistantCardsButtons(int playerID, AtomicInteger turnOrder) {
+<b class="nc"><i class="no-highlight">326</i>&nbsp;        JPanel buttonContainer = new JPanel();</b>
+<b class="nc"><i class="no-highlight">327</i>&nbsp;        JButton[] buttons = new JButton[modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size()];</b>
+<b class="nc"><i class="no-highlight">328</i>&nbsp;        AtomicInteger lastPressedButton = new AtomicInteger();</b>
+<b class="nc"><i class="no-highlight">329</i>&nbsp;        for (int i = 0; i &lt; modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size(); i++) {</b>
+<b class="nc"><i class="no-highlight">330</i>&nbsp;            buttons[i] = (new AssistantCardButton(modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i)));</b>
+<b class="nc"><i class="no-highlight">331</i>&nbsp;            int finalI = modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i);</b>
+<b class="nc"><i class="no-highlight">332</i>&nbsp;            int finalI1 = i;</b>
+<b class="nc"><i class="no-highlight">333</i>&nbsp;            buttons[i].addActionListener(e -&gt; {</b>
+<b class="nc"><i class="no-highlight">334</i>&nbsp;                InputStream url1 = this.getClass().getClassLoader().getResourceAsStream(&quot;GameTable/Assistant_cards/2x/&quot; + finalI + &quot;chk.png&quot;);</b>
+<b class="nc"><i class="no-highlight">335</i>&nbsp;                loadImages(buttons, finalI1, url1);</b>
+<b class="nc"><i class="no-highlight">336</i>&nbsp;                if (turnOrder.get() != 0 &amp;&amp; turnOrder.get() != finalI) {</b>
+<b class="nc"><i class="no-highlight">337</i>&nbsp;                    InputStream url2 = this.getClass().getClassLoader().getResourceAsStream(&quot;GameTable/Assistant_cards/2x/&quot; + turnOrder.get() + &quot;.png&quot;);</b>
+<b class="nc"><i class="no-highlight">338</i>&nbsp;                    loadImagesOnLastPressedButton(buttons, lastPressedButton, url2);</b>
+<i class="no-highlight">339</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">340</i>&nbsp;                lastPressedButton.set(finalI1);</b>
+<b class="nc"><i class="no-highlight">341</i>&nbsp;                turnOrder.set(finalI);</b>
+<i class="no-highlight">342</i>&nbsp;            });
+<b class="nc"><i class="no-highlight">343</i>&nbsp;            buttonContainer.add(buttons[i]);</b>
+<i class="no-highlight">344</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">345</i>&nbsp;        return buttonContainer;</b>
+<i class="no-highlight">346</i>&nbsp;    }
+<i class="no-highlight">347</i>&nbsp;
+<i class="no-highlight">348</i>&nbsp;    /**
+<i class="no-highlight">349</i>&nbsp;     * Creates a JOptionPane to inform the player about the available moves in that game phase
+<i class="no-highlight">350</i>&nbsp;     * and then set clickable the entrance of the player dashboard and/or the character cards.
+<i class="no-highlight">351</i>&nbsp;     * @param expertMode the game mode boolean used to decide whether to set the character cards clickable.
+<i class="no-highlight">352</i>&nbsp;     */
+<i class="no-highlight">353</i>&nbsp;    public void showMoveOptions(boolean expertMode) {
+<b class="nc"><i class="no-highlight">354</i>&nbsp;        if (!turnStarted) {</b>
+<b class="nc"><i class="no-highlight">355</i>&nbsp;            turnStarted = true;</b>
+<b class="nc"><i class="no-highlight">356</i>&nbsp;            if (expertMode)</b>
+<b class="nc"><i class="no-highlight">357</i>&nbsp;                gameScreenPanel.setCharactersClickable(modelChanges.getPlayerID());</b>
+<b class="nc"><i class="no-highlight">358</i>&nbsp;            String message = &quot;It&#39;s your turn!&quot;;</b>
+<b class="nc"><i class="no-highlight">359</i>&nbsp;            JOptionPane.showMessageDialog(f, message, &quot;Action Phase&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<i class="no-highlight">360</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">361</i>&nbsp;        gameScreenPanel.setEntranceStudentsClickable(modelChanges.getPlayerID());</b>
+<i class="no-highlight">362</i>&nbsp;    }
+<i class="no-highlight">363</i>&nbsp;
+<i class="no-highlight">364</i>&nbsp;    /**
+<i class="no-highlight">365</i>&nbsp;     * Permits moving mother nature when it&#39;s possible (ACTION_PHASE.MOVE_MOTHER_NATURE).
+<i class="no-highlight">366</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">367</i>&nbsp;    public void showMNMovement() { gameScreenPanel.getTableCenterPanel().setMNClickable(getViewObserverList()); }</b>
+<i class="no-highlight">368</i>&nbsp;
+<i class="no-highlight">369</i>&nbsp;    /**
+<i class="no-highlight">370</i>&nbsp;     * Permits picking students from a cloud when it&#39;s possible (ACTION_PHASE.CHOOSE_CLOUD)
+<i class="no-highlight">371</i>&nbsp;     */
+<i class="no-highlight">372</i>&nbsp;    public void showCloudChoice() {
+<b class="nc"><i class="no-highlight">373</i>&nbsp;        gameScreenPanel.getTableCenterPanel().setCloudsClickable();</b>
+<b class="nc"><i class="no-highlight">374</i>&nbsp;        turnStarted = false;</b>
+<i class="no-highlight">375</i>&nbsp;    }
+<i class="no-highlight">376</i>&nbsp;
+<i class="no-highlight">377</i>&nbsp;    /**
+<i class="no-highlight">378</i>&nbsp;     * Informs the user about the Character Card he played and activates various listeners according to the Character Card.
+<i class="no-highlight">379</i>&nbsp;     * @param cc is the name of the Character Card played.
+<i class="no-highlight">380</i>&nbsp;     */
+<i class="no-highlight">381</i>&nbsp;    public void showEffectActivationChoice(CharacterCardsName cc) {
+<b class="nc"><i class="no-highlight">382</i>&nbsp;        StringBuilder message = new StringBuilder(&quot;You activated the &quot; + cc.toString() + &quot;!&quot;);</b>
+<b class="nc"><i class="no-highlight">383</i>&nbsp;        switch (cc) {</b>
+<i class="no-highlight">384</i>&nbsp;            case FARMER -&gt; {
+<b class="nc"><i class="no-highlight">385</i>&nbsp;                message.append(&quot;\nDuring this turn, you take control of any number of Professors even if you have the same number of Students as the player who currently controls them.&quot;);</b>
+<b class="nc"><i class="no-highlight">386</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">387</i>&nbsp;                notifyObserver(obs -&gt; obs.onAtomicEffect(-1));</b>
+<b class="nc"><i class="no-highlight">388</i>&nbsp;            }</b>
+<i class="no-highlight">389</i>&nbsp;            case MAGICAL_LETTER_CARRIER -&gt; {
+<b class="nc"><i class="no-highlight">390</i>&nbsp;                message.append(&quot;\nYou may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you&#39;ve played.&quot;);</b>
+<b class="nc"><i class="no-highlight">391</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">392</i>&nbsp;                notifyObserver(obs -&gt; obs.onAtomicEffect(-1));</b>
+<b class="nc"><i class="no-highlight">393</i>&nbsp;            }</b>
+<i class="no-highlight">394</i>&nbsp;            case CENTAUR -&gt; {
+<b class="nc"><i class="no-highlight">395</i>&nbsp;                message.append(&quot;\nWhen resolving a Conquering on an Island, Towers do not count towards influence.&quot;);</b>
+<b class="nc"><i class="no-highlight">396</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">397</i>&nbsp;                notifyObserver(obs -&gt; obs.onAtomicEffect(-1));</b>
+<b class="nc"><i class="no-highlight">398</i>&nbsp;            }</b>
+<i class="no-highlight">399</i>&nbsp;            case KNIGHT -&gt; {
+<b class="nc"><i class="no-highlight">400</i>&nbsp;                message.append(&quot;\nDuring the influence calculation this turn, you count as having 2 more influence.&quot;);</b>
+<b class="nc"><i class="no-highlight">401</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">402</i>&nbsp;                notifyObserver(obs -&gt; obs.onAtomicEffect(-1));</b>
+<b class="nc"><i class="no-highlight">403</i>&nbsp;            }</b>
+<i class="no-highlight">404</i>&nbsp;            case HERALD -&gt; {
+<b class="nc"><i class="no-highlight">405</i>&nbsp;                message.append(&quot;\nChoose an Island and resolve the Island as if Mother Nature had ended her movement there.\nMother Nature will still move and the Island where she ends her movement will also be resolved.&quot;);</b>
+<b class="nc"><i class="no-highlight">406</i>&nbsp;                JOptionPane.showMessageDialog(f,message,&quot;Character Card activated&quot;,JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">407</i>&nbsp;                gameScreenPanel.getTableCenterPanel().setIslesClickableForEffect(getViewObserverList());</b>
+<b class="nc"><i class="no-highlight">408</i>&nbsp;            }</b>
+<i class="no-highlight">409</i>&nbsp;            case GRANDMA_HERBS -&gt; {
+<b class="nc"><i class="no-highlight">410</i>&nbsp;                message.append(&quot;\nPlace a NoEntry tile on an Island of your choice.\nThe first time Mother Nature ends her movement there, put the No Entry tile back onto this card\n(DO NOT calculate influence on that Island, or place any Towers).&quot;);</b>
+<b class="nc"><i class="no-highlight">411</i>&nbsp;                JOptionPane.showMessageDialog(f,message,&quot;Character Card activated&quot;,JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">412</i>&nbsp;                gameScreenPanel.getTableCenterPanel().setIslesClickableForEffect(getViewObserverList());</b>
+<b class="nc"><i class="no-highlight">413</i>&nbsp;            }</b>
+<i class="no-highlight">414</i>&nbsp;            case FUNGIST -&gt; {
+<b class="nc"><i class="no-highlight">415</i>&nbsp;                message.append(&quot;\nChoose a color of Student: during the influence calculation this turn, that color adds no influence.&quot;);</b>
+<b class="nc"><i class="no-highlight">416</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">417</i>&nbsp;                int chosenColor = showColorForm(&quot;Which color you don&#39;t want to consider for influence calculation in this turn?&quot;);</b>
+<b class="nc"><i class="no-highlight">418</i>&nbsp;                notifyObserver(obs -&gt; obs.onAtomicEffect(chosenColor));</b>
+<b class="nc"><i class="no-highlight">419</i>&nbsp;            }</b>
+<i class="no-highlight">420</i>&nbsp;            case THIEF -&gt; {
+<b class="nc"><i class="no-highlight">421</i>&nbsp;                message.append(&quot;\nChoose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag.\nIf any player has fewer than 3 Students of that type, return as many Students as they have.&quot;);</b>
+<b class="nc"><i class="no-highlight">422</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">423</i>&nbsp;                int chosenColor = showColorForm(&quot;Which color you want to be removed from Dining Rooms?&quot;);</b>
+<b class="nc"><i class="no-highlight">424</i>&nbsp;                notifyObserver(obs -&gt; obs.onAtomicEffect(chosenColor));</b>
+<b class="nc"><i class="no-highlight">425</i>&nbsp;            }</b>
+<i class="no-highlight">426</i>&nbsp;            case SPOILED_PRINCESS -&gt; {
+<b class="nc"><i class="no-highlight">427</i>&nbsp;                message.append(&quot;\nTake 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.&quot;);</b>
+<b class="nc"><i class="no-highlight">428</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">429</i>&nbsp;                CharacterPanel spoiledPrincessPanel = null;</b>
+<b class="nc"><i class="no-highlight">430</i>&nbsp;                for (CharacterPanel character : gameScreenPanel.getTableCenterPanel().getCharacterPanels()) {</b>
+<b class="nc"><i class="no-highlight">431</i>&nbsp;                    if (character.getCharacterName().equals(CharacterCardsName.SPOILED_PRINCESS.toString())) {</b>
+<b class="nc"><i class="no-highlight">432</i>&nbsp;                        spoiledPrincessPanel = character;</b>
+<b class="nc"><i class="no-highlight">433</i>&nbsp;                        break;</b>
+<i class="no-highlight">434</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">435</i>&nbsp;                }</b>
+<b class="nc"><i class="no-highlight">436</i>&nbsp;                if (spoiledPrincessPanel != null)</b>
+<b class="nc"><i class="no-highlight">437</i>&nbsp;                    gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(spoiledPrincessPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));</b>
+<b class="nc"><i class="no-highlight">438</i>&nbsp;            }</b>
+<i class="no-highlight">439</i>&nbsp;            case MONK -&gt; {
+<b class="nc"><i class="no-highlight">440</i>&nbsp;                message.append(&quot;\nTake 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card.&quot;);</b>
+<b class="nc"><i class="no-highlight">441</i>&nbsp;                JOptionPane.showMessageDialog(f, message, &quot;Character Card activated&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">442</i>&nbsp;                CharacterPanel monkPanel = null;</b>
+<b class="nc"><i class="no-highlight">443</i>&nbsp;                for (CharacterPanel character : gameScreenPanel.getTableCenterPanel().getCharacterPanels()) {</b>
+<b class="nc"><i class="no-highlight">444</i>&nbsp;                    if (character.getCharacterName().equals(CharacterCardsName.MONK.toString())) {</b>
+<b class="nc"><i class="no-highlight">445</i>&nbsp;                        monkPanel = character;</b>
+<b class="nc"><i class="no-highlight">446</i>&nbsp;                        break;</b>
+<i class="no-highlight">447</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">448</i>&nbsp;                }</b>
+<b class="nc"><i class="no-highlight">449</i>&nbsp;                if (monkPanel != null)</b>
+<b class="nc"><i class="no-highlight">450</i>&nbsp;                    gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(monkPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));</b>
+<i class="no-highlight">451</i>&nbsp;
+<b class="nc"><i class="no-highlight">452</i>&nbsp;            }</b>
+<i class="no-highlight">453</i>&nbsp;            case JESTER -&gt; {
+<b class="nc"><i class="no-highlight">454</i>&nbsp;                message.append(&quot;\nYou may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.&quot;);</b>
+<b class="nc"><i class="no-highlight">455</i>&nbsp;                JOptionPane.showMessageDialog(f,message,&quot;Character Card activated&quot;,JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">456</i>&nbsp;                if (showExchangeForm())</b>
+<b class="nc"><i class="no-highlight">457</i>&nbsp;                    notifyObserver(ViewObserver::onEndCharacterPhase);</b>
+<i class="no-highlight">458</i>&nbsp;                else {
+<b class="nc"><i class="no-highlight">459</i>&nbsp;                    CharacterPanel jesterPanel = null;</b>
+<b class="nc"><i class="no-highlight">460</i>&nbsp;                    for (CharacterPanel character : gameScreenPanel.getTableCenterPanel().getCharacterPanels()) {</b>
+<b class="nc"><i class="no-highlight">461</i>&nbsp;                        if (character.getCharacterName().equals(CharacterCardsName.JESTER.toString())) {</b>
+<b class="nc"><i class="no-highlight">462</i>&nbsp;                            jesterPanel = character;</b>
+<b class="nc"><i class="no-highlight">463</i>&nbsp;                            break;</b>
+<i class="no-highlight">464</i>&nbsp;                        }
+<b class="nc"><i class="no-highlight">465</i>&nbsp;                    }</b>
+<b class="nc"><i class="no-highlight">466</i>&nbsp;                    if (jesterPanel != null)</b>
+<b class="nc"><i class="no-highlight">467</i>&nbsp;                        gameScreenPanel.getTableCenterPanel().setCharacterStudentsClickable(jesterPanel, gameScreenPanel.getDashboardPanel(modelChanges.getPlayerID()));</b>
+<i class="no-highlight">468</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">469</i>&nbsp;            }</b>
+<i class="no-highlight">470</i>&nbsp;            case MINSTREL -&gt; {
+<b class="nc"><i class="no-highlight">471</i>&nbsp;                message.append(&quot;\nNow you can exchange up to 2 students between your dining and your entrance&quot;);</b>
+<b class="nc"><i class="no-highlight">472</i>&nbsp;                JOptionPane.showMessageDialog(f,message,&quot;Character Card activated&quot;,JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">473</i>&nbsp;                if (showExchangeForm())</b>
+<b class="nc"><i class="no-highlight">474</i>&nbsp;                    notifyObserver(ViewObserver::onEndCharacterPhase);</b>
+<i class="no-highlight">475</i>&nbsp;                else
+<b class="nc"><i class="no-highlight">476</i>&nbsp;                    gameScreenPanel.setDiningStudentsClickable(modelChanges.getPlayingID());</b>
+<i class="no-highlight">477</i>&nbsp;
+<i class="no-highlight">478</i>&nbsp;            }
+<i class="no-highlight">479</i>&nbsp;        }
+<i class="no-highlight">480</i>&nbsp;    }
+<i class="no-highlight">481</i>&nbsp;
+<i class="no-highlight">482</i>&nbsp;
+<i class="no-highlight">483</i>&nbsp;    /**
+<i class="no-highlight">484</i>&nbsp;     * Updates the game screen panel according to the changes occurred in the modelStorage.
+<i class="no-highlight">485</i>&nbsp;     * The GuiDrawer reads the changes Array List in the modelStorage in order to know which component to update.
+<i class="no-highlight">486</i>&nbsp;     */
+<i class="no-highlight">487</i>&nbsp;    public void updateGameScreenPanel() {
+<b class="nc"><i class="no-highlight">488</i>&nbsp;        for (int i = 0; i &lt; modelChanges.getToUpdate().size(); i++) {</b>
+<b class="nc"><i class="no-highlight">489</i>&nbsp;            switch (modelChanges.getToUpdate().get(i)) {</b>
+<i class="no-highlight">490</i>&nbsp;                case FILLCLOUD_CHANGED -&gt; {
+<b class="nc"><i class="no-highlight">491</i>&nbsp;                    if (gameStart) {</b>
+<b class="nc"><i class="no-highlight">492</i>&nbsp;                        createGameScreen();</b>
+<b class="nc"><i class="no-highlight">493</i>&nbsp;                        showGameScreen();</b>
+<b class="nc"><i class="no-highlight">494</i>&nbsp;                        gameStart=false;</b>
+<i class="no-highlight">495</i>&nbsp;                    }
+<i class="no-highlight">496</i>&nbsp;                    else
+<b class="nc"><i class="no-highlight">497</i>&nbsp;                        gameScreenPanel.getTableCenterPanel().updateFillClouds();</b>
+<b class="nc"><i class="no-highlight">498</i>&nbsp;                }</b>
+<i class="no-highlight">499</i>&nbsp;
+<b class="nc"><i class="no-highlight">500</i>&nbsp;                case CLOUD_CHANGED -&gt; gameScreenPanel.getTableCenterPanel().updateCloud(modelChanges.getCloudID());</b>
+<i class="no-highlight">501</i>&nbsp;
+<b class="nc"><i class="no-highlight">502</i>&nbsp;                case DISCARDPILE_CHANGED -&gt; gameScreenPanel.getTableCenterPanel().updateAssistCard(modelChanges.getPlayingID());</b>
+<i class="no-highlight">503</i>&nbsp;
+<b class="nc"><i class="no-highlight">504</i>&nbsp;                case ENTRANCE_CHANGED -&gt; gameScreenPanel.updateEntrance(modelChanges.getPlayingID());</b>
+<i class="no-highlight">505</i>&nbsp;
+<b class="nc"><i class="no-highlight">506</i>&nbsp;                case STUDENTDINING_CHANGED -&gt; gameScreenPanel.updateStudentDinings();</b>
+<i class="no-highlight">507</i>&nbsp;
+<b class="nc"><i class="no-highlight">508</i>&nbsp;                case PROFDINING_CHANGED -&gt; gameScreenPanel.updateProfessors();</b>
+<i class="no-highlight">509</i>&nbsp;
+<b class="nc"><i class="no-highlight">510</i>&nbsp;                case COINS_CHANGED -&gt; gameScreenPanel.getTableCenterPanel().updateCoins(modelChanges.getPlayingID());</b>
+<i class="no-highlight">511</i>&nbsp;
+<b class="nc"><i class="no-highlight">512</i>&nbsp;                case TOWERSTORAGE_CHANGED -&gt; gameScreenPanel.updateTowerStorages();</b>
+<i class="no-highlight">513</i>&nbsp;
+<b class="nc"><i class="no-highlight">514</i>&nbsp;                case ISLE_CHANGED -&gt; gameScreenPanel.getTableCenterPanel().updateIsle(modelChanges.getIsleID());</b>
+<i class="no-highlight">515</i>&nbsp;
+<i class="no-highlight">516</i>&nbsp;                case ISLELAYOUT_CHANGED -&gt; {
+<b class="nc"><i class="no-highlight">517</i>&nbsp;                    if (modelChanges.isLayoutChanged())</b>
+<b class="nc"><i class="no-highlight">518</i>&nbsp;                        for(int j=0;j&lt;modelChanges.getIslesToRemove();j++)</b>
+<b class="nc"><i class="no-highlight">519</i>&nbsp;                            gameScreenPanel.getTableCenterPanel().updateIsleLayout();</b>
+<b class="nc"><i class="no-highlight">520</i>&nbsp;                    for(int j=0;j&lt;modelStorage.getGameTable().getIsles().size();j++)</b>
+<b class="nc"><i class="no-highlight">521</i>&nbsp;                        gameScreenPanel.getTableCenterPanel().updateIsle(j);</b>
+<b class="nc"><i class="no-highlight">522</i>&nbsp;                    modelChanges.setLayoutChanged(false);</b>
+<b class="nc"><i class="no-highlight">523</i>&nbsp;                }</b>
+<i class="no-highlight">524</i>&nbsp;                case CHARACTERCARD_CHANGED -&gt; {
+<b class="nc"><i class="no-highlight">525</i>&nbsp;                    for(CharacterPanel characterPanel:gameScreenPanel.getTableCenterPanel().getCharacterPanels()){</b>
+<b class="nc"><i class="no-highlight">526</i>&nbsp;                        characterPanel.resetCharacter();</b>
+<b class="nc"><i class="no-highlight">527</i>&nbsp;                        characterPanel.initializeCharacter();</b>
+<b class="nc"><i class="no-highlight">528</i>&nbsp;                    }</b>
+<b class="nc"><i class="no-highlight">529</i>&nbsp;                }</b>
+<b class="nc"><i class="no-highlight">530</i>&nbsp;                case GNRLRESERVE_CHANGED -&gt; gameScreenPanel.getTableCenterPanel().updateGeneralReserve();</b>
+<i class="no-highlight">531</i>&nbsp;            }
+<i class="no-highlight">532</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">533</i>&nbsp;        modelChanges.getToUpdate().clear();</b>
+<i class="no-highlight">534</i>&nbsp;    }
+<i class="no-highlight">535</i>&nbsp;
+<i class="no-highlight">536</i>&nbsp;    /**
+<i class="no-highlight">537</i>&nbsp;     * Prints a message at the top of the screen which informs the user about the phase that is being played.
+<i class="no-highlight">538</i>&nbsp;     * @param message the text to display.
+<i class="no-highlight">539</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">540</i>&nbsp;    public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }</b>
+<i class="no-highlight">541</i>&nbsp;
+<i class="no-highlight">542</i>&nbsp;    /**
+<i class="no-highlight">543</i>&nbsp;     * Adds a logout button at the top of the screen.
+<i class="no-highlight">544</i>&nbsp;     * When pressed it will open a confirmation option pane.
+<i class="no-highlight">545</i>&nbsp;     */
+<i class="no-highlight">546</i>&nbsp;    public void addLogoutButton() {
+<b class="nc"><i class="no-highlight">547</i>&nbsp;        JButton logout = new JButton();</b>
+<b class="nc"><i class="no-highlight">548</i>&nbsp;        logout.setText(&quot;LOGOUT&quot;);</b>
+<b class="nc"><i class="no-highlight">549</i>&nbsp;        logout.setBackground(Color.RED);</b>
+<b class="nc"><i class="no-highlight">550</i>&nbsp;        logout.setPreferredSize(logoutButtonDimension);</b>
+<b class="nc"><i class="no-highlight">551</i>&nbsp;        logout.addActionListener(e -&gt; logoutConfirmation());</b>
+<b class="nc"><i class="no-highlight">552</i>&nbsp;        gameScreenPanel.getTextContainerPanel().add(logout,BorderLayout.LINE_END);</b>
+<i class="no-highlight">553</i>&nbsp;    }
+<i class="no-highlight">554</i>&nbsp;
+<i class="no-highlight">555</i>&nbsp;    /**
+<i class="no-highlight">556</i>&nbsp;     * Asks the player if he is sure to log out.
+<i class="no-highlight">557</i>&nbsp;     * If the answer is yes then it will notify the ClientController that starts the logout process,
+<i class="no-highlight">558</i>&nbsp;     * else the player will be able to continue the game.
+<i class="no-highlight">559</i>&nbsp;     */
+<i class="no-highlight">560</i>&nbsp;    public void logoutConfirmation() {
+<b class="nc"><i class="no-highlight">561</i>&nbsp;        JButton yes = new JButton();</b>
+<b class="nc"><i class="no-highlight">562</i>&nbsp;        JButton no = new JButton();</b>
+<b class="nc"><i class="no-highlight">563</i>&nbsp;        yes.setText(&quot;Yes&quot;);</b>
+<b class="nc"><i class="no-highlight">564</i>&nbsp;        no.setText(&quot;No&quot;);</b>
+<b class="nc"><i class="no-highlight">565</i>&nbsp;        yes.addActionListener(e -&gt; notifyObserver(ViewObserver::onLogout));</b>
+<b class="nc"><i class="no-highlight">566</i>&nbsp;        no.addActionListener(e -&gt; {});</b>
+<b class="nc"><i class="no-highlight">567</i>&nbsp;        Object[] options = { yes, &quot;No&quot; };</b>
+<b class="nc"><i class="no-highlight">568</i>&nbsp;        JOptionPane.showOptionDialog(null,&quot;Are you sure you want to log out?&quot;, &quot;Logout Request&quot;,</b>
+<i class="no-highlight">569</i>&nbsp;                                        JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,options,options[0]);
+<i class="no-highlight">570</i>&nbsp;    }
+<i class="no-highlight">571</i>&nbsp;
+<i class="no-highlight">572</i>&nbsp;    /**
+<i class="no-highlight">573</i>&nbsp;     * Pops up a JOptionPane which tells the user that he has to repeat the last action.
+<i class="no-highlight">574</i>&nbsp;     * @param serviceMessage the KO to display
+<i class="no-highlight">575</i>&nbsp;     */
+<i class="no-highlight">576</i>&nbsp;    public void showKOMessage(String serviceMessage) {
+<b class="nc"><i class="no-highlight">577</i>&nbsp;        if (reactivateCharacters(serviceMessage))</b>
+<b class="nc"><i class="no-highlight">578</i>&nbsp;            gameScreenPanel.setCharactersClickable(modelChanges.getPlayerID());</b>
+<b class="nc"><i class="no-highlight">579</i>&nbsp;        JOptionPane.showMessageDialog(f,serviceMessage,&quot;Service message&quot;,JOptionPane.PLAIN_MESSAGE);</b>
+<i class="no-highlight">580</i>&nbsp;    }
+<i class="no-highlight">581</i>&nbsp;
+<i class="no-highlight">582</i>&nbsp;    /**
+<i class="no-highlight">583</i>&nbsp;     * Checks if it is necessary to set Character Cards clickable again after a KO.
+<i class="no-highlight">584</i>&nbsp;     * @param serviceMessage the message to check
+<i class="no-highlight">585</i>&nbsp;     * @return true if the KO message has been received immediately after a listener set Character Cards as non-clickable.
+<i class="no-highlight">586</i>&nbsp;     */
+<i class="no-highlight">587</i>&nbsp;    private boolean reactivateCharacters(String serviceMessage) {
+<b class="nc"><i class="no-highlight">588</i>&nbsp;        return serviceMessage.equals(&quot;You don&#39;t have enough money to activate this card, please select another one&quot;) ||</b>
+<b class="nc"><i class="no-highlight">589</i>&nbsp;               serviceMessage.equals(&quot;This cloud is empty! Please select another one&quot;) ||</b>
+<b class="nc"><i class="no-highlight">590</i>&nbsp;               serviceMessage.equals(&quot;There&#39;s no deny cards left on GRANDMA_HERBS, you can&#39;t activate this card&quot;) ||</b>
+<b class="nc"><i class="no-highlight">591</i>&nbsp;               serviceMessage.equals(&quot;You don&#39;t have students in your dining room, you can&#39;t activate this card&quot;);</b>
+<i class="no-highlight">592</i>&nbsp;    }
+<i class="no-highlight">593</i>&nbsp;
+<i class="no-highlight">594</i>&nbsp;    /**
+<i class="no-highlight">595</i>&nbsp;     * Opens a JOptionPanel to select a color. It is used for FUNGIST and THIEF Character Cards.
+<i class="no-highlight">596</i>&nbsp;     * @param colorQuestion the question to ask.
+<i class="no-highlight">597</i>&nbsp;     */
+<i class="no-highlight">598</i>&nbsp;    private int showColorForm(String colorQuestion) {
+<b class="nc"><i class="no-highlight">599</i>&nbsp;        AtomicInteger colorChoice = new AtomicInteger();</b>
+<b class="nc"><i class="no-highlight">600</i>&nbsp;        colorChoice.set(-1);</b>
+<b class="nc"><i class="no-highlight">601</i>&nbsp;        JPanel buttonContainer = new JPanel();</b>
+<b class="nc"><i class="no-highlight">602</i>&nbsp;        JButton[] buttons = new JButton[5];</b>
+<b class="nc"><i class="no-highlight">603</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc"><i class="no-highlight">604</i>&nbsp;            buttons[i] = (new ColorChoiceButton(i));</b>
+<b class="nc"><i class="no-highlight">605</i>&nbsp;            int finalI = i;</b>
+<b class="nc"><i class="no-highlight">606</i>&nbsp;            buttons[i].addActionListener(e -&gt; {</b>
+<b class="nc"><i class="no-highlight">607</i>&nbsp;                checkedStudentsImagesLoaderInt(finalI,buttons);</b>
+<b class="nc"><i class="no-highlight">608</i>&nbsp;                if (colorChoice.get()!=-1 &amp;&amp; colorChoice.get()!=finalI)</b>
+<b class="nc"><i class="no-highlight">609</i>&nbsp;                    studentsImagesLoaderInt(colorChoice,buttons);</b>
+<b class="nc"><i class="no-highlight">610</i>&nbsp;                colorChoice.set(finalI);</b>
+<i class="no-highlight">611</i>&nbsp;            });
+<b class="nc"><i class="no-highlight">612</i>&nbsp;            buttonContainer.add(buttons[i]);</b>
+<i class="no-highlight">613</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">614</i>&nbsp;        JScrollPane scrollPane = new JScrollPane(buttonContainer);</b>
+<b class="nc"><i class="no-highlight">615</i>&nbsp;        scrollPane.setPreferredSize(new Dimension(500, 40));</b>
+<b class="nc"><i class="no-highlight">616</i>&nbsp;        JOptionPane.showMessageDialog(f, scrollPane, colorQuestion, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">617</i>&nbsp;        return colorChoice.get();</b>
+<i class="no-highlight">618</i>&nbsp;    }
+<i class="no-highlight">619</i>&nbsp;
+<i class="no-highlight">620</i>&nbsp;    /**
+<i class="no-highlight">621</i>&nbsp;     * Opens a JOptionPanel to select if continuing to use the effect of JESTER/MINSTREL Character Card or not.
+<i class="no-highlight">622</i>&nbsp;     * @return the answer of the user
+<i class="no-highlight">623</i>&nbsp;     */
+<i class="no-highlight">624</i>&nbsp;    private boolean showExchangeForm() {
+<b class="nc"><i class="no-highlight">625</i>&nbsp;        AtomicInteger exchangeChoice = new AtomicInteger();</b>
+<b class="nc"><i class="no-highlight">626</i>&nbsp;        exchangeChoice.set(-1);</b>
+<b class="nc"><i class="no-highlight">627</i>&nbsp;        JPanel buttonContainer = new JPanel();</b>
+<b class="nc"><i class="no-highlight">628</i>&nbsp;        JButton[] buttons = new JButton[2];</b>
+<b class="nc"><i class="no-highlight">629</i>&nbsp;        for (int i = 0; i &lt; 2; i++) {</b>
+<b class="nc"><i class="no-highlight">630</i>&nbsp;            buttons[i] = (new ExchangeChoiceButton(i));</b>
+<b class="nc"><i class="no-highlight">631</i>&nbsp;            int finalI = i;</b>
+<b class="nc"><i class="no-highlight">632</i>&nbsp;            buttons[i].addActionListener(e -&gt; {</b>
+<b class="nc"><i class="no-highlight">633</i>&nbsp;                ClassLoader cl1 = this.getClass().getClassLoader();</b>
+<i class="no-highlight">634</i>&nbsp;                InputStream url1;
+<b class="nc"><i class="no-highlight">635</i>&nbsp;                if (finalI == 0) {</b>
+<b class="nc"><i class="no-highlight">636</i>&nbsp;                    url1 = cl1.getResourceAsStream(&quot;Raw/CheckChk.png&quot;);</b>
+<i class="no-highlight">637</i>&nbsp;                } else {
+<b class="nc"><i class="no-highlight">638</i>&nbsp;                    url1 = cl1.getResourceAsStream(&quot;Raw/RedCrossChk.png&quot;);</b>
+<i class="no-highlight">639</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">640</i>&nbsp;                loadImages(buttons, finalI, url1);</b>
+<i class="no-highlight">641</i>&nbsp;
+<b class="nc"><i class="no-highlight">642</i>&nbsp;                if (exchangeChoice.get() != -1 &amp;&amp; exchangeChoice.get() != finalI) {</b>
+<b class="nc"><i class="no-highlight">643</i>&nbsp;                    ClassLoader cl2 = this.getClass().getClassLoader();</b>
+<i class="no-highlight">644</i>&nbsp;                    InputStream url2;
+<b class="nc"><i class="no-highlight">645</i>&nbsp;                    if (exchangeChoice.get() == 0) {</b>
+<b class="nc"><i class="no-highlight">646</i>&nbsp;                        url2 = cl2.getResourceAsStream(&quot;Raw/Check.png&quot;);</b>
+<i class="no-highlight">647</i>&nbsp;                    } else {
+<b class="nc"><i class="no-highlight">648</i>&nbsp;                        url2 = cl2.getResourceAsStream(&quot;Raw/RedCross.png&quot;);</b>
+<i class="no-highlight">649</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">650</i>&nbsp;                    loadImagesOnLastPressedButton(buttons, exchangeChoice, url2);</b>
+<i class="no-highlight">651</i>&nbsp;                }
+<i class="no-highlight">652</i>&nbsp;
+<b class="nc"><i class="no-highlight">653</i>&nbsp;                exchangeChoice.set(finalI);</b>
+<i class="no-highlight">654</i>&nbsp;
+<i class="no-highlight">655</i>&nbsp;            });
+<b class="nc"><i class="no-highlight">656</i>&nbsp;            buttonContainer.add(buttons[i]);</b>
+<i class="no-highlight">657</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">658</i>&nbsp;        JScrollPane scrollPane = new JScrollPane(buttonContainer);</b>
+<b class="nc"><i class="no-highlight">659</i>&nbsp;        scrollPane.setPreferredSize(new Dimension(440, 220));</b>
+<b class="nc"><i class="no-highlight">660</i>&nbsp;        JOptionPane.showMessageDialog(f, scrollPane, &quot;Do you want to exchange students?&quot;, JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">661</i>&nbsp;        return exchangeChoice.get() != 0;</b>
+<i class="no-highlight">662</i>&nbsp;    }
+<i class="no-highlight">663</i>&nbsp;
+<i class="no-highlight">664</i>&nbsp;    /**
+<i class="no-highlight">665</i>&nbsp;     * Shows on screen the notification that an error has occurred and that the player will be disconnected.
+<i class="no-highlight">666</i>&nbsp;     * @param serviceMessage contains the reason why the disconnection occurred.
+<i class="no-highlight">667</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">668</i>&nbsp;    public void showErrorMessage(String serviceMessage) { JOptionPane.showMessageDialog(f, serviceMessage, &quot;Disconnection occurred&quot;, JOptionPane.ERROR_MESSAGE); }</b>
+<i class="no-highlight">669</i>&nbsp;
+<i class="no-highlight">670</i>&nbsp;    public ModelStorage getModelStorage() {
+<b class="nc"><i class="no-highlight">671</i>&nbsp;        return modelStorage;</b>
+<i class="no-highlight">672</i>&nbsp;    }
+<i class="no-highlight">673</i>&nbsp;
+<i class="no-highlight">674</i>&nbsp;    public void setModelStorage(ModelStorage modelStorage) {
+<b class="nc"><i class="no-highlight">675</i>&nbsp;        this.modelStorage = modelStorage;</b>
+<b class="nc"><i class="no-highlight">676</i>&nbsp;        modelChanges = modelStorage.getModelChanges();</b>
+<i class="no-highlight">677</i>&nbsp;    }
+<i class="no-highlight">678</i>&nbsp;
+<i class="no-highlight">679</i>&nbsp;    /**
+<i class="no-highlight">680</i>&nbsp;     * This method shows on screen a dialog window notifying who has won the game
+<i class="no-highlight">681</i>&nbsp;     * @param winner the String representing the name of the winning player
+<i class="no-highlight">682</i>&nbsp;     */
+<i class="no-highlight">683</i>&nbsp;    public void showWinner(String winner) {
+<b class="nc"><i class="no-highlight">684</i>&nbsp;        String message=winner+&quot; won the game!&quot;;</b>
+<b class="nc"><i class="no-highlight">685</i>&nbsp;        JOptionPane.showMessageDialog(f,message,&quot;Winner&quot;,JOptionPane.PLAIN_MESSAGE);</b>
+<b class="nc"><i class="no-highlight">686</i>&nbsp;        f.dispose();</b>
+<b class="nc"><i class="no-highlight">687</i>&nbsp;        System.exit(1);</b>
+<i class="no-highlight">688</i>&nbsp;    }
+<i class="no-highlight">689</i>&nbsp;
+<i class="no-highlight">690</i>&nbsp;    public JPanel getUserInputPanel() {
+<b class="nc"><i class="no-highlight">691</i>&nbsp;        return userInputPanel;</b>
+<i class="no-highlight">692</i>&nbsp;    }
+<i class="no-highlight">693</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

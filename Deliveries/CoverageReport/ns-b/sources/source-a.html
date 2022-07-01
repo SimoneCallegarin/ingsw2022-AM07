@@ -1,0 +1,187 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > MNMovement_UpdateMsg</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Network.Messages.NetworkMessages</a>
+</div>
+
+<h1>Coverage Summary for Class: MNMovement_UpdateMsg (it.polimi.ingsw.Network.Messages.NetworkMessages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MNMovement_UpdateMsg</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Network.Messages.NetworkMessages;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.TowerColors;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.Network.Messages.MessageType;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">8</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;/**
+<i class="no-highlight">11</i>&nbsp; * Message sent everytime mother nature is moved by a player.
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;public class MNMovement_UpdateMsg extends NetworkMessage{
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Number of isles on the board.
+<i class="no-highlight">17</i>&nbsp;     */
+<i class="no-highlight">18</i>&nbsp;    private final int totalIsles;
+<i class="no-highlight">19</i>&nbsp;    /**
+<i class="no-highlight">20</i>&nbsp;     * Students on the isles.
+<i class="no-highlight">21</i>&nbsp;     */
+<i class="no-highlight">22</i>&nbsp;    private final ArrayList&lt;HashMap&lt;RealmColors,Integer&gt;&gt; students;
+<i class="no-highlight">23</i>&nbsp;    /**
+<i class="no-highlight">24</i>&nbsp;     * Color of the towers on the isles.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    private final ArrayList&lt;TowerColors&gt; towerColors;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * Isle where there&#39;s mother nature.
+<i class="no-highlight">29</i>&nbsp;     */
+<i class="no-highlight">30</i>&nbsp;    private final int whereMNId;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * Deny cards on each isle.
+<i class="no-highlight">33</i>&nbsp;     */
+<i class="no-highlight">34</i>&nbsp;    private final ArrayList&lt;Boolean&gt; denyCards;
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;    /**
+<i class="no-highlight">37</i>&nbsp;     * Number of isles per isle.
+<i class="no-highlight">38</i>&nbsp;     */
+<i class="no-highlight">39</i>&nbsp;    private final ArrayList&lt;Integer&gt; numberOfIsles;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * Number of towers per player.
+<i class="no-highlight">42</i>&nbsp;     */
+<i class="no-highlight">43</i>&nbsp;    private final ArrayList&lt;Integer&gt; numberOfTowers;
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    /**
+<i class="no-highlight">46</i>&nbsp;     * MNMovement_UpdateMsg constructor.
+<i class="no-highlight">47</i>&nbsp;     * @param messageType it will be MNMOVEMENT_UPDATE.
+<i class="no-highlight">48</i>&nbsp;     * @param totalIsles number of isles on the board.
+<i class="no-highlight">49</i>&nbsp;     * @param students students on the isles.
+<i class="no-highlight">50</i>&nbsp;     * @param towerColors color of the towers on the isles.
+<i class="no-highlight">51</i>&nbsp;     * @param whereMNId isle where there&#39;s mother nature.
+<i class="no-highlight">52</i>&nbsp;     * @param denyCards deny cards on each isle.
+<i class="no-highlight">53</i>&nbsp;     * @param numberOfIsles number of isles per isle.
+<i class="no-highlight">54</i>&nbsp;     * @param numberOfTowers number of towers per player.
+<i class="no-highlight">55</i>&nbsp;     */
+<i class="no-highlight">56</i>&nbsp;    public MNMovement_UpdateMsg(MessageType messageType, int totalIsles, ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; students, ArrayList&lt;TowerColors&gt; towerColors, int whereMNId, ArrayList&lt;Boolean&gt; denyCards, ArrayList&lt;Integer&gt; numberOfIsles, ArrayList&lt;Integer&gt; numberOfTowers) {
+<b class="nc"><i class="no-highlight">57</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">58</i>&nbsp;        this.totalIsles = totalIsles;</b>
+<b class="nc"><i class="no-highlight">59</i>&nbsp;        this.students = students;</b>
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        this.towerColors = towerColors;</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        this.whereMNId = whereMNId;</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        this.denyCards = denyCards;</b>
+<b class="nc"><i class="no-highlight">63</i>&nbsp;        this.numberOfIsles = numberOfIsles;</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;        this.numberOfTowers = numberOfTowers;</b>
+<i class="no-highlight">65</i>&nbsp;    }
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;    // GETTERS:
+<i class="no-highlight">68</i>&nbsp;
+<b class="nc"><i class="no-highlight">69</i>&nbsp;    public int getTotalIsles() { return totalIsles; }</b>
+<i class="no-highlight">70</i>&nbsp;
+<b class="nc"><i class="no-highlight">71</i>&nbsp;    public ArrayList&lt;HashMap&lt;RealmColors, Integer&gt;&gt; getStudents() { return students; }</b>
+<i class="no-highlight">72</i>&nbsp;
+<b class="nc"><i class="no-highlight">73</i>&nbsp;    public ArrayList&lt;TowerColors&gt; getTowerColors() { return towerColors; }</b>
+<i class="no-highlight">74</i>&nbsp;
+<b class="nc"><i class="no-highlight">75</i>&nbsp;    public int getWhereMNId() { return whereMNId; }</b>
+<i class="no-highlight">76</i>&nbsp;
+<b class="nc"><i class="no-highlight">77</i>&nbsp;    public ArrayList&lt;Boolean&gt; getDenyCards() { return denyCards; }</b>
+<i class="no-highlight">78</i>&nbsp;
+<b class="nc"><i class="no-highlight">79</i>&nbsp;    public ArrayList&lt;Integer&gt; getNumberOfIsles() { return numberOfIsles; }</b>
+<i class="no-highlight">80</i>&nbsp;
+<b class="nc"><i class="no-highlight">81</i>&nbsp;    public ArrayList&lt;Integer&gt; getNumberOfTowers() { return numberOfTowers; }</b>
+<i class="no-highlight">82</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

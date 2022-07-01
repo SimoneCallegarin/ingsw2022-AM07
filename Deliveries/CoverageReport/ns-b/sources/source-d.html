@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > PickFromCloud_UpdateMsg</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.Network.Messages.NetworkMessages</a>
+</div>
+
+<h1>Coverage Summary for Class: PickFromCloud_UpdateMsg (it.polimi.ingsw.Network.Messages.NetworkMessages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PickFromCloud_UpdateMsg</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.Network.Messages.NetworkMessages;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Model.Enumeration.RealmColors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Network.Messages.MessageType;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;/**
+<i class="no-highlight">9</i>&nbsp; * Message sent everytime a player picks students from a cloud.
+<i class="no-highlight">10</i>&nbsp; */
+<i class="no-highlight">11</i>&nbsp;public class PickFromCloud_UpdateMsg extends NetworkMessage{
+<i class="no-highlight">12</i>&nbsp;    /**
+<i class="no-highlight">13</i>&nbsp;     * ID of the player that picks the students from the cloud.
+<i class="no-highlight">14</i>&nbsp;     */
+<i class="no-highlight">15</i>&nbsp;    private final int playerID;
+<i class="no-highlight">16</i>&nbsp;    /**
+<i class="no-highlight">17</i>&nbsp;     * Updated entrance of the player that picks the students from the cloud.
+<i class="no-highlight">18</i>&nbsp;     */
+<i class="no-highlight">19</i>&nbsp;    private final HashMap&lt;RealmColors,Integer&gt; entrance;
+<i class="no-highlight">20</i>&nbsp;    /**
+<i class="no-highlight">21</i>&nbsp;     * ID of the cloud where the player picked the students.
+<i class="no-highlight">22</i>&nbsp;     */
+<i class="no-highlight">23</i>&nbsp;    private final int cloudID;
+<i class="no-highlight">24</i>&nbsp;    /**
+<i class="no-highlight">25</i>&nbsp;     * An empty cloud used to send the cloud after the player picked the students.
+<i class="no-highlight">26</i>&nbsp;     */
+<i class="no-highlight">27</i>&nbsp;    private final HashMap&lt;RealmColors,Integer&gt; emptyCloud;
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /**
+<i class="no-highlight">30</i>&nbsp;     * PickFromCloud_UpdateMsg update.
+<i class="no-highlight">31</i>&nbsp;     * @param messageType it will be CLOUDCHOICE_UPDATE.
+<i class="no-highlight">32</i>&nbsp;     * @param playerID ID of the player that picks the students from the cloud.
+<i class="no-highlight">33</i>&nbsp;     * @param entrance updated entrance of the player that picks the students from the cloud.
+<i class="no-highlight">34</i>&nbsp;     * @param cloudID ID of the cloud where the player picked the students.
+<i class="no-highlight">35</i>&nbsp;     */
+<i class="no-highlight">36</i>&nbsp;    public PickFromCloud_UpdateMsg(MessageType messageType, int playerID, HashMap&lt;RealmColors,Integer&gt; entrance, int cloudID) {
+<b class="nc"><i class="no-highlight">37</i>&nbsp;        super(messageType);</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;        this.playerID= playerID;</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        this.entrance = entrance;</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;        this.cloudID = cloudID;</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;        HashMap&lt;RealmColors, Integer&gt; emptyCloud = new HashMap&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">42</i>&nbsp;        for (RealmColors color : RealmColors.values())</b>
+<b class="nc"><i class="no-highlight">43</i>&nbsp;            emptyCloud.put(color, 0);</b>
+<b class="nc"><i class="no-highlight">44</i>&nbsp;        this.emptyCloud = emptyCloud;</b>
+<i class="no-highlight">45</i>&nbsp;    }
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;    // GETTERS:
+<i class="no-highlight">48</i>&nbsp;
+<b class="nc"><i class="no-highlight">49</i>&nbsp;    public int getPlayerID() { return playerID; }</b>
+<i class="no-highlight">50</i>&nbsp;
+<b class="nc"><i class="no-highlight">51</i>&nbsp;    public HashMap&lt;RealmColors,Integer&gt; getEntrance() { return entrance; }</b>
+<i class="no-highlight">52</i>&nbsp;
+<b class="nc"><i class="no-highlight">53</i>&nbsp;    public int getCloudID() { return cloudID; }</b>
+<i class="no-highlight">54</i>&nbsp;
+<b class="nc"><i class="no-highlight">55</i>&nbsp;    public HashMap&lt;RealmColors, Integer&gt; getEmptyCloud() { return emptyCloud; }</b>
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

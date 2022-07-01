@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > GeneralReservePanel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI</a>
+</div>
+
+<h1>Coverage Summary for Class: GeneralReservePanel (it.polimi.ingsw.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GeneralReservePanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
+<i class="no-highlight">4</i>&nbsp;
+<i class="no-highlight">5</i>&nbsp;import javax.swing.*;
+<i class="no-highlight">6</i>&nbsp;import java.awt.*;
+<i class="no-highlight">7</i>&nbsp;import java.awt.image.BufferedImage;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/**
+<i class="no-highlight">10</i>&nbsp; * Panel representing the general reserve of money, placed in the center of the screen
+<i class="no-highlight">11</i>&nbsp; */
+<i class="no-highlight">12</i>&nbsp;public class GeneralReservePanel extends JPanel {
+<i class="no-highlight">13</i>&nbsp;    /**
+<i class="no-highlight">14</i>&nbsp;     * ModelStorage reference to retrieve the general reserve state
+<i class="no-highlight">15</i>&nbsp;     */
+<i class="no-highlight">16</i>&nbsp;    private final ModelStorage storage;
+<i class="no-highlight">17</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;    /**
+<i class="no-highlight">19</i>&nbsp;     * Constructor of GeneralReservePanel
+<i class="no-highlight">20</i>&nbsp;     * @param storage ModelStorage reference to retrieve the general reserve state
+<i class="no-highlight">21</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">22</i>&nbsp;    public GeneralReservePanel(ModelStorage storage) {</b>
+<b class="nc"><i class="no-highlight">23</i>&nbsp;        setOpaque(false);</b>
+<b class="nc"><i class="no-highlight">24</i>&nbsp;        setBackground(Color.CYAN);</b>
+<b class="nc"><i class="no-highlight">25</i>&nbsp;        this.storage=storage;</b>
+<b class="nc"><i class="no-highlight">26</i>&nbsp;        initializeGeneralReserve();</b>
+<i class="no-highlight">27</i>&nbsp;    }
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /**
+<i class="no-highlight">30</i>&nbsp;     * Draws and updates the generalReservePanel according to storage information
+<i class="no-highlight">31</i>&nbsp;     */
+<i class="no-highlight">32</i>&nbsp;    public void initializeGeneralReserve(){
+<b class="nc"><i class="no-highlight">33</i>&nbsp;        this.removeAll();</b>
+<b class="nc"><i class="no-highlight">34</i>&nbsp;        JLabel moneyLabel = new JLabel();</b>
+<b class="nc"><i class="no-highlight">35</i>&nbsp;        moneyLabel.setOpaque(false);</b>
+<b class="nc"><i class="no-highlight">36</i>&nbsp;        System.out.println(storage.getGameTable().getGeneralMoneyReserve());</b>
+<b class="nc"><i class="no-highlight">37</i>&nbsp;        moneyLabel.setText(&quot;General reserve:&quot;+storage.getGameTable().getGeneralMoneyReserve());</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;        moneyLabel.setFont(new Font(&quot;Dialog.bold&quot;, Font.PLAIN,11));</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        add(moneyLabel);</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;        this.repaint();</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;        this.validate();</b>
+<i class="no-highlight">42</i>&nbsp;    }
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;    @Override
+<i class="no-highlight">45</i>&nbsp;    protected void paintComponent(Graphics g) {
+<b class="nc"><i class="no-highlight">46</i>&nbsp;        super.paintComponent(g);</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        BufferedImage img=ImagesLoader.coinsImageLoader(this.getClass().getClassLoader());</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        g.drawImage(img,0,0,getWidth(),getHeight(),null);</b>
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coverage Report > EffectListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.View.GUI.EventListeners</a>
+</div>
+
+<h1>Coverage Summary for Class: EffectListener (it.polimi.ingsw.View.GUI.EventListeners)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EffectListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.View.GUI.EventListeners;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.Observer.Subjects.ViewSubject;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.Observer.ViewObserver;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.View.GUI.Buttons.StudentButton;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.View.GUI.DashboardPanels.EntrancePanel;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.View.GUI.IslesPanels.TableCenterPanel;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;import java.awt.event.MouseEvent;
+<i class="no-highlight">10</i>&nbsp;import java.awt.event.MouseListener;
+<i class="no-highlight">11</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;import static it.polimi.ingsw.View.GUI.EventListeners.MouseClickedEvents.studentButtonPressed;
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;/**
+<i class="no-highlight">16</i>&nbsp; * MouseListener added to every component that has to notify the view observers
+<i class="no-highlight">17</i>&nbsp; * about the chosen generic value of the atomic effect.
+<i class="no-highlight">18</i>&nbsp; */
+<i class="no-highlight">19</i>&nbsp;public class EffectListener extends ViewSubject implements MouseListener {
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;    /**
+<i class="no-highlight">22</i>&nbsp;     * The generic value sent with the ACTIVATE_ATOMIC_EFFECT message.
+<i class="no-highlight">23</i>&nbsp;     * It could either be a colorIndex or an isleIndex.
+<i class="no-highlight">24</i>&nbsp;     */
+<i class="no-highlight">25</i>&nbsp;    private int genericValue;
+<i class="no-highlight">26</i>&nbsp;    /**
+<i class="no-highlight">27</i>&nbsp;     * TableCenterPanel reference used to remove the listener on the isles.
+<i class="no-highlight">28</i>&nbsp;     */
+<i class="no-highlight">29</i>&nbsp;    private final TableCenterPanel tableCenterPanel;
+<i class="no-highlight">30</i>&nbsp;    /**
+<i class="no-highlight">31</i>&nbsp;     * EntrancePanel reference used to remove the listeners on the entrance.
+<i class="no-highlight">32</i>&nbsp;     */
+<i class="no-highlight">33</i>&nbsp;    private final EntrancePanel entrance;
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * Effectlistener first constructor.
+<i class="no-highlight">37</i>&nbsp;     * @param observerList Array list of viewObserver to attach to this listener the GUI observers.
+<i class="no-highlight">38</i>&nbsp;     * @param genericValue the generic value sent with the ACTIVATE_ATOMIC_EFFECT message.
+<i class="no-highlight">39</i>&nbsp;     * @param tableCenterPanel reference used to remove the listener on the isles.
+<i class="no-highlight">40</i>&nbsp;     * @param entrance reference used to remove the listeners on the entrance.
+<i class="no-highlight">41</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">42</i>&nbsp;    public EffectListener(ArrayList&lt;ViewObserver&gt; observerList, int genericValue, TableCenterPanel tableCenterPanel, EntrancePanel entrance) {</b>
+<b class="nc"><i class="no-highlight">43</i>&nbsp;        addAllObservers(observerList);</b>
+<b class="nc"><i class="no-highlight">44</i>&nbsp;        this.genericValue = genericValue;</b>
+<b class="nc"><i class="no-highlight">45</i>&nbsp;        this.tableCenterPanel = tableCenterPanel;</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;        this.entrance = entrance;</b>
+<i class="no-highlight">47</i>&nbsp;    }
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;    /**
+<i class="no-highlight">50</i>&nbsp;     * Effectlistener second constructor.
+<i class="no-highlight">51</i>&nbsp;     * @param observerList Array list of viewObserver to attach to this listener the GUI observers.
+<i class="no-highlight">52</i>&nbsp;     * @param genericValue the generic value sent with the ACTIVATE_ATOMIC_EFFECT message.
+<i class="no-highlight">53</i>&nbsp;     * @param tableCenterPanel reference used to remove the listener on the isles.
+<i class="no-highlight">54</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">55</i>&nbsp;    public EffectListener(ArrayList&lt;ViewObserver&gt; observerList, int genericValue, TableCenterPanel tableCenterPanel) {</b>
+<b class="nc"><i class="no-highlight">56</i>&nbsp;        addAllObservers(observerList);</b>
+<b class="nc"><i class="no-highlight">57</i>&nbsp;        this.genericValue = genericValue;</b>
+<b class="nc"><i class="no-highlight">58</i>&nbsp;        this.tableCenterPanel = tableCenterPanel;</b>
+<b class="nc"><i class="no-highlight">59</i>&nbsp;        this.entrance = null;</b>
+<i class="no-highlight">60</i>&nbsp;    }
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;    /**
+<i class="no-highlight">63</i>&nbsp;     * Handles the event of the mouse when clicked.
+<i class="no-highlight">64</i>&nbsp;     * @param e the event of the mouse.
+<i class="no-highlight">65</i>&nbsp;     */
+<i class="no-highlight">66</i>&nbsp;    @Override
+<i class="no-highlight">67</i>&nbsp;    public void mouseClicked(MouseEvent e) {
+<i class="no-highlight">68</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">69</i>&nbsp;            StudentButton buttonPressed = (StudentButton) e.getSource();</b>
+<b class="nc"><i class="no-highlight">70</i>&nbsp;            genericValue = studentButtonPressed(buttonPressed);</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            notifyObserver(obs -&gt; obs.onAtomicEffect(genericValue));</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;            entrance.removeStudentsClickableForEffect();</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;        } catch (ClassCastException cce) {</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;            notifyObserver(obs -&gt; obs.onAtomicEffect(genericValue));</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;            tableCenterPanel.removeClickableIsles();</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;        }</b>
+<i class="no-highlight">77</i>&nbsp;    }
+<i class="no-highlight">78</i>&nbsp;
+<i class="no-highlight">79</i>&nbsp;    // Not used mouse event:
+<i class="no-highlight">80</i>&nbsp;    @Override
+<i class="no-highlight">81</i>&nbsp;    public void mousePressed(MouseEvent e) {}
+<i class="no-highlight">82</i>&nbsp;    @Override
+<i class="no-highlight">83</i>&nbsp;    public void mouseReleased(MouseEvent e) {}
+<i class="no-highlight">84</i>&nbsp;    @Override
+<i class="no-highlight">85</i>&nbsp;    public void mouseEntered(MouseEvent e) {}
+<i class="no-highlight">86</i>&nbsp;    @Override
+<i class="no-highlight">87</i>&nbsp;    public void mouseExited(MouseEvent e) {}
+<i class="no-highlight">88</i>&nbsp;
+<i class="no-highlight">89</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-01 14:32</div>
+</div>
+</body>
+</html>
