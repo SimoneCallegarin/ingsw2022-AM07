@@ -12,6 +12,9 @@ import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Network.Utils.PlayerInfo;
 import it.polimi.ingsw.View.VirtualView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -251,13 +254,31 @@ public class Server {
     public static void main(String[] args) {
 
         String hostName;
-        int portNumber;
+        int portNumber = 0;
 
         if (args.length==2){
             hostName = args[0];
             portNumber = Integer.parseInt(args[1]);
-        }else{
+        } else {
             hostName = ServerSettings.getHostName();
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Choose a port (leave empty to set \"1234\"):");
+            try {
+                String stringPort = br.readLine();
+                if (stringPort.isEmpty())
+                    portNumber = 1234;
+                else
+                    try {
+                        portNumber = Integer.parseInt(stringPort);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Wrong port format, the port must be a sequence of numbers only! Restart server...");
+                        return;
+                    }
+            } catch (IOException ioe) {
+                System.out.println("IOException thrown! Restart server...");
+                return;
+            }
+            ServerSettings.setPort(portNumber);
             portNumber = ServerSettings.getPort();
         }
 
