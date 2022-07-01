@@ -1,7 +1,7 @@
 package it.polimi.ingsw.View.GUI.IslesPanels;
 
 import it.polimi.ingsw.Observer.ViewObserver;
-import it.polimi.ingsw.View.GUI.AssistantCardPanel;
+import it.polimi.ingsw.View.GUI.*;
 import it.polimi.ingsw.View.GUI.ExpertPanels.CharacterPanel;
 import it.polimi.ingsw.View.GUI.CloudsPanels.CloudsContainerPanel;
 import it.polimi.ingsw.View.GUI.DashboardPanels.DashboardPanel;
@@ -11,9 +11,7 @@ import it.polimi.ingsw.View.GUI.EventListeners.CharacterCardListener;
 import it.polimi.ingsw.View.GUI.EventListeners.EffectListener;
 import it.polimi.ingsw.View.GUI.EventListeners.IsleListener;
 import it.polimi.ingsw.View.GUI.EventListeners.MNListener;
-import it.polimi.ingsw.View.GUI.GameScreenPanel;
-import it.polimi.ingsw.View.GUI.GeneralReservePanel;
-import it.polimi.ingsw.View.GUI.ImagesLoader;
+import it.polimi.ingsw.View.GUI.ExpertPanels.GeneralReservePanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import javax.swing.*;
