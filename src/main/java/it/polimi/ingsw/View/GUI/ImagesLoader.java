@@ -10,14 +10,52 @@ import it.polimi.ingsw.View.GUI.ExpertPanels.CoinPanel;
 import it.polimi.ingsw.View.GUI.IslesPanels.DenyCardPanel;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Permits loading images that will be stored in order to use them in game.
  */
 public class ImagesLoader {
+
+    /**
+     * Loads images on buttons.
+     * @param buttons where to put the images.
+     * @param finalI1 the index of the image to load.
+     * @param url the path of the image.
+     */
+    protected static void loadImages(JButton[] buttons, int finalI1, InputStream url) {
+        BufferedImage img = null;
+        try {
+            if (url != null)
+                img = ImageIO.read(url);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        if (img != null)
+            buttons[finalI1].setIcon(new ImageIcon(img));
+    }
+
+    /**
+     * Loads images on the last button that the player pressed.
+     * @param buttons where to put the image.
+     * @param lastPressedButton last button pressed by the player.
+     * @param url path of the image.
+     */
+    protected static void loadImagesOnLastPressedButton(JButton[] buttons, AtomicInteger lastPressedButton, InputStream url) {
+        BufferedImage img = null;
+        try {
+            if (url != null)
+                img = ImageIO.read(url);
+        } catch (IOException ex) {
+            System.err.println("Failed to load the image at path: " + url);
+        }
+        if (img != null)
+            buttons[lastPressedButton.get()].setIcon(new ImageIcon(img));
+    }
 
     /**
      * Loads the background image.
@@ -62,6 +100,25 @@ public class ImagesLoader {
     }
 
     /**
+     * Loads the students images using the index of the color.
+     * @param colorIndex index associated to the students chosen.
+     * @param buttons buttons to add the images with.
+     */
+    public static void studentsImagesLoaderInt(AtomicInteger colorIndex, JButton[] buttons) {
+        ClassLoader cl = GUIDrawer.class.getClassLoader();
+        InputStream url;
+        switch (colorIndex.get()) {
+            case 0 -> url = cl.getResourceAsStream("Dashboard/Students/Yellow.png");
+            case 1 -> url = cl.getResourceAsStream("Dashboard/Students/Pink.png");
+            case 2 -> url = cl.getResourceAsStream("Dashboard/Students/Blue.png");
+            case 3 -> url = cl.getResourceAsStream("Dashboard/Students/Red.png");
+            case 4 -> url = cl.getResourceAsStream("Dashboard/Students/Green.png");
+            default -> url = cl.getResourceAsStream("Dashboard/Circles.png");
+        }
+        loadImagesOnLastPressedButton(buttons, colorIndex, url);
+    }
+
+    /**
      * Loads a checked student image.
      * @param rc color of the student we want the image.
      * @return the image of the checked student of the chosen color.
@@ -85,6 +142,25 @@ public class ImagesLoader {
             System.err.println("Failed to load the image at path: " + url);
         }
         return img;
+    }
+
+    /**
+     * Loads the checked students images using the index of the color.
+     * @param colorIndex index associated to the students chosen.
+     * @param buttons buttons to add the images with.
+     */
+    public static void checkedStudentsImagesLoaderInt(int colorIndex, JButton[] buttons) {
+        ClassLoader cl = GUIDrawer.class.getClassLoader();
+        InputStream url;
+        switch (colorIndex) {
+            case 0 -> url = cl.getResourceAsStream("Dashboard/Students/YellowChk.png");
+            case 1 -> url = cl.getResourceAsStream("Dashboard/Students/PinkChk.png");
+            case 2 -> url = cl.getResourceAsStream("Dashboard/Students/BlueChk.png");
+            case 3 -> url = cl.getResourceAsStream("Dashboard/Students/RedChk.png");
+            case 4 -> url = cl.getResourceAsStream("Dashboard/Students/GreenChk.png");
+            default -> url = cl.getResourceAsStream("Dashboard/Circles.png");
+        }
+        loadImages(buttons, colorIndex, url);
     }
 
     /**

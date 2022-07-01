@@ -14,10 +14,6 @@ public class GUIConstants {
     public static void setScreenDimensionX(int screenDimensionX) { GUIConstants.screenDimensionX = screenDimensionX; }
     public static void setScreenDimensionY(int screenDimensionY) { GUIConstants.screenDimensionY = screenDimensionY; }
 
-    public static final int currentActionWidth = 1000;
-    public static final int currentActionHeight = 10;
-    public static final Dimension currentActionGSP = new Dimension(currentActionWidth,currentActionHeight);
-
     // Waiting Room Constants:
     public static final int waitingRoomFontSize = 24;
     public static final int waitingRoomWidth = 100;
@@ -33,6 +29,23 @@ public class GUIConstants {
     public static final int nicknameDisplayWidth = 200;
     public static final int nicknameDisplayHeight = 150;
     public static final Dimension nicknameDisplayDimension = new Dimension(nicknameDisplayWidth,nicknameDisplayHeight);
+
+    // Current action placed on top of the screen.
+    public static final int currentActionWidth = 1000;
+    public static final int currentActionHeight = 10;
+    public static final Dimension currentActionGSP = new Dimension(currentActionWidth,currentActionHeight);
+
+    // Assistant cards:
+    public static final int assistantCardsWidth = 1000;
+    public static final int assistantCardsHeight = 564;
+    public static final Dimension assistantCardsDimension = new Dimension(assistantCardsWidth, assistantCardsHeight);
+
+    // Isles:
+    public static final int isleWidth = 25;
+    public static final int isleHeight = 25;
+    public static final Dimension isleDimension = new Dimension(isleWidth,isleHeight);
+    public static final int isleImageX = 200;
+    public static final int isleImageY = 200;
 
     // Clouds constraints:
     public static final double cloudsWeightX = 1;
@@ -89,5 +102,10 @@ public class GUIConstants {
     public static final int denyCardWidth = 25;
     public static final int denyCardHeight = 25;
     public static final Dimension denyCardDimension = new Dimension(denyCardWidth,denyCardHeight);
+
+    // Logout button:
+    public static final int logoutButtonWidth = 100;
+    public static final int logoutButtonHeight = 25;
+    public static final Dimension logoutButtonDimension = new Dimension(logoutButtonWidth,logoutButtonHeight);
 
 }

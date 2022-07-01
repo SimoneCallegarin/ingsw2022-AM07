@@ -21,107 +21,111 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+
 /**
- * the panel use to contain the isles, the clouds and the character cards
+ * Panel used to contain the isles, the clouds and the character cards.
  */
 public class TableCenterPanel extends JPanel {
+
     /**
-     * ModelStorage reference used to retrieve game state information from
+     * ModelStorage reference used to retrieve game state information from.
      */
     private final ModelStorage storage;
     /**
-     * The panel containing the leftmost three isles;
+     * The panel containing the leftmost three isles.
      */
     private final JPanel isleContainerSx;
     /**
-     * The panel container the rightmost three isles
+     * The panel container the rightmost three isles.
      */
     private final JPanel isleContainerDx;
     /**
-     * One of the two isle panel container in the isleContainerCenter
+     * One of the two isle panel container in the isleContainerCenter.
      */
     private final JPanel firstIsleContainer1x2;
     /**
-     * One of the two isle panel container in the isleContainerCenter
+     * One of the two isle panel container in the isleContainerCenter.
      */
     private final JPanel secondIsleContainer1x2;
     /**
-     * The panel containing the clouds panels
+     * The panel containing the clouds panels.
      */
     private final CloudsContainerPanel cloudsContainerPanel;
     /**
-     * Constraints used to add the assistant card and the labels for money and username (and squad) in the assistantAndMoneyPanels
+     * Constraints used to add the assistant card and the labels for
+     * money and username (and squad) in the assistantAndMoneyPanels.
      */
     private final GridBagConstraints assistantAndMoneyConstraints;
     /**
-     * This array contains all the panels representing the isles
+     * Contains all the panels representing the isles.
      */
     private final ArrayList<IslePanel> islesPanels;
     /**
-     * This array list stores all the panel representing the assistant card, the money, the username and the squad for each player
+     * Stores all the panel representing the assistant card, the money, the username and the squad for each player
      */
     private final ArrayList<JPanel> assistantAndMoneyPanelList;
     /**
-     * ArrayList to store the labels for showing the available coins for each player
+     * Stores the labels for showing the available coins for each player.
      */
     private ArrayList<JLabel> coinsLabel;
     /**
-     * Arraylist to store the assistant card panels currently on screen
+     * Stores the assistant card panels currently on screen.
      */
     private final ArrayList<AssistantCardPanel> assistantCardPanels;
     /**
-     * Constraints for the rightmost isle container
+     * Constraints for the rightmost isle container.
      */
     private final GridBagConstraints icDxConstraints;
     /**
-     * Constraints for the leftmost isle container
+     * Constraints for the leftmost isle container.
      */
     private final GridBagConstraints icSxConstraints;
     /**
-     * Constraints for the first 1x2 isle container (the one on top)
+     * Constraints for the first 1x2 isle container (the one on top).
      */
     private final GridBagConstraints first1x2constraints;
     /**
-     * Constraints for the second 1x2 isle container (the one on bottom)
+     * Constraints for the second 1x2 isle container (the one on bottom).
      */
     private final GridBagConstraints second1x2constraints;
     /**
-     * Array list of panel added on top of isle. The listeners will be added to this array list element
-     * in order to make the isles clickable on every point of their panel even if they are full of students,towers etc.
+     * Array list of panel added on top of isle.
+     * The listeners will be added to this array list element
+     * in order to make the isles clickable on every point of their panel
+     * even if they are full of students,towers etc.
      */
     private final ArrayList<JPanel> clickablePanels;
     /**
-     * Array list to store the layered panel added to the isle container. Layered panel are used to permit to add on top of the isle panel
-     * a clickable panel
+     * Store the layered panel added to the isle container.
+     * Layered panel are used to permit adding on top of the isle panel a clickable panel.
      */
     private final ArrayList<JLayeredPane> isleLayeredPanels;
     /**
-     * Array list to store the character cards panel
+     * Store the character cards panel.
      */
     private final ArrayList<CharacterPanel> characterPanels;
     /**
-     * GameScreenPanel reference
+     * GameScreenPanel reference.
      */
     private final GameScreenPanel gsp;
     /**
-     * Panel representing the general money reserve
+     * Panel representing the general money reserve.
      */
     private final GeneralReservePanel generalReserve;
 
     /**
-     * Constructor of TableCenterPanel
-     * @param frameWidth frame width
-     * @param frameHeight frame height
-     * @param storage ModelStorage reference
-     * @param usernamePlaying username of the player using the GUI
-     * @param nicknameColor color of usernamePlaying
-     * @param viewObservers array list of viewObservers attached to the view components
-     * @param students array list of students images
-     * @param towers array list of towers images
-     * @param checkedStudents array list of checked students
-     * @param gsp gameScreenPanel reference
+     * Constructor of TableCenterPanel.
+     * @param storage ModelStorage reference.
+     * @param usernamePlaying username of the player using the GUI.
+     * @param nicknameColor color of usernamePlaying.
+     * @param viewObservers array list of viewObservers attached to the view components.
+     * @param students array list of students images.
+     * @param towers array list of towers images.
+     * @param checkedStudents array list of checked students.
+     * @param gsp gameScreenPanel reference.
      */
-    public TableCenterPanel(int frameWidth,int frameHeight,ModelStorage storage, String usernamePlaying, Color nicknameColor,
+    public TableCenterPanel(ModelStorage storage, String usernamePlaying, Color nicknameColor,
                             ArrayList<ViewObserver> viewObservers, ArrayList<BufferedImage> students, ArrayList<BufferedImage> towers, ArrayList<BufferedImage> checkedStudents,
                             GameScreenPanel gsp) {
         this.storage=storage;
@@ -138,18 +142,17 @@ public class TableCenterPanel extends JPanel {
 
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createLineBorder(Color.black));
 
-        GridBagConstraints c=new GridBagConstraints();
-        GridBagConstraints centerConstraints=new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
+        GridBagConstraints centerConstraints = new GridBagConstraints();
 
-        //I create five columns, the first and the fifth one will contain the discard pile of each player,
-        //the second and the fourth one will contain two 4x1 grids containing four islesImages
-        //the third one will contain another 3x1 panel with two 1x2 grids on the top and on the bottom, while in the
-        //center cell there are the clouds and the character cards
-        isleContainerDx=new JPanel(new GridBagLayout());
+        // I create five columns, the first and the fifth one will contain the discard pile of each player,
+        // the second and the fourth one will contain two 4x1 grids containing four islesImages
+        // the third one will contain another 3x1 panel with two 1x2 grids on the top and on the bottom, while in the
+        // center cell there are the clouds and the character cards.
+        isleContainerDx = new JPanel(new GridBagLayout());
         isleContainerDx.setBackground(Color.CYAN);
-        icDxConstraints=new GridBagConstraints();
+        icDxConstraints = new GridBagConstraints();
 
         //The center panel containing two rows of islesImages and a center row containing the clouds and the character cards
         JPanel isleContainerCenter = new JPanel(new GridBagLayout());
@@ -213,7 +216,7 @@ public class TableCenterPanel extends JPanel {
         int idxSx=0;
         int idxDx=0;
         for(int i=0;i<storage.getNumberOfPlayers();i++){
-            String username=""+storage.getDashboard(i).getNickname();
+            String username = ""+storage.getDashboard(i).getNickname();
 
             JPanel usernamePanel=new JPanel();
             usernamePanel.setLayout(new BorderLayout());
@@ -263,7 +266,7 @@ public class TableCenterPanel extends JPanel {
 
         }
 
-        //if the gamemode is expert we need to show also the coins
+        //if the game mode is expert we need to show also the coins
         if(storage.isExpertMode()) {
             idxSx=0;
             idxDx=0;
@@ -295,7 +298,7 @@ public class TableCenterPanel extends JPanel {
         c.gridx=4;
         add(assistantAndMoneyContainerDx,c);
 
-        //initialize the islesImages
+        // Initialize the islesImages.
         for(int i=0;i<12;i++){
             JLayeredPane isleLayeredPane=new JLayeredPane();
             JPanel clickablePanel=new JPanel();
@@ -303,8 +306,8 @@ public class TableCenterPanel extends JPanel {
 
             clickablePanel.setOpaque(false);
             clickablePanel.setBackground(Color.YELLOW);
-            clickablePanel.setBounds(0,0,200,200);
-            islePanel.setBounds(0,0,200,200);
+            clickablePanel.setBounds(0,0,isleImageX,isleImageY);
+            islePanel.setBounds(0,0,isleImageX,isleImageY);
 
             isleLayeredPane.add(clickablePanel,Integer.valueOf(1));
             isleLayeredPane.add(islePanel,Integer.valueOf(0));
@@ -449,15 +452,12 @@ public class TableCenterPanel extends JPanel {
             centerConstraints.weighty=0.55;
             isleContainerCenter.add(secondIsleContainer1x2,centerConstraints);
 
-        firstIsleContainer1x2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        secondIsleContainer1x2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        cloudsContainerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        //set sizes of islesImages and clickablepanels
+        // set sizes of islesImages and clickable panels.
         int x=0;
         int y=0;
-        int width= (int) Math.round(frameWidth/(7.5));
-        int height= frameHeight/4;
-        for(int i=0;i<islesPanels.size();i++){
+        int width = (int) Math.round(screenDimensionX/(7.5));
+        int height = screenDimensionY/4;
+        for(int i=0;i<islesPanels.size();i++) {
             islesPanels.get(i).setBounds(x,y,width,height);
             clickablePanels.get(i).setBounds(x,y,width,height);
             islesPanels.get(i).repaint();
@@ -465,13 +465,14 @@ public class TableCenterPanel extends JPanel {
         }
     }
 
-    public void updateGeneralReserve(){
-        generalReserve.initializeGeneralReserve();
-    }
+    /**
+     * Updates the general money reserve.
+     */
+    public void updateGeneralReserve(){ generalReserve.initializeGeneralReserve(); }
 
     /**
-     * Updates the player discard pile with the last assistant card played by that player
-     * @param playerID the player id used to identify which player discard pile update
+     * Updates the player discard pile with the last assistant card played by that player.
+     * @param playerID the player id used to identify which player discard pile update.
      */
     public void updateAssistCard(int playerID){
         assistantAndMoneyConstraints.gridx=0;
@@ -495,25 +496,22 @@ public class TableCenterPanel extends JPanel {
     }
 
     /**
-     * Updates cloud panel on player choice
-     * @param cloudID the id of the cloud to update
+     * Updates cloud panel on player choice.
+     * @param cloudID the id of the cloud to update.
      */
-    public void updateCloud(int cloudID) {
-        cloudsContainerPanel.updateCloudPanels(cloudID);
-    }
+    public void updateCloud(int cloudID) { cloudsContainerPanel.updateCloudPanels(cloudID); }
 
     /**
-     * Update cloud panels on their filling
+     * Update cloud panels on their filling.
      */
     public void updateFillClouds(){
-        for(int i=0;i<storage.getGameTable().getClouds().size();i++){
+        for(int i=0;i<storage.getGameTable().getClouds().size();i++)
             cloudsContainerPanel.updateCloudPanels(i);
-        }
     }
 
     /**
-     * Updates the player available coins
-     * @param playerID the player id used to identify which coin reserve update
+     * Updates the player available coins.
+     * @param playerID the player id used to identify which coin reserve update.
      */
     public void updateCoins(int playerID){
         assistantAndMoneyConstraints.gridx=0;
@@ -533,8 +531,8 @@ public class TableCenterPanel extends JPanel {
     }
 
     /**
-     * Update isle panel
-     * @param isleID isle id used to identify which isle update
+     * Update isle panel.
+     * @param isleID isle id used to identify which isle update.
      */
     public void updateIsle(int isleID){
         islesPanels.get(isleID).resetIsle();
@@ -542,8 +540,8 @@ public class TableCenterPanel extends JPanel {
     }
 
     /**
-     * Update isle panels once one or more isle are unified. It eliminates the last isle (starting from the one below the top-left angle)
-     *  and updates the remaining
+     * Update isle panels once one or more isle are unified.
+     * It eliminates the last isle (starting from the one below the top-left angle) and updates the remaining.
      */
     public void updateIsleLayout(){
         int lastIsleID=isleLayeredPanels.size()-1;
@@ -558,7 +556,6 @@ public class TableCenterPanel extends JPanel {
             if(lastIsleID==11) icSxConstraints.gridy=1;
             if(lastIsleID==10) icSxConstraints.gridy=2;
             if(lastIsleID==9) icSxConstraints.gridy=3;
-
             isleContainerSx.add(emptyPanel,icSxConstraints);
         }
         if(lastIsleID==1 || lastIsleID==2){
@@ -585,104 +582,94 @@ public class TableCenterPanel extends JPanel {
     }
 
     /**
-     * Adds mouse listener to the isle panels in order to register user click on them. This allows the player to move students on them.
-     * @param viewObserverList view observers list passed to the listeners
-     * @param entrance EntrancePanel reference passed to the listeners
-     * @param dining DiningPanel reference passed to the listeners
+     * Adds mouse listener to the isle panels in order to register user click on them.
+     * This allows the player to move students on them.
+     * @param viewObserverList view observers list passed to the listeners.
+     * @param entrance EntrancePanel reference passed to the listeners.
+     * @param dining DiningPanel reference passed to the listeners.
      */
     public void setIslesClickable(ArrayList<ViewObserver> viewObserverList, EntrancePanel entrance, DiningPanel dining){
-        for (int i=0;i<islesPanels.size();i++) {
+        for (int i=0;i<islesPanels.size();i++)
             clickablePanels.get(i).addMouseListener(new IsleListener(this, viewObserverList, entrance, i, dining));
-        }
     }
     /**
-     *Adds mouse listener to the isle panels in order to register user click on them. This allows the player to move MN on one of them.
-     * @param viewObserverList the viewObserver list passed to the listeners
+     * Adds mouse listener to the isle panels in order to register user click on them.
+     * This allows the player to move MN on one of them.
+     * @param viewObserverList the viewObserver list passed to the listeners.
      */
     public void setMNClickable(ArrayList<ViewObserver> viewObserverList){
-        for (int i=0;i<islesPanels.size();i++) {
+        for (int i=0;i<islesPanels.size();i++)
             clickablePanels.get(i).addMouseListener(new MNListener(viewObserverList,i,this));
-        }
     }
 
     /**
-     * Adds a MouseListener to every isle in order to send an ACTIVATE_ATOMIC_EFFECT message to the server when clicked.
-     * @param viewObserverList the list of observers that have to send the message to the server
+     * Adds a MouseListener to every isle in order to send
+     * an ACTIVATE_ATOMIC_EFFECT message to the server when clicked.
+     * @param viewObserverList the list of observers that have to send the message to the server.
      */
-    public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList){
-        for (int i=0;i<islesPanels.size();i++) {
+    public void setIslesClickableForEffect(ArrayList<ViewObserver> viewObserverList) {
+        for (int i=0;i<islesPanels.size();i++)
             clickablePanels.get(i).addMouseListener(new EffectListener(viewObserverList,i,this));
-        }
-
     }
 
     /**
-     * Adds mouse listeners to the clouds in order to let the player pick students from one of them
+     * Adds mouse listeners to the clouds in order to let the player pick students from one of them.
      */
-    public void setCloudsClickable(){
-        cloudsContainerPanel.setCloudsClickable();
-    }
+    public void setCloudsClickable() { cloudsContainerPanel.setCloudsClickable(); }
 
     /**
-     * Removes mouse listeners from the clouds
+     * Removes mouse listeners from the clouds.
      */
-    public void removeClickableClouds() {
-        cloudsContainerPanel.removeCloudsClickable();
-    }
+    public void removeClickableClouds() { cloudsContainerPanel.removeCloudsClickable(); }
 
     /**
-     * Removes mouse listeners from the isles
+     * Removes mouse listeners from the isles.
      */
     public void removeClickableIsles(){
-        for (JPanel clickablePanel : clickablePanels) {
-            for (int j = 0; j < clickablePanel.getMouseListeners().length; j++) {
+        for (JPanel clickablePanel : clickablePanels)
+            for (int j = 0; j < clickablePanel.getMouseListeners().length; j++)
                 clickablePanel.removeMouseListener(clickablePanel.getMouseListeners()[j]);
-            }
-        }
     }
 
     /**
-     * Adds a MouseListener to every Character Card in order to send an PLAY_CHARACTER_CARD message to the server when clicked.
-     * @param viewObserverList the list of observers that have to send the message to the server
-     * @param playerID the ID of the player that clicked on the card
+     * Adds a MouseListener to every Character Card in order to send
+     * a PLAY_CHARACTER_CARD message to the server when clicked.
+     * @param viewObserverList the list of observers that have to send the message to the server.
+     * @param playerID the ID of the player that clicked on the card.
      */
     public void setCharactersClickable(ArrayList<ViewObserver> viewObserverList, int playerID) {
-        for(CharacterPanel characterPanel : characterPanels){
+        for(CharacterPanel characterPanel : characterPanels)
             characterPanel.addMouseListener(new CharacterCardListener(viewObserverList,characterPanel.getCharacterIndex(), playerID, this , gsp));
-        }
     }
 
     /**
      * Removes the MouseListeners of the Character Cards.
      */
     public void removeClickableCharacters() {
-        for(CharacterPanel characterPanel : characterPanels){
-            for (int j = 0; j < characterPanel.getMouseListeners().length; j++) {
+        for(CharacterPanel characterPanel : characterPanels)
+            for (int j = 0; j < characterPanel.getMouseListeners().length; j++)
                 characterPanel.removeMouseListener(characterPanel.getMouseListeners()[j]);
-            }
-        }
-    }
-
-    public ArrayList<CharacterPanel> getCharacterPanels() {
-        return characterPanels;
     }
 
     /**
      * Sets the students on the chosen Character Card clickable.
-     * @param character the panel of the chosen Character Card
-     * @param dashboard the dashboard associated with the one who played the Character Card
+     * @param character the panel of the chosen Character Card.
+     * @param dashboard the dashboard associated with the one who played the Character Card.
      */
-    public void setCharacterStudentsClickable(CharacterPanel character, DashboardPanel dashboard) {
-        character.setStudentsClickable(dashboard);
-    }
+    public void setCharacterStudentsClickable(CharacterPanel character, DashboardPanel dashboard) { character.setStudentsClickable(dashboard); }
 
     /**
      * Removes the MouseListeners of the students on the Character Cards.
      */
     public void removeClickableCharacterStudents() {
-        for(CharacterPanel characterPanel : characterPanels){
+        for(CharacterPanel characterPanel : characterPanels)
             characterPanel.removeStudentsClickable();
-        }
     }
+
+    /**
+     * Getter method for the character card panel.
+     * @return the character card panel.
+     */
+    public ArrayList<CharacterPanel> getCharacterPanels() { return characterPanels; }
 
 }

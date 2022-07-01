@@ -58,7 +58,6 @@ public class DashboardPanel extends JPanel {
      */
     public DashboardPanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents, ArrayList<BufferedImage> towers, BufferedImage dashboard) {
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createLineBorder(Color.black));
 
         this.towerStorage = new TowerStoragePanel(storage, playerID, towers);
         this.dining = new DiningPanel(storage,playerID, students, checkedStudents);

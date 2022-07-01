@@ -10,18 +10,15 @@ import it.polimi.ingsw.View.GUI.ExpertPanels.CharacterPanel;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelChanges;
 import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static it.polimi.ingsw.View.GUI.GUIConstants.*;
+import static it.polimi.ingsw.View.GUI.ImagesLoader.*;
 
 /**
  * Class called upon GUI creation that start the GUI construction chain.
@@ -33,6 +30,10 @@ public class GUIDrawer extends ViewSubject {
      * Model Storage reference used to retrieve game state information.
      */
     private ModelStorage modelStorage;
+    /**
+     * Contains all the information about the changes occurred in the ModelStorage.
+     */
+    private ModelChanges modelChanges;
     /**
      * String placed in the frame to identify the application
      */
@@ -90,10 +91,6 @@ public class GUIDrawer extends ViewSubject {
      */
     private String usernamePlaying;
     /**
-     * Contains all the information about the changes occurred in the ModelStorage.
-     */
-    private ModelChanges modelChanges;
-    /**
      * Used to know if it's necessary to let appear a JOptionPanel of start turn or not.
      */
     private boolean turnStarted = false;
@@ -139,13 +136,11 @@ public class GUIDrawer extends ViewSubject {
      * In the first case then it will be notified on screen by an error message, otherwise the game will soon begin.
      */
     public void showUsernameForm() {
-
         JPanel mainMenu = new JPanel();
-
         mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.LINE_AXIS));
 
         JPanel leftHalf = new JPanel(new GridLayout(3, 1)) {
-            //Don't allow the nickname field to stretch vertically.
+            // Don't allow the nickname field to stretch vertically.
             public Dimension getMaximumSize() {
                 Dimension pref = getPreferredSize();
                 return new Dimension(Integer.MAX_VALUE, pref.height);
@@ -175,7 +170,6 @@ public class GUIDrawer extends ViewSubject {
         buttons.add(submit);
 
         leftHalf.add(buttons, 2);
-
         leftHalf.setLayout(new BoxLayout(leftHalf, BoxLayout.PAGE_AXIS));
 
         mainMenu.add(leftHalf);
@@ -187,19 +181,18 @@ public class GUIDrawer extends ViewSubject {
     /**
      * Displays on screen on the right side of the main menu panel the nickname chosen and checked,
      * that will be green when valid, else red.
-     *
      * @return the right panel of the main menu.
      */
     private JComponent createNicknameDisplay() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel nicknameRightSide = new JPanel(new BorderLayout());
         nicknameDisplay = new JLabel();
         nicknameDisplay.setHorizontalAlignment(JLabel.CENTER);
 
-        panel.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.LINE_START);
-        panel.add(nicknameDisplay, BorderLayout.CENTER);
-        panel.setPreferredSize(nicknameDisplayDimension);
+        nicknameRightSide.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.LINE_START);
+        nicknameRightSide.add(nicknameDisplay, BorderLayout.CENTER);
+        nicknameRightSide.setPreferredSize(nicknameDisplayDimension);
 
-        return panel;
+        return nicknameRightSide;
     }
 
     /**
@@ -223,98 +216,113 @@ public class GUIDrawer extends ViewSubject {
     public void showGamePreferencesForm() {
         JPanel gamePreferences = new JPanel(new GridLayout(5, 3));
 
-        gamePreferences.add(new JLabel("Select number of players:"), 0);
-
+        gamePreferences.add(new JLabel("Select number of players:"));
         JPanel numberOfPlayers = new JPanel(new GridLayout(1, 3));
-        JRadioButton twoPlayers = new JRadioButton("2");
-        twoPlayers.setMnemonic(KeyEvent.VK_2);
-        twoPlayers.setActionCommand("2");
-        twoPlayers.setSelected(true);
-        JRadioButton threePlayers = new JRadioButton("3");
-        threePlayers.setMnemonic(KeyEvent.VK_3);
-        threePlayers.setActionCommand("3");
-        JRadioButton fourPlayers = new JRadioButton("4");
-        fourPlayers.setMnemonic(KeyEvent.VK_4);
-        fourPlayers.setActionCommand("4");
-        numberOfPlayers.add(twoPlayers);
-        numberOfPlayers.add(threePlayers);
-        numberOfPlayers.add(fourPlayers);
-        gamePreferences.add(numberOfPlayers, 1);
-
-        gamePreferences.add(new JLabel("Select game mode:"), 2);
-
-        JPanel gameMode = new JPanel(new GridLayout(1, 2));
-        JRadioButton baseMode = new JRadioButton("Base");
-        baseMode.setMnemonic(KeyEvent.VK_B);
-        baseMode.setActionCommand("Base");
-        baseMode.setSelected(true);
-        JRadioButton expertMode = new JRadioButton("Expert");
-        expertMode.setMnemonic(KeyEvent.VK_B);
-        expertMode.setActionCommand("Expert");
-        expertMode.setSelected(true);
-        gameMode.add(baseMode, 0);
-        gameMode.add(expertMode, 1);
+        JRadioButton twoPlayers = createChoiceButton("2",KeyEvent.VK_2,"2");
+        JRadioButton threePlayers = createChoiceButton("3",KeyEvent.VK_3,"3");
+        JRadioButton fourPlayers = createChoiceButton("4",KeyEvent.VK_4,"4");
         ButtonGroup numOfPlayersButtons = new ButtonGroup();
-        ButtonGroup gameModeButtons = new ButtonGroup();
         numOfPlayersButtons.add(twoPlayers);
         numOfPlayersButtons.add(threePlayers);
         numOfPlayersButtons.add(fourPlayers);
+        numberOfPlayers.add(twoPlayers);
+        numberOfPlayers.add(threePlayers);
+        numberOfPlayers.add(fourPlayers);
+        gamePreferences.add(numberOfPlayers);
+
+        gamePreferences.add(new JLabel("Select game mode:"));
+        JPanel gameMode = new JPanel(new GridLayout(1, 2));
+        JRadioButton baseMode = createChoiceButton("Base",KeyEvent.VK_B,"Base");
+        JRadioButton expertMode = createChoiceButton("Expert",KeyEvent.VK_E,"Expert");
+        ButtonGroup gameModeButtons = new ButtonGroup();
         gameModeButtons.add(baseMode);
         gameModeButtons.add(expertMode);
-
-        gamePreferences.add(gameMode, 3);
+        gameMode.add(baseMode);
+        gameMode.add(expertMode);
+        gamePreferences.add(gameMode);
 
         startGame.addActionListener(e -> {
-            //add try catch
             int numPlayers = Integer.parseInt(numOfPlayersButtons.getSelection().getActionCommand());
             boolean gameModeChosen;
             gameModeChosen = gameModeButtons.getSelection().getActionCommand().equals("Expert");
 
             notifyObserver(obs -> obs.onGamePreferences(numPlayers, gameModeChosen));
-            showLoadingScreen();
+            showWaitingRoom();
         });
 
-        gamePreferences.add(startGame, 4);
+        gamePreferences.add(startGame);
 
         userInputPanel.add(gamePreferences, "Game preferences form");
         userCl.show(userInputPanel, "Game preferences form");
     }
 
     /**
-     * this method shows a loading screen while waiting for other players to join and loading the game
+     * Creates the button used in the game preferences selection.
+     * @param text text of the button.
+     * @param key KeyEvent associated to the buttons.
+     * @param actionCommand action command of the buttons.
+     * @return the button with the desired attributes.
      */
-    public void showLoadingScreen() {
+    private JRadioButton createChoiceButton(String text, int key, String actionCommand) {
+        JRadioButton choiceButton = new JRadioButton(text);
+        choiceButton.setMnemonic(key);
+        choiceButton.setActionCommand(actionCommand);
+        if(text.equals("2") || text.equals("Base"))
+            choiceButton.setSelected(true);
+        return choiceButton;
+    }
+
+    /**
+     * Shows a waiting room on screen while waiting for other players to join and start the game.
+     */
+    public void showWaitingRoom() {
         waitingRoom = new WaitingRoom(usernamePlaying);
-        //need to update the loading screen graphics
-        generalPanelManager.add(waitingRoom, "Loading Screen");
-        cl.show(generalPanelManager, "Loading Screen");
+        //need to update the waiting room graphics
+        generalPanelManager.add(waitingRoom, "Waiting room");
+        cl.show(generalPanelManager, "Waiting room");
 
     }
 
+    /**
+     * Initializes the game screen and add it to the generalPanelManager.
+     */
     public void createGameScreen() {
-        //initialize the game screen and add it to the generalPanelManager
-        gameScreenPanel = new GameScreenPanel(new GridBagLayout(), modelStorage, f.getWidth(), f.getHeight(), usernamePlaying, waitingRoom.getNicknameColor(), getViewObserverList());
+        gameScreenPanel = new GameScreenPanel(new GridBagLayout(), modelStorage, screenDimensionX, screenDimensionY, usernamePlaying, waitingRoom.getNicknameColor(), getViewObserverList());
         generalPanelManager.add(gameScreenPanel, "Game Screen");
     }
 
     /**
-     * this method uses the general panel manager card layout to switch from the InitialBackground panel to the GameScreen panel
+     * Uses the general panel manager card layout to switch from the InitialBackground panel to the GameScreen panel.
      */
     public void showGameScreen() {
         addLogoutButton();
-        //switch to the actual game screen
+        // Switch to the actual game screen
         cl.show(generalPanelManager, "Game Screen");
     }
 
     /**
-     * this method opens a JOptionPane to select the assistant card. Each assistant card displayed is a button which on press updates
-     * the relative player discard pile
-     *
-     * @param playerID the playerID used to decide which character card display and which discard pile update
+     * Opens a JOptionPane to select the assistant card.
+     * Each assistant card displayed is a button which on press updates the relative player discard pile.
+     * @param playerID the playerID used to decide which character card display and which discard pile update.
      */
-    public int ShowAssistantCardForm(int playerID) {
+    public int ShowAssistantCardsForm(int playerID) {
         AtomicInteger turnOrder = new AtomicInteger();
         turnOrder.set(0);
+        JPanel buttonContainer = assistantCardsButtons(playerID,turnOrder);
+        JScrollPane scrollPane = new JScrollPane(buttonContainer);
+        scrollPane.setPreferredSize(assistantCardsDimension);
+        JOptionPane.showMessageDialog(f, scrollPane, "Your deck", JOptionPane.PLAIN_MESSAGE);
+        return turnOrder.get();
+    }
+
+    /**
+     * Associates to each assistant card displayed a button that permits to update
+     * the relative player discard pile when pressed.
+     * @param playerID the playerID used to decide which character card display and which discard pile update.
+     * @param turnOrder turn order of the assistant card.
+     * @return the assistant cards in form of buttons.
+     */
+    private JPanel assistantCardsButtons(int playerID, AtomicInteger turnOrder) {
         JPanel buttonContainer = new JPanel();
         JButton[] buttons = new JButton[modelStorage.getDashboard(playerID).getAssistantCardsMNMovement().size()];
         AtomicInteger lastPressedButton = new AtomicInteger();
@@ -323,71 +331,24 @@ public class GUIDrawer extends ViewSubject {
             int finalI = modelStorage.getDashboard(playerID).getAssistantCardsTurnOrder().get(i);
             int finalI1 = i;
             buttons[i].addActionListener(e -> {
-                ClassLoader cl1 = this.getClass().getClassLoader();
-                InputStream url1 = cl1.getResourceAsStream("GameTable/Assistant_cards/2x/" + finalI + "chk.png");
+                InputStream url1 = this.getClass().getClassLoader().getResourceAsStream("GameTable/Assistant_cards/2x/" + finalI + "chk.png");
                 loadImages(buttons, finalI1, url1);
-
                 if (turnOrder.get() != 0 && turnOrder.get() != finalI) {
-                    ClassLoader cl2 = this.getClass().getClassLoader();
-                    InputStream url2 = cl2.getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder.get() + ".png");
+                    InputStream url2 = this.getClass().getClassLoader().getResourceAsStream("GameTable/Assistant_cards/2x/" + turnOrder.get() + ".png");
                     loadImagesOnLastPressedButton(buttons, lastPressedButton, url2);
                 }
-                //gameScreenPanel.tableCenterPanel.updateAllAssistCard();
                 lastPressedButton.set(finalI1);
                 turnOrder.set(finalI);
-
             });
             buttonContainer.add(buttons[i]);
         }
-        JScrollPane scrollPane = new JScrollPane(buttonContainer);
-        scrollPane.setPreferredSize(new Dimension(1000, 564));
-        JOptionPane.showMessageDialog(f, scrollPane, "Your deck", JOptionPane.PLAIN_MESSAGE);
-        return turnOrder.get();
+        return buttonContainer;
     }
 
     /**
-     * Loads images on the last button that the player pressed.
-     * @param buttons where to put the image.
-     * @param lastPressedButton last button pressed by the player.
-     * @param url path of the image.
-     */
-    private void loadImagesOnLastPressedButton(JButton[] buttons, AtomicInteger lastPressedButton, InputStream url) {
-        BufferedImage img2 = null;
-        try {
-            if (url != null)
-                img2 = ImageIO.read(url);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        if (img2 != null) {
-            buttons[lastPressedButton.get()].setIcon(new ImageIcon(img2));
-        }
-    }
-
-    /**
-     * Loads images on buttons.
-     * @param buttons where to put the images.
-     * @param finalI1 the index of the image to load.
-     * @param url the path of the image.
-     */
-    private void loadImages(JButton[] buttons, int finalI1, InputStream url) {
-        BufferedImage img1 = null;
-        try {
-            if (url != null)
-                img1 = ImageIO.read(url);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        if (img1 != null) {
-            buttons[finalI1].setIcon(new ImageIcon(img1));
-        }
-    }
-
-    /**
-     * this method create a JOptionPane to inform the player about the available moves in that game phase and then set clickable the entrance of the
-     * player dashboard and/or the character cards
-     *
-     * @param expertMode the game mode boolean used to decide whether to set the character cards clickable
+     * Creates a JOptionPane to inform the player about the available moves in that game phase
+     * and then set clickable the entrance of the player dashboard and/or the character cards.
+     * @param expertMode the game mode boolean used to decide whether to set the character cards clickable.
      */
     public void showMoveOptions(boolean expertMode) {
         if (!turnStarted) {
@@ -397,23 +358,25 @@ public class GUIDrawer extends ViewSubject {
             String message = "It's your turn!";
             JOptionPane.showMessageDialog(f, message, "Action Phase", JOptionPane.PLAIN_MESSAGE);
         }
-
         gameScreenPanel.setEntranceStudentsClickable(modelChanges.getPlayerID());
     }
 
-    public void showMNMovement() {
-        gameScreenPanel.getTableCenterPanel().setMNClickable(getViewObserverList());
-    }
+    /**
+     * Permits moving mother nature when it's possible (ACTION_PHASE.MOVE_MOTHER_NATURE).
+     */
+    public void showMNMovement() { gameScreenPanel.getTableCenterPanel().setMNClickable(getViewObserverList()); }
 
+    /**
+     * Permits picking students from a cloud when it's possible (ACTION_PHASE.CHOOSE_CLOUD)
+     */
     public void showCloudChoice() {
         gameScreenPanel.getTableCenterPanel().setCloudsClickable();
-
         turnStarted = false;
     }
 
     /**
      * Informs the user about the Character Card he played and activates various listeners according to the Character Card.
-     * @param cc is the name of the Character Card played
+     * @param cc is the name of the Character Card played.
      */
     public void showEffectActivationChoice(CharacterCardsName cc) {
         StringBuilder message = new StringBuilder("You activated the " + cc.toString() + "!");
@@ -519,7 +482,7 @@ public class GUIDrawer extends ViewSubject {
 
     /**
      * Updates the game screen panel according to the changes occurred in the modelStorage.
-     * The GuiDrawer reads the changes arraylist in the modelStorage in order to know which component to update.
+     * The GuiDrawer reads the changes Array List in the modelStorage in order to know which component to update.
      */
     public void updateGameScreenPanel() {
         for (int i = 0; i < modelChanges.getToUpdate().size(); i++) {
@@ -530,10 +493,8 @@ public class GUIDrawer extends ViewSubject {
                         showGameScreen();
                         gameStart=false;
                     }
-                    else {
+                    else
                         gameScreenPanel.getTableCenterPanel().updateFillClouds();
-                    }
-
                 }
 
                 case CLOUD_CHANGED -> gameScreenPanel.getTableCenterPanel().updateCloud(modelChanges.getCloudID());
@@ -553,14 +514,11 @@ public class GUIDrawer extends ViewSubject {
                 case ISLE_CHANGED -> gameScreenPanel.getTableCenterPanel().updateIsle(modelChanges.getIsleID());
 
                 case ISLELAYOUT_CHANGED -> {
-                    if (modelChanges.isLayoutChanged()) {
-                        for(int j=0;j<modelChanges.getIslesToRemove();j++) {
+                    if (modelChanges.isLayoutChanged())
+                        for(int j=0;j<modelChanges.getIslesToRemove();j++)
                             gameScreenPanel.getTableCenterPanel().updateIsleLayout();
-                        }
-                    }
-                    for(int j=0;j<modelStorage.getGameTable().getIsles().size();j++) {
+                    for(int j=0;j<modelStorage.getGameTable().getIsles().size();j++)
                         gameScreenPanel.getTableCenterPanel().updateIsle(j);
-                    }
                     modelChanges.setLayoutChanged(false);
                 }
                 case CHARACTERCARD_CHANGED -> {
@@ -577,7 +535,7 @@ public class GUIDrawer extends ViewSubject {
 
     /**
      * Prints a message at the top of the screen which informs the user about the phase that is being played.
-     * @param message the text to display
+     * @param message the text to display.
      */
     public void showServiceMessage(String message) { gameScreenPanel.setMessage(message); }
 
@@ -589,7 +547,7 @@ public class GUIDrawer extends ViewSubject {
         JButton logout = new JButton();
         logout.setText("LOGOUT");
         logout.setBackground(Color.RED);
-        logout.setPreferredSize(new Dimension(100,25));
+        logout.setPreferredSize(logoutButtonDimension);
         logout.addActionListener(e -> logoutConfirmation());
         gameScreenPanel.getTextContainerPanel().add(logout,BorderLayout.LINE_END);
     }
@@ -607,7 +565,8 @@ public class GUIDrawer extends ViewSubject {
         yes.addActionListener(e -> notifyObserver(ViewObserver::onLogout));
         no.addActionListener(e -> {});
         Object[] options = { yes, "No" };
-        JOptionPane.showOptionDialog(null,"Are you sure you want to log out?", "Logout Request",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,options,options[0]);
+        JOptionPane.showOptionDialog(null,"Are you sure you want to log out?", "Logout Request",
+                                        JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,options,options[0]);
     }
 
     /**
@@ -623,7 +582,7 @@ public class GUIDrawer extends ViewSubject {
     /**
      * Checks if it is necessary to set Character Cards clickable again after a KO.
      * @param serviceMessage the message to check
-     * @return true if the KO message has been received immediately after a listener set Character Cards as non-clickable
+     * @return true if the KO message has been received immediately after a listener set Character Cards as non-clickable.
      */
     private boolean reactivateCharacters(String serviceMessage) {
         return serviceMessage.equals("You don't have enough money to activate this card, please select another one") ||
@@ -633,7 +592,7 @@ public class GUIDrawer extends ViewSubject {
 
     /**
      * Opens a JOptionPanel to select a color. It is used for FUNGIST and THIEF Character Cards.
-     * @param colorQuestion the question to ask
+     * @param colorQuestion the question to ask.
      */
     private int showColorForm(String colorQuestion) {
         AtomicInteger colorChoice = new AtomicInteger();
@@ -644,34 +603,10 @@ public class GUIDrawer extends ViewSubject {
             buttons[i] = (new ColorChoiceButton(i));
             int finalI = i;
             buttons[i].addActionListener(e -> {
-                ClassLoader cl1 = this.getClass().getClassLoader();
-                InputStream url1;
-                switch (finalI) {
-                    case 0 -> url1 = cl1.getResourceAsStream("Dashboard/Students/YellowChk.png");
-                    case 1 -> url1 = cl1.getResourceAsStream("Dashboard/Students/PinkChk.png");
-                    case 2 -> url1 = cl1.getResourceAsStream("Dashboard/Students/BlueChk.png");
-                    case 3 -> url1 = cl1.getResourceAsStream("Dashboard/Students/RedChk.png");
-                    case 4 -> url1 = cl1.getResourceAsStream("Dashboard/Students/GreenChk.png");
-                    default -> url1 = cl1.getResourceAsStream("Dashboard/Circles.png");
-                }
-                loadImages(buttons, finalI, url1);
-
-                if (colorChoice.get() != -1 && colorChoice.get() != finalI) {
-                    ClassLoader cl2 = this.getClass().getClassLoader();
-                    InputStream url2;
-                    switch (colorChoice.get()) {
-                        case 0 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Yellow.png");
-                        case 1 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Pink.png");
-                        case 2 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Blue.png");
-                        case 3 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Red.png");
-                        case 4 -> url2 = cl2.getResourceAsStream("Dashboard/Students/Green.png");
-                        default -> url2 = cl2.getResourceAsStream("Dashboard/Circles.png");
-                    }
-                    loadImagesOnLastPressedButton(buttons, colorChoice, url2);
-                }
-
+                checkedStudentsImagesLoaderInt(finalI,buttons);
+                if (colorChoice.get()!=-1 && colorChoice.get()!=finalI)
+                    studentsImagesLoaderInt(colorChoice,buttons);
                 colorChoice.set(finalI);
-
             });
             buttonContainer.add(buttons[i]);
         }
