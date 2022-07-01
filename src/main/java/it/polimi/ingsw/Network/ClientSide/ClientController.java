@@ -69,6 +69,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
         this.GUI = false;
         this.cliDrawer = cliDrawer;
         taskQueue = Executors.newSingleThreadExecutor();
+        this.client.setControllerExistence();
     }
 
     /**
@@ -83,6 +84,7 @@ public class ClientController implements ViewObserver, NetworkObserver {
         this.GUI = true;
         this.guiDrawer = guiDrawer;
         taskQueue = Executors.newSingleThreadExecutor();
+        this.client.setControllerExistence();
     }
 
     /**

@@ -101,6 +101,10 @@ public class ConnectionSocket {
         threadSender.start();
     }
 
+    void setControllerExistence() {
+        cListener.setControllerExistence();
+    }
+
     /**
      * Handles the client disconnection by stopping all the threads that were associated with the client
      * and closing the streams and the ConnectionSocket itself.

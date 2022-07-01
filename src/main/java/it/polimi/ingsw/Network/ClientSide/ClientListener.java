@@ -18,6 +18,7 @@ public class ClientListener extends NetworkSubject implements Runnable {
      * Input stream of the client.
      */
     private final ObjectInputStream input;
+    private boolean controllerExists = false;
 
     /**
      * ClientListener constructor.
@@ -25,6 +26,10 @@ public class ClientListener extends NetworkSubject implements Runnable {
      */
     public ClientListener(ObjectInputStream input) {
         this.input = input;
+    }
+
+    void setControllerExistence() {
+        this.controllerExists = true;
     }
 
     /**
@@ -44,6 +49,8 @@ public class ClientListener extends NetworkSubject implements Runnable {
                 notifyObserver(messageReceived);
             } catch (IOException | ClassNotFoundException | NoSuchElementException e) {
                 System.err.println("Connection lost...");
+                if (!controllerExists)
+                    System.exit(1);
                 notifyObserver(new ServiceMessage(MessageType.QUIT, "The game will now end."));
             }
         }
