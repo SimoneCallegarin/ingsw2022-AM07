@@ -126,6 +126,8 @@ public class App {
 
     /**
      * MAIN of the app that runs CLI or GUI and connects to the server.
+     * @param args when set contains port and localhost.
+     * @throws IOException when the input given results in an exception.
      */
     public static void main(String[] args) throws IOException {
 

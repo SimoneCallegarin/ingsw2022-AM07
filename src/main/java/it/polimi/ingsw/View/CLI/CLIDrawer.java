@@ -7,6 +7,9 @@ import it.polimi.ingsw.View.StorageOfModelInformation.ModelStorage;
 
 import java.util.ArrayList;
 
+/**
+ * Graphical drawer of the CLI.
+ */
 public class CLIDrawer {
 
     /**

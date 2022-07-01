@@ -123,6 +123,7 @@ public class DiningPanel extends JPanel {
     /**
      * Called by the Color Listener after one student button press.
      * @param observers the observers list which are notified by the listener.
+     * @param tableCenterPanel reference ro the tableCenterPanel.
      */
     public void setClickable(ArrayList<ViewObserver> observers, TableCenterPanel tableCenterPanel){
         DashboardPanel pairedDashboard=((DashboardPanel)this.getParent());

@@ -28,6 +28,7 @@ public interface View {
 
      /**
       * Asks the player which assistant card he wants to play.
+      * @param playerID ID of the player we want to ask the assistant card to play.
       */
      void askAssistantCard(int playerID);
 

@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+/**
+ * Model of the MVC pattern, it represents the game itself.
+ */
 public class Game extends ModelSubject {
 
     /**
