@@ -346,4 +346,7 @@ class GameControllerTest {
         gameController.addPlayerToGame("calle",gp,true);
         assertEquals(2,gameController.getNumberOfPlayers());
     }
+
+    @Test
+    void isGameEnded() { assertFalse(gameController.isGameEnded()); }
 }
