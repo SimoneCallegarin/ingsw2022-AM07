@@ -1,15 +1,9 @@
 package it.polimi.ingsw.Network.ServerSide;
 
 /**
- * Class containing default ip address and port of the server
+ * Class containing serverPort
  */
 class ServerSettings {
-
-    /**
-     * Gets localhost.
-     * @return "localhost".
-     */
-    public static String getHostName() { return "localhost"; }
 
     /**
      * Server port

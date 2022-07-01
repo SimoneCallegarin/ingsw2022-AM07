@@ -253,14 +253,11 @@ public class Server {
      */
     public static void main(String[] args) {
 
-        String hostName;
-        int portNumber = 0;
+        int portNumber;
 
-        if (args.length==2){
-            hostName = args[0];
-            portNumber = Integer.parseInt(args[1]);
+        if (args.length==1){
+            portNumber = Integer.parseInt(args[0]);
         } else {
-            hostName = ServerSettings.getHostName();
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Choose a port (leave empty to set \"1234\"):");
             try {
@@ -283,7 +280,6 @@ public class Server {
         }
 
         Server server = new Server(portNumber);
-        System.out.println(hostName+" Server started at port " + portNumber + "!");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
     }

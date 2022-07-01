@@ -44,8 +44,9 @@ class SocketServer implements Runnable{
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(port);
+            System.out.println("Server started at port " + port + "!");
         } catch (IOException e) {
-            System.err.println("Unavailable port!");
+            System.err.println("Unavailable port! Restart server...");
             return;
         }
         System.out.println("Server ready!");
