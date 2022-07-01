@@ -2,7 +2,6 @@ package it.polimi.ingsw.View.GUI;
 
 import it.polimi.ingsw.Network.ClientSide.ClientController;
 import it.polimi.ingsw.Model.CharacterCards.CharacterCardsName;
-import it.polimi.ingsw.Network.Messages.MessageType;
 import it.polimi.ingsw.Network.Messages.NetworkMessages.ServiceMessage;
 import it.polimi.ingsw.Observer.Subjects.ViewSubject;
 import it.polimi.ingsw.View.CLI.CLIDrawer;
@@ -88,7 +87,7 @@ public class GUI extends ViewSubject implements View {
      */
     @Override
     public void askAssistantCard(int playerID) {
-        int turnOrder = guiDrawer.ShowAssistantCardForm(playerID);
+        int turnOrder = guiDrawer.ShowAssistantCardsForm(playerID);
         notifyObserver(obs->obs.onAssistantCard(turnOrder));
     }
 
