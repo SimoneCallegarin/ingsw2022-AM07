@@ -84,7 +84,7 @@ Di seguito vi sarà richiesto di inserire la porta su cui mettere in ascolto il 
 
 In alternativa:
 ```
-java -jar server.jar hostName portNumber
+java -jar server.jar portNumber
 ```
 
 
@@ -92,8 +92,9 @@ java -jar server.jar hostName portNumber
 Al fine di rendere l'esperienza di gioco il più godibile possibile sarebbe conveniente eseguire le seguenti operazioni prima di giocare:
 
 #### CLI
-- Aprire la finestra del terminale a schermo intero.
-- Settare da impostazioni di terminale un buffer di almeno 900 caratteri (in modo da evitare spiacevoli tagli della console sulle scritte).
+- Aprire la finestra del terminale a schermo intero;
+- Settare da impostazioni di terminale un buffer di almeno 900 caratteri (in modo da evitare spiacevoli tagli della console sulle scritte);
+- Utilizzare caratteri di dimensione consona (possibilmente di dimensione ridotta quanto possibile).
 
 #### GUI
 - In caso il vostro pc sia dotato di uno schermo 14 pollici o inferiore sarebbe utile settare da impostazioni di windows (Sistema > Schermo > Ridimensionamento personalizzato) un valore di Ridimensionamento personalizzato pari a 100% o inferiore (in modo da evitare piccoli spiacevoli bug grafici).
