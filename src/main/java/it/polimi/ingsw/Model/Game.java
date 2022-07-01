@@ -843,11 +843,15 @@ public class Game extends ModelSubject {
                 if (characterCardIndex >= 0 && characterCardIndex <= 2) {
                     if (players.get(playerID).getMoney() >= gameTable.getCharacterCard(characterCardIndex).getCost()) {
                         if (cardName != CharacterCardsName.GRANDMA_HERBS || getGameTable().getCharacterCards().get(characterCardIndex).getDenyCards() > 0) {
-                            getGameTable().characterCardPlayed(characterCardIndex);
-                            getPlayerByIndex(playerID).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
-                            lastActionPhase = actionPhase;
-                            actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
-                            notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap()));
+                            if (cardName != CharacterCardsName.MINSTREL || players.get(playerID).getDashboard().getDiningRoom().getNumberOfStudents() > 0) {
+                                getGameTable().characterCardPlayed(characterCardIndex);
+                                getPlayerByIndex(playerID).playCharacterCard(getGameTable().getCharacterCard(characterCardIndex));
+                                lastActionPhase = actionPhase;
+                                actionPhase = ActionPhases.CHARACTER_CARD_PHASE;
+                                notifyObserver(obs -> obs.onCharacterCard(characterCardIndex, getGameTable().getCharacterCards().get(characterCardIndex).getCharacterCardName(), getGameTable().getCharacterCards().get(characterCardIndex).getCost(), playerID, getGameTable().getGeneralMoneyReserve(), getPlayerByIndex(playerID).getMoney(), getGameTable().getCharacterCard(characterCardIndex).getDenyCards(), getGameTable().getCharacterCard(characterCardIndex).getStudentsHashMap()));
+                            }
+                            else
+                                notifyObserver(obs -> obs.onKO(playerID, "You don't have students in your dining room, you can't activate this card"));
                         }
                         else
                             notifyObserver(obs -> obs.onKO(playerID, "There's no deny cards left on GRANDMA_HERBS, you can't activate this card"));

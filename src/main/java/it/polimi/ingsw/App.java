@@ -63,7 +63,7 @@ public class App {
      * Asks the user to write the port where to communicate with the server (default is 1234).
      */
     private void selectPort() throws IOException {
-        System.out.println("Choose a port(leave empty to set \"1234\"):");
+        System.out.println("Choose a port (leave empty to set \"1234\"):");
         String stringPort = br.readLine();
         if (stringPort.isEmpty())
             port = 1234;

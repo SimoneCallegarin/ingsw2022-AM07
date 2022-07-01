@@ -587,7 +587,8 @@ public class GUIDrawer extends ViewSubject {
     private boolean reactivateCharacters(String serviceMessage) {
         return serviceMessage.equals("You don't have enough money to activate this card, please select another one") ||
                serviceMessage.equals("This cloud is empty! Please select another one") ||
-               serviceMessage.equals("There's no deny cards left on GRANDMA_HERBS, you can't activate this card");
+               serviceMessage.equals("There's no deny cards left on GRANDMA_HERBS, you can't activate this card") ||
+               serviceMessage.equals("You don't have students in your dining room, you can't activate this card");
     }
 
     /**
