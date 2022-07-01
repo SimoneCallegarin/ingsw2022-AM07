@@ -8,10 +8,6 @@
   <artifactId>AM07</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>AM07</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>

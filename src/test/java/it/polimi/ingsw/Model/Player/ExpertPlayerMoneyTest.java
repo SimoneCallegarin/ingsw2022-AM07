@@ -6,6 +6,9 @@ import it.polimi.ingsw.Model.Enumeration.Squads;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Some tests on the money update after playing some character cards.
+ */
 public class ExpertPlayerMoneyTest {
 
     Player expertPlayerForTest = new Player("PlayerForTest", 4, 1, Squads.SQUAD1);

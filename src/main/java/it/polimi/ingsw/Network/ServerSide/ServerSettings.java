@@ -12,9 +12,21 @@ class ServerSettings {
     public static String getHostName() { return "localhost"; }
 
     /**
-     * Gets default port.
-     * @return default port.
+     * Server port
      */
-    public static int getPort() { return 1234; }
+    private static int port;
+
+    /**
+     * Sets port.
+     */
+    public static void setPort(int port) {
+        ServerSettings.port = port;
+    }
+
+    /**
+     * Gets port.
+     * @return port.
+     */
+    public static int getPort() { return ServerSettings.port; }
 
 }

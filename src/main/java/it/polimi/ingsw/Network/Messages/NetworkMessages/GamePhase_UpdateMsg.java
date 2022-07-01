@@ -29,7 +29,8 @@ public class GamePhase_UpdateMsg extends NetworkMessage {
     /**
      * Constructor of the GamePhase_UpdateMsg.
      * @param messageType it will be GAMEPHASE_UPDATE.
-     * @param activePlayer The player that this turn is the active one.
+     * @param activePlayer The ID of the player that this turn is the active one.
+     * @param activePlayerNickname The nickname of the player that this turn is the active one.
      * @param gamePhases The actual game phase of the turn.
      * @param actionPhases The actual sub-phase of the action phase of the turn.
      */

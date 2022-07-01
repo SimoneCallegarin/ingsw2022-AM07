@@ -5,6 +5,9 @@ import it.polimi.ingsw.Network.Messages.MessageType;
 
 import java.util.HashMap;
 
+/**
+ * Deny card update message.
+ */
 public class DenyCard_UpdateMsg extends NetworkMessage {
 
     /**
@@ -50,6 +53,8 @@ public class DenyCard_UpdateMsg extends NetworkMessage {
         this.denyCardsOnCard = denyCardsOnCard;
         this.studentsOnCard = studentsOnCard;
     }
+
+    // GETTERS:
 
     public int getGrandmaIndex() {
         return grandmaIndex;

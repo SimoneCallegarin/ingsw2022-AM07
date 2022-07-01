@@ -55,6 +55,7 @@ public class DashboardPanel extends JPanel {
      * @param students Array List of buffered images to print students button.
      * @param checkedStudents Array list of buffered images to print checked students button.
      * @param towers Array List of buffered images to print towers.
+     * @param dashboard dashboard image.
      */
     public DashboardPanel(ModelStorage storage, int playerID, ArrayList<ViewObserver> viewObservers, TableCenterPanel tableCenterPanel, ArrayList<BufferedImage> students, ArrayList<BufferedImage> checkedStudents, ArrayList<BufferedImage> towers, BufferedImage dashboard) {
         setLayout(new GridBagLayout());
