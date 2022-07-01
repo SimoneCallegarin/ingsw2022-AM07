@@ -130,29 +130,37 @@ public class CharacterPanel extends JPanel {
     public void initializeCharacter(){
         constraints.gridx = characterCardGridX;
         constraints.gridy = characterCardGridY;
+        JPanel objectsPanel=new JPanel(new GridBagLayout());
+        objectsPanel.setOpaque(false);
+        GridBagConstraints objectsConstraints=new GridBagConstraints();
+        objectsConstraints.gridy=characterCardGridX;
+        objectsConstraints.gridx=characterCardGridY;
         switch (character){
             case "MONK", "JESTER","SPOILED_PRINCESS" ->{
                 for(RealmColors color: RealmColors.values()){
                     for(int i=0; i<storage.getGameTable().getCharacterCard(characterIndex).getStudentsByColor(color); i++){
                         StudentButton studentButton = new StudentButton(color,students,checkedStudents);
-                        add(studentButton,constraints);
+                        objectsPanel.add(studentButton,objectsConstraints);
                         studentButtons.add(studentButton);
-                        constraints.gridx++;
+                        objectsConstraints.gridx++;
                     }
                 }
+                add(objectsPanel,constraints);
             }
             case "GRANDMA_HERBS"->{
                 for(int i=0; i<storage.getGameTable().getCharacterCard(characterIndex).getDenyCardsOnCharacterCard();  i++){
-                    add(new DenyCardPanel(),constraints);
-                    constraints.gridx++;
+                    objectsPanel.add(new DenyCardPanel(),objectsConstraints);
+                    objectsConstraints.gridx++;
                 }
+                add(objectsPanel,constraints);
             }
         }
+        JPanel coinsPanel=new JPanel(new GridBagLayout());
+        coinsPanel.setOpaque(false);
+        constraints.gridy++;
+        add(coinsPanel,constraints);
         if(storage.getGameTable().getCharacterCard(characterIndex).used()) {
-            constraints.gridx = characterCardGridX;
-            constraints.gridy++;
-            constraints.gridy++;
-            add(new CoinPanel(),constraints);
+            coinsPanel.add(new CoinPanel());
         }
         this.validate();
         this.repaint();
