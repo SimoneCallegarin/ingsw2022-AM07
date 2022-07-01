@@ -122,6 +122,8 @@ public class GameTable implements DenyCardManager {
     public void characterCardPlayed(int index) {
         if(getCharacterCard(index).isUsed())
             generalMoneyReserve += getCharacterCard(index).getCost();
+        else
+            generalMoneyReserve += getCharacterCard(index).getCost()-1;
     }
 
     /**
